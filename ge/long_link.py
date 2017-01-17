@@ -25,7 +25,6 @@ def long_link(span=None):
                 try:
                     dc['rt']=func(*args,**kw)
                 except Exception as e:
-                    ev.set()
                     dc['rt']=e # 将异常扔到外面去运行
                     
                 if dc['rt']:
