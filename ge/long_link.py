@@ -6,7 +6,7 @@ import time
 func_list=[]
 def run():
     while True:
-        for func_item in func_list:
+        for func_item in list(func_list):
             func_item()
         time.sleep(1)
 
@@ -29,9 +29,10 @@ def long_link(span=None):
                     
                 if dc['rt']:
                     ev.set()
-                after=time.time()
-                if span and after-before > span:
-                    ev.set()
+                else:
+                    after=time.time()
+                    if span and after-before > span:
+                        ev.set()
                     
             func_list.append(__func)
             ev.wait()
