@@ -25,7 +25,7 @@ def ajax_view(request):
             return HttpResponse(json.dumps(rt),content_type="application/json")
             
     """
-    router=RouterAjax(request, scope,rt_except= True)#not settings.DEBUG)
+    router=RouterAjax(request, scope,rt_except= not settings.DEBUG)
     return router.run()
 
 class RouterAjax(object):
