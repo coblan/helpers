@@ -20,15 +20,17 @@ var filter={
 	},
 	
 }
-function  map(name,row) {
-	if(filter[name]){
-		return filter[name](name,row)
-	}else{
-		return row[name]
-	}
-}
+
+
 $(function () {
-	table.map=map
+	var super_value_map=table.value_map
+	table.value_map=function(name,row){
+		if(filter[name]){
+			return filter[name](name,row)
+		}else{
+			return super_value_map(name,row)
+		}
+	} 
 })
 
 </script>

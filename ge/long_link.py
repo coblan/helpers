@@ -6,7 +6,7 @@ import time
 func_list=[]
 def run():
     while True:
-        for func_item in func_list:
+        for func_item in list(func_list):
             func_item()
         time.sleep(1)
 
@@ -25,14 +25,14 @@ def long_link(span=None):
                 try:
                     dc['rt']=func(*args,**kw)
                 except Exception as e:
-                    ev.set()
                     dc['rt']=e # 将异常扔到外面去运行
                     
                 if dc['rt']:
                     ev.set()
-                after=time.time()
-                if span and after-before > span:
-                    ev.set()
+                else:
+                    after=time.time()
+                    if span and after-before > span:
+                        ev.set()
                     
             func_list.append(__func)
             ev.wait()
