@@ -30,7 +30,7 @@ def upload_image(request):
         file_name=m.hexdigest()+'_'+f.name
         file_path=os.path.join(file_dir,file_name)
         if not os.path.exists( file_path ):
-            with open(file_path,'w') as image_file:
+            with open(file_path,'wb') as image_file:
                 image_file.write(catch.getvalue())
                 
         file_url=urlparse.urljoin(settings.MEDIA_URL, 'ckeditor/{file_name}'.format(file_name=file_name))
