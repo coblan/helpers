@@ -29,7 +29,7 @@
 				submit:function () {
 					var self =this;
 					show_upload()
-					var search =parseSearch(location.search)
+					var search =ex.parseSearch() //parseSearch(location.search)
 					var post_data=[{fun:'save',row:this.kw.row}]
 					$.post('',JSON.stringify(post_data),function (data) {
 						if(data.msg){
@@ -47,15 +47,13 @@
 						}else if(search.next){
 							location=atob(search.next)
 						}else{
-							setTimeout(function () {
-								hide_upload()
-							}, 2000);
+							hide_upload(1000)
+
 						}
-						
 					})
 				},
 				cancel:function () {
-					var search =parseSearch(location.search)
+					var search =ex.parseSearch() //parseSearch(location.search)
 					if(search.next){
 						location=atob(search.next)
 					}

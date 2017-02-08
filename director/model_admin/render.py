@@ -62,7 +62,7 @@ def del_rows(request):
 
 
 class TablePage(object):
-    template='table.html'
+    template='director/table.html'
     tableCls=''
     ajax_scope={}
     def __init__(self,request):
@@ -79,7 +79,7 @@ class TablePage(object):
         return ctx
 
 class FormPage(object):
-    template='fields.html'
+    template='director/fields.html'
     fieldsCls=''
     ajax_scope={}
     def __init__(self,request,pk):
@@ -95,7 +95,7 @@ class FormPage(object):
         return ctx
 
 class DelPage(object):
-    template='del_rows.html'
+    template='director/del_rows.html'
     ajax_scope={}
     def __init__(self,request):
         self.request=request
