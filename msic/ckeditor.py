@@ -20,6 +20,10 @@ def upload_image(request):
         url(r'ckeditor/upload_image',upload_image),
     ]
     
+    # setting.py
+    
+    MEDIA_ROOT= os.path.join( os.path.dirname(BASE_DIR),'media')
+    
     """
     if request.method == 'POST':
         callback=request.GET.get('CKEditorFuncNum')
