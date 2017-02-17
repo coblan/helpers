@@ -10,6 +10,8 @@ def qiangda(request):
     return render(request,'nianhui/qiang_da.html')
 """
 
+# do not import model,because may cause "app is not load" error
+
 #from model_admin.base import model_dc,model_page_dc
 #from model_admin.render import TablePage,FormPage
 #from model_admin.tabel import ModelTable
