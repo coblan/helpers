@@ -9,7 +9,7 @@ def regist(path,label):
     dc={}
     temp = loader.get_template(path)
     
-    mt = re.search('<script .*form-meta-data[\'\"]>(.*)</script>',temp.template.source,re.M|re.S)
+    mt = re.search('<script .*form-meta-data[\'\"]>(.*?)</script>',temp.template.source,re.M|re.S)
     
     if mt:
         code_str=mt.group(1)
