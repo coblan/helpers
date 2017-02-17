@@ -26,11 +26,9 @@ def upload_image(request):
         f= request.FILES['upload']
         
         file_dir= os.path.join(settings.MEDIA_ROOT,'ckeditor')
-        try:
+        if not os.path.exists(file_dir):
             os.makedirs(file_dir)
-        except os.error as e:
-            print(e)
-        
+
         catch = io.BytesIO()
         m = hashlib.md5()
         for chunk in f.chunks():
