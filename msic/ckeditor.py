@@ -10,7 +10,17 @@ from django.views.decorators.csrf import csrf_exempt
 
 @csrf_exempt
 def upload_image(request):
-
+    """
+    # urls.py
+    
+    from helpers.msic.ckeditor import upload_image
+    
+    urlpattern=[
+        ...
+        url(r'ckeditor/upload_image',upload_image),
+    ]
+    
+    """
     if request.method == 'POST':
         callback=request.GET.get('CKEditorFuncNum')
         f= request.FILES['upload']
