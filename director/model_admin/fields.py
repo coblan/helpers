@@ -7,10 +7,22 @@ import json
 from django.db import models
 from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
-
+from django.core.exceptions import ValidationError
+from base import model_dc
 import base64
 from permit import Permit
 from ..models import LogModel
+
+def save_row(row,user):
+    model= name_to_model(row['_class'])
+    fields_cls = model_dc.get(model).get('fields')
+
+    fields_obj=fields_cls(row,crt_user=user)
+    if fields_obj.is_valid():
+        return fields_obj.instance
+    else:
+        raise ValidationError(fields_obj.errors)
+    
 
 class ModelFields(forms.ModelForm):
     """
@@ -182,7 +194,7 @@ class ModelFields(forms.ModelForm):
         if op:
             log =LogModel(key='{model_label}.{pk}'.format(model_label=model_to_name(self.instance),pk=self.instance.pk),kind=op,user=self.crt_user,detail=detail)
             log.save()
-        return {'status':'success','pk':self.instance.pk,'_class':model_to_name(self.instance)}
+ 
     
     def del_form(self):
         if self.permit.can_del():

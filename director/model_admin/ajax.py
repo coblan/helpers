@@ -9,6 +9,8 @@ from __future__ import unicode_literals
 from permit import Permit
 from base import model_dc
 from ..db_tools import name_to_model
+from fields import save_row
+from django.core.exceptions import ValidationError
 #from base import model_dc,get_admin_name_by_model,del_row
 
 
@@ -24,14 +26,19 @@ def model_perm(user,perm,model):
 def save(row,user):
     """
     """
-    model= name_to_model(row['_class'])
-    fields_cls = model_dc.get(model).get('fields')
+    try:
+        instance = save_row(row, user)
+        return {'status':'success','pk':instance.pk,'_class':model_to_name(instance)}
+    except ValidationError as e:
+        return {'errors':dict(e)}
+    #model= name_to_model(row['_class'])
+    #fields_cls = model_dc.get(model).get('fields')
 
-    fields_obj=fields_cls(row,crt_user=user)
-    if fields_obj.is_valid():
-        return fields_obj.save_form()
-    else:
-        return {'errors':fields_obj.errors}
+    #fields_obj=fields_cls(row,crt_user=user)
+    #if fields_obj.is_valid():
+        #return fields_obj.save_form()
+    #else:
+        #return {'errors':fields_obj.errors}
 
 
 def del_rows(rows,user):
