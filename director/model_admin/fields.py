@@ -17,7 +17,7 @@ class ModelFields(forms.ModelForm):
     __init__函数，参数组合
     1. pk,crt_user 编辑，读取的时候
     2. instance,crt_user 编辑，读取的时候
-    3. dc,crt_user 保存修改的时候
+    3. dc,crt_user 保存修改的时候。dc是新值组成的字典
     4. crt_user 新建的时候
     
     """
