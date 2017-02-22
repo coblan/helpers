@@ -20,6 +20,13 @@
             el:'#there',
             data:{
                 file_name:[],
+                file2:'',
+                img_url:'',
+            },
+            watch:{
+                img_url:function(v){
+                    alert(v)
+                }
             },
             methods:{
                 show_upload:function(){
@@ -36,11 +43,20 @@
                     $('#jjyy').click()
                 },
                 upload:function () {
-                    for (var i=0;i<this.file_name.length;i++){
-                        fl.upload(this.file_name[i],'/face/upload/')
-                    }
+//                    for (var i=0;i<this.file_name.length;i++){
+//                        fl.upload(this.file_name[i],'/face/upload/')
+//                    }
+                    fl.uploads(this.file_name,'/face/upload')
                     //this.$refs.f1.upload('http://localhost:8000/upload_image_demo/')
 
+                },
+                upload2:function(){
+                    var dd='dgo'
+                    fl.upload(this.file2[0],function(urls){
+                        alert(urls)
+                    },function(progress){
+                        console.log(progress)
+                    })
                 }
             }
         })
@@ -54,18 +70,23 @@
 <h1 id='tt'>Top 3 Transactions</h1>
 <div id='there'>
     <file-input id='jjyy' v-model='file_name' multiple></file-input>
+
+    <file-input id='jjyy' v-model='file2' ></file-input>
     <div><img src="" alt="" id='haha'></div>
     <button name="test" type="button"  @click='pre_view()'>预览</button>
     <button name="test" type="button"  @click='fack_click()'>dji</button>
     <button name="test" type="button"  @click='upload()' :disabled='file_name.length>0?false:true'>upload</button>
+    <button name="test" type="button"  @click='upload2()' >upload2</button>
 
-    <modal>
-        <div style="width: 80vw;height: 80vh;">
-            <ul>
-                <li>jjj</li>
-            </ul>
-        </div>
-    </modal>
+
+    <img-uploador v-model="img_url"></img-uploador>
+    <!--<modal>-->
+        <!--<div style="width: 80vw;height: 80vh;">-->
+            <!--<ul>-->
+                <!--<li>jjj</li>-->
+            <!--</ul>-->
+        <!--</div>-->
+    <!--</modal>-->
 </div>
 
 
