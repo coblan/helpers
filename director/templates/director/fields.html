@@ -31,20 +31,17 @@
 					show_upload()
 					var search =ex.parseSearch() //parseSearch(location.search)
 					var post_data=[{fun:'save',row:this.kw.row}]
-					$.post('',JSON.stringify(post_data),function (data) {
-						if(data.msg){
-							hide_upload()
-							return
-						}
-						if(data.save && data.save.errors){
-							self.kw.errors = data.save.errors
+					ex.post('',JSON.stringify(post_data),function (resp) {
+						if( resp.save.errors){
+							self.kw.errors = resp.save.errors
 							hide_upload()
 						}else if(search._pop==1){
 							if(window.opener.on_subwin_close){
-								window.opener.on_subwin_close({pk:data.save.pk,_class:data.save._class})
+								window.opener.on_subwin_close({pk:resp.save.pk,_class:resp.save._class})
 							}
 							window.close()
 						}else if(search.next){
+
 							location=atob(search.next)
 						}else{
 							hide_upload(1000)

@@ -7,8 +7,9 @@ urlpatterns = [
     url(r'^logout/?$',views.logout),
     url(r'^pswd/?$',views.change_pswd),
     
+    url(r'^$',views.trival,name='director'),
     url(r'^model/(?P<name>\w+)/edit/?$',render.form_view,name='model_new'),
-    url(r'^model/(?P<name>\w+)/edit/(?P<pk>\w+)/?$',render.form_view,name='model_edit'),
+    url(r'^model/(?P<name>[^\/]+)/edit/(?P<pk>[^\/]+)/?$',render.form_view,name='model_edit'),
     url(r'^model/(?P<name>\w+)/history/(?P<pk>\w+)/?$',render.form_history,name='model_history'),
     url(r'^model/(?P<name>\w+)/$',render.table_view,name='model_table'),
     url(r'^del_rows/?$',render.del_rows,name='del_rows'),

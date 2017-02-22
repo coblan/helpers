@@ -8,7 +8,7 @@ from __future__ import unicode_literals
 
 from permit import Permit
 from base import model_dc
-from ..db_tools import name_to_model
+from ..db_tools import name_to_model,model_to_name
 from fields import save_row
 from django.core.exceptions import ValidationError
 #from base import model_dc,get_admin_name_by_model,del_row

@@ -52,3 +52,7 @@ def change_pswd(request):
         return jsonpost(request,auth_ajax.get_globe())  
         #except UserWarning as e:
             #return HttpResponse(json.dumps({'status':'fail','msg':str(e)}),content_type="application/json")
+            
+
+def trival(request):
+    pass
