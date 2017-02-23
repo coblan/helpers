@@ -32,6 +32,9 @@
 					var search =ex.parseSearch() //parseSearch(location.search)
 					var post_data=[{fun:'save',row:this.kw.row}]
 					ex.post('',JSON.stringify(post_data),function (resp) {
+						if(resp.save.pk && resp.save._class){
+							sessionStorage.setItem(resp.save._class,resp.save.pk)
+						}
 						if( resp.save.errors){
 							self.kw.errors = resp.save.errors
 							hide_upload()
