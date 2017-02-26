@@ -9,6 +9,7 @@ import hashlib
 import io
 import urlparse
 import hashlib
+import re
 from django.views.decorators.csrf import csrf_exempt
 
 try:
@@ -29,7 +30,16 @@ def general(request):
             m.update(chunk)    
             
         catch.flush()
-        file_name=m.hexdigest()+'_'+fl.name
+        mt_name=re.search('\.(\w+)$',fl.name)
+        if mt_name:
+            file_name=m.hexdigest()+'_'+fl.name
+        else:
+            img_ext = re.search('image/(\w+)',fl.content_type)
+            if img_ext:
+                file_name =m.hexdigest()+'.'+img_ext.group(1)
+            else:
+                file_name=m.hexdigest()
+                
         file_path=os.path.join(file_dir,file_name)
         if not os.path.exists( file_path ):
             with open(file_path,'wb') as general_file:

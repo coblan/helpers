@@ -22,6 +22,7 @@
                 file_name:[],
                 file2:'',
                 img_url:'',
+                crop_img:'',
             },
             watch:{
                 img_url:function(v){
@@ -57,6 +58,11 @@
                     },function(progress){
                         console.log(progress)
                     })
+                },
+                upload_crop:function(){
+                    fl.upload(this.crop_img,function(urls){
+                        alert(urls)
+                    })
                 }
             }
         })
@@ -80,6 +86,9 @@
 
 
     <img-uploador v-model="img_url"></img-uploador>
+
+    <img-crop v-model="crop_img"></img-crop>
+    <button @click="upload_crop()">upload crop</button>
     <!--<modal>-->
         <!--<div style="width: 80vw;height: 80vh;">-->
             <!--<ul>-->
