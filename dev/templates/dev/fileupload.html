@@ -85,9 +85,11 @@
     <button name="test" type="button"  @click='upload2()' >upload2</button>
 
 
-    <img-uploador v-model="img_url" :config="{crop:true}"></img-uploador>
+    <img-uploador v-model="img_url" ></img-uploador>
 
-    <img-crop v-model="crop_img" :config="{aspectRatio: 1}"></img-crop>
+    <img-uploador v-model="img_url" :config="{crop:true,aspectRatio:1,size:{width:200,height:200}}"></img-uploador>
+
+    <img-crop v-model="crop_img" ></img-crop>
     <button @click="upload_crop()">upload crop</button>
     <!--<modal>-->
         <!--<div style="width: 80vw;height: 80vh;">-->
