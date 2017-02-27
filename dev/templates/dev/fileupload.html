@@ -60,7 +60,7 @@
                     })
                 },
                 upload_crop:function(){
-                    fl.upload(this.crop_img,function(urls){
+                    fl.upload(this.crop_img[0],function(urls){
                         alert(urls)
                     })
                 }
@@ -85,9 +85,9 @@
     <button name="test" type="button"  @click='upload2()' >upload2</button>
 
 
-    <img-uploador v-model="img_url"></img-uploador>
+    <img-uploador v-model="img_url" :config="{crop:true}"></img-uploador>
 
-    <img-crop v-model="crop_img"></img-crop>
+    <img-crop v-model="crop_img" :config="{aspectRatio: 1}"></img-crop>
     <button @click="upload_crop()">upload crop</button>
     <!--<modal>-->
         <!--<div style="width: 80vw;height: 80vh;">-->
