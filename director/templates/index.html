@@ -1,8 +1,9 @@
-{% load static %}
-{% load jsonify %}
 <!DOCTYPE html>
 <html lang="zh-CN">
- 
+
+{% load static %}
+{% load jsonify %}
+
     <head>
         <meta charset='utf-8' />
         <script src="http://cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
@@ -17,30 +18,26 @@
 	    <script src='{% static "js/exfun.js" %}'></script>
 	    <script src='{% static "js/fields.pack.js?t=201701101349" %}'></script>
 	     <link href="{% static 'css/ui.css'%}" rel="stylesheet">
+
+
+		<script type="text/javascript">
+			Vue.config.devtools = true
+			menu= {{menu| jsonify}}
+			$(function () {
+
+				frame=new Vue({
+					el:'#menu',
+					data:{
+						menu:menu
+					}
+				})
+
+			})
+
+		</script>
     </head>
 
-    <script type="text/javascript">
-    	Vue.config.devtools = true
-    	menu= {{menu| jsonify}}
-    	$(function () {
 
-    	frame=new Vue({
-	    	el:'#menu',
-	    	data:{
-		    	menu:menu
-	    	}
-    	})
-
-//	    	for(var i=0;i<100;i++){
-//		    	if($('body').height()<$(window).height()-10){
-//			    	$('#wrap').css('min-height',($('#wrap').height()+10)+'px')
-//		    	}else{
-//			    	break;
-//		    	}
-//	    	}
-    	})
-    	
-    </script>
     <body>
 	    <div id='head'>
 		    <div class='crt_user'>
@@ -76,7 +73,7 @@
         </div>
         
       
-    </body>
+
     <script type="text/javascript">
     	Vue.component('path-nav',{
 	    	template:'#path-nav',
@@ -105,9 +102,6 @@
 		<ol class="breadcrumb">
 			<li v-for='act in get_active_links()'><span v-text='act.label'></span></li>
 			<slot></slot>
-			<!--<li><a href="#">Home</a></li>
-			<li><a href="#">Library</a></li>
-			<li class="active">Data</li>-->
 		</ol>
     </template>
     <style type="text/css" media="screen" id="test">
@@ -199,5 +193,5 @@
 	    	max-width:300px;
     	}
     </style>
-    
+	</body>
 </html>
