@@ -1,7 +1,8 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
 {% load static %}
 {% load jsonify %}
+<!DOCTYPE html>
+<html lang="zh-CN">
+
 <head>
     <meta charset='utf-8' />
     <script src="http://cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
@@ -63,15 +64,18 @@
     <div id='menu'>
         <expand_menu :menu='menu'></expand_menu>
     </div>
-    <div id='content'>
+    <div id='show-content'>
         {% block page_content %}
 
         {% endblock %}
     </div>
 </div>
+<div style="background-color: blue;">
+    wori
+</div>
 
 <div id='footer'>
-
+    sss
 </div>
 
 
@@ -112,7 +116,15 @@
 <style type="text/css" media="screen" id="test">
     body{
         background-color: #EEEEEE;
-        height: 100vh;
+        /*display: flex;*/
+
+        /*display: -ms-flexbox;*/
+
+        min-height: 100vh;
+
+
+        /*flex-direction:column;*/
+        /*-ms-flex-direction: column;*/
     }
     ._expand_menu{
         width:200px;
@@ -129,6 +141,9 @@
 
     #wrap{
         position: relative;
+        /*height: 400px;*/
+        /*-ms-flex:1.0;*/
+        /*flex: 1;*/
 
     }
     #menu{
@@ -143,7 +158,7 @@
         padding: 20px;
     }
     #footer{
-        background-color: #2C3542;
+        background-color: red;
         min-height:30px;
         /*height: 400px;*/
 
