@@ -21,12 +21,29 @@
 <script type="text/javascript">
     Vue.config.devtools = true
     menu= {{menu| jsonify}}
+
+    var search_args = ex.parseSearch()
     $(function () {
+
+        new Vue({
+            el:'#head',
+            data:{
+                    search_args:search_args
+                    }
+        })
 
         frame=new Vue({
             el:'#menu',
             data:{
-                menu:menu
+                menu:menu,
+                search_args:search_args
+            }
+        })
+
+        new Vue({
+            el:'#footer',
+            data:{
+                search_args:search_args
             }
         })
 
@@ -40,10 +57,12 @@
     })
 
 </script>
-<body class="flex-v">
-<div id='head'>
-    <div class='crt_user'>
-        {% if user.is_authenticated %}
+<body >
+<div class="flex">
+    <div class="flex-v page-wrap">
+        <div id='head' v-if="!search_args._pop">
+            <div class='crt_user'>
+                {% if user.is_authenticated %}
 			    <span>Welcome &nbsp
 			    {% if user.first_name %}
 			    	{{ user.first_name}}
@@ -51,28 +70,32 @@
 			    	{{ user.username}}
 			    {% endif %}
 			    </span>&nbsp/&nbsp
-        <a href="/accounts/logout/?next=/">退出</a>
-        {% else %}
-        <a href="/accounts/login/?next=/">登陆</a>
-        <a href="/accounts/regist/">注册</a>
-        {% endif %}
+                <a href="/accounts/logout/?next=/">退出</a>
+                {% else %}
+                <a href="/accounts/login/?next=/">登陆</a>
+                <a href="/accounts/regist/">注册</a>
+                {% endif %}
+            </div>
+
+        </div>
+        <div id='wrap' class="flex-grow flex">
+            <div id='menu' v-if="!search_args._pop">
+                <expand_menu :menu='menu'></expand_menu>
+            </div>
+            <div id='content' class="flex-grow">
+                {% block page_content %}
+
+                {% endblock %}
+            </div>
+        </div>
+
+        <div id='footer' v-if="!search_args._pop">
+
+        </div>
     </div>
 
 </div>
-<div id='wrap' class="flex-grow">
-    <div id='menu'>
-        <expand_menu :menu='menu'></expand_menu>
-    </div>
-    <div id='content'>
-        {% block page_content %}
 
-        {% endblock %}
-    </div>
-</div>
-
-<div id='footer'>
-
-</div>
 
 
 
@@ -110,9 +133,11 @@
     </ol>
 </template>
 <style type="text/css" media="screen" id="test">
-    body{
+
+    .page-wrap{
+        min-width: 100vw;
         background-color: #EEEEEE;
-        height: 100vh;
+        min-height: 100vh;
     }
     ._expand_menu{
         width:200px;
@@ -132,14 +157,14 @@
 
     }
     #menu{
-        position: absolute;
-        top:0;
-        bottom:0;
+        /*position: absolute;*/
+        /*top:0;*/
+        /*bottom:0;*/
         background-color: #2C3542;
     }
 
     #content{
-        margin-left: 210px;
+        /*margin-left: 210px;*/
         padding: 20px;
     }
     #footer{
