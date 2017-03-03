@@ -38,3 +38,17 @@ def evalue_list(ls,**kw):
             continue
         new_ls.append(tmp)
     return new_ls
+
+
+
+
+def find_one(collection,dc):
+    for doc in collection:
+        find=True
+        for k,v in dc.items():
+            if doc.get(k)!=v:
+                find=False
+        if find:
+            return doc
+        
+                
