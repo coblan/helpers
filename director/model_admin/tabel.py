@@ -95,7 +95,7 @@ class RowFilter(object):
         self.filter_args={}
         for k in self.names:
             v = dc.pop(k,None)
-            if v:
+            if v != None:
                 self.filter_args[k]=v    
     
     def get_context(self):
@@ -113,7 +113,7 @@ class RowFilter(object):
     def get_options(self,name):
         ls = list(set(self.query.values_list(name,flat=True)))
         ls.sort()
-        ls=[{'value':x,'label':x} for x in ls]
+        ls=[{'value':x,'label':unicode(x)} for x in ls]
         return ls
     
 class RowSort(object):
