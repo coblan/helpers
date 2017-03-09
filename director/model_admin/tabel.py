@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 
 #from core.db_tools import to_dict,model_to_head,model_stringfy
 import json
-from django.db.models import Q
+from django.db.models import Q,fields
 from django.core.exceptions import PermissionDenied
 from permit import Permit
 from ..db_tools import model_to_name,to_dict,model_to_head,model_to_name
@@ -87,6 +87,7 @@ class RowSearch(object):
 
 class RowFilter(object):
     names=[]
+    date_fields=[]
     model=''
     def __init__(self,dc,user,allowed_names,kw={}):
         self.valid_name=[x for x in self.names if x in allowed_names]
@@ -96,13 +97,29 @@ class RowFilter(object):
         for k in self.names:
             v = dc.pop(k,None)
             if v != None:
-                self.filter_args[k]=v    
+                self.filter_args[k]=v   
+            if v=='0':
+                self.filter_args[k]=False
+            elif v=='1':
+                self.filter_args[k]=True
+        for k in self.date_fields:
+            if kw.get('_start_%s'%k):
+                start=kw.get('_start_%s'%k)
+                self.filter_args['%s__gte'%k]=start
+            if kw.get('_end_%s'%k):
+                end=kw.get('_end_%s'%k)
+                self.filter_args['%s__lte'%k]=end            
     
     def get_context(self):
         ls=[]
         for name in self.valid_name:
             f = self.model._meta.get_field(name)
-            ls.append({'name':name,'label':f.verbose_name,'option':self.get_options(name)})
+            if isinstance(f,fields.BooleanField):
+                ls.append({'name':name,'label':f.verbose_name,'options':[
+                {'value':'1','label':'Yes'},
+                {'value':"0",'label':'No'}]})
+            else:
+                ls.append({'name':name,'label':f.verbose_name,'options':self.get_options(name)})
         return ls
       
     def get_query(self,query):

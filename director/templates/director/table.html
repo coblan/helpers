@@ -106,11 +106,10 @@
 
 </script>
 <div id='there'>
-	<div class='btn-panel'>
-		
-		<path-nav :menu='menu' v-if="!search_args._pop"></path-nav>
-		
-		<form class='button-group' autocomplete="on" v-if='placeholder || row_filters.length>0'>
+	<path-nav :menu='menu' v-if="!search_args._pop"></path-nav>
+	<div class='btn-panel flex'>
+
+		<form class='button-group flex-grow' autocomplete="on" v-if='placeholder || row_filters.length>0'>
 			<input v-if='placeholder' type="text" name="_q" v-model='search_args._q' :placeholder='placeholder' class='form-control'/>
 			<select name="" id="" v-for='filter in row_filters' v-model='search_args[filter.name]' class='form-control'>
 			        <option :value="null" v-text='filter.label'></option>
@@ -118,7 +117,7 @@
 			        <option v-for='option in filter.option' :value="option.value" v-text='option.label'></option>
 			</select>
 
-			<button name="go" type="button" class="btn btn-info" @click='search()' style='position: absolute;right:-80px;top:-1px;width:70px;height:33px;'>提交</button>
+			<button name="go" type="button" class="btn btn-info" @click='search()' >提交</button>
 		</form>
 		
 		<div class='btn-group' style='float: right;' v-if="!search_args._pop">
@@ -165,15 +164,15 @@
 	
 </div>
 <style type="text/css" media="screen" id="test">
-	.button-group{
-		position: relative;
-		display: inline-block;
-	}
+	/*.button-group{*/
+		/*position: relative;*/
+		/*display: inline-block;*/
+	/*}*/
 	.form-control{
 		display: inline-block;
 		margin-left:10px;
 		width:auto;
-		height:30px;
+		/*height:30px;*/
 	}
 	.sort-mark{
 		float: right;
