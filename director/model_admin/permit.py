@@ -1,12 +1,43 @@
 # encoding:utf-8
+"""
+>>>director/permit.rst>
+=========
+permit
+=========
+
+添加权限
+========
+添加特殊权限::
+
+    permit_list.append({'name':'workload','label':'人员负荷','fields':[
+        {'name':'view_all_task','label':'查看所有负荷','type':'bool'},
+        {'name':'sp2','label':'工作统计','type':'bool'}
+    ]})
+
+添加数据库表权限::
+
+    permit_list.append(WorkModel)
+
+判断权限
+========
+判断特殊权限::
+
+    has_permit(user,'view_all_task')
+
+判断数据库表权限::
+
+    Permit(model,user).changeable_fields() ...
+
+<<<<
+"""
 
 from __future__ import unicode_literals
 from ..db_tools import model_to_name
 from django.apps import apps
 import json
 from django.db import models
-from base import model_dc
-permit_list=[]
+from base import model_dc,permit_list
+
 
 def has_permit(user,name):
     """

@@ -87,12 +87,13 @@ class RowSearch(object):
 
 class RowFilter(object):
     names=[]
-    date_fields=[]
+    range_fields=[]
     model=''
     def __init__(self,dc,user,allowed_names,kw={}):
+        self.names = self.names + [x.get('name') for x in self.range_fields]
         self.valid_name=[x for x in self.names if x in allowed_names]
         self.crt_user=user
-        self._names=[x for x in self.names if x in allowed_names]        
+        #self._names=[x for x in self.names if x in allowed_names]        
         self.filter_args={}
         for k in self.names:
             v = dc.pop(k,None)
@@ -102,7 +103,7 @@ class RowFilter(object):
                 self.filter_args[k]=False
             elif v=='1':
                 self.filter_args[k]=True
-        for k in self.date_fields:
+        for k in [x.get('name') for x in self.range_fields]:
             if kw.get('_start_%s'%k):
                 start=kw.get('_start_%s'%k)
                 self.filter_args['%s__gte'%k]=start
@@ -114,7 +115,10 @@ class RowFilter(object):
         ls=[]
         for name in self.valid_name:
             f = self.model._meta.get_field(name)
-            if isinstance(f,fields.BooleanField):
+            mt = [x for x in self.range_fields if x.get('name')==name]
+            if mt:
+                ls.append({'name':name,'label':f.verbose_name,'type':mt[0].get('type')})
+            elif isinstance(f,fields.BooleanField):
                 ls.append({'name':name,'label':f.verbose_name,'options':[
                 {'value':'1','label':'Yes'},
                 {'value':"0",'label':'No'}]})
@@ -231,7 +235,7 @@ class ModelTable(object):
             'row_pages' : self.pagenum.get_context(),
             'row_sort':self.row_sort.get_context(),
             'row_filters':self.row_filter.get_context(),
-            'placeholder':self.row_search.get_context(),
+            'search_tip':self.row_search.get_context(),
             'model':model_to_name(self.model),
         }
        
