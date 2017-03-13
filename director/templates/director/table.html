@@ -87,15 +87,15 @@
 	<table class='table fake-suit'>
 		<thead>
 			<tr >
-				<td style='width:50px' v-if='!search_args._pop'>
+				<th style='width:50px' v-if='!search_args._pop'>
 					<input type="checkbox" name="test" value=""/>
-				</td>
-				<td v-for='head in heads' :class='["td_"+head.name,{"selected":is_sorted(row_sort.sort_str ,head.name )}]'>
+				</th>
+				<th v-for='head in heads' :class='["td_"+head.name,{"selected":is_sorted(row_sort.sort_str ,head.name )}]'>
 					<span v-if='ex.isin(head.name,row_sort.sortable)' v-text='head.label' class='clickable' 
 						@click='row_sort.sort_str = toggle( row_sort.sort_str,head.name)'></span>
 					<span v-else v-text='head.label'></span>
 					<sort-mark class='sort-mark' v-model='row_sort.sort_str' :name='head.name'></sort-mark>
-				</td>
+				</th>
 			</tr>
 		</thead>
 		<tbody>

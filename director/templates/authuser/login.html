@@ -20,7 +20,7 @@
 
 	$(function () {
 		new Vue({
-			el:'#content',
+			el:'#there',
 			data:{
 				meta:meta,
 				regist_url:regist_url
@@ -50,8 +50,8 @@
 
 </script>
 
-<div class='container' id='content'>
-	<div ng-controller='content'>
+<div id='there' class="flex">
+	<div class="flex-vh-center flex panel">
 		<form name="logForm" ng-submit='submit_func(logForm.$valid)' class='form-signin' novalidate>
 			<h2 class='form-signin-heading'>欢迎登陆</h2>
 			<field name='username' :kw='meta'></field>
@@ -65,18 +65,24 @@
 
 		</form>
 
-</div>
-
+	</div>
 </div>
 <style type="text/css">
+	.panel{
+		min-height: 100vh;
+		width: 100vw;
+	}
 	.form-signin{
-		max-width:330px;
-		padding: 15px;
-		margin: 0 auto;
+		min-width:350px;
+		padding: 15px 30px;
+		border:1px solid gainsboro;
+		border-radius: 5px;
+		background-color: #bcf7c2;
+		/*margin: 0 auto;*/
 	}
-	input{
-		margin-bottom:3px;
-	}
+	/*input{*/
+		/*margin-bottom:3px;*/
+	/*}*/
 </style>
 
 {% endblock %}
