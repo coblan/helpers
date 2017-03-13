@@ -1,37 +1,45 @@
-{% extends 'table.html' %}
+{% extends 'director/table.html' %}
 
 {% block extra %}
 
 <script type="text/javascript">
-var filter={
-	username:function (name,row) {
-		return ex.template('<a href="edit/{pk}?next={next}">{value}</a>',
-									{	pk:row.pk,
-										next:btoa(location.pathname+location.search),
-										value:row[name]
-							})
-	},
-	groups:function (name,row) {
-		if(row['groups']){
-			return row['groups'].join('<br>')
+	var org_map = table_fun.methods.map
+	table_fun.methods.map=function(name,row){
+		if(name=='groups'){
+			return row[name].join('')
 		}else{
-			return ''
+			return org_map.call(this,name,row)
 		}
-	},
-	
-}
-
-
-$(function () {
-	var super_value_map=table.value_map
-	table.value_map=function(name,row){
-		if(filter[name]){
-			return filter[name](name,row)
-		}else{
-			return super_value_map(name,row)
-		}
-	} 
-})
+	}
+//var filter={
+//	username:function (name,row) {
+//		return ex.template('<a href="edit/{pk}?next={next}">{value}</a>',
+//									{	pk:row.pk,
+//										next:btoa(location.pathname+location.search),
+//										value:row[name]
+//							})
+//	},
+//	groups:function (name,row) {
+//		if(row['groups']){
+//			return row['groups'].join('<br>')
+//		}else{
+//			return ''
+//		}
+//	},
+//
+//}
+//
+//
+//$(function () {
+//	var super_value_map=table.value_map
+//	table.value_map=function(name,row){
+//		if(filter[name]){
+//			return filter[name](name,row)
+//		}else{
+//			return super_value_map(name,row)
+//		}
+//	}
+//})
 
 </script>
 {% endblock %}

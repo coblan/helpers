@@ -1,4 +1,4 @@
-{% extends "index.html" %}
+{% extends "director/index.html" %}
 {% load static %}
 {% load jsonify %}
 
@@ -45,50 +45,14 @@
 				rt_win:function(row){
 					ln.rtWin(row)
 				},
-				map:function(name,row){
-					if(name==heads[0].name){
-						return ex.template('<a href="edit/{pk}?next={next}">{value}</a>',
-								{	pk:row.pk,
-									next:btoa(location.pathname+location.search),
-									value:row[name]
-								})
-					}else{
-						return row[name]
-					}
-				},
+//				map:function (name,row) {
+//					if(name=='head'){
+//						return ex.template('<img src="{src}" style="max-height:40px" />',{src:row['head']})
+//					}else{
+//						return table_fun.methods.map.call(this,name,row) //row[name]
+//					}
+//				},
 
-				goto_page:function (page) {
-					this.search_args._page=page
-					this.search()
-				},
-				add_new:function () {
-					return 'edit/?next='+btoa(location.pathname+location.search)
-				},
-				del_item:function () {
-					
-					if (this.selected.length==0){
-						return
-					}
-					var rows=[]
-					var inst_ls =[]
-					for(var j=0;j<this.selected.length;j++){
-						var pk = this.selected[j]
-						for(var i=0;i<this.rows.length;i++){
-							if(this.rows[i].pk.toString()==pk){
-								rows.push(this.rows[i])
-								inst_ls.push({pk:pk,_class:this.rows[i]._class})
-							}
-						}
-					}
-					var path = '{% url "del_rows" %}'
-					location=ex.template("{path}?rows={rows}&next={next}",{path:path,
-																		rows:btoa(JSON.stringify(inst_ls)),
-																		next:btoa(location.pathname+location.search)})
-				},
-				search:function () {
-					location =ex.template('{path}{search}',{path:location.pathname,
-															search: encodeURI(ex.searchfy(this.search_args,'?')) }) 
-				},
 			},
 			mounted:function () {
 				var self=this;
@@ -109,16 +73,9 @@
 	<path-nav :menu='menu' v-if="!search_args._pop"></path-nav>
 	<div class='btn-panel flex'>
 
-		<form class='button-group flex-grow' autocomplete="on" v-if='placeholder || row_filters.length>0'>
-			<input v-if='placeholder' type="text" name="_q" v-model='search_args._q' :placeholder='placeholder' class='form-control'/>
-			<select name="" id="" v-for='filter in row_filters' v-model='search_args[filter.name]' class='form-control'>
-			        <option :value="null" v-text='filter.label'></option>
-			        <option value="" >----</option>
-			        <option v-for='option in filter.option' :value="option.value" v-text='option.label'></option>
-			</select>
+		<div v-if="row_filters.length==0" class="flex-grow"></div>
+		<com-filter class="flex-grow flex" :heads="row_filters" :search="search_args" :search_tip='placeholder' @submit="search()"></com-filter>
 
-			<button name="go" type="button" class="btn btn-info" @click='search()' >提交</button>
-		</form>
 		
 		<div class='btn-group' style='float: right;' v-if="!search_args._pop">
 			<a type="button" class="btn btn-success" :href='add_new()' v-if='can_add' role="button">创建</a>
@@ -127,7 +84,7 @@
 		
 	</div>
 
-	<table class='table'>
+	<table class='table fake-suit'>
 		<thead>
 			<tr >
 				<td style='width:50px' v-if='!search_args._pop'>
@@ -185,12 +142,12 @@
 		font-size:120%;
 		color: #0099CC;
 	}
-	.table tbody tr:nth-child(2n+1){
-		background-color: #F5F5F5;
-	}
-	.table tbody tr:nth-child(2n){
-		background-color: #F1F1F1;
-	}
+	/*.table tbody tr:nth-child(2n+1){*/
+		/*background-color: #F5F5F5;*/
+	/*}*/
+	/*.table tbody tr:nth-child(2n){*/
+		/*background-color: #F1F1F1;*/
+	/*}*/
 	
 </style>
 {% block extra %}

@@ -135,8 +135,10 @@ class ModelFields(forms.ModelForm):
         """
         if not self.can_access():
             raise PermissionDenied,'you have no Permission access %s'%self.instance._meta.model_name
-        
-        include = [x for x in self._meta.fields if x in self.fields]
+        if self._meta.fields:
+            include = [x for x in self._meta.fields if x in self.fields]
+        else:
+            include= self.fields
         return to_dict(self.instance,include=include)
 
     def get_options(self):
