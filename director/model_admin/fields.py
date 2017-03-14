@@ -193,8 +193,8 @@ class ModelFields(forms.ModelForm):
         
         for k,v in self.cleaned_data.items():
             print((k,v))
-            if isinstance(v,str):
-                v=u(v)
+            if isinstance(v,unicode):
+                v=v.encode('utf-8')
                 print(('sss',v))
             setattr(self.instance,k,v)
         print(repr(self.instance.name))
