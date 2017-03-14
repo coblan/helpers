@@ -191,16 +191,17 @@ class ModelFields(forms.ModelForm):
             detail=''
             self.instance.save() # if instance is a new row , need save first then manytomany_relationship can create   
         
-        for k,v in self.cleaned_data.items():
+        for k,v in [(k,v) for (k,v) in self.cleaned_data.items() if k in self.changed_data]:
             print((k,v))
-            if isinstance(v,unicode):
-                v=v.encode('utf-8')
-                print(('sss',v))
+            #if isinstance(v,unicode):
+                #v=v.encode('utf-8')
+                #print(('sss',v))
             setattr(self.instance,k,v)
         print(repr(self.instance.name))
         print('--------------')
         print(self.instance.name)
         self.instance.save()
+        print('oooooooooooo')
         
         if op:
             log =LogModel(key='{model_label}.{pk}'.format(model_label=model_to_name(self.instance),pk=self.instance.pk),kind=op,user=self.crt_user,detail=detail)
