@@ -28,7 +28,7 @@ def name_to_model(app_model_string):
     return apps.get_model(app_model_string)
     
 
-def to_dict(instance,filt_attr=None,include=None,exclude=None):
+def to_dict(instance,filt_attr=None,include=None,exclude=None,):
     out=sim_dict(instance,filt_attr,include,exclude)
     out['pk']=instance.pk
     out['_class']= instance._meta.app_label+'.'+instance._meta.model_name
@@ -64,7 +64,12 @@ def sim_dict(instance,filt_attr=None,include=None,exclude=None):
             if proxy_cls:
                 out[field.name] = proxy_cls().to_dict(instance,field.name)
             else:
-                out[field.name]=field.get_prep_value( getattr(instance,field.name) )   
+                out[field.name]=field.get_prep_value( getattr(instance,field.name) )  
+                if field.choices:
+                    org_value= out[field.name]
+                    mt = [x for x in field.choices if x[0]==org_value]
+                    if mt:
+                        out['_tr_'+field.name]=mt[0][1]
     return out
     
 
