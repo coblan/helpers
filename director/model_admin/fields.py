@@ -199,7 +199,6 @@ class ModelFields(forms.ModelForm):
             setattr(self.instance,k,v)
         print(repr(self.instance.name))
         print('--------------')
-        print(self.instance.name)
         self.instance.save()
         print('oooooooooooo')
         
