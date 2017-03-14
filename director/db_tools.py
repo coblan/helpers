@@ -6,7 +6,7 @@ from django import forms
 import json
 from datetime import datetime
 from django.utils.translation import ugettext as _
-
+from ..pyenv import u
 #from django.db.models.fields import related_descriptors
 
 def get_or_none(model, **kw):
@@ -189,7 +189,10 @@ def form_to_head(form,include=None):
         if isinstance(include,(tuple,list)) and k not in include:
             continue
         dc = {'name':k,'label':_(v.label),'required':v.required,}
-        if v.__class__==forms.fields.CharField:
+        if isinstance(v.widget,forms.widgets.Select):
+            dc['type'] = 'sim_select' 
+            dc['options']=[{'value':k,'label':v} for k,v in v.widget.choices]
+        elif v.__class__==forms.fields.CharField:
             if v.max_length:
                 dc.update({'type':'linetext','maxlength':v.max_length})
             else:
@@ -202,9 +205,8 @@ def form_to_head(form,include=None):
         elif v.__class__ ==forms.models.ModelMultipleChoiceField and \
             isinstance(v.widget,forms.widgets.SelectMultiple):
             dc['type']='tow_col'
-        elif v.__class__==forms.models.ModelChoiceField and \
-             isinstance(v.widget,forms.widgets.Select):
-            dc['type'] = 'sim_select'
+        # elif v.__class__==forms.models.ModelChoiceField and \
+        
         else:
             dc.update({'type':'linetext'})
         out.append(dc)
@@ -217,7 +219,7 @@ def model_to_head(model,include=[],exclude=[]):
             #if isinstance(field._verbose_name, (str,unicode)):
                 #dc = {'name':field.name,'label':_(field._verbose_name),}
             #else:
-            dc= {'name':field.name,'label':unicode(field.verbose_name)}
+            dc= {'name':field.name,'label':u(field.verbose_name)}
             out.append(dc)
     if include:
         out=[x for x in out if x.get('name') in include]
@@ -301,14 +303,14 @@ def delete_related_query(inst):
         many_to_many_rels = getattr(inst,name)
         for obj in many_to_many_rels.all():
             ls.append({'str':'{obj_cls}({obj_content}) to {inst_cls}({inst_content}) relationship '.format(obj_cls=obj.__class__.__name__,\
-                                obj_content=unicode(obj),inst_cls=inst.__class__.__name__,inst_content=unicode(obj)),
+                                obj_content=u(obj),inst_cls=inst.__class__.__name__,inst_content=unicode(obj)),
                        'related':[]})
     for field in inst._meta.get_fields():    # manyToMany Field
         if isinstance(field,models.ManyToManyField):
             name = field.name
             for obj in getattr(inst,name).all():
                 ls.append({'str':'{obj_cls}({obj_content}) to {inst_cls}({inst_content}) relationship '.format(obj_cls=obj.__class__.__name__,\
-                                obj_content=unicode(obj),inst_cls=inst.__class__.__name__,inst_content=unicode(obj)),
+                                obj_content=u(obj),inst_cls=inst.__class__.__name__,inst_content=unicode(obj)),
                        'related':[]})
     
     return ls
