@@ -194,6 +194,7 @@ class ModelFields(forms.ModelForm):
             setattr(self.instance,k,v)
         print(self.cleaned_data)
         self.instance.save()
+        print('here')
         
         if op:
             log =LogModel(key='{model_label}.{pk}'.format(model_label=model_to_name(self.instance),pk=self.instance.pk),kind=op,user=self.crt_user,detail=detail)
