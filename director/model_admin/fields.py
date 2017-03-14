@@ -12,6 +12,7 @@ from base import model_dc
 import base64
 from permit import Permit
 from ..models import LogModel
+from helpers.pyenv import u
 
 def save_row(row,user):
     model= name_to_model(row['_class'])
@@ -191,10 +192,10 @@ class ModelFields(forms.ModelForm):
             self.instance.save() # if instance is a new row , need save first then manytomany_relationship can create   
         
         for k,v in self.cleaned_data.items():
+            if isinstance(v,str):
+                v=u(v)
             setattr(self.instance,k,v)
-        print(self.cleaned_data)
         self.instance.save()
-        print('here')
         
         if op:
             log =LogModel(key='{model_label}.{pk}'.format(model_label=model_to_name(self.instance),pk=self.instance.pk),kind=op,user=self.crt_user,detail=detail)
