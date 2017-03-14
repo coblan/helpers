@@ -190,7 +190,7 @@ class ModelFields(forms.ModelForm):
             detail=''
             self.instance.save() # if instance is a new row , need save first then manytomany_relationship can create   
         
-        print(self.cleaned_data)
+        raise UserWarning,str(self.cleaned_data)
         for k,v in self.cleaned_data.items():
             setattr(self.instance,k,v)
         self.instance.save()
