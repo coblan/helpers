@@ -1,6 +1,7 @@
 
 def u(text):
-    try:
-        return unicode(text)
-    except UnicodeDecodeError:
+    if isinstance(text,str):
         return text.decode('utf-8')
+    else:
+        return unicode(text)
+
