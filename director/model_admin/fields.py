@@ -176,9 +176,9 @@ class ModelFields(forms.ModelForm):
             model_str= unicode(self.instance)
             for data in self.changed_data:
                 if data in self.get_readonly_fields():
-                    self.cleaned_data.pop(data)
-                    print("Can't change {data} of {model},I pop it".format(data=data,model=model_str))
-                    #raise PermissionDenied,"Can't change {data}".format(data=data)
+                    #self.cleaned_data.pop(data)
+                    #print("Can't change {data} of {model},I pop it".format(data=data,model=model_str))
+                    raise PermissionDenied,"Can't change {data}".format(data=data)
         
         op=None
         if self.changed_data:
@@ -189,7 +189,8 @@ class ModelFields(forms.ModelForm):
             op='add'
             detail=''
             self.instance.save() # if instance is a new row , need save first then manytomany_relationship can create   
-            
+        
+        print(self.cleaned_data)
         for k,v in self.cleaned_data.items():
             setattr(self.instance,k,v)
         self.instance.save()
