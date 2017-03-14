@@ -192,6 +192,7 @@ class ModelFields(forms.ModelForm):
         
         for k,v in self.cleaned_data.items():
             setattr(self.instance,k,v)
+        print(self.cleaned_data)
         self.instance.save()
         
         if op:
