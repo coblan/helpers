@@ -197,6 +197,8 @@ class ModelFields(forms.ModelForm):
                 v=u(v)
                 print(('sss',v))
             setattr(self.instance,k,v)
+        print('--------------')
+        print(self.instance.name)
         self.instance.save()
         
         if op:
