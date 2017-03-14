@@ -141,7 +141,6 @@ def from_dict(dc,model=None,pre_proc=None):
     processed_attr=pre_proc(dc,model) ; 返回处理过的字典processed，该processed用于剔除传入的dc参数
     
     """
-    print(dc)
     processed={}
     if model is None and '_class' in dc:
         model=apps.get_model(dc['_class'])
@@ -160,7 +159,7 @@ def from_dict(dc,model=None,pre_proc=None):
                 if field_map.get(field.__class__):
                     processed[field.name] = field_map.get(field.__class__)().from_dict(value,field) 
                 else:
-                    processed[field.name]=value
+                    processed[field.name]=u(value)
             else:
                 processed[field.name]=None
 
