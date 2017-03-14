@@ -192,8 +192,10 @@ class ModelFields(forms.ModelForm):
             self.instance.save() # if instance is a new row , need save first then manytomany_relationship can create   
         
         for k,v in self.cleaned_data.items():
+            print((k,v))
             if isinstance(v,str):
                 v=u(v)
+                print(('sss',v))
             setattr(self.instance,k,v)
         self.instance.save()
         
