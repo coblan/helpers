@@ -197,10 +197,10 @@ class ModelFields(forms.ModelForm):
                 #v=v.encode('utf-8')
                 #print(('sss',v))
             setattr(self.instance,k,v)
-        print(repr(self.instance.name))
-        print('--------------')
+        # print(repr(self.instance.name))
+        # print('--------------')
         self.instance.save()
-        print('oooooooooooo')
+        # print('oooooooooooo')
         
         if op:
             log =LogModel(key='{model_label}.{pk}'.format(model_label=model_to_name(self.instance),pk=self.instance.pk),kind=op,user=self.crt_user,detail=detail)
