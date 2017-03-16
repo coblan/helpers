@@ -46,7 +46,16 @@ class PageNum(object):
             num = page_nums[i]
         page_nums=[str(x) for x in page_nums]
         return {'options':page_nums,'crt_page':self.pageNumber}    
+
+class TrivalPageNum(object):
+    def __init__(self,pageNumber=1,kw={}):
+        pass    
+    def get_query(self,query):
+        return query
+    def get_context(self):
+        return {}
     
+
 class RowSearch(object):
     names=[]
     model=''
