@@ -55,7 +55,7 @@ class ModelFields(forms.ModelForm):
                 kw['instance'] = self._meta.model()
 
         super(ModelFields,self).__init__(dc,*args,**kw)
-        self.permit= Permit(self.instance._meta.model,self.crt_user)
+        self.permit= Permit(self.Meta.model,self.crt_user)
         self.pop_fields()
         self.init_value()
         

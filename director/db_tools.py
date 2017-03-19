@@ -95,7 +95,10 @@ class ForeignProc(object):
             return value
         else:
             model=field.rel.to
-            return model.objects.get(pk=value)
+            if not value:
+                return None
+            else:
+                return model.objects.get(pk=value)
 
 class ManyProc(object):
     def to_dict(self,inst,name):

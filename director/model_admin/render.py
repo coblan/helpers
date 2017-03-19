@@ -68,6 +68,7 @@ class TablePage(object):
     def __init__(self,request):
         self.request=request
         self.table = self.tableCls.parse_request(request)
+        self.crt_user=request.user
        
     def get_context(self):
         ctx = self.table.get_context()
