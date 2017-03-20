@@ -4,8 +4,10 @@ from django.db import models
 from django.apps import apps
 from django import forms
 import json
+from django.utils.timezone import localtime
 from datetime import datetime
 from django.utils.translation import ugettext as _
+
 from ..pyenv import u
 #from django.db.models.fields import related_descriptors
 
@@ -77,11 +79,14 @@ class DatetimeProc(object):
     def to_dict(self,inst,name):
         value = getattr(inst,name)
         if value:
-            return value.strftime('%Y-%m-%d %H:%M:%S')
+            return localtime(value).strftime('%Y-%m-%d %H:%M:%S')
         else:
             return ''
     
     def from_dict(self,value,field):
+        """
+        该函数需要check
+        """
         return datetime.strptime(value,'%Y-%m-%d %H:%M:%S')
         
 class ForeignProc(object):
