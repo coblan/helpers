@@ -43,8 +43,10 @@
 					}
 					var next = search.next
 					if(next){
-						var url = atob(next)
+						var url = decodeURIComponent(next)
 						location=url
+					}else{
+						location='/'
 					}
 					
 				}

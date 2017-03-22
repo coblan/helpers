@@ -53,6 +53,10 @@
 //						return table_fun.methods.map.call(this,name,row) //row[name]
 //					}
 //				},
+				del_item:function(){
+					var path= '{% url "del_rows" %}'
+					table_fun.methods.del_item.call(this,path)
+				}
 
 			},
 			mounted:function () {
