@@ -11,8 +11,8 @@ class RequestMiddleware(object):
         url=request.get_full_path()
         content=response.content
         status_code=response.status_code
-        if re.search('text/html',response.get('Content-Type')):
-            content='text/html'
+        if not re.search('application/json',response.get('Content-Type')):
+            content= response.get('Content-Type') + ';Len:%s'%len(response.content)
        
         log.info('Url:{url}\nStatus_code:{status_code}\nContent:{content}'.format(url=url,content=content,status_code=status_code))
         return response
