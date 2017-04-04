@@ -19,6 +19,8 @@
     <!--<link href="{% static 'css/ui.css'%}" rel="stylesheet">-->
 </head>
 
+{% include 'director/reverse.html' %}
+
 <script type="text/javascript">
     Vue.config.devtools = true
     menu= {{menu| jsonify}}
