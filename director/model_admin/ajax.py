@@ -6,9 +6,9 @@
 """
 from __future__ import unicode_literals
 
-from permit import Permit
+from permit import ModelPermit
 from base import model_dc
-from ..db_tools import name_to_model,model_to_name
+from ..db_tools import name_to_model,model_to_name,to_dict
 from fields import save_row
 from django.core.exceptions import ValidationError
 #from base import model_dc,get_admin_name_by_model,del_row
@@ -19,7 +19,7 @@ def get_globle():
 
 
 def model_perm(user,perm,model):
-    validator = Permit(model, user)
+    validator = ModelPermit(model, user)
     return getattr(validator,perm)()
 
 
@@ -28,7 +28,9 @@ def save(row,user):
     """
     try:
         instance = save_row(row, user)
-        return {'status':'success','pk':instance.pk,'_class':model_to_name(instance)}
+        perm=ModelPermit(instance,user)
+        dc =to_dict(instance,include=perm.readable_fields())
+        return {'status':'success','row':dc}
     except ValidationError as e:
         return {'errors':dict(e)}
     #model= name_to_model(row['_class'])
@@ -48,4 +50,4 @@ def del_rows(rows,user):
         fields_obj = fields_cls(row,crt_user=user)
         fields_obj.del_form()
    
-    return {'status':'success','rows':rows}  
+    return rows

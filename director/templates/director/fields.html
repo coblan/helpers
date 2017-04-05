@@ -11,6 +11,10 @@
 
 	errors={}
 
+	can_add={{ can_add | jsonify | default:'false' }}
+	can_log={{ can_log | jsonify | default:'false' }}
+	can_del={{ can_del | jsonify | default:'false' }}
+
 	$(function () {
 		new Vue({
 			el:'#there',
@@ -21,16 +25,16 @@
 			   		errors:errors,
 				},
 				menu:menu,
-				can_save:false,
-				can_delete:false,
-				can_log:false,
+				can_add:can_add,
+				can_del:can_del,
+				can_log:can_log,
 			},
 			mixins:[field_fun],
 			methods:{
-				del_row:function(){
-					var path = '{% url "del_rows" %}'
-					field_fun.methods.del_row.call(this,path)
-				}
+//				del_row:function(){
+//					var path = '{% url "del_rows" %}'
+//					field_fun.methods.del_row.call(this,path)
+//				}
 //				submit:function () {
 //					var self =this;
 //					show_upload()
@@ -77,20 +81,20 @@
 //																next:btoa(location.pathname)})
 //				}
 			},
-			mounted:function () {
-				var self=this
-				var ls = row._class.split('.')
-				var app_label=ls[0]
-				var model_name=ls[1]
-				var post_data=[{fun:'model_perm',perm:'can_add',model:row._class,_rt_key:'can_save'},
-								{fun:'model_perm',perm:'can_del',model:row._class,_rt_key:'can_delete'},
-								{fun:'model_perm',perm:'can_log',model:row._class,_rt_key:'can_log'}]
-				$.post('',JSON.stringify(post_data),function (data) {
-					self.can_save=data.can_save
-					self.can_delete=data.can_delete
-					self.can_log=data.can_log
-				})
-			}
+//			mounted:function () {
+//				var self=this
+//				var ls = row._class.split('.')
+//				var app_label=ls[0]
+//				var model_name=ls[1]
+//				var post_data=[{fun:'model_perm',perm:'can_add',model:row._class,_rt_key:'can_save'},
+//								{fun:'model_perm',perm:'can_del',model:row._class,_rt_key:'can_delete'},
+//								{fun:'model_perm',perm:'can_log',model:row._class,_rt_key:'can_log'}]
+//				$.post('',JSON.stringify(post_data),function (data) {
+//					self.can_save=data.can_save
+//					self.can_delete=data.can_delete
+//					self.can_log=data.can_log
+//				})
+//			}
 		})
 	})
 </script>
@@ -106,8 +110,8 @@
 	
 	<div style='overflow: hidden;'>
 		<div class="btn-group" style='float: right;'>
-			<button type="button" class="btn btn-default" @click='submit()' v-if='can_save'>Save</button>
-			<button type="button" class="btn btn-default" v-if='can_delete' @click='del_row()'>删除</button>
+			<button type="button" class="btn btn-default" @click='submit()' v-if='can_add'>Save</button>
+			<button type="button" class="btn btn-default" v-if='can_del' @click='del_row()'>删除</button>
 			<button type="button" class="btn btn-default" @click='cancel()' >Cancel</button>
 		</div>
 	</div>

@@ -55,7 +55,7 @@ def has_permit(user,name):
                     return True
     return False
 
-class Permit(object):
+class ModelPermit(object):
     """
     以json的形式存储于permitModel数据库
     

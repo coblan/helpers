@@ -10,7 +10,7 @@ from django.core.urlresolvers import reverse
 from django.core.exceptions import ValidationError
 from base import model_dc
 import base64
-from permit import Permit
+from permit import ModelPermit
 from ..models import LogModel
 from helpers.pyenv import u
 
@@ -55,7 +55,7 @@ class ModelFields(forms.ModelForm):
                 kw['instance'] = self._meta.model()
 
         super(ModelFields,self).__init__(dc,*args,**kw)
-        self.permit= Permit(self.Meta.model,self.crt_user)
+        self.permit= ModelPermit(self.Meta.model,self.crt_user)
         self.pop_fields()
         self.init_value()
         

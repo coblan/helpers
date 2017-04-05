@@ -6,7 +6,7 @@ from __future__ import unicode_literals
 import json
 from django.db.models import Q,fields
 from django.core.exceptions import PermissionDenied
-from permit import Permit
+from permit import ModelPermit
 from ..db_tools import model_to_name,to_dict,model_to_head,model_to_name
 #from forms import MobilePageForm
 
@@ -250,7 +250,7 @@ class ModelTable(object):
        
 
     def permited_fields(self):
-        self.permit=Permit(model=self.model, user=self.crt_user)
+        self.permit=ModelPermit(model=self.model, user=self.crt_user)
         ls = self.permit.readable_fields()
         if self.include:
             return [x for x in self.include if x in ls]

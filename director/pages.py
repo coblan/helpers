@@ -5,6 +5,8 @@ import json
 from django.apps import apps
 from .model_admin.base import model_dc
 import re
+from .model_admin.permit import ModelPermit
+from .db_tools import to_dict
 
 class TablePage(object):
     template='director/table.html'
@@ -17,6 +19,9 @@ class TablePage(object):
        
     def get_context(self):
         ctx = self.table.get_context()
+        perm = ModelPermit(self.table.model,self.crt_user)
+        ctx['can_add']=perm.can_add()
+        ctx['can_del']=perm.can_del()
         #pop = self.request.GET.get('_pop')
         #if not pop:
             #menu_list=list( render_dc.get('menu') )
@@ -35,6 +40,11 @@ class FormPage(object):
         
     def get_context(self):
         ctx = self.fields.get_context()
+        perm = ModelPermit(self.fieldsCls.Meta.model,self.request.user)
+        ctx['can_add']=perm.can_add()
+        ctx['can_del']=perm.can_del()   
+        ctx['can_log']=perm.can_log()
+        
         #pop = self.request.GET.get('_pop')
         #if not pop:
             #ctx['menu']=evalue_container(render_dc.get('menu'),user=self.request.user)  
@@ -53,11 +63,12 @@ class DelPage(object):
             # ctx['menu']=evalue_container(render_dc.get('menu',{}),user=self.request.user) 
             
         ls_str = self.request.GET.get('rows')
-        rows = [x for x in ls_str.split(',') if x]
+        rows_stream = [x for x in ls_str.split(',') if x]
 
         
         infos = {}
-        for row in rows:
+        rows=[]
+        for row in rows_stream:
             ls = row.split(':')
             _class=ls[0]
             model = apps.get_model(_class)
@@ -67,7 +78,7 @@ class DelPage(object):
                 dc={'pk':pk,'crt_user':self.request.user}
                 fields_obj= fields_cls(**dc)
                 infos.update(fields_obj.get_del_info())
-            
+                rows.append(to_dict(fields_obj.instance,include=fields_obj.permit.readable_fields()))
         ctx['infos']=infos
         ctx['rows']=rows       
         return ctx   

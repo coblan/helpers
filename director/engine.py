@@ -8,7 +8,7 @@ from django.shortcuts import redirect
 from django.conf import settings
 from .model_admin import ajax
 from .container import evalue_container
-from .model_admin.permit import Permit
+from .model_admin.permit import ModelPermit
 from .port import jsonpost
 from .pages import DelPage
 
@@ -52,14 +52,14 @@ class BaseEngine(object):
 
 def can_touch(model):
     def _func(user):
-        validator = Permit(model, user)
+        validator = ModelPermit(model, user)
         return validator.can_access()
     return _func
 
 def can_list(ls):
     def _func(user):
         for model in ls:
-            validator = Permit(model, user)
+            validator = ModelPermit(model, user)
             if validator.can_access():
                 return True
     return _func    
