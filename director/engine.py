@@ -10,6 +10,7 @@ from .model_admin import ajax
 from .container import evalue_container
 from .model_admin.permit import Permit
 from .port import jsonpost
+from .pages import DelPage
 
 class BaseEngine(object):
     _pages=None
@@ -25,7 +26,9 @@ class BaseEngine(object):
     @classmethod
     def add_pages(cls,dc):
         if cls._pages is None:
-            cls._pages={}
+            cls._pages={
+                'del_rows':DelPage,
+            }
         cls._pages.update(dc)
     
     def view(self,request,name):
