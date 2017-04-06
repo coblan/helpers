@@ -14,11 +14,11 @@ from ..container import evalue_container
 import ajax
 from django.contrib.auth.decorators import login_required
 
-from base import model_dc,render_dc,model_page_dc
+from base import model_dc,render_dc,page_dc
 
 @login_required
 def table_view(request,name):
-    page_cls = model_page_dc.get(name).get('table')
+    page_cls = page_dc.get(name).get('table')
     if request.method=='GET':
         page=page_cls(request)
         return render(request,page.template,context=page.get_context())
@@ -30,7 +30,7 @@ def table_view(request,name):
 
 @login_required
 def form_view(request,name,pk=None):
-    page_cls = model_page_dc.get(name).get('form')
+    page_cls = page_dc.get(name).get('form')
     if request.method=='GET':
         page=page_cls(request,pk)
         return render(request,page.template,context=page.get_context())
@@ -166,7 +166,7 @@ class Render(object):
                 dc={'crt_user':self.request.user}
             
             if admin_name:
-                model_item =model_page_dc.get(admin_name)                  
+                model_item =page_dc.get(admin_name)                  
                 ajax_scope= model_item.get('ajax',{})
                 function_scope.update(ajax_scope)
                 
@@ -180,17 +180,17 @@ class Render(object):
             elif re.search('^(\w+)/?$', self.url):
                 browse = re.search('^(\w+)/?$', self.url)
                 self.name=browse.group(1)
-                self.model_item =model_page_dc.get(self.name)
+                self.model_item =page_dc.get(self.name)
                 temp,context = self.browse()
             elif re.search('^(\w+)/edit/?$',self.url):
                 edit = re.search('^(\w+)/edit/?$',self.url)
                 self.name=edit.group(1)
-                self.model_item =model_page_dc.get(self.name)  
+                self.model_item =page_dc.get(self.name)  
                 temp, context = self.edit(name=edit.group(1),pk=None)            
             elif re.search('^(\w+)/edit/(\w*)/?$',self.url):
                 edit = re.search('^(\w+)/edit/(\w*)/?$',self.url)
                 self.name=edit.group(1)
-                self.model_item =model_page_dc.get(self.name)  
+                self.model_item =page_dc.get(self.name)  
                 temp, context = self.edit(name=edit.group(1),pk=edit.group(2))
                 
             if temp is None:
@@ -233,7 +233,7 @@ class Render(object):
         for row in rows:
             model = apps.get_model(row['_class'])
             admin_name = get_admin_name_by_model(model)
-            model_item = model_page_dc.get(admin_name)
+            model_item = page_dc.get(admin_name)
             fields_cls = model_item.get('fields') #,self._get_new_fields_cls())
             
             dc={'pk':row['pk'],'crt_user':self.request.user}
@@ -293,7 +293,7 @@ class Render(object):
             edit = re.search('^(\w+)/edit/',self.url)
             admin_name= edit.group(1)
             
-        self.model_item = model_page_dc.get(admin_name) 
+        self.model_item = page_dc.get(admin_name) 
         fields_cls = self.model_item.get('fields') 
         row['crt_user']=user
         fields_obj=fields_cls(row,crt_user=user)
@@ -328,9 +328,9 @@ class Render(object):
         """
         if model:
             admin_name = get_admin_name_by_model(model)
-            fields= model_page_dc.get(admin_name).get('fields')
+            fields= page_dc.get(admin_name).get('fields')
         elif name:
-            fields = model_page_dc.get(name).get('fields')
+            fields = page_dc.get(name).get('fields')
         return fields(pk=pk,crt_user=self.crt_user).get_context()
     
 

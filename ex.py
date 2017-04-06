@@ -6,4 +6,13 @@ def findone(collection,dc):
                 find=False
         if find:
             return doc
-                
+
+def locate(path):
+    ls = path.split('.')
+    try:
+        mod=None
+        for k in range(len(ls)):
+            mod=__import__('.'.join(ls[:k+1]))
+        return mod
+    except:
+        return reduce(lambda obj,prop:getattr(obj,prop,None), ls[k:], mod)

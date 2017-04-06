@@ -12,6 +12,8 @@ from .model_admin.permit import ModelPermit
 from .port import jsonpost
 from .pages import DelPage
 
+page_dc={}
+
 class BaseEngine(object):
     _pages=None
     menu={}
