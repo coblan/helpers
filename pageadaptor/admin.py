@@ -1,7 +1,7 @@
 # encoding:utf-8
 from __future__ import unicode_literals
 
-from helpers.director.shortcut import model_dc,model_page_dc,TablePage,ModelTable,FormPage,ModelFields
+from helpers.director.shortcut import model_dc,page_dc,TablePage,ModelTable,FormPage,ModelFields
 from models import WebPage
 from stencil import web_page_templates
 from pydoc import locate

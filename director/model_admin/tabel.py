@@ -95,6 +95,10 @@ class RowSearch(object):
             return query
 
 class RowFilter(object):
+    """
+    @names : 普通字段，用于过滤用.
+    @range_fields: span字段，例如时间段
+    """
     names=[]
     range_fields=[]
     model=''
@@ -196,7 +200,7 @@ class ModelTable(object):
     include=None
     exclude=[]
     pagenator=PageNum
-    def __init__(self,page=1,row_sort=[],row_filter={},row_search={},crt_user=None,kw={}):
+    def __init__(self,page=1,row_sort=[],row_filter={},row_search={},crt_user=None,**kw):
         self.crt_user=crt_user 
         self.page=page
         allowed_names=self.permited_fields()
@@ -209,6 +213,7 @@ class ModelTable(object):
         if not self.row_search.model:
             self.row_search.model=self.model
         self.pagenum = self.pagenator(pageNumber=self.page)
+        self.kw=kw
 
     @classmethod
     def parse_request(cls,request):
@@ -235,7 +240,7 @@ class ModelTable(object):
             arg = kw.pop(k,None)
             if arg:
                 row_filter[k]=arg
-        return cls(page,row_sort,row_filter,q,request.user,kw)    
+        return cls(page,row_sort,row_filter,q,request.user,**kw)    
         
     def get_context(self):
         return {
@@ -247,8 +252,27 @@ class ModelTable(object):
             'search_tip':self.row_search.get_context(),
             'model':model_to_name(self.model),
         }
-       
-
+    
+    def get_head_context(self):
+        """
+        有些时候，最先不需要返回rows，而只返回filters，head等，等待用户选择后，才返回rows
+        """
+        return {
+            'heads':self.get_heads(),
+            'rows': [], #self.get_rows(),
+            'row_pages':{}, # self.pagenum.get_context(),
+            'row_sort':self.row_sort.get_context(),
+            'row_filters':self.row_filter.get_context(),
+            'search_tip':self.row_search.get_context(),
+            'model':model_to_name(self.model),
+        }        
+    
+    def get_data_context(self):
+        return {
+            'rows': self.get_rows(),
+            'row_pages' : self.pagenum.get_context(),            
+        }
+    
     def permited_fields(self):
         self.permit=ModelPermit(model=self.model, user=self.crt_user)
         ls = self.permit.readable_fields()
