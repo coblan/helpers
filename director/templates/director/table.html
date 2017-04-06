@@ -12,8 +12,8 @@
 	heads={{ heads | jsonify | default:'[]'}}
 	rows={{ rows | jsonify | default:'[]'}}
 	row_pages = {{ row_pages | jsonify}}
-	can_add={{can_add | jsonify| default :'false'}}
-	can_del={{can_del | jsonify| default :'false'}}
+	can_add={{can_add | jsonify| default:'false'}}
+	can_del={{can_del | jsonify| default:'false'}}
 	search_args=ex.parseSearch()
 	//	search字段从 search_args._q 来取值
 	$(function () {

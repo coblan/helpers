@@ -37,18 +37,15 @@ class FormPage(object):
         self.request=request
         self.pk=request.GET.get('pk')
         self.fields = self.fieldsCls(pk=self.pk,crt_user=request.user)
+        self.ctx=self.fields.get_context()
         
     def get_context(self):
-        ctx = self.fields.get_context()
-        perm = ModelPermit(self.fieldsCls.Meta.model,self.request.user)
-        ctx['can_add']=perm.can_add()
-        ctx['can_del']=perm.can_del()   
-        ctx['can_log']=perm.can_log()
-        
-        #pop = self.request.GET.get('_pop')
-        #if not pop:
-            #ctx['menu']=evalue_container(render_dc.get('menu'),user=self.request.user)  
-        return ctx
+        if self.fieldsCls:
+            perm = ModelPermit(self.fieldsCls.Meta.model,self.request.user)
+            self.ctx['can_add']=perm.can_add()
+            self.ctx['can_del']=perm.can_del()   
+            self.ctx['can_log']=perm.can_log()
+        return self.ctx
 
 class DelPage(object):
     template='director/del_rows.html'
