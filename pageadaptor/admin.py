@@ -4,6 +4,10 @@ from __future__ import unicode_literals
 from helpers.director.shortcut import model_dc,model_page_dc,TablePage,ModelTable,FormPage,ModelFields
 from models import WebPage
 from stencil import web_page_templates
+from pydoc import locate
+from django.conf import settings
+
+dir_engine=locate(settings.DIR_ENGINE)
 
 class WebPageTable(ModelTable):
     model = WebPage
@@ -41,4 +45,8 @@ class WebPageFormPage(FormPage):
 
 
 model_dc[WebPage]={'fields':WebPageForm}
-model_page_dc['webpage']={'table':WebPageTablePage,'form':WebPageFormPage}
+# model_page_dc['webpage']={'table':WebPageTablePage,'form':WebPageFormPage}
+dir_engine.add_pages({
+    'webpage':WebPageTablePage,
+    'webpage.edit':WebPageFormPage,
+})

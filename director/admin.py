@@ -1,13 +1,16 @@
 # encoding:utf-8
 from __future__ import unicode_literals
 
-from model_admin.render import TablePage,FormPage
+# from model_admin.render import TablePage,FormPage
+from .pages import TablePage,FormPage
 from model_admin.tabel import ModelTable
 from model_admin.fields import ModelFields
 from model_admin.base import model_dc,model_page_dc
 from django.contrib.auth.models import Group,User
 import ajax
 import json
+from pydoc import locate
+from django.conf import settings
 
 class UserGroupTable(ModelTable):
     model=Group
@@ -63,5 +66,12 @@ class UserFormPage(FormPage):
 
 model_dc[Group]={'fields':UserGroupFields}
 model_dc[User]={'fields':UserFields}
-model_page_dc['user']={'table':UserTablePage,'form':UserFormPage}
-model_page_dc['group']={'table':GroupTablePage,'form':GroupFormPage,}
+
+# model_page_dc['user']={'table':UserTablePage,'form':UserFormPage}
+# model_page_dc['group']={'table':GroupTablePage,'form':GroupFormPage,}
+
+dir_engine=locate(settings.DIR_ENGINE)
+dir_engine.add_pages({'user':UserTablePage,
+                         'user.edit':UserFormPage,
+                         'group':GroupTablePage,
+                         'group.edit':GroupFormPage})
