@@ -9,6 +9,7 @@ from model_admin.base import model_dc,page_dc
 from django.contrib.auth.models import Group,User
 import ajax
 import json
+from .model_admin.base import page_dc
 
 from django.conf import settings
 
@@ -69,7 +70,6 @@ model_dc[User]={'fields':UserFields}
 
 # model_page_dc['user']={'table':UserTablePage,'form':UserFormPage}
 # model_page_dc['group']={'table':GroupTablePage,'form':GroupFormPage,}
-
 
 page_dc.update({'user':UserTablePage,
                          'user.edit':UserFormPage,

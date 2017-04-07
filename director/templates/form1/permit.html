@@ -1,4 +1,4 @@
-{% extends "index.html" %}
+{% extends "director/index.html" %}
 {% load static %}
 {% load jsonify %}
 
@@ -57,12 +57,13 @@
                                         show_upload()
                                         var post_data=[{fun:'save_group_and_permit',row:this.kw.row,permits:this.permits}]
                                         $.post('',JSON.stringify(post_data),function (data) {
-                                                if(data.save_group_and_permit.errors){
-                                                        this.kw.errors=data.save_group_and_permit.errors
-                                                }
-                                                setTimeout(function () {
-                                                    hide_upload()
-                                                },2000)
+											if(data.save_group_and_permit.errors){
+													this.kw.errors=data.save_group_and_permit.errors
+											}
+											if(ex.parseSearch().next){
+												location=decodeURIComponent(ex.parseSearch().next)
+											}
+											hide_upload(300)
                                         })
                                 },
                                 cancel:function () {
