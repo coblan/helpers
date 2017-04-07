@@ -1,3 +1,14 @@
+# encoding:utf-8
+"""
+>5>helpers/db.rst>
+redis
+=======
+目标是全局只有一个到redis的连接::
+
+    from helpers.db.redis_utils import redis_conn
+
+<-<
+"""
 from django.conf import settings
 import redis
 

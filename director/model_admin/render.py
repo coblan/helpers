@@ -1,4 +1,7 @@
 # encoding:utf-8
+"""
+该模块，不再使用了。取而代之的是 engine.py
+"""
 from django.shortcuts import render,Http404
 #from tabel import ModelTable
 #from fields import ModelFields
