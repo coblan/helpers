@@ -201,7 +201,7 @@ def form_to_head(form,include=None):
     for k,v in form.fields.items():
         if isinstance(include,(tuple,list)) and k not in include:
             continue
-        dc = {'name':k,'label':_(v.label),'required':v.required,}
+        dc = {'name':k,'label':_(v.label),'required':v.required,'help_text':v.help_text}
         if isinstance(v.widget,forms.widgets.Select):
             dc['type'] = 'sim_select' 
             dc['options']=[{'value':k,'label':v} for k,v in v.widget.choices]
