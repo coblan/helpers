@@ -6,7 +6,8 @@ from django.apps import apps
 from .model_admin.base import model_dc
 import re
 from .model_admin.permit import ModelPermit
-from .db_tools import to_dict
+from .db_tools import to_dict,sim_dict,model_to_head
+from .models import LogModel
 
 class TablePage(object):
     template='director/table.html'
@@ -22,11 +23,6 @@ class TablePage(object):
         perm = ModelPermit(self.table.model,self.crt_user)
         ctx['can_add']=perm.can_add()
         ctx['can_del']=perm.can_del()
-        #pop = self.request.GET.get('_pop')
-        #if not pop:
-            #menu_list=list( render_dc.get('menu') )
-            #ctx['menu']=evalue_container(menu_list,user=self.request.user)        
-
         return ctx
     
 class FormPage(object):
@@ -79,3 +75,36 @@ class DelPage(object):
         ctx['infos']=infos
         ctx['rows']=rows       
         return ctx   
+
+class LogPage(object):
+    template='director/model_log.html'
+    def __init__(self, request):
+        """
+        ?rows=pkg.model:1:2,pkg.model2:1:2,
+        
+        """
+        self.request=request
+       
+    
+    def get_context(self):
+        ls_str = self.request.GET.get('rows')
+        rows_stream = [x for x in ls_str.split(',') if x]
+        rows =[]
+        for row in rows_stream:
+            ls = row.split(':')
+            _class=ls[0]
+            model = apps.get_model(_class)
+            model_util= model_dc.get(model)            
+            fields_cls = model_util.get('fields') 
+            perm = ModelPermit(model, self.request.user)
+            if perm.can_log(): 
+                for pk in ls[1:]:
+                    querys =LogModel.objects.filter(key='%s.%s'%(_class,pk))
+                    rows.extend(list(querys))
+        ctx = {'rows':[sim_dict(x,filt_attr=lambda y:{'user':unicode(y.user)}) for x in rows],
+               'heads':model_to_head(LogModel)}
+
+        ctx['can_add']=False
+        ctx['can_del']=False
+        return ctx         
+    

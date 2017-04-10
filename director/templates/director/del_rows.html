@@ -40,20 +40,16 @@
 						}
 					})
 				},
-//				next_page:function () {
-//					var search = ex.parseSearch()
-//					if(search._pop){
-//						window.close()
-//					}
-//					var next = search.next
-//					if(next){
-//						var url = decodeURIComponent(next)
-//						location=url
-//					}else{
-//						location='/'
-//					}
-//
-//				}
+				next_page:function () {
+					var search = ex.parseSearch()
+					if(search._pop){
+						window.close()
+					}else{
+						location=decodeURIComponent(search.next)||'/'
+					}
+
+
+				}
 			}
 			
 		})

@@ -46,10 +46,10 @@
 				rt_win:function(row){
 					ln.rtWin(row)
 				},
-				del_item:function(){
-					var path= '{% url "del_rows" %}'
-					table_fun.methods.del_item.call(this,path)
-				}
+//				del_item:function(){
+//					var path= '{% url "del_rows" %}'
+//					table_fun.methods.del_item.call(this,path)
+//				}
 
 			},
 
@@ -71,6 +71,8 @@
 		</div>
 		
 	</div>
+
+	<!--<com-table class='table fake-suit' :has_check="!search_args._pop" :map="map" :row_sort="row_sort" :heads="heads" :rows="rows" :selected="selected"></com-table>-->
 
 	<table class='table fake-suit'>
 		<thead>

@@ -37,8 +37,8 @@
 
 <div id='there'>
 
-	<div style='float: right;padding: 5px 20px;'>
-		<a href="ss">History</a>
+	<div v-if="can_log" style='float: right;padding: 5px 20px;'>
+		<a :href="log_url()">History</a>
 	</div>
 	<path-nav :menu='menu'>
 		<li><span>编辑</span></li>

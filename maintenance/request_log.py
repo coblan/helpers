@@ -21,7 +21,7 @@ class RequestMiddleware(object):
         url=request.get_full_path()
         if hasattr(response,'content'):
             content=response.content
-            if not re.search('application/json',response.get('Content-Type')):
+            if not re.search('application/json',response.get('Content-Type','')):
                 content= response.get('Content-Type') + ';Len:%s'%len(content)            
         else:
             content='response no content property'
