@@ -1,6 +1,24 @@
+{% load jsonify %}
+
 <script type="application/javascript">
     page_name='{{page_name}}'
     engine_url='{{engine_url}}'
+
+    can_add={{ can_add | jsonify | default:'false' }}
+    can_log={{ can_log | jsonify | default:'false' }}
+    can_del={{ can_del | jsonify | default:'false' }}
+
+    heads={{ heads | jsonify | default:'[]' }}
+
+    row = {{ row | jsonify | default:'[]' }}
+
+
+    row_filters={{row_filters | jsonify | default:'[]' }}
+    search_tip = '{{ search_tip |default:""}}'
+    row_sort={{row_sort | jsonify | default:'[]' }}
+    rows={{ rows | jsonify | default:'[]'}}
+    row_pages = {{ row_pages | jsonify | default:'[]'}}
+
 
 </script>
 

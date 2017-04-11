@@ -40,7 +40,7 @@ from .model_admin import ajax
 from .container import evalue_container
 from .model_admin.permit import ModelPermit
 from .port import jsonpost
-from .pages import DelPage
+from .pages import DelPage,LogPage
 
 page_dc={}
 
@@ -60,6 +60,7 @@ class BaseEngine(object):
         if cls._pages is None:
             cls._pages={
                 'del_rows':DelPage,
+                'log':LogPage,
             }
         cls._pages.update(dc)
     

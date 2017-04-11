@@ -6,34 +6,35 @@
 <script src='{% static "js/table.pack.js" %}'></script>
 <script type="text/javascript">
 	
-	row_filters={{row_filters | jsonify }}
-	placeholder = '{{placeholder |default:""}}'
-	row_sort={{row_sort | jsonify | default:'[]' }}
-	heads={{ heads | jsonify | default:'[]'}}
-	rows={{ rows | jsonify | default:'[]'}}
-	row_pages = {{ row_pages | jsonify}}
-	can_add={{can_add | jsonify| default:'false'}}
-	can_del={{can_del | jsonify| default:'false'}}
-	search_args=ex.parseSearch()
+//	row_filters={{row_filters | jsonify }}
+//	placeholder = '{{placeholder |default:""}}'
+//	row_sort={{row_sort | jsonify | default:'[]' }}
+//	heads={{ heads | jsonify | default:'[]'}}
+//	rows={{ rows | jsonify | default:'[]'}}
+//	row_pages = {{ row_pages | jsonify}}
+
+//	can_add={{can_add | jsonify| default:'false'}}
+//	can_del={{can_del | jsonify| default:'false'}}
+//	search_args=ex.parseSearch()
 	//	search字段从 search_args._q 来取值
 	$(function () {
 	table=new Vue({
 			el:'#there',
 			data:{
-		        heads:heads,
-		        rows:rows,
-		        row_filters:row_filters,
-		        row_sort:row_sort,
-		        row_pages:row_pages,
-		        placeholder:placeholder,
-		        selected:[],
-		        del_info:[],
-		        menu:menu,
-		        can_add:can_add,
-		        can_del:can_del,
+//		        heads:heads,
+//		        rows:rows,
+//		        row_filters:row_filters,
+//		        row_sort:row_sort,
+//		        row_pages:row_pages,
+//		        placeholder:placeholder,
+//		        selected:[],
+//		        del_info:[],
+//		        menu:menu,
+//		        can_add:can_add,
+//		        can_del:can_del,
 //		        model:model,
-		        search_args:search_args,
-		        ex:ex,
+//		        search_args:search_args,
+//		        ex:ex,
 			},
 			mixins:[table_fun],
 			watch:{
@@ -43,13 +44,13 @@
 				}
 			},
 			methods:{
-				rt_win:function(row){
-					ln.rtWin(row)
-				},
-				del_item:function(){
-					var path= '{% url "del_rows" %}'
-					table_fun.methods.del_item.call(this,path)
-				}
+//				rt_win:function(row){
+//					ln.rtWin(row)
+//				},
+//				del_item:function(){
+//					var path= '{% url "del_rows" %}'
+//					table_fun.methods.del_item.call(this,path)
+//				}
 
 			},
 
@@ -62,42 +63,47 @@
 	<div class='btn-panel flex'>
 
 		<div v-if="row_filters.length==0" class="flex-grow"></div>
-		<com-filter class="flex-grow flex" :heads="row_filters" :search="search_args" :search_tip='placeholder' @submit="search()"></com-filter>
+		<com-filter class="flex-grow flex" :heads="row_filters" :search="search_args"
+					:search_tip='search_tip' @submit="search()"></com-filter>
 
+		<com-table-btn v-if="!search_args._pop" :add_new="add_new" :del_item="del_item"></com-table-btn>
 		
-		<div class='btn-group' style='float: right;' v-if="!search_args._pop">
-			<a type="button" class="btn btn-success btn-sm" :href='add_new()' v-if='can_add' role="button">创建</a>
-			<button type="button" class="btn btn-danger btn-sm" @click='del_item()' v-if='can_del'>删除</button>
-		</div>
+		<!--<div class='btn-group' style='float: right;' v-if="!search_args._pop">-->
+			<!--<a type="button" class="btn btn-success btn-sm" :href='add_new()' v-if='can_add' role="button">创建</a>-->
+			<!--<button type="button" class="btn btn-danger btn-sm" @click='del_item()' v-if='can_del'>删除</button>-->
+		<!--</div>-->
 		
 	</div>
 
-	<table class='table fake-suit'>
-		<thead>
-			<tr >
-				<th style='width:50px' v-if='!search_args._pop'>
-					<input type="checkbox" name="test" value=""/>
-				</th>
-				<th v-for='head in heads' :class='["td_"+head.name,{"selected":is_sorted(row_sort.sort_str ,head.name )}]'>
-					<span v-if='ex.isin(head.name,row_sort.sortable)' v-text='head.label' class='clickable' 
-						@click='row_sort.sort_str = toggle( row_sort.sort_str,head.name)'></span>
-					<span v-else v-text='head.label'></span>
-					<sort-mark class='sort-mark' v-model='row_sort.sort_str' :name='head.name'></sort-mark>
-				</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr v-for='row in rows'>
-				<td v-if='!search_args._pop'>
-					<input type="checkbox" name="test" :value="row.pk" v-model='selected'/>
-				</td>
-				<td v-for='head in heads' :class='"td_"+head.name'>
-					<a v-if='search_args._pop && head.name=="name"' href=";" @click="rt_win(row)" v-text="row['name']"></a>
-					<span v-else v-html='map(head.name,row)'></span>
-				</td>
-			</tr>
-		</tbody>
-	</table>
+	<com-table class='table fake-suit' :has_check="!search_args._pop" :map="map"
+			   :row_sort="row_sort" :heads="heads" :rows="rows" v-model="selected"></com-table>
+
+	<!--<table class='table fake-suit'>-->
+		<!--<thead>-->
+			<!--<tr >-->
+				<!--<th style='width:50px' v-if='!search_args._pop'>-->
+					<!--<input type="checkbox" name="test" value=""/>-->
+				<!--</th>-->
+				<!--<th v-for='head in heads' :class='["td_"+head.name,{"selected":is_sorted(row_sort.sort_str ,head.name )}]'>-->
+					<!--<span v-if='ex.isin(head.name,row_sort.sortable)' v-text='head.label' class='clickable' -->
+						<!--@click='row_sort.sort_str = toggle( row_sort.sort_str,head.name)'></span>-->
+					<!--<span v-else v-text='head.label'></span>-->
+					<!--<sort-mark class='sort-mark' v-model='row_sort.sort_str' :name='head.name'></sort-mark>-->
+				<!--</th>-->
+			<!--</tr>-->
+		<!--</thead>-->
+		<!--<tbody>-->
+			<!--<tr v-for='row in rows'>-->
+				<!--<td v-if='!search_args._pop'>-->
+					<!--<input type="checkbox" name="test" :value="row.pk" v-model='selected'/>-->
+				<!--</td>-->
+				<!--<td v-for='head in heads' :class='"td_"+head.name'>-->
+					<!--<a v-if='search_args._pop && head.name=="name"' href=";" @click="rt_win(row)" v-text="row['name']"></a>-->
+					<!--<span v-else v-html='map(head.name,row)'></span>-->
+				<!--</td>-->
+			<!--</tr>-->
+		<!--</tbody>-->
+	<!--</table>-->
 	
 
 	<paginator :nums='row_pages.options' :crt='row_pages.crt_page' @goto_page='goto_page($event)'></paginator>
@@ -109,23 +115,23 @@
 		/*position: relative;*/
 		/*display: inline-block;*/
 	/*}*/
-	.form-control{
-		display: inline-block;
-		margin-left:10px;
-		width:auto;
-		/*height:30px;*/
-	}
-	.sort-mark{
-		float: right;
-	}
-	.selected{
-		background-color: #DDD;
-	}
-	.clickable{
-		cursor: pointer;
-		font-size:120%;
-		color: #0099CC;
-	}
+	/*.form-control{*/
+		/*display: inline-block;*/
+		/*margin-left:10px;*/
+		/*width:auto;*/
+		/*/!*height:30px;*!/*/
+	/*}*/
+	/*.sort-mark{*/
+		/*float: right;*/
+	/*}*/
+	/*.selected{*/
+		/*background-color: #DDD;*/
+	/*}*/
+	/*.clickable{*/
+		/*cursor: pointer;*/
+		/*font-size:120%;*/
+		/*color: #0099CC;*/
+	/*}*/
 	/*.table tbody tr:nth-child(2n+1){*/
 		/*background-color: #F5F5F5;*/
 	/*}*/
