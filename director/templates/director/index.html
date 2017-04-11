@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <script src="https://cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
     <script src="https://cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css">
     <link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <script src="https://cdn.bootcss.com/vue/2.2.1/vue.js"></script>
 
@@ -112,7 +112,7 @@
                 ex.each(this.menu,function(act){
                     if(act.selected){
                         ls.push(act)
-                        if(act.subMenu){
+                        if(act.submenu){
                             ex.each(act.submenu,function(sub_act){
                                 if(sub_act.active){
                                     ls.push(sub_act)
@@ -130,9 +130,6 @@
     <ol class="breadcrumb">
         <li v-for='act in get_active_links()'><span v-text='act.label'></span></li>
         <slot></slot>
-        <!--<li><a href="#">Home</a></li>
-        <li><a href="#">Library</a></li>
-        <li class="active">Data</li>-->
     </ol>
 </template>
 <style type="text/css" media="screen" id="test">

@@ -56,7 +56,7 @@
 
 	<div class='field-panel'>
 		
-		<field  v-for='head in kw.heads' :name='head.name' :kw='kw'></field>
+		<field  v-for='head in kw.heads' :key="head.name" :name='head.name' :kw='kw'></field>
 	</div>
 </div>
 
