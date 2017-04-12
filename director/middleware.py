@@ -14,7 +14,7 @@ class GeneralProcess(object):
         session_id=request.GET.get('_user_session')
         if not session_id:
             session_id=request.GET.get('user_session')  # 为了兼容，暂时支持老的user_session 参数
-            
+        print(session_id)
         if session_id:
             request.COOKIES['sessionid']=session_id
             # user=session_to_user(session_id)
