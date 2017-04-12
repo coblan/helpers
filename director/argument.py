@@ -13,7 +13,7 @@ def get_argument(request):
                 dc[k]=v[0]
         return dc
     else:
-        return dict(request.GET)
+        return request.GET.dict()
 
 def validate_argument(dc,validate_dict):
     for k,v in validate_dict.items():
