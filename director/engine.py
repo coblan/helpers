@@ -41,8 +41,12 @@ from .container import evalue_container
 from .model_admin.permit import ModelPermit
 from .port import jsonpost
 from .pages import DelPage,LogPage
+from .model_admin.base import page_dc
 
-page_dc={}
+page_dc.update({
+        'del_rows':DelPage,
+        'log':LogPage,
+    } )
 
 class BaseEngine(object):
     _pages=None
@@ -58,14 +62,12 @@ class BaseEngine(object):
     @classmethod
     def add_pages(cls,dc):
         if cls._pages is None:
-            cls._pages={
-                'del_rows':DelPage,
-                'log':LogPage,
-            }
-        cls._pages.update(dc)
+            cls._pages=[]
+        if not dc in cls._pages:
+            cls._pages.append(dc)
     
     def view(self,request,name):
-        page_cls = self._pages.get(name)
+        page_cls = self.get_page_cls(name)
         if request.method=='GET':
             if getattr(page_cls,'need_login',True):
                 if request.user.is_anonymous() or not request.user.is_active:
@@ -79,7 +81,13 @@ class BaseEngine(object):
             return render(request,page.template,context=ctx)
         elif request.is_ajax():
             return jsonpost(request,ajax.get_globle())        
-        
+    
+    def get_page_cls(self,name):
+        if self._pages:
+            for dc in self._pages:
+                if name in dc:
+                    return dc[name]
+
     def get_menu(self,request):
         return evalue_container( self.menu,user=request.user,url_name=self.url_name)
 

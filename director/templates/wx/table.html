@@ -1,0 +1,54 @@
+{% extends "wx/base.html" %}
+{% load static %}
+{% load jsonify %}
+
+
+{% block page_content %}
+
+<script type="text/javascript">
+        $(function(){
+            new Vue({
+                el:'#there',
+                data:{
+                    menu:menu,
+                    rows:rows,
+                },
+                mounted:function(){
+
+                },
+                methods:{
+                    goto:function(url){
+                        location=url
+                    }
+                }
+            })
+        })
+</script>
+
+<div id="there">
+    <div class="flex flex-center">
+        <h1>WeUI</h1>
+    </div>
+
+    <div class="weui-grids">
+        <a :href="act.url" class="weui-grid" v-for="act in menu">
+            <div class="weui-grid__icon">
+                <span v-html="act.icon"></span>
+            </div>
+            <p class="weui-grid__label" v-text="act.label"></p>
+        </a>
+    </div>
+
+    <div class="weui-cells__title">带跳转的列表项</div>
+    <div class="weui-cells">
+        <a class="weui-cell weui-cell_access" href="/m/m_home" v-for="row in rows">
+            <div class="weui-cell__bd">
+                <p v-text="row._label"></p>
+            </div>
+            <div class="weui-cell__ft">
+            </div>
+        </a>
+    </div>
+</div>
+
+{% endblock %}
