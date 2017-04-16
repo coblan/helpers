@@ -4,26 +4,44 @@
 <html>
 <head>
     <meta charset="utf-8">
+	 <meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no">
     <title>Deposits and Withdrawals</title>
-    <script type="text/javascript" src='http://apps.bdimg.com/libs/jquery/1.9.1/jquery.min.js'></script>
-    <!--<script src="http://cdn.bootcss.com/vue/2.0.24/vue.js"></script>-->
+    <script src="https://cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
     <script src="http://cdn.bootcss.com/vue/2.1.6/vue.js"></script>
     <script src="http://cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css">
     <link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <link href="https://cdn.bootcss.com/weui/1.1.1/style/weui.min.css" rel="stylesheet">
+    <script src="{% static 'js/exfun.js' %}"></script>
     <script src="{% static 'js/weui.min.js' %}"></script>
     <script src="{% static 'js/uis_mb.pack.js' %}"></script>
+    <script src="{% static 'js/fields_mb.pack.js' %}"></script>
+    <script src="{% static 'js/table_mb.pack.js' %}"></script>
 
-
-
-    <!--<script src="../js/exfun.js"></script>-->
     <!--<script src="../build/fields.pack.js"></script>-->
 
     {% include 'director/reverse.html' %}
 
     <script type="text/javascript">
         menu = {{ menu | jsonify }}
+
+        var org_height=$(window).height()
+        $(function(){
+            $(window).resize(function(){
+//                alert('orgin is '+org_height)
+                var delta = org_height - $(window).height()
+//                var top = $(".footer.nav").offset().top;
+                if(Math.abs(delta)  > 200){
+                    $(".footer.nav").hide()
+                }else{
+                    $(".footer.nav").show()
+                }
+//                alert($(window).height())
+//                if($(window).height()<org_height-4)
+//                console.log($(window).height())
+            })
+
+        })
 
 //        $(function(){
 //            new Vue({
@@ -45,9 +63,34 @@
     </script>
 </head>
 <body >
-{% block page_content %}
 
-{% endblock %}
+
+<div class="weui-tab">
+    <div class="weui-tab__panel content">
+        {% block page_content %}
+
+        {% endblock %}
+    </div>
+    <div class="weui-tabbar nav footer">
+        <a href="javascript:;" class="weui-tabbar__item ">
+            <i class="fa fa-car weui-tabbar__icon" aria-hidden="true" ></i>
+            <p class="weui-tabbar__label">信息</p>
+        </a>
+        <a href="/m/m_home" class="weui-tabbar__item weui-bar__item_on">
+            <i class="fa fa-car weui-tabbar__icon" aria-hidden="true" ></i>
+            <p class="weui-tabbar__label">工作</p>
+        </a>
+        <a href="javascript:;" class="weui-tabbar__item">
+            <i class="fa fa-car weui-tabbar__icon" aria-hidden="true" ></i>
+            <p class="weui-tabbar__label">我的信息</p>
+        </a>
+        <!--<a href="javascript:;" class="weui-tabbar__item">-->
+            <!--<img src="./images/icon_tabbar.png" alt="" class="weui-tabbar__icon">-->
+            <!--<p class="weui-tabbar__label">我</p>-->
+        <!--</a>-->
+    </div>
+</div>
+
 <!--<div id="there">-->
     <!--<div class="flex flex-center">-->
         <!--<h1>WeUI</h1>-->
@@ -65,7 +108,16 @@
 
 <!--</div>-->
 <style type="text/css">
-
+    /*body>.weui-tab{*/
+        /*height: 100vh;*/
+    /*}*/
+    .weui-tabbar.nav{
+        position: fixed;
+        bottom: 0px;
+    }
+    .weui-tab__panel{
+        padding-bottom: 150px;
+    }
 </style>
 </body>
 

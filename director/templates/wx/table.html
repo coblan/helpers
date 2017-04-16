@@ -6,49 +6,173 @@
 {% block page_content %}
 
 <script type="text/javascript">
+
+
+
+//    $(function(){
+//        pushHistory();
+//        var bool=false;
+//        setTimeout(function(){
+//            bool=true;
+//        },1500);
+//        window.addEventListener("popstate", function(e) {
+//            if(bool)
+//            {
+//                alert("我监听到了浏览器的返回按钮事件啦");//根据自己的需求实现自己的功能
+//                location.href='你要跳转的链接';
+//            }
+//            pushHistory();
+//
+//        }, false);
+//    });
+//    function pushHistory() {
+//        var state = {
+//            title: "title",
+//            url: "#"
+//        };
+//        window.history.pushState(state, "title", "#");
+//    }
+
+
+//search_args=ex.parseSearch()
+
         $(function(){
-            new Vue({
+
+//            history.pushState({view:'table'},'title')
+            search_args=ex.parseSearch()
+            crt_view = search_args.crt_view || 'table'
+
+            history.pushState({view:crt_view},'title',location.href)
+            window.addEventListener('popstate', function(e){
+                if(e.state){
+                    table.crt_view= e.state.view
+                }else{
+                    history.back()
+                }
+
+            },false)
+           var table= new Vue({
                 el:'#there',
                 data:{
-                    menu:menu,
-                    rows:rows,
+//                    menu:menu,
+//                    rows:rows,
+                    crt_view:crt_view,
                 },
+               mixins:[table_fun],
                 mounted:function(){
 
                 },
                 methods:{
                     goto:function(url){
                         location=url
-                    }
+                    },
+                    get_link:function(pk){
+                        return ex.template('{engine_url}/{page_name}.edit?pk={pk}',{engine_url:engine_url,page_name:page_name,pk:pk})
+                    },
+                    switch_to:function(name){
+                        history.pushState({view:name},'',ex.appendSearch({crt_view:name}))
+                        this.crt_view=name
+                    },
+                    back:function(){
+                        history.back()
+                    },
+
                 }
             })
         })
 </script>
 
+
+
+
 <div id="there">
-    <div class="flex flex-center">
-        <h1>WeUI</h1>
+
+
+    <!--<button @click="switch_to('search')">过滤</button>-->
+
+    <div v-show="crt_view=='table'">
+
+        <div class="weui-search-bar" id="search_bar" >
+            <form class="weui-search-bar__form">
+                <div class="weui-search-bar__box" @click="switch_to('search')">
+                    <i class="weui-icon-search"></i>
+                    <input type="search" class="weui-search-bar__input" id="search_input" placeholder="搜索" />
+                    <!--<a href="javascript:" class="weui-icon-clear" id="search_clear"></a>-->
+                </div>
+                <label for="search_input" class="weui-search-bar__label" id="search_text">
+                    <i class="weui-icon-search"></i>
+                    <span>搜索</span>
+                </label>
+            </form>
+            <!--<a href="javascript:" class="weui-search-bar__cancel-btn" id="search_cancel">取消</a>-->
+        </div>
+
+
+        <!--<div class="flex flex-center">-->
+            <!--<h1>WeUI</h1>-->
+        <!--</div>-->
+
+        <!--<div class="weui-grids">-->
+            <!--<a :href="act.url" class="weui-grid" v-for="act in menu">-->
+                <!--<div class="weui-grid__icon">-->
+                    <!--<span v-html="act.icon"></span>-->
+                <!--</div>-->
+                <!--<p class="weui-grid__label" v-text="act.label"></p>-->
+            <!--</a>-->
+        <!--</div>-->
+
+        <!--<div class="weui-tab">-->
+            <!--<div class="weui-navbar">-->
+                <!--<div class="weui-navbar__item weui-bar__item_on">-->
+                    <!--选项一-->
+                <!--</div>-->
+                <!--<div class="weui-navbar__item">-->
+                    <!--选项二-->
+                <!--</div>-->
+                <!--<div class="weui-navbar__item">-->
+                    <!--选项三-->
+                <!--</div>-->
+            <!--</div>-->
+            <!--<div class="weui-tab__panel">-->
+                <!--<div>Page 1</div>-->
+                <!--<div style="display:none">Page 2</div>-->
+                <!--<div style="display:none">Page 3</div>-->
+            <!--</div>-->
+        <!--</div>-->
+
+        <div class="weui-cells__title">列表项</div>
+        <div class="weui-cells">
+            <a class="weui-cell weui-cell_access" :href="get_link(row.pk)" v-for="row in rows">
+                <div class="weui-cell__bd">
+                    <p v-text="row._label"></p>
+                </div>
+                <div class="weui-cell__ft">
+                </div>
+            </a>
+        </div>
     </div>
 
-    <div class="weui-grids">
-        <a :href="act.url" class="weui-grid" v-for="act in menu">
-            <div class="weui-grid__icon">
-                <span v-html="act.icon"></span>
-            </div>
-            <p class="weui-grid__label" v-text="act.label"></p>
-        </a>
+    <div v-show="crt_view=='search'">
+
+        <com-filter :heads="row_filters" :search="search_args" :search_tip='search_tip'></com-filter>
+
+
+        <!--<button @click="back()">回去</button>-->
+
+        <div class="weui-btn-area">
+            <a class="weui-btn weui-btn_primary" href="javascript:" @click='search()' style="width: 50%;">
+                <i class="fa fa-search" aria-hidden="true"></i>
+            </a>
+        </div>
+
     </div>
 
-    <div class="weui-cells__title">带跳转的列表项</div>
-    <div class="weui-cells">
-        <a class="weui-cell weui-cell_access" href="/m/m_home" v-for="row in rows">
-            <div class="weui-cell__bd">
-                <p v-text="row._label"></p>
-            </div>
-            <div class="weui-cell__ft">
-            </div>
-        </a>
-    </div>
 </div>
+
+<style type="text/css">
+    body{
+        background-color: #f7f5f3;
+    }
+</style>
 
 {% endblock %}
