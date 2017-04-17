@@ -16,8 +16,14 @@
     row_filters={{row_filters | jsonify | default:'[]' }}
     search_tip = '{{ search_tip |default:""}}'
     row_sort={{row_sort | jsonify | default:'[]' }}
+
+    // only in table
     rows={{ rows | jsonify | default:'[]'}}
     row_pages = {{ row_pages | jsonify | default:'[]'}}
+
+    //
+    fieldset={{ fieldset | jsonify }}
+    namelist={{ namelist | jsonify | default:'[]' }}
 
 
 </script>
