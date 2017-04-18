@@ -8,6 +8,8 @@ from db_tools import form_to_head
 from forms import AuthForm
 from django.contrib import auth 
 from django.views.decorators.csrf import ensure_csrf_cookie
+from .port import jsonpost
+from pydoc import locate
 
 @ensure_csrf_cookie
 def login(request):
@@ -56,3 +58,12 @@ def change_pswd(request):
 
 def trival(request):
     pass
+
+def ajax_views(request,app):
+    ajax=locate('%(app)s.ajax'%{'app':app})
+    if request.method=='POST':
+        try:
+            return jsonpost(request, ajax.get_globe())
+        except KeyError as e:
+            rt={'status':'error','msg':'key error '+str(e) +' \n may function name error'}
+            return HttpResponse(json.dumps(rt),content_type="application/json")  

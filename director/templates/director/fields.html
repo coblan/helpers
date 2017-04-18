@@ -6,7 +6,7 @@
 
 <script type="text/javascript">
 
-
+	{% comment "Optional note" %}
 //	heads={{ heads | jsonify | default:'[]' }}
 //	row = {{ row | jsonify | default:'[]' }}
 //
@@ -14,7 +14,7 @@
 //	can_add={{ can_add | jsonify | default:'false' }}
 //	can_log={{ can_log | jsonify | default:'false' }}
 //	can_del={{ can_del | jsonify | default:'false' }}
-
+	{% endcomment %}
 	$(function () {
 		new Vue({
 			el:'#there',

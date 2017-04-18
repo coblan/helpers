@@ -23,6 +23,7 @@ class TablePage(object):
         perm = ModelPermit(self.table.model,self.crt_user)
         ctx['can_add']=perm.can_add()
         ctx['can_del']=perm.can_del()
+        ctx['app']=self.tableCls.model._meta.app_label
         return ctx
     
 class FormPage(object):
@@ -41,6 +42,8 @@ class FormPage(object):
             self.ctx['can_add']=perm.can_add()
             self.ctx['can_del']=perm.can_del()   
             self.ctx['can_log']=perm.can_log()
+            
+            self.ctx['app']=self.fieldsCls.model._meta.app_label
         return self.ctx
 
 class DelPage(object):

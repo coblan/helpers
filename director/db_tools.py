@@ -66,7 +66,7 @@ def sim_dict(instance,filt_attr=None,include=None,exclude=None):
             if proxy_cls:
                 out[field.name] = proxy_cls().to_dict(instance,field.name)
             else:
-                out[field.name]=field.get_prep_value( getattr(instance,field.name) )  
+                out[field.name]=field.get_prep_value( getattr(instance,field.name,None) )  
                 if field.choices:
                     org_value= out[field.name]
                     mt = [x for x in field.choices if x[0]==org_value]
@@ -77,7 +77,7 @@ def sim_dict(instance,filt_attr=None,include=None,exclude=None):
 
 class DatetimeProc(object):
     def to_dict(self,inst,name):
-        value = getattr(inst,name)
+        value = getattr(inst,name,None)
         if value:
             return localtime(value).strftime('%Y-%m-%d %H:%M:%S')
         else:
@@ -91,7 +91,7 @@ class DatetimeProc(object):
         
 class ForeignProc(object):
     def to_dict(self,inst,name):
-        foreign=getattr(inst,name)
+        foreign=getattr(inst,name,None)
         if foreign:
             return foreign.pk
         
@@ -201,7 +201,10 @@ def form_to_head(form,include=None):
     for k,v in form.fields.items():
         if isinstance(include,(tuple,list)) and k not in include:
             continue
-        dc = {'name':k,'label':_(v.label),'required':v.required,'help_text':unicode(v.help_text)}
+        dc = {'name':k,'label':_(v.label),
+              'required':v.required,
+              'help_text':unicode(v.help_text),
+              'type':'linetext'}
         
         if isinstance(v.widget,forms.widgets.Select):
             dc['type'] = 'sim_select' 
@@ -221,8 +224,6 @@ def form_to_head(form,include=None):
             dc['type']='tow_col'
         # elif v.__class__==forms.models.ModelChoiceField and \
         
-        else:
-            dc.update({'type':'linetext'})
         out.append(dc)
     return out
 

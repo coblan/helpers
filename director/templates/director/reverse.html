@@ -27,5 +27,8 @@
     delset={{ delset | jsonify | default:'[]' }}
     save_step={{ save_step | jsonify | default:'[]' }}
 
+    app='{{ app }}'
+    ajax_url="{% url 'ajax_url' app=app %}"
+
 </script>
 
