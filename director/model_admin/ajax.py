@@ -15,7 +15,7 @@ from ..models import PermitModel
 from django.contrib.auth.models import Group,User
 import json
 #from base import model_dc,get_admin_name_by_model,del_row
-
+from django.db import transaction
 
 def get_globle():
     return globals()
@@ -44,6 +44,27 @@ def save(row,user):
         #return fields_obj.save_form()
     #else:
         #return {'errors':fields_obj.errors}
+        
+def save_fieldset(fieldset,save_step,user):
+    out={}
+    try:
+        with transaction.atomic():
+            for step in save_step:
+                if step.get('save'):
+                    name=step.get('save')
+
+                    fieldset[name] = save_row(fieldset.get(name), user)
+                    instance=fieldset[name]
+                    perm=ModelPermit(instance,user)
+                    dc =to_dict(instance,include=perm.readable_fields())
+                    out[name]=dc              
+                      
+                if step.get('assign'):
+                    fieldset[step['obj']] [step['assign']]=fieldset[step['value']]
+        return {'status':'success','fieldset':out}
+    except ValidationError as e:
+        return {'errors':dict(e),'path':name+'.errors'}     
+    
 
 
 def del_rows(rows,user):

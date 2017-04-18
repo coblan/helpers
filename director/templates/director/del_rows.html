@@ -40,12 +40,12 @@
 						}
 					})
 				},
-				next_page:function () {
+				cancel:function () {
 					var search = ex.parseSearch()
 					if(search._pop){
 						window.close()
 					}else{
-						location=decodeURIComponent(search.next)||'/'
+						history.back()
 					}
 
 
@@ -67,7 +67,7 @@
 			</ul>
 		</div>
 		<button name="test" type="button" @click='del_rows()'>确定删除</button>
-		<button name="test" type="button" @click='next_page()'>取消</button>
+		<button name="test" type="button" @click='cancel()'>取消</button>
 	</div>
 	
 </div>

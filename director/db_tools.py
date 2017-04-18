@@ -202,9 +202,10 @@ def form_to_head(form,include=None):
         if isinstance(include,(tuple,list)) and k not in include:
             continue
         dc = {'name':k,'label':_(v.label),'required':v.required,'help_text':unicode(v.help_text)}
+        
         if isinstance(v.widget,forms.widgets.Select):
             dc['type'] = 'sim_select' 
-            dc['options']=[{'value':k,'label':v} for k,v in v.widget.choices]
+            dc['options']=[{'value':val,'label':lab} for val,lab in v.widget.choices]
         elif v.__class__==forms.fields.CharField:
             if v.max_length:
                 dc.update({'type':'linetext','maxlength':v.max_length})
@@ -215,7 +216,7 @@ def form_to_head(form,include=None):
             #dc['no_auto_label']=True
         elif v.__class__ in [forms.fields.IntegerField,forms.fields.FloatField]:
             dc['type']='number'
-        elif v.__class__ ==forms.models.ModelMultipleChoiceField and \
+        if v.__class__ ==forms.models.ModelMultipleChoiceField and \
             isinstance(v.widget,forms.widgets.SelectMultiple):
             dc['type']='tow_col'
         # elif v.__class__==forms.models.ModelChoiceField and \
@@ -321,6 +322,8 @@ def delete_related_query(inst):
     for field in inst._meta.get_fields():    # manyToMany Field
         if isinstance(field,models.ManyToManyField):
             name = field.name
+            if not inst.pk: # instance must save before access manyToMany
+                continue
             for obj in getattr(inst,name).all():
                 ls.append({'str':'{obj_cls}({obj_content}) to {inst_cls}({inst_content}) relationship '.format(obj_cls=obj.__class__.__name__,\
                                 obj_content=u(obj),inst_cls=inst.__class__.__name__,inst_content=unicode(obj)),

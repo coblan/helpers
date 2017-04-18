@@ -10,11 +10,16 @@ from django.core.urlresolvers import reverse
 from django.core.exceptions import ValidationError
 from base import model_dc
 import base64
+from django.db import models
 from permit import ModelPermit
 from ..models import LogModel
 from helpers.pyenv import u
 
 def save_row(row,user):
+    for k in row: # convert model instance to pk for normal validation
+        if isinstance(row[k],models.Model):
+            row[k]=row[k].pk
+    
     model= name_to_model(row['_class'])
     fields_cls = model_dc.get(model).get('fields')
 
