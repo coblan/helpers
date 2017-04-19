@@ -43,7 +43,7 @@ class FormPage(object):
             self.ctx['can_del']=perm.can_del()   
             self.ctx['can_log']=perm.can_log()
             
-            self.ctx['app']=self.fieldsCls.model._meta.app_label
+            self.ctx['app']=self.fieldsCls._meta.model._meta.app_label
         return self.ctx
 
 class DelPage(object):
