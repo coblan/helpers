@@ -37,10 +37,24 @@ class RouterAjax(object):
         self.msgs=[]
         
     def run(self):
-        self.commands = json.loads(self.request.body)
+        if self.request.method=='POST':
+            self.commands = json.loads(self.request.body)
+        else:
+            self.commands=[]
+            op=self.request.GET.get('_op')
+            for cmd in op.split(','):
+                ls = cmd.split(':')
+                dc={'fun':ls[0]}
+                count=1
+                while count <len(ls):
+                    dc[ls[count]]=ls[count+1]
+                    count+=2
+                self.commands.append(dc)
+                    
         if isinstance(self.commands,list):
             return self.run_list()
         else:
+            # 为了老代码兼容，现在不用了。
             return self.run_dict()
     
     def run_list(self):

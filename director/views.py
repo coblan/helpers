@@ -61,9 +61,9 @@ def trival(request):
 
 def ajax_views(request,app):
     ajax=locate('%(app)s.ajax'%{'app':app})
-    if request.method=='POST':
-        try:
-            return jsonpost(request, ajax.get_globe())
-        except KeyError as e:
-            rt={'status':'error','msg':'key error '+str(e) +' \n may function name error'}
-            return HttpResponse(json.dumps(rt),content_type="application/json")  
+    # if request.method=='POST':
+    try:
+        return jsonpost(request, ajax.get_globe())
+    except KeyError as e:
+        rt={'status':'error','msg':'key error '+str(e) +' \n may function name error'}
+        return HttpResponse(json.dumps(rt),content_type="application/json")  
