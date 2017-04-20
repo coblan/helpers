@@ -8,3 +8,9 @@ def int_str(value):
             _('%(value)s is not integer number'),
             params={'value': value},
         )
+
+def has_str(value):
+    if not value:
+        raise ValidationError(
+                    _('must input string'),
+                )        

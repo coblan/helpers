@@ -33,8 +33,10 @@
 						if(data.del_rows){
 							if(search_args._pop){
 								ln.rtWin({del_rows:self.rows})
+							}else if(search_args.next){
+								location=decodeURIComponent(search_args.next)
 							}else{
-								location=decodeURIComponent(search_args.next)  || '/'
+								location='/'
 							}
 
 						}
@@ -57,7 +59,7 @@
 </script>
 
 	<div id='there'>
-		<h1>就要删除的记录是：</h1>
+		<h1>需要(关联)删除的记录是：</h1>
 		<div v-for='(info,key) in infos'>
 			<h3 v-text='key'></h3>
 			<ul>

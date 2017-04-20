@@ -72,7 +72,7 @@ class ModelFields(forms.ModelForm):
             'row': self.get_row(),
         }  
     def get_del_info(self):
-        return {unicode(self.instance):delete_related_query(self.instance)}
+        return {'%(model)s:%(inst)s'%{'model':self.instance.__class__.__name__,'inst':unicode(self.instance)}:delete_related_query(self.instance)}
     
     def pop_fields(self):
         """
