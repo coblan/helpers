@@ -145,10 +145,14 @@ class RowFilter(object):
         return query    
     
     def get_options(self,name):
-        ls = list(set(self.query.values_list(name,flat=True)))
-        ls.sort()
-        ls=[{'value':x,'label':unicode(x)} for x in ls]
-        return ls
+        this_field= self.model._meta.get_field(name)
+        if this_field.choices:
+            return [{'value':x[0],'label':x[1]} for x in this_field.choices]
+        else:
+            ls = list(set(self.query.values_list(name,flat=True)))
+            ls.sort()
+            ls=[{'value':x,'label':unicode(x)} for x in ls]
+            return ls
     
 class RowSort(object):
     """

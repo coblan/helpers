@@ -10,14 +10,20 @@ from .db_tools import to_dict,sim_dict,model_to_head
 from .models import LogModel
 
 class TablePage(object):
-    template='director/table.html'
+    template=''
     tableCls=''
     ajax_scope={}
     def __init__(self,request):
         self.request=request
         self.table = self.tableCls.parse_request(request)
         self.crt_user=request.user
-       
+    
+    def get_template(self,prefer=None):
+        if prefer=='wx':
+            return 'wx/table.html'
+        else:
+            return 'director/table.html'
+        
     def get_context(self):
         ctx = self.table.get_context()
         perm = ModelPermit(self.table.model,self.crt_user)
@@ -27,7 +33,7 @@ class TablePage(object):
         return ctx
     
 class FormPage(object):
-    template='director/fields.html'
+    template=''
     fieldsCls=''
     ajax_scope={}
     def __init__(self,request):
@@ -35,7 +41,13 @@ class FormPage(object):
         self.pk=request.GET.get('pk')
         self.fields = self.fieldsCls(pk=self.pk,crt_user=request.user)
         self.ctx=self.fields.get_context()
-        
+    
+    def get_template(self,prefer=None):    
+        if prefer=='wx':
+            return 'wx/fields.html'
+        else:
+            return 'director/fields.html'
+    
     def get_context(self):
         if self.fieldsCls:
             perm = ModelPermit(self.fieldsCls.Meta.model,self.request.user)
@@ -47,11 +59,17 @@ class FormPage(object):
         return self.ctx
 
 class DelPage(object):
-    template='director/del_rows.html'
+    template=''
     ajax_scope={}
     def __init__(self,request):
         self.request=request
     
+    def get_template(self,prefer=None):
+        if prefer=='wx':
+            return 'wx/del_rows.html'
+        else:
+            return 'director/del_rows.html'
+        
     def get_context(self):
         ctx = {}
         # pop = self.request.GET.get('_pop')

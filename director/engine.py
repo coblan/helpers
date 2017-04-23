@@ -52,6 +52,7 @@ class BaseEngine(object):
     _pages=None
     menu={}
     url_name='baseengine'
+    prefer='pc'
     
     @classmethod
     def as_view(cls):
@@ -78,7 +79,13 @@ class BaseEngine(object):
             ctx['menu']=self.get_menu(request)
             ctx['page_name']=name
             ctx['engine_url']=reverse(self.url_name,args=('aa',))[:-3]
-            return render(request,page.template,context=ctx)
+            
+            if page.template:
+                template=page.template
+            else: 
+                template=page.get_template(prefer=self.prefer)
+                
+            return render(request,template,context=ctx)
         elif request.is_ajax():
             return jsonpost(request,ajax.get_globle())        
     

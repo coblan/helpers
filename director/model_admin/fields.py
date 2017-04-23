@@ -40,7 +40,7 @@ class ModelFields(forms.ModelForm):
     4. crt_user 新建的时候
     
     """
-
+    readonly=[]
     def __init__(self,dc={},pk=None,crt_user=None,*args,**kw):
         
         if not crt_user:
@@ -131,7 +131,9 @@ class ModelFields(forms.ModelForm):
     
     
     def get_readonly_fields(self):
-        return self.permit.readonly_fields()
+        ls=self.permit.readonly_fields()
+        ls.extend(self.readonly)
+        return ls
         # return []
     
     def get_row(self):
@@ -141,11 +143,13 @@ class ModelFields(forms.ModelForm):
         """
         if not self.can_access():
             raise PermissionDenied,'you have no Permission access %s'%self.instance._meta.model_name
-        if self._meta.fields:
-            include = [x for x in self._meta.fields if x in self.fields]
-        else:
-            include= self.fields
-        return to_dict(self.instance,include=include)
+        #if self._meta.fields:
+            #include = [x for x in self._meta.fields if x in self.fields]
+        #else:
+            #include= self.fields
+            
+        # self.fields 是经过 权限 处理了的。
+        return to_dict(self.instance,include=self.fields)
 
     def get_options(self):
         options={}

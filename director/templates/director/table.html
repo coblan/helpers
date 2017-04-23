@@ -59,6 +59,7 @@
 		<!--<div v-if="row_filters.length==0" class="flex-grow"></div>-->
 		<com-filter class="flex" :heads="row_filters" :search="search_args"
 					:search_tip='search_tip' @submit="search()"></com-filter>
+		<div class="flex-grow"></div>
 
 		<com-table-btn v-if="!search_args._pop" :add_new="add_new" :del_item="del_item"></com-table-btn>
 		
