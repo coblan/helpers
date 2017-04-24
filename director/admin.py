@@ -63,6 +63,7 @@ class UserTablePage(TablePage):
     tableCls=UserTable
 
 class UserFormPage(FormPage):
+    template='authuser/user_form.html'
     fieldsCls=UserFields
 
 model_dc[Group]={'fields':UserGroupFields}

@@ -120,7 +120,7 @@ class RouterAjax(object):
             if user:
                 kw['user']=user
             else:
-                raise UserWarning,'function need login ,but you are not login'
+                raise UserWarning,'function need user ,but you are not login'
                 
         return func(**kw)    
     

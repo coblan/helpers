@@ -8,9 +8,11 @@ from db_tools import form_to_head
 from forms import AuthForm
 from django.contrib import auth 
 from django.views.decorators.csrf import ensure_csrf_cookie
+from django.contrib.auth.decorators import login_required
 from .port import jsonpost
 from pydoc import locate
 from django.utils.translation import ugettext as _
+from django.contrib.auth.models import User
 @ensure_csrf_cookie
 def login(request):
     if request.method=='GET':
@@ -48,10 +50,20 @@ def logout(request):
     return redirect(next) 
 
 @ensure_csrf_cookie
+@login_required
 def change_pswd(request):
+    pk = request.GET.get('uid')
+    if pk:
+        name=User.objects.get(pk=pk).username
+    else:
+        pk = request.user.pk
+        name=request.user.username
+        
     if request.method=='GET':
         dc={
-            'login_url':reverse('login')
+            'login_url':reverse('login'),
+            'username':name,
+            'uid':pk
         }        
         return render(request,'authuser/changepswd.html',context=dc)
     elif request.method=='POST':

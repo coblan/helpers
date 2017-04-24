@@ -64,9 +64,20 @@ def registe(info):
         #else:
             #return {'errors':form.errors}
 
-def changepswd(user,pswd):
-    user.set_password(pswd)
-    user.save()
-    return {'status':'success'}
+def changepswd(user,row):
+    if row.get('first_pswd')!=row.get('second_pswd'):
+        return  {'errors':{'second_pswd':['second password not match']}}
+    elif not row.get('first_pswd'):
+        return {'errors':{'first_pswd':['must input password']}}
+        
+    md_user= User.objects.get(pk=row.get('uid'))
+    if user.is_superuser or md_user.check_password(row.get('old_pswd')):
+        md_user.set_password(row.get('first_pswd'))
+        md_user.save()
+        dc={'status':'success'}
+    else:
+        dc={'errors':{'old_pswd':['old password not match']}}
+
+    return dc
     
 
