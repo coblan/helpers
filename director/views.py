@@ -10,7 +10,7 @@ from django.contrib import auth
 from django.views.decorators.csrf import ensure_csrf_cookie
 from .port import jsonpost
 from pydoc import locate
-
+from django.utils.translation import ugettext as _
 @ensure_csrf_cookie
 def login(request):
     if request.method=='GET':
@@ -28,9 +28,14 @@ def login(request):
 @ensure_csrf_cookie
 def regist_user(request):
     if request.method=='GET':
+        
+        heads= form_to_head(AuthForm())
+        for head in heads:
+            if head.get('name') in ['password','pas2']:
+                head['type']='password'
         dc={
             'login_url':reverse('login'),
-            'heads':json.dumps( form_to_head(AuthForm()))
+            'heads':json.dumps( heads )
         }
         return render(request,'authuser/regist.html',context=dc)
     elif request.method=='POST':

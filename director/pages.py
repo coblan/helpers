@@ -120,7 +120,7 @@ class LogPage(object):
             perm = ModelPermit(model, self.request.user)
             if perm.can_log(): 
                 for pk in ls[1:]:
-                    querys =LogModel.objects.filter(key='%s.%s'%(_class,pk))
+                    querys =LogModel.objects.filter(key='%s.%s'%(_class,pk)).order_by('-id')
                     rows.extend(list(querys))
         ctx = {'rows':[sim_dict(x,filt_attr=lambda y:{'user':unicode(y.user)}) for x in rows],
                'heads':model_to_head(LogModel)}
