@@ -320,7 +320,7 @@ class ModelTable(object):
         if not self.crt_user.is_superuser and not self.permit.readable_fields():
             raise PermissionDenied,'no permission to browse %s'%self.model._meta.model_name
         else:
-            return query
+            return query.order_by('-id')
     
     #def search_filter(self,query):
         #return self.row_search.get_query(query)
