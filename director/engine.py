@@ -38,10 +38,11 @@ from django.shortcuts import redirect
 from django.conf import settings
 from .model_admin import ajax
 from .container import evalue_container
-from .model_admin.permit import ModelPermit
+from .model_admin.permit import ModelPermit,has_permit
 from .port import jsonpost
 from .pages import DelPage,LogPage
 from .model_admin.base import page_dc
+from django.db import models
 
 page_dc.update({
         'del_rows':DelPage,
@@ -97,6 +98,19 @@ class BaseEngine(object):
 
     def get_menu(self,request):
         return evalue_container( self.menu,user=request.user,url_name=self.url_name)
+
+def and_list(ls):
+    def _func(user):
+        for model in ls:
+            if isinstance(model,models.Model):
+                validator = ModelPermit(model, user)
+                if not validator.can_access():
+                    return False
+            else:
+                if not has_permit(user,model):
+                    return False
+        return True
+    return _func   
 
 def can_touch(model):
     def _func(user):

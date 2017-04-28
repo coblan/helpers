@@ -183,7 +183,7 @@ class ModelFields(forms.ModelForm):
             # if not self.can_access_instance():
                 # raise PermissionDenied,'you have no Permission access %s'%self.instance._meta.model_name  
             
-            model_str= unicode(self.instance)
+            #model_str= unicode(self.instance)
             for data in self.changed_data:
                 if data in self.get_readonly_fields():
                     #self.cleaned_data.pop(data)

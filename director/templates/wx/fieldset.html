@@ -60,9 +60,12 @@
 
         <div v-for="name in namelist" >
             <div class="weui-cells__title" v-text="name.label"></div>
-            <div class="weui-cells weui-cells_form">
+            <!--<div class="weui-cells weui-cells_form">-->
+            <div class="form-pad">
                 <field  v-for='field_name in name.fields' :key="field_name" :name='get_name(field_name)' :kw='get_kw(field_name)'></field>
             </div>
+
+            <!--</div>-->
 
         </div>
 
