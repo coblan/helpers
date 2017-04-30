@@ -42,7 +42,8 @@
 						if(data.registe.errors){
 							update_vue_obj(self.kw.errors,data.registe.errors)
 						}else{
-							location=login_url;
+							var next=ex.parseSearch().next
+							location=ex.appendSearch(login_url,{next:next}) ;
 						}
 					})
 				}
