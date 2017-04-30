@@ -39,18 +39,18 @@
         $(function(){
 
 //            history.pushState({view:'table'},'title')
-            search_args=ex.parseSearch()
+//            search_args=ex.parseSearch()
             crt_view = search_args.crt_view || 'table'
 
-            history.pushState({view:crt_view},'title',location.href)
-            window.addEventListener('popstate', function(e){
-                if(e.state){
-                    table.crt_view= e.state.view
-                }else{
-                    history.back()
-                }
-
-            },false)
+//            history.pushState({view:crt_view},'title',location.href)
+//            window.addEventListener('popstate', function(e){
+//                if(e.state){
+//                    table.crt_view= e.state.view
+//                }else{
+//                    history.back()
+//                }
+//
+//            },false)
            var table= new Vue({
                 el:'#there',
                 data:{

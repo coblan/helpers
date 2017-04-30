@@ -302,8 +302,19 @@ class ModelTable(object):
         return: [{"name": "heyul0", "age": "32", "user": null, "pk": 1, "_class": "user_admin.BasicInfo", "id": 1}]
         """
         query=self.get_query()
-        return [to_dict(x, include=self.permited_fields()) for x in query] 
-        
+        out=[]
+        for inst in query:
+            dc= to_dict(inst, include=self.permited_fields())
+            dc.update(self.dict_row(inst))
+            out.append(dc)
+        return out
+    
+    def dict_row(self,inst):
+        """
+        重写该函数，定制row输出字典
+        """
+        return {}
+    
     def get_query(self):
         query = self.inn_filter(self.model.objects.all())
         query=self.row_filter.get_query(query)

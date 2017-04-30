@@ -43,6 +43,7 @@ from .port import jsonpost
 from .pages import DelPage,LogPage
 from .model_admin.base import page_dc
 from django.db import models
+import inspect
 
 page_dc.update({
         'del_rows':DelPage,
@@ -106,8 +107,11 @@ def and_list(ls):
                 validator = ModelPermit(model, user)
                 if not validator.can_access():
                     return False
-            else:
+            elif isinstance(model,(unicode,str)):
                 if not has_permit(user,model):
+                    return False
+            elif inspect.isfunction(model):
+                if not model(user):
                     return False
         return True
     return _func   

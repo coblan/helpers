@@ -29,6 +29,8 @@ class TablePage(object):
         perm = ModelPermit(self.table.model,self.crt_user)
         ctx['can_add']=perm.can_add()
         ctx['can_del']=perm.can_del()
+        if perm.changeable_fields:
+            ctx['can_edit']=True
         ctx['app']=self.tableCls.model._meta.app_label
         return ctx
     
@@ -49,13 +51,15 @@ class FormPage(object):
             return 'director/fields.html'
     
     def get_context(self):
-        if self.fieldsCls:
-            perm = ModelPermit(self.fieldsCls.Meta.model,self.request.user)
-            self.ctx['can_add']=perm.can_add()
-            self.ctx['can_del']=perm.can_del()   
-            self.ctx['can_log']=perm.can_log()
-            
-            self.ctx['app']=self.fieldsCls._meta.model._meta.app_label
+        #if self.fieldsCls:
+        perm = ModelPermit(self.fieldsCls.Meta.model,self.request.user)
+        self.ctx['can_add']=perm.can_add()
+        self.ctx['can_del']=perm.can_del()   
+        self.ctx['can_log']=perm.can_log()
+        if perm.changeable_fields():
+            self.ctx['can_edit']=True
+        
+        self.ctx['app']=self.fieldsCls._meta.model._meta.app_label
         return self.ctx
 
 class DelPage(object):

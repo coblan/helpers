@@ -72,7 +72,7 @@ class ModelFields(forms.ModelForm):
             'row': self.get_row(),
         }  
     def get_del_info(self):
-        return {'%(model)s:%(inst)s'%{'model':self.instance.__class__.__name__,'inst':unicode(self.instance)}:delete_related_query(self.instance)}
+        return {'%(model)s:%(inst)s <id=%(pk)s>'%{'model':self.instance.__class__.__name__,'inst':unicode(self.instance),'pk':self.instance.pk}:delete_related_query(self.instance)}
     
     def pop_fields(self):
         """
@@ -148,7 +148,7 @@ class ModelFields(forms.ModelForm):
         #else:
             #include= self.fields
             
-        # self.fields 是经过 权限 处理了的。
+        # self.fields 是经过 权限 处理了的。可读写的字段
         return to_dict(self.instance,include=self.fields)
 
     def get_options(self):
@@ -171,12 +171,12 @@ class ModelFields(forms.ModelForm):
         call by model render engin
         """
         if not self.crt_user.is_superuser:
-            if self.instance.pk:
-                if not self.permit.changeable_fields():
-                    raise PermissionDenied,'you have no Permission changed %s'%self.instance._meta.model_name 
-            else:
-                if not self.can_access():
-                    raise PermissionDenied,'you have no Permission access %s'%self.instance._meta.model_name  
+            #if self.instance.pk:
+                #if not self.permit.changeable_fields():
+                    #raise PermissionDenied,'you have no Permission changed %s'%self.instance._meta.model_name 
+            #else:
+            if not self.can_access():
+                raise PermissionDenied,'you have no Permission access %s'%self.instance._meta.model_name  
             # table_perm = self.instance._meta.app_label+'.%s_'%op+self.instance._meta.model_name
             # if not self.crt_user.has_perm(table_perm):
                 # raise PermissionDenied,'you have no Permission access %s'%self.instance._meta.model_name 
