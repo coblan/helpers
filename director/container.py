@@ -36,6 +36,7 @@ def evalue_list(ls,**kw):
         tmp=evalue_container(item,**kw)
         if isinstance(tmp,dict) and tmp.has_key('visible') and not tmp.get('visible'):
             continue
+        tmp.pop('visible',None)
         new_ls.append(tmp)
     return new_ls
 
@@ -50,5 +51,16 @@ def find_one(collection,dc):
                 find=False
         if find:
             return doc
-        
+
+def find_one_r(collection,dc):
+    item=find_one(collection, dc)
+    if item:
+        return item
+    else:
+        for doc in collection:
+            for k,v in doc.items():
+                if isinstance(v,(list,tuple)):
+                    item= find_one_r(v,dc)
+                    if item:
+                        return item
                 

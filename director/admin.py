@@ -50,16 +50,22 @@ class UserTable(ModelTable):
     model=User
     include=['username','groups','first_name','is_active','is_staff','is_superuser','email',]
     
-    def get_rows(self):
-        rows=super(UserTable,self).get_rows()
-        for row in rows:
-            row['groups']=[group.name for group in Group.objects.filter(pk__in=row.get('groups'))]
-        return rows
+    #def get_rows(self):
+        #rows=super(UserTable,self).get_rows()
+        #for row in rows:
+            #row['groups']=[group.name for group in Group.objects.filter(pk__in=row.get('groups'))]
+        #return rows
+    
+    def dict_row(self, inst):
+        return {
+            'groups':';'.join([g.name for g in inst.groups.all()])
+        }
+        
                 
             
 
 class UserTablePage(TablePage):
-    template='authuser/user_table.html'
+    #template='authuser/user_table.html'
     tableCls=UserTable
 
 class UserFormPage(FormPage):

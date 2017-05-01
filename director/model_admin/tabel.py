@@ -8,6 +8,7 @@ from django.db.models import Q,fields
 from django.core.exceptions import PermissionDenied
 from permit import ModelPermit
 from ..db_tools import model_to_name,to_dict,model_to_head,model_to_name
+from django.db import models
 #from forms import MobilePageForm
 
 
@@ -148,6 +149,10 @@ class RowFilter(object):
         this_field= self.model._meta.get_field(name)
         if this_field.choices:
             return [{'value':x[0],'label':x[1]} for x in this_field.choices]
+        elif isinstance(this_field,models.ForeignKey):
+            ls=this_field.get_choices()
+            ls=ls[1:]
+            return [{'value':x[0],'label':x[1]} for x in ls]
         else:
             ls = list(set(self.query.values_list(name,flat=True)))
             ls.sort()

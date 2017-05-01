@@ -37,12 +37,13 @@ from django.core.urlresolvers import reverse
 from django.shortcuts import redirect
 from django.conf import settings
 from .model_admin import ajax
-from .container import evalue_container
+from .container import evalue_container,find_one_r
 from .model_admin.permit import ModelPermit,has_permit
 from .port import jsonpost
 from .pages import DelPage,LogPage
 from .model_admin.base import page_dc
 from django.db import models
+from django.core.exceptions import PermissionDenied
 import inspect
 
 page_dc.update({
@@ -70,6 +71,11 @@ class BaseEngine(object):
             cls._pages.append(dc)
     
     def view(self,request,name):
+        menu = self.get_menu(request)
+        #item = find_one_r(menu,{'url':request.path})
+        #if not item:
+            #raise PermissionDenied,'you have not permi to visit this url'
+        
         page_cls = self.get_page_cls(name)
         if request.method=='GET':
             if getattr(page_cls,'need_login',True):
@@ -78,7 +84,7 @@ class BaseEngine(object):
                 
             page=page_cls(request)
             ctx=page.get_context()
-            ctx['menu']=self.get_menu(request)
+            ctx['menu']=menu
             ctx['page_name']=name
             ctx['engine_url']=reverse(self.url_name,args=('aa',))[:-3]
             
