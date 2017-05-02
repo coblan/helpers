@@ -65,6 +65,8 @@ class ModelPermit(object):
         self.user=user
         if isinstance(model,(str,unicode)):
             model=apps.get_model(model)
+        elif isinstance(model,models.Model):
+            model=model.__class__
         self.model = model
         self.permit_list=[]
         self._init_perm()
