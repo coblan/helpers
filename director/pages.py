@@ -8,6 +8,7 @@ import re
 from .model_admin.permit import ModelPermit
 from .db_tools import to_dict,sim_dict,model_to_head
 from .models import LogModel
+from ..ex import findone
 
 class TablePage(object):
     template=''
@@ -116,7 +117,7 @@ class LogPage(object):
         rows_stream = [x for x in ls_str.split(',') if x]
         rows =[]
         for row in rows_stream:
-            ls = row.split(':')
+            ls   = row.split(':')
             _class=ls[0]
             model = apps.get_model(_class)
             model_util= model_dc.get(model)            
@@ -132,4 +133,36 @@ class LogPage(object):
         ctx['can_add']=False
         ctx['can_del']=False
         return ctx         
+
+class TabGroup(object):
+    tabs=[]
+    template='director/tabgroup.html'
+    def __init__(self, request):
+        self.request=request
+        tab_name=request.GET.get('_tab')
+        self.ctx={
+            'tabs':[{'name':x['name'],'label':x['label']} for x in self.tabs],
+            'crt_tab':tab_name,
+        }
+        tab_dict=findone(self.tabs,{'name':tab_name}) or self.tabs[0]
+        tab_page_cls= tab_dict.get('page_cls')
+        self.tab_page = tab_page_cls(request)
+        self.ctx.update(self.tab_page.get_context())
     
+    def get_template(self,prefer=None):
+        if self.tab_page.template:
+            return self.tab_page.template
+        elif self.template:
+            return self.template
+        else:
+            return self.tab_page.get_template(prefer)
+        
+        #if prefer=='wx':
+            #return 'wx/del_rows.html'
+        #else:
+            #return 'director/del_rows.html'    
+    
+    def get_context(self):
+        return self.ctx
+    
+        
