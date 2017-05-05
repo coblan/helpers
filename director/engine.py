@@ -88,11 +88,11 @@ class BaseEngine(object):
             ctx['page_name']=name
             ctx['engine_url']=reverse(self.url_name,args=('aa',))[:-3]
             
-            if page.template:
-                template=page.template
-            else: 
+            if hasattr(page,'get_template'):
                 template=page.get_template(prefer=self.prefer)
-                
+            else:
+                template=page.template
+   
             return render(request,template,context=ctx)
         elif request.is_ajax():
             return jsonpost(request,ajax.get_globle())        

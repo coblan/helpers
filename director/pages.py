@@ -11,7 +11,7 @@ from .models import LogModel
 from ..ex import findone
 
 class TablePage(object):
-    template=''
+    template='director/table.html'
     tableCls=''
     ajax_scope={}
     def __init__(self,request):
@@ -23,7 +23,7 @@ class TablePage(object):
         if prefer=='wx':
             return 'wx/table.html'
         else:
-            return 'director/table.html'
+            return self.template
         
     def get_context(self):
         ctx = self.table.get_context()
@@ -37,7 +37,7 @@ class TablePage(object):
     
 class FormPage(object):
     template=''
-    fieldsCls=''
+    fieldsCls='director/fields.html'
     ajax_scope={}
     def __init__(self,request):
         self.request=request
@@ -49,7 +49,7 @@ class FormPage(object):
         if prefer=='wx':
             return 'wx/fields.html'
         else:
-            return 'director/fields.html'
+            return self.template
     
     def get_context(self):
         #if self.fieldsCls:
@@ -64,7 +64,7 @@ class FormPage(object):
         return self.ctx
 
 class DelPage(object):
-    template=''
+    template='director/del_rows.html'
     ajax_scope={}
     def __init__(self,request):
         self.request=request
@@ -73,7 +73,7 @@ class DelPage(object):
         if prefer=='wx':
             return 'wx/del_rows.html'
         else:
-            return 'director/del_rows.html'
+            return self.template
         
     def get_context(self):
         ctx = {}
@@ -140,27 +140,29 @@ class TabGroup(object):
     def __init__(self, request):
         self.request=request
         tab_name=request.GET.get('_tab')
+        acture_tabs=self.get_tabs()
+        tab_name = tab_name or acture_tabs[0].get('name')
         self.ctx={
-            'tabs':[{'name':x['name'],'label':x['label']} for x in self.tabs],
+            'tabs':[{'name':x['name'],'label':x['label']} for x in acture_tabs],
             'crt_tab':tab_name,
         }
-        tab_dict=findone(self.tabs,{'name':tab_name}) or self.tabs[0]
+        tab_dict=findone(acture_tabs,{'name':tab_name}) or acture_tabs[0]
         tab_page_cls= tab_dict.get('page_cls')
         self.tab_page = tab_page_cls(request)
         self.ctx.update(self.tab_page.get_context())
     
     def get_template(self,prefer=None):
-        if self.tab_page.template:
-            return self.tab_page.template
-        elif self.template:
-            return self.template
-        else:
+        if self.tab_page.get_template(prefer):
             return self.tab_page.get_template(prefer)
-        
+        else:
+            return self.template   
         #if prefer=='wx':
             #return 'wx/del_rows.html'
         #else:
             #return 'director/del_rows.html'    
+            
+    def get_tabs(self):
+        return self.tabs
     
     def get_context(self):
         return self.ctx
