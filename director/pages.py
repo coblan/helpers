@@ -11,7 +11,7 @@ from .models import LogModel
 from ..ex import findone
 
 class TablePage(object):
-    template='director/table.html'
+    template=''
     tableCls=''
     ajax_scope={}
     def __init__(self,request):
@@ -20,10 +20,12 @@ class TablePage(object):
         self.crt_user=request.user
     
     def get_template(self,prefer=None):
-        if prefer=='wx':
+        if self.template:
+            return self.template
+        elif prefer=='wx':
             return 'wx/table.html'
         else:
-            return self.template
+            return 'director/table.html'
         
     def get_context(self):
         ctx = self.table.get_context()
@@ -37,7 +39,7 @@ class TablePage(object):
     
 class FormPage(object):
     template=''
-    fieldsCls='director/fields.html'
+    fieldsCls=''
     ajax_scope={}
     def __init__(self,request):
         self.request=request
@@ -45,11 +47,13 @@ class FormPage(object):
         self.fields = self.fieldsCls(pk=self.pk,crt_user=request.user)
         self.ctx=self.fields.get_context()
     
-    def get_template(self,prefer=None):    
-        if prefer=='wx':
+    def get_template(self,prefer=None): 
+        if self.template:
+            return self.template
+        elif prefer=='wx':
             return 'wx/fields.html'
         else:
-            return self.template
+            return 'director/fields.html'
     
     def get_context(self):
         #if self.fieldsCls:
@@ -64,16 +68,18 @@ class FormPage(object):
         return self.ctx
 
 class DelPage(object):
-    template='director/del_rows.html'
+    template=''
     ajax_scope={}
     def __init__(self,request):
         self.request=request
     
     def get_template(self,prefer=None):
-        if prefer=='wx':
+        if self.template:
+            return self.template
+        elif prefer=='wx':
             return 'wx/del_rows.html'
         else:
-            return self.template
+            return 'director/del_rows.html'
         
     def get_context(self):
         ctx = {}
@@ -136,7 +142,7 @@ class LogPage(object):
 
 class TabGroup(object):
     tabs=[]
-    template='director/tabgroup.html'
+    template=''
     def __init__(self, request):
         self.request=request
         tab_name=request.GET.get('_tab')
@@ -152,10 +158,16 @@ class TabGroup(object):
         self.ctx.update(self.tab_page.get_context())
     
     def get_template(self,prefer=None):
-        if self.tab_page.get_template(prefer):
+        if self.tab_page.template:
+            return self.tab_page.template
+        elif hasattr(self.tab_page,'get_template') and self.tab_page.get_template(prefer):
             return self.tab_page.get_template(prefer)
+        elif self.template:
+            return self.template
+        elif prefer=='wx':
+            return 'wx/tabgroup.html'
         else:
-            return self.template   
+            return 'director/tabgroup.html'   
         #if prefer=='wx':
             #return 'wx/del_rows.html'
         #else:

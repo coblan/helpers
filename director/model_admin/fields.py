@@ -152,15 +152,20 @@ class ModelFields(forms.ModelForm):
         return to_dict(self.instance,include=self.fields)
 
     def get_options(self):
-        options={}
+        options=self.dict_options()
         
         for name,field in self.fields.items():
+            if name in options.keys():
+                continue
             if isinstance(field,forms.models.ModelMultipleChoiceField):
                 options[name]=[{'value':x[0],'label':x[1]} for x in field.choices]            
             elif isinstance(field,forms.models.ModelChoiceField):
                 options[name]=[{'value':x[0],'label':x[1]} for x in list(field.choices)]
             
         return options
+    
+    def dict_options(self):
+        return {}
     
     def get_input_type(self):
         types={}
