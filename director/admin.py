@@ -10,8 +10,9 @@ from django.contrib.auth.models import Group,User
 import ajax
 import json
 from .model_admin.base import page_dc
-
 from django.conf import settings
+from .models import KVModel
+from . import short_gen
 
 class UserGroupTable(ModelTable):
     model=Group
@@ -61,8 +62,6 @@ class UserTable(ModelTable):
             'groups':';'.join([g.name for g in inst.groups.all()])
         }
         
-                
-            
 
 class UserTablePage(TablePage):
     #template='authuser/user_table.html'
@@ -75,10 +74,11 @@ class UserFormPage(FormPage):
 model_dc[Group]={'fields':UserGroupFields}
 model_dc[User]={'fields':UserFields}
 
-# model_page_dc['user']={'table':UserTablePage,'form':UserFormPage}
-# model_page_dc['group']={'table':GroupTablePage,'form':GroupFormPage,}
+
 
 page_dc.update({'user':UserTablePage,
-                         'user.edit':UserFormPage,
-                         'group':GroupTablePage,
-                         'group.edit':GroupFormPage})
+                'user.edit':UserFormPage,
+                'group':GroupTablePage,
+                'group.edit':GroupFormPage})
+
+short_gen.regist_director(['kv','kv.wx'],KVModel)

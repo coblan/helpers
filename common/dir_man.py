@@ -8,9 +8,10 @@ from django.core.exceptions import PermissionDenied
 >5>comp/catalog.rst>
 后端
 ======
-文件:helpers.commmon.dir_man.py
+源文件:helpers.commmon.dir_man.py
 
-数据库要求：dir和item表中，以外键形式指向dirparent，字段名为 **par**
+catalog管理的后台逻辑。一般情况下是后台一个dir数据表，一个item数据表。DirMan类要求：dir和item表中，以外键形式指向dirparent，字段名为 **par**。
+DirMan不需要继承，只需要实例化，即可使用。
 
 使用步骤:
 

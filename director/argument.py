@@ -6,6 +6,9 @@ from __future__ import absolute_import
 import urlparse
 
 def get_argument(request):
+    """
+    
+    """
     if request.method=='POST':
         dc =urlparse.parse_qs(request.body)
         for k,v in dc.items():

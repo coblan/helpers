@@ -19,3 +19,7 @@ class PermitModel(models.Model):
     group = models.OneToOneField(Group,verbose_name=_('user group'))
     # model = models.CharField('model',max_length=200, default='')
     permit = models.TextField(verbose_name=_('user permit'),default='{}')
+
+class KVModel(models.Model):
+    key=models.CharField('key',max_length=500,blank=True)
+    value=models.TextField(verbose_name='value',blank=True)

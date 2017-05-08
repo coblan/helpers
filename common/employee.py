@@ -10,6 +10,27 @@ from . import human
 from helpers.director.admin import UserFields,User,UserFormPage
 from helpers.director.shortcut import FormPage,TablePage,ModelFields,TabGroup,ModelTable
 # Create your models here.
+"""
+employee
+==========
+雇员信息管理模块。包括一个Employee抽象model类，以及引入了一个human.HumanInfo类作为用户基本信息。使用时，需要继承Employee和HumanInfo类，
+覆盖baseinfo字段。
+
+emp_admin = get_admin(BasicInfo, EmployeeModel) ，这样将实例化的Model传递到本模块，返回的是一个字典。
+
+get_admin示例::
+
+    emp_admin = get_admin(BasicInfo, EmployeeModel)
+    
+    model_dc[BasicInfo]={'fields': emp_admin['BasicInfoFields']}
+    model_dc[EmployeeModel]={'fields':emp_admin[ 'EmployeeFields']}
+    
+    permit_list.append(EmployeeModel)
+    permit_list.append(BasicInfo)
+    
+    page_dc.update(emp_admin['engine_dict'])
+
+"""
 
 class Employee(models.Model):
     user = models.ForeignKey(User,verbose_name=_('account'), blank=True, null=True)
@@ -25,7 +46,7 @@ class Employee(models.Model):
     class Meta:
         abstract = True
 
-def employee_admin( BasicInfo,
+def get_admin( BasicInfo,
                     EmployeeModel):
    
     human_dc=human.get_admin(BasicInfo)

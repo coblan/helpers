@@ -7,5 +7,5 @@ from .model_admin.tabel import ModelTable,PageNum,TrivalPageNum,RowFilter,RowSea
 from .model_admin.fields import ModelFields,save_row
 from .model_admin.permit import ModelPermit,has_permit
 from .container import evalue_container
-from .short_gen import dict_for_engine
+from .short_gen import regist_director
 
