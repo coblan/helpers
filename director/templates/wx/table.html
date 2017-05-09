@@ -9,54 +9,26 @@
 
 
 
-//    $(function(){
-//        pushHistory();
-//        var bool=false;
-//        setTimeout(function(){
-//            bool=true;
-//        },1500);
-//        window.addEventListener("popstate", function(e) {
-//            if(bool)
-//            {
-//                alert("我监听到了浏览器的返回按钮事件啦");//根据自己的需求实现自己的功能
-//                location.href='你要跳转的链接';
-//            }
-//            pushHistory();
-//
-//        }, false);
-//    });
-//    function pushHistory() {
-//        var state = {
-//            title: "title",
-//            url: "#"
-//        };
-//        window.history.pushState(state, "title", "#");
-//    }
+    ln.history_handle({
+        init:{crt_view:'main'},
+        handler:function(state){
+            if(state.crt_view) {
+                table.crt_view = state.crt_view
+            }
+        }
+    })
 
 
-//search_args=ex.parseSearch()
 
         $(function(){
 
-//            history.pushState({view:'table'},'title')
-//            search_args=ex.parseSearch()
-            crt_view = search_args.crt_view || 'table'
+            crt_view = 'main'
 
-//            history.pushState({view:crt_view},'title',location.href)
-//            window.addEventListener('popstate', function(e){
-//                if(e.state){
-//                    table.crt_view= e.state.view
-//                }else{
-//                    history.back()
-//                }
-//
-//            },false)
-           var table= new Vue({
+           table= new Vue({
                 el:'#there',
                 data:{
-//                    menu:menu,
-//                    rows:rows,
                     crt_view:crt_view,
+                    ln:ln,
                 },
                mixins:[table_fun],
                 mounted:function(){
@@ -90,7 +62,7 @@
 
     <!--<button @click="switch_to('search')">过滤</button>-->
 
-    <div v-show="crt_view=='table'">
+    <div>
 
         <div class="flex">
             <div class="flex-grow"></div>
@@ -105,7 +77,7 @@
         <div class="weui-cells">
             <a class="weui-cell weui-cell_access" href="javascript:;" v-for="row in rows">
                 <div class="weui-cell__hd" style="padding-right: 20px">
-                    <input type="checkbox" :value="row.pk" v-model="selected" />
+                    <com-check-box v-model="selected" :value="row.pk"  ></com-check-box>
                 </div>
                 <div class="weui-cell__bd" @click="ge_edit(row.pk)">
                     <p v-text="row._label"></p>
@@ -116,33 +88,53 @@
         </div>
     </div>
 
-    <div v-show="crt_view=='search'">
+    <transition name="slide">
+        <div v-show="crt_view=='search'" class="slide-win">
 
-        <com-filter :row_filters="row_filters" :search_args="search_args" :search_tip='search_tip'></com-filter>
+            <com-filter :row_filters="row_filters" :search_args="search_args" :search_tip='search_tip'></com-filter>
 
-        <div class="weui-btn-area">
-            <a class="weui-btn weui-btn_primary" href="javascript:" @click='search()' style="width: 50%;">
-                <i class="fa fa-search" aria-hidden="true"></i>
-            </a>
+            <div class="weui-btn-area">
+                <a class="weui-btn weui-btn_primary" href="javascript:" @click='search()' style="width: 50%;">
+                    <i class="fa fa-search" aria-hidden="true"></i>
+                </a>
+            </div>
+
         </div>
+    </transition>
 
-    </div>
 
+    <transition name="fade">
     <modal v-show="show_menu" @click.native="show_menu=false">
-        <div class="weui-actionsheet__menu" @click.stop="" style="width: 80vw;">
 
-            <div class="weui-actionsheet__cell" @click="add_new();show_menu=false" v-if="can_add">新建</div>
-            <div class="weui-actionsheet__cell" @click="del_item();show_menu=false" v-if="can_del &&selected.length>0">删除选中</div>
-            <div class="weui-actionsheet__cell" @click="crt_view='search';show_menu=false" v-if="can_search">排序过滤</div>
-        </div>
-        <div class="weui-actionsheet__cell">
-            <div class="weui-actionsheet__cell" @click="show_menu=false">取消</div>
-        </div>
+            <div class="weui-actionsheet__menu up-menu" @click.stop="" style="width: 80vw;">
+                <div class="weui-actionsheet__cell" @click="add_new();show_menu=false" v-if="can_add">新建</div>
+                <div class="weui-actionsheet__cell" @click="del_item();show_menu=false" v-if="can_del &&selected.length>0">删除选中</div>
+                <div class="weui-actionsheet__cell" @click="ln.pushState({crt_view:'search'});show_menu=false" v-if="can_search">排序过滤</div>
+            </div>
+            <div class="weui-actionsheet__cell">
+                <div class="weui-actionsheet__cell" @click="show_menu=false">取消</div>
+            </div>
+
     </modal>
+    </transition>
+
+
 
 </div>
 
 <style type="text/css">
+    /*.slide{*/
+        /*position: fixed;*/
+        /*left: 0;*/
+        /*width: 100vw;*/
+        /*height: 100vh;*/
+        /*top:0;*/
+        /*background-color: white;*/
+
+    /*}*/
+    /*.up-menu{*/
+        /*position: relative;*/
+    /*}*/
 
 </style>
 
