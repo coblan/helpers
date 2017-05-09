@@ -76,8 +76,9 @@
         <div class="weui-cells__title">列表项</div>
         <div class="weui-cells">
             <a class="weui-cell weui-cell_access" href="javascript:;" v-for="row in rows">
-                <div class="weui-cell__hd" style="padding-right: 20px">
-                    <com-check-box v-model="selected" :value="row.pk"  ></com-check-box>
+                <div class="weui-cell__hd" style="padding: 0.5em 1.5em 0.5em 1em;">
+                    <!--<input type="checkbox" v-model="selected" :value="row.pk"  />-->
+                    <com-check-box v-model="selected" :value="row.pk"></com-check-box>
                 </div>
                 <div class="weui-cell__bd" @click="ge_edit(row.pk)">
                     <p v-text="row._label"></p>
