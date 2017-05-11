@@ -1,34 +1,37 @@
-
+# encoding:utf-8
 from django.db import models
+from django.utils import timezone
+import random
 
 def get_no():
     a='ABCDEFGHIJKLMNOPQRSTUVWXYZ'
     return timezone.now().strftime('%Y%m%d%H%M%S')+''.join(random.choice(a) for i in range(8))
 
-class WXOrderModel(models.Model):
+class WXOrderBase(models.Model):
 
-    no = models.CharField('ÄÚ²¿Î¢ĞÅ¶©µ¥ºÅ',max_length=300,blank=True)
-    transaction_id=models.CharField('Î¢ĞÅÖ§¸¶¶©µ¥ºÅ',max_length=300,blank=True)
-    time_end=models.CharField('Ö§¸¶Íê³ÉÊ±¼ä',max_length=300,blank=True)
-    total_fee=models.CharField('×Ü½ğ¶î',max_length=300,blank=True)
-    openid=models.CharField('¸¶¿îÈËopenid',max_length=300,blank=True)
-    trade_type=models.CharField('½»Ò×ÀàĞÍ',max_length=300,blank=True)
-    result_code=models.CharField('ÒµÎñ½á¹û',max_length=300,blank=True)
-    detail=models.TextField(verbose_name='ÏêÏ¸',blank=True)
-    create_time=models.DateTimeField(verbose_name='¼ÇÂ¼´´½¨Ê±¼ä',auto_now_add=True,null=True)
-    last_update_time=models.DateTimeField(verbose_name='¼ÇÂ¼×îºóĞŞ¸ÄÊ±¼ä',auto_now=True,null=True)
-    pay=models.CharField('Ö§¸¶Çé¿ö',max_length=100,blank=True)
-    confirmed=models.BooleanField('ÊÇ·ñÈ·ÈÏ',default=False)
+    no = models.CharField('å†…éƒ¨å¾®ä¿¡è®¢å•å·',max_length=300,blank=True)
+    transaction_id=models.CharField('å¾®ä¿¡æ”¯ä»˜è®¢å•å·',max_length=300,blank=True)
+    time_end=models.CharField('æ”¯ä»˜å®Œæˆæ—¶é—´',max_length=300,blank=True)
+    total_fee=models.CharField('æ€»é‡‘é¢',max_length=300,blank=True)
+    openid=models.CharField('ä»˜æ¬¾äººopenid',max_length=300,blank=True)
+    trade_type=models.CharField('äº¤æ˜“ç±»å‹',max_length=300,blank=True)
+    result_code=models.CharField('ä¸šåŠ¡ç»“æœ',max_length=300,blank=True)
+    body=models.CharField('å®é™…å•†å“åç§°',max_length=300,blank=True)
+    detail=models.TextField(verbose_name='è¯¦ç»†',blank=True)
+    create_time=models.DateTimeField(verbose_name='è®°å½•åˆ›å»ºæ—¶é—´',auto_now_add=True,null=True)
+    last_update_time=models.DateTimeField(verbose_name='è®°å½•æœ€åä¿®æ”¹æ—¶é—´',auto_now=True,null=True)
+    pay=models.CharField('æ”¯ä»˜æƒ…å†µ',max_length=100,blank=True)
+    confirmed=models.BooleanField('æ˜¯å¦ç¡®è®¤',default=False)
     
-    #org_fee=models.CharField('Ô­¼Û',max_length=100,blank=True)
-    #car=models.ForeignKey(UserCarModel,verbose_name='Æû³µ',blank=True,null=True)
-    #order=models.OneToOneField(OrderModel,verbose_name='¶©µ¥',blank=True,null=True)
-    #meal=models.ForeignKey(MealModel,verbose_name='Ì×²Í',blank=True,null=True)
-    #coupon=models.ForeignKey('CouponModel',verbose_name='ÓÅ»İÈ¯',blank=True,null=True)    
+    #org_fee=models.CharField('åŸä»·',max_length=100,blank=True)
+    #car=models.ForeignKey(UserCarModel,verbose_name='æ±½è½¦',blank=True,null=True)
+    #order=models.OneToOneField(OrderModel,verbose_name='è®¢å•',blank=True,null=True)
+    #meal=models.ForeignKey(MealModel,verbose_name='å¥—é¤',blank=True,null=True)
+    #coupon=models.ForeignKey('CouponModel',verbose_name='ä¼˜æƒ åˆ¸',blank=True,null=True)    
 
     
     def __init__(self,*args,**kw):
-        super(WXOrderModel,self).__init__(*args,**kw)
+        super(WXOrderBase,self).__init__(*args,**kw)
         if not self.no:
             self.no= 'WX'+get_no()
     
