@@ -1,5 +1,18 @@
 import inspect
 
+"""
+>->helpers/container.rst>
+========
+容器
+========
+
+evalue_container
+-----------------
+接收dict或者list对象，对里面的'visible'属性进行计算。
+<-<
+
+"""
+
 def evalue_container(container,**kw):
     """
     use to evalue dict or list ,that has some callable element

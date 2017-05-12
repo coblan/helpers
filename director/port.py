@@ -7,6 +7,32 @@ from django.contrib.auth.models import User
 from django.conf import settings
 from django.core.exceptions import PermissionDenied
 
+"""
+>->helpers/port.rst>
+===========
+port
+===========
+主要功能是，利用一个url出口，路由前端对后端函数的调用。
+
+使用时，首先在为view函数申请一个url，然后在view函数中调用即可::
+
+    def ajax_view(request):
+        return jsonpost(request,scope)
+
+前端使用POST调用::
+
+    var post_data=[{fun:"fuc1",data:mydata}]
+    $.post('url',JSON.stringfy(post_data),function(resp){
+    })
+
+利用GET调用::
+
+    var url = xxx?_op=fun1:arg1:arg2,fun2:arg1:arg2
+    $.get(url,function(resp){
+    })
+<-<
+"""
+
 def jsonpost(request, scope):
     """
     该函数会路由ajax请求，ajax发送的json格式为{'order':['func3','func2'],func1:{name:'heyulin'},func2:{arg:..},func3:{arg:}}

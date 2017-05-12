@@ -76,6 +76,22 @@ def change_pswd(request):
 def trival(request):
     pass
 
+
+"""
+>5>helpers/port.rst>
+总的ajax view
+===============
+源码路径为:director/views.ajax_views
+
+作用是，将所有模块的ajax访问，聚集到一个url，再根据url中的app路由到不同app.ajax模块去。
+
+该函数的url现在嵌入到了director.urls中，所以url设置为::
+
+    from helpers.director import urls as director_urls
+    url(r'^d/',include(director_urls)),
+<-<
+"""
+
 def ajax_views(request,app):
     ajax=locate('%(app)s.ajax'%{'app':app})
     # if request.method=='POST':
