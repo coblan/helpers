@@ -44,6 +44,7 @@ def sim_dict(instance,filt_attr=None,include=None,exclude=None):
                          输入是字段的名字
                          
     filt_attr(instance)是可调用对象，返回一个字典，包含已经处理过的属性。这些属性不会再被to_jd操作。
+         或者直接是dict
     
     注意，返回的字典，是可以json化的才行。
     """
@@ -54,7 +55,10 @@ def sim_dict(instance,filt_attr=None,include=None,exclude=None):
     if exclude:
         fields=filter(lambda field:field.name not in exclude,fields)
     if filt_attr:
-        out=filt_attr(instance)
+        if callable(filt_attr):
+            out=filt_attr(instance)
+        else:
+            out=filt_attr
     else:
         out={}
     for field in fields:

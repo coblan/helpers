@@ -309,8 +309,8 @@ class ModelTable(object):
         query=self.get_query()
         out=[]
         for inst in query:
-            dc= to_dict(inst, include=self.permited_fields())
-            dc.update(self.dict_row(inst))
+            
+            dc= to_dict(inst, include=self.permited_fields(),filt_attr=self.dict_row( inst))
             out.append(dc)
         return out
     

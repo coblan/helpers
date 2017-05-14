@@ -2,6 +2,7 @@
 
 <script type="application/javascript">
     page_name='{{page_name}}'
+    page_label={{ page_label | jsonify | default:'unlabel page'}}
     engine_url='{{engine_url}}'
 
     can_add={{ can_add | jsonify | default:'false' }}
@@ -34,6 +35,8 @@
     {% endif %}
 
      search_args=ex.parseSearch()
+
+
 
 </script>
 

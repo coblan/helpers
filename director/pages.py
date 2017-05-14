@@ -1,3 +1,4 @@
+# encoding:utf-8
 
 from __future__ import absolute_import
 import urllib
@@ -35,7 +36,11 @@ class TablePage(object):
         if perm.changeable_fields:
             ctx['can_edit']=True
         ctx['app']=self.tableCls.model._meta.app_label
+        ctx['page_label'] =self.get_label()
         return ctx
+    
+    def get_label(self):
+        return '列表项'
     
 class FormPage(object):
     template=''
@@ -65,7 +70,11 @@ class FormPage(object):
             self.ctx['can_edit']=True
         
         self.ctx['app']=self.fieldsCls._meta.model._meta.app_label
+        self.ctx['page_label'] =self.get_label()
         return self.ctx
+    
+    def get_label(self):
+        return '编辑表单'    
 
 class DelPage(object):
     template=''
@@ -105,8 +114,11 @@ class DelPage(object):
                 infos.update(fields_obj.get_del_info())
                 rows.append(to_dict(fields_obj.instance,include=fields_obj.permit.readable_fields()))
         ctx['infos']=infos
-        ctx['rows']=rows       
+        ctx['rows']=rows  
+        ctx['page_label']=self.get_label()
         return ctx   
+    def get_label(self):
+        return '数据表行删除'
 
 class LogPage(object):
     template='director/model_log.html'
@@ -178,5 +190,6 @@ class TabGroup(object):
     
     def get_context(self):
         return self.ctx
+    
     
         

@@ -71,6 +71,9 @@ def get_admin( BasicInfo,
         fieldsCls=EmployeeFields
         def get_template(self, prefer=None):
             return None
+        def get_label(self):
+            emp=EmployeeModel.objects.get(pk=self.pk)
+            return '%s的工作信息'%emp.baseinfo.name
     
     class BaseinfoItem(FormPage):
         template=''
@@ -83,11 +86,15 @@ def get_admin( BasicInfo,
             if c:
                 emp.baseinfo=base
                 emp.save()
+            self.emp=emp
             self.fields=self.fieldsCls(instance= base,crt_user=request.user)
             self.ctx=self.fields.get_context()
         
         def get_template(self, prefer=None):
             return None
+        
+        def get_label(self):
+            return '%s的个人基本信息'%self.emp.baseinfo.name
     
     
     class UserTab(UserFormPage):
@@ -101,6 +108,7 @@ def get_admin( BasicInfo,
             if c:
                 emp.user=user
                 emp.save()
+            self.emp=emp
             self.fields=self.fieldsCls(instance= user,crt_user=request.user)
             self.ctx=self.fields.get_context() 
         
@@ -109,6 +117,8 @@ def get_admin( BasicInfo,
                 return 'wx/tabgroup.html'
             else:
                 return 'authuser/user_form_tab.html'
+        def get_label(self):
+            return '%s的账号信息'%self.emp.baseinfo.name
     
     class EmpGroup(TabGroup):
         tabs=[{'name':'emp','label':'EMPLOYEE','page_cls':EmployeeItem},
