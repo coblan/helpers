@@ -14,6 +14,8 @@ from .port import jsonpost
 from pydoc import locate
 from django.utils.translation import ugettext as _
 from django.contrib.auth.models import User
+from . import ajax
+
 @ensure_csrf_cookie
 def login(request):
     if request.method=='GET':
@@ -93,11 +95,13 @@ def trival(request):
 <-<
 """
 
-def ajax_views(request,app):
-    ajax=locate('%(app)s.ajax'%{'app':app})
-    # if request.method=='POST':
+def ajax_views(request,app=None):
+    if not app:
+        ajax_module = ajax
+    else:
+        ajax_module=locate('%(app)s.ajax'%{'app':app})
     try:
-        return jsonpost(request, ajax.get_global())
+        return jsonpost(request, ajax_module.get_global())
     except KeyError as e:
         rt={'status':'error','msg':'key error '+str(e) +' \n may function name error'}
         return HttpResponse(json.dumps(rt),content_type="application/json")  

@@ -40,7 +40,7 @@ class GroupTablePage(TablePage):
 class GroupFormPage(FormPage):
     template='form1/permit.html'
     fieldsCls=UserGroupFields
-    ajax_scope=ajax.get_globe()
+    ajax_scope=ajax.get_global()
     
 class UserFields(ModelFields):
     class Meta:

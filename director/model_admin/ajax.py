@@ -17,10 +17,6 @@ import json
 #from base import model_dc,get_admin_name_by_model,del_row
 from django.db import transaction
 
-def get_globle():
-    return globals()
-
-
 def model_perm(user,perm,model):
     validator = ModelPermit(model, user)
     return getattr(validator,perm)()

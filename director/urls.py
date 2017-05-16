@@ -7,7 +7,7 @@ urlpatterns = [
     #url(r'^logout/?$',views.logout),
     #url(r'^pswd/?$',views.change_pswd),
     
-    url(r'^ajax/(?P<app>\w+)/?$',views.ajax_views,name='ajax_url'),
+    #url(r'^ajax/(?P<app>\w+)/?$',views.ajax_views,name='ajax_url'),
     
     #url(r'^$',views.trival,name='director'),
     #url(r'^model/(?P<name>\w+)/edit/?$',render.form_view,name='model_new'),
