@@ -1,8 +1,9 @@
 from django.http import HttpResponse
+from django.shortcuts import redirect
 import json
 from .wepay.jsapi import JSApiWePay
 from .wepay.appapi import APPApiWePay
-
+from .fuwu import FuWuHao
 
 def pay_replay(request):
     pay = JSApiWePay()
@@ -23,3 +24,13 @@ def wepay_make_order(request):
         pay=APPApiWePay()
         dc=pay.make_order(request)
     return HttpResponse(json.dumps(dc),content_type="application/json") 
+
+def recv_code_fuwu(request):
+    fuwu=FuWuHao()
+    fuwu.rec_code(request)
+    return {'status':'success'}
+
+def test_view(request):
+    fuwu=FuWuHao()
+    url = fuwu.get_redirect_url(request)
+    return redirect(url)

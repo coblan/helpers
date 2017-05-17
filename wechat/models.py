@@ -2,6 +2,7 @@
 from django.db import models
 from django.utils import timezone
 import random
+from django.contrib.auth.models import User
 
 def get_no():
     a='ABCDEFGHIJKLMNOPQRSTUVWXYZ'
@@ -23,12 +24,6 @@ class WXOrderBase(models.Model):
     pay=models.CharField('支付情况',max_length=100,blank=True)
     confirmed=models.BooleanField('是否确认',default=False)
     
-    #org_fee=models.CharField('原价',max_length=100,blank=True)
-    #car=models.ForeignKey(UserCarModel,verbose_name='汽车',blank=True,null=True)
-    #order=models.OneToOneField(OrderModel,verbose_name='订单',blank=True,null=True)
-    #meal=models.ForeignKey(MealModel,verbose_name='套餐',blank=True,null=True)
-    #coupon=models.ForeignKey('CouponModel',verbose_name='优惠券',blank=True,null=True)    
-
     
     def __init__(self,*args,**kw):
         super(WXOrderBase,self).__init__(*args,**kw)
@@ -37,3 +32,19 @@ class WXOrderBase(models.Model):
     
     class Meta:
         abstract=True
+    
+
+#class AccessToken(models.Model):
+    #appid=models.CharField('appid',max_length=50,blank=True)
+    #token=models.CharField('token',max_length=100,blank=True)
+    #update_time=models.CharField('update time',max_length=50,blank=True)
+
+class WxInfo(models.Model):
+    user=models.ForeignKey(User,verbose_name='user',blank=True,null=True)
+    openid=models.CharField('openid',max_length=30,unique=True)
+    head=models.CharField('head',max_length=300,blank=True)
+    nickname=models.CharField('nick name',max_length=200,blank=True)
+    sex=models.CharField('sex',max_length=10,blank=True)
+    province=models.CharField('province',max_length=50,blank=True)
+    city=models.CharField('city',max_length=50,blank=True)
+    country=models.CharField('country',max_length=50,blank=True)
