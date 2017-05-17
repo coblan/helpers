@@ -21,7 +21,6 @@ class FuWuHao(object):
     scheme='http'
     def get_redirect_url(self,request):
         host=request.META['HTTP_HOST']
-        host='www.enjoyst.com'
         red_url=self.scheme+'://'+host+'/_wechat/rec_code'
         red_url=urllib.quote(red_url)
         url="https://open.weixin.qq.com/connect/oauth2/authorize?appid=%(appid)s&redirect_uri=%(redirect_url)s&response_type=code&scope=%(scope)s&state=123#wechat_redirect"\
@@ -30,6 +29,7 @@ class FuWuHao(object):
     
     def rec_code(self,request):
         code=request.GET.get('code')
+        print('code is %s'%code)
         url='https://api.weixin.qq.com/sns/oauth2/access_token?appid=%(appid)s&secret=%(secret)s&code=%(code)s&grant_type=authorization_code'\
             %{'appid':self.APPID,'secret':self.APPSECRET,'code':code}
         resp=requests.get(url)
@@ -37,6 +37,7 @@ class FuWuHao(object):
         openid = dc['openid']
         token=dc['access_token']
         wxuser,c = WxInfo.objects.get_or_create(openid=openid)
+        print('save ok')
         if c:
             dc = self.get_info(token,openid)
             wxuser.head=dc['headimgurl']
@@ -61,6 +62,7 @@ class FuWuHao(object):
             wxuser.user=User.objects.create()
             wxuser.save()
         auth.login(request, wxuser.user)
+        print('log in ok')
         
 
 if __name__=='__main__':
