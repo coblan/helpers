@@ -33,4 +33,5 @@ def recv_code_fuwu(request):
 def test_view(request):
     fuwu=FuWuHao()
     url = fuwu.get_redirect_url(request)
+    print(url)
     return redirect(url)
