@@ -28,10 +28,16 @@ def wepay_make_order(request):
 def recv_code_fuwu(request):
     fuwu=FuWuHao()
     fuwu.rec_code(request)
-    return HttpResponse('ok')
+    return redirect(fuwu.next_url)
 
 def test_view(request):
     fuwu=FuWuHao()
     url = fuwu.get_redirect_url(request)
     print(url)
     return redirect(url)
+
+def user_info(request):
+    if request.user.is_authenticated():
+        return HttpResponse(request.user.username)
+    else:
+        return HttpResponse('not login')

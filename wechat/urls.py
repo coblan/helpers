@@ -8,6 +8,6 @@ urlpatterns = [
     url(r'pay/new_order',views.wepay_make_order),
     url(r'^rec_code$',views.recv_code_fuwu),
     
-    url(r'^test',views.test_view)
-
+    url(r'^test$',views.test_view),
+    url(r'^print_username/?$',views.user_info)
 ]

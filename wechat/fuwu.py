@@ -19,6 +19,7 @@ class FuWuHao(object):
     APPSECRET='d4624c36b6795d1d99dcf0547af5443d'
     WxInfo=WxInfo
     scheme='http'
+    next_url='/_wechat/print_username'
     def get_redirect_url(self,request):
         host=request.META['HTTP_HOST']
         red_url=self.scheme+'://'+host+'/_wechat/rec_code'
