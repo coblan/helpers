@@ -2,8 +2,9 @@ from models import PermitModel
 from model_admin.base import model_dc
 from django.contrib.auth.models import Group
 import json
+from .model_admin.ajax import *
 
-def get_globe():
+def get_global():
     return globals()
 
 def save_group_and_permit(row,permits,user): 

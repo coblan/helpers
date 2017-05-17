@@ -36,6 +36,7 @@ from django.shortcuts import render
 from django.core.urlresolvers import reverse
 from django.shortcuts import redirect
 from django.conf import settings
+from django.http import HttpResponse
 from .model_admin import ajax
 from .container import evalue_container,find_one_r
 from .model_admin.permit import ModelPermit,has_permit
@@ -45,6 +46,7 @@ from .model_admin.base import page_dc
 from django.db import models
 from django.core.exceptions import PermissionDenied
 import inspect
+import json
 
 page_dc.update({
         'del_rows':DelPage,
@@ -71,20 +73,20 @@ class BaseEngine(object):
             cls._pages.append(dc)
     
     def view(self,request,name):
-        menu = self.get_menu(request)
-        #item = find_one_r(menu,{'url':request.path})
-        #if not item:
-            #raise PermissionDenied,'you have not permi to visit this url'
-        
+        #if request.is_ajax():
+              
         page_cls = self.get_page_cls(name)
-        if request.method=='GET':
-            if getattr(page_cls,'need_login',True):
-                if request.user.is_anonymous() or not request.user.is_active:
-                    return redirect(settings.LOGIN_URL+'?next='+request.get_full_path())
+        
+        if getattr(page_cls,'need_login',True):
+            if request.user.is_anonymous() or not request.user.is_active:
+                return redirect(settings.LOGIN_URL+'?next='+request.get_full_path())
                 
-            page=page_cls(request)
-            ctx=page.get_context()
-            ctx['menu']=menu
+        page=page_cls(request)
+        ctx=page.get_context()
+        if  request.is_ajax():
+            return HttpResponse(json.dumps(ctx),content_type="application/json")
+        else:
+            ctx['menu']=self.get_menu(request)   
             ctx['page_name']=name
             ctx['engine_url']=reverse(self.url_name,args=('aa',))[:-3]
             
@@ -94,8 +96,10 @@ class BaseEngine(object):
                 template=page.template
    
             return render(request,template,context=ctx)
-        elif request.is_ajax():
-            return jsonpost(request,ajax.get_globle())        
+       
+            
+        #elif request.is_ajax():
+            #return jsonpost(request,ajax.get_globle())        
     
     def get_page_cls(self,name):
         if self._pages:
