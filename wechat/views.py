@@ -28,7 +28,7 @@ def wepay_make_order(request):
 def recv_code_fuwu(request):
     fuwu=FuWuHao()
     fuwu.rec_code(request)
-    return {'status':'success'}
+    return HttpResponse('ok')
 
 def test_view(request):
     fuwu=FuWuHao()

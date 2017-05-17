@@ -61,6 +61,7 @@ class FuWuHao(object):
         if not wxuser.user:
             wxuser.user=User.objects.create()
             wxuser.save()
+        wxuser.user.backend = 'django.contrib.auth.backends.ModelBackend'
         auth.login(request, wxuser.user)
         print('log in ok')
         
