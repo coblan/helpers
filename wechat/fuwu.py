@@ -48,7 +48,7 @@ class FuWuHao(object):
             wxuser.country=dc['country']
             wxuser.save()
             
-        self.on_login(wxuser)
+        self.on_login(request,wxuser)
         
     
     def get_info(self,token,openid):
@@ -57,7 +57,7 @@ class FuWuHao(object):
         resp=requests.get(url)
         return json.loads(resp.content)
 
-    def on_login(self,request,openid):
+    def on_login(self,request,wxuser):
         if not wxuser.user:
             wxuser.user=User.objects.create()
             wxuser.save()
