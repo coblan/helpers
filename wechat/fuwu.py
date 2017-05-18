@@ -21,12 +21,16 @@ class FuWuHao(object):
     scheme='http'
     next_url='/_wechat/print_username'
     def get_redirect_url(self,request):
-        host=request.META['HTTP_HOST']
-        red_url=self.scheme+'://'+host+'/_wechat/rec_code'
+        red_url=self.get_recieve_url(request)
         red_url=urllib.quote(red_url)
         url="https://open.weixin.qq.com/connect/oauth2/authorize?appid=%(appid)s&redirect_uri=%(redirect_url)s&response_type=code&scope=%(scope)s&state=123#wechat_redirect"\
             %{'appid':self.APPID,'redirect_url':red_url,'scope':'snsapi_userinfo'}
         return url
+    
+    def get_recieve_url(self,request):
+        host=request.META['HTTP_HOST']
+        red_url=self.scheme+'://'+host+'/_wechat/rec_code'
+        return red_url
     
     def rec_code(self,request):
         code=request.GET.get('code')
