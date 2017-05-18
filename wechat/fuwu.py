@@ -37,19 +37,19 @@ class FuWuHao(object):
         dc = json.loads(resp.content)
         openid = dc['openid']
         token=dc['access_token']
-        wxuser,c = WxInfo.objects.get_or_create(openid=openid)
+        wxinfo,c = WxInfo.objects.get_or_create(openid=openid)
         print('save ok')
         if c:
             dc = self.get_info(token,openid)
-            wxuser.head=dc['headimgurl']
-            wxuser.sex=dc['sex']
-            wxuser.nickname=dc['nickname']
-            wxuser.province=dc['province']
-            wxuser.city=dc['city']
-            wxuser.country=dc['country']
-            wxuser.save()
+            wxinfo.head=dc['headimgurl']
+            wxinfo.sex=dc['sex']
+            wxinfo.nickname=dc['nickname']
+            wxinfo.province=dc['province']
+            wxinfo.city=dc['city']
+            wxinfo.country=dc['country']
+            wxinfo.save()
             
-        self.on_login(request,wxuser)
+        self.on_login(request,wxinfo)
         
     
     def get_info(self,token,openid):
@@ -58,12 +58,12 @@ class FuWuHao(object):
         resp=requests.get(url)
         return json.loads(resp.content)
 
-    def on_login(self,request,wxuser):
-        if not wxuser.user:
-            wxuser.user=User.objects.create()
-            wxuser.save()
-        wxuser.user.backend = 'django.contrib.auth.backends.ModelBackend'
-        auth.login(request, wxuser.user)
+    def on_login(self,request,weinfo):
+        if not weinfo.user:
+            weinfo.user=User.objects.create()
+            weinfo.save()
+        weinfo.user.backend = 'django.contrib.auth.backends.ModelBackend'
+        auth.login(request, weinfo.user)
         print('log in ok')
         
 
