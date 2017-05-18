@@ -1,6 +1,12 @@
 from django.conf.urls import include, url
 import views
 from model_admin import render
+"""
+
+    url(r'^ajax/(?P<app>\w+)?/?$',director_views.ajax_views,name='ajax_url'),
+    url(r'^ajax/?$',director_views.ajax_views),
+
+"""
 urlpatterns = [
     #url(r'^login/?$',views.login,name='login'),
     #url(r'^regist/?$',views.regist_user,name='regist'),
