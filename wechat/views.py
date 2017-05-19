@@ -1,3 +1,5 @@
+# encoding:utf-8
+from __future__ import unicode_literals
 from django.http import HttpResponse
 from django.shortcuts import redirect
 import json
@@ -31,6 +33,9 @@ def recv_code_fuwu(request):
     return redirect(fuwu.next_url)
 
 def test_view(request):
+    """
+    其他模块调用服务号登录，就是从这里开始。
+    """
     fuwu=FuWuHao()
     url = fuwu.get_redirect_url(request)
     print(url)
