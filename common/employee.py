@@ -138,17 +138,24 @@ def get_admin( BasicInfo,
         def dict_row(self, inst):
             dc={
                 'user':unicode(inst.user),
-                'baseinfo':unicode(inst.baseinfo)
+                'baseinfo':unicode(inst.baseinfo),
+                'head':inst.baseinfo.head
             }
             return dc        
     
     class EmployeeTablePage(TablePage):
         tableCls=EmployeeTable 
+        
+        def get_label(self):
+            return '员工列表'
+        
+    class EmployeeTablePageWX(EmployeeTablePage):
+        template='common/m_emp_table.html'
     
     engine_dict={
         'employee':EmployeeTablePage,
         'employee.edit':EmpGroup,
-        'employee.wx':EmployeeTablePage,
+        'employee.wx':EmployeeTablePageWX,
         'employee.wx.edit':EmpGroup,
     }
     
