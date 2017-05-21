@@ -72,8 +72,11 @@ def get_admin( BasicInfo,
         def get_template(self, prefer=None):
             return None
         def get_label(self):
-            emp=EmployeeModel.objects.get(pk=self.pk)
-            return '%s的工作信息'%emp.baseinfo.name
+            try:
+                emp=EmployeeModel.objects.get(pk=self.pk)
+                return '%s的工作信息'%(emp.baseinfo.name if emp.baseinfo else '未命名')
+            except EmployeeModel.DoesNotExist:
+                return '新建员工'
     
     class BaseinfoItem(FormPage):
         template=''
@@ -139,7 +142,7 @@ def get_admin( BasicInfo,
             dc={
                 'user':unicode(inst.user),
                 'baseinfo':unicode(inst.baseinfo),
-                'head':inst.baseinfo.head
+                'head':inst.baseinfo.head if inst.baseinfo else ''
             }
             return dc        
     

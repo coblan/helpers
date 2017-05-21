@@ -15,6 +15,7 @@ from pydoc import locate
 from django.utils.translation import ugettext as _
 from django.contrib.auth.models import User
 from . import ajax
+import urllib
 
 @ensure_csrf_cookie
 def login(request):
@@ -49,6 +50,7 @@ def regist_user(request):
 
 def logout(request):
     next = request.GET.get('next','/')
+    next=urllib.unquote(next)
     auth.logout(request)
     return redirect(next) 
 

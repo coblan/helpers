@@ -182,15 +182,14 @@ def from_dict(dc,model=None,pre_proc=None):
     pk=dc.get('pk')
     if pk:
         instance=model.objects.get(pk=pk) 
-        #for k,v in processed.items():
-            #setattr(instance,k,v)       
-        #return instance            
+        for k,v in processed.items():
+            setattr(instance,k,v)                  
     else:
-        #instance=model.objects.create(**processed)
-        instance=model.objects.create()
+        instance=model.objects.create(**processed)
+        #instance=model.objects.create()
         
-    for k,v in processed.items():
-        setattr(instance,k,v)     
+    #for k,v in processed.items():
+        #setattr(instance,k,v)     
     return instance
      
 

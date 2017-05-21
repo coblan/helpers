@@ -3,9 +3,7 @@
 {% load jsonify %}
 
 {% block page_content %}
-<script src='{% static "js/exfun.js" %}'></script>
-<script src='{% static "js/fields.pack.js" %}'></script>
-<script src='{% static "js/uis.pack.js" %}'></script>
+
 <script type="text/javascript">
         
         heads={{ heads | jsonify }}
@@ -56,7 +54,7 @@
                                         var self=this;
                                         show_upload()
                                         var post_data=[{fun:'save_group_and_permit',row:this.kw.row,permits:this.permits}]
-                                        $.post('',JSON.stringify(post_data),function (data) {
+                                        $.post('/_ajax',JSON.stringify(post_data),function (data) {
 											if(data.save_group_and_permit.errors){
 													this.kw.errors=data.save_group_and_permit.errors
 											}
@@ -108,7 +106,7 @@
 	        	<tr :class='["permit-table",{"info":head.type!="model"}]' v-for='(head,index) in selected_heads'>
 		        	<td style='width:200px;'>
 			        	<span @click='delet_permit(head.name)' class='del_btn'>
-				        	<span class="glyphicon glyphicon-trash"></span>
+				        	<i class="fa fa-trash" aria-hidden="true"></i>
 				        </span>
 				        
 			        	<span v-text='head.label'></span>

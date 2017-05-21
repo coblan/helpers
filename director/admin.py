@@ -13,6 +13,7 @@ from .model_admin.base import page_dc
 from django.conf import settings
 from .models import KVModel
 from . import short_gen
+import cgi
 
 class UserGroupTable(ModelTable):
     model=Group
@@ -81,4 +82,23 @@ page_dc.update({'user':UserTablePage,
                 'group':GroupTablePage,
                 'group.edit':GroupFormPage})
 
+
+class KVTable(ModelTable):
+    model=KVModel
+    exclude=[]
+    def dict_row(self, inst):
+        if len(inst.value)>50:
+            value=inst.value[:50]+'...'
+        else:
+            value=inst.value
+        return {
+            'value':cgi.escape(value)
+        }
+
+class KvTablePage(TablePage):
+    tableCls=KVTable
+
 short_gen.regist_director(['kv','kv.wx'],KVModel)
+page_dc.update({
+    'kv':KvTablePage
+})

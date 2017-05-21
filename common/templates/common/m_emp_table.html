@@ -1,23 +1,31 @@
 {% extends "wx/table.html" %}
 
-{% block item_view %}
-<div v-for="row in rows">
-    <img :src="row.head" alt="" style="width: 3em;"/>
-    <span v-text="row.baseinfo"></span>
-</div>
 
-<!--<div class="weui-cells">-->
-    <!--<a class="weui-cell weui-cell_access" href="javascript:;" v-for="row in rows">-->
-        <!--<div class="weui-cell__hd" style="padding: 0 1em 0 0.3em;">-->
-            <!--&lt;!&ndash;<input type="checkbox" v-model="selected" :value="row.pk"  />&ndash;&gt;-->
-            <!--<com-check-box v-model="selected" :value="row.pk"></com-check-box>-->
-        <!--</div>-->
-        <!--<div class="weui-cell__bd" @click="ge_edit(row.pk)">-->
-            <!--<p v-text="row._label"></p>-->
-        <!--</div>-->
-        <!--<div class="weui-cell__ft">-->
-        <!--</div>-->
-    <!--</a>-->
-<!--</div>-->
+
+{% block extra_head %}
+<style>
+    .this-item{
+        display: flex;
+        width: 100vw;
+        padding: 1em;
+        padding-left: 2em;
+        align-items: center;
+    }
+    .this-item:nth-child(odd){
+        background-color: white;
+    }
+    .this-item .name{
+        padding-left: 3em;
+    }
+</style>
+{% endblock %}
+
+{% block item_view %}
+
+<div class="this-item" v-for="row in rows" @click="ge_edit(row.pk)">
+    <img :src="row.head" alt="" style="width: 3em;height: 3em;"/>
+    <span class="name flex-grow" v-text="row.baseinfo"></span>
+    <i class="fa fa-chevron-right" aria-hidden="true"></i>
+</div>
 
 {% endblock%}

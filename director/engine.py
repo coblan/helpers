@@ -58,12 +58,15 @@ class BaseEngine(object):
     menu={}
     url_name='baseengine'
     prefer='pc'
-    
+    login_url=settings.LOGIN_URL
+    def __init__(self):
+        self.root_page='/'
+        
     @classmethod
     def as_view(cls):
-        if not getattr(cls,'_single',None):
-            cls._single = cls()
-        return cls._single.view
+        if not getattr(cls,'_singleton',None):
+            cls._singleton = cls()
+        return cls._singleton.view
     
     @classmethod
     def add_pages(cls,dc):
@@ -79,7 +82,7 @@ class BaseEngine(object):
         
         if getattr(page_cls,'need_login',True):
             if request.user.is_anonymous() or not request.user.is_active:
-                return redirect(settings.LOGIN_URL+'?next='+request.get_full_path())
+                return redirect(self.login_url+'?next='+request.get_full_path())
                 
         page=page_cls(request)
         ctx=page.get_context()
@@ -89,6 +92,10 @@ class BaseEngine(object):
             ctx['menu']=self.get_menu(request)   
             ctx['page_name']=name
             ctx['engine_url']=reverse(self.url_name,args=('aa',))[:-3]
+            if isinstance(self.root_page,(str,unicode)):
+                ctx['root_page']=self.root_page
+            else:
+                ctx['root_page']=self.root_page(self.url_name)
             
             if hasattr(page,'get_template'):
                 template=page.get_template(prefer=self.prefer)

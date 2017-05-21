@@ -29,7 +29,7 @@
 				del_rows:function () {
 					var self =this
 					var post_data=[{fun:'del_rows',rows:this.rows}]
-					$.post('',JSON.stringify(post_data),function (data) {
+					$.post('/_ajax',JSON.stringify(post_data),function (data) {
 						if(data.del_rows){
 							if(search_args._pop){
 								ln.rtWin({del_rows:self.rows})
@@ -70,7 +70,10 @@
 				</ul>
 			</div>
 		</article>
-		<button name="test" type="button" @click='del_rows()' class="weui-btn weui-btn_warn" style="width: 50%;">确定删除</button>
+		<div style="text-align: center;padding-top: 3em;">
+			<button  @click='del_rows()' type="button" class="btn btn-danger btn-sm" style="width: 16em;">确定删除</button>
+		</div>
+
 		<!--<button name="test" type="button" @click='cancel()'>取消</button>-->
 	</div>
 	

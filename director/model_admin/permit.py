@@ -164,10 +164,18 @@ def model_permit_info(model,user):
     
     [{u'name': u'task', u'label': u'\u6240\u5c5e\u4efb\u52a1'},]
     """
-    fields = model_dc.get(model).get('fields')
+
+    fields_cls = model_dc.get(model).get('fields')
+    fields_dc = fields_cls(crt_user=user).fields
+    
+    for field in model._meta.fields:
+        if getattr(field,'auto_now',False):
+            fields_dc[field.name]=field.verbose_name  
     ls=[]
-    for k,v in fields(crt_user=user).fields.items():
-        if hasattr(v.label,'title') and callable(v.label.title):
+    for k,v in fields_dc.items():
+        if isinstance(v,(str,unicode)):
+            label=v
+        elif hasattr(v.label,'title') and callable(v.label.title):
             label=v.label.title()
         else:
             label=v.label

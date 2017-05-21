@@ -104,15 +104,16 @@ class ModelFields(forms.ModelForm):
             for head in heads:
                 if head['name']==k:
                     head['options']=v
-        for k,v in self.get_input_type().items():
-            for head in heads:
-                if head['name']==k:
-                    head['type']=v
+        #for k,v in self.get_input_type().items():
+            #for head in heads:
+                #if head['name']==k:
+                    #head['type']=v
         for name in self.get_readonly_fields():
             for head in heads:
                 if head['name']==name:
                     head['readonly']=True 
-
+        for head in heads:
+            self.dict_head(head)
         return heads
     
     def can_access(self):
@@ -129,6 +130,7 @@ class ModelFields(forms.ModelForm):
         # perm = self.instance._meta.app_label+'.change_'+self.instance._meta.model_name
         # return self.crt_user.has_perm(perm)
     
+
     
     def get_readonly_fields(self):
         ls=self.permit.readonly_fields()
@@ -163,13 +165,17 @@ class ModelFields(forms.ModelForm):
                 options[name]=[{'value':x[0],'label':x[1]} for x in list(field.choices)]
             
         return options
+
     
     def dict_options(self):
         return {}
     
-    def get_input_type(self):
-        types={}
-        return types
+    def dict_head(self,head):
+        return head      
+    
+    #def get_input_type(self):
+        #types={}
+        #return types
     
     def save_form(self):
         """
