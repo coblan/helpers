@@ -120,7 +120,7 @@ class BaseEngine(object):
 def and_list(ls):
     def _func(user):
         for model in ls:
-            if isinstance(model,models.Model):
+            if isinstance(model,models.Model) or(inspect.isclass(model) and issubclass(model,models.Model)):
                 validator = ModelPermit(model, user)
                 if not validator.can_access():
                     return False

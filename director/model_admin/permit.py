@@ -61,7 +61,7 @@ class ModelPermit(object):
     
     [{'model':'app.App',}]
     """
-    def __init__(self,model,user):
+    def __init__(self,model,user,nolimit=False):
         self.user=user
         if isinstance(model,(str,unicode)):
             model=apps.get_model(model)
@@ -69,9 +69,10 @@ class ModelPermit(object):
             model=model.__class__
         self.model = model
         self.permit_list=[]
-        self._init_perm()
+        self.nolimit=nolimit
+        self._read_perm_from_db()
     
-    def _init_perm(self):
+    def _read_perm_from_db(self):
         model_name = model_to_name(self.model)
         for group in self.user.groups.all():
             if hasattr(group,'permitmodel'):
@@ -81,11 +82,15 @@ class ModelPermit(object):
         self.permit_list=list(set(self.permit_list))
     
     def get_heads(self):
+        """
+        这个函数好像只被 group admin 用了下，貌似没用，等待求证。
+        """
         ls=[]
         for v in permit_list:
             if not isinstance(v,dict) and issubclass(v,models.Model):
+
                 ls.append({'name':model_to_name(v),
-                           'label':v._meta.verbose_name,
+                           'label':unicode(v._meta.verbose_name), # 因为翻译的缘故，有时是 __proxy__函数
                            'type':'model',
                            'fields':model_permit_info(v,self.user)})
         
@@ -98,24 +103,24 @@ class ModelPermit(object):
         pass
     
     def can_add(self):
-        if self.user.is_superuser:
+        if self.user.is_superuser or self.nolimit:
             return True
         else:
             return 'can__create' in self.permit_list
 
     def can_del(self):
-        if self.user.is_superuser:
+        if self.user.is_superuser or self.nolimit:
             return True
         else:
             return 'can__delete' in self.permit_list
     def can_log(self):
-        if self.user.is_superuser:
+        if self.user.is_superuser or self.nolimit:
             return True
         else:
             return 'can__log' in self.permit_list        
     
     def can_access(self):
-        if self.user.is_superuser:
+        if self.user.is_superuser or self.nolimit:
             return True
         elif self.readable_fields() or self.changeable_fields():
             return True
@@ -123,7 +128,7 @@ class ModelPermit(object):
             return False
 
     def readonly_fields(self):
-        if self.user.is_superuser:
+        if self.user.is_superuser or self.nolimit:
             return []
         else:
             return [x for x in self.readable_fields() if x not in self.changeable_fields()]
@@ -136,7 +141,7 @@ class ModelPermit(object):
         return ls
     
     def readable_fields(self):
-        if self.user.is_superuser:
+        if self.user.is_superuser or self.nolimit:
             return self.all_fields()
         else:
             ls=[]
@@ -146,7 +151,7 @@ class ModelPermit(object):
             return list(set(ls))  
     
     def changeable_fields(self):
-        if self.user.is_superuser:
+        if self.user.is_superuser or self.nolimit:
             return self.all_fields()
             #return self.model._meta.get_all_field_names()
         else:

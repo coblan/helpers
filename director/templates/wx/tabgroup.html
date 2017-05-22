@@ -57,29 +57,13 @@
 
 
 
-    <div style="text-align: center;padding: 3em 0 8em 0;">
+    <div v-if="can_edit" style="text-align: center;padding: 3em 0 8em 0;">
         <a type="button" class="btn btn-success btn-sm" href="javascript:"  @click="submit()" style="width: 16em;">确定</a>
     </div>
 
 
 </div>
 
-<style type="text/css">
-    /*.field.weui-cell::before{*/
-    /*content: " ";*/
-    /*position: absolute;*/
-    /*left: 0;*/
-    /*top: 0;*/
-    /*right: 0;*/
-    /*height: 1px;*/
-    /*border-top: 1px solid #d9d9d9;*/
-    /*color: #d9d9d9;*/
-    /*-webkit-transform-origin: 0 0;*/
-    /*transform-origin: 0 0;*/
-    /*-webkit-transform: scaleY(.5);*/
-    /*transform: scaleY(.5);*/
-    /*left: 15px;*/
-    /*}*/
-</style>
+
 
 {% endblock %}

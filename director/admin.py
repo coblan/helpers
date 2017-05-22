@@ -5,7 +5,7 @@ from __future__ import unicode_literals
 from .pages import TablePage,FormPage
 from model_admin.tabel import ModelTable
 from model_admin.fields import ModelFields
-from model_admin.base import model_dc,page_dc
+from model_admin.base import model_dc,page_dc,permit_list
 from django.contrib.auth.models import Group,User
 import ajax
 import json
@@ -81,6 +81,9 @@ page_dc.update({'user':UserTablePage,
                 'user.edit':UserFormPage,
                 'group':GroupTablePage,
                 'group.edit':GroupFormPage})
+
+permit_list.append(Group)
+permit_list.append(User)
 
 
 class KVTable(ModelTable):

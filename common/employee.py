@@ -9,6 +9,8 @@ from . import human
 
 from helpers.director.admin import UserFields,User,UserFormPage
 from helpers.director.shortcut import FormPage,TablePage,ModelFields,TabGroup,ModelTable
+from helpers.director.engine import and_list
+from helpers.director.container import evalue_container
 # Create your models here.
 """
 employee
@@ -125,14 +127,16 @@ def get_admin( BasicInfo,
     
     class EmpGroup(TabGroup):
         tabs=[{'name':'emp','label':'EMPLOYEE','page_cls':EmployeeItem},
-              {'name':'baseinfo','label':'BASEINFO','page_cls':BaseinfoItem},
-              {'name':'user','label':'ACCOUNT','page_cls':UserTab}]
+              {'name':'baseinfo','label':'BASEINFO','page_cls':BaseinfoItem,'visible':and_list([BasicInfo])},
+              {'name':'user','label':'ACCOUNT','page_cls':UserTab,'visible':and_list([User])}]
         
         def get_tabs(self):
             if not self.request.GET.get('pk'):
-                return self.tabs[0:1]
+                tabs= self.tabs[0:1]
             else:
-                return self.tabs   
+                tabs= self.tabs  
+            tabs= evalue_container(tabs,user=self.request.user)
+            return tabs
 
     class EmployeeTable(ModelTable):
         model=EmployeeModel

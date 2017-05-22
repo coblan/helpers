@@ -10,6 +10,7 @@ from .model_admin.permit import ModelPermit
 from .db_tools import to_dict,sim_dict,model_to_head
 from .models import LogModel
 from ..ex import findone
+from .container import evalue_container
 
 class TablePage(object):
     template=''
@@ -68,6 +69,8 @@ class FormPage(object):
         self.ctx['can_log']=perm.can_log()
         if perm.changeable_fields():
             self.ctx['can_edit']=True
+        else:
+            self.ctx['can_edit']=False
         
         self.ctx['app']=self.fieldsCls._meta.model._meta.app_label
         self.ctx['page_label'] =self.get_label()
@@ -186,7 +189,7 @@ class TabGroup(object):
             #return 'director/del_rows.html'    
             
     def get_tabs(self):
-        return self.tabs
+        return evalue_container(self.tabs)
     
     def get_context(self):
         return self.ctx

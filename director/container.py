@@ -29,7 +29,7 @@ def evalue_container(container,**kw):
         return evalue_dict(container,**kw)
     elif isinstance(container,(tuple,list)):
         return evalue_list(container,**kw)
-    elif callable(container):
+    elif inspect.isfunction(container):
         args=inspect.getargspec(container).args
         real_kw={}
         for k,v in kw.items():

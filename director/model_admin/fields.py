@@ -58,9 +58,9 @@ class ModelFields(forms.ModelForm):
                 
             else:
                 kw['instance'] = self._meta.model()
-
+        nolimit = kw.pop('nolimit',False)
         super(ModelFields,self).__init__(dc,*args,**kw)
-        self.permit= ModelPermit(self.Meta.model,self.crt_user)
+        self.permit= ModelPermit(self.Meta.model,self.crt_user,nolimit=nolimit)
         self.pop_fields()
         self.init_value()
         
