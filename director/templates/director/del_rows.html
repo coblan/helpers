@@ -29,7 +29,7 @@
 				del_rows:function () {
 					var self =this
 					var post_data=[{fun:'del_rows',rows:this.rows}]
-					$.post('',JSON.stringify(post_data),function (data) {
+					$.post('/_ajax',JSON.stringify(post_data),function (data) {
 						if(data.del_rows){
 							if(search_args._pop){
 								ln.rtWin({del_rows:self.rows})
