@@ -8,6 +8,7 @@ from django.contrib.auth.models import User
 from django.contrib import auth 
 from .models import WxInfo
 import urllib
+import random
 
 class FuWuHao(object):
     """
@@ -64,8 +65,10 @@ class FuWuHao(object):
 
     def on_login(self,request,weinfo):
         if not weinfo.user:
-            count = User.objects.count()
-            weinfo.user=User.objects.create(username='_uid_%s'%count)
+            tmp=random.randint(0,99999999)
+            weinfo.user=User.objects.create(username='_tmp_%s'%tmp)
+            weinfo.user.username='_uid_%s'%weinfo.user.id
+            weinfo.user.save()
             weinfo.save()
         weinfo.user.backend = 'django.contrib.auth.backends.ModelBackend'
         auth.login(request, weinfo.user)
