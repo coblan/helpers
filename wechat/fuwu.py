@@ -64,8 +64,8 @@ class FuWuHao(object):
 
     def on_login(self,request,weinfo):
         if not weinfo.user:
-            weinfo.user=User.objects.create()
-            weinfo.user.username=weinfo.user.id
+            count = User.objects.count()
+            weinfo.user=User.objects.create(username='_uid_'+count)
             weinfo.save()
         weinfo.user.backend = 'django.contrib.auth.backends.ModelBackend'
         auth.login(request, weinfo.user)
