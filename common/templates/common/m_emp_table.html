@@ -22,7 +22,7 @@
 
 {% block item_view %}
 
-<div class="this-item" v-for="row in rows" @click="ge_edit(row.pk)">
+<div class="this-item flex" v-for="row in rows" @click="ge_edit(row.pk)">
     <img :src="row.head" alt="" style="width: 3em;height: 3em;"/>
     <span class="name flex-grow" v-text="row.baseinfo"></span>
     <i class="fa fa-chevron-right" aria-hidden="true"></i>
