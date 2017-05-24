@@ -41,11 +41,15 @@
     </div>
     {% endblock %}
 
-    <div class="sub-btn-panel">
-        <a v-if="can_edit" type="button" class="btn btn-success btn-sm" href="javascript:"  @click="submit()" style="width: 16em;">确定</a>
-        <a v-if="can_del" type="button" class="btn btn-danger btn-sm" href="javascript:" v-if="can_del" @click="del_row()" style="width: 16em;">删除</a>
-
+    <div v-btn-group:form>
+        <a v-if="can_edit" state="success"  @click="submit()">确定</a>
+        <a v-if="can_del" state="danger" :href="get_del_link()">删除</a>
     </div>
+    <!--<div class="sub-btn-panel">-->
+        <!--<a v-if="can_edit" type="button" class="btn btn-success btn-sm" href="javascript:"  @click="submit()" style="width: 16em;">确定</a>-->
+        <!--<a v-if="can_del" type="button" class="btn btn-danger btn-sm" href="javascript:" v-if="can_del" @click="del_row()" style="width: 16em;">删除</a>-->
+
+    <!--</div>-->
 
 </div>
 <style>
