@@ -7,6 +7,7 @@ def SET(scope):
         'helpers.debug.debug_toolbar.json_as_html.JsonAsHTML',
         
         ])
+    scope['DEBUG_TOOLBAR_CONFIG'] = {  'JQUERY_URL' : r"/static/lib/jquery3.2.1.min.js"}
     scope['INTERNAL_IPS'] =['127.0.0.1']
 
 
