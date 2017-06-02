@@ -1,5 +1,6 @@
-
 # encoding:utf-8
+from __future__ import unicode_literals
+
 import os
 
 def SET(scope):
@@ -54,4 +55,7 @@ def SET(scope):
         }
     }
     
-    scope.update(locals())
+    scope.update({
+        'MIDDLEWARE_CLASSES':MIDDLEWARE_CLASSES,
+        'LOGGING':LOGGING,
+    })
