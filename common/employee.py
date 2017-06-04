@@ -36,17 +36,19 @@ get_admin示例::
 
 class Employee(models.Model):
     user = models.ForeignKey(User,verbose_name=_('account'), blank=True, null=True)
-    baseinfo=models.OneToOneField(human.HumanInfo,verbose_name=_('basic info'),blank=True,null=True)
-    eid=models.CharField('employee id',max_length=30,default='')
+    #baseinfo=models.OneToOneField(human.HumanInfo,verbose_name=_('basic info'),blank=True,null=True)
+    eid=models.CharField(_('employee id'),max_length=30,default='')
    
     def __unicode__(self):
         if self.baseinfo:
             return self.baseinfo.name
         else:
-            return 'unnamed employee'
+            return _('unnamed employee')
     
     class Meta:
         abstract = True
+
+
 
 def get_admin( BasicInfo,
                     EmployeeModel):
@@ -58,15 +60,16 @@ def get_admin( BasicInfo,
         
         class Meta:
             model=EmployeeModel
-            exclude=[]
+            exclude=['baseinfo']
         
-        def get_options(self):
-            options= super(EmployeeFields,self).get_options()
-            users = list(User.objects.filter(employeemodel=None))
+        def dict_options(self):
+            users =list(User.objects.filter(employeemodel=None))
             if self.instance.user:
-                users.append(self.instance.user)
-            options['user']=[{'value':user.pk,'label':unicode(user)}for user in users]
-            return options  
+                users.append(self.instance.user)            
+            return {
+                'user':[{'value':user.pk,'label':unicode(user)}for user in users]
+            }
+        
     
     class EmployeeItem(FormPage):
         template=''
@@ -109,7 +112,7 @@ def get_admin( BasicInfo,
             self.request=request
             pk= self.request.GET.get('pk')
             emp=EmployeeModel.objects.get(pk=pk)
-            user,c=User.objects.get_or_create(employeemodel__id=pk)
+            user,c=User.objects.get_or_create(employeemodel__id=pk,defaults={'username':'_uid_%s'%pk})
             if c:
                 emp.user=user
                 emp.save()
@@ -123,18 +126,21 @@ def get_admin( BasicInfo,
             else:
                 return 'authuser/user_form_tab.html'
         def get_label(self):
-            return '%s的账号信息'%self.emp.baseinfo.name
+            name = self.emp.baseinfo.name if self.emp.baseinfo else 'unnamed employee'
+            return '%s的账号信息'%name
     
     class EmpGroup(TabGroup):
-        tabs=[{'name':'emp','label':'EMPLOYEE','page_cls':EmployeeItem},
-              {'name':'baseinfo','label':'BASEINFO','page_cls':BaseinfoItem,'visible':and_list([BasicInfo])},
-              {'name':'user','label':'ACCOUNT','page_cls':UserTab,'visible':and_list([User])}]
+        tabs=[{'name':'emp','label':'员工','page_cls':EmployeeItem},
+              {'name':'baseinfo','label':'基本信息','page_cls':BaseinfoItem,'visible':and_list([BasicInfo])},
+              {'name':'user','label':'账号','page_cls':UserTab,'visible':and_list([User])}]
         
         def get_tabs(self):
-            if not self.request.GET.get('pk'):
+            emp_pk=self.request.GET.get('pk')
+            if not emp_pk:      # 没有emp_pk 表示是新建employee
                 tabs= self.tabs[0:1]
             else:
-                tabs= self.tabs  
+                
+                tabs= self.tabs 
             tabs= evalue_container(tabs,user=self.request.user)
             return tabs
 

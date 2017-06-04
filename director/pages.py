@@ -183,10 +183,7 @@ class TabGroup(object):
             return 'wx/tabgroup.html'
         else:
             return 'director/tabgroup.html'   
-        #if prefer=='wx':
-            #return 'wx/del_rows.html'
-        #else:
-            #return 'director/del_rows.html'    
+ 
             
     def get_tabs(self):
         return evalue_container(self.tabs)

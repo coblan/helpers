@@ -17,7 +17,7 @@ GEN=(
 class HumanInfo(models.Model):
     name = models.CharField(_('name'), max_length=50, blank=True)
     age = models.CharField(_('age'), max_length=50, blank=True)
-    head = models.CharField(_('head image'),max_length=200,blank=True,default='/static/image/user.jpg')
+    head = models.CharField(_('head image'),max_length=200,blank=True,default='/static/res/image/user.jpg')
     id_number=models.CharField(_('id  number'),max_length=200,blank=True)
     address=models.CharField(_('address'),max_length=500,blank=True)
     gen = models.CharField(_('gen'),max_length=30,blank=True,choices=GEN)

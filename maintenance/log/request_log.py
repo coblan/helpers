@@ -22,7 +22,7 @@ class RequestMiddleware(object):
         if hasattr(response,'content'):
             content=response.content
             if not re.search('application/json',response.get('Content-Type','')):
-                content= response.get('Content-Type') + ';Len:%s'%len(content)            
+                content= response.get('Content-Type','no content-type') + ';Len:%s'%len(content)            
         else:
             content='response no content property'
         status_code=response.status_code

@@ -125,7 +125,7 @@ def and_list(ls):
                 if not validator.can_access():
                     return False
             elif isinstance(model,(unicode,str)):
-                if not has_permit(user,model):
+                if not has_permit(user,model): # model是字符串，表示是验证特殊权限
                     return False
             elif inspect.isfunction(model):
                 if not model(user):

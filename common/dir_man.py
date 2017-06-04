@@ -23,8 +23,8 @@ DirMan不需要继承，只需要实例化，即可使用。
     # Create your views here.
     
     def dir_man(request):
-        mana=DirMan(Index, Work)
-        scope= dict(inspect.getmembers(mana,inspect.ismethod))
+        manager=DirMan(Index, Work)
+        scope= dict(inspect.getmembers(manager,inspect.ismethod))
         return jsonpost(request, scope)
         
 2. 完成url.py路由::
@@ -36,21 +36,23 @@ DirMan不需要继承，只需要实例化，即可使用。
 """
 
 class DirMan(object):
-    def __init__(self,dir_model,item_model):
+    def __init__(self,dir_model,item_model=None):
         self.DIR=dir_model
         self.ITEM=item_model
 
     def dir_data(self,par,user):
         par_permit=ModelPermit(self.DIR,user)
-        item_perm=ModelPermit(self.ITEM,user)
         if not par_permit.readable_fields():
-            raise PermissionDenied,'can not read %s'% model_to_name(self.DIR)    
-        if not item_perm.readable_fields():
-            raise PermissionDenied,'can not read %s'%model_to_name(self.ITEM)
-        
+            raise PermissionDenied,'can not read %s'% model_to_name(self.DIR) 
         DIR=self.DIR
-        ITEM=self.ITEM    
-       
+        
+        if self.ITEM:
+            item_perm=ModelPermit(self.ITEM,user)
+            if not item_perm.readable_fields():
+                raise PermissionDenied,'can not read %s'%model_to_name(self.ITEM)
+        
+            ITEM=self.ITEM 
+
         if par:
             query = DIR.objects.filter(par_id=par)
         else:
@@ -66,12 +68,12 @@ class DirMan(object):
                 this_dir=this_dir.par
         parents.reverse()
         parents= [to_dict(idx) for idx in parents]
-        items=[]
-        
-        if par:
-            items=[to_dict(item,include=item_perm.readable_fields()) for item in ITEM.objects.filter(par_id=par)]
-        else:
-            items=[to_dict(item,include=item_perm.readable_fields()) for item in ITEM.objects.filter(par=None)]
+        items=[]   # 如果有item_model，才会去查询item项
+        if self.ITEM:
+            if par:
+                items=[to_dict(item,include=item_perm.readable_fields()) for item in ITEM.objects.filter(par_id=par)]
+            else:
+                items=[to_dict(item,include=item_perm.readable_fields()) for item in ITEM.objects.filter(par=None)]
         return {'dirs':rows,'parents':parents,'items':items}
     
     
