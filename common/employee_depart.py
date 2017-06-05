@@ -1,3 +1,5 @@
+# encoding:utf-8
+from __future__ import unicode_literals
 import employee
 
 def get_admin(BasicInfo,
@@ -8,6 +10,6 @@ def get_admin(BasicInfo,
         template=''
     
     emp_admin['EmployeeItem']=EmployeeItem
-    emp_admin['EmpGroup'].tabs[0]={'name':'emp','label':'Ô±¹¤','page_cls':EmployeeItem}
+    emp_admin['EmpGroup'].tabs[0]={'name':'emp','label':'å‘˜å·¥','page_cls':EmployeeItem}
     return emp_admin
     

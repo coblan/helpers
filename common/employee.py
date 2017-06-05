@@ -70,7 +70,7 @@ def get_admin( BasicInfo,
                 'user':[{'value':user.pk,'label':unicode(user)}for user in users]
             }
         
-    
+
     class EmployeeItem(FormPage):
         template=''
         fieldsCls=EmployeeFields

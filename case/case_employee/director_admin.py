@@ -3,20 +3,21 @@
 from __future__ import unicode_literals
 from __future__ import absolute_import
 
+from helpers.director.container import evalue_container
+from helpers.director.admin import UserFields,User,UserFormPage
+from helpers.director.engine import and_list
 from helpers.director.shortcut import FormPage,TablePage,ModelFields,ModelTable,page_dc,model_dc,permit_list,TabGroup
 from helpers.director.db_tools import to_dict
 from django.contrib import admin
-from .models import EmployeeModel,BasicInfo,Department
+from .models import Employee,BasicInfo,Department
 from django.contrib.auth.models import User
 from django.db.models import Q
-from helpers.common import employee
-from helpers.common import department
 
 
 class EmployeeFields(ModelFields):
     
     class Meta:
-        model=EmployeeModel
+        model=Employee
         exclude=['baseinfo']
     
     def dict_options(self):
@@ -27,27 +28,45 @@ class EmployeeFields(ModelFields):
             'user':[{'value':user.pk,'label':unicode(user)}for user in users]
         }
     
-
+# case_employee/employeetable.html
 class EmployeeItem(FormPage):
-    template=''
+    template='case_employee/employee_form.html'
     fieldsCls=EmployeeFields
     def get_template(self, prefer=None):
         return None
     def get_label(self):
         try:
-            emp=EmployeeModel.objects.get(pk=self.pk)
+            emp=Employee.objects.get(pk=self.pk)
             return '%s的工作信息'%(emp.baseinfo.name if emp.baseinfo else '未命名')
-        except EmployeeModel.DoesNotExist:
+        except Employee.DoesNotExist:
             return '新建员工'
 
+class BasicInfoFields(ModelFields):
+
+    class Meta:
+        model=BasicInfo
+        exclude=[]
+    
+    def get_heads(self):
+        heads=super(BasicInfoFields,self).get_heads()
+        for head in heads:
+            if head.get('name')=='head':
+                head['type']='picture'
+                head['config']={
+                'crop':True,
+                'aspectRatio': 1,
+                'size':{'width':250,'height':250}
+            }
+        return heads
+    
 class BaseinfoItem(FormPage):
     template=''
     fieldsCls=BasicInfoFields
     def __init__(self, request):
         self.request=request
         pk= self.request.GET.get('pk')
-        emp=EmployeeModel.objects.get(pk=pk)
-        base,c = BasicInfo.objects.get_or_create(employeemodel__id=pk)
+        emp=Employee.objects.get(pk=pk)
+        base,c = BasicInfo.objects.get_or_create(employee__id=pk)
         if c:
             emp.baseinfo=base
             emp.save()
@@ -67,7 +86,7 @@ class UserTab(UserFormPage):
     def __init__(self, request):
         self.request=request
         pk= self.request.GET.get('pk')
-        emp=EmployeeModel.objects.get(pk=pk)
+        emp=Employee.objects.get(pk=pk)
         user,c=User.objects.get_or_create(employeemodel__id=pk,defaults={'username':'_uid_%s'%pk})
         if c:
             emp.user=user
@@ -101,7 +120,7 @@ class EmpGroup(TabGroup):
         return tabs
 
 class EmployeeTable(ModelTable):
-    model=EmployeeModel
+    model=Employee
     #exclude=['baseinfo']
     
     def dict_row(self, inst):
@@ -121,9 +140,33 @@ class EmployeeTablePage(TablePage):
 class EmployeeTablePageWX(EmployeeTablePage):
     template='common/m_emp_table.html'
 
-engine_dict={
-    'employee':EmployeeTablePage,
-    'employee.edit':EmpGroup,
-    'employee.wx':EmployeeTablePageWX,
-        'employee.wx.edit':EmpGroup,
-    }
+
+class DepartmentForm(ModelFields):
+    class Meta:
+        model=Department
+        exclude=['par']
+        
+class DepartmentPage(object):
+    template='common/department.html'
+    def __init__(self,request):
+        self.request=request
+        
+    def get_context(self):
+        departform = DepartmentForm(crt_user=self.request.user)
+        self.ctx={
+            #'app':'',
+            'heads':departform.get_heads(),
+            'can_edit':departform.permit.can_add(),
+        }
+        return self.ctx  
+
+
+page_dc.update({
+    'case_employee':EmployeeTablePage,
+    'case_employee.edit':EmpGroup,
+    'case_employee_department':DepartmentPage,
+    'case_employee.wx':EmployeeTablePageWX,
+    'case_employee.wx.edit':EmpGroup,
+})
+
+model_dc[Employee]={'fields':EmployeeFields}
