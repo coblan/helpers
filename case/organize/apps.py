@@ -4,4 +4,4 @@ from django.apps import AppConfig
 
 
 class CustomerConfig(AppConfig):
-    name = 'case_employee'
+    name = 'organize'

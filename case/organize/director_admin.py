@@ -20,17 +20,28 @@ class EmployeeFields(ModelFields):
         model=Employee
         exclude=['baseinfo']
     
+    def get_row(self):
+        row = super(EmployeeFields,self).get_row()
+        if 'depart' in row.keys() and self.instance.depart:
+            row['depart_obj']={'pk':self.instance.depart.pk,'name':self.instance.depart.name}
+        return row
+    
     def dict_options(self):
-        users =list(User.objects.filter(employeemodel=None))
+        users =list(User.objects.filter(employee=None))
         if self.instance.user:
-            users.append(self.instance.user)            
+            users.append(self.instance.user) 
+        
+        user_options=[{'value':None,'label':'---'}]
+        options=[{'value':user.pk,'label':unicode(user)}for user in users]
+        options=sorted(options,cmp=lambda x,y: cmp(x['label'],y['label']) )
+        user_options.extend(options)
         return {
-            'user':[{'value':user.pk,'label':unicode(user)}for user in users]
+            'user':user_options,
+            'depart':[],
         }
     
-# case_employee/employeetable.html
 class EmployeeItem(FormPage):
-    template='case_employee/employee_form.html'
+    template='organize/employee_form.html'
     fieldsCls=EmployeeFields
     def get_template(self, prefer=None):
         return None
@@ -87,7 +98,7 @@ class UserTab(UserFormPage):
         self.request=request
         pk= self.request.GET.get('pk')
         emp=Employee.objects.get(pk=pk)
-        user,c=User.objects.get_or_create(employeemodel__id=pk,defaults={'username':'_uid_%s'%pk})
+        user,c=User.objects.get_or_create(employee__id=pk)
         if c:
             emp.user=user
             emp.save()
@@ -111,11 +122,14 @@ class EmpGroup(TabGroup):
     
     def get_tabs(self):
         emp_pk=self.request.GET.get('pk')
+        tabs= self.tabs
         if not emp_pk:      # 没有emp_pk 表示是新建employee
             tabs= self.tabs[0:1]
         else:
+            emp= Employee.objects.get(pk=emp_pk)
+            if not emp.user:        # 没有账号时，不显示账号标签
+                tabs=[x for x in tabs if x['name']!='user']
             
-            tabs= self.tabs 
         tabs= evalue_container(tabs,user=self.request.user)
         return tabs
 
@@ -147,7 +161,7 @@ class DepartmentForm(ModelFields):
         exclude=['par']
         
 class DepartmentPage(object):
-    template='common/department.html'
+    template='organize/department.html'
     def __init__(self,request):
         self.request=request
         
@@ -162,11 +176,13 @@ class DepartmentPage(object):
 
 
 page_dc.update({
-    'case_employee':EmployeeTablePage,
-    'case_employee.edit':EmpGroup,
-    'case_employee_department':DepartmentPage,
-    'case_employee.wx':EmployeeTablePageWX,
-    'case_employee.wx.edit':EmpGroup,
+    'organize.employee':EmployeeTablePage,
+    'organize.employee.edit':EmpGroup,
+    'organize.department':DepartmentPage,
+    'organize.employee.wx':EmployeeTablePageWX,
+    'organize.employee.wx.edit':EmpGroup,
 })
 
 model_dc[Employee]={'fields':EmployeeFields}
+model_dc[Department]={'fields':DepartmentForm}
+model_dc[BasicInfo]={'fields':BasicInfoFields}
