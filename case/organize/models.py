@@ -5,7 +5,7 @@ from django.contrib.auth.models import User,Group
 from django.db import models
 from django.utils.translation import ugettext as _
 from helpers.director.model_validator import has_str
-
+from .config import config
 
 GEN=(
     ('male',_('male')),
@@ -60,13 +60,20 @@ class Department(models.Model):
 
 class Employee(models.Model):
     user = models.ForeignKey(User,verbose_name=_('account'), blank=True, null=True)
-    eid=models.CharField(_('employee id'),max_length=30,default='')    
+    eid=models.CharField(_('employee id'),max_length=30,blank=True)    
     baseinfo=models.OneToOneField(BasicInfo,verbose_name=_('basic info'),blank=True,null=True)
     position = models.CharField(_('job position'),max_length=100,blank=True)
     depart=models.ForeignKey(Department,verbose_name=_('department'),blank=True,null=True,on_delete=models.SET_NULL)
 
     class Meta:
         verbose_name=_('Employee Info')
+    
+    def save(self, *args,**kw):
+        super(Employee,self).save()
+        if not self.eid:
+            temp='%s%0'+config['empid_number_length']+'d'
+            self.eid= temp%(config['empid_prefix'],self.pk)
+            self.save()
 
 
 

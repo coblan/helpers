@@ -26,6 +26,11 @@ class EmployeeFields(ModelFields):
             row['depart_obj']={'pk':self.instance.depart.pk,'name':self.instance.depart.name}
         return row
     
+    def dict_head(self, head):
+        if head['name']=='eid':
+            head['readonly']=True
+        return head
+    
     def dict_options(self):
         users =list(User.objects.filter(employee=None))
         if self.instance.user:
@@ -41,7 +46,7 @@ class EmployeeFields(ModelFields):
         }
     
 class EmployeeItem(FormPage):
-    template='organize/employee_form.html'
+    template=''
     fieldsCls=EmployeeFields
     def get_template(self, prefer=None):
         return None
@@ -51,6 +56,12 @@ class EmployeeItem(FormPage):
             return '%s的工作信息'%(emp.baseinfo.name if emp.baseinfo else '未命名')
         except Employee.DoesNotExist:
             return '新建员工'
+        # 
+    def get_template(self, prefer=None):
+        if prefer=='wx':
+            return 'organize/employee_form_wx.html'
+        else:
+            return 'organize/employee_form.html'
 
 class BasicInfoFields(ModelFields):
 
@@ -152,7 +163,7 @@ class EmployeeTablePage(TablePage):
         return '员工列表'
     
 class EmployeeTablePageWX(EmployeeTablePage):
-    template='common/m_emp_table.html'
+    template='organize/employee_table_wx.html'
 
 
 class DepartmentForm(ModelFields):
@@ -161,7 +172,7 @@ class DepartmentForm(ModelFields):
         exclude=['par']
         
 class DepartmentPage(object):
-    template='organize/department.html'
+    template=''
     def __init__(self,request):
         self.request=request
         
@@ -173,6 +184,11 @@ class DepartmentPage(object):
             'can_edit':departform.permit.can_add(),
         }
         return self.ctx  
+    def get_template(self,prefer=None):
+        if prefer=='wx':
+            return 'organize/department_wx.html'
+        else:
+            return 'organize/department.html'
 
 
 page_dc.update({
