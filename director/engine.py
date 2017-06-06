@@ -101,7 +101,7 @@ class BaseEngine(object):
                 template=page.get_template(prefer=self.prefer)
             else:
                 template=page.template
-   
+            ctx=self.get_ctx(ctx)
             return render(request,template,context=ctx)
        
             
@@ -116,6 +116,10 @@ class BaseEngine(object):
 
     def get_menu(self,request):
         return evalue_container( self.menu,user=request.user,url_name=self.url_name)
+    
+    def get_ctx(self,ctx):
+        """ctx的hook"""
+        return ctx
 
 def and_list(ls):
     def _func(user):
