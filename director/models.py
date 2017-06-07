@@ -20,6 +20,12 @@ class PermitModel(models.Model):
     # model = models.CharField('model',max_length=200, default='')
     permit = models.TextField(verbose_name=_('user permit'),default='{}')
 
+EDITOR_TYPE=(
+    ('blocktext','普通编辑器'),
+    ('richtext','富文本编辑器'),
+)
+
 class KVModel(models.Model):
     key=models.CharField('key',max_length=500,blank=True)
     value=models.TextField(verbose_name='value',blank=True)
+    editor_type=models.CharField('编辑器类型',max_length=30,default='blocktext',choices=EDITOR_TYPE)

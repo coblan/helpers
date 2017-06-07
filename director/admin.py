@@ -101,7 +101,23 @@ class KVTable(ModelTable):
 class KvTablePage(TablePage):
     tableCls=KVTable
 
-short_gen.regist_director(['kv','kv.wx'],KVModel)
+class KvFields(ModelFields):
+    class Meta:
+        model=KVModel
+        exclude=[]
+
+class KvFormPage(FormPage):
+    fieldsCls=KvFields
+    def get_template(self, prefer=None):
+        if prefer=='wx':
+            return 'wx/kvform.html'
+        else:
+            return 'director/kvform.html'
+
+# short_gen.regist_director(['kv','kv.wx'],KVModel)
 page_dc.update({
-    'kv':KvTablePage
+    'kv':KvTablePage,
+    'kv.edit':KvFormPage,
 })
+
+model_dc[KVModel]={'fields':KvFields}

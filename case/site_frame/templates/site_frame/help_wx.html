@@ -1,0 +1,17 @@
+{% extends "wx/base.html" %}
+
+
+{% block page_content %}
+<script>
+    $(function(){
+        $('#work-panel').removeClass('weui-bar__item_on')
+        $('#help-page').addClass('weui-bar__item_on')
+    })
+</script>
+
+{{ help_text | safe }}
+{% endblock %}
+
+
+
+

@@ -27,43 +27,47 @@
     {% include 'director/reverse.html' %}
 
     <script type="text/javascript">
+//        var strategies = Vue.config.optionMergeStrategies
+//        strategies.myOption = strategies.methods
+
         menu = {{ menu | jsonify }}
 
         var org_height=$(window).height()
         $(function(){
             $(window).resize(function(){
-//                alert('orgin is '+org_height)
                 var delta = org_height - $(window).height()
-//                var top = $(".footer.nav").offset().top;
                 if(Math.abs(delta)  > 200){
                     $(".footer.nav").hide()
                 }else{
                     $(".footer.nav").show()
                 }
-//                alert($(window).height())
-//                if($(window).height()<org_height-4)
-//                console.log($(window).height())
+
             })
 
         })
 
-//        $(function(){
-//            new Vue({
-//                el:'#there',
-//                data:{
-//                    menu:menu,
-//                },
-//                mounted:function(){
-//
-//                },
-//                methods:{
-//                    goto:function(url){
-//                        location=url
-//                    }
-//                }
-//            })
-//        })
+        ex.each(menu,function(act){
+            if(act.url==location.pathname){
+                $('title').html(act.label)
+            }
+        })
 
+        $(function(){
+            $('.weui-tabbar.nav a').on('touchstart',function(){
+                $(this).addClass('fake-active')
+            })
+            $('.weui-tabbar.nav a').on('touchend',function(){
+                var self=this
+                setTimeout(function(){
+                    $(self).removeClass('fake-active')
+                },500)
+
+            })
+            $('.weui-tabbar.nav a').on('click',function(){
+                $(this).addClass('fake-active')
+
+            })
+        })
     </script>
 </head>
 <body >
@@ -77,58 +81,50 @@
     </div>
     {% block main_menu %}
     <div class="weui-tabbar nav footer">
-        <a href="javascript:;" class="weui-tabbar__item ">
-            <i class="fa fa-car weui-tabbar__icon" aria-hidden="true" ></i>
+        <a id="help-page" href="/wx/help.wx" class="weui-tabbar__item ">
+            <i class="fa fa-info-circle weui-tabbar__icon" aria-hidden="true" ></i>
             <p class="weui-tabbar__label">信息</p>
         </a>
-        <a href="/m/m_home" class="weui-tabbar__item weui-bar__item_on">
-            <i class="fa fa-car weui-tabbar__icon" aria-hidden="true" ></i>
+        <a id="work-panel" href="/wx/home.wx" class="weui-tabbar__item weui-bar__item_on">
+            <i class="fa fa-th weui-tabbar__icon" aria-hidden="true" ></i>
             <p class="weui-tabbar__label">工作</p>
         </a>
-        <a href="javascript:;" class="weui-tabbar__item">
-            <i class="fa fa-car weui-tabbar__icon" aria-hidden="true" ></i>
+        <a id="employee-center" href="/wx/organize.employeeself.wx" class="weui-tabbar__item">
+            <i class="fa fa-user-circle weui-tabbar__icon" aria-hidden="true" ></i>
             <p class="weui-tabbar__label">我的信息</p>
         </a>
-        <!--<a href="javascript:;" class="weui-tabbar__item">-->
-            <!--<img src="./images/icon_tabbar.png" alt="" class="weui-tabbar__icon">-->
-            <!--<p class="weui-tabbar__label">我</p>-->
-        <!--</a>-->
+
     </div>
     {% endblock %}
 </div>
 
-<!--<div id="there">-->
-    <!--<div class="flex flex-center">-->
-        <!--<h1>WeUI</h1>-->
-    <!--</div>-->
-
-    <!--<div class="weui-grids">-->
-        <!--<a :href="act.url" class="weui-grid" v-for="act in menu">-->
-            <!--<div class="weui-grid__icon">-->
-                <!--<span v-html="act.icon"></span>-->
-            <!--</div>-->
-            <!--<p class="weui-grid__label" v-text="act.label"></p>-->
-        <!--</a>-->
-    <!--</div>-->
-
-
-<!--</div>-->
 <style type="text/css">
-    /*body>.weui-tab{*/
-        /*height: 100vh;*/
-    /*}*/
+    body{
+        background-color: #f7f5f3;
+    }
     .weui-tabbar.nav{
         position: fixed;
         bottom: 0px;
     }
+    .nav .fake-active>i,.nav .fake-active>p{
+        color: green;
+
+    }
     .weui-tab__panel{
         padding-bottom: 150px;
     }
-    body{
-        background-color: #f7f5f3;
+    .field .error{
+        color: red;
     }
     [v-cloak] {
         display: none;
+    }
+    .main-content{
+        min-height: 100vh;
+    }
+
+    .scroll-wrapper .scroller{
+        padding-bottom: 120px;
     }
 </style>
 </body>

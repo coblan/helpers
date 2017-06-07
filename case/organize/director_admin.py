@@ -12,7 +12,8 @@ from django.contrib import admin
 from .models import Employee,BasicInfo,Department
 from django.contrib.auth.models import User
 from django.db.models import Q
-
+from .pages.myinfo import EmployeeSelf
+from .pages.baseinfo import BaseinfoItem,BasicInfoFields
 
 class EmployeeFields(ModelFields):
     
@@ -63,44 +64,7 @@ class EmployeeItem(FormPage):
         else:
             return 'organize/employee_form.html'
 
-class BasicInfoFields(ModelFields):
 
-    class Meta:
-        model=BasicInfo
-        exclude=[]
-    
-    def get_heads(self):
-        heads=super(BasicInfoFields,self).get_heads()
-        for head in heads:
-            if head.get('name')=='head':
-                head['type']='picture'
-                head['config']={
-                'crop':True,
-                'aspectRatio': 1,
-                'size':{'width':250,'height':250}
-            }
-        return heads
-    
-class BaseinfoItem(FormPage):
-    template=''
-    fieldsCls=BasicInfoFields
-    def __init__(self, request):
-        self.request=request
-        pk= self.request.GET.get('pk')
-        emp=Employee.objects.get(pk=pk)
-        base,c = BasicInfo.objects.get_or_create(employee__id=pk)
-        if c:
-            emp.baseinfo=base
-            emp.save()
-        self.emp=emp
-        self.fields=self.fieldsCls(instance= base,crt_user=request.user)
-        self.ctx=self.fields.get_context()
-    
-    def get_template(self, prefer=None):
-        return None
-    
-    def get_label(self):
-        return '%s的个人基本信息'%self.emp.baseinfo.name
 
 class UserTab(UserFormPage):
     template=''
@@ -197,6 +161,7 @@ page_dc.update({
     'organize.department':DepartmentPage,
     'organize.employee.wx':EmployeeTablePageWX,
     'organize.employee.wx.edit':EmpGroup,
+    'organize.employeeself.wx':EmployeeSelf,
 })
 
 model_dc[Employee]={'fields':EmployeeFields}

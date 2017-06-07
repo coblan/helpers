@@ -11,3 +11,8 @@ pc_menu={
                  {'label':'员工名册','url':page('organize.employee'),'visible':can_touch(Employee)},
              ]    
 }
+
+wx_menu=[
+    {'label':'员工','url':page('organize.employee.wx'),'icon':fa('fa-user-o fa-2x')},
+    {'label':'部门','url':page('organize.department'),'icon':fa('fa-sitemap fa-2x')},    
+]
