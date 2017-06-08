@@ -67,7 +67,13 @@ class Employee(models.Model):
 
     class Meta:
         verbose_name=_('Employee Info')
-    
+        
+    def __unicode__(self):
+        if self.baseinfo:
+            return self.baseinfo.name
+        else:
+            return _('unnamed employee')
+            
     def save(self, *args,**kw):
         super(Employee,self).save()
         if not self.eid:
