@@ -56,7 +56,15 @@ class Department(models.Model):
         self.save()
         for depart in self.childs.all():
             depart.update_parent_chain() 
-    
+
+MANAGE_EVENT=(
+    ('work','工作审核'),
+    ('small_money','小额花费')
+)
+
+class DepartManage(models.Model):
+    depart=models.OneToOneField(Department,verbose_name='department',blank=True,null=True)
+    recv_event=models.CharField(_('recive pop event'),max_length=500,blank=True,choices=MANAGE_EVENT)
 
 class Employee(models.Model):
     user = models.ForeignKey(User,verbose_name=_('account'), blank=True, null=True)
@@ -67,7 +75,13 @@ class Employee(models.Model):
 
     class Meta:
         verbose_name=_('Employee Info')
-    
+        
+    def __unicode__(self):
+        if self.baseinfo:
+            return self.baseinfo.name
+        else:
+            return _('unnamed employee')    
+            
     def save(self, *args,**kw):
         super(Employee,self).save()
         if not self.eid:
