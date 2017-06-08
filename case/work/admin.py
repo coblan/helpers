@@ -71,7 +71,16 @@ class WorkRecordForm(ModelFields):
         if not has_permit(self.crt_user,'workrecord.check_all'):
             if self.instance.status!='waiting': 
                 raise forms.ValidationError('you have no permition to edit this workrecord again')
-
+    
+    def save_form(self):
+        rt = super(WorkRecordForm,self).save_form()
+        emp=self.instance.emp
+        if emp.depart:
+            check_depart=pop_depart(emp.depart,'work')
+            self.instance.check_depart=check_depart.par_chain 
+            self.instance.save()
+        return rt
+    
     #def can_access(self):
         #access = super(WorkRecordForm,self).can_access()
         #if not has_permit(self.crt_user,'workrecord.check_all'):
@@ -128,20 +137,30 @@ class WorkRecordTablePageWX(WorkRecordTablePage):
 class WorkRecordFormPageWX(WorkRecordFormPage):
     template='work/workrecord_form_wx.html'
 
+def pop_depart(depart,event):
+    while depart.par:
+        if depart.departmanage:
+            events= depart.departmanage.recv_event.split(',')
+            if event in events:
+                return depart
+        depart=depart.par
+    return depart
+        
+
 class WRselfForm(ModelFields):
     readonly=['emp','status']
     class Meta:
         model=WorkRecord
-        exclude=[]
+        exclude=['check_depart']
 
     def get_row(self):
 
         #if not self.instance.pk:
         # 员工创建新workrecord时，自动添加上
-        self.instance.emp= self.crt_user.employee_set.first()
-            #self.instance.save()
+        emp=self.crt_user.employee_set.first()
+        self.instance.emp= emp
         return super(WRselfForm,self).get_row()
-
+     
     def get_heads(self):
         heads= super(WRselfForm,self).get_heads()
         for head in heads:
@@ -182,7 +201,7 @@ class WRselfTablePage(TablePage):
     template='work/workself_wx.html'
     def get_label(self):
         emp=self.request.user.employee_set.first()
-        return '%s的工作提交记录'%emp.baseinfo.name
+        return '%s的工作提交记录'% emp
 
 
 

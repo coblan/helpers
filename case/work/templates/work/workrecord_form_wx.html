@@ -35,6 +35,7 @@
                 crt_view:'main',
                 page_label:page_label,
                 workindex_url:workindex_url,
+                is_shrink:true,
 
             },
             mixins:[field_fun],
@@ -59,6 +60,14 @@
                 itclick:function(item){
                     this.kw.row.work=item.pk
                     history.back()
+                },
+                shrinked:function(heads){
+                    if(this.is_shrink){
+                        return ex.sort_by_names(this.kw.heads,['work','finish_time','count','short'])
+                    }else{
+                        return ex.sort_by_names(this.kw.heads,['work','finish_time','count','short','status'],true)
+                    }
+
                 }
 
             }
@@ -72,11 +81,12 @@
         <div class="weui-cells__title" v-text="page_label">编辑内容</div>
 
         <div class="form-pad">
-            <field v-for="head in kw.heads" :name="head.name" :kw="kw"></field>
+            <field v-for="head in shrinked(kw.heads)" :name="head.name" :kw="kw"></field>
+            <div v-if="is_shrink" @click="is_shrink=false" style="position: absolute;right:1em;padding: 0.3em;color: #3c8aff;">更多<i class="fa fa-angle-down" aria-hidden="true"></i></div>
         </div>
 
 
-        <div v-btn-group:form>
+        <div v-btn-group>
             <a state="success" @click="submit()">确定</a>
         </div>
         <!--<div style="text-align: center;padding-top: 3em;">-->
