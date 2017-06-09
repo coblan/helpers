@@ -80,7 +80,7 @@ class Employee(models.Model):
         if self.baseinfo:
             return self.baseinfo.name
         else:
-            return _('unnamed employee')    
+            return self.eid  
             
     def save(self, *args,**kw):
         super(Employee,self).save()
