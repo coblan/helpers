@@ -102,6 +102,7 @@ class BaseEngine(object):
             else:
                 template=page.template
             ctx=self.get_ctx(ctx)
+            ctx['template']=template
             return render(request,template,context=ctx)
        
             

@@ -14,6 +14,7 @@ from django.contrib.auth.models import User
 from django.db.models import Q
 from .pages.myinfo import EmployeeSelf
 from .pages.baseinfo import BaseinfoItem,BasicInfoFields
+from .pages.department import DepartmentGroup
 
 class EmployeeFields(ModelFields):
     
@@ -159,11 +160,14 @@ page_dc.update({
     'organize.employee':EmployeeTablePage,
     'organize.employee.edit':EmpGroup,
     'organize.department':DepartmentPage,
+    'organize.department.edit':DepartmentGroup,
+    
     'organize.employee.wx':EmployeeTablePageWX,
     'organize.employee.wx.edit':EmpGroup,
     'organize.employeeself.wx':EmployeeSelf,
+    
 })
 
 model_dc[Employee]={'fields':EmployeeFields}
-model_dc[Department]={'fields':DepartmentForm}
+# model_dc[Department]={'fields':DepartmentForm}
 model_dc[BasicInfo]={'fields':BasicInfoFields}

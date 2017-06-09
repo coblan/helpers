@@ -175,8 +175,8 @@ class TabGroup(object):
     def get_template(self,prefer=None):
         if self.tab_page.template:
             return self.tab_page.template
-        elif hasattr(self.tab_page,'get_template') and self.tab_page.get_template(prefer):
-            return self.tab_page.get_template(prefer)
+        # elif hasattr(self.tab_page,'get_template') and self.tab_page.get_template(prefer):
+            # return self.tab_page.get_template(prefer)
         elif self.template:
             return self.template
         elif prefer=='wx':

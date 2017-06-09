@@ -1,6 +1,7 @@
 {% load jsonify %}
 
 <script type="application/javascript">
+    template='{{ template }}'
     root_page='{{ root_page }}'
     page_name='{{page_name}}'
     page_label={{ page_label | jsonify | default:'unlabel page'}}
