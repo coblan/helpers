@@ -125,7 +125,7 @@
                     <div class="bd">
                         <table class='table fake-suit'>
                             <tr v-for="dir in dirs">
-                                <td>
+                                <td style="width: 2em;">
                                     <input v-if="editable" type="checkbox" :value="dir" v-model="selected"/>
                                 </td>
                                 <td @click="dir_data(dir)" class="clickable">
@@ -189,8 +189,12 @@
         padding: 2em;
         min-width: 600px;
     }
+    .clickable{
+        color: #348fce;
+    }
     .clickable:hover{
         cursor: pointer;
+        text-decoration:underline;
     }
 
 </style>

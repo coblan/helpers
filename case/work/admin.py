@@ -7,7 +7,7 @@ from .models import Work,WorkRecord,Index
 from helpers.director.shortcut import page_dc,FormPage,\
      TablePage,ModelTable,ModelFields,model_dc,RowFilter,permit_list,has_permit,ModelPermit
 from django import forms
-
+from .pages.work_list import WorkListPage
 # Register your models here.
 class IndexForm(ModelFields):
     class Meta:
@@ -258,4 +258,6 @@ page_dc.update({
 
     'work.wkself.wx':WRselfTablePage,
     'work.wkself.wx.edit':WRselfFormPage,
+    
+    'work.worklist.wx':WorkListPage,
 })

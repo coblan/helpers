@@ -6,6 +6,9 @@
 {% block page_content %}
 <script src="{% static 'js/fields_mb.pack.js' %}"></script>
 <script src='{% static "js/ex_inputs.pack.js" %}'></script>
+
+{% include 'work/com_workindex.html' %}
+
 <script type="text/javascript">
 
 
@@ -16,7 +19,7 @@
         }
     })
 
-    workindex_url = '{% url "work.workindex" %}'
+
     $(function(){
         ln.history_handle({
             init:{crt_view:'main'},
@@ -34,7 +37,6 @@
 //                menu:menu,
                 crt_view:'main',
                 page_label:page_label,
-                workindex_url:workindex_url,
                 is_shrink:true,
 
             },
@@ -57,10 +59,7 @@
                 },
 
 
-                itclick:function(item){
-                    this.kw.row.work=item.pk
-                    history.back()
-                },
+
                 shrinked:function(heads){
                     if(this.is_shrink){
                         return ex.sort_by_names(this.kw.heads,['work','finish_time','count','short'])
@@ -96,12 +95,11 @@
         <!--</div>-->
 
     </div>
-    <div v-show="crt_view=='dir'">
-        <com-catalog class="mobile" ref="catalog" :url="workindex_url" :root="{pk:null,name:'root'}"
-                     @itemclick="itclick($event)" :editable="false"></com-catalog>
-
-        <!--<com-dir @itclick="itclick($event)"></com-dir>-->
-    </div>
+    <!--<div v-show="crt_view=='dir'">-->
+        <!--<com-catalog class="mobile" ref="catalog" :url="workindex_url" :root="{pk:null,name:'root'}"-->
+                     <!--@itemclick="itclick($event)" :editable="false"></com-catalog>-->
+        <!-- -->
+    <!--</div>-->
 
     <!--<iframe :src="out_src" frameborder="0" style="width: 100vw;height: 100vh;"></iframe>-->
 </div>
@@ -110,49 +108,44 @@
 
 </style>
 
-<template id="btn-dir">
-    <div >
-        <span v-if="kw.readonly" v-text="show_name"></span>
-        <button type="button" class="btn btn-default btn-sm" v-else @click="open()" v-text="show_name" style="color: #0099CC;padding: 0.3em 2em;" :disabled="is_tmp"></button>
-        <!--<el-checkbox v-model="is_tmp">临时工时</el-checkbox>-->
-    </div>
-</template>
-<script type="application/javascript">
-    Vue.component('btn-dir',{
-        template:'#btn-dir',
-        props:['row','name','kw'],
-        data:function(){
-            return {
-                is_tmp:false
-            }
-        },
-        watch:{
-//          is_tmp:function(v){
-//              if(v){
-//                  this.row[this.name]=null
-//              }
-//          }
-        },
-        computed:{
-            show_name:function(){
-                var pk =this.row[this.name]
-                var option = ex.findone(this.kw.options,{value:pk})
-                if(option){
-                    return option.label
-                }else{
-                    return '点击选择'
-                }
-            }
-        },
-        methods:{
-            open:function(){
-                ln.pushState({crt_view:'dir'})
+<!--<template id="btn-dir">-->
+    <!--<div >-->
+        <!--<span v-if="kw.readonly" v-text="show_name"></span>-->
+        <!--<button type="button" class="btn btn-default btn-sm" v-else @click="open()" v-text="show_name" style="color: #0099CC;padding: 0.3em 2em;" :disabled="is_tmp"></button>-->
+        <!--&lt;!&ndash;<el-checkbox v-model="is_tmp">临时工时</el-checkbox>&ndash;&gt;-->
+    <!--</div>-->
+<!--</template>-->
+<!--<script type="application/javascript">-->
+    <!--Vue.component('btn-dir',{-->
+        <!--template:'#btn-dir',-->
+        <!--props:['row','name','kw'],-->
+        <!--data:function(){-->
+            <!--return {-->
+                <!--is_tmp:false-->
+            <!--}-->
+        <!--},-->
+        <!--watch:{-->
+        <!--},-->
+        <!--computed:{-->
+            <!--show_name:function(){-->
+                <!--var pk =this.row[this.name]-->
+                <!--var option = ex.findone(this.kw.options,{value:pk})-->
+                <!--if(option){-->
+                    <!--return option.label-->
+                <!--}else{-->
+                    <!--return '点击选择'-->
+                <!--}-->
+            <!--}-->
+        <!--},-->
+        <!--methods:{-->
+            <!--open:function(){-->
+                <!--ln.pushState({crt_view:'dir'})-->
 
-            }
-        }
-    })
+            <!--}-->
+        <!--}-->
+    <!--})-->
 
-</script>
+<!--</script>-->
 
 
 {% endblock %}
