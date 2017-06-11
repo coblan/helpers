@@ -49,10 +49,13 @@
     transfer={}
     function disable_scroll(){
         window.transfer.wsctop=$(window).scrollTop();  //记住滚动条的位置
-        $("body").css({position:'fixed',top:-transfer.wsctop});
+        $('body').addClass('modal-show')
+        $('body').css('top',-transfer.wsctop)
+//        $("body").css({position:'fixed',top:-transfer.wsctop});
     }
     function enable_scroll(){
-        $("body").css({position:'static'});
+//        $("body").css({position:'static'});
+        $("body").removeClass('modal-show')
         $(window).scrollTop(window.transfer.wsctop);//弹框关闭时，启动滚动条，并滚动到原来的位置
     }
 
@@ -75,8 +78,9 @@
 </template>
 
 <style>
-    /*body.modal-show {*/
-        /*position: fixed;*/
-    /*}*/
+    body.modal-show {
+        position: fixed;
+        width: 100%;
+    }
 </style>
 

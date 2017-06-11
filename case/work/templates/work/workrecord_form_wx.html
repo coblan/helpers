@@ -46,7 +46,10 @@
 
             },
             mounted:function(){
-
+                var self=this
+                setTimeout(function(){
+                    self.$refs.scroller.refresh()
+                },500)
             },
             methods:{
                 router:function(state){
@@ -67,6 +70,13 @@
                         return ex.sort_by_names(this.kw.heads,['work','finish_time','count','short','status'],true)
                     }
 
+                },
+                expand:function(){
+                    this.is_shrink=false
+                    var self=this
+                    setTimeout(function(){
+                        self.$refs.scroller.refresh()
+                    },500)
                 }
 
             }
@@ -77,17 +87,20 @@
 <div id="there" v-cloak>
     <div v-show="crt_view=='main'">
 
-        <div class="weui-cells__title" v-text="page_label">编辑内容</div>
+        <scroll-wraper class="flex-grow"  ref="scroller" style="min-height: 100vh;">
 
-        <div class="form-pad">
-            <field v-for="head in shrinked(kw.heads)" :name="head.name" :kw="kw"></field>
-            <div v-if="is_shrink" @click="is_shrink=false" style="position: absolute;right:1em;padding: 0.3em;color: #3c8aff;">更多<i class="fa fa-angle-down" aria-hidden="true"></i></div>
-        </div>
+            <div class="weui-cells__title" v-text="page_label">编辑内容</div>
+
+            <div class="form-pad">
+                <field v-for="head in shrinked(kw.heads)" :name="head.name" :kw="kw"></field>
+                <div v-if="is_shrink" @click="expand()" style="position: absolute;right:1em;padding: 0.3em;color: #3c8aff;">更多<i class="fa fa-angle-down" aria-hidden="true"></i></div>
+            </div>
 
 
-        <div v-btn-group>
-            <a state="success" @click="submit()">确定</a>
-        </div>
+            <div v-btn-group>
+                <a state="success" @click="submit()">确定</a>
+            </div>
+        </scroll-wraper>
         <!--<div style="text-align: center;padding-top: 3em;">-->
 
         <!--<a type="button" class="btn btn-success btn-sm" href="javascript:"  @click="submit()" style="width: 16em;">确定</a>-->
@@ -107,6 +120,7 @@
 <style type="text/css">
 
 </style>
+
 
 <!--<template id="btn-dir">-->
     <!--<div >-->

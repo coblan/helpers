@@ -131,13 +131,7 @@
         })
     })
 
-    //    $(function(){
-    //        var height = $('.nav.footer').height()
-    //        $('.scroll-wrapper .scroller').css('padding-bottom',height)
-    //        setTimeout(function(){
-    //            table.$refs.scroller.refresh()
-    //        },200)
-    //    })
+
 </script>
 
 
@@ -157,16 +151,6 @@
 
 
                 <template scope="box" slot="check_sel">
-                    <!--<com-check-box :value="box.value"  @change="box.toggle_check(box.value)" ></com-check-box>-->
-                    <!--@change="box.set_sel($event,box.value)"-->
-                    <!--v-model='box.agg.selected'-->
-
-                    <!--<div class="checkbox checkbox-success checkbox-inline">-->
-                    <!--<input type="checkbox" class="styled"  value="box.value"  @change="box.toggle_check(box.value)" >-->
-                    <!--<label></label>-->
-                    <!--</div>-->
-
-                    <!--box.toggle_check(box.value)-->
                     <div @click="box.toggle_check(box.value)" >
                         <i  v-if="ex.isin(box.value,box.selected)" class="fa fa-circle" aria-hidden="true"></i>
                         <i  v-else  class="fa fa-circle-o" aria-hidden="true"></i>
@@ -229,7 +213,7 @@
                     <field  v-for='head in kw.heads' :key="head.name" :name='head.name' :kw='kw'></field>
                 </div>
 
-                <div v-btn-group:form>
+                <div v-btn-group>
                     <a state="success" @click="item_save()">确定</a>
                 </div>
 
@@ -254,6 +238,7 @@
 
     body{
         background-color: #faf6fa;
+
     }
 
 
