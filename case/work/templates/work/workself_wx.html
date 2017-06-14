@@ -23,6 +23,8 @@
 
     myScroll=''
     last_move=0
+
+
     $(function(){
 
         crt_view = 'main'
@@ -30,11 +32,11 @@
         table= new Vue({
             el:'#there',
             data:{
-//                    menu:menu,
-//                    rows:rows,
                 crt_view:crt_view,
                 ln:ln,
-                page_label:page_label
+                page_label:page_label,
+                wx:wx,
+                is_show_menu:false,
             },
             mixins:[table_fun,scroll_loader],
             mounted:function(){
@@ -42,6 +44,7 @@
                 Vue.nextTick(function(){
                     self.$refs.scroller.refresh()
                 })
+                bus.$on('menu_click',this.show_menu)
             },
             methods:{
                 goto:function(url){
@@ -66,24 +69,19 @@
                 },
                 get_row_img:function(row){
                     return  row.desp_img || row.work_desp_img || '/static/image/default_image.png'
-                }
+                },
+                show_menu:function(){
+                    this.is_show_menu=true
+                },
 
             }
         })
     })
 
+
 </script>
 
 <style>
-    /*.ff{*/
-    /*color: #828fb2;*/
-    /*}*/
-    /*.item{*/
-    /*margin:2em 1em;*/
-    /*display: flex;*/
-    /*justify-content: space-between;*/
-    /*align-items: center;*/
-    /*}*/
     .item-table{
         width: 100vw;
     }
@@ -112,19 +110,20 @@
     })
 </script>
 
-<div id="there" v-cloak>
+
+<div id="there" class="cloak-block" v-cloak>
 
 
     <div class="flex-v" style="height: 100vh;position: relative;">
 
-        <div class="flex">
+        <div class="flex" v-if="wx">
             <div class="flex-grow"></div>
-            <div style="text-align: right;padding: 0.5em 1em;" @click="show_menu=true">
+            <div style="text-align: right;padding: 0.5em 1em;" @click="show_menu()">
                 <i class="fa fa-align-justify fa-2x" aria-hidden="true" ></i>
             </div>
         </div>
 
-        <div class="weui-cells__title" v-text="page_label"></div>
+        <!--<div class="weui-cells__title" v-text="page_label"></div>-->
 
         <scroll-wraper class="flex-grow"  ref="scroller" :down_text='get_down_text()' @down_out_border="load_next_page()" >
 
@@ -165,21 +164,22 @@
     </transition>
 
     <transition name="fade">
-        <modal v-show="show_menu" @click.native="show_menu=false">
+        <modal v-show="is_show_menu" @click.native="is_show_menu=false">
             <div class="weui-actionsheet__menu" @click.stop="" style="width: 80vw;">
 
-                <div class="weui-actionsheet__cell" @click="add_new();show_menu=false" v-if="can_add">新建</div>
-                <div class="weui-actionsheet__cell" @click="del_item();show_menu=false" v-if="can_del &&selected.length>0">删除选中</div>
-                <div class="weui-actionsheet__cell" @click="ln.pushState({crt_view:'search'});show_menu=false" v-if="can_search">排序过滤</div>
+                <div class="weui-actionsheet__cell" @click="add_new();is_show_menu=false" v-if="can_add">新建</div>
+                <div class="weui-actionsheet__cell" @click="del_item();is_show_menu=false" v-if="can_del &&selected.length>0">删除选中</div>
+                <div class="weui-actionsheet__cell" @click="ln.pushState({crt_view:'search'});is_show_menu=false" v-if="can_search">排序过滤</div>
             </div>
             <div class="weui-actionsheet__cell">
-                <div class="weui-actionsheet__cell" @click="show_menu=false">取消</div>
+                <div class="weui-actionsheet__cell" @click="is_show_menu=false">取消</div>
             </div>
         </modal>
     </transition>
 
 
 </div>
+
 
 
 

@@ -21,7 +21,7 @@
 
     <script src="{% static 'js/uis_mb.pack.js' %}"></script>
     <script src="{% static 'js/fields_mb.pack.js' %}"></script>
-    <script src="{% static 'js/table_mb.pack.js' %}"></script>
+    <script src="{% static 'js/table_mb.pack.js?t=1234' %}"></script>
 
 
     {% include 'director/reverse.html' %}
@@ -67,13 +67,77 @@
                 $(this).addClass('fake-active')
 
             })
+            setTimeout(function(){
+                $('body').removeClass('start')
+                $('body').addClass('ready')
+            })
+
         })
+
+
     </script>
 </head>
-<body >
+<body class="start">
+
+<script>
+
+    bus=new Vue()
+
+    wx=false
+
+    title_bar=true
+    with_back=true
+    with_menu=true
 
 
-<div class="weui-tab">
+    $(function(){
+        new Vue({
+            el:'#com-title',
+            data:{
+                title_bar:title_bar,
+                page_label:page_label,
+                with_back:with_back,
+                with_menu:with_menu,
+            },
+            computed:{
+                is_show_back:function(){
+                    if(this.with_back){
+                        return true
+                    }else{
+                        return false
+                    }
+                }
+            },
+            methods:{
+
+            }
+        })
+    })
+
+
+</script>
+<style>
+
+    .title-bar{
+        width: 100vw;
+        height: 3em;
+        background-color: #323232;
+        color: white;
+    }
+    .title-bar div{
+        min-width: 2em;
+        padding: 0.3em 0.6em;
+    }
+</style>
+
+
+
+<div id="com-title">
+    <title-bar v-if="title_bar" :title="page_label" :with_back="is_show_back" :with_menu="with_menu"></title-bar>
+</div>
+
+
+<div class="weui-tab"  >
     <div class="weui-tab__panel content">
         {% block page_content %}
 
@@ -99,8 +163,12 @@
 </div>
 
 <style type="text/css">
-    body{
+    body.start{
+        opacity: 0;
+    }
+    body.ready{
         background-color: #f7f5f3;
+        transition: all 0.2s ease;
     }
     .weui-tabbar.nav{
         position: fixed;
@@ -127,7 +195,37 @@
     .scroll-wrapper .scroller{
         padding-bottom: 120px;
     }
+
+
 </style>
+
+<script type="application/javascript">
+    Vue.component('title-bar',{
+        template:'#title-bar',
+        props:['title','with_back','with_menu'],
+        methods:{
+            go_back:function(){
+                history.back()
+            },
+            on_menu_click:function(){
+
+                bus.$emit('menu_click')
+
+            }
+        }
+
+    })
+</script>
+
+<template id="title-bar">
+    <div class="flex title-bar" style="align-items:center;">
+        <div><div v-if="with_back" @click="go_back()"><i class="fa fa-chevron-left" aria-hidden="true"></i><span>返回</span></div></div>
+        <div  class="flex-grow" style="text-align: center;"><span v-text="title"></span></div>
+        <div><div v-if="with_menu" @click="on_menu_click()"><i  class="fa fa-align-justify" aria-hidden="true" style="font-size: 1.5em;"></i></div></div>
+    </div>
+</template>
+
 </body>
+
 
 </html>
