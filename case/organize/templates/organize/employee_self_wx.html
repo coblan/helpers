@@ -52,7 +52,7 @@
                     var self=this
                     show_upload()
                     var post_data=[{fun:'save_self_info','base_info':this.base_kw.row}]
-                    ex.post("/_ajax/employee",JSON.stringify(post_data),function(resp){
+                    ex.post("/_ajax/organize",JSON.stringify(post_data),function(resp){
 //                        alert(resp)
                         if(!resp.save_self_info.msg){
 //                            weui.toast('操作成功', 3000);

@@ -67,7 +67,7 @@ Vue.component('department',{
 {% block extra_body %}
 
 <transition name="fade">
-<modal @click.native="show_depart=false" v-show="show_depart">
+<modal @click.native="show_depart=false" :show="show_depart">
     <div @click.stop="" class="department-win">
         <com-catalog ref="catalog" :url="department_url" :root="{pk:null,name:'公司'}" @dirclick="on_dirclick($event)"
                      :editable="false" inline-template>

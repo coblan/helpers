@@ -44,14 +44,14 @@
 <div id="there" v-cloak>
 
 
-    <div style="text-align: center;margin-top: 1em;">
+    <div style="text-align: center;margin:1em 0;">
         <div class="btn-group" role="group" aria-label="..." >
             <a type="button" :class="['btn btn-default',{'btn-info':crt_tab==tab.name}]" v-for="tab in tabs" :href="item_link(tab.name)" v-text="tab.label">Left</a>
         </div>
     </div>
 
 
-    <div class="weui-cells__title" v-text="page_label">编辑内容</div>
+    <!--<div class="weui-cells__title" v-text="page_label">编辑内容</div>-->
 
 
     <div class="form-pad">

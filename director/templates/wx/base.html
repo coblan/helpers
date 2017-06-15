@@ -83,7 +83,7 @@
 
     bus=new Vue()
 
-    wx=false
+    in_wx_agent=false
 
     title_bar=true
     with_back=true
@@ -125,24 +125,29 @@
         color: white;
     }
     .title-bar div{
-        min-width: 2em;
+        min-width: 3em;
         padding: 0.3em 0.6em;
     }
+    /*.main.content{*/
+        /*padding: 0.5em 0 4em 0;*/
+    /*}*/
 </style>
 
-
-
-<div id="com-title">
-    <title-bar v-if="title_bar" :title="page_label" :with_back="is_show_back" :with_menu="with_menu"></title-bar>
-</div>
-
-
-<div class="weui-tab"  >
-    <div class="weui-tab__panel content">
-        {% block page_content %}
-
-        {% endblock %}
+<div class="flex-v" style="height: 100vh;">
+    <div id="com-title">
+        <title-bar v-if="title_bar" :title="page_label" :with_back="is_show_back" :with_menu="with_menu"></title-bar>
     </div>
+
+
+    <div class="weui-tab flex-grow"  style="overflow: auto;">
+        <div class="weui-tab__panel main content">
+            {% block page_content %}
+
+            {% endblock %}
+        </div>
+
+    </div>
+
     {% block main_menu %}
     <div class="weui-tabbar nav footer">
         <a id="help-page" href="/wx/help.wx" class="weui-tabbar__item ">
@@ -162,6 +167,8 @@
     {% endblock %}
 </div>
 
+
+
 <style type="text/css">
     body.start{
         opacity: 0;
@@ -170,11 +177,11 @@
         background-color: #f7f5f3;
         transition: all 0.2s ease;
     }
-    .weui-tabbar.nav{
-        position: fixed;
-        bottom: 0px;
-        z-index: 500;
-    }
+    /*.weui-tabbar.nav{*/
+        /*position: fixed;*/
+        /*bottom: 0px;*/
+        /*z-index: 500;*/
+    /*}*/
     .nav .fake-active>i,.nav .fake-active>p{
         color: green;
 

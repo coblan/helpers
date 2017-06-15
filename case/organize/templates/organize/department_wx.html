@@ -21,12 +21,12 @@
             handler:function(state){
                 if(state.crt_view) {
                     table.crt_view = state.crt_view
-                    Vue.nextTick(function(){
-                        setTimeout(function(){
-                            table.$refs.editor_scroller.refresh()
-                        },500)
-
-                    })
+//                    Vue.nextTick(function(){
+//                        setTimeout(function(){
+//                            table.$refs.editor_scroller.refresh()
+//                        },500)
+//
+//                    })
                 }
                 if (state.op) {
                     table[state.op](state.arg)
@@ -46,8 +46,8 @@
                 crt_name:'',
 
                 ex:ex,
-                show_menu:false,
-
+                is_show_menu:false,
+                in_wx_agent:in_wx_agent,
                 state:{},
                 department_url:department_url,
 
@@ -57,12 +57,16 @@
             mounted:function(){
                 this.$refs.catalog.dir_data()
                 var self=this
-                Vue.nextTick(function(){
-                    setTimeout(function(){
-                        self.$refs.scroller.refresh()
-                    },500)
-
+                bus.$on('menu_click',function(){
+                    self.is_show_menu=true
                 })
+//                var self=this
+//                Vue.nextTick(function(){
+//                    setTimeout(function(){
+//                        self.$refs.scroller.refresh()
+//                    },500)
+//
+//                })
             },
             methods:{
                 set_state:function(state){
@@ -112,15 +116,10 @@
 
 
 <div id='there' v-cloak>
-    <!--<path-nav :menu='menu' ></path-nav>-->
-    <!--<div class='btn-panel flex flex-sb' style="padding-left:20px; ">-->
-
-
-    <!--</div>-->
 
     <div>
 
-        <scroll-wraper class="main-content" ref="scroller" style="width: 100vw;height:90vh;">
+        <!--<scroll-wraper class="main-content" ref="scroller" style="width: 100vw;height:90vh;">-->
             <com-catalog class="mobile" ref="catalog" :url="department_url" :root="{pk:null,name:'公司'}"
                          @state_change="set_state($event)" :editable="true">
 
@@ -134,8 +133,8 @@
                 </template>
 
 
-                <div slot="head_end" style="text-align: right;padding: 0.5em 1em;">
-                    <i class="fa fa-align-justify fa-2x" aria-hidden="true" @click="show_menu=true"></i>
+                <div slot="head_end" style="text-align: right;padding: 0.5em 1em;" v-if="in_wx_agent">
+                    <i class="fa fa-align-justify fa-2x" aria-hidden="true" @click="is_show_menu=true"></i>
                 </div>
 
                 <template scope="dir_icon">
@@ -155,23 +154,23 @@
                 </template>
 
             </com-catalog>
-        </scroll-wraper>
+        <!--</scroll-wraper>-->
 
         <!--@click.native="show_menu=false"-->
 
         <transition name="fade">
-            <modal v-show="show_menu" >
+            <modal v-show="is_show_menu" >
                 <div class="weui-actionsheet__menu" @click.stop="" style="width: 80vw;" v-if="can_edit">
-                    <div class="weui-actionsheet__cell" @click="edit($refs.catalog.selected[0]);show_menu=false" v-show="state.has_select">编辑</div>
+                    <div class="weui-actionsheet__cell" @click="edit($refs.catalog.selected[0]);is_show_menu=false" v-show="state.has_select">编辑</div>
 
-                    <div class="weui-actionsheet__cell" @click="$refs.catalog.dir_create();show_menu=false">新建目录</div>
+                    <div class="weui-actionsheet__cell" @click="$refs.catalog.dir_create();is_show_menu=false">新建目录</div>
                     <!--<div class="weui-actionsheet__cell" @click="$refs.catalog.item_create();show_menu=false" v-if="work_can_add">新建工时</div>-->
-                    <div class="weui-actionsheet__cell" @click="$refs.catalog.item_del();show_menu=false" v-show="state.has_select">删除选中项</div>
-                    <div class="weui-actionsheet__cell" @click="$refs.catalog.cut();show_menu=false" v-show="state.can_cut">剪切</div>
-                    <div class="weui-actionsheet__cell" @click="$refs.catalog.paste();show_menu=false" v-show="state.can_paste">粘贴</div>
+                    <div class="weui-actionsheet__cell" @click="$refs.catalog.item_del();is_show_menu=false" v-show="state.has_select">删除选中项</div>
+                    <div class="weui-actionsheet__cell" @click="$refs.catalog.cut();is_show_menu=false" v-show="state.can_cut">剪切</div>
+                    <div class="weui-actionsheet__cell" @click="$refs.catalog.paste();is_show_menu=false" v-show="state.can_paste">粘贴</div>
                 </div>
                 <div class="weui-actionsheet__cell">
-                    <div class="weui-actionsheet__cell" @click="show_menu=false">取消</div>
+                    <div class="weui-actionsheet__cell" @click="is_show_menu=false">取消</div>
                 </div>
             </modal>
         </transition>
@@ -181,8 +180,8 @@
 
     <transition name="slide">
         <div v-show="crt_view=='editor'" class="slide-win">
-            <scroll-wraper ref="editor_scroller" style="width:100vw;height:90vh;">
-
+            <!--<scroll-wraper ref="editor_scroller" style="width:100vw;height:90vh;">-->
+                <title-bar :with_back="true" title="编辑部门信息"></title-bar>
                 <div class="weui-cells__title">编辑</div>
 
                 <div class="form-pad" >
@@ -193,7 +192,7 @@
                     <a state="success" @click="item_save()">确定</a><br/>
                 </div>
 
-            </scroll-wraper>
+            <!--</scroll-wraper>-->
         </div>
     </transition>
 

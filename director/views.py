@@ -16,6 +16,7 @@ from django.utils.translation import ugettext as _
 from django.contrib.auth.models import User
 from . import ajax
 import urllib
+from django.apps import apps
 
 @ensure_csrf_cookie
 def login(request):
@@ -101,7 +102,9 @@ def ajax_views(request,app=None):
     if not app:
         ajax_module = ajax
     else:
-        ajax_module=locate('%(app)s.ajax'%{'app':app})
+        conf= apps.get_app_config(app)
+        app_dot_path=conf.module.__name__
+        ajax_module=locate('%(app)s.ajax'%{'app':app_dot_path})
     try:
         return jsonpost(request, ajax_module.get_global())
     except KeyError as e:

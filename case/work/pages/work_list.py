@@ -18,4 +18,5 @@ class WorkList(ModelTable):
 
 class WorkListPage(TablePage):
     tableCls=WorkList
-    
+
+

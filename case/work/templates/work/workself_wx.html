@@ -35,7 +35,7 @@
                 crt_view:crt_view,
                 ln:ln,
                 page_label:page_label,
-                wx:wx,
+                in_wx_agent:in_wx_agent,
                 is_show_menu:false,
             },
             mixins:[table_fun,scroll_loader],
@@ -116,7 +116,7 @@
 
     <div class="flex-v" style="height: 100vh;position: relative;">
 
-        <div class="flex" v-if="wx">
+        <div class="flex" v-if="in_wx_agent">
             <div class="flex-grow"></div>
             <div style="text-align: right;padding: 0.5em 1em;" @click="show_menu()">
                 <i class="fa fa-align-justify fa-2x" aria-hidden="true" ></i>

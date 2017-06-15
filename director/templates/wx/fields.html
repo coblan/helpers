@@ -7,6 +7,7 @@
 <script src="{% static 'js/fields_mb.pack.js' %}"></script>
 <script type="text/javascript">
 
+    with_menu=false
     ln.readCache()
 
     form_logic={
@@ -33,7 +34,7 @@
 {% endblock %}
 
 <div id="there" v-cloak>
-    <div  class="page_label" v-text="page_label">编辑内容</div>
+    <!--<div  class="page_label" v-text="page_label">编辑内容</div>-->
 
     {% block form_view %}
     <div class="form-pad">

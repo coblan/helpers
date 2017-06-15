@@ -260,4 +260,5 @@ page_dc.update({
     'work.wkself.wx.edit':WRselfFormPage,
     
     'work.worklist.wx':WorkListPage,
+    'work.worklist.wx.edit':WorkRecordFormPage,
 })
