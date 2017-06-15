@@ -231,7 +231,7 @@ class WorkIndexWX(WorkIndex):
 permit_list.append(WorkRecord)
 permit_list.append(Work)
 permit_list.append(Index)
-permit_list.append({'name':'work','label':'工作SP','fields':[
+permit_list.append({'name':'work','label':'work.工作SP','fields':[
     {'name':'check_all','label':'查看所有工作','type':'bool'},
 ]})
 
@@ -244,7 +244,7 @@ page_dc.update({
     'work.workindex':WorkIndex,
     'work.workindex.wx':WorkIndexWX,
 
-    'work.work':WorkTablePage,
+    'work.work':WorkTablePage,   # 平铺的 work，而 workindex 树状的work 
     'work.work.wx':WorkTablePage,
 
     'work.work.edit':WorkFormPage,

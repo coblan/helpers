@@ -13,6 +13,7 @@ pc_menu={
 }
 
 wx_menu=[
-    {'label':'员工','url':page('organize.employee.wx'),'icon':fa('fa-user-o fa-2x')},
-    {'label':'部门','url':page('organize.department'),'icon':fa('fa-sitemap fa-2x')},    
+    {'label':'员工','url':page('organize.employee.wx'),'icon':fa('fa-user-o fa-2x'),'visible':can_list([BasicInfo,Employee,Department])},
+    {'label':'部门','url':page('organize.department'),'icon':fa('fa-sitemap fa-2x'),'visible':can_touch(
+        Department)},    
 ]

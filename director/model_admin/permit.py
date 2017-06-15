@@ -90,7 +90,7 @@ class ModelPermit(object):
             if not isinstance(v,dict) and issubclass(v,models.Model):
 
                 ls.append({'name':model_to_name(v),
-                           'label':unicode(v._meta.verbose_name), # 因为翻译的缘故，有时是 __proxy__函数
+                           'label':v._meta.app_label+'.'+ unicode(v._meta.verbose_name), # 因为翻译的缘故，有时是 __proxy__函数，所以必须 unicode处理一下
                            'type':'model',
                            'fields':model_permit_info(v,self.user)})
         
