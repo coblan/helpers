@@ -162,6 +162,7 @@ page_dc.update({
     'organize.department':DepartmentPage,
     'organize.department.edit':DepartmentGroup,
     
+    
     'organize.employee.wx':EmployeeTablePageWX,
     'organize.employee.wx.edit':EmpGroup,
     'organize.employeeself.wx':EmployeeSelf,

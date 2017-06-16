@@ -26,7 +26,7 @@ wx_menu=[
     {'label':'工作审核','url':page('work.workrecord'),'icon':fa('fa-check-square-o fa-2x'),'visible':and_list(
         [WorkRecord,can_check_work])},  
 
-    {'label':'工作记录','url':page('work.worklist.wx'),'icon':fa('fa-check-square-o fa-2x'),'visible':and_list(['work.check_all'])},     
+    {'label':'工作记录','url':page('work.worklist.wx'),'icon':fa('fa-calendar-check-o fa-2x'),'visible':and_list(['work.check_all'])},     
 ]
     
 

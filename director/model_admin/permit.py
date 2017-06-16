@@ -60,6 +60,8 @@ class ModelPermit(object):
     以json的形式存储于permitModel数据库
     
     [{'model':'app.App',}]
+    
+    @nolimit ,有时需要跨越 权限，操作某个数据表，就加上 nolimit=True
     """
     def __init__(self,model,user,nolimit=False):
         self.user=user

@@ -98,7 +98,12 @@
                 },
 
                 edit:function(item){
-                    ln.pushState({op:'edit_aa',arg:item,crt_view:'editor'})
+                    location=ex.template('{engine_url}/{page_name}.edit?pk={pk}',{
+                        engine_url:engine_url,
+                        page_name:page_name,
+                        pk:item.pk
+                    })
+//                    ln.pushState({op:'edit_aa',arg:item,crt_view:'editor'})
                 },
                 edit_aa:function(item){
                     this.kw.row=item
@@ -178,6 +183,7 @@
 
     </div>
 
+    <!--下面的滑动窗口暂时不用了，编辑department是跳转到其他tab页面进行编辑-->
     <transition name="slide">
         <div v-show="crt_view=='editor'" class="slide-win">
             <!--<scroll-wraper ref="editor_scroller" style="width:100vw;height:90vh;">-->

@@ -41,9 +41,9 @@
             mixins:[table_fun,scroll_loader],
             mounted:function(){
                 var self=this
-                Vue.nextTick(function(){
-                    self.$refs.scroller.refresh()
-                })
+//                Vue.nextTick(function(){
+//                    self.$refs.scroller.refresh()
+//                })
                 bus.$on('menu_click',this.show_menu)
             },
             methods:{
@@ -125,7 +125,7 @@
 
         <!--<div class="weui-cells__title" v-text="page_label"></div>-->
 
-        <scroll-wraper class="flex-grow"  ref="scroller" :down_text='get_down_text()' @down_out_border="load_next_page()" >
+        <!--<scroll-wraper class="flex-grow"  ref="scroller" :down_text='get_down_text()' @down_out_border="load_next_page()" >-->
 
             <table class="item-table">
                 <tr v-for="row in rows" @tap="ge_edit(row.pk)">
@@ -143,7 +143,7 @@
             </table>
 
 
-        </scroll-wraper>
+        <!--</scroll-wraper>-->
         <!--<div style="height: 5em;"></div>-->
 
 
@@ -151,7 +151,7 @@
     </div>
     <transition name="slide">
         <div v-show="crt_view=='search'" class="slide-win">
-
+            <title-bar :with_back="true" title="筛选"></title-bar>
             <com-filter :row_filters="row_filters" :search_args="search_args" :search_tip='search_tip'></com-filter>
 
             <div class="weui-btn-area">

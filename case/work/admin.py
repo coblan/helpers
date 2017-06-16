@@ -77,7 +77,7 @@ class WorkRecordForm(ModelFields):
         emp=self.instance.emp
         if emp.depart:
             check_depart=pop_depart(emp.depart,'work')
-            self.instance.check_depart=check_depart.par_chain 
+            self.instance.check_depart=check_depart 
             self.instance.save()
         return rt
     

@@ -6,12 +6,15 @@ from helpers.director.shortcut import ModelTable,TablePage
 from ..models import WorkRecord
 
 class WorkList(ModelTable):
+    """
+    拥有HEAD权限的人，查看本部门的所有工作列表
+    """
     model=WorkRecord
     
     def inn_filter(self, query):
         emp=self.crt_user.employee_set.first()
         if emp and emp.depart:
-            return query.filter(check_depart__startswith=emp.depart.par_chain)
+            return query.filter(check_depart=emp.depart)
         else:
             return query.none()
         

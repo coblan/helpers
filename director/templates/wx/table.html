@@ -94,7 +94,7 @@
             </div>
             <transition name="slide">
                 <div v-show="crt_view=='search'" class="slide-win">
-
+                    <title-bar :with_back="true" title="筛选"></title-bar>
                     <com-filter :row_filters="row_filters" :search_args="search_args" :search_tip='search_tip'></com-filter>
 
                     <div class="weui-btn-area">
@@ -126,7 +126,7 @@
         {% endblock %}
 
 
-        <scroll-wraper class="flex-grow" ref="scroller" :down_text='get_down_text()' @down_out_border="load_next_page()" style="margin-bottom: 5em;">
+        <!--<scroll-wraper class="flex-grow" ref="scroller" :down_text='get_down_text()' @down_out_border="load_next_page()" style="margin-bottom: 5em;">-->
             {% block item_view %}
                 <div class="weui-cells">
                     <a class="weui-cell weui-cell_access" href="javascript:;" v-for="row in rows">
@@ -142,7 +142,7 @@
                     </a>
                 </div>
             {% endblock %}
-        </scroll-wraper>
+        <!--</scroll-wraper>-->
     </div>
 
 

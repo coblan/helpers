@@ -6,7 +6,7 @@ from __future__ import unicode_literals
 from django.db import models
 from helpers.director.model_validator import has_str
 from django.utils import timezone
-from helpers.case.organize.models import Employee
+from helpers.case.organize.models import Employee,Department
 
 class Index(models.Model):
     name=models.CharField('name',max_length=500,default='new index',validators=[has_str])
@@ -45,7 +45,7 @@ class WorkRecord(models.Model):
     create_time=models.DateTimeField(verbose_name='创建时间',auto_now=True)
     desp_img=models.CharField('描述图片',max_length=300,blank=True)
     count=models.IntegerField(verbose_name='数量',default=1,help_text='整数')
-    check_depart=models.CharField('审核部门编码',max_length=200,blank=True)
+    check_depart=models.ForeignKey(Department,verbose_name='审核部门',blank=True,null=True)
     #tmp=models.BooleanField('临时工时',default=False)
     
     def __unicode__(self):
