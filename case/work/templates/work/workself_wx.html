@@ -128,7 +128,7 @@
         <!--<scroll-wraper class="flex-grow"  ref="scroller" :down_text='get_down_text()' @down_out_border="load_next_page()" >-->
 
             <table class="item-table">
-                <tr v-for="row in rows" @tap="ge_edit(row.pk)">
+                <tr v-for="row in rows" @click="ge_edit(row.pk)">
                     <td><img style="width: 3em;height: 3em" :src="get_row_img(row)" alt=""/></td>
                     <td><span v-text="row.work"></span></td>
                     <td> <i v-if="row.status=='pass'" class="fa fa-circle" aria-hidden="true" style="color: #04be02"></i>

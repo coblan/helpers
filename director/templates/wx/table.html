@@ -35,9 +35,9 @@
         mixins:[table_fun,scroll_loader],
         mounted:function(){
             var self=this
-            Vue.nextTick(function(){
-                self.$refs.scroller.refresh()
-            })
+//            Vue.nextTick(function(){
+//                self.$refs.scroller.refresh()
+//            })
 
             bus.$on('menu_click',function(){
                 self.is_show_menu=true

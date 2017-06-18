@@ -71,7 +71,10 @@ class Employee(models.Model):
     eid=models.CharField(_('employee id'),max_length=30,blank=True)    
     baseinfo=models.OneToOneField(BasicInfo,verbose_name=_('basic info'),blank=True,null=True)
     position = models.CharField(_('job position'),max_length=100,blank=True)
-    depart=models.ForeignKey(Department,verbose_name=_('department'),blank=True,null=True,on_delete=models.SET_NULL)
+    #depart=models.ForeignKey(Department,verbose_name=_('department'),blank=True,null=True,on_delete=models.SET_NULL)
+    depart=models.ManyToManyField(Department,verbose_name=_('department'),blank=True,null=True)
+    #manage_depart=models.ManyToManyField(Department,verbose_name=_('managed department'),blank=True,null=True,related_name='manage')
+    #follow_depart=models.ManyToManyField(Department,verbose_name=_('followed department'),blank=True,null=True,related_name='follow')
 
     class Meta:
         verbose_name=_('Employee Info')
@@ -89,5 +92,7 @@ class Employee(models.Model):
             self.eid= temp%(config['empid_prefix'],self.pk)
             self.save()
 
-
-
+class WorkPermitModel(models.Model):
+    depart=models.ForeignKey(Department,verbose_name=_('department'),blank=True,null=True)
+    group=models.ManyToManyField(Group,verbose_name=_('group'),blank=True,null=True)
+    emp=models.ForeignKey(Employee,verbose_name='employee',blank=True,null=True)

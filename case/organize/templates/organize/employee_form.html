@@ -9,11 +9,11 @@
     bus=new Vue()
     department_url = "{% url 'organize.department' %}"
 
-    ex.each(heads,function(head){
-        if(head.name=='depart'){
-            head.type='department'
-        }
-    })
+//    ex.each(heads,function(head){
+//        if(head.name=='depart'){
+//            head.type='department'
+//        }
+//    })
 
     tabs={{ tabs | jsonify | default:'[]' }}
     crt_tab = '{{ crt_tab | default:'null' }}'

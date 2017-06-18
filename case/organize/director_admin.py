@@ -15,6 +15,7 @@ from django.db.models import Q
 from .pages.myinfo import EmployeeSelf
 from .pages.baseinfo import BaseinfoItem,BasicInfoFields
 from .pages.department import DepartmentGroup
+from .pages.empoyee_permit import EmployePermitTab
 
 class EmployeeFields(ModelFields):
     
@@ -22,11 +23,11 @@ class EmployeeFields(ModelFields):
         model=Employee
         exclude=['baseinfo']
     
-    def get_row(self):
-        row = super(EmployeeFields,self).get_row()
-        if 'depart' in row.keys() and self.instance.depart:
-            row['depart_obj']={'pk':self.instance.depart.pk,'name':self.instance.depart.name}
-        return row
+    #def get_row(self):
+        #row = super(EmployeeFields,self).get_row()
+        #if 'depart' in row.keys() and self.instance.depart:
+            #row['depart_obj']={'pk':self.instance.depart.pk,'name':self.instance.depart.name}
+        #return row
     
     def dict_head(self, head):
         if head['name']=='eid':
@@ -44,7 +45,7 @@ class EmployeeFields(ModelFields):
         user_options.extend(options)
         return {
             'user':user_options,
-            'depart':[],
+            #'depart':[],
         }
     
 class EmployeeItem(FormPage):
@@ -94,7 +95,8 @@ class UserTab(UserFormPage):
 class EmpGroup(TabGroup):
     tabs=[{'name':'emp','label':'员工','page_cls':EmployeeItem},
           {'name':'baseinfo','label':'基本信息','page_cls':BaseinfoItem,'visible':and_list([BasicInfo])},
-          {'name':'user','label':'账号','page_cls':UserTab,'visible':and_list([User])}]
+          {'name':'user','label':'账号','page_cls':UserTab,'visible':and_list([User])},
+          {'name':'permit','label':'工作权限','page_cls':EmployePermitTab}]
     
     def get_tabs(self):
         emp_pk=self.request.GET.get('pk')
@@ -166,6 +168,8 @@ page_dc.update({
     'organize.employee.wx':EmployeeTablePageWX,
     'organize.employee.wx.edit':EmpGroup,
     'organize.employeeself.wx':EmployeeSelf,
+    
+   
     
 })
 
