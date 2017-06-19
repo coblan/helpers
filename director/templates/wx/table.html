@@ -108,7 +108,7 @@
 
 
             <transition name="fade">
-                <modal v-show="is_show_menu" @click.native="is_show_menu=false">
+                <modal id="pop-menu" v-show="is_show_menu" @click.native="is_show_menu=false">
 
                     <div class="weui-actionsheet__menu up-menu" @click.stop="" style="width: 80vw;">
                         <div class="weui-actionsheet__cell" @click="add_new();is_show_menu=false" v-if="can_add">新建</div>

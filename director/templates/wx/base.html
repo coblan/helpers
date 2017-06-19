@@ -90,7 +90,28 @@
     with_menu=true
 
 
+    ln_state={
+        crt_view:''
+    }
     $(function(){
+        ln.history_handle({
+            init:ln_state,
+            handler:function(state){
+                ex.assign(ln_state,state)
+            }
+        })
+    })
+
+
+
+    $(function(){
+
+        if($('#pop-menu').length>0){
+            var with_menu=true
+        }else{
+            var with_menu=false
+        }
+
         new Vue({
             el:'#com-title',
             data:{

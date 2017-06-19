@@ -4,20 +4,6 @@
 <script src='{% static "js/ex_inputs.pack.js" %}'></script>
 <script>
 
-    ln_state={
-        crt_view:''
-    }
-    ln.history_handle({
-        init:ln_state,
-        handler:function(state){
-            if(state){
-                ex.assign(ln_state,state)
-            }else{
-                history.back()
-            }
-        }
-    })
-
 
     row.depart_obj=row.depart_obj || {pk:null,name:'请选择部门'}
 

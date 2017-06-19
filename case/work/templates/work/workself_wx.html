@@ -6,19 +6,20 @@
 {% block page_content %}
 
 {% include 'organize/com_depart_btn.html' %}
+{% include 'wx/com/table_filter_wx.html' %}
 <script type="text/javascript">
 
 
-    $(function(){
-        ln.history_handle({
-            init:{crt_view:'main'},
-            handler:function(state){
-                if(state.crt_view) {
-                    table.crt_view = state.crt_view
-                }
-            }
-        })
-    })
+//    $(function(){
+//        ln.history_handle({
+//            init:{crt_view:'main'},
+//            handler:function(state){
+//                if(state.crt_view) {
+//                    table.crt_view = state.crt_view
+//                }
+//            }
+//        })
+//    })
 
     myScroll=''
     last_move=0
@@ -26,16 +27,16 @@
 
     $(function(){
 
-        crt_view = 'main'
+//        crt_view = 'main'
 
         table= new Vue({
             el:'#there',
             data:{
-                crt_view:crt_view,
+//                crt_view:crt_view,
                 ln:ln,
                 page_label:page_label,
                 in_wx_agent:in_wx_agent,
-                is_show_menu:false,
+                show_menu:false,
 
                 depart_list:depart_list,
                 crt_depart:crt_depart,
@@ -47,7 +48,9 @@
 //                Vue.nextTick(function(){
 //                    self.$refs.scroller.refresh()
 //                })
-                bus.$on('menu_click',this.show_menu)
+                bus.$on('menu_click',function(){
+                    self.show_menu=true
+                })
             },
             methods:{
                 goto:function(url){
@@ -75,9 +78,9 @@
                 get_row_img:function(row){
                     return  row.desp_img || row.work_desp_img || '/static/image/default_image.png'
                 },
-                show_menu:function(){
-                    this.is_show_menu=true
-                },
+//                show_menu:function(){
+//                    this.is_show_menu=true
+//                },
                 depart_link:function(pk){
                     return ex.appendSearch({_depart:pk})
                 }
@@ -124,18 +127,13 @@
 
     <div class="flex-v" style="height: 100vh;position: relative;">
 
-        <div class="flex" v-if="in_wx_agent">
-            <div class="flex-grow"></div>
-            <div style="text-align: right;padding: 0.5em 1em;" @click="show_menu()">
-                <i class="fa fa-align-justify fa-2x" aria-hidden="true" ></i>
-            </div>
-        </div>
-
-        <!--<div style="text-align: center;margin:1em 0;">-->
-            <!--<div class="btn-group" role="group" aria-label="..." >-->
-                <!--<a type="button" :class="['btn btn-default',{'btn-info':crt_depart==depart.pk}]" v-for="depart in depart_list" :href="depart_link(depart.pk)" v-text="depart.label">Left</a>-->
+        <!--<div class="flex" v-if="in_wx_agent">-->
+            <!--<div class="flex-grow"></div>-->
+            <!--<div style="text-align: right;padding: 0.5em 1em;" @click="show_menu()">-->
+                <!--<i class="fa fa-align-justify fa-2x" aria-hidden="true" ></i>-->
             <!--</div>-->
         <!--</div>-->
+
 
         <table class="item-table">
             <tr v-for="row in rows" @click="ge_edit(row.pk)">
@@ -153,30 +151,30 @@
         </table>
 
     </div>
-    <transition name="slide">
-        <div v-show="crt_view=='search'" class="slide-win">
-            <title-bar :with_back="true" title="筛选"></title-bar>
-            <com-filter :row_filters="row_filters" :search_args="search_args" :search_tip='search_tip'></com-filter>
+    <!--<transition name="slide">-->
+        <!--<div v-show="crt_view=='search'" class="slide-win">-->
+            <!--<title-bar :with_back="true" title="筛选"></title-bar>-->
+            <!--<com-filter :row_filters="row_filters" :search_args="search_args" :search_tip='search_tip'></com-filter>-->
 
-            <div class="weui-btn-area">
-                <a class="weui-btn weui-btn_primary" href="javascript:" @click='search()' style="width: 50%;">
-                    <i class="fa fa-search" aria-hidden="true"></i>
-                </a>
-            </div>
+            <!--<div class="weui-btn-area">-->
+                <!--<a class="weui-btn weui-btn_primary" href="javascript:" @click='search()' style="width: 50%;">-->
+                    <!--<i class="fa fa-search" aria-hidden="true"></i>-->
+                <!--</a>-->
+            <!--</div>-->
 
-        </div>
-    </transition>
+        <!--</div>-->
+    <!--</transition>-->
 
     <transition name="fade">
-        <modal v-show="is_show_menu" @click.native="is_show_menu=false">
+        <modal id="pop-menu" v-show="show_menu" @click.native="show_menu=false">
             <div class="weui-actionsheet__menu" @click.stop="" style="width: 80vw;">
 
-                <div class="weui-actionsheet__cell" @click="add_new();is_show_menu=false" v-if="can_add">新建</div>
-                <div class="weui-actionsheet__cell" @click="del_item();is_show_menu=false" v-if="can_del &&selected.length>0">删除选中</div>
-                <div class="weui-actionsheet__cell" @click="ln.pushState({crt_view:'search'});is_show_menu=false" v-if="can_search">排序过滤</div>
+                <div class="weui-actionsheet__cell" @click="add_new();show_menu=false" v-if="can_add">新建</div>
+                <div class="weui-actionsheet__cell" @click="del_item();show_menu=false" v-if="can_del &&selected.length>0">删除选中</div>
+                <div class="weui-actionsheet__cell" @click="ln.pushState({crt_view:'show_filter'});show_menu=false" v-if="can_search">排序过滤</div>
             </div>
             <div class="weui-actionsheet__cell">
-                <div class="weui-actionsheet__cell" @click="is_show_menu=false">取消</div>
+                <div class="weui-actionsheet__cell" @click="show_menu=false">取消</div>
             </div>
         </modal>
     </transition>

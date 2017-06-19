@@ -1,0 +1,44 @@
+
+<script>
+    $(function(){
+        new Vue({
+            el:'#filter-block',
+            data:{
+                row_filters:row_filters,
+                search_args:search_args,
+                search_tip:search_tip,
+                ln_state:ln_state
+            },
+            methods:{
+                search:function () {
+                    location=ex.appendSearch(search_args)
+//                    location =ex.template('{path}{search}',{path:location.pathname,
+//                        search: encodeURI(ex.searchfy(this.search_args,'?')) })
+                },
+            }
+//            mounted:function(){
+//                var self=this
+//                bus.$on('show_filter',function(){
+//                    ln.pushState({crt_view:'show_filter'})
+//                })
+//            },
+        })
+    })
+
+</script>
+
+<div id="filter-block">
+    <transition name="slide">
+        <div v-show="ln_state.crt_view=='show_filter'" class="slide-win">
+            <title-bar :with_back="true" title="筛选过滤"></title-bar>
+            <com-filter :row_filters="row_filters" :search_args="search_args" :search_tip='search_tip'></com-filter>
+
+            <div class="weui-btn-area">
+                <a class="weui-btn weui-btn_primary" href="javascript:" @click='search()' style="width: 50%;">
+                    <i class="fa fa-search" aria-hidden="true"></i>
+                </a>
+            </div>
+
+        </div>
+    </transition>
+</div>
