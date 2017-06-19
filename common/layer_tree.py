@@ -36,8 +36,10 @@ DirMan不需要继承，只需要实例化，即可使用。
 """
 
 class LayerTree(object):
-
-    def get_dir_data(self,root,par,user):
+    def __init__(self,model):
+        self.model=model
+        
+    def dir_data(self,root,par,user):
         """
         @root: 自定义
         @par: to_dict 对象
@@ -46,7 +48,33 @@ class LayerTree(object):
         
         items 是 to_dict对象，为每个对象添加_type 属性，定义前段使用的显示
         """
-        pass
+        if '_class' not in root.keys():
+            root=from_dict(root,model=self.model)
+        else:
+            root=from_dict(root)
+        
+        parents=[]
+        if not par.get('pk',None):
+            items=[to_dict(x) for x in self.model.objects.filter(par=None)]
+            par=root
+        else:
+            par=from_dict(par)
+            items=[to_dict(x) for x in self.model.objects.filter(par=par)]
+        
+        crt_par=par
+        while True:
+            parents.append(crt_par)
+            crt_par=crt_par.par
+            if not crt_par or not crt_par.pk or crt_par==root:
+                break            
+        if root not in parents:
+            parents.append(root)
+        parents.reverse()
+        
+        return {
+            'parents':[to_dict(x)  for x in parents],
+            'items':items,
+        }
     
         #par_permit=ModelPermit(self.DIR,user)
         #if not par_permit.readable_fields():

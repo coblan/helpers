@@ -1,0 +1,29 @@
+{% load jsonify %}
+
+<script>
+
+    depart_list={{ depart_list | jsonify | default:'false' }}
+    crt_depart={{ crt_depart | jsonify | default:'false' }}
+
+    $(function(){
+        new Vue({
+            el:'#depart-btn',
+            data:{
+                depart_list:depart_list,
+                crt_depart:crt_depart,
+            },
+            methods:{
+                depart_link:function(pk){
+                    return ex.appendSearch({_depart:pk})
+                }
+            }
+        })
+    })
+
+</script>
+
+<div id="depart-btn" style="text-align: center;margin:1em 0;">
+    <div class="btn-group" role="group" aria-label="..." >
+        <a type="button" :class="['btn btn-default',{'btn-info':crt_depart==depart.pk}]" v-for="depart in depart_list" :href="depart_link(depart.pk)" v-text="depart.label">Left</a>
+    </div>
+</div>

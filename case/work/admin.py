@@ -6,8 +6,36 @@ from django.contrib import admin
 from .models import Work,WorkRecord,Index
 from helpers.director.shortcut import page_dc,FormPage,\
      TablePage,ModelTable,ModelFields,model_dc,RowFilter,permit_list,has_permit,ModelPermit
+     
 from django import forms
 from .pages.work_list import WorkListPage
+from .models import Department
+from helpers.director.db_tools import to_dict
+from helpers.case.organize.workpermit import WorkModelPermit
+from django.core.exceptions import PermissionDenied
+
+
+class DepartWorkTablePageMixin(object):
+    """tablepage mixin"""
+    def get_allowed_depart(self,employee,user):
+        return True
+    
+    def get_context(self):
+        ctx=super(DepartWorkTablePageMixin,self).get_context()
+        employee=self.crt_user.employee_set.first()
+        allowed_departs=self.get_allowed_depart(employee,self.crt_user)
+        if not allowed_departs:
+            raise PermissionDenied,'no deparment allowed'
+        ctx['depart_list']=[{'pk':x.pk,'label':unicode(x)} for x in allowed_departs]
+        
+        if self.request.GET.get('_depart'):
+            depart= Department.objects.get(pk=self.request.GET.get('_depart'))
+            if depart in allowed_departs:
+                ctx['crt_depart']=depart.pk
+        else:
+            ctx['crt_depart']=allowed_departs[0].pk
+        return ctx  
+    
 # Register your models here.
 class IndexForm(ModelFields):
     class Meta:
@@ -46,6 +74,11 @@ class WorkTable(ModelTable):
 class WorkTablePage(TablePage):
     tableCls=WorkTable
 
+# class DepartWorkFromMixin(object):
+    # def __init__(self,*args,**kw):
+        # self.request=kw.pop('request',None)
+        # super(DepartWorkFromMixin,self).__init__(*args,**kw)
+        
 
 class WorkRecordForm(ModelFields):
     class Meta:
@@ -75,8 +108,15 @@ class WorkRecordForm(ModelFields):
     def save_form(self):
         rt = super(WorkRecordForm,self).save_form()
         emp=self.instance.emp
-        if emp.depart:
-            check_depart=pop_depart(emp.depart,'work')
+        allowd_depart=get_depart_can_submit_work(emp,self.crt_user)
+        if self.request.GET.get('_depart'):
+            tmp_depart=emp.depart.get(pk=self.request.GET.get('_depart'))
+            if tmp_depart in allowd_depart:
+                depart=tmp_depart
+        else:
+            depart=allowd_depart[0]
+        if depart:
+            check_depart=pop_depart(depart,'work')
             self.instance.check_depart=check_depart 
             self.instance.save()
         return rt
@@ -108,7 +148,14 @@ class WorkRecordTable(ModelTable):
 
     def inn_filter(self, query):
         query =super(WorkRecordTable,self).inn_filter(query)
-        return query.order_by('-id')
+        
+        if self.kw.get('_depart'):
+            depart=Department.objects.get(pk=self.kw.get('_depart'))
+        else:
+            emp=self.crt_user.employee_set.first()
+            depart=emp.depart.first()
+            
+        return query.filter(check_depart=depart).order_by('-id')
 
     def dict_row(self,inst):
         dc={}
@@ -123,9 +170,17 @@ class WorkRecordTable(ModelTable):
         })
         return dc
 
-class WorkRecordTablePage(TablePage):
+class WorkRecordTablePage(DepartWorkTablePageMixin,TablePage):
     tableCls=WorkRecordTable
-
+    
+    def get_allowed_depart(self, employee, user):
+        allowed_depart=[]
+        for depart in employee.depart.all():
+            permit = WorkModelPermit(WorkRecord, user, department=depart)
+            if 'status' in permit.changeable_fields():
+                allowed_depart.append(depart)
+        return allowed_depart
+    
     def get_label(self):
         return '工作审批列表'
 
@@ -158,6 +213,7 @@ class WRselfForm(ModelFields):
         #if not self.instance.pk:
         # 员工创建新workrecord时，自动添加上
         emp=self.crt_user.employee_set.first()
+        
         self.instance.emp= emp
         return super(WRselfForm,self).get_row()
      
@@ -187,18 +243,58 @@ class WRselfFormPage(FormPage):
 class WRselfTable(ModelTable):
     model=WorkRecord
     filters=WorkRecordFilter
+    
     def inn_filter(self, query):
         query =super(WRselfTable,self).inn_filter(query)
-        return query.filter(emp__user=self.crt_user).order_by('-id')
+        if self.kw.get('_depart'):
+            depart=Department.objects.get(pk=self.kw.get('_depart'))
+        else:
+            emp=self.crt_user.employee_set.first()
+            depart=emp.depart.first()
+        return query.filter(emp__user=self.crt_user,check_depart=depart).order_by('-id')
+    
     def dict_row(self, inst):
         return {
             'work': unicode(inst.work),
             'work_desp_img':inst.work.desp_img
         }
 
-class WRselfTablePage(TablePage):
+def get_depart_can_submit_work(employee,user):
+    allowed_departs=[]
+    for depart in employee.depart.all():
+        permit = WorkModelPermit(WorkRecord, user,department=depart)
+        if permit.can_add():
+            allowed_departs.append(depart)
+    return allowed_departs
+            
+      
+
+class WRselfTablePage(DepartWorkTablePageMixin,TablePage):
     tableCls=WRselfTable
     template='work/workself_wx.html'
+    
+    def get_allowed_depart(self,employee,user):
+        return get_depart_can_submit_work(employee, user)
+    # def get_context(self):
+        # ctx=super(WRselfTablePage,self).get_context()
+        # employee=self.crt_user.employee_set.first()
+        # allowed_departs=[]
+        # for depart in employee.depart.all():
+            # permit = WorkModelPermit(WorkRecord, self.crt_user,department=depart)
+            # if permit.can_add():
+                # allowed_departs.append(depart)
+        # if not allowed_departs:
+            # raise PermissionDenied,'not deparment allowed'
+        # ctx['depart_list']=[to_dict(x) for x in allowed_departs]
+        
+        # if self.request.GET.get('_depart'):
+            # depart= Department.objects.get(pk=self.request.get('_depart'))
+            # if depart in allowed_departs:
+                # ctx['crt_depart']=to_dict(depart)
+        # else:
+            # ctx['crt_depart']=allowed_departs[0]
+        # return ctx
+    
     def get_label(self):
         emp=self.request.user.employee_set.first()
         return '%s的工作提交记录'% emp

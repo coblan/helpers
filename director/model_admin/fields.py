@@ -15,7 +15,7 @@ from permit import ModelPermit
 from ..models import LogModel
 from helpers.pyenv import u
 
-def save_row(row,user):
+def save_row(row,user,request):
     for k in row: # convert model instance to pk for normal validation
         if isinstance(row[k],models.Model):
             row[k]=row[k].pk
@@ -23,7 +23,7 @@ def save_row(row,user):
     model= name_to_model(row['_class'])
     fields_cls = model_dc.get(model).get('fields')
 
-    fields_obj=fields_cls(row,crt_user=user)
+    fields_obj=fields_cls(row,crt_user=user,request=request)
     if fields_obj.is_valid():
         fields_obj.save_form()
         return fields_obj.instance
@@ -59,6 +59,8 @@ class ModelFields(forms.ModelForm):
             else:
                 kw['instance'] = self._meta.model()
         nolimit = kw.pop('nolimit',False)
+        self.request=kw.pop('request',None)
+        
         super(ModelFields,self).__init__(dc,*args,**kw)
         self.permit= ModelPermit(self.Meta.model,self.crt_user,nolimit=nolimit)
         self.pop_fields()

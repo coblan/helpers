@@ -5,7 +5,7 @@
 
 {% block page_content %}
 
-
+{% include 'organize/com_depart_btn.html' %}
 <script type="text/javascript">
 
 
@@ -19,7 +19,6 @@
             }
         })
     })
-
 
     myScroll=''
     last_move=0
@@ -37,8 +36,12 @@
                 page_label:page_label,
                 in_wx_agent:in_wx_agent,
                 is_show_menu:false,
+
+                depart_list:depart_list,
+                crt_depart:crt_depart,
+
             },
-            mixins:[table_fun,scroll_loader],
+            mixins:[table_fun],
             mounted:function(){
                 var self=this
 //                Vue.nextTick(function(){
@@ -51,7 +54,9 @@
                     location=url
                 },
                 ge_edit:function(pk){
-                    location= ex.template('{engine_url}/{page_name}.edit?pk={pk}',{engine_url:engine_url,page_name:page_name,pk:pk})
+                    var url=ex.template('{engine_url}/{page_name}.edit',{engine_url:engine_url,page_name:page_name})
+                    search_args.pk=pk
+                    location= ex.appendSearch(url,search_args)
                 },
                 switch_to:function(name){
                     history.pushState({view:name},'',ex.appendSearch({crt_view:name}))
@@ -73,6 +78,9 @@
                 show_menu:function(){
                     this.is_show_menu=true
                 },
+                depart_link:function(pk){
+                    return ex.appendSearch({_depart:pk})
+                }
 
             }
         })
@@ -123,30 +131,26 @@
             </div>
         </div>
 
-        <!--<div class="weui-cells__title" v-text="page_label"></div>-->
+        <!--<div style="text-align: center;margin:1em 0;">-->
+            <!--<div class="btn-group" role="group" aria-label="..." >-->
+                <!--<a type="button" :class="['btn btn-default',{'btn-info':crt_depart==depart.pk}]" v-for="depart in depart_list" :href="depart_link(depart.pk)" v-text="depart.label">Left</a>-->
+            <!--</div>-->
+        <!--</div>-->
 
-        <!--<scroll-wraper class="flex-grow"  ref="scroller" :down_text='get_down_text()' @down_out_border="load_next_page()" >-->
+        <table class="item-table">
+            <tr v-for="row in rows" @click="ge_edit(row.pk)">
+                <td><img style="width: 3em;height: 3em" :src="get_row_img(row)" alt=""/></td>
+                <td><span v-text="row.work"></span></td>
+                <td> <i v-if="row.status=='pass'" class="fa fa-circle" aria-hidden="true" style="color: #04be02"></i>
+                    <i v-if="row.status=='waiting'" class="fa fa-telegram" aria-hidden="true" style="color: #074bb6"></i>
+                    <i v-if="row.status=='reject'" class="fa fa-info-circle" aria-hidden="true" style="color: red"></i>
+                </td>
+                <td>
+                    <span v-text="row.create_time"></span>
+                </td>
 
-            <table class="item-table">
-                <tr v-for="row in rows" @click="ge_edit(row.pk)">
-                    <td><img style="width: 3em;height: 3em" :src="get_row_img(row)" alt=""/></td>
-                    <td><span v-text="row.work"></span></td>
-                    <td> <i v-if="row.status=='pass'" class="fa fa-circle" aria-hidden="true" style="color: #04be02"></i>
-                        <i v-if="row.status=='waiting'" class="fa fa-telegram" aria-hidden="true" style="color: #074bb6"></i>
-                        <i v-if="row.status=='reject'" class="fa fa-info-circle" aria-hidden="true" style="color: red"></i>
-                    </td>
-                    <td>
-                        <span v-text="row.create_time"></span>
-                    </td>
-
-                </tr>
-            </table>
-
-
-        <!--</scroll-wraper>-->
-        <!--<div style="height: 5em;"></div>-->
-
-
+            </tr>
+        </table>
 
     </div>
     <transition name="slide">

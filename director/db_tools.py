@@ -185,7 +185,8 @@ def from_dict(dc,model=None,pre_proc=None):
         for k,v in processed.items():
             setattr(instance,k,v)                  
     else:
-        instance=model.objects.create(**processed)
+        # instance=model.objects.create(**processed)
+        instance=model(**processed)
         #instance=model.objects.create()
         
     #for k,v in processed.items():

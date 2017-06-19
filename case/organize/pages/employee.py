@@ -8,11 +8,11 @@ class EmployeeFields(ModelFields):
         model=Employee
         exclude=['baseinfo']
     
-    def get_row(self):
-        row = super(EmployeeFields,self).get_row()
-        if 'depart' in row.keys() and self.instance.depart:
-            row['depart_obj']={'pk':self.instance.depart.pk,'name':self.instance.depart.name}
-        return row
+    # def get_row(self):
+        # row = super(EmployeeFields,self).get_row()
+        # if 'depart' in row.keys() and self.instance.depart:
+            # row['depart_obj']={'pk':self.instance.depart.pk,'name':self.instance.depart.name}
+        # return row
     
     def dict_head(self, head):
         if head['name']=='eid':

@@ -22,11 +22,11 @@ def model_perm(user,perm,model):
     return getattr(validator,perm)()
 
 
-def save(row,user):
+def save(row,user,request):
     """
     """
     try:
-        instance = save_row(row, user)
+        instance = save_row(row, user,request)
         perm=ModelPermit(instance,user)
         dc =to_dict(instance,include=perm.readable_fields())
         return {'status':'success','row':dc}

@@ -23,7 +23,7 @@ pc_menu= {'label':'工作统计','icon':fa('fa-users'),'visible':can_list((Work,
 wx_menu=[
     {'label':'工作类别','url':page('work.workindex.wx'),'icon':'<img src="/static/res/image/work_types.ico" />','visible':can_list((Work,WorkRecord,Index))}, 
     {'label':'个人工作提交','url':page('work.wkself.wx'),'icon':fa('fa-list-ol fa-2x'),'visible':and_list([can_create_work])},  
-    {'label':'工作审核','url':page('work.workrecord'),'icon':fa('fa-check-square-o fa-2x'),'visible':and_list(
+    {'label':'工作审核','url':page('work.workrecord.wx'),'icon':fa('fa-check-square-o fa-2x'),'visible':and_list(
         [WorkRecord,can_check_work])},  
 
     {'label':'工作记录','url':page('work.worklist.wx'),'icon':fa('fa-calendar-check-o fa-2x'),'visible':and_list(['work.check_all'])},     
