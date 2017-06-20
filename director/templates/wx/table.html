@@ -86,12 +86,13 @@
     <div class="total-wrap flex-v">
 
         {% block table_head %}
-            <div class="flex" v-if="in_wx_agent">
-                <div class="flex-grow"></div>
-                <div style="text-align: right;padding: 0.5em 1em;">
-                    <i class="fa fa-align-justify fa-2x" aria-hidden="true" @click="is_show_menu=true"></i>
-                </div>
-            </div>
+            <!--<div class="flex" v-if="in_wx_agent">-->
+                <!--<div class="flex-grow"></div>-->
+                <!--<div style="text-align: right;padding: 0.5em 1em;">-->
+                    <!--<i class="fa fa-align-justify fa-2x" aria-hidden="true" @click="is_show_menu=true"></i>-->
+                <!--</div>-->
+            <!--</div>-->
+
             <transition name="slide">
                 <div v-show="crt_view=='search'" class="slide-win">
                     <title-bar :with_back="true" title="筛选"></title-bar>
@@ -150,6 +151,9 @@
 
 
 </div>
+
+
+
 
 
 {% endblock %}

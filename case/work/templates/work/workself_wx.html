@@ -122,35 +122,27 @@
 </script>
 
 
-<div id="there" class="cloak-block" v-cloak>
+<div id="there" class="cloak-block flex-grow" style="overflow: hidden;position: relative;" v-cloak>
+
+        <scroll-loader>
+            <table class="item-table">
+                <tr v-for="row in rows" @click="ge_edit(row.pk)">
+                    <td><img style="width: 3em;height: 3em" :src="get_row_img(row)" alt=""/></td>
+                    <td><span v-text="row.work"></span></td>
+                    <td> <i v-if="row.status=='pass'" class="fa fa-circle" aria-hidden="true" style="color: #04be02"></i>
+                        <i v-if="row.status=='waiting'" class="fa fa-telegram" aria-hidden="true" style="color: #074bb6"></i>
+                        <i v-if="row.status=='reject'" class="fa fa-info-circle" aria-hidden="true" style="color: red"></i>
+                    </td>
+                    <td>
+                        <span v-text="row.create_time"></span>
+                    </td>
+
+                </tr>
+            </table>
+        </scroll-loader>
 
 
-    <div class="flex-v" style="height: 100vh;position: relative;">
-
-        <!--<div class="flex" v-if="in_wx_agent">-->
-            <!--<div class="flex-grow"></div>-->
-            <!--<div style="text-align: right;padding: 0.5em 1em;" @click="show_menu()">-->
-                <!--<i class="fa fa-align-justify fa-2x" aria-hidden="true" ></i>-->
-            <!--</div>-->
-        <!--</div>-->
-
-
-        <table class="item-table">
-            <tr v-for="row in rows" @click="ge_edit(row.pk)">
-                <td><img style="width: 3em;height: 3em" :src="get_row_img(row)" alt=""/></td>
-                <td><span v-text="row.work"></span></td>
-                <td> <i v-if="row.status=='pass'" class="fa fa-circle" aria-hidden="true" style="color: #04be02"></i>
-                    <i v-if="row.status=='waiting'" class="fa fa-telegram" aria-hidden="true" style="color: #074bb6"></i>
-                    <i v-if="row.status=='reject'" class="fa fa-info-circle" aria-hidden="true" style="color: red"></i>
-                </td>
-                <td>
-                    <span v-text="row.create_time"></span>
-                </td>
-
-            </tr>
-        </table>
-
-    </div>
+    <!--</div>-->
     <!--<transition name="slide">-->
         <!--<div v-show="crt_view=='search'" class="slide-win">-->
             <!--<title-bar :with_back="true" title="筛选"></title-bar>-->
@@ -183,6 +175,57 @@
 </div>
 
 
+<script>
+    Vue.component('scroll-loader',{
+        template:'#scroll-loader',
+        data:function(){
+          return {
+              load_data:false,
+          }
+        },
+        mounted:function(){
+            var self=this
+            var wraper= $(this.$el)
+            var content=wraper.find('.scroll-content')
+            wraper.scroll(function(){
+                if(wraper.scrollTop()+wraper.height() +20 >content.outerHeight()){
+                    self.load_data=true
+                }else{
+                    self.load_data=false
+                }
 
+            })
+        }
+    })
 
+</script>
+
+<template id="scroll-loader">
+<div class="scroll-wraper">
+    <div class="scroll-content">
+        <slot></slot>
+        <div class="load-icon" v-if="load_data" style="height: 3em;text-align: center;">加载</div>
+    </div>
+</div>
+</template>
+
+<style>
+    .scroll-wraper{
+        position: absolute;
+        overflow: scroll;
+        top:0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+    }
+    .scroll-content{
+        padding-bottom: 4em;
+        position: relative;
+    }
+    .load-icon{
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+    }
+</style>
 {% endblock %}

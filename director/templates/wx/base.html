@@ -72,6 +72,8 @@
                 $('body').addClass('ready')
             })
 
+
+
         })
 
 
@@ -160,32 +162,37 @@
     </div>
 
 
-    <div class="weui-tab flex-grow"  style="overflow: auto;">
-        <div class="weui-tab__panel main content">
-            {% block page_content %}
+    <div id="main-content-wrap" class="flex-grow flex-v" style="position: relative;overflow: hidden;">
 
-            {% endblock %}
+        {% block page_content %}
+
+        {% endblock %}
+
+
+    </div>
+
+    <div style="position: relative;">
+    {% block main_menu %}
+
+        <div class="weui-tabbar nav footer">
+            <a id="help-page" href="/wx/help.wx" class="weui-tabbar__item ">
+                <i class="fa fa-info-circle weui-tabbar__icon" aria-hidden="true" ></i>
+                <p class="weui-tabbar__label">信息</p>
+            </a>
+            <a id="work-panel" href="/wx/home.wx" class="weui-tabbar__item weui-bar__item_on">
+                <i class="fa fa-th weui-tabbar__icon" aria-hidden="true" ></i>
+                <p class="weui-tabbar__label">工作</p>
+            </a>
+            <a id="employee-center" href="/wx/organize.employeeself.wx" class="weui-tabbar__item">
+                <i class="fa fa-user-circle weui-tabbar__icon" aria-hidden="true" ></i>
+                <p class="weui-tabbar__label">我的信息</p>
+            </a>
+
         </div>
 
-    </div>
-
-    {% block main_menu %}
-    <div class="weui-tabbar nav footer">
-        <a id="help-page" href="/wx/help.wx" class="weui-tabbar__item ">
-            <i class="fa fa-info-circle weui-tabbar__icon" aria-hidden="true" ></i>
-            <p class="weui-tabbar__label">信息</p>
-        </a>
-        <a id="work-panel" href="/wx/home.wx" class="weui-tabbar__item weui-bar__item_on">
-            <i class="fa fa-th weui-tabbar__icon" aria-hidden="true" ></i>
-            <p class="weui-tabbar__label">工作</p>
-        </a>
-        <a id="employee-center" href="/wx/organize.employeeself.wx" class="weui-tabbar__item">
-            <i class="fa fa-user-circle weui-tabbar__icon" aria-hidden="true" ></i>
-            <p class="weui-tabbar__label">我的信息</p>
-        </a>
-
-    </div>
     {% endblock %}
+
+    </div>
 </div>
 
 
@@ -198,31 +205,43 @@
         background-color: #f7f5f3;
         transition: all 0.2s ease;
     }
-    /*.weui-tabbar.nav{*/
-        /*position: fixed;*/
-        /*bottom: 0px;*/
-        /*z-index: 500;*/
-    /*}*/
+
     .nav .fake-active>i,.nav .fake-active>p{
         color: green;
 
     }
-    .weui-tab__panel{
-        padding-bottom: 150px;
-    }
+    /*.nav.footer{*/
+        /*position: static;*/
+        /*margin: 0;*/
+    /*}*/
+    /*.weui-tab__panel{*/
+        /*padding-bottom: 150px;*/
+    /*}*/
     .field .error{
         color: red;
     }
     [v-cloak] {
         display: none;
     }
-    .main-content{
-        min-height: 100vh;
+    .nav.footer{
+        position: static;
     }
+    /*.main-content-wrap{*/
+        /*margin-bottom: 2em;*/
+    /*}*/
+    /*.nav.footer{*/
+        /*position: fixed;*/
+        /*bottom: 0;*/
+        /*left: 0;*/
+        /*width: 100vw;*/
+    /*}*/
+    /*.main-content{*/
+        /*min-height: 100vh;*/
+    /*}*/
 
-    .scroll-wrapper .scroller{
-        padding-bottom: 120px;
-    }
+    /*.scroll-wrapper .scroller{*/
+        /*padding-bottom: 120px;*/
+    /*}*/
 
 
 </style>

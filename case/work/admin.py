@@ -11,7 +11,7 @@ from django import forms
 from .pages.work_list import WorkListPage
 from .models import Department
 from helpers.director.db_tools import to_dict
-from helpers.case.organize.workpermit import WorkModelPermit
+from helpers.case.organize.workpermit import DepartModelPermit
 from django.core.exceptions import PermissionDenied
 from helpers.case.organize.valid_depart import ValidDepart
 
@@ -178,7 +178,7 @@ class WorkCheckValidDepart(ValidDepart):
     def get_allowed_depart(self, employee, user):
         allowed_depart=[]
         for depart in employee.depart.all():
-            permit = WorkModelPermit(WorkRecord, user, department=depart)
+            permit = DepartModelPermit(WorkRecord, user, department=depart)
             if 'status' in permit.changeable_fields():
                 allowed_depart.append(depart)
         return allowed_depart        
@@ -281,19 +281,28 @@ class WRselfTable(ModelTable):
 def get_depart_can_submit_work(employee,user):
     allowed_departs=[]
     for depart in employee.depart.all():
-        permit = WorkModelPermit(WorkRecord, user,department=depart)
+        permit = DepartModelPermit(WorkRecord, user,department=depart)
         if permit.can_add():
             allowed_departs.append(depart)
     return allowed_departs
             
-      
 
-class WRselfTablePage(DepartWorkTablePageMixin,TablePage):
+class WRselfValidDepart(ValidDepart):
+    data_key='work_self'
+    def get_allowed_depart(self, employee, user):
+        return get_depart_can_submit_work(employee, user)
+
+class WRselfTablePage(TablePage):
     tableCls=WRselfTable
     template='work/workself_wx.html'
     
-    def get_allowed_depart(self,employee,user):
-        return get_depart_can_submit_work(employee, user)
+    def get_context(self):
+        ctx=super(WRselfTablePage,self).get_context()
+        valid_depart=WRselfValidDepart(self.request)
+        ctx=valid_depart.get_context(ctx)
+        return ctx
+    #def get_allowed_depart(self,employee,user):
+        #return get_depart_can_submit_work(employee, user)
     # def get_context(self):
         # ctx=super(WRselfTablePage,self).get_context()
         # employee=self.crt_user.employee_set.first()
@@ -347,7 +356,8 @@ permit_list.append(WorkRecord)
 permit_list.append(Work)
 permit_list.append(Index)
 permit_list.append({'name':'work','label':'work.工作SP','fields':[
-    {'name':'check_all','label':'查看所有工作','type':'bool'},
+    {'name':'check_all','label':'审批工作','type':'bool'},
+    {'name':'read_all','label':'查看工作','type':'bool'},
 ]})
 
 
