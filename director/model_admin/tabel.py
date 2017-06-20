@@ -209,7 +209,7 @@ class ModelTable(object):
     include=None
     exclude=[]
     pagenator=PageNum
-    def __init__(self,page=1,row_sort=[],row_filter={},row_search={},crt_user=None,**kw):
+    def __init__(self,page=1,row_sort=[],row_filter={},row_search={},crt_user=None,request=None,**kw):
         self.crt_user=crt_user 
         self.page=page
         allowed_names=self.permited_fields()
@@ -223,6 +223,7 @@ class ModelTable(object):
             self.row_search.model=self.model
         self.pagenum = self.pagenator(pageNumber=self.page)
         self.kw=kw
+        self.request=request
 
     @classmethod
     def parse_request(cls,request):
@@ -249,7 +250,7 @@ class ModelTable(object):
             arg = kw.pop(k,None)
             if arg:
                 row_filter[k]=arg
-        return cls(page,row_sort,row_filter,q,request.user,**kw)    
+        return cls(page,row_sort,row_filter,q,request.user,request=request,**kw)    
         
     def get_context(self):
         return {

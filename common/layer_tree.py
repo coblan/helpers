@@ -66,8 +66,13 @@ class LayerTree(object):
             parents.append(crt_par)
             crt_par=crt_par.par
             if not crt_par or not crt_par.pk or crt_par==root:
-                break            
-        if root not in parents:
+                break    
+            
+        find=False
+        for par in parents:
+            if unicode(par.pk)==root.pk:
+                find=True
+        if not find:
             parents.append(root)
         parents.reverse()
         

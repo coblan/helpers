@@ -13,6 +13,7 @@ from .models import Department
 from helpers.director.db_tools import to_dict
 from helpers.case.organize.workpermit import WorkModelPermit
 from django.core.exceptions import PermissionDenied
+from helpers.case.organize.valid_depart import ValidDepart
 
 
 class DepartWorkTablePageMixin(object):
@@ -148,14 +149,15 @@ class WorkRecordTable(ModelTable):
 
     def inn_filter(self, query):
         query =super(WorkRecordTable,self).inn_filter(query)
+        validdepart=WorkCheckValidDepart(self.request)
+        depart_list=validdepart.get_query_depart()
+        # if self.kw.get('_depart'):
+            # depart=Department.objects.get(pk=self.kw.get('_depart'))
+        # else:
+            # emp=self.crt_user.employee_set.first()
+            # depart=emp.depart.first()
         
-        if self.kw.get('_depart'):
-            depart=Department.objects.get(pk=self.kw.get('_depart'))
-        else:
-            emp=self.crt_user.employee_set.first()
-            depart=emp.depart.first()
-            
-        return query.filter(check_depart=depart).order_by('-id')
+        return query.filter(check_depart__in=depart_list).order_by('-id')
 
     def dict_row(self,inst):
         dc={}
@@ -170,16 +172,33 @@ class WorkRecordTable(ModelTable):
         })
         return dc
 
-class WorkRecordTablePage(DepartWorkTablePageMixin,TablePage):
-    tableCls=WorkRecordTable
-    
+
+class WorkCheckValidDepart(ValidDepart):
+    data_key='work_check'
     def get_allowed_depart(self, employee, user):
         allowed_depart=[]
         for depart in employee.depart.all():
             permit = WorkModelPermit(WorkRecord, user, department=depart)
             if 'status' in permit.changeable_fields():
                 allowed_depart.append(depart)
-        return allowed_depart
+        return allowed_depart        
+
+class WorkRecordTablePage(TablePage):
+    tableCls=WorkRecordTable
+    
+    def get_context(self):
+        ctx = super(WorkRecordTablePage,self).get_context()
+        validdepart=WorkCheckValidDepart(self.request)
+        ctx=validdepart.get_context(ctx)
+        return ctx
+    
+    # def get_allowed_depart(self, employee, user):
+        # allowed_depart=[]
+        # for depart in employee.depart.all():
+            # permit = WorkModelPermit(WorkRecord, user, department=depart)
+            # if 'status' in permit.changeable_fields():
+                # allowed_depart.append(depart)
+        # return allowed_depart
     
     def get_label(self):
         return '工作审批列表'

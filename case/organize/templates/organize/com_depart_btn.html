@@ -24,6 +24,6 @@
 
 <div id="depart-btn" style="text-align: center;margin:1em 0;">
     <div class="btn-group" role="group" aria-label="..." >
-        <a type="button" :class="['btn btn-default',{'btn-info':crt_depart==depart.pk}]" v-for="depart in depart_list" :href="depart_link(depart.pk)" v-text="depart.label">Left</a>
+        <a type="button" :class="['btn btn-default',{'btn-info':crt_depart.pk==depart.pk}]" v-for="depart in depart_list" :href="depart_link(depart.pk)" v-text="depart.label">Left</a>
     </div>
 </div>

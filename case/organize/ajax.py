@@ -1,7 +1,8 @@
 # encoding:utf-8
 
 from helpers.director.db_tools import from_dict
-from .models import WorkPermitModel,Employee
+from .models import WorkPermitModel,Employee,EmployeeData
+import json
 
 def get_global():
     return globals()
@@ -34,3 +35,14 @@ def save_workpermit(permits,emp_pk,user):
         wp.group=groups
         wp.save()
     return {'status':'success'}
+
+def save_emplyee_data(data_key,content,user):
+    emp = user.employee_set.first()
+    if not hasattr(emp,'employeedata'):
+        EmployeeData.objects.create(emp=emp,content='{}')
+    dc=json.loads(emp.employeedata.content)
+    dc[data_key]=content
+    emp.employeedata.content=json.dumps(dc)
+    emp.employeedata.save()
+    return {'status':'success'}
+

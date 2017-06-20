@@ -1,9 +1,40 @@
+{% load jsonify %}
+
 <script>
+    data_key = '{{ data_key | default:"" }}'
+    child_depart_list={{ child_depart_list | jsonify | default:'[]' }}
+
     $(function(){
         new  Vue({
             el:'#active-depart',
             data:{
                 ln_state:ln_state,
+                child_depart_list:child_depart_list
+            },
+            methods:{
+                add:function(){
+                    var self=this
+                    depart_win.get_department(crt_depart,function(depart){
+                        if(!ex.isin(depart,self.child_depart_list,function(src,dst){
+                                    return src.pk==dst.pk
+                                })){
+                            self.child_depart_list.push(depart)
+                        }
+
+                    })
+                },
+                save:function(){
+                    var depart_pk_list=ex.map(this.child_depart_list,function(depart){
+                        return depart.pk
+                    })
+                    var post_data=[{fun:'save_emplyee_data',data_key:data_key,content:depart_pk_list}]
+                    ex.post('/_ajax/organize',JSON.stringify(post_data),function(resp){
+                        location.reload(true)
+                    })
+                },
+                rm_depart:function(depart){
+                   ex.remove(this.child_depart_list,{pk:depart.pk})
+                }
             }
         })
     })
@@ -13,7 +44,12 @@
     <transition name="slide">
         <div v-show="ln_state.crt_view=='show_active-depart'" class="slide-win">
             <title-bar :with_back="true" title="选择下属部门"></title-bar>
+            <button @click="add()">add</button>
+            <button @click="save()">save</button>
 
+            <div>
+                <com-tab-lite v-for="depart in child_depart_list" :label="depart.name" :value="depart.pk" @close="rm_depart(depart)"></com-tab-lite>
+            </div>
         </div>
     </transition>
 
