@@ -18,9 +18,7 @@
     main_logic={
         el:'#there',
         data:{
-//            crt_view:crt_view,
-//            ln_state:ln_state,
-            in_wx_agent:in_wx_agent,
+
             ln:ln,
             page_label:page_label,
             show_menu:false,
@@ -45,6 +43,9 @@
                 search_args.pk=pk
                 location= ex.appendSearch(url,search_args)
             },
+            get_row_img:function(row){
+                return  row.desp_img || row.work_desp_img || '/static/image/default_image.png'
+            },
 //            switch_to:function(name){
 //                history.pushState({view:name},'',ex.appendSearch({crt_view:name}))
 //                this.crt_view=name
@@ -60,52 +61,62 @@
     })
 </script>
 
-<style>
-    .total-wrap{
-        height: 100vh;
-        position: relative;
-    }
 
-</style>
-
-{% block extra_head %}
-{% endblock %}
-
-<div id="there" v-cloak>
+<div id="there" v-cloak class="flex-grow" style="position: relative">
 
 
     <!--<button @click="switch_to('search')">过滤</button>-->
 
-    <div class="total-wrap flex-v">
+    <scroll-loader :can_load="has_next_page" @load_more="load_next_page()">
+        <div class="weui-cells">
+            <a class="weui-cell weui-cell_access" href="javascript:;" v-for="row in rows" style="margin-bottom: 0.5em;">
 
-        {% block table_head %}
-        <!--<div class="flex" v-if="in_wx_agent">-->
-            <!--<div class="flex-grow"></div>-->
-            <!--<div style="text-align: right;padding: 0.5em 1em;">-->
-                <!--<i class="fa fa-align-justify fa-2x" aria-hidden="true" @click="show_menu=true"></i>-->
-            <!--</div>-->
-        <!--</div>-->
-
-        <!--<transition name="slide">-->
-            <!--<div v-show="crt_view=='search'" class="slide-win">-->
-                <!--<title-bar :with_back="true" title="筛选"></title-bar>-->
-                <!--<com-filter :row_filters="row_filters" :search_args="search_args" :search_tip='search_tip'></com-filter>-->
-
-                <!--<div class="weui-btn-area">-->
-                    <!--<a class="weui-btn weui-btn_primary" href="javascript:" @click='search()' style="width: 50%;">-->
-                        <!--<i class="fa fa-search" aria-hidden="true"></i>-->
-                    <!--</a>-->
+                <!--<div class="weui-cell__hd" style="padding: 0 1em 0 0.3em;">-->
+                    <!--<com-check-box v-model="selected" :value="row.pk"></com-check-box>-->
                 <!--</div>-->
 
-            <!--</div>-->
-        <!--</transition>-->
+                <div class="weui-cell__bd" @click="ge_edit(row.pk)" style="position: relative;">
+                    <!--<img style="position:absolute;right:1em;top:-0.4em;width: 1.5em;height: 1.5em;border-radius: 1em;" :src="row.emp.head" alt=""/>-->
+                    <div class="flex">
+                        <div><img style="width: 3em;height: 3em" :src="get_row_img(row)" alt=""/></div>
+                        <div style="padding: 0.5em 1em;">
+                            <div>
+                                <span style="margin-right: 0.3em;">完成日期:</span><span v-text="row.finish_time"></span>
+                            </div>
+                            <div>
+                                <span style="margin-right: 0.3em;">工作名称:</span><span v-text="row.work"></span>
+                            </div>
+                            <div>
+                                <span style="margin-right: 0.3em;">数量:</span><span v-text="row.count"></span>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div style="text-align: right;font-size: 0.6em;color: #d3d2d1">
+
+                        <span v-text="row.emp.name"></span>
+                        <span style="margin: 0 0.3em">于</span>
+                        <span v-text="row.create_time"></span>
+                        <span style="margin: 0 0.3em">提交</span>
+
+                    </div>
+
+                </div>
+                <div class="weui-cell__ft">
+                </div>
+            </a>
+        </div>
+    </scroll-loader>
+
 
 
         <transition name="fade">
             <modal id="pop-menu" v-show="show_menu" @click.native="show_menu=false">
 
                 <div class="weui-actionsheet__menu up-menu" @click.stop="" style="width: 80vw;">
-                    <div class="weui-actionsheet__cell" @click="add_new();show_menu=false" v-if="can_add">新建</div>
+                    <!--<div class="weui-actionsheet__cell" @click="add_new();show_menu=false" v-if="can_add">新建</div>-->
                     <div class="weui-actionsheet__cell" @click="ln.pushState({crt_view:'show_active-depart'});show_menu=false">下属部门</div>
                     <div class="weui-actionsheet__cell" @click="del_item();is_show_menu=false" v-if="can_del &&selected.length>0">删除选中</div>
                     <div class="weui-actionsheet__cell" @click="ln.pushState({crt_view:'show_filter'});show_menu=false" v-if="can_search">排序过滤</div>
@@ -116,33 +127,6 @@
 
             </modal>
         </transition>
-
-        <!--<div class="weui-cells__title" v-text="page_label"></div>-->
-        {% endblock %}
-
-
-        <!--<scroll-wraper class="flex-grow" ref="scroller" :down_text='get_down_text()' @down_out_border="load_next_page()" style="margin-bottom: 5em;">-->
-        {% block item_view %}
-        <div class="weui-cells">
-            <a class="weui-cell weui-cell_access" href="javascript:;" v-for="row in rows">
-                <div class="weui-cell__hd" style="padding: 0 1em 0 0.3em;">
-                    <!--<input type="checkbox" v-model="selected" :value="row.pk"  />-->
-                    <com-check-box v-model="selected" :value="row.pk"></com-check-box>
-                </div>
-                <div class="weui-cell__bd" @click="ge_edit(row.pk)">
-                    <p v-text="row._label"></p>
-                </div>
-                <div class="weui-cell__ft">
-                </div>
-            </a>
-        </div>
-        {% endblock %}
-        <!--</scroll-wraper>-->
-    </div>
-
-
-
-
 
 </div>
 

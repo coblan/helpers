@@ -16,7 +16,7 @@ from django.core.paginator import Paginator
 
 
 class PageNum(object):
-    perPage=30
+    perPage=20
     def __init__(self,pageNumber=1,kw={}):
         self.pageNumber = int(pageNumber)
     

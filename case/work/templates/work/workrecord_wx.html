@@ -26,15 +26,15 @@
                 show_menu:false,
 
             },
-            mixins:[table_fun,scroll_loader],
+            mixins:[table_fun],
             mounted:function(){
                 var self=this
                 bus.$on('menu_click',function(){
                     self.show_menu=true
                 })
-                Vue.nextTick(function(){
-                    self.$refs.scroller.refresh()
-                })
+//                Vue.nextTick(function(){
+//                    self.$refs.scroller.refresh()
+//                })
             },
             methods:{
                 ge_edit:function(pk){
@@ -74,21 +74,15 @@
 </style>
 
 
-<div id="there" v-cloak>
+<div id="there" v-cloak class="flex-grow" style="position: relative;">
 
 
     <!--<button @click="switch_to('search')">过滤</button>-->
 
-    <div class="flex-v" style="min-height: 100vh;">
+    <!--<div class="flex-v" style="min-height: 100vh;">-->
 
-        <!--<div class="flex">-->
-            <!--<div class="flex-grow"></div>-->
-            <!--<div style="text-align: right;padding: 0.5em 1em;">-->
-                <!--<i class="fa fa-align-justify fa-2x" aria-hidden="true" @click="show_menu=true"></i>-->
-            <!--</div>-->
-        <!--</div>-->
-        <div class="weui-cells__title" v-text="page_label"></div>
-        <scroll-wraper class="flex-grow" style="margin-bottom: 6em;"  ref="scroller" :down_text='get_down_text()' @down_out_border="load_next_page()">
+        <!--<div class="weui-cells__title" v-text="page_label"></div>-->
+        <scroll-loader   :can_load="has_next_page" @load_more="load_next_page()">
             <table class="item-table">
                 <tr v-for="row in rows" @click="ge_edit(row.pk)">
                     <td><img style="width: 3em;height: 3em" :src="get_row_img(row)" alt=""/></td>
@@ -103,9 +97,9 @@
 
 
             </table>
-        </scroll-wraper>
+        </scroll-loader>
 
-    </div>
+    <!--</div>-->
 
 
     <transition name="fade">

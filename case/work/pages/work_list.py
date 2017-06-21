@@ -6,10 +6,11 @@ from helpers.director.shortcut import ModelTable,TablePage
 from ..models import WorkRecord
 from helpers.case.organize.valid_depart import ValidDepart
 from helpers.case.organize.workpermit import has_depart_permit
+from helpers.director.db_tools import sim_dict
 
 class WorkList(ModelTable):
     """
-    拥有 work check all 权限的人，查看本部门的所有工作列表
+    拥有 work.read_all 权限的人，查看本部门的所有工作列表
     """
     model=WorkRecord
     
@@ -18,10 +19,18 @@ class WorkList(ModelTable):
         valid_depart=WorkReadValidDepart(self.request)
         query_depart=valid_depart.get_query_depart()
         return query.filter(check_depart__in=query_depart)
+    
+    def dict_row(self, inst):
+        return {
+            'emp':sim_dict(inst.emp.baseinfo),
+            'work':unicode(inst.work)
+        }
+  
   
 
 class WorkReadValidDepart(ValidDepart):
     data_key='work_readall'
+    
     def get_allowed_depart(self, employee, user):
         allowed_depart=[]
         for depart in employee.depart.all():

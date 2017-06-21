@@ -34,8 +34,13 @@ class Work(models.Model):
     def __unicode__(self):
         return self.name
 
+WORK_SUBMIT_TYPE=(
+    ('normal','普通'),
+    ('importent','重要'),
+)
+
 class WorkRecord(models.Model):
-    work=models.ForeignKey(Work,verbose_name='工时类型',null=True)
+    work=models.ForeignKey(Work,verbose_name='工时名称',null=True)
     emp=models.ForeignKey(Employee,verbose_name='员工',blank=False,null=True)
     ex_span=models.FloatField('调整工时',default=0,help_text='单位(小时)，小数或整数')
     status=models.CharField('状态',max_length=20,choices=WORK_STATUS,default='waiting')
@@ -45,7 +50,9 @@ class WorkRecord(models.Model):
     create_time=models.DateTimeField(verbose_name='创建时间',auto_now=True)
     desp_img=models.CharField('描述图片',max_length=300,blank=True)
     count=models.IntegerField(verbose_name='数量',default=1,help_text='整数')
-    check_depart=models.ForeignKey(Department,verbose_name='审核部门',blank=True,null=True)
+    sub_type=models.CharField('提交类型',max_length=50,choices=WORK_SUBMIT_TYPE,default='normal')
+    depart=models.ForeignKey(Department,verbose_name='从属部门',blank=True,null=True)
+    check_depart=models.ForeignKey(Department,verbose_name='审核部门',blank=True,null=True,related_name='check_workrecord')
     #tmp=models.BooleanField('临时工时',default=False)
     
     def __unicode__(self):

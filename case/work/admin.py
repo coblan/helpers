@@ -16,26 +16,26 @@ from django.core.exceptions import PermissionDenied
 from helpers.case.organize.valid_depart import ValidDepart
 
 
-class DepartWorkTablePageMixin(object):
-    """tablepage mixin"""
-    def get_allowed_depart(self,employee,user):
-        return True
+# class DepartWorkTablePageMixin(object):
+    # """tablepage mixin"""
+    # def get_allowed_depart(self,employee,user):
+        # return True
     
-    def get_context(self):
-        ctx=super(DepartWorkTablePageMixin,self).get_context()
-        employee=self.crt_user.employee_set.first()
-        allowed_departs=self.get_allowed_depart(employee,self.crt_user)
-        if not allowed_departs:
-            raise PermissionDenied,'no deparment allowed'
-        ctx['depart_list']=[{'pk':x.pk,'label':unicode(x)} for x in allowed_departs]
+    # def get_context(self):
+        # ctx=super(DepartWorkTablePageMixin,self).get_context()
+        # employee=self.crt_user.employee_set.first()
+        # allowed_departs=self.get_allowed_depart(employee,self.crt_user)
+        # if not allowed_departs:
+            # raise PermissionDenied,'no deparment allowed'
+        # ctx['depart_list']=[{'pk':x.pk,'label':unicode(x)} for x in allowed_departs]
         
-        if self.request.GET.get('_depart'):
-            depart= Department.objects.get(pk=self.request.GET.get('_depart'))
-            if depart in allowed_departs:
-                ctx['crt_depart']=depart.pk
-        else:
-            ctx['crt_depart']=allowed_departs[0].pk
-        return ctx  
+        # if self.request.GET.get('_depart'):
+            # depart= Department.objects.get(pk=self.request.GET.get('_depart'))
+            # if depart in allowed_departs:
+                # ctx['crt_depart']=depart.pk
+        # else:
+            # ctx['crt_depart']=allowed_departs[0].pk
+        # return ctx  
     
 # Register your models here.
 class IndexForm(ModelFields):
@@ -109,14 +109,17 @@ class WorkRecordForm(ModelFields):
     def save_form(self):
         rt = super(WorkRecordForm,self).save_form()
         emp=self.instance.emp
-        allowd_depart=get_depart_can_submit_work(emp,self.crt_user)
-        if self.request.GET.get('_depart'):
-            tmp_depart=emp.depart.get(pk=self.request.GET.get('_depart'))
-            if tmp_depart in allowd_depart:
-                depart=tmp_depart
-        else:
-            depart=allowd_depart[0]
+        valid_depart=WRselfValidDepart(self.request)
+        depart=valid_depart.get_crt_depart()
+        # allowd_depart=get_depart_can_submit_work(emp,self.crt_user)
+        # if self.request.GET.get('_depart'):
+            # tmp_depart=emp.depart.get(pk=self.request.GET.get('_depart'))
+            # if tmp_depart in allowd_depart:
+                # depart=tmp_depart
+        # else:
+            # depart=allowd_depart[0]
         if depart:
+            self.instance.depart=depart
             check_depart=pop_depart(depart,'work')
             self.instance.check_depart=check_depart 
             self.instance.save()
@@ -225,15 +228,16 @@ class WRselfForm(ModelFields):
     readonly=['emp','status']
     class Meta:
         model=WorkRecord
-        exclude=['check_depart']
+        exclude=['check_depart','depart']
 
     def get_row(self):
 
         #if not self.instance.pk:
         # 员工创建新workrecord时，自动添加上
         emp=self.crt_user.employee_set.first()
-        
         self.instance.emp= emp
+        
+        
         return super(WRselfForm,self).get_row()
      
     def get_heads(self):
@@ -265,12 +269,14 @@ class WRselfTable(ModelTable):
     
     def inn_filter(self, query):
         query =super(WRselfTable,self).inn_filter(query)
-        if self.kw.get('_depart'):
-            depart=Department.objects.get(pk=self.kw.get('_depart'))
-        else:
-            emp=self.crt_user.employee_set.first()
-            depart=emp.depart.first()
-        return query.filter(emp__user=self.crt_user,check_depart=depart).order_by('-id')
+        valid_depart=WRselfValidDepart(self.request)
+        depart=valid_depart.get_crt_depart()
+        # if self.kw.get('_depart'):
+            # depart=Department.objects.get(pk=self.kw.get('_depart'))
+        # else:
+            # emp=self.crt_user.employee_set.first()
+            # depart=emp.depart.first()
+        return query.filter(emp__user=self.crt_user,depart=depart).order_by('-id')
     
     def dict_row(self, inst):
         return {

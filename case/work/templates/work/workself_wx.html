@@ -10,21 +10,6 @@
 <script type="text/javascript">
 
 
-//    $(function(){
-//        ln.history_handle({
-//            init:{crt_view:'main'},
-//            handler:function(state){
-//                if(state.crt_view) {
-//                    table.crt_view = state.crt_view
-//                }
-//            }
-//        })
-//    })
-
-    myScroll=''
-    last_move=0
-
-
     $(function(){
 
 //        crt_view = 'main'
@@ -52,18 +37,27 @@
                     self.show_menu=true
                 })
             },
+            computed:{
+//              has_next_page:function(){
+//                  var final=row_pages.options[row_pages.options.length-1]
+//                  return  row_pages.crt_page < parseInt(final)
+//              }
+            },
             methods:{
                 goto:function(url){
                     location=url
                 },
+//                load_next_page:function(){
+//                    var self=this
+//                    ex.get(ex.appendSearch({_page:row_pages.crt_page+1}),function(resp){
+//                        ex.assign(row_pages,resp.row_pages)
+//                        self.rows = self.rows.concat(resp.rows)
+//                    })
+//                },
                 ge_edit:function(pk){
                     var url=ex.template('{engine_url}/{page_name}.edit',{engine_url:engine_url,page_name:page_name})
                     search_args.pk=pk
                     location= ex.appendSearch(url,search_args)
-                },
-                switch_to:function(name){
-                    history.pushState({view:name},'',ex.appendSearch({crt_view:name}))
-                    this.crt_view=name
                 },
 
                 get_color:function(row){
@@ -122,9 +116,9 @@
 </script>
 
 
-<div id="there" class="cloak-block flex-grow" style="overflow: hidden;position: relative;" v-cloak>
+<div id="there" class="cloak-block flex-grow"  style="position: relative;" v-cloak>
 
-        <scroll-loader>
+        <scroll-loader :can_load="has_next_page" @load_more="load_next_page()">
             <table class="item-table">
                 <tr v-for="row in rows" @click="ge_edit(row.pk)">
                     <td><img style="width: 3em;height: 3em" :src="get_row_img(row)" alt=""/></td>
@@ -175,57 +169,70 @@
 </div>
 
 
-<script>
-    Vue.component('scroll-loader',{
-        template:'#scroll-loader',
-        data:function(){
-          return {
-              load_data:false,
-          }
-        },
-        mounted:function(){
-            var self=this
-            var wraper= $(this.$el)
-            var content=wraper.find('.scroll-content')
-            wraper.scroll(function(){
-                if(wraper.scrollTop()+wraper.height() +20 >content.outerHeight()){
-                    self.load_data=true
-                }else{
-                    self.load_data=false
-                }
+<!--<script>-->
+    <!--Vue.component('scroll-loader',{-->
+        <!--template:'#scroll-loader',-->
+        <!--props:['can_load'],-->
+        <!--data:function(){-->
+          <!--return {-->
+              <!--loading:false,-->
+          <!--}-->
+        <!--},-->
+        <!--watch:{-->
+            <!--loading:function(v){-->
+                <!--if(v && this.can_load){-->
+                    <!--this.$emit('load_more')-->
+                <!--}-->
+            <!--}-->
+        <!--},-->
+        <!--mounted:function(){-->
+            <!--var self=this-->
+            <!--var wraper= $(this.$el)-->
+            <!--var content=wraper.find('.scroll-content')-->
+            <!--wraper.scroll(function(){-->
+                <!--if(wraper.scrollTop()+wraper.height() +20 >content.outerHeight()){-->
+                    <!--self.loading=true-->
+                <!--}-->
+                <!--if(wraper.scrollTop()+wraper.height() <content.outerHeight()){-->
+                    <!--self.loading=false-->
+                <!--}-->
 
-            })
-        }
-    })
+            <!--})-->
+        <!--}-->
+    <!--})-->
 
-</script>
+<!--</script>-->
 
-<template id="scroll-loader">
-<div class="scroll-wraper">
-    <div class="scroll-content">
-        <slot></slot>
-        <div class="load-icon" v-if="load_data" style="height: 3em;text-align: center;">加载</div>
-    </div>
-</div>
-</template>
+<!--<template id="scroll-loader">-->
+<!--<div class="scroll-wraper">-->
+    <!--<div class="scroll-content">-->
+        <!--<slot></slot>-->
+        <!--<div class="load-icon" v-if="loading" style="height: 3em;text-align: center;">-->
+            <!--<span v-if="can_load">加载...</span>-->
+            <!--<span v-else>没有更多数据了</span>-->
+        <!--</div>-->
+    <!--</div>-->
+<!--</div>-->
+<!--</template>-->
 
-<style>
-    .scroll-wraper{
-        position: absolute;
-        overflow: scroll;
-        top:0;
-        left: 0;
-        bottom: 0;
-        right: 0;
-    }
-    .scroll-content{
-        padding-bottom: 4em;
-        position: relative;
-    }
-    .load-icon{
-        position: absolute;
-        bottom: 0;
-        width: 100%;
-    }
-</style>
+<!--<style>-->
+    <!--.scroll-wraper{-->
+        <!--position: absolute;-->
+        <!--overflow: auto;-->
+
+        <!--top:0;-->
+        <!--left: 0;-->
+        <!--bottom: 0;-->
+        <!--right: 0;-->
+    <!--}-->
+    <!--.scroll-content{-->
+        <!--padding-bottom: 4em;-->
+        <!--position: relative;-->
+    <!--}-->
+    <!--.load-icon{-->
+        <!--position: absolute;-->
+        <!--bottom: 0;-->
+        <!--width: 100%;-->
+    <!--}-->
+<!--</style>-->
 {% endblock %}
