@@ -44,7 +44,7 @@
                 location= ex.appendSearch(url,search_args)
             },
             get_row_img:function(row){
-                return  row.desp_img || row.work_desp_img || '/static/image/default_image.png'
+                return  row.desp_img || row.work_desp_img || '/static/res/image/person-work.png'
             },
 //            switch_to:function(name){
 //                history.pushState({view:name},'',ex.appendSearch({crt_view:name}))
@@ -69,32 +69,45 @@
 
     <scroll-loader :can_load="has_next_page" @load_more="load_next_page()">
         <div class="weui-cells">
-            <a class="weui-cell weui-cell_access" href="javascript:;" v-for="row in rows" style="margin-bottom: 0.5em;">
+            <div class="weui-cell weui-cell_access"  v-for="row in rows" style="padding-top:1.6em;margin-bottom: 0.3em;padding-bottom: 0.1em;">
 
-                <!--<div class="weui-cell__hd" style="padding: 0 1em 0 0.3em;">-->
-                    <!--<com-check-box v-model="selected" :value="row.pk"></com-check-box>-->
-                <!--</div>-->
+
 
                 <div class="weui-cell__bd" @click="ge_edit(row.pk)" style="position: relative;">
+
                     <!--<img style="position:absolute;right:1em;top:-0.4em;width: 1.5em;height: 1.5em;border-radius: 1em;" :src="row.emp.head" alt=""/>-->
+                    <div v-if="row.status=='pass'" style="position:absolute;right:1em;top:-0.4em;color: green;">
+                        <i class="fa fa-check" aria-hidden="true"></i>
+                    </div>
+
                     <div class="flex">
                         <div><img style="width: 3em;height: 3em" :src="get_row_img(row)" alt=""/></div>
-                        <div style="padding: 0.5em 1em;">
-                            <div>
-                                <span style="margin-right: 0.3em;">完成日期:</span><span v-text="row.finish_time"></span>
-                            </div>
-                            <div>
-                                <span style="margin-right: 0.3em;">工作名称:</span><span v-text="row.work"></span>
-                            </div>
-                            <div>
-                                <span style="margin-right: 0.3em;">数量:</span><span v-text="row.count"></span>
-                            </div>
+                        <div style="padding: 0 1em;">
+                            <table>
+                                <tr v-for="info in ['work','finish_time','count','depart']" style="padding: 0.2em 0;">
+                                    <td style="text-align: right;padding-right:0.5em;" v-text="ex.findone(heads,{name:info}).label"></td>
+                                    <td v-text="row[info]"></td>
+                                </tr>
+
+                            </table>
+                            <!--<div>-->
+                                <!--<span style="margin-right: 0.3em;">工作名称:</span><span v-text="row.work"></span>-->
+                            <!--</div>-->
+                            <!--<div>-->
+                                <!--<span style="margin-right: 0.3em;">完成日期:</span><span v-text="row.finish_time"></span>-->
+                            <!--</div>-->
+                            <!--<div>-->
+                                <!--<span style="margin-right: 0.3em;">数量:</span><span v-text="row.count"></span>-->
+                            <!--</div>-->
+                            <!--<div>-->
+                                <!--<span style="margin-right: 0.3em;">从属部门:</span><span v-text="row.depart"></span>-->
+                            <!--</div>-->
 
                         </div>
 
                     </div>
 
-                    <div style="text-align: right;font-size: 0.6em;color: #d3d2d1">
+                    <div style="margin-top:1.4em;text-align: right;font-size: 0.6em;color: #bebdbc">
 
                         <span v-text="row.emp.name"></span>
                         <span style="margin: 0 0.3em">于</span>
@@ -106,7 +119,7 @@
                 </div>
                 <div class="weui-cell__ft">
                 </div>
-            </a>
+            </div>
         </div>
     </scroll-loader>
 

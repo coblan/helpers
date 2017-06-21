@@ -41,10 +41,13 @@
 
 {% endblock %}
 
-<div id="there" v-cloak>
+<div id="there" v-cloak class="flex-grow" style="position: relative">
 
 
-    <div style="text-align: center;margin:1em 0;">
+
+<div class="scroll-wraper">
+
+    <div  style="text-align: center;margin:1em 0;">
         <div class="btn-group" role="group" aria-label="..." >
             <a type="button" :class="['btn btn-default',{'btn-info':crt_tab==tab.name}]" v-for="tab in tabs" :href="item_link(tab.name)" v-text="tab.label">Left</a>
         </div>
@@ -53,7 +56,6 @@
 
     <!--<div class="weui-cells__title" v-text="page_label">编辑内容</div>-->
 
-
     <div class="form-pad">
         <field v-for="head in kw.heads" :name="head.name" :kw="kw"></field>
     </div>
@@ -61,6 +63,8 @@
     <div v-if="can_edit" style="text-align: center;padding: 3em 0 8em 0;">
         <a type="button" class="btn btn-success btn-sm" href="javascript:"  @click="submit()" style="width: 16em;">确定</a>
     </div>
+</div>
+
 
     {% block extra_body %}
 

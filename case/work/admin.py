@@ -8,7 +8,7 @@ from helpers.director.shortcut import page_dc,FormPage,\
      TablePage,ModelTable,ModelFields,model_dc,RowFilter,permit_list,has_permit,ModelPermit
      
 from django import forms
-from .pages.work_list import WorkListPage
+from .pages.work_list import WorkListPage,WorkListFormPage
 from .models import Department
 from helpers.director.db_tools import to_dict
 from helpers.case.organize.workpermit import DepartModelPermit
@@ -391,5 +391,5 @@ page_dc.update({
     'work.wkself.wx.edit':WRselfFormPage,
     
     'work.worklist.wx':WorkListPage,
-    'work.worklist.wx.edit':WorkRecordFormPage,
+    'work.worklist.wx.edit':WorkListFormPage,
 })

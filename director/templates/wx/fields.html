@@ -42,12 +42,13 @@
     </div>
     {% endblock %}
 
+    {% block sub_btn_group %}
     <div v-btn-group>
         <a v-if="can_edit" state="success"  @click="submit()">确定</a>
         <a v-if="can_del" state="danger" :href="get_del_link()">删除</a>
     </div>
 
-
+    {% endblock %}
 </div>
 <style>
     .page_label{
