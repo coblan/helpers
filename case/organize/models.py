@@ -58,8 +58,9 @@ class Department(models.Model):
             depart.update_parent_chain() 
 
 MANAGE_EVENT=(
-    ('work','工作审核'),
-    ('small_money','小额花费')
+    ('normal_work','普通工作'),
+    ('importent_work','重要工作'),
+    # ('small_money','小额花费')
 )
 
 class DepartManage(models.Model):

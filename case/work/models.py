@@ -35,8 +35,8 @@ class Work(models.Model):
         return self.name
 
 WORK_SUBMIT_TYPE=(
-    ('normal','普通'),
-    ('importent','重要'),
+    ('normal_work','普通工作'),
+    ('importent_work','重要工作'),
 )
 
 class WorkRecord(models.Model):

@@ -1,6 +1,6 @@
 # encoding:utf-8
 from __future__ import unicode_literals
-from helpers.director.shortcut import ModelFields,FormPage
+from helpers.director.shortcut import ModelFields,FormPage,ModelPermit
 from ..models import WorkPermitModel,Employee
 from helpers.director.db_tools import to_dict
 from django.contrib.auth.models import Group
@@ -25,7 +25,7 @@ from django.contrib.auth.models import Group
         #return heads
     
 class EmployePermitTab(FormPage):
-    template='organize/employee_permit.html'
+    template=''
 
     def __init__(self, request):
         self.request=request
@@ -45,21 +45,26 @@ class EmployePermitTab(FormPage):
     
     def get_context(self):
         ##if self.fieldsCls:
-        #perm = ModelPermit(self.fieldsCls.Meta.model,self.request.user)
+        
         self.ctx['can_add']=True
         self.ctx['can_del']=True   
         self.ctx['can_log']=True
-        #if perm.changeable_fields():
-            #self.ctx['can_edit']=True
-        #else:
-            #self.ctx['can_edit']=False
+        
+        perm = ModelPermit(WorkPermitModel,self.request.user)
+        if perm.changeable_fields():
+            self.ctx['can_edit']=True
+        else:
+            self.ctx['can_edit']=False
         
         self.ctx['app']='organize'
         self.ctx['page_label'] =self.get_label()
         return self.ctx    
     
     def get_template(self, prefer=None):
-        return None
+        if prefer=='wx':
+            return 'organize/employee_permit_wx.html'
+        else:
+            return 'organize/employee_permit.html'
     
     def get_label(self):
         return '%s的工作权限'%self.emp.baseinfo.name
