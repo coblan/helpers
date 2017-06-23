@@ -184,7 +184,7 @@ class WorkCheckValidDepart(ValidDepart):
             permit = DepartModelPermit(WorkRecord, self.crt_user, department=depart)
             if 'status' in permit.changeable_fields():
                 allowed_depart.append(depart)
-        return allowed_depart        
+        return allowed_depart  
 
 class WorkRecordTablePage(TablePage):
     tableCls=WorkRecordTable
@@ -192,11 +192,12 @@ class WorkRecordTablePage(TablePage):
         self.request=request
         self.table = self.tableCls.parse_request(request)
         self.crt_user=request.user
-        self.permit=WorkCheckValidDepart(self.request)
+        self.valid_depart= WorkCheckValidDepart(self.request)
+        self.permit=DepartModelPermit(WorkRecord,self.crt_user, self.valid_depart.get_crt_depart())
         
     def get_context(self):
         ctx = super(WorkRecordTablePage,self).get_context()
-        ctx=self.permit.get_context(ctx)
+        ctx=self.valid_depart.get_context(ctx)
         return ctx
     
     def get_label(self):
@@ -302,11 +303,12 @@ class WRselfTablePage(TablePage):
         self.request=request
         self.table = self.tableCls.parse_request(request)
         self.crt_user=request.user
-        self.permit=WRselfValidDepart(self.request)
+        self.valid_depart=WRselfValidDepart(self.request)
+        self.permit= DepartModelPermit(WorkRecord,self.crt_user, self.valid_depart.get_crt_depart())
         
     def get_context(self):
         ctx=super(WRselfTablePage,self).get_context()
-        ctx=self.permit.get_context(ctx)
+        ctx=self.valid_depart.get_context(ctx)
         return ctx
     #def get_allowed_depart(self,employee,user):
         #return get_depart_can_submit_work(employee, user)
