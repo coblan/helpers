@@ -6,25 +6,29 @@ from .models import WorkRecord,Work,Index
 from helpers.director.shortcut import ModelPermit
 from helpers.case.organize.workpermit import WorkPermitModel
 from .pages.work_list import WorkReadValidDepart
+from .admin import WorkCheckValidDepart
+from django.core.exceptions import PermissionDenied
 
 
-def can_check_work(user):
-    permit=ModelPermit(WorkRecord, user)
-    return 'status' in permit.changeable_fields()
+def can_check_work(request):
+     try:
+          permit = WorkCheckValidDepart(request)
+          if permit.get_crt_depart():
+               return True
+     except PermissionDenied:
+          return False
 
 def can_create_work(user):
-    permit=ModelPermit(WorkRecord, user)
-    return permit.can_add()
+     permit=ModelPermit(WorkRecord, user)
+     return permit.can_add()
 
 def can_read_all(request):
-    if request.user.is_anonymous():
-        return False
-    permit = WorkReadValidDepart(request)
-    allow_depart = permit.get_allowed_depart()
-    if allow_depart:
-        return True
-    else:
-        return False
+     try:
+          permit = WorkReadValidDepart(request)
+          if permit.get_crt_depart():
+               return True
+     except PermissionDenied as e:
+          return False
 
 pc_menu= {'label':'工作统计','icon':fa('fa-users'),'visible':can_list((Work,WorkRecord,Index)),
          'submenu':[{'label':'工作类别','url': page('work.workindex'),'visible':can_list([Work,Index])},
@@ -35,8 +39,7 @@ pc_menu= {'label':'工作统计','icon':fa('fa-users'),'visible':can_list((Work,
 wx_menu=[
     {'label':'工作类别','url':page('work.workindex.wx'),'icon':'<img src="/static/res/image/work_types.ico" />','visible':can_list((Work,WorkRecord,Index))}, 
     {'label':'个人工作提交','url':page('work.wkself.wx'),'icon':fa('fa-list-ol fa-2x'),'visible':and_list([can_create_work])},  
-    {'label':'工作审核','url':page('work.workrecord.wx'),'icon':fa('fa-check-square-o fa-2x'),'visible':and_list(
-        [WorkRecord,can_check_work])},  
+    {'label':'工作审核','url':page('work.workrecord.wx'),'icon':fa('fa-check-square-o fa-2x'),'visible':can_check_work},  
 
     {'label':'工作记录','url':page('work.worklist.wx'),'icon':fa('fa-calendar-check-o fa-2x'),'visible':can_read_all},     
 ]

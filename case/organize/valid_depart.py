@@ -10,8 +10,12 @@ class ValidDepart(object):
     data_key=''
     def __init__(self,request):
         self.request=request
+        if request.user.is_anonymous():
+            raise PermissionDenied,'Anonymous user not allowd access deparment data'
         self.crt_user=request.user
         self.employee=self.crt_user.employee_set.first()
+        if not self.employee:
+            raise PermissionDenied,'Only employee allowd access deparment data'
         # self.data_key=data_key
     
     def get_query_depart(self):
