@@ -178,10 +178,10 @@ class WorkRecordTable(ModelTable):
 
 class WorkCheckValidDepart(ValidDepart):
     data_key='work_check'
-    def get_allowed_depart(self, employee, user):
+    def get_allowed_depart(self):
         allowed_depart=[]
-        for depart in employee.depart.all():
-            permit = DepartModelPermit(WorkRecord, user, department=depart)
+        for depart in self.employee.depart.all():
+            permit = DepartModelPermit(WorkRecord, self.crt_user, department=depart)
             if 'status' in permit.changeable_fields():
                 allowed_depart.append(depart)
         return allowed_depart        
@@ -295,8 +295,8 @@ def get_depart_can_submit_work(employee,user):
 
 class WRselfValidDepart(ValidDepart):
     data_key='work_self'
-    def get_allowed_depart(self, employee, user):
-        return get_depart_can_submit_work(employee, user)
+    def get_allowed_depart(self):
+        return get_depart_can_submit_work(self.employee, self.crt_user)
 
 class WRselfTablePage(TablePage):
     tableCls=WRselfTable

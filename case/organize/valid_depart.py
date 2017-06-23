@@ -29,7 +29,7 @@ class ValidDepart(object):
     
     
     def get_crt_depart(self):
-        allowed_depart= self.get_allowed_depart(self.employee,self.crt_user)
+        allowed_depart= self.get_allowed_depart()
         if not allowed_depart:
             raise PermissionDenied,'No Valid department'
         depart=None
@@ -45,7 +45,7 @@ class ValidDepart(object):
             raise PermissionDenied,'No Valid department' 
         return depart
 
-    def get_allowed_depart(self, employee, user):
+    def get_allowed_depart(self):
         """
         """
         return []
@@ -58,7 +58,7 @@ class ValidDepart(object):
     
     def get_context(self,ctx=None):
         ctx = ctx or {}
-        allowed_departs=self.get_allowed_depart(self.employee,self.crt_user)
+        allowed_departs=self.get_allowed_depart()
         ctx['depart_list']=[{'pk':x.pk,'label':unicode(x)} for x in allowed_departs]
         ctx['crt_depart']=to_dict( self.get_crt_depart())
         ctx['data_key']=self.data_key

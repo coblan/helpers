@@ -32,10 +32,10 @@ class WorkList(ModelTable):
 class WorkReadValidDepart(ValidDepart):
     data_key='work_readall'
     
-    def get_allowed_depart(self, employee, user):
+    def get_allowed_depart(self):
         allowed_depart=[]
-        for depart in employee.depart.all():
-            if has_depart_permit(user, 'work.read_all', depart):
+        for depart in self.employee.depart.all():
+            if has_depart_permit(self.crt_user, 'work.read_all', depart):
                 allowed_depart.append(depart)
         return allowed_depart
     

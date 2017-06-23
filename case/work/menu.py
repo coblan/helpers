@@ -20,7 +20,7 @@ def can_read_all(request):
     if request.user.is_anonymous():
         return False
     permit = WorkReadValidDepart(request)
-    allow_depart = permit.get_query_depart()
+    allow_depart = permit.get_allowed_depart()
     if allow_depart:
         return True
     else:
