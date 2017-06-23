@@ -17,12 +17,15 @@ class DepartModelPermit(ModelPermit):
     def _read_perm_from_db(self):
         model_name = model_to_name(self.model)
         workpermit= self.employee.workpermitmodel_set.filter(depart=self.department).first()
-        for group in workpermit.group.all():
-            if hasattr(group,'permitmodel'):
-                permits = json.loads( group.permitmodel.permit )
-                permit= permits.get(model_name,[])
-                self.permit_list.extend(permit)
-        self.permit_list=list(set(self.permit_list))   
+        if not workpermit:
+            self.permit_list=[]
+        else:
+            for group in workpermit.group.all():
+                if hasattr(group,'permitmodel'):
+                    permits = json.loads( group.permitmodel.permit )
+                    permit= permits.get(model_name,[])
+                    self.permit_list.extend(permit)
+            self.permit_list=list(set(self.permit_list))   
     
 def has_depart_permit(user,name,depart):
     if user.is_superuser:
