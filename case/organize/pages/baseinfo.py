@@ -34,6 +34,7 @@ class BaseinfoItem(FormPage):
             emp.save()
         self.emp=emp
         self.fields=self.fieldsCls(instance= base,crt_user=request.user)
+        self.permit=self.fields.permit
         self.ctx=self.fields.get_context()
     
     def get_template(self, prefer=None):

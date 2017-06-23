@@ -22,71 +22,66 @@
     })
 
 
-//    $(function(){
-//        ln.history_handle({
-//            init:{crt_view:'main'},
-//            handler:function(state){
-//                form.router(state)
-//            },
-//        })
-//    })
-
-
-    $(function(){
-        form =new Vue({
-            el:'#there',
-            data:{
+form_logic={
+    el:'#there',
+    data:{
 //                menu:menu,
-                crt_view:'main',
-                page_label:page_label,
-                is_shrink:true,
+        crt_view:'main',
+        page_label:page_label,
+        is_shrink:true,
 
-            },
-            mixins:[field_fun],
+    },
+    mixins:[field_fun],
 
-            computed:{
+    computed:{
 
-            },
+    },
 //            mounted:function(){
 //                var self=this
 //                setTimeout(function(){
 //                    self.$refs.scroller.refresh()
 //                },500)
 //            },
-            methods:{
-                router:function(state){
-                    if(state.crt_view){
-                        this.crt_view=state.crt_view
-                    }
-                },
-                goto:function(url){
-                    location=url
-                },
+    methods:{
+        router:function(state){
+            if(state.crt_view){
+                this.crt_view=state.crt_view
+            }
+        },
+        goto:function(url){
+            location=url
+        },
 
 
 
-                shrinked:function(heads){
-                    if(this.is_shrink){
-                        return ex.sort_by_names(this.kw.heads,['work','finish_time','count','short'])
-                    }else{
-                        return ex.sort_by_names(this.kw.heads,['work','finish_time','count','short','status'],true)
-                    }
+        shrinked:function(heads){
+            if(this.is_shrink){
+                return ex.sort_by_names(this.kw.heads,['work','finish_time','count','short'])
+            }else{
+                return ex.sort_by_names(this.kw.heads,['work','finish_time','count','short','status'],true)
+            }
 
-                },
-                expand:function(){
-                    this.is_shrink=false
+        },
+        expand:function(){
+            this.is_shrink=false
 //                    var self=this
 //                    setTimeout(function(){
 //                        self.$refs.scroller.refresh()
 //                    },500)
-                }
+        },
 
-            }
-        })
+
+    }
+}
+
+
+    $(function(){
+        form =new Vue(form_logic)
     })
 </script>
 
-
+{% block extra_head %}
+{% endblock %}
 
 <div id="there" v-cloak style="overflow: auto">
     <div v-show="crt_view=='main'">

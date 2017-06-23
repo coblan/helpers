@@ -113,25 +113,7 @@ class WorkRecordForm(ModelFields):
             if self.instance.status!='waiting': 
                 raise forms.ValidationError('you have no permition to edit this workrecord again')
     
-    def save_form(self):
-        rt = super(WorkRecordForm,self).save_form()
-        emp=self.instance.emp
-        valid_depart=WRselfValidDepart(self.request)
-        depart=valid_depart.get_crt_depart()
-        # allowd_depart=get_depart_can_submit_work(emp,self.crt_user)
-        # if self.request.GET.get('_depart'):
-            # tmp_depart=emp.depart.get(pk=self.request.GET.get('_depart'))
-            # if tmp_depart in allowd_depart:
-                # depart=tmp_depart
-        # else:
-            # depart=allowd_depart[0]
-        if depart:
-            self.instance.depart=depart
-            check_depart=pop_depart(depart,'work')
-            self.instance.check_depart=check_depart 
-            self.instance.save()
-        return rt
-    
+
     #def can_access(self):
         #access = super(WorkRecordForm,self).can_access()
         #if not has_permit(self.crt_user,'workrecord.check_all'):
@@ -228,7 +210,7 @@ def pop_depart(depart,event):
         
 
 class WRselfForm(ModelFields):
-    readonly=['emp','status']
+    readonly=['status']
     class Meta:
         model=WorkRecord
         exclude=['check_depart','depart']
@@ -265,9 +247,19 @@ class WRselfForm(ModelFields):
 
         return heads 
 
+    def save_form(self):
+        rt = super(WRselfForm,self).save_form()
+        depart=self.valid_depart.get_crt_depart()
+        if depart:
+            self.instance.depart=depart
+            check_depart=pop_depart(depart,'work')
+            self.instance.check_depart=check_depart 
+            self.instance.save()
+        return rt
+    
 
 class WRselfFormPage(FormPage):
-    template='work/workrecord_form_wx.html'
+    template='work/workself_form_wx.html'
     fieldsCls=WRselfForm
 
 class WRselfTable(ModelTable):
