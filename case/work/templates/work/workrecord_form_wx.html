@@ -9,6 +9,8 @@
 
 {% include 'work/com_workindex.html' %}
 
+<!--{% include 'organize/com_department_wx.html' %}-->
+
 <script type="text/javascript">
 
 
@@ -128,7 +130,6 @@
     <!--<div >-->
         <!--<span v-if="kw.readonly" v-text="show_name"></span>-->
         <!--<button type="button" class="btn btn-default btn-sm" v-else @click="open()" v-text="show_name" style="color: #0099CC;padding: 0.3em 2em;" :disabled="is_tmp"></button>-->
-        <!--&lt;!&ndash;<el-checkbox v-model="is_tmp">临时工时</el-checkbox>&ndash;&gt;-->
     <!--</div>-->
 <!--</template>-->
 <!--<script type="application/javascript">-->
@@ -142,6 +143,8 @@
         <!--},-->
         <!--watch:{-->
         <!--},-->
+
+
         <!--computed:{-->
             <!--show_name:function(){-->
                 <!--var pk =this.row[this.name]-->
@@ -153,9 +156,26 @@
                 <!--}-->
             <!--}-->
         <!--},-->
+
+<!--//        computed:{-->
+<!--//            show_name:function(){-->
+<!--//                var pk =this.row[this.name]-->
+<!--//                var option = ex.findone(this.kw.options,{value:pk})-->
+<!--//                if(option){-->
+<!--//                    return option.label-->
+<!--//                }else{-->
+<!--//                    return '点击选择'-->
+<!--//                }-->
+<!--//            }-->
+<!--//        },-->
         <!--methods:{-->
             <!--open:function(){-->
-                <!--ln.pushState({crt_view:'dir'})-->
+                <!--var self=this-->
+                <!--depart_win.get_department(null,function(depart){-->
+                    <!--Vue.set(self.row,self.name,depart.pk)-->
+<!--//                    self.row[self.name]=depart.pk-->
+                <!--})-->
+
 
             <!--}-->
         <!--}-->

@@ -22,10 +22,10 @@
                 get_department:function(root,callback){
 //                    Vue.set(this,'root',root)
                     var  self=this
-                    this.root=root
+                    this.root=root || {pk:null,name:'公司'}
                     ln.pushState({crt_view:'department_win'})
                     Vue.nextTick(function(){
-                        self.$refs.depart_tree.dir_data(root)
+                        self.$refs.depart_tree.dir_data(self.root)
                         self.depart_callback=callback
                     })
 
