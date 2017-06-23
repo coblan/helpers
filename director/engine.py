@@ -116,7 +116,7 @@ class BaseEngine(object):
                     return dc[name]
 
     def get_menu(self,request):
-        return evalue_container( self.menu,user=request.user,url_name=self.url_name)
+        return evalue_container( self.menu,request=request,user=request.user,url_name=self.url_name)
     
     def get_ctx(self,ctx):
         """ctx的hook"""
