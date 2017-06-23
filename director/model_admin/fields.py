@@ -58,14 +58,16 @@ class ModelFields(forms.ModelForm):
                 
             else:
                 kw['instance'] = self._meta.model()
-        nolimit = kw.pop('nolimit',False)
+        self.nolimit = kw.pop('nolimit',False)
         self.request=kw.pop('request',None)
         
         super(ModelFields,self).__init__(dc,*args,**kw)
-        self.permit= ModelPermit(self.Meta.model,self.crt_user,nolimit=nolimit)
+        self.custom_permit()
         self.pop_fields()
         self.init_value()
-        
+    
+    def custom_permit(self):
+        self.permit=ModelPermit(self.Meta.model,self.crt_user,nolimit=self.nolimit)
     def get_context(self):
         """
         """

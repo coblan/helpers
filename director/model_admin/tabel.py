@@ -210,8 +210,11 @@ class ModelTable(object):
     exclude=[]
     pagenator=PageNum
     def __init__(self,page=1,row_sort=[],row_filter={},row_search={},crt_user=None,request=None,**kw):
+        self.request=request
         self.crt_user=crt_user 
         self.page=page
+        
+        self.custom_permit()
         allowed_names=self.permited_fields()
         
         self.row_sort=self.sort(row_sort,crt_user,allowed_names,kw)
@@ -223,7 +226,11 @@ class ModelTable(object):
             self.row_search.model=self.model
         self.pagenum = self.pagenator(pageNumber=self.page)
         self.kw=kw
-        self.request=request
+        
+        
+    
+    def custom_permit(self):
+        self.permit=ModelPermit(model=self.model, user=self.crt_user)
 
     @classmethod
     def parse_request(cls,request):
@@ -284,7 +291,6 @@ class ModelTable(object):
         }
     
     def permited_fields(self):
-        self.permit=ModelPermit(model=self.model, user=self.crt_user)
         ls = self.permit.readable_fields()
         if self.include:
             return [x for x in self.include if x in ls]

@@ -85,7 +85,11 @@ class WorkRecordForm(ModelFields):
     class Meta:
         model=WorkRecord
         exclude=[]
-
+    
+    def custom_permit(self):
+        self.valid_depart= WorkCheckValidDepart(self.request)
+        self.permit=DepartModelPermit(WorkRecord,self.crt_user, self.valid_depart.get_crt_depart())
+        
     def get_heads(self):
         heads= super(WorkRecordForm,self).get_heads()
         for head in heads:
@@ -149,7 +153,12 @@ class WorkRecordFilter(RowFilter):
 class WorkRecordTable(ModelTable):
     model=WorkRecord
     filters=WorkRecordFilter
+    
+    def custom_permit(self):
+        self.valid_depart= WorkCheckValidDepart(self.request)
+        self.permit=DepartModelPermit(WorkRecord,self.crt_user, self.valid_depart.get_crt_depart())
 
+    
     def inn_filter(self, query):
         query =super(WorkRecordTable,self).inn_filter(query)
         validdepart=WorkCheckValidDepart(self.request)
