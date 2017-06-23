@@ -252,7 +252,7 @@ class WRselfForm(ModelFields):
         depart=self.valid_depart.get_crt_depart()
         if depart:
             self.instance.depart=depart
-            check_depart=pop_depart(depart,'work')
+            check_depart=pop_depart(depart,self.instance.sub_type)
             self.instance.check_depart=check_depart 
             self.instance.save()
         return rt
