@@ -137,6 +137,7 @@ class DepartmentForm(ModelFields):
     class Meta:
         model=Department
         exclude=['par']
+    
         
 class DepartmentPage(object):
     template=''

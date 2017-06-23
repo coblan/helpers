@@ -65,7 +65,7 @@ MANAGE_EVENT=(
 
 class DepartManage(models.Model):
     depart=models.OneToOneField(Department,verbose_name=_('department'),blank=True,null=True)
-    recv_event=models.CharField(_('recive pop event'),max_length=500,blank=True,choices=MANAGE_EVENT)
+    recv_event=models.CharField(_('recive pop event'),max_length=500,blank=True) # ,choices=MANAGE_EVENT
 
 class Employee(models.Model):
     user = models.ForeignKey(User,verbose_name=_('account'), blank=True, null=True)
