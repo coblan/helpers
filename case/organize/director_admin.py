@@ -9,7 +9,7 @@ from helpers.director.engine import and_list
 from helpers.director.shortcut import FormPage,TablePage,ModelFields,ModelTable,page_dc,model_dc,permit_list,TabGroup
 from helpers.director.db_tools import to_dict
 from django.contrib import admin
-from .models import Employee,BasicInfo,Department
+from .models import Employee,BasicInfo,Department,WorkPermitModel
 from django.contrib.auth.models import User
 from django.db.models import Q
 from .pages.myinfo import EmployeeSelf
@@ -96,7 +96,8 @@ class EmpGroup(TabGroup):
     tabs=[{'name':'emp','label':'员工','page_cls':EmployeeItem},
           {'name':'baseinfo','label':'基本信息','page_cls':BaseinfoItem,'visible':and_list([BasicInfo])},
           {'name':'user','label':'账号','page_cls':UserTab,'visible':and_list([User])},
-          {'name':'permit','label':'工作权限','page_cls':EmployePermitTab}]
+          {'name':'permit','label':'工作权限','page_cls':EmployePermitTab,'visible':and_list(
+              [WorkPermitModel])}]
     
     def get_tabs(self):
         emp_pk=self.request.GET.get('pk')
@@ -177,3 +178,6 @@ page_dc.update({
 model_dc[Employee]={'fields':EmployeeFields}
 # model_dc[Department]={'fields':DepartmentForm}
 model_dc[BasicInfo]={'fields':BasicInfoFields}
+permit_list.append(Employee)
+permit_list.append(BasicInfo)
+permit_list.append(WorkPermitModel)

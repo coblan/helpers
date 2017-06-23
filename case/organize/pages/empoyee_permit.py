@@ -1,6 +1,6 @@
 # encoding:utf-8
 from __future__ import unicode_literals
-from helpers.director.shortcut import ModelFields,FormPage,ModelPermit
+from helpers.director.shortcut import ModelFields,FormPage,ModelPermit,model_dc
 from ..models import WorkPermitModel,Employee
 from helpers.director.db_tools import to_dict
 from django.contrib.auth.models import Group
@@ -23,7 +23,9 @@ from django.contrib.auth.models import Group
                 #'size':{'width':250,'height':250}
             #}
         #return heads
-    
+
+
+
 class EmployePermitTab(FormPage):
     template=''
 
@@ -68,3 +70,12 @@ class EmployePermitTab(FormPage):
     
     def get_label(self):
         return '%s的工作权限'%self.emp.baseinfo.name
+    
+
+
+class WorkPermiForm(ModelFields):
+    class Meta:
+        model=WorkPermitModel
+        exclude=[]
+        
+model_dc[WorkPermitModel]={'fields':WorkPermiForm}

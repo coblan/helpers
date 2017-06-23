@@ -8,7 +8,7 @@ from pydoc import locate
 from django.conf import settings
 
 
-dir_engine=locate(settings.DIR_ENGINE)
+#dir_engine=locate(settings.DIR_ENGINE)
 
 class WebPageTable(ModelTable):
     model = WebPage
