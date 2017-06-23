@@ -17,6 +17,8 @@ def can_create_work(user):
     return permit.can_add()
 
 def can_read_all(request):
+    if request.user.is_anonymous:
+        return False
     permit = WorkReadValidDepart(request)
     allow_depart = permit.get_query_depart()
     if allow_depart:
