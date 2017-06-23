@@ -64,6 +64,8 @@ class LayerTree(object):
         crt_par=par
         while True:
             parents.append(crt_par)
+            if root.pk == crt_par.pk:
+                break
             crt_par=crt_par.par
             if not crt_par or not crt_par.pk or crt_par==root:
                 break    

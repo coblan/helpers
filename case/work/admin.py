@@ -87,8 +87,11 @@ class WorkRecordForm(ModelFields):
         exclude=[]
     
     def custom_permit(self):
-        self.valid_depart= WorkCheckValidDepart(self.request)
-        self.permit=DepartModelPermit(WorkRecord,self.crt_user, self.valid_depart.get_crt_depart())
+        if self.request:
+            self.valid_depart= WorkCheckValidDepart(self.request)
+            self.permit=DepartModelPermit(WorkRecord,self.crt_user, self.valid_depart.get_crt_depart())
+        else:
+            return super(WorkRecordForm,self).custom_permit()
         
     def get_heads(self):
         heads= super(WorkRecordForm,self).get_heads()
