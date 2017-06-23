@@ -20,7 +20,7 @@ class TablePage(object):
         self.request=request
         self.table = self.tableCls.parse_request(request)
         self.crt_user=request.user
-        self.permit=ModelPermit(self.table.model,self.crt_user)
+        self.permit=self.table.permit #ModelPermit(self.table.model,self.crt_user)
     
     def get_template(self,prefer=None):
         if self.template:
@@ -52,6 +52,7 @@ class FormPage(object):
         self.pk=request.GET.get('pk')
         self.fields = self.fieldsCls(pk=self.pk,crt_user=request.user,request=request)
         self.ctx=self.fields.get_context()
+        self.permit=self.fields.permit
     
     def get_template(self,prefer=None): 
         if self.template:
@@ -63,11 +64,11 @@ class FormPage(object):
     
     def get_context(self):
         #if self.fieldsCls:
-        perm = ModelPermit(self.fieldsCls.Meta.model,self.request.user)
-        self.ctx['can_add']=perm.can_add()
-        self.ctx['can_del']=perm.can_del()   
-        self.ctx['can_log']=perm.can_log()
-        if perm.changeable_fields():
+        #perm = ModelPermit(self.fieldsCls.Meta.model,self.request.user)
+        self.ctx['can_add']=self.permit.can_add()
+        self.ctx['can_del']=self.permit.can_del()   
+        self.ctx['can_log']=self.permit.can_log()
+        if self.permit.changeable_fields():
             self.ctx['can_edit']=True
         else:
             self.ctx['can_edit']=False

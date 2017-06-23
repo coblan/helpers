@@ -166,12 +166,6 @@ class WorkRecordTable(ModelTable):
         query =super(WorkRecordTable,self).inn_filter(query)
         validdepart=WorkCheckValidDepart(self.request)
         depart_list=validdepart.get_query_depart()
-        # if self.kw.get('_depart'):
-            # depart=Department.objects.get(pk=self.kw.get('_depart'))
-        # else:
-            # emp=self.crt_user.employee_set.first()
-            # depart=emp.depart.first()
-        
         return query.filter(check_depart__in=depart_list).order_by('-id')
 
     def dict_row(self,inst):
@@ -239,6 +233,10 @@ class WRselfForm(ModelFields):
         model=WorkRecord
         exclude=['check_depart','depart']
 
+    def custom_permit(self):
+        self.valid_depart= WRselfValidDepart(self.request)
+        self.permit=DepartModelPermit(WorkRecord,self.crt_user, self.valid_depart.get_crt_depart())
+
     def get_row(self):
 
         #if not self.instance.pk:
@@ -276,6 +274,10 @@ class WRselfTable(ModelTable):
     model=WorkRecord
     filters=WorkRecordFilter
     
+    def custom_permit(self):
+        self.valid_depart= WRselfValidDepart(self.request)
+        self.permit=DepartModelPermit(WorkRecord,self.crt_user, self.valid_depart.get_crt_depart())   
+        
     def inn_filter(self, query):
         query =super(WRselfTable,self).inn_filter(query)
         valid_depart=WRselfValidDepart(self.request)
