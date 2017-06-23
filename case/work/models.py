@@ -50,7 +50,7 @@ class WorkRecord(models.Model):
     create_time=models.DateTimeField(verbose_name='创建时间',auto_now=True)
     desp_img=models.CharField('描述图片',max_length=300,blank=True)
     count=models.IntegerField(verbose_name='数量',default=1,help_text='整数')
-    sub_type=models.CharField('提交类型',max_length=50,choices=WORK_SUBMIT_TYPE,default='normal')
+    sub_type=models.CharField('提交类型',max_length=50,choices=WORK_SUBMIT_TYPE,default='normal_work')
     depart=models.ForeignKey(Department,verbose_name='从属部门',blank=True,null=True)
     check_depart=models.ForeignKey(Department,verbose_name='审核部门',blank=True,null=True,related_name='check_workrecord')
     #tmp=models.BooleanField('临时工时',default=False)

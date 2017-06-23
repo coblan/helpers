@@ -7,6 +7,7 @@ from stencil import web_page_templates
 from pydoc import locate
 from django.conf import settings
 
+
 dir_engine=locate(settings.DIR_ENGINE)
 
 class WebPageTable(ModelTable):
@@ -20,7 +21,7 @@ class WebPageForm(ModelFields):
     class Meta:
         model=WebPage
         fields=['name','label','temp','status','content']
-    
+      
     def get_heads(self):
         heads=super(WebPageForm,self).get_heads()
         for head in list(heads):
@@ -46,7 +47,7 @@ class WebPageFormPage(FormPage):
 
 model_dc[WebPage]={'fields':WebPageForm}
 # model_page_dc['webpage']={'table':WebPageTablePage,'form':WebPageFormPage}
-dir_engine.add_pages({
+page_dc.update({
     'webpage':WebPageTablePage,
     'webpage.edit':WebPageFormPage,
 })
