@@ -52,7 +52,7 @@ class FormPage(object):
         self.pk=request.GET.get('pk')
         self.fields = self.fieldsCls(pk=self.pk,crt_user=request.user,request=request)
         self.ctx=self.fields.get_context()
-        self.permit=self.fields.permit
+        
     
     def get_template(self,prefer=None): 
         if self.template:
@@ -63,8 +63,7 @@ class FormPage(object):
             return 'director/fields.html'
     
     def get_context(self):
-        #if self.fieldsCls:
-        #perm = ModelPermit(self.fieldsCls.Meta.model,self.request.user)
+        self.permit=self.fields.permit
         self.ctx['can_add']=self.permit.can_add()
         self.ctx['can_del']=self.permit.can_del()   
         self.ctx['can_log']=self.permit.can_log()
