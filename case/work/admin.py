@@ -188,20 +188,16 @@ class WorkCheckValidDepart(ValidDepart):
 
 class WorkRecordTablePage(TablePage):
     tableCls=WorkRecordTable
-    
+    def __init__(self,request):
+        self.request=request
+        self.table = self.tableCls.parse_request(request)
+        self.crt_user=request.user
+        self.permit=WorkCheckValidDepart(self.request)
+        
     def get_context(self):
         ctx = super(WorkRecordTablePage,self).get_context()
-        validdepart=WorkCheckValidDepart(self.request)
-        ctx=validdepart.get_context(ctx)
+        ctx=self.permit.get_context(ctx)
         return ctx
-    
-    # def get_allowed_depart(self, employee, user):
-        # allowed_depart=[]
-        # for depart in employee.depart.all():
-            # permit = WorkModelPermit(WorkRecord, user, department=depart)
-            # if 'status' in permit.changeable_fields():
-                # allowed_depart.append(depart)
-        # return allowed_depart
     
     def get_label(self):
         return '工作审批列表'
@@ -302,10 +298,15 @@ class WRselfTablePage(TablePage):
     tableCls=WRselfTable
     template='work/workself_wx.html'
     
+    def __init__(self,request):
+        self.request=request
+        self.table = self.tableCls.parse_request(request)
+        self.crt_user=request.user
+        self.permit=WRselfValidDepart(self.request)
+        
     def get_context(self):
         ctx=super(WRselfTablePage,self).get_context()
-        valid_depart=WRselfValidDepart(self.request)
-        ctx=valid_depart.get_context(ctx)
+        ctx=self.permit.get_context(ctx)
         return ctx
     #def get_allowed_depart(self,employee,user):
         #return get_depart_can_submit_work(employee, user)
