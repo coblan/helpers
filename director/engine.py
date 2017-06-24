@@ -59,8 +59,9 @@ class BaseEngine(object):
     url_name='baseengine'
     prefer='pc'
     login_url=settings.LOGIN_URL
-    def __init__(self):
-        self.root_page='/'
+    root_page='/'
+    #def __init__(self):
+        #self.root_page='/'
         
     @classmethod
     def as_view(cls):
