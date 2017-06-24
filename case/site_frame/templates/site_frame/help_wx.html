@@ -9,7 +9,10 @@
     })
 </script>
 
-{{ help_text | safe }}
+<div class='flex-grow' style='overflow: auto;'>
+    {{ help_text | safe }}
+</div>
+
 {% endblock %}
 
 
