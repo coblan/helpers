@@ -6,12 +6,12 @@ from helpers.director.model_admin.permit import ModelPermit,has_permit
 from helpers.director.db_tools import model_to_name
 
 class DepartModelPermit(ModelPermit):
-    def __init__(self,model,user,department=None,nolimit=False):
-        self.employee= user.employee_set.first()
+    def __init__(self,model,employee,department=None,nolimit=False):
+        self.employee= employee
         if not department:
             department=self.employee.depart_set.first()
         self.department=department        
-        super(DepartModelPermit,self).__init__(model,user,nolimit=False)
+        super(DepartModelPermit,self).__init__(model,employee.user,nolimit=False)
         
         
     def _read_perm_from_db(self):
@@ -27,11 +27,9 @@ class DepartModelPermit(ModelPermit):
                     self.permit_list.extend(permit)
             self.permit_list=list(set(self.permit_list))   
     
-def has_depart_permit(user,name,depart):
-    if user.is_superuser:
+def has_depart_permit(employee,name,depart):
+    if employee.user.is_superuser:
         return True
-    
-    employee= user.employee_set.first()
     depart_permit = employee.workpermitmodel_set.filter(depart=depart).first()
     cls,perm=name.split('.')
       

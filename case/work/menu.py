@@ -12,7 +12,7 @@ from django.core.exceptions import PermissionDenied
 
 def can_check_work(request):
      try:
-          permit = WorkCheckValidDepart(request)
+          permit = WorkCheckValidDepart.parse_request(request)
           if permit.get_crt_depart():
                return True
      except PermissionDenied:
@@ -20,7 +20,8 @@ def can_check_work(request):
 
 def can_create_work(request):
      try:
-          valid_depart = WRselfValidDepart(request)
+          
+          valid_depart = WRselfValidDepart.parse_request(request)
           if valid_depart.get_crt_depart():
                return True
      except PermissionDenied:
@@ -31,7 +32,7 @@ def can_create_work(request):
 
 def can_read_all(request):
      try:
-          permit = WorkReadValidDepart(request)
+          permit = WorkReadValidDepart.parse_request(request)
           if permit.get_crt_depart():
                return True
      except PermissionDenied as e:

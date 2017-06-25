@@ -6,17 +6,36 @@ from .models import Department,EmployeeData
 import json
 from helpers.director.db_tools import to_dict
 
+def user_to_employee(user):
+    if not hasattr(user,'employee_set'):
+        raise PermissionDenied,'you are not employee'
+    employee=user.employee_set.first()
+    if not employee:
+        raise PermissionDenied,'you are not employee'
+    return employee
+
 class ValidDepart(object):
+    """
+    
+    data_key
+      在EmployeeData数据表中，保存了员工的数据。其中就有对应各个页面的department筛选条件。data_key就是这些页面对应的数据key。每个页面
+    的key都不同。
+    
+    """
     data_key=''
-    def __init__(self,request):
-        self.request=request
-        if request.user.is_anonymous():
-            raise PermissionDenied,'Anonymous user not allowd access deparment data'
-        self.crt_user=request.user
-        self.employee=self.crt_user.employee_set.first()
+    
+    @classmethod
+    def parse_request(cls,request):
+        employee=user_to_employee(request.user)
+        depart_pk=request.GET.get('_depart')
+        return cls(employee,depart_pk=depart_pk)
+    
+    def __init__(self,employee,depart_pk=None):
+        self.employee=employee
+        self.depart_pk=depart_pk
         if not self.employee:
             raise PermissionDenied,'Only employee allowd access deparment data'
-        # self.data_key=data_key
+
     
     def get_query_depart(self):
         depart=self.get_crt_depart()
@@ -37,10 +56,9 @@ class ValidDepart(object):
         if not allowed_depart:
             raise PermissionDenied,'No Valid department'
         depart=None
-        if self.request.GET.get('_depart'):
-            
+        if self.depart_pk:
             for dep in allowed_depart:
-                if unicode(dep.pk) ==self.request.GET.get('_depart'):
+                if unicode(dep.pk) ==self.depart_pk:
                     depart=dep
         else:
             depart=allowed_depart[0]

@@ -209,8 +209,8 @@ class ModelTable(object):
     include=None
     exclude=[]
     pagenator=PageNum
-    def __init__(self,page=1,row_sort=[],row_filter={},row_search={},crt_user=None,request=None,**kw):
-        self.request=request
+    def __init__(self,page=1,row_sort=[],row_filter={},row_search={},crt_user=None,**kw):
+        self.kw=kw
         self.crt_user=crt_user 
         self.page=page
         
@@ -225,7 +225,7 @@ class ModelTable(object):
         if not self.row_search.model:
             self.row_search.model=self.model
         self.pagenum = self.pagenator(pageNumber=self.page)
-        self.kw=kw
+        
         
         
     
@@ -246,18 +246,12 @@ class ModelTable(object):
         row_sort = kw.pop('_sort','').split(',')
         row_sort=filter(lambda x: x!='',row_sort)
         q=kw.pop('_q',None)
-        #row_search={}
-        #for k in cls.search.names:
-            #arg=kw.pop(k,None)
-            #if arg:
-                #row_search[k]=arg
-        
         row_filter={}
         for k in cls.filters.names:
             arg = kw.pop(k,None)
             if arg:
                 row_filter[k]=arg
-        return cls(page,row_sort,row_filter,q,request.user,request=request,**kw)    
+        return cls(page,row_sort,row_filter,q,request.user,**kw)    
         
     def get_context(self):
         return {

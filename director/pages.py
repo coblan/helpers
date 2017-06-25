@@ -49,8 +49,8 @@ class FormPage(object):
     ajax_scope={}
     def __init__(self,request):
         self.request=request
-        self.pk=request.GET.get('pk')
-        self.fields = self.fieldsCls(pk=self.pk,crt_user=request.user,request=request)
+        #self.pk=request.GET.get('pk')
+        self.fields = self.fieldsCls.parse_request(request) # (pk=self.pk,crt_user=request.user,request=request)
         self.ctx=self.fields.get_context()
         
     

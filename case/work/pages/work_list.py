@@ -15,8 +15,8 @@ class WorkList(ModelTable):
     model=WorkRecord
     
     def inn_filter(self, query):
-        emp=self.crt_user.employee_set.first()
-        valid_depart=WorkReadValidDepart(self.request)
+        employee=self.crt_user.employee_set.first()
+        valid_depart=WorkReadValidDepart(employee,self.kw.get('_depart'))
         query_depart=valid_depart.get_query_depart()
         return query.filter(depart__in=query_depart).order_by('-id')
     
@@ -35,7 +35,7 @@ class WorkReadValidDepart(ValidDepart):
     def get_allowed_depart(self):
         allowed_depart=[]
         for depart in self.employee.depart.all():
-            if has_depart_permit(self.crt_user, 'work.read_all', depart):
+            if has_depart_permit(self.employee, 'work.read_all', depart):
                 allowed_depart.append(depart)
         return allowed_depart
     
@@ -45,7 +45,8 @@ class WorkListPage(TablePage):
     template='work/work_list_wx.html'
     def get_context(self):
         ctx=super(WorkListPage,self).get_context()
-        valid_depart=WorkReadValidDepart(self.request)
+        employee=self.request.user.employee_set.first()
+        valid_depart=WorkReadValidDepart(employee,self.request.GET.get('_depart'))
         ctx=valid_depart.get_context(ctx)
         return ctx
 

@@ -86,10 +86,17 @@ class WorkRecordForm(ModelFields):
         model=WorkRecord
         exclude=[]
     
+    @classmethod
+    def parse_request(cls, request):
+        pk=request.GET.get('pk')
+        depart_pk = request.GET.get('_depart')
+        return cls(pk=pk,crt_user=request.user,depart_pk=depart_pk) 
+    
     def custom_permit(self):
-        if self.request:
-            self.valid_depart= WorkCheckValidDepart(self.request)
-            self.permit=DepartModelPermit(WorkRecord,self.crt_user, self.valid_depart.get_crt_depart())
+        employee=self.crt_user.employee_set.first()
+        if self.kw.get('depart_pk'):
+            self.valid_depart= WorkCheckValidDepart(employee,self.kw.get('depart_pk'))
+            self.permit=DepartModelPermit(WorkRecord,employee, self.valid_depart.get_crt_depart())
         else:
             return super(WorkRecordForm,self).custom_permit()
         
@@ -140,14 +147,14 @@ class WorkRecordTable(ModelTable):
     filters=WorkRecordFilter
     
     def custom_permit(self):
-        self.valid_depart= WorkCheckValidDepart(self.request)
-        self.permit=DepartModelPermit(WorkRecord,self.crt_user, self.valid_depart.get_crt_depart())
+        employee=self.crt_user.employee_set.first()
+        self.valid_depart= WorkCheckValidDepart(employee,depart_pk=self.kw.get('_depart'))
+        self.permit=DepartModelPermit(WorkRecord,employee, self.valid_depart.get_crt_depart())
 
     
     def inn_filter(self, query):
         query =super(WorkRecordTable,self).inn_filter(query)
-        validdepart=WorkCheckValidDepart(self.request)
-        depart_list=validdepart.get_query_depart()
+        depart_list=self.valid_depart.get_query_depart()
         return query.filter(check_depart__in=depart_list).order_by('-id')
 
     def dict_row(self,inst):
@@ -169,23 +176,24 @@ class WorkCheckValidDepart(ValidDepart):
     def get_allowed_depart(self):
         allowed_depart=[]
         for depart in self.employee.depart.all():
-            permit = DepartModelPermit(WorkRecord, self.crt_user, department=depart)
+            permit = DepartModelPermit(WorkRecord, self.employee, department=depart)
             if 'status' in permit.changeable_fields():
                 allowed_depart.append(depart)
         return allowed_depart  
 
 class WorkRecordTablePage(TablePage):
     tableCls=WorkRecordTable
-    def __init__(self,request):
-        self.request=request
-        self.table = self.tableCls.parse_request(request)
-        self.crt_user=request.user
-        self.valid_depart= WorkCheckValidDepart(self.request)
-        self.permit=DepartModelPermit(WorkRecord,self.crt_user, self.valid_depart.get_crt_depart())
+    #def __init__(self,request):
+        #self.request=request
+        #self.table = self.tableCls.parse_request(request)
+        #self.crt_user=request.user
+        #employee=self.crt_user.employee_set.first()
+        #self.valid_depart= WorkCheckValidDepart(employee,self.request.GET.get('_depart'))
+        #self.permit=DepartModelPermit(WorkRecord,employee, self.valid_depart.get_crt_depart())
         
     def get_context(self):
         ctx = super(WorkRecordTablePage,self).get_context()
-        ctx=self.valid_depart.get_context(ctx)
+        ctx=self.table.valid_depart.get_context(ctx)
         return ctx
     
     def get_label(self):
@@ -216,8 +224,10 @@ class WRselfForm(ModelFields):
         exclude=['check_depart','depart']
 
     def custom_permit(self):
-        self.valid_depart= WRselfValidDepart(self.request)
-        self.permit=DepartModelPermit(WorkRecord,self.crt_user, self.valid_depart.get_crt_depart())
+        employee=self.crt_user.employee_set.first()
+        
+        self.valid_depart= WRselfValidDepart(employee,self.kw.get('_depart'))
+        self.permit=DepartModelPermit(WorkRecord,employee, self.valid_depart.get_crt_depart())
 
     def get_row(self):
 
@@ -267,12 +277,14 @@ class WRselfTable(ModelTable):
     filters=WorkRecordFilter
     
     def custom_permit(self):
-        self.valid_depart= WRselfValidDepart(self.request)
-        self.permit=DepartModelPermit(WorkRecord,self.crt_user, self.valid_depart.get_crt_depart())   
+        employee=self.crt_user.employee_set.first()
+        self.valid_depart= WRselfValidDepart(employee,self.kw.get('_depart'))
+        self.permit=DepartModelPermit(WorkRecord,employee, self.valid_depart.get_crt_depart())   
         
     def inn_filter(self, query):
         query =super(WRselfTable,self).inn_filter(query)
-        valid_depart=WRselfValidDepart(self.request)
+        employee=self.crt_user.employee_set.first()
+        valid_depart=WRselfValidDepart(employee,self.kw.get('_depart'))
         depart=valid_depart.get_crt_depart()
         # if self.kw.get('_depart'):
             # depart=Department.objects.get(pk=self.kw.get('_depart'))
@@ -287,10 +299,10 @@ class WRselfTable(ModelTable):
             'work_desp_img':inst.work.desp_img
         }
 
-def get_depart_can_submit_work(employee,user):
+def get_depart_can_submit_work(employee):
     allowed_departs=[]
     for depart in employee.depart.all():
-        permit = DepartModelPermit(WorkRecord, user,department=depart)
+        permit = DepartModelPermit(WorkRecord, employee,department=depart)
         if permit.can_add():
             allowed_departs.append(depart)
     return allowed_departs
@@ -299,7 +311,7 @@ def get_depart_can_submit_work(employee,user):
 class WRselfValidDepart(ValidDepart):
     data_key='work_self'
     def get_allowed_depart(self):
-        return get_depart_can_submit_work(self.employee, self.crt_user)
+        return get_depart_can_submit_work(self.employee)
 
 class WRselfTablePage(TablePage):
     tableCls=WRselfTable
@@ -309,8 +321,9 @@ class WRselfTablePage(TablePage):
         self.request=request
         self.table = self.tableCls.parse_request(request)
         self.crt_user=request.user
-        self.valid_depart=WRselfValidDepart(self.request)
-        self.permit= DepartModelPermit(WorkRecord,self.crt_user, self.valid_depart.get_crt_depart())
+        employee=self.crt_user.employee_set.first()
+        self.valid_depart=WRselfValidDepart(employee,self.request.GET.get('_depart'))
+        self.permit= DepartModelPermit(WorkRecord,employee, self.valid_depart.get_crt_depart())
         
     def get_context(self):
         ctx=super(WRselfTablePage,self).get_context()

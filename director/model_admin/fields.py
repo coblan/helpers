@@ -41,6 +41,19 @@ class ModelFields(forms.ModelForm):
     
     """
     readonly=[]
+    
+    @classmethod
+    def parse_request(cls,request):
+        """
+        传入参数的形式：
+        row_search: key=value&..
+        row_sort: _sort=key1,-key2
+        page: _page=1
+        row_filter:key=value&..
+        """
+        pk=request.GET.get('pk')
+        return cls(pk=pk,crt_user=request.user) 
+    
     def __init__(self,dc={},pk=None,crt_user=None,*args,**kw):
         
         if not crt_user:
@@ -50,24 +63,26 @@ class ModelFields(forms.ModelForm):
         
         if pk is None:
             pk=dc.get('pk')
+        form_kw={}
         if 'instance' not in kw:
             if pk:
-                kw['instance']= get_or_none( self._meta.model,pk=pk)
-                if not kw['instance']:
+                form_kw['instance']= get_or_none( self._meta.model,pk=pk)
+                if not form_kw['instance']:
                     raise Http404('Id that you request is not exist in database')
                 
             else:
-                kw['instance'] = self._meta.model()
+                form_kw['instance'] = self._meta.model()
         self.nolimit = kw.pop('nolimit',False)
-        self.request=kw.pop('request',None)
-        
-        super(ModelFields,self).__init__(dc,*args,**kw)
+        self.kw=kw
+
+        super(ModelFields,self).__init__(dc,*args,**form_kw)
         self.custom_permit()
         self.pop_fields()
         self.init_value()
     
     def custom_permit(self):
         self.permit=ModelPermit(self.Meta.model,self.crt_user,nolimit=self.nolimit)
+        
     def get_context(self):
         """
         """
