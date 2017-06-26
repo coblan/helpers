@@ -51,12 +51,19 @@ class EmployeeFields(ModelFields):
 class EmployeeItem(FormPage):
     template=''
     fieldsCls=EmployeeFields
+    
+    def __init__(self, request):
+        pk= request.GET.get('pk')
+        self.employee=Employee.objects.get(pk=pk)        
+        self.fields=self.fieldsCls(instance= self.employee,crt_user=request.user)
+        self.ctx=self.fields.get_context() 
+    
     def get_template(self, prefer=None):
         return None
     def get_label(self):
         try:
-            emp=Employee.objects.get(pk=self.pk)
-            return '%s的工作信息'%(emp.baseinfo.name if emp.baseinfo else '未命名')
+            # emp=Employee.objects.get(pk=self.pk)
+            return '%s的工作信息'%(self.employee.baseinfo.name if self.employee.baseinfo else '未命名')
         except Employee.DoesNotExist:
             return '新建员工'
         # 

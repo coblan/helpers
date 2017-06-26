@@ -209,7 +209,7 @@
 
 
     <transition name="slide">
-        <div v-show="ln_state.crt_view=='editor'" class="slide-win">
+        <div v-show="ln_state.crt_view=='editor'" class="slide-win" style="overflow:auto;padding-bottom: 5em;">
             <!--<scroll-wraper ref="editor_scroller" style="width:100vw;height:90vh;">-->
                 <title-bar :with_back="true" title="编辑工作类型"></title-bar>
                 <!--<div class="weui-cells__title">编辑</div>-->

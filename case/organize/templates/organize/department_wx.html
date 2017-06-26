@@ -164,11 +164,11 @@
         <!--@click.native="show_menu=false"-->
 
         <transition name="fade">
-            <modal v-show="is_show_menu" >
+            <modal v-show="is_show_menu" id="pop-menu">
                 <div class="weui-actionsheet__menu" @click.stop="" style="width: 80vw;" v-if="can_edit">
                     <div class="weui-actionsheet__cell" @click="edit($refs.catalog.selected[0]);is_show_menu=false" v-show="state.has_select">编辑</div>
 
-                    <div class="weui-actionsheet__cell" @click="$refs.catalog.dir_create();is_show_menu=false">新建目录</div>
+                    <div class="weui-actionsheet__cell" @click="$refs.catalog.dir_create();is_show_menu=false">新建部门</div>
                     <!--<div class="weui-actionsheet__cell" @click="$refs.catalog.item_create();show_menu=false" v-if="work_can_add">新建工时</div>-->
                     <div class="weui-actionsheet__cell" @click="$refs.catalog.item_del();is_show_menu=false" v-show="state.has_select">删除选中项</div>
                     <div class="weui-actionsheet__cell" @click="$refs.catalog.cut();is_show_menu=false" v-show="state.can_cut">剪切</div>

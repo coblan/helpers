@@ -72,6 +72,8 @@ class ModelFields(forms.ModelForm):
                 
             else:
                 form_kw['instance'] = self._meta.model()
+        else:
+            form_kw['instance']=kw.pop('instance')
         self.nolimit = kw.pop('nolimit',False)
         self.kw=kw
 
