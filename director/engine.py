@@ -104,11 +104,12 @@ class BaseEngine(object):
                 template=page.template
             ctx=self.get_ctx(ctx)
             ctx['template']=template
+            ctx=self.custome_ctx(ctx)
             return render(request,template,context=ctx)
        
             
-        #elif request.is_ajax():
-            #return jsonpost(request,ajax.get_globle())        
+    def custome_ctx(self,ctx):
+        return ctx
     
     def get_page_cls(self,name):
         if self._pages:

@@ -4,8 +4,7 @@
 
 
 {% block page_content %}
-<script src="{% static 'js/fields_mb.pack.js' %}"></script>
-<script src='{% static "js/ex_inputs.pack.js" %}'></script>
+<script src='{% static "js/ex_inputs.pack.js?t=" %}{{ stamp.ex_inputs_pack_js}}'></script>
 
 {% include 'work/com_workindex.html' %}
 

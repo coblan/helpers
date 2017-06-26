@@ -18,6 +18,10 @@ import cgi
 class UserGroupTable(ModelTable):
     model=Group
     include=['name']
+    
+    def inn_filter(self, query):
+        return query.order_by('name')
+        
 
 class UserGroupFields(ModelFields):
     #template='user_admin/permit.html'

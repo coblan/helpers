@@ -5,27 +5,6 @@ from ..models import WorkPermitModel,Employee
 from helpers.director.db_tools import to_dict
 from django.contrib.auth.models import Group
 
-
-#class BasicInfoFields(ModelFields):
-
-    #class Meta:
-        #model=BasicInfo
-        #exclude=[]
-    
-    #def get_heads(self):
-        #heads=super(BasicInfoFields,self).get_heads()
-        #for head in heads:
-            #if head.get('name')=='head':
-                #head['type']='picture'
-                #head['config']={
-                #'crop':True,
-                #'aspectRatio': 1,
-                #'size':{'width':250,'height':250}
-            #}
-        #return heads
-
-
-
 class EmployePermitTab(FormPage):
     template=''
 
@@ -38,7 +17,7 @@ class EmployePermitTab(FormPage):
             permit,c = WorkPermitModel.objects.get_or_create(emp=self.emp,depart=depart)
             out.append({'groups':[to_dict(x) for x in permit.group.all()],
                         'depart':to_dict(permit.depart)})
-        groups=[to_dict(x) for x in Group.objects.all()] 
+        groups=[to_dict(x) for x in Group.objects.filter(name__startswith='depart.')] 
         self.ctx={
             'permits':out,
             'groups':groups

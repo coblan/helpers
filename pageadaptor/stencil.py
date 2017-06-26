@@ -1,5 +1,5 @@
 
-from django.template import loader 
+from django.template import loader ,Engine,Context
 import re
 import json
 
@@ -8,7 +8,6 @@ web_page_templates=[]
 def regist(path,label):
     dc={}
     temp = loader.get_template(path)
-    
     mt = re.search('<script .*form-meta-data[\'\"]>(.*?)</script>',temp.template.source,re.M|re.S)
     
     if mt:
