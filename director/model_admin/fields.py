@@ -23,7 +23,7 @@ def save_row(row,user,request):
     model= name_to_model(row['_class'])
     fields_cls = model_dc.get(model).get('fields')
 
-    fields_obj=fields_cls(row,crt_user=user,request=request)
+    fields_obj=fields_cls(row,crt_user=user)
     if fields_obj.is_valid():
         fields_obj.save_form()
         return fields_obj.instance
@@ -54,7 +54,7 @@ class ModelFields(forms.ModelForm):
         pk=request.GET.get('pk')
         return cls(pk=pk,crt_user=request.user) 
     
-    def __init__(self,dc={},pk=None,crt_user=None,*args,**kw):
+    def __init__(self,dc={},pk=None,crt_user=None,nolimit=False,*args,**kw):
         
         if not crt_user:
             self.crt_user=dc.get('crt_user')
@@ -74,7 +74,7 @@ class ModelFields(forms.ModelForm):
                 form_kw['instance'] = self._meta.model()
         else:
             form_kw['instance']=kw.pop('instance')
-        self.nolimit = kw.pop('nolimit',False)
+        self.nolimit = nolimit
         self.kw=kw
 
         super(ModelFields,self).__init__(dc,*args,**form_kw)
@@ -99,7 +99,7 @@ class ModelFields(forms.ModelForm):
         """
         pop some field out,this will be 
         """
-        if self.crt_user.is_superuser:
+        if self.nolimit or self.crt_user.is_superuser:
             return
         ls=[]
         ls.extend(self.permit.readable_fields())
@@ -202,7 +202,7 @@ class ModelFields(forms.ModelForm):
         """
         call by model render engin
         """
-        if not self.crt_user.is_superuser:
+        if not (self.nolimit and self.crt_user.is_superuser):
             #if self.instance.pk:
                 #if not self.permit.changeable_fields():
                     #raise PermissionDenied,'you have no Permission changed %s'%self.instance._meta.model_name 

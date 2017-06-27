@@ -142,7 +142,7 @@ class RouterAjax(object):
         if 'request' in args:
             kw['request']=self.request
         if 'user' in args:
-            user=self._get_user()
+            user=self.request.user #self._get_user()
             if user:
                 kw['user']=user
             else:

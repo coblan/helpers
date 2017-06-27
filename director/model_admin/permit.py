@@ -63,7 +63,7 @@ class ModelPermit(object):
     
     @nolimit ,有时需要跨越 权限，操作某个数据表，就加上 nolimit=True
     """
-    def __init__(self,model,user,nolimit=False):
+    def __init__(self,model,user=None,nolimit=False):
         self.user=user
         if isinstance(model,(str,unicode)):
             model=apps.get_model(model)
@@ -72,10 +72,14 @@ class ModelPermit(object):
         self.model = model
         self.permit_list=[]
         self.nolimit=nolimit
+        
         self._read_perm_from_db()
     
     def _read_perm_from_db(self):
         model_name = model_to_name(self.model)
+        if not self.user:
+            self.permit_list=[]
+            return
         for group in self.user.groups.all():
             if hasattr(group,'permitmodel'):
                 permits = json.loads( group.permitmodel.permit )
@@ -105,24 +109,24 @@ class ModelPermit(object):
         pass
     
     def can_add(self):
-        if self.user.is_superuser or self.nolimit:
+        if self.nolimit or self.user.is_superuser:
             return True
         else:
             return 'can__create' in self.permit_list
 
     def can_del(self):
-        if self.user.is_superuser or self.nolimit:
+        if self.nolimit or self.user.is_superuser:
             return True
         else:
             return 'can__delete' in self.permit_list
     def can_log(self):
-        if self.user.is_superuser or self.nolimit:
+        if self.nolimit or self.user.is_superuser:
             return True
         else:
             return 'can__log' in self.permit_list        
     
     def can_access(self):
-        if self.user.is_superuser or self.nolimit:
+        if self.nolimit or self.user.is_superuser:
             return True
         elif self.readable_fields() or self.changeable_fields():
             return True
@@ -130,7 +134,7 @@ class ModelPermit(object):
             return False
 
     def readonly_fields(self):
-        if self.user.is_superuser or self.nolimit:
+        if self.nolimit or self.user.is_superuser:
             return []
         else:
             return [x for x in self.readable_fields() if x not in self.changeable_fields()]
@@ -143,7 +147,7 @@ class ModelPermit(object):
         return ls
     
     def readable_fields(self):
-        if self.user.is_superuser or self.nolimit:
+        if self.nolimit or self.user.is_superuser:
             return self.all_fields()
         else:
             ls=[]
@@ -153,7 +157,7 @@ class ModelPermit(object):
             return list(set(ls))  
     
     def changeable_fields(self):
-        if self.user.is_superuser or self.nolimit:
+        if self.nolimit or self.user.is_superuser:
             return self.all_fields()
             #return self.model._meta.get_all_field_names()
         else:
