@@ -16,7 +16,7 @@ def need_login(fun):
     return _fun
 
 def need_permit(fun):
-    """还没想好怎么写"""
+    """还没想好怎么写,暂时没用"""
     def _fun(request,*args,**kw):
         if request.user.is_authenticated():
             return fun(request,*args,**kw)

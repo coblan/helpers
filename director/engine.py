@@ -102,7 +102,7 @@ class BaseEngine(object):
                 template=page.get_template(prefer=self.prefer)
             else:
                 template=page.template
-            ctx=self.get_ctx(ctx)
+            #ctx=self.get_ctx(ctx)
             ctx['template']=template
             ctx=self.custome_ctx(ctx)
             return render(request,template,context=ctx)
@@ -110,6 +110,9 @@ class BaseEngine(object):
             
     def custome_ctx(self,ctx):
         return ctx
+    
+    def get_url(self,name):
+        return reverse(self.url_name,args=(name,))
     
     def get_page_cls(self,name):
         if self._pages:
@@ -120,9 +123,9 @@ class BaseEngine(object):
     def get_menu(self,request):
         return evalue_container( self.menu,request=request,user=request.user,url_name=self.url_name)
     
-    def get_ctx(self,ctx):
-        """ctx的hook"""
-        return ctx
+    #def get_ctx(self,ctx):
+        #"""ctx的hook"""
+        #return ctx
 
 def and_list(ls):
     def _func(user):

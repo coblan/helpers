@@ -3,10 +3,10 @@ from __future__ import unicode_literals
 
 from helpers.director.shortcut import model_dc,page_dc,TablePage,ModelTable,FormPage,ModelFields
 from models import WebPage
-from stencil import web_page_templates
+from .stencil import web_page_templates,regist
 from pydoc import locate
 from django.conf import settings
-
+from get_page import EnginPress
 
 #dir_engine=locate(settings.DIR_ENGINE)
 
@@ -51,3 +51,8 @@ page_dc.update({
     'webpage':WebPageTablePage,
     'webpage.edit':WebPageFormPage,
 })
+
+
+page_dc.update({'press':EnginPress})
+regist('pageadaptor/one_richtext.html','one rich text')
+regist('pageadaptor/one_richtext_wx.html','one rich text WX')

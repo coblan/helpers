@@ -15,4 +15,4 @@ def get_static_obj(path):
 org_static_file_path=os.path.join(settings.BASE_DIR,'static')
 volatile_static_file_path=os.path.join(org_static_file_path,'js')
 
-static_file_timestamp=get_static_obj(volatile_static_file_path)
+static_file_timestamp_dict=get_static_obj(volatile_static_file_path)

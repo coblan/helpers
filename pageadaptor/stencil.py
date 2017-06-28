@@ -12,9 +12,12 @@ def regist(path,label):
     
     if mt:
         code_str=mt.group(1)
-        exec(code_str,dc)
+        json_dict= json.loads(code_str)
+        dc.update(json_dict)
+        #exec(code_str,dc)
         #dc = json.loads(code_str)
-        del dc['__builtins__']
+        #del dc['__builtins__']
+
     dc.update({'value':path,'label':label})
     web_page_templates.append(dc)
 
