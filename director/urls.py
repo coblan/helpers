@@ -1,7 +1,11 @@
+# encoding:utf-8
+
 from django.conf.urls import include, url
 import views
+
 from model_admin import render
 """
+为了简短的url，这个路由直接放到总的urls.py里面去了
 
     url(r'^ajax/(?P<app>\w+)?/?$',director_views.ajax_views,name='ajax_url'),
     url(r'^ajax/?$',director_views.ajax_views),

@@ -10,13 +10,14 @@ from forms import AuthForm
 from django.contrib import auth 
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.contrib.auth.decorators import login_required
-from .port import jsonpost
+from .port import jsonpost,naked_router
 from pydoc import locate
 from django.utils.translation import ugettext as _
 from django.contrib.auth.models import User
 from . import ajax
 import urllib
 from django.apps import apps
+
 
 @ensure_csrf_cookie
 def login(request):
@@ -94,7 +95,8 @@ def trival(request):
 该函数的url现在嵌入到了director.urls中，所以url设置为::
 
     from helpers.director import urls as director_urls
-    url(r'^d/',include(director_urls)),
+        url(r'^_ajax/(?P<app>\w+)?/?$',director_views.ajax_views,name='ajax_url'),
+    url(r'^_ajax/?$',director_views.ajax_views), 
 <-<
 """
 
@@ -110,3 +112,16 @@ def ajax_views(request,app=None):
     except KeyError as e:
         rt={'status':'error','msg':'key error '+str(e) +' \n may function name error'}
         return HttpResponse(json.dumps(rt),content_type="application/json")  
+    
+def donwload_views(request,app):
+    conf= apps.get_app_config(app)
+    app_dot_path=conf.module.__name__
+    ajax_module=locate('%(app)s.ajax'%{'app':app_dot_path})
+    
+    try:
+        # 返回 未经过任何修改的 response对象
+        return naked_router(request, ajax_module.get_global())
+    except KeyError as e:
+        rt={'status':'error','msg':'key error '+str(e) +' \n may function name error'}
+        return HttpResponse(json.dumps(rt),content_type="application/json")      
+    

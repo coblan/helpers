@@ -15,6 +15,7 @@ class WebPageTable(ModelTable):
     include=['name','label','temp','status']    
 
 class WebPageTablePage(TablePage):
+    template='pageadaptor/page_table.html'
     tableCls=WebPageTable
 
 class WebPageForm(ModelFields):

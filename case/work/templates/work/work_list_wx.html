@@ -133,6 +133,7 @@
                     <div class="weui-actionsheet__cell" @click="ln.pushState({crt_view:'show_active-depart'});show_menu=false">下属部门</div>
                     <div class="weui-actionsheet__cell" @click="del_item();is_show_menu=false" v-if="can_del &&selected.length>0">删除选中</div>
                     <div class="weui-actionsheet__cell" @click="ln.pushState({crt_view:'show_filter'});show_menu=false" v-if="can_search">排序过滤</div>
+                    <div class="weui-actionsheet__cell" v-if="help_url" @click="goto(help_url)">帮助</div>
                 </div>
                 <div class="weui-actionsheet__cell">
                     <div class="weui-actionsheet__cell" @click="show_menu=false">取消</div>

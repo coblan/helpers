@@ -33,10 +33,10 @@ class EnginPress(Press):
         
     def get_template(self, prefer=None):
         temp=self.page.temp
-        if prefer=='wx':
-            mt = re.search('^(.*)(\.[^\.]+)',temp)
-            if mt:
-                return mt.group(1)+'_wx'+mt.group(2)
+        # if prefer=='wx':
+            # mt = re.search('^(.*)(\.[^\.]+)',temp)
+            # if mt:
+                # return mt.group(1)+'_wx'+mt.group(2)
         return temp
     
 

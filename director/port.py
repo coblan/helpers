@@ -52,7 +52,9 @@ def ajax_view(request):
             
     """
     router=RouterAjax(request, scope,rt_except= not settings.DEBUG)
-    return router.run()
+    rt = router.run()
+    return HttpResponse(json.dumps(rt), content_type="application/json") 
+
 
 class RouterAjax(object):
     def __init__(self,request,scope,rt_except=False):
@@ -82,6 +84,7 @@ class RouterAjax(object):
         else:
             # 为了老代码兼容，现在不用了。
             return self.run_dict()
+
     
     def run_list(self):
         """
@@ -106,7 +109,8 @@ class RouterAjax(object):
                 #func = self.scope[fun_name]
                 self.rt[_rt_key] = self.inject_and_run(func,**func_dic)                
         self.rt['msg']=';'.join(self.msgs)
-        return HttpResponse(json.dumps(self.rt), content_type="application/json")            
+        return self.rt
+               
             
     def run_dict(self):
         """beacuse dict has no order, Call order is a little tedius,
@@ -123,8 +127,9 @@ class RouterAjax(object):
             self.proc_order()
             self.proc_no_order()
         self.rt['msg']=';'.join(self.msgs)
-        return HttpResponse(json.dumps(self.rt), content_type="application/json")     
-
+        return self.rt
+ 
+    
     def proc_order(self):
         for k in self.orders:
             func = self.scope[k]
@@ -157,3 +162,18 @@ class RouterAjax(object):
             return None    
                 
 
+
+def naked_router(request, scope):
+    router=Naked(request, scope,rt_except= not settings.DEBUG)
+    rt = router.run()
+    return rt
+
+class Naked(RouterAjax):
+    def run_list(self):
+        for func_dic in self.commands:
+            fun_name= func_dic.pop('fun')
+            _rt_key=func_dic.pop('_rt_key',fun_name)  
+            func = self.scope[fun_name]
+            return self.inject_and_run(func,**func_dic)
+
+    

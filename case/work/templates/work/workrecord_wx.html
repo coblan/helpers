@@ -76,12 +76,6 @@
 
 <div id="there" v-cloak class="flex-grow" style="position: relative;">
 
-
-    <!--<button @click="switch_to('search')">过滤</button>-->
-
-    <!--<div class="flex-v" style="min-height: 100vh;">-->
-
-        <!--<div class="weui-cells__title" v-text="page_label"></div>-->
         <scroll-loader   :can_load="has_next_page" @load_more="load_next_page()">
             <table class="item-table">
                 <tr v-for="row in rows" @click="ge_edit(row.pk)">
@@ -110,6 +104,7 @@
                 <div class="weui-actionsheet__cell" @click="ln.pushState({crt_view:'show_active-depart'});show_menu=false" v-if="can_search">下属部门</div>
                 <div class="weui-actionsheet__cell" @click="del_item();show_menu=false" v-if="can_del &&selected.length>0">删除选中</div>
                 <div class="weui-actionsheet__cell" @click="ln.pushState({crt_view:'show_filter'});show_menu=false" v-if="can_search">排序过滤</div>
+                <div class="weui-actionsheet__cell" v-if="help_url" @click="goto(help_url)">帮助</div>
             </div>
             <div class="weui-actionsheet__cell">
                 <div class="weui-actionsheet__cell" @click="show_menu=false">取消</div>

@@ -26,6 +26,7 @@
                 depart_list:depart_list,
                 crt_depart:crt_depart,
 
+
             },
             mixins:[table_fun],
             mounted:function(){
@@ -44,9 +45,10 @@
 //              }
             },
             methods:{
-                goto:function(url){
-                    location=url
-                },
+//                goto:function(url){
+//                    location=url
+////                    location= ex.appendSearch(url,{next:encodeURIComponent(location.href)})
+//                },
 //                load_next_page:function(){
 //                    var self=this
 //                    ex.get(ex.appendSearch({_page:row_pages.crt_page+1}),function(resp){
@@ -158,7 +160,10 @@
                 <div class="weui-actionsheet__cell" @click="add_new();show_menu=false" v-if="can_add">新建</div>
                 <div class="weui-actionsheet__cell" @click="del_item();show_menu=false" v-if="can_del &&selected.length>0">删除选中</div>
                 <div class="weui-actionsheet__cell" @click="ln.pushState({crt_view:'show_filter'});show_menu=false" v-if="can_search">排序过滤</div>
+                <div class="weui-actionsheet__cell" v-if="help_url" @click="goto(help_url)">帮助</div>
+
             </div>
+
             <div class="weui-actionsheet__cell">
                 <div class="weui-actionsheet__cell" @click="show_menu=false">取消</div>
             </div>
