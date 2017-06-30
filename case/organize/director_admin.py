@@ -54,7 +54,10 @@ class EmployeeItem(FormPage):
     
     def __init__(self, request):
         pk= request.GET.get('pk')
-        self.employee=Employee.objects.get(pk=pk)        
+        if pk:
+            self.employee=Employee.objects.get(pk=pk) 
+        else:
+            self.employee=Employee()
         self.fields=self.fieldsCls(instance= self.employee,crt_user=request.user)
         self.ctx=self.fields.get_context() 
     
