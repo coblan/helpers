@@ -11,6 +11,7 @@ def save_self_info(base_info,user):
     """
     """
     instance = from_dict(base_info)
+    instance.save()
     if getattr(instance,'employee',None) is None:
         emp =user.employee_set.first()
         emp.baseinfo=instance
