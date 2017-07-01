@@ -65,11 +65,9 @@ class RouterAjax(object):
         self.msgs=[]
         
     def run(self):
-        if self.request.method=='POST':
-            self.commands = json.loads(self.request.body)
-        else:
+        op=self.request.GET.get('_op')
+        if op:
             self.commands=[]
-            op=self.request.GET.get('_op')
             for cmd in op.split(','):
                 ls = cmd.split(':')
                 dc={'fun':ls[0]}
@@ -77,7 +75,11 @@ class RouterAjax(object):
                 while count <len(ls):
                     dc[ls[count]]=ls[count+1]
                     count+=2
-                self.commands.append(dc)
+                self.commands.append(dc)            
+        elif self.request.method=='POST':
+            self.commands = json.loads(self.request.body)
+        else:
+            raise UserWarning,'port can not parse request url and body'
                     
         if isinstance(self.commands,list):
             return self.run_list()

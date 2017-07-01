@@ -32,11 +32,12 @@ permit
 """
 
 from __future__ import unicode_literals
-from ..db_tools import model_to_name
+from ..db_tools import model_to_name,get_or_none
 from django.apps import apps
 import json
 from django.db import models
 from base import model_dc,permit_list
+from django.contrib.auth.models import Group
 
 
 def has_permit(user,name):
@@ -47,13 +48,36 @@ def has_permit(user,name):
         return True    
     
     cls,perm=name.split('.')
-    for group in user.groups.all():
-            if hasattr(group,'permitmodel'):
-                permit_dc = json.loads( group.permitmodel.permit )
-                sp_permit_list= permit_dc.get(cls,[])
-                if perm in sp_permit_list:
-                    return True
+    for permit_dc in user_permit_dc(user):
+        sp_permit_list= permit_dc.get(cls,[])
+        if perm in sp_permit_list:
+            return True        
+    #for group in user.groups.all():
+            #if hasattr(group,'permitmodel'):
+                #permit_dc = json.loads( group.permitmodel.permit )
+                #sp_permit_list= permit_dc.get(cls,[])
+                #if perm in sp_permit_list:
+                    #return True
     return False
+
+
+def user_permit_dc(user):
+    for group in user.groups.all():
+        for permit_dc in group_permit(group):
+            yield permit_dc
+
+def group_permit(group):
+    if hasattr(group,'permitmodel'):
+        permit_dc = json.loads( group.permitmodel.permit )
+        if isinstance(permit_dc,list):
+            for pk in permit_dc:
+                child_group=get_or_none(Group,pk=pk)
+                if child_group:
+                    for dc in group_permit(child_group):
+                        yield dc
+        else:
+            yield permit_dc
+            
 
 class ModelPermit(object):
     """
@@ -77,19 +101,27 @@ class ModelPermit(object):
     
     def _read_perm_from_db(self):
         model_name = model_to_name(self.model)
+
         if not self.user:
             self.permit_list=[]
             return
-        for group in self.user.groups.all():
-            if hasattr(group,'permitmodel'):
-                permits = json.loads( group.permitmodel.permit )
-                permit= permits.get(model_name,[])
-                self.permit_list.extend(permit)
+        # 每次请求，大概率上，会获取permit_dc很多次，所以这里缓存在user上，减少读取数据库
+        if not hasattr(self.user,'permit_dc_list'):
+            self.user.permit_dc_list=list(user_permit_dc(self.user))
+        for permit_dc in self.user.permit_dc_list:
+            permit= permit_dc.get(model_name,[])
+            self.permit_list.extend(permit)            
+        #for group in self.user.groups.all():
+            #if hasattr(group,'permitmodel'):
+                #permits = json.loads( group.permitmodel.permit )
+                #permit= permits.get(model_name,[])
+                #self.permit_list.extend(permit)
         self.permit_list=list(set(self.permit_list))
+            #setattr(self.user,'_permit_list.%s'%model_name,self.permit_list)
     
     def get_heads(self):
         """
-        这个函数好像只被 group admin 用了下，貌似没用，等待求证。
+        这个函数好像只被 group admin 用了下,返回所有注册了的model的权限备选head信息。
         """
         ls=[]
         for v in permit_list:

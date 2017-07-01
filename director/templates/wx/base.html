@@ -154,9 +154,14 @@
     /*.main.content{*/
         /*padding: 0.5em 0 4em 0;*/
     /*}*/
+
+    .total-page{
+        height: 100vh;
+        width: 100vm;
+    }
 </style>
 
-<div class="flex-v" style="height: 100vh;">
+<div class="flex-v total-page">
     <div id="com-title">
         <title-bar v-if="title_bar" :title="page_label" :with_back="is_show_back" :with_menu="with_menu"></title-bar>
     </div>

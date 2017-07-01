@@ -31,6 +31,8 @@ def has_depart_permit(employee,name,depart):
     if employee.user.is_superuser:
         return True
     depart_permit = employee.workpermitmodel_set.filter(depart=depart).first()
+    if not depart_permit:
+        return False
     cls,perm=name.split('.')
       
     for group in depart_permit.group.all():

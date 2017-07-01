@@ -14,6 +14,7 @@ from django.conf import settings
 from .models import KVModel
 from . import short_gen
 import cgi
+from .admin_pages.assem_group import AssemGroupPage
 
 class UserGroupTable(ModelTable):
     model=Group
@@ -40,6 +41,7 @@ class UserGroupFields(ModelFields):
         return ctx
 
 class GroupTablePage(TablePage):
+    template='authuser/group_table.html'
     tableCls=UserGroupTable
 
 class GroupFormPage(FormPage):
@@ -84,7 +86,8 @@ model_dc[User]={'fields':UserFields}
 page_dc.update({'user':UserTablePage,
                 'user.edit':UserFormPage,
                 'group':GroupTablePage,
-                'group.edit':GroupFormPage})
+                'group.edit':GroupFormPage,
+                'group.assem.edit':AssemGroupPage})
 
 permit_list.append(Group)
 permit_list.append(User)

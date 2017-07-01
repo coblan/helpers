@@ -16,6 +16,7 @@ from django.core.exceptions import PermissionDenied
 from helpers.case.organize.valid_depart import ValidDepart
 
 
+
 # class DepartWorkTablePageMixin(object):
     # """tablepage mixin"""
     # def get_allowed_depart(self,employee,user):
@@ -47,6 +48,9 @@ class WorkForm(ModelFields):
     class Meta:
         model=Work
         exclude=['par']
+    
+
+    
     def get_heads(self):
         heads= super(WorkForm,self).get_heads()
         for head in heads:
@@ -94,11 +98,22 @@ class WorkRecordForm(ModelFields):
     
     def custom_permit(self):
         employee=self.crt_user.employee_set.first()
-        if self.kw.get('depart_pk'):
-            self.valid_depart= WorkCheckValidDepart(employee,self.kw.get('depart_pk'))
-            self.permit=DepartModelPermit(WorkRecord,employee, self.valid_depart.get_crt_depart())
-        else:
-            return super(WorkRecordForm,self).custom_permit()
+
+        self.valid_depart= WorkCheckValidDepart(employee,self.kw.get('depart_pk'))
+        self.permit=DepartModelPermit(WorkRecord,employee, self.valid_depart.get_crt_depart())    
+    #@classmethod
+    #def parse_request(cls, request):
+        #pk=request.GET.get('pk')
+        #depart_pk = request.GET.get('_depart')
+        #return cls(pk=pk,crt_user=request.user,depart_pk=depart_pk) 
+    
+    #def custom_permit(self):
+        #employee=self.crt_user.employee_set.first()
+        #if self.kw.get('depart_pk'):
+            #self.valid_depart= WorkCheckValidDepart(employee,self.kw.get('depart_pk'))
+            #self.permit=DepartModelPermit(WorkRecord,employee, self.valid_depart.get_crt_depart())
+        #else:
+            #return super(WorkRecordForm,self).custom_permit()
         
     def get_heads(self):
         heads= super(WorkRecordForm,self).get_heads()

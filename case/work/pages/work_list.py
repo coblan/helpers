@@ -7,6 +7,7 @@ from ..models import WorkRecord
 from helpers.case.organize.valid_depart import ValidDepart
 from helpers.case.organize.workpermit import has_depart_permit
 from helpers.director.db_tools import sim_dict
+from helpers.case.organize.workpermit import DepartModelPermit
 
 class WorkList(ModelTable):
     """
@@ -55,6 +56,18 @@ class WorkListForm(ModelFields):
     class Meta:
         model=WorkRecord
         exclude=[]
+    
+    @classmethod
+    def parse_request(cls, request):
+        pk=request.GET.get('pk')
+        depart_pk = request.GET.get('_depart')
+        return cls(pk=pk,crt_user=request.user,depart_pk=depart_pk) 
+    
+    def custom_permit(self):
+        employee=self.crt_user.employee_set.first()
+        
+        self.valid_depart= WorkReadValidDepart(employee,self.kw.get('depart_pk'))
+        self.permit=DepartModelPermit(WorkRecord,employee, self.valid_depart.get_crt_depart())
     
     def get_heads(self):
         heads=super(WorkListForm,self).get_heads()
