@@ -266,6 +266,9 @@ class WRselfForm(ModelFields):
                 }
             elif head['name']=='finish_time':
                 head['type']='date'
+            elif head['name']=='emp':
+                head['readonly']=True
+                
         if self.instance.status =='pass':
             for head in heads:
                 head['readonly']=True

@@ -59,6 +59,7 @@
                 ge_edit:function(pk){
                     var url=ex.template('{engine_url}/{page_name}.edit',{engine_url:engine_url,page_name:page_name})
                     search_args.pk=pk
+                    search_args.next=encodeURIComponent(location.href)
                     location= ex.appendSearch(url,search_args)
                 },
 

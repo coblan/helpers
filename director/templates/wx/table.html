@@ -9,16 +9,16 @@
 
 
 
-    $(function(){
-        ln.history_handle({
-            init:{crt_view:'main'},
-            handler:function(state){
-                if(state.crt_view) {
-                    table.crt_view = state.crt_view
-                }
-            }
-        })
-    })
+//    $(function(){
+//        ln.history_handle({
+//            init:{crt_view:'main'},
+//            handler:function(state){
+//                if(state.crt_view) {
+//                    table.crt_view = state.crt_view
+//                }
+//            }
+//        })
+//    })
 
 
     crt_view = 'main'
@@ -68,30 +68,24 @@
 </script>
 
 <style>
-    .total-wrap{
-        height: 100vh;
-        position: relative;
-    }
+    /*.total-wrap{*/
+        /*height: 100vh;*/
+        /*position: relative;*/
+    /*}*/
 
 </style>
 
 {% block extra_head %}
 {% endblock %}
 
-<div id="there" v-cloak>
+<div id="there" v-cloak class="flex-grow"  style="position: relative;">
 
 
     <!--<button @click="switch_to('search')">过滤</button>-->
 
-    <div class="total-wrap flex-v">
+    <div class="flex-v scroll-wraper">
 
         {% block table_head %}
-            <!--<div class="flex" v-if="in_wx_agent">-->
-                <!--<div class="flex-grow"></div>-->
-                <!--<div style="text-align: right;padding: 0.5em 1em;">-->
-                    <!--<i class="fa fa-align-justify fa-2x" aria-hidden="true" @click="is_show_menu=true"></i>-->
-                <!--</div>-->
-            <!--</div>-->
 
             <transition name="slide">
                 <div v-show="crt_view=='search'" class="slide-win">

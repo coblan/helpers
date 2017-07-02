@@ -3,6 +3,11 @@
 
 {% block extra_head %}
 <script>
+
+//    ex.each(heads,function(head){
+//        if(head.name=='')
+//    })
+
     ex_logic={
         methods:{
             submit: function submit() {
@@ -18,6 +23,8 @@
                     hide_upload(500);
                     if (resp.save_workself.errors) {
                         self.kw.errors = resp.save_workself.errors;
+                    }else if(search_args.next){
+                        location=decodeURIComponent(search_args.next)
                     }
                 });
             },
