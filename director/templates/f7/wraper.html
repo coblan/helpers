@@ -51,26 +51,29 @@
                 <!-- We have home navbar without left link-->
                 <div class="center sliding">Awesome App</div>
                 <div class="right">
-                    <!-- Right link contains only icon - additional "icon-only" class--><a href="#" class="link icon-only open-panel"> <i class="icon icon-bars"></i></a>
+                    <!--<a href="#" class="link icon-only open-panel"> <i class="icon icon-bars"></i></a>-->
                 </div>
             </div>
         </div>
         <!-- Pages, because we need fixed-through navbar and toolbar, it has additional appropriate classes-->
         <div class="pages navbar-through toolbar-through">
             <!-- Page, data-page contains page name-->
-            <div data-page="index" class="page">
+            <div data-page="home" class="page">
                 <!-- Scrollable page content-->
                 <div class="page-content">
-
+                    {% block page_content %}
                     <a href="/static/services.html?t=123">service</a>
-
+                    {% endblock %}
                 </div>
             </div>
         </div>
         <!-- Bottom Toolbar-->
+
+        {% block tool_bar %}
         <div class="toolbar">
             <div class="toolbar-inner"><a href="#" class="link">Link 1</a><a href="#" class="link">Link 2</a></div>
         </div>
+        {% endblock %}
     </div>
 </div>
 <!-- Path to Framework7 Library JS-->
@@ -103,6 +106,17 @@
                 var data = el.attr('data')
                 el.attr('src',data)
             },500)
+        }else if(page.name=='home'){
+            new Vue({
+                el:'#there',
+                data:{
+                    menu:menu,
+
+                },
+
+                methods:{
+                }
+            })
         }
     })
 </script>

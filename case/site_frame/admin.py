@@ -18,6 +18,7 @@ class MHome(object):
 class F7Home(object):
     template='f7/home.html'
     need_login=False
+    ajax_html=True
     def __init__(self,request):
         self.request=request
     

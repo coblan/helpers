@@ -87,7 +87,7 @@ class BaseEngine(object):
                 
         page=page_cls(request)
         ctx=page.get_context()
-        if  request.is_ajax():
+        if  request.is_ajax() and not getattr(page,'ajax_html',False):
             return HttpResponse(json.dumps(ctx),content_type="application/json")
         else:
             ctx['menu']=self.get_menu(request)   
