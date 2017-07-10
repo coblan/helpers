@@ -179,7 +179,7 @@ page_dc.update({
     
     'organize.employee.wx':EmployeeTablePageWX,
     'organize.employee.wx.edit':EmpGroup,
-    'organize.employeeself.wx':EmployeeSelf,
+    'organize.employeeself.f7':EmployeeSelf,
     
    
     

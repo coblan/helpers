@@ -7,7 +7,7 @@ from .baseinfo import BasicInfoFields
 from .employee import EmployeeFields
 
 class EmployeeSelf(object):
-    template='organize/employee_self_wx.html'
+    template='organize/employee_self_f7.html'
     def __init__(self,request):
         user= request.user
         ctx={}

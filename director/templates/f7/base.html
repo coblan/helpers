@@ -4,7 +4,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-	 <meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no">
     <title>{{ page_label | default:''}}</title>
 
     <script src="{% static 'lib/jquery3.2.1.min.js' %}"></script>
@@ -27,8 +27,8 @@
     {% include 'director/reverse.html' %}
 
     <script type="text/javascript">
-//        var strategies = Vue.config.optionMergeStrategies
-//        strategies.myOption = strategies.methods
+        //        var strategies = Vue.config.optionMergeStrategies
+        //        strategies.myOption = strategies.methods
 
         menu = {{ menu | jsonify }}
 
@@ -152,7 +152,7 @@
         padding: 0.3em 0.6em;
     }
     /*.main.content{*/
-        /*padding: 0.5em 0 4em 0;*/
+    /*padding: 0.5em 0 4em 0;*/
     /*}*/
 
     .total-page{
@@ -177,7 +177,7 @@
     </div>
 
     <div style="position: relative;">
-    {% block main_menu %}
+        {% block main_menu %}
 
         <div class="weui-tabbar nav footer">
             <a id="help-page" href="/wx/help.wx" class="weui-tabbar__item ">
@@ -195,7 +195,7 @@
 
         </div>
 
-    {% endblock %}
+        {% endblock %}
 
     </div>
 </div>
@@ -204,11 +204,11 @@
 
 <style type="text/css">
     /*body.start{*/
-        /*opacity: 0;*/
+    /*opacity: 0;*/
     /*}*/
     /*body.ready{*/
-        /*background-color: #f7f5f3;*/
-        /*transition: all 0.2s ease;*/
+    /*background-color: #f7f5f3;*/
+    /*transition: all 0.2s ease;*/
     /*}*/
 
     .nav .fake-active>i,.nav .fake-active>p{
@@ -216,11 +216,11 @@
 
     }
     /*.nav.footer{*/
-        /*position: static;*/
-        /*margin: 0;*/
+    /*position: static;*/
+    /*margin: 0;*/
     /*}*/
     /*.weui-tab__panel{*/
-        /*padding-bottom: 150px;*/
+    /*padding-bottom: 150px;*/
     /*}*/
     .field .error{
         color: red;

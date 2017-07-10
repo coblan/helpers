@@ -15,6 +15,15 @@ class MHome(object):
         return {}
 
 
+class F7Home(object):
+    template='f7/home.html'
+    need_login=False
+    def __init__(self,request):
+        self.request=request
+    
+    def get_context(self):
+        return {}    
+
     
 class Help(object):
     template='site_frame/help_wx.html'
@@ -30,5 +39,6 @@ class Help(object):
 
 page_dc.update({
     'home.wx':MHome,
+    'home.f7':F7Home,
     'help.wx':Help,
 })

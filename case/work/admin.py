@@ -333,7 +333,7 @@ class WRselfValidDepart(ValidDepart):
 
 class WRselfTablePage(TablePage):
     tableCls=WRselfTable
-    template='work/workself_wx.html'
+    template='work/workself_f7.html'
     
     def __init__(self,request):
         self.request=request

@@ -107,7 +107,6 @@ class BaseEngine(object):
             ctx=self.custome_ctx(ctx)
             return render(request,template,context=ctx)
        
-            
     def custome_ctx(self,ctx):
         return ctx
     

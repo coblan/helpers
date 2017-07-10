@@ -123,5 +123,20 @@ def donwload_views(request,app):
         return naked_router(request, ajax_module.get_global())
     except KeyError as e:
         rt={'status':'error','msg':'key error '+str(e) +' \n may function name error'}
-        return HttpResponse(json.dumps(rt),content_type="application/json")      
+        return HttpResponse(json.dumps(rt),content_type="application/json")  
+    
+    # class F7FrameWraper(object):
+        # template='f7/frame_wraper.html'
+        # def __init__(self,request):
+            # src= request.GET.get('src')
+            # self.src=urllib.unquote( src)
+            
+        # def get_context(self):
+            # return {'src':self.src}
+        
+def f7_frame_wraper(request):
+    src= request.GET.get('src')
+    name=request.GET.get('name','noname')
+    src=urllib.unquote( src)
+    return render(request,'f7/frame_wraper.html',context={'src':src,'name':name})
     
