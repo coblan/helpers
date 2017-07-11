@@ -69,6 +69,7 @@ def sim_dict(instance,filt_attr=None,include=None,exclude=None):
             proxy_cls = field_map.get(field.__class__)
             if proxy_cls:
                 out[field.name] = proxy_cls().to_dict(instance,field.name)
+                out['_%s_label'%field.name]=unicode(getattr(instance,field.name,''))
             else:
                 out[field.name]=field.get_prep_value( getattr(instance,field.name,None) )  
                 if field.choices:

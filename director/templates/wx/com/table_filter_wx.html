@@ -1,44 +1,100 @@
 
 <script>
     $(function(){
-        new Vue({
+       filter= new Vue({
             el:'#filter-block',
             data:{
                 row_filters:row_filters,
                 search_args:search_args,
                 search_tip:search_tip,
-                ln_state:ln_state
+                ln_state:ln_state,
+                show:false,
             },
             methods:{
                 search:function () {
                     location=ex.appendSearch(search_args)
-//                    location =ex.template('{path}{search}',{path:location.pathname,
-//                        search: encodeURI(ex.searchfy(this.search_args,'?')) })
                 },
             }
-//            mounted:function(){
-//                var self=this
-//                bus.$on('show_filter',function(){
-//                    ln.pushState({crt_view:'show_filter'})
-//                })
-//            },
         })
     })
 
 </script>
 
+
+<style>
+    ._full_screen{
+        position: fixed;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        top:0;
+        background-color: white;
+        z-index: 1000;
+        //overflow: auto;
+    }
+
+    .slide_up-enter-active, .slide_up-leave-active {
+        transition: all .5s ease-out;
+    }
+    .slide_up-enter,.slide_up-leave-to {
+        top: 100vh;
+        /*opacity: 0;*/
+    }
+</style>
+
+
 <div id="filter-block">
-    <transition name="slide">
-        <div v-show="ln_state.crt_view=='show_filter'" class="slide-win">
-            <title-bar :with_back="true" title="筛选过滤"></title-bar>
+    <transition name="slide_up" >
+        <div v-show="show" class="_full_screen">
+
+            <!--<title-bar :with_back="true" title="筛选过滤"></title-bar>-->
             <com-filter :row_filters="row_filters" :search_args="search_args" :search_tip='search_tip'></com-filter>
 
             <div class="weui-btn-area">
                 <a class="weui-btn weui-btn_primary" href="javascript:" @click='search()' style="width: 50%;">
                     <i class="fa fa-search" aria-hidden="true"></i>
                 </a>
+                <button @click="show=false">close</button>
             </div>
 
         </div>
     </transition>
 </div>
+
+<!--<div class="popup popup-filter">-->
+    <!--<div class="content-block">-->
+
+        <!--<p><a href="#" class="close-popup">Close popup</a></p>-->
+
+        <!--<div id="filter-block">-->
+            <!--<div>-->
+                <!--<title-bar :with_back="true" title="筛选过滤"></title-bar>-->
+                <!--<com-filter :row_filters="row_filters" :search_args="search_args" :search_tip='search_tip'></com-filter>-->
+
+                <!--<div class="weui-btn-area">-->
+                    <!--<a class="weui-btn weui-btn_primary" href="javascript:" @click='search()' style="width: 50%;">-->
+                        <!--<i class="fa fa-search" aria-hidden="true"></i>-->
+                    <!--</a>-->
+                <!--</div>-->
+
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
+<!--</div>-->
+
+
+<!--<div id="filter-block">-->
+    <!--<transition name="slide">-->
+        <!--<div v-show="show" class="slide-win">-->
+            <!--<title-bar :with_back="true" title="筛选过滤"></title-bar>-->
+            <!--<com-filter :row_filters="row_filters" :search_args="search_args" :search_tip='search_tip'></com-filter>-->
+
+            <!--<div class="weui-btn-area">-->
+                <!--<a class="weui-btn weui-btn_primary" href="javascript:" @click='search()' style="width: 50%;">-->
+                    <!--<i class="fa fa-search" aria-hidden="true"></i>-->
+                <!--</a>-->
+            <!--</div>-->
+
+        <!--</div>-->
+    <!--</transition>-->
+<!--</div>-->

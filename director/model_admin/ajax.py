@@ -26,9 +26,9 @@ def save(row,user,request):
     """
     """
     try:
-        instance = save_row(row, user,request)
-        perm=ModelPermit(instance,user)
-        dc =to_dict(instance,include=perm.readable_fields())
+        dc = save_row(row, user,request)
+        # perm=ModelPermit(instance,user)
+        # dc =to_dict(instance,include=perm.readable_fields())
         return {'status':'success','row':dc}
     except ValidationError as e:
         return {'errors':dict(e)}

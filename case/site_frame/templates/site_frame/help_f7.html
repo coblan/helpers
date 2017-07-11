@@ -1,0 +1,51 @@
+{% extends "f7/wraper.html" %}
+{% load static %}
+{% load jsonify %}
+
+{% block extra_script %}
+<link rel="stylesheet" href="{% static 'lib/weui.min.css' %}">
+<script src="{% static 'lib/jquery3.2.1.min.js' %}"></script>
+<link rel="stylesheet" href="{% static 'lib/font-awesome4.7/font-awesome4.7.min.css' %}">
+<script src="{% static 'lib/vue2.3.2.js' %}"></script>
+<script src="{% static 'js/fields_mb.pack.js' %}"></script>
+
+<style>
+p.weui-tabbar__label{
+    margin: 0.2em;
+}
+</style>
+{% endblock %}
+
+{% block page_content %}
+<script>
+    $('.navbar-inner .center').html('简略帮助')
+
+</script>
+
+<div class='flex-grow' style='overflow: auto;'>
+    {{ help_text | safe }}
+</div>
+
+{% endblock %}
+
+{% block tool_bar %}
+
+
+<div class="toolbar">
+    <div class="weui-tabbar nav footer">
+        <a id="help-page" href="/f7/help.f7" class="weui-tabbar__item weui-bar__item_on external">
+            <i class="fa fa-info-circle weui-tabbar__icon" aria-hidden="true" ></i>
+            <p class="weui-tabbar__label">信息</p>
+        </a>
+        <a id="work-panel" href="/f7/home.f7" class="weui-tabbar__item external">
+            <i class="fa fa-th weui-tabbar__icon" aria-hidden="true" ></i>
+            <p class="weui-tabbar__label">工作</p>
+        </a>
+        <a id="employee-center" href="/f7/organize.employeeself.f7" class="weui-tabbar__item external">
+            <i class="fa fa-user-circle weui-tabbar__icon" aria-hidden="true" ></i>
+            <p class="weui-tabbar__label">我的信息</p>
+        </a>
+
+    </div>
+</div>
+{% endblock %}

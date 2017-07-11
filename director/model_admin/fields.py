@@ -26,7 +26,7 @@ def save_row(row,user,request):
     fields_obj=fields_cls(row,crt_user=user)
     if fields_obj.is_valid():
         fields_obj.save_form()
-        return fields_obj.instance
+        return fields_obj.get_row()
     else:
         raise ValidationError(fields_obj.errors)
     

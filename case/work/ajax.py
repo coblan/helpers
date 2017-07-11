@@ -8,7 +8,8 @@ def save_workself(row,user,request):
     fm = WRselfForm(row,crt_user=user,request=request)
     if fm.is_valid():
         fm.save_form()
-        return {'status':'success'}
+        dc = fm.get_row()
+        return {'status':'success','row':dc}
     else:
         return {'errors':dict(fm.errors)}
 

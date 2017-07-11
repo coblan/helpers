@@ -24,7 +24,24 @@
         var iframe_url='/_f7_iframe?name=iframe_'+name+'&src='+encodeURIComponent(url)
         mainView.router.loadPage(iframe_url)
     }
+    function pop_menu(callback){
+        $('.navbar-on-center .pop-menu').css('visibility','visible')
+        if(callback){
+            $('.navbar-on-center .pop-menu').click(callback)
+        }
+    }
+    function back(callback){
+        if(callback){
+            callback($('.page-on-left iframe')[0].contentWindow)
+        }
+        mainView.router.back()
 
+
+//        setTimeout(function(){
+//            $('.page-on-center iframe')[0].contentWindow.location.reload()
+//        },500)
+
+    }
 
 
     menu = {{ menu | jsonify }}
@@ -54,6 +71,10 @@
         color: green;
 
     }
+     p.weui-tabbar__label{
+         margin: 0.2em;
+     }
+
 </style>
 
 
@@ -73,12 +94,12 @@
 
     <div class="pad">
     <div class="weui-grids">
-    <a :href="'/_f7_iframe?name=iframe_'+act.name+'&src='+act.url" class="weui-grid" v-for="act in menu">
-    <div class="weui-grid__icon">
-    <span v-html="act.icon"></span>
-    </div>
-    <p class="weui-grid__label" v-text="act.label"></p>
-    </a>
+        <a :href="'/_f7_iframe?name=iframe_'+act.name+'&src='+act.url" class="weui-grid ajax" v-for="act in menu">
+            <div class="weui-grid__icon">
+                <span v-html="act.icon"></span>
+            </div>
+            <p class="weui-grid__label" v-text="act.label"></p>
+        </a>
     </div>
     </div>
 
@@ -89,17 +110,18 @@
 {% endblock %}
 
 {% block tool_bar %}
+
 <div class="toolbar">
     <div class="weui-tabbar nav footer">
-        <a id="help-page" href="/wx/help.wx" class="weui-tabbar__item ">
+        <a id="help-page" href="/f7/help.f7" class="weui-tabbar__item external">
             <i class="fa fa-info-circle weui-tabbar__icon" aria-hidden="true" ></i>
             <p class="weui-tabbar__label">信息</p>
         </a>
-        <a id="work-panel" href="/wx/home.wx" class="weui-tabbar__item weui-bar__item_on">
+        <a id="work-panel" href="/f7/home.f7" class="weui-tabbar__item weui-bar__item_on external">
             <i class="fa fa-th weui-tabbar__icon" aria-hidden="true" ></i>
             <p class="weui-tabbar__label">工作</p>
         </a>
-        <a id="employee-center" href="/wx/organize.employeeself.wx" class="weui-tabbar__item">
+        <a id="employee-center" href="/f7/organize.employeeself.f7" class="weui-tabbar__item external">
             <i class="fa fa-user-circle weui-tabbar__icon" aria-hidden="true" ></i>
             <p class="weui-tabbar__label">我的信息</p>
         </a>

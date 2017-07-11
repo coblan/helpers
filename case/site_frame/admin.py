@@ -27,7 +27,7 @@ class F7Home(object):
 
     
 class Help(object):
-    template='site_frame/help_wx.html'
+    template='site_frame/help_f7.html'
     def __init__(self,request):
         self.request=request
         
@@ -41,5 +41,5 @@ class Help(object):
 page_dc.update({
     'home.wx':MHome,
     'home.f7':F7Home,
-    'help.wx':Help,
+    'help.f7':Help,
 })

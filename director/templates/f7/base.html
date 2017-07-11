@@ -7,6 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no">
     <title>{{ page_label | default:''}}</title>
 
+
+
     <script src="{% static 'lib/jquery3.2.1.min.js' %}"></script>
     <link rel="stylesheet" href="{% static 'lib/font-awesome4.7/font-awesome4.7.min.css' %}">
     <script src="{% static 'lib/vue2.3.2.js' %}"></script>
@@ -83,6 +85,8 @@
 
 <script>
 
+
+
     bus=new Vue()
 
     in_wx_agent=false
@@ -114,27 +118,27 @@
             var with_menu=false
         }
 
-        new Vue({
-            el:'#com-title',
-            data:{
-                title_bar:title_bar,
-                page_label:page_label,
-                with_back:with_back,
-                with_menu:with_menu,
-            },
-            computed:{
-                is_show_back:function(){
-                    if(this.with_back){
-                        return true
-                    }else{
-                        return false
-                    }
-                }
-            },
-            methods:{
-
-            }
-        })
+//        new Vue({
+//            el:'#com-title',
+//            data:{
+//                title_bar:title_bar,
+//                page_label:page_label,
+//                with_back:with_back,
+//                with_menu:with_menu,
+//            },
+//            computed:{
+//                is_show_back:function(){
+//                    if(this.with_back){
+//                        return true
+//                    }else{
+//                        return false
+//                    }
+//                }
+//            },
+//            methods:{
+//
+//            }
+//        })
     })
 
 
@@ -159,12 +163,13 @@
         height: 100vh;
         width: 100vm;
     }
+    .popup-overlay{z-index: 111 !important;}
 </style>
 
 <div class="flex-v total-page">
-    <div id="com-title">
-        <title-bar v-if="title_bar" :title="page_label" :with_back="is_show_back" :with_menu="with_menu"></title-bar>
-    </div>
+    <!--<div id="com-title">-->
+        <!--<title-bar v-if="title_bar" :title="page_label" :with_back="is_show_back" :with_menu="with_menu"></title-bar>-->
+    <!--</div>-->
 
 
     <div id="main-content-wrap" class="flex-grow flex-v" >
@@ -231,7 +236,21 @@
     </div>
 </template>
 
+{% block extra_body %}
+{% endblock %}
+
 </body>
 
+<!--<script type="text/javascript" src="/static/lib/framework7/framework7.min.js"></script>-->
+<!--<link rel="stylesheet" href="/static/lib/framework7/framework7.ios.min.css">-->
+<!--<link rel="stylesheet" href="/static/lib/framework7/framework7.ios.colors.min.css">-->
+
+<script>
+//    $(function(){
+//        var sss = new Framework7();
+//    })
+
+
+</script>
 
 </html>

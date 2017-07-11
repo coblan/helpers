@@ -287,7 +287,7 @@ class WRselfForm(ModelFields):
     
 
 class WRselfFormPage(FormPage):
-    template='work/workself_form_wx.html'
+    template='work/workself_form_f7.html'
     fieldsCls=WRselfForm
 
 class WRselfTable(ModelTable):
@@ -427,9 +427,9 @@ page_dc.update({
     'work.workrecord.edit':WorkRecordFormPage,
     'work.workrecord.wx.edit':WorkRecordFormPageWX,
 
-    'work.wkself.wx':WRselfTablePage,
-    'work.wkself.wx.edit':WRselfFormPage,
+    'work.wkself.f7':WRselfTablePage,
+    'work.wkself.f7.edit':WRselfFormPage,
     
-    'work.worklist.wx':WorkListPage,
-    'work.worklist.wx.edit':WorkListFormPage,
+    'work.worklist.f7':WorkListPage,
+    'work.worklist.f7.edit':WorkListFormPage,
 })

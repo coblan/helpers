@@ -2,14 +2,24 @@
 {% load static %}
 {% load jsonify %}
 
+{% block extra_body %}
+
+{% include 'wx/com/table_filter_wx.html' %}
+{% endblock %}
 
 {% block page_content %}
 
 {% include 'organize/com_depart_btn.html' %}
-{% include 'wx/com/table_filter_wx.html' %}
-<script type="text/javascript">
 
-    parent.set_title(page_label)
+
+<script type="text/javascript">
+   if(parent.set_title &&  parent.pop_menu){
+       parent.set_title(page_label)
+       parent.pop_menu(function(){
+           table.show_menu= ! table.show_menu
+       })
+   }
+
 
     $(function(){
 
@@ -30,15 +40,7 @@
 
             },
             mixins:[table_fun],
-            mounted:function(){
-                var self=this
-//                Vue.nextTick(function(){
-//                    self.$refs.scroller.refresh()
-//                })
-                bus.$on('menu_click',function(){
-                    self.show_menu=true
-                })
-            },
+
             computed:{
 //              has_next_page:function(){
 //                  var final=row_pages.options[row_pages.options.length-1]
@@ -69,6 +71,14 @@
 
                 depart_link:function(pk){
                     return ex.appendSearch({_depart:pk})
+                },
+                open_filter:function(){
+                    this.show_menu=false
+                    filter.show=true
+//                    Vue.nextTick(function(){
+//                        parent.myApp.popup($('.popup-filter')[0])
+//                    })
+
                 }
 
             }
@@ -149,7 +159,7 @@
 
                 <div class="weui-actionsheet__cell" @click="add_new();show_menu=false" v-if="can_add">新建</div>
                 <div class="weui-actionsheet__cell" @click="del_item();show_menu=false" v-if="can_del &&selected.length>0">删除选中</div>
-                <div class="weui-actionsheet__cell" @click="ln.pushState({crt_view:'show_filter'});show_menu=false" v-if="can_search">排序过滤</div>
+                <div class="weui-actionsheet__cell" @click="open_filter()" v-if="can_search">排序过滤</div>
                 <div class="weui-actionsheet__cell" v-if="help_url" @click="goto(help_url)">帮助</div>
 
             </div>
