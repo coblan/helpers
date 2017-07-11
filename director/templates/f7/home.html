@@ -36,13 +36,40 @@
         }
         mainView.router.back()
 
-
 //        setTimeout(function(){
 //            $('.page-on-center iframe')[0].contentWindow.location.reload()
 //        },500)
-
     }
+    function iframe_full_screen(value,second){
+        var second= second || 300
+        if(value){
+            $('.page-on-center .iframe_wraper').addClass('full-screen')
+            $('.toolbar').hide()
+            setTimeout(function(){
+                $('.navbar').hide()
+            },second)
 
+        }else{
+            $('.page-on-center .iframe_wraper').removeClass('full-screen')
+            $('.page-on-center .page-content').addClass('_no_bottom')
+            $('.navbar').show()
+            setTimeout(function(){
+                $('.toolbar').show()
+                $('.page-on-center .page-content').removeClass('_no_bottom')
+            },second)
+
+
+        }
+    }
+    function call_iframe(callback_name){
+        $('.page-on-center iframe')[0].contentWindow[callback_name]()
+    }
+    function add_nav(str){
+        $('.navbar-on-center').after(str)
+    }
+    function remove_nav(){
+        $('.navbar-on-center').next('.navbar').remove()
+    }
 
     menu = {{ menu | jsonify }}
 
@@ -74,7 +101,26 @@
      p.weui-tabbar__label{
          margin: 0.2em;
      }
-
+     .page-content{
+         z-index: auto;
+     }
+    /*.iframe-content{*/
+        /*width: 100%;*/
+        /*height: 100%;*/
+    /*}*/
+    .page-content._no_bottom{
+        padding-bottom: 0;
+    }
+    .iframe_wraper.full-screen{
+        position: fixed;
+        top:0;
+        left:0;
+        bottom: 0;
+        right: 0;
+        z-index: 5000;
+        margin: 0;
+        padding: 0;
+    }
 </style>
 
 

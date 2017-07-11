@@ -1,5 +1,12 @@
 
 <script>
+    function close_filter(){
+        filter.close_win()
+    }
+    function search(){
+        filter.search()
+    }
+
     $(function(){
        filter= new Vue({
             el:'#filter-block',
@@ -10,10 +17,35 @@
                 ln_state:ln_state,
                 show:false,
             },
+           watch:{
+               show:function(v){
+//                   parent.iframe_full_screen(v)
+               }
+           },
             methods:{
                 search:function () {
-                    location=ex.appendSearch(search_args)
+
+                    setTimeout(function(){
+                        location=ex.appendSearch(search_args)
+                    },300)
+                    this.close_win()
+
                 },
+                open_win:function(){
+                    parent.add_nav(' <div class="navbar">\
+                            <div class="navbar-inner">\
+                            <div class="left"><a href=" javascript:void(0)" onclick="call_iframe(\'close_filter\')" style="padding-left: 1em;">取消</a></div>\
+                            <div class="center"></div>\
+                            <div class="right"><a href=" javascript:void(0)" onclick="call_iframe(\'search\')" style="padding-right: 1em;">确定 </a></div>\
+                            </div>\
+                            </div>')
+                    this.show=true
+                },
+                close_win:function(){
+                    parent.remove_nav()
+                    this.show=false
+                }
+
             }
         })
     })
@@ -29,12 +61,12 @@
         height: 100vh;
         top:0;
         background-color: white;
-        z-index: 1000;
+        z-index: 9000;
         //overflow: auto;
     }
 
     .slide_up-enter-active, .slide_up-leave-active {
-        transition: all .5s ease-out;
+        transition: all .3s cubic-bezier(0.56, 0.33,0.83, 0.71);
     }
     .slide_up-enter,.slide_up-leave-to {
         top: 100vh;
@@ -43,19 +75,19 @@
 </style>
 
 
-<div id="filter-block">
+<div id="filter-block" >
     <transition name="slide_up" >
-        <div v-show="show" class="_full_screen">
+        <div v-show="show" class="_full_screen" style="border-top: 1px solid #8f8f8f;">
 
             <!--<title-bar :with_back="true" title="筛选过滤"></title-bar>-->
             <com-filter :row_filters="row_filters" :search_args="search_args" :search_tip='search_tip'></com-filter>
 
-            <div class="weui-btn-area">
-                <a class="weui-btn weui-btn_primary" href="javascript:" @click='search()' style="width: 50%;">
-                    <i class="fa fa-search" aria-hidden="true"></i>
-                </a>
-                <button @click="show=false">close</button>
-            </div>
+            <!--<div class="weui-btn-area">-->
+                <!--<a class="weui-btn weui-btn_primary" href="javascript:" @click='search()' style="width: 50%;">-->
+                    <!--<i class="fa fa-search" aria-hidden="true"></i>-->
+                <!--</a>-->
+                <!--<button @click="show=false">close</button>-->
+            <!--</div>-->
 
         </div>
     </transition>
