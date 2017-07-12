@@ -20,6 +20,17 @@
        })
    }
 
+   var history_state={crt_view:'',pathname:location.pathname}
+
+   function pushState(state){
+       state.call_iframe='popState'
+        parent.pushState(state)
+   }
+   function popState(state){
+       ex.assign(history_state,state)
+   }
+
+   pushState(history_state)
 
     $(function(){
 
@@ -31,12 +42,11 @@
 //                crt_view:crt_view,
                 ln:ln,
                 page_label:page_label,
-                in_wx_agent:in_wx_agent,
                 show_menu:false,
 
                 depart_list:depart_list,
                 crt_depart:crt_depart,
-
+                history_state:history_state,
 
             },
             mixins:[table_fun],
@@ -74,7 +84,7 @@
                 },
                 open_filter:function(){
                     this.show_menu=false
-                    filter.open_win()
+                    pushState({crt_view:'filter_win'})
 //                    Vue.nextTick(function(){
 //                        parent.myApp.popup($('.popup-filter')[0])
 //                    })

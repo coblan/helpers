@@ -24,6 +24,18 @@
         var iframe_url='/_f7_iframe?name=iframe_'+name+'&src='+encodeURIComponent(url)
         mainView.router.loadPage(iframe_url)
     }
+    function replace_iframe(str){
+        var iframe=$('.page-on-center .iframe_wraper')
+
+        var container = iframe.parent();
+//
+        iframe.remove();
+        iframe.attr('data', str);
+        container.append(iframe);
+        history.pushState({kind:'replace_url'},'')
+
+//        $('.page-on-center iframe')[0].contentWindow.location.replace(str)
+    }
     function pop_menu(callback){
         $('.navbar-on-center .pop-menu').css('visibility','visible')
         if(callback){
@@ -32,7 +44,7 @@
     }
     function back(callback){
         if(callback){
-            callback($('.page-on-left iframe')[0].contentWindow)
+            callback($('.page-on-left .iframe_wraper')[0].contentWindow)
         }
         mainView.router.back()
 
@@ -62,7 +74,8 @@
         }
     }
     function call_iframe(callback_name){
-        $('.page-on-center iframe')[0].contentWindow[callback_name]()
+        var args=Array.prototype.slice.call(arguments)
+        $('.page-on-center .iframe_wraper')[0].contentWindow[callback_name].apply(this,args.slice(1,args.length))
     }
     function add_nav(str){
         $('.navbar-on-center').after(str)
@@ -71,6 +84,27 @@
         $('.navbar-on-center').next('.navbar').remove()
     }
 
+    function pushState(state){
+        if(JSON.stringify(history.state)!=JSON.stringify(state)){
+            ln.pushState(state)
+        }
+
+    }
+
+
+    ln.history_handle({
+//        init:{viewIndex:0},
+        handler:function(state){
+            if(state.pathname  && state.pathname == location.pathname){
+                mainView.router.back()
+            }else if(state.call_iframe){
+                call_iframe(state.call_iframe,state)
+            }else{
+                mainView.router.back()
+            }
+            // 如果 mainView.history 没有了，还在 back，证明想退出
+        }
+    })
     menu = {{ menu | jsonify }}
 
     title_bar=false

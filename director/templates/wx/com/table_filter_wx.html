@@ -1,10 +1,11 @@
 
 <script>
     function close_filter(){
-        filter.close_win()
+        history.back()
     }
     function search(){
         filter.search()
+        history.back()
     }
 
     $(function(){
@@ -15,23 +16,31 @@
                 search_args:search_args,
                 search_tip:search_tip,
                 ln_state:ln_state,
-                show:false,
+                history_state:history_state,
             },
+           computed:{
+               show:function(){
+                   return this.history_state.crt_view=='filter_win'
+               }
+           },
            watch:{
+
                show:function(v){
+                   if(v){
+                       this.add_nav()
+                   }else{
+                       this.rm_nav()
+                   }
 //                   parent.iframe_full_screen(v)
                }
            },
             methods:{
                 search:function () {
-
                     setTimeout(function(){
-                        location=ex.appendSearch(search_args)
+                        parent.replace_iframe(ex.appendSearch(search_args))
                     },300)
-                    this.close_win()
-
                 },
-                open_win:function(){
+                add_nav:function(){
                     parent.add_nav(' <div class="navbar">\
                             <div class="navbar-inner">\
                             <div class="left"><a href=" javascript:void(0)" onclick="call_iframe(\'close_filter\')" style="padding-left: 1em;">取消</a></div>\
@@ -39,11 +48,11 @@
                             <div class="right"><a href=" javascript:void(0)" onclick="call_iframe(\'search\')" style="padding-right: 1em;">确定 </a></div>\
                             </div>\
                             </div>')
-                    this.show=true
+
                 },
-                close_win:function(){
+                rm_nav:function(){
                     parent.remove_nav()
-                    this.show=false
+
                 }
 
             }
