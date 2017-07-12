@@ -95,7 +95,6 @@
         // Because we use fixed-through navbar we can enable dynamic navbar
         dynamicNavbar: true,
 
-
     });
 
 
@@ -105,14 +104,13 @@
         var page = e.detail.page;
 
         history.pushState({name:page.name,kind:'page'}, '');
-        last_state=history.state
 
         if (page.name.startsWith('iframe_')) {
             // Following code will be executed for page with data-page attribute equal to "about"
             setTimeout(function(){
                 var el=$('.page-on-center').find('.iframe_wraper')
-//                var data = el.attr('data')
-//                el.attr('src',data)
+                var data = el.attr('data-src')
+                el.attr('src',data)
             },500)
         }else if(page.name=='home'){
             new Vue({

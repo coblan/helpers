@@ -17,6 +17,7 @@
 <script src="{% static 'lib/vue2.3.2.js' %}"></script>
 <script src="{% static 'js/fields_mb.pack.js' %}"></script>
 <script type="text/javascript">
+
     function set_title(title){
         $('.navbar-on-center .center').html(title)
     }
@@ -25,14 +26,29 @@
         mainView.router.loadPage(iframe_url)
     }
     function replace_iframe(str){
+
+        var page_name=$('.page-on-center').attr('data-page')
         var iframe=$('.page-on-center .iframe_wraper')
 
-        var container = iframe.parent();
-//
+        var html = '<iframe class="iframe_wraper" src='+str + ' frameborder="0" width="100%" height="100%" src="/f7/work.wkself.f7"></iframe>'
+        iframe.after(html)
         iframe.remove();
-        iframe.attr('data', str);
-        container.append(iframe);
-        history.pushState({kind:'replace_url'},'')
+
+        history.pushState({name:page_name,kind:'page'}, '');
+
+//        iframe[0].contentWindow.location.replace(str)
+//        var container = iframe.parent();
+
+
+//
+//        container.html(html)
+//        setTimeout(function(){
+//            var iframe=$('.page-on-center .iframe_wraper')
+//            iframe.attr('src', str);
+//        })
+
+//        container.append(iframe);
+//        history.pushState({kind:'replace_url'},'')
 
 //        $('.page-on-center iframe')[0].contentWindow.location.replace(str)
     }
@@ -95,7 +111,9 @@
     ln.history_handle({
 //        init:{viewIndex:0},
         handler:function(state){
-            if(state.pathname  && state.pathname == location.pathname){
+            var page_name = $('.page-on-center').attr('data-page')
+
+            if(state.name  && state.name != page_name){
                 mainView.router.back()
             }else if(state.call_iframe){
                 call_iframe(state.call_iframe,state)

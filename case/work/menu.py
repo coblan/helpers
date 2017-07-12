@@ -53,11 +53,11 @@ wx_menu=[
 ]
 
 f7_menu=[
-     {'name':'work.workindex.f7','label':'工作类别','url':page('work.workindex.f7'),'icon':'<img src="/static/res/image/work_types.ico" />','visible':can_list((Work,Index))}, 
+     {'name':'work_workindex_f7','label':'工作类别','url':page('work.workindex.f7'),'icon':'<img src="/static/res/image/work_types.ico" />','visible':can_list((Work,Index))}, 
     {'name':'work_wkself_f7','label':'个人工作提交','url':page('work.wkself.f7'),'icon':fa('fa-list-ol fa-2x'),'visible':can_create_work},  
-    {'name':'work.workrecord.f7','label':'工作审核','url':page('work.workrecord.f7'),'icon':fa('fa-check-square-o fa-2x'),'visible':can_check_work},  
+    {'name':'work_workrecord_f7','label':'工作审核','url':page('work.workrecord.f7'),'icon':fa('fa-check-square-o fa-2x'),'visible':can_check_work},  
 
-    {'name':'work.worklist.f7','label':'工作记录','url':page('work.worklist.f7'),'icon':fa('fa-calendar-check-o fa-2x'),'visible':can_read_all},     
+    {'name':'work_worklist_f7','label':'工作记录','url':page('work.worklist.f7'),'icon':fa('fa-calendar-check-o fa-2x'),'visible':can_read_all},     
 ]
     
 

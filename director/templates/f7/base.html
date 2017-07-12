@@ -85,6 +85,26 @@
 
 <script>
 
+    if(parent.set_title &&  parent.pop_menu){
+        parent.set_title(page_label)
+        parent.pop_menu(function(){
+            table.show_menu= ! table.show_menu
+        })
+    }
+
+    var history_state={crt_view:'init'}
+
+    function pushState(state){
+        state.call_iframe='popState'
+        parent.pushState(state)
+    }
+    function popState(state){
+        ex.assign(history_state,state)
+    }
+
+    pushState(history_state)
+
+
 //    parent.iframe_full_screen(false,1)
 
     bus=new Vue()
