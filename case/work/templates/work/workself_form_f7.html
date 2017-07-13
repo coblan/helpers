@@ -22,10 +22,15 @@
                         self.kw.errors = resp.save_workself.errors;
                     }else if(parent.back) {
                         var new_row=resp.save_workself.row
-                        parent.back(function(win){
-                            var row = ex.findone(win.rows,{pk:new_row.pk})
-                            ex.assign(row,new_row)
-                            row.work=new_row._work_label
+                        ff.back(function(win){
+                            if(self.kw.row.pk){
+                                var row = ex.findone(win.rows,{pk:new_row.pk})
+                                ex.assign(row,new_row)
+                                row.work=new_row._work_label
+                            }else{
+                                win.location.reload()
+                            }
+
                         })
                     }
                 });

@@ -51,8 +51,9 @@ class ModelFields(forms.ModelForm):
         page: _page=1
         row_filter:key=value&..
         """
-        pk=request.GET.get('pk')
-        return cls(pk=pk,crt_user=request.user) 
+        dc=request.GET.dict()
+        pk=dc.pop('pk',None)
+        return cls(pk=pk,crt_user=request.user,**dc) 
     
     def __init__(self,dc={},pk=None,crt_user=None,nolimit=False,*args,**kw):
         

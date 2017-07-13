@@ -24,7 +24,7 @@
 
 {% endblock %}
 
-<body>
+<body class="start">
 <!-- Status bar overlay for fullscreen mode-->
 <div class="statusbar-overlay"></div>
 <!-- Panels overlay-->
@@ -102,13 +102,15 @@
 
         // Get page data from event data
         var page = e.detail.page;
+        state_stack=[]
 
         if (page.name.startsWith('iframe_')) {
-            show_load()
+
             setTimeout(function(){
                 var el=$('.page-on-center').find('.iframe_wraper')
                 var data = el.attr('data-src')
                 el.attr('src',data)
+                show_load(10*1000)
             },500)
         }else if(page.name=='home'){
             new Vue({

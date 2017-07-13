@@ -5,7 +5,7 @@ from .admin import WRselfForm
 
 def save_workself(row,user,request):
     #instance=from_dict(row)
-    fm = WRselfForm(row,crt_user=user,request=request)
+    fm = WRselfForm(row,crt_user=user,_depart=request.GET.get('_depart'))
     if fm.is_valid():
         fm.save_form()
         dc = fm.get_row()

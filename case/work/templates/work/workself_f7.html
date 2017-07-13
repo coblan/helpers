@@ -16,7 +16,7 @@
 
 
 
-    parent.pop_menu(function(){
+    ff.pop_menu(function(){
         var buttons = [
             {
                 text: '新建',
@@ -44,7 +44,7 @@
                 text: '取消',
                 color: 'red',
         })
-        parent.myApp.actions(buttons)
+        ff.app.actions(buttons)
     })
 
     $(function(){
@@ -72,6 +72,15 @@
             },
             methods:{
 
+                add_new: function add_new() {
+                    // 启用
+                    var pathname=ex.template('{engine_url}/{page}.edit?', {
+                                    engine_url: engine_url,
+                                    page: page_name,
+                                });
+                    var url=ex.appendSearch(pathname,search_args)
+                    ff.load(url,'workself_edit')
+                },
                 ge_edit:function(pk){
                     var url=ex.template('{engine_url}/{page_name}.edit',{engine_url:engine_url,page_name:page_name})
                     search_args.pk=pk

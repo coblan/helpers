@@ -54,20 +54,20 @@
         })
 
         $(function(){
-            $('.weui-tabbar.nav a').on('touchstart',function(){
-                $(this).addClass('fake-active')
-            })
-            $('.weui-tabbar.nav a').on('touchend',function(){
-                var self=this
-                setTimeout(function(){
-                    $(self).removeClass('fake-active')
-                },500)
-
-            })
-            $('.weui-tabbar.nav a').on('click',function(){
-                $(this).addClass('fake-active')
-
-            })
+//            $('.weui-tabbar.nav a').on('touchstart',function(){
+//                $(this).addClass('fake-active')
+//            })
+//            $('.weui-tabbar.nav a').on('touchend',function(){
+//                var self=this
+//                setTimeout(function(){
+//                    $(self).removeClass('fake-active')
+//                },500)
+//
+//            })
+//            $('.weui-tabbar.nav a').on('click',function(){
+//                $(this).addClass('fake-active')
+//
+//            })
             setTimeout(function(){
                 $('body').removeClass('start')
                 $('body').addClass('ready')
@@ -85,21 +85,22 @@
 <script>
 
 $(function(){
-    parent.hide_load(200)
-    parent.init_page()
+
+    ff.hide_load(200)
+    ff.init_page()
 })
 
     ff={
+        app:parent.myApp,
         push:function(obj){
             parent.state_stack.push(obj)
         },
         pop:function(){
           parent.state_stack.pop()
         },
-//        pushState:function(state){
-//            state.call_iframe='popState'
-//            parent.pushState(state)
-//        },
+        back:function(callback){
+            parent.back(callback)
+        },
         load:function(url,name){
             parent.show_load()
             parent.load_iframe(url,name)
@@ -108,15 +109,48 @@ $(function(){
             parent.show_load()
             parent.replace_iframe(url)
         },
-        popmenu:function(buttons){
-
+        pop_menu:function(buttons){
+            parent.pop_menu(buttons)
+        },
+        hide_load:function(time){
+            parent.hide_load(time)
+        },
+        init_page:function(){
+            parent.init_page()
+            parent.set_title(page_label)
         }
     }
 
-    if(parent.set_title &&  parent.pop_menu){
-        parent.set_title(page_label)
+    if(!parent.myApp){
+        ff={
+            app:{
+                actions:function(){
 
+                }
+            },
+            push:function(obj){
+            },
+            pop:function(){
+            },
+            back:function(callback){
+            },
+            load:function(url,name){
+                location=url
+            },
+            replace:function(url){
+                location=url
+            },
+            pop_menu:function(buttons){
+
+            },
+            hide_load:function(time){
+            },
+            init_page:function(){
+
+            }
+        }
     }
+
 
     var history_state={crt_view:'init'}
 
@@ -158,11 +192,10 @@ $(function(){
 
     $(function(){
 
-        if($('#pop-menu').length>0){
-            var with_menu=true
-        }else{
-            var with_menu=false
-        }
+        setTimeout(function(){
+            $('body').removeClass('start')
+            $('body').addClass('ready')
+        })
 
 //        new Vue({
 //            el:'#com-title',
@@ -190,6 +223,14 @@ $(function(){
 
 </script>
 <style>
+    body.start{
+        opacity: 0;
+    }
+    body.ready{
+        background-color: white;
+        transition: all 0.2s ease;
+    }
+
 
     .title-bar{
         width: 100vw;

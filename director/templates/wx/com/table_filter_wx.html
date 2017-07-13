@@ -5,7 +5,7 @@
     }
     function search(){
         filter.search()
-        history.back()
+        filter.close()
     }
 
     $(function(){
@@ -92,7 +92,7 @@
     }
 
     .slide_up-enter-active, .slide_up-leave-active {
-        transition: all .3s cubic-bezier(0.56, 0.33,0.83, 0.71);
+        transition: all .5s ease;
     }
     .slide_up-enter,.slide_up-leave-to {
         top: 100vh;

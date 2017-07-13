@@ -102,10 +102,11 @@
                 mainView.router.back()
             }else{
                 var real_state= state_stack.pop()
-                if(typeof(obj) === 'function'){
+                if(typeof(real_state) === 'function'){
                     real_state()
                 }
             }
+            hide_load()
 //            var page_name = $('.page-on-center').attr('data-page')
 //            if(state.name  && state.name != page_name){
 //                mainView.router.back()
@@ -133,6 +134,13 @@
                 }
             })
         })
+
+    $(function(){
+        setTimeout(function(){
+            $('body').removeClass('start')
+            $('body').addClass('ready')
+        })
+    })
 </script>
 
 <style type="text/css">
@@ -204,9 +212,6 @@
 {% block tool_bar %}
 
 <div class="_full_wraper hide general-loader">
-    <!--<svg id="circleProcess" xmlns="http://www.w3.org/2000/svg">-->
-        <!--<circle id="circle" cx="50%" cy="50%" r="40%" stroke-width="10%"></circle>-->
-    <!--</svg>-->
     <div class="general">
         <span style="width:42px; height:42px" class="preloader"></span>
     </div>
@@ -214,6 +219,14 @@
 
 
 <style>
+    body.start{
+        opacity: 0;
+    }
+    body.ready{
+        background-color: #f7f5f3;
+        transition: all 0.2s ease;
+    }
+
     ._full_wraper{
         position: fixed;
         top:0;
@@ -231,36 +244,30 @@
         top: 50%;
         transform: translate(-50%,-50%);
     }
-    /*#circleProcess {*/
-        /*/!*position: relative;*!/*/
-        /*/!*top: 0;*!/*/
-        /*/!*left: 0;*!/*/
-        /*position: absolute;*/
-        /*left: 50%;*/
-        /*top: 50%;*/
 
-
-        /*width: 3em;*/
-        /*height: 3em;*/
-        /*stroke-dasharray: 255%;*/
-        /*stroke-dashoffset: 255%;*/
-        /*stroke: #5281ec;*/
-        /*fill: none;*/
-        /*-webkit-transform:translate(-50%,-50%) rotate(-90deg);*/
-        /*-moz-transform:translate(-50%,-50%) rotate(-90deg);*/
-        /*-ms-transform:translate(-50%,-50%) rotate(-90deg);*/
-        /*-o-transform:translate(-50%,-50%) rotate(-90deg);*/
-        /*transform: translate(-50%,-50%) rotate(-90deg);*/
-
-    /*}*/
 </style>
 
 <script>
 
-    function show_load(){
+    var load_timer=null
+
+    function show_load(timeout){
+        var timeout= timeout || 10*1000
         $('.general-loader').removeClass('hide')
+
+        if(load_timer){
+            clearTimeout(load_timer)
+        }
+        load_timer =setTimeout(function(){
+            myApp.alert('请检查网络问题', '加载超时');
+            hide_load()
+        },timeout)
     }
     function hide_load(time){
+        if(load_timer){
+            clearTimeout(load_timer)
+            load_timer=null
+        }
         var time= time || 20
         setTimeout(function(){
             $('.general-loader').addClass('hide')
