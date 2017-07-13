@@ -103,10 +103,8 @@
         // Get page data from event data
         var page = e.detail.page;
 
-        history.pushState({name:page.name,kind:'page'}, '');
-
         if (page.name.startsWith('iframe_')) {
-            // Following code will be executed for page with data-page attribute equal to "about"
+            show_load()
             setTimeout(function(){
                 var el=$('.page-on-center').find('.iframe_wraper')
                 var data = el.attr('data-src')

@@ -15,21 +15,51 @@
 <script type="text/javascript">
 
 
-    $(function(){
 
-//        crt_view = 'main'
+    parent.pop_menu(function(){
+        var buttons = [
+            {
+                text: '新建',
+                onClick: function () {
+                    table.add_new();
+                }
+            },
+            {
+                text: '排序过滤',
+                onClick: function () {
+                    filter.open()
+                }
+            },
+        ];
+        if(table.help_url){
+            buttons.push({
+                text: '帮助',
+                onClick: function () {
+                    table.goto(help_url);
+                }
+            })
+        }
+
+        buttons.push({
+                text: '取消',
+                color: 'red',
+        })
+        parent.myApp.actions(buttons)
+    })
+
+    $(function(){
 
         table= new Vue({
             el:'#there',
             data:{
 //                crt_view:crt_view,
-                ln:ln,
-                page_label:page_label,
-                show_menu:false,
+//                ln:ln,
+//                page_label:page_label,
+//                show_menu:false,
 
-                depart_list:depart_list,
-                crt_depart:crt_depart,
-                history_state:history_state,
+//                depart_list:depart_list,
+//                crt_depart:crt_depart,
+//                history_state:history_state,
 
             },
             mixins:[table_fun],
@@ -46,32 +76,22 @@
                     var url=ex.template('{engine_url}/{page_name}.edit',{engine_url:engine_url,page_name:page_name})
                     search_args.pk=pk
 //                    search_args.next=encodeURIComponent(location.href)
-                    parent.iframe_load(ex.appendSearch(url,search_args),'workself_edit')
+                    ff.load(ex.appendSearch(url,search_args),'workself_edit')
                 },
 
-                get_color:function(row){
-                    if(row.status=='waiting'){
-                        return '#828fb2'
-                    }else if(row.status=='pass'){
-                        return '#88b288'
-                    }else if(row.status=='reject'){
-                        return '#b25d64'
-                    }
-                },
                 get_row_img:function(row){
                     return  row.desp_img || row.work_desp_img || '/static/res/image/person-work.png'
                 },
 
-                depart_link:function(pk){
-                    return ex.appendSearch({_depart:pk})
-                },
+//                depart_link:function(pk){
+//                    return ex.appendSearch({_depart:pk})
+//                },
                 open_filter:function(){
-                    this.show_menu=false
-                    pushState({crt_view:'filter_win'})
-//                    Vue.nextTick(function(){
-//                        parent.myApp.popup($('.popup-filter')[0])
-//                    })
-
+//                    this.show_menu=false
+                    var state= {crt_view:'filter_win'}
+                    ff.pushState(state)
+                    popState(state)
+//                    pushState({crt_view:'filter_win'})
                 }
 
             }
@@ -99,16 +119,16 @@
     }
 </style>
 
-<script>
-    Vue.directive('tap', {
-        bind: function (el, binding) {
-            el.addEventListener('tap', function(){
-                binding.value.fun(binding.value.arg)
-            }, false);
+<!--<script>-->
+    <!--Vue.directive('tap', {-->
+        <!--bind: function (el, binding) {-->
+            <!--el.addEventListener('tap', function(){-->
+                <!--binding.value.fun(binding.value.arg)-->
+            <!--}, false);-->
 
-        }
-    })
-</script>
+        <!--}-->
+    <!--})-->
+<!--</script>-->
 
 
 <div id="there" class="cloak-block flex-grow"  style="position: relative;" v-cloak>
@@ -146,22 +166,23 @@
     <!--</div>-->
     <!--</transition>-->
 
-    <transition name="fade">
-        <modal id="pop-menu" v-show="show_menu" @click.native="show_menu=false">
-            <div class="weui-actionsheet__menu" @click.stop="" style="width: 80vw;">
 
-                <div class="weui-actionsheet__cell" @click="add_new();show_menu=false" v-if="can_add">新建</div>
-                <div class="weui-actionsheet__cell" @click="del_item();show_menu=false" v-if="can_del &&selected.length>0">删除选中</div>
-                <div class="weui-actionsheet__cell" @click="open_filter()" v-if="can_search">排序过滤</div>
-                <div class="weui-actionsheet__cell" v-if="help_url" @click="goto(help_url)">帮助</div>
+    <!--<transition name="fade">-->
+        <!--<modal id="pop-menu" v-show="show_menu" @click.native="show_menu=false">-->
+            <!--<div class="weui-actionsheet__menu" @click.stop="" style="width: 80vw;">-->
 
-            </div>
+                <!--<div class="weui-actionsheet__cell" @click="add_new();show_menu=false" v-if="can_add">新建</div>-->
+                <!--<div class="weui-actionsheet__cell" @click="del_item();show_menu=false" v-if="can_del &&selected.length>0">删除选中</div>-->
+                <!--<div class="weui-actionsheet__cell" @click="open_filter()" v-if="can_search">排序过滤</div>-->
+                <!--<div class="weui-actionsheet__cell" v-if="help_url" @click="goto(help_url)">帮助</div>-->
 
-            <div class="weui-actionsheet__cell">
-                <div class="weui-actionsheet__cell" @click="show_menu=false">取消</div>
-            </div>
-        </modal>
-    </transition>
+            <!--</div>-->
+
+            <!--<div class="weui-actionsheet__cell">-->
+                <!--<div class="weui-actionsheet__cell" @click="show_menu=false">取消</div>-->
+            <!--</div>-->
+        <!--</modal>-->
+    <!--</transition>-->
 
 
 </div>

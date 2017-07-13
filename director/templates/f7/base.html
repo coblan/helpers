@@ -8,7 +8,6 @@
     <title>{{ page_label | default:''}}</title>
 
 
-
     <script src="{% static 'lib/jquery3.2.1.min.js' %}"></script>
     <link rel="stylesheet" href="{% static 'lib/font-awesome4.7/font-awesome4.7.min.css' %}">
     <script src="{% static 'lib/vue2.3.2.js' %}"></script>
@@ -85,11 +84,38 @@
 
 <script>
 
+$(function(){
+    parent.hide_load(200)
+    parent.init_page()
+})
+
+    ff={
+        push:function(obj){
+            parent.state_stack.push(obj)
+        },
+        pop:function(){
+          parent.state_stack.pop()
+        },
+//        pushState:function(state){
+//            state.call_iframe='popState'
+//            parent.pushState(state)
+//        },
+        load:function(url,name){
+            parent.show_load()
+            parent.load_iframe(url,name)
+        },
+        replace:function(url){
+            parent.show_load()
+            parent.replace_iframe(url)
+        },
+        popmenu:function(buttons){
+
+        }
+    }
+
     if(parent.set_title &&  parent.pop_menu){
         parent.set_title(page_label)
-        parent.pop_menu(function(){
-            table.show_menu= ! table.show_menu
-        })
+
     }
 
     var history_state={crt_view:'init'}
@@ -102,7 +128,7 @@
         ex.assign(history_state,state)
     }
 
-    pushState(history_state)
+//    pushState(history_state)
 
 
 //    parent.iframe_full_screen(false,1)

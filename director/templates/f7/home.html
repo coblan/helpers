@@ -4,12 +4,7 @@
 
 
 {% block extra_script %}
-<!--<div>-->
-<!--<a href="/_f7_frame?name=iframe_sss&src=/wx/home.wx" class="item-link">sss</a>-->
-<!--<a href="/_f7_frame?name=iframe_worklist&src=/wx/work.worklist.wx" class="item-link">worklist</a>-->
 
-
-<!--</div>-->
 
 <link rel="stylesheet" href="{% static 'lib/weui.min.css' %}">
 <script src="{% static 'lib/jquery3.2.1.min.js' %}"></script>
@@ -21,41 +16,24 @@
     function set_title(title){
         $('.navbar-on-center .center').html(title)
     }
-    function iframe_load(url,name){
+    function load_iframe(url,name){
         var iframe_url='/_f7_iframe?name=iframe_'+name+'&src='+encodeURIComponent(url)
         mainView.router.loadPage(iframe_url)
     }
     function replace_iframe(str){
-
         var page_name=$('.page-on-center').attr('data-page')
         var iframe=$('.page-on-center .iframe_wraper')
 
         var html = '<iframe class="iframe_wraper" src='+str + ' frameborder="0" width="100%" height="100%" src="/f7/work.wkself.f7"></iframe>'
         iframe.after(html)
         iframe.remove();
+        history.replaceState({name:page_name,kind:'page'}, '');
 
-        history.pushState({name:page_name,kind:'page'}, '');
-
-//        iframe[0].contentWindow.location.replace(str)
-//        var container = iframe.parent();
-
-
-//
-//        container.html(html)
-//        setTimeout(function(){
-//            var iframe=$('.page-on-center .iframe_wraper')
-//            iframe.attr('src', str);
-//        })
-
-//        container.append(iframe);
-//        history.pushState({kind:'replace_url'},'')
-
-//        $('.page-on-center iframe')[0].contentWindow.location.replace(str)
     }
     function pop_menu(callback){
         $('.navbar-on-center .pop-menu').css('visibility','visible')
         if(callback){
-            $('.navbar-on-center .pop-menu').click(callback)
+            $('.navbar-on-center .pop-menu')[0].onclick=callback
         }
     }
     function back(callback){
@@ -63,10 +41,6 @@
             callback($('.page-on-left .iframe_wraper')[0].contentWindow)
         }
         mainView.router.back()
-
-//        setTimeout(function(){
-//            $('.page-on-center iframe')[0].contentWindow.location.reload()
-//        },500)
     }
     function iframe_full_screen(value,second){
         var second= second || 300
@@ -100,27 +74,47 @@
         $('.navbar-on-center').next('.navbar').remove()
     }
 
-    function pushState(state){
-        if(JSON.stringify(history.state)!=JSON.stringify(state)){
-            ln.pushState(state)
+    function init_page(){
+        state_stack=[]
+        add_history()
+    }
+//    function pushState(state){
+////        if(JSON.stringify(history.state)!=JSON.stringify(state)){
+////            ln.pushState(state)
+////        }
+//        state_stack.push(state)
+//    }
+    function add_history(){
+        for(var i=0;i<3;i++){
+            history.pushState({count:i},'')
         }
-
     }
 
+    add_history()
 
     ln.history_handle({
 //        init:{viewIndex:0},
         handler:function(state){
-            var page_name = $('.page-on-center').attr('data-page')
-
-            if(state.name  && state.name != page_name){
-                mainView.router.back()
-            }else if(state.call_iframe){
-                call_iframe(state.call_iframe,state)
-            }else{
-                mainView.router.back()
+            if(state.count<1){
+                add_history()
             }
-            // 如果 mainView.history 没有了，还在 back，证明想退出
+            if(state_stack.length<=0){
+                mainView.router.back()
+            }else{
+                var real_state= state_stack.pop()
+                if(typeof(obj) === 'function'){
+                    real_state()
+                }
+            }
+//            var page_name = $('.page-on-center').attr('data-page')
+//            if(state.name  && state.name != page_name){
+//                mainView.router.back()
+//            }else if(state.call_iframe){
+//                call_iframe(state.call_iframe,state)
+//            }else{
+//                mainView.router.back()
+//            }
+//            // 如果 mainView.history 没有了，还在 back，证明想退出
         }
     })
     menu = {{ menu | jsonify }}
@@ -208,6 +202,97 @@
 {% endblock %}
 
 {% block tool_bar %}
+
+<div class="_full_wraper hide general-loader">
+    <!--<svg id="circleProcess" xmlns="http://www.w3.org/2000/svg">-->
+        <!--<circle id="circle" cx="50%" cy="50%" r="40%" stroke-width="10%"></circle>-->
+    <!--</svg>-->
+    <div class="general">
+        <span style="width:42px; height:42px" class="preloader"></span>
+    </div>
+</div>
+
+
+<style>
+    ._full_wraper{
+        position: fixed;
+        top:0;
+        left:0;
+        right:0;
+        bottom: 0;
+        z-index:5000;
+    }
+    .hide{
+        display: none;
+    }
+    .general-loader .general{
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%,-50%);
+    }
+    /*#circleProcess {*/
+        /*/!*position: relative;*!/*/
+        /*/!*top: 0;*!/*/
+        /*/!*left: 0;*!/*/
+        /*position: absolute;*/
+        /*left: 50%;*/
+        /*top: 50%;*/
+
+
+        /*width: 3em;*/
+        /*height: 3em;*/
+        /*stroke-dasharray: 255%;*/
+        /*stroke-dashoffset: 255%;*/
+        /*stroke: #5281ec;*/
+        /*fill: none;*/
+        /*-webkit-transform:translate(-50%,-50%) rotate(-90deg);*/
+        /*-moz-transform:translate(-50%,-50%) rotate(-90deg);*/
+        /*-ms-transform:translate(-50%,-50%) rotate(-90deg);*/
+        /*-o-transform:translate(-50%,-50%) rotate(-90deg);*/
+        /*transform: translate(-50%,-50%) rotate(-90deg);*/
+
+    /*}*/
+</style>
+
+<script>
+
+    function show_load(){
+        $('.general-loader').removeClass('hide')
+    }
+    function hide_load(time){
+        var time= time || 20
+        setTimeout(function(){
+            $('.general-loader').addClass('hide')
+        },time)
+    }
+//    function fake_load(is_show){
+//
+//        $('.circle-loader').removeClass('hide')
+//        var circle = document.getElementById("circle");
+//
+//        if(!is_show){
+//            count=255
+//            $('.circle-loader').addClass('hide')
+//            circle.setAttribute("stroke-dashoffset", (255 - count) + "%");
+//            setTimeout(function(){
+//                $('.circle-loader').addClass('hide')
+//            },200)
+//        }else{
+//            var count=0
+//            var timmer=setInterval(function(){
+//                count+=2
+//                circle.setAttribute("stroke-dashoffset", (255 - count) + "%");
+//                if(count >220){
+//                    clearInterval(timmer)
+//                }
+//            },30)
+//        }
+//    }
+
+
+
+</script>
 
 <div class="toolbar">
     <div class="weui-tabbar nav footer">

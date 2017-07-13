@@ -1,7 +1,7 @@
 
 <script>
     function close_filter(){
-        history.back()
+        filter.close()
     }
     function search(){
         filter.search()
@@ -16,25 +16,42 @@
                 search_args:search_args,
                 search_tip:search_tip,
                 ln_state:ln_state,
-                history_state:history_state,
+                show:false,
+//                history_state:history_state,
             },
-           computed:{
-               show:function(){
-                   return this.history_state.crt_view=='filter_win'
-               }
-           },
-           watch:{
-
-               show:function(v){
-                   if(v){
-                       this.add_nav()
-                   }else{
-                       this.rm_nav()
-                   }
-//                   parent.iframe_full_screen(v)
-               }
-           },
+//           computed:{
+//               show:function(){
+//                   return this.history_state.crt_view=='filter_win'
+//               }
+//           },
+//           watch:{
+//
+//               show:function(v){
+//                   if(v){
+//                       this.add_nav()
+//                   }else{
+//                       this.rm_nav()
+//                   }
+////                   parent.iframe_full_screen(v)
+//               }
+//           },
             methods:{
+                open:function(){
+                    var self=this
+                    self.show=true
+                    self.add_nav()
+
+                    ff.push(this.close_)
+                },
+                close:function(){
+                    ff.pop()
+                    this.close_()
+                },
+                close_:function(){
+                    this.show=false
+                    this.rm_nav()
+                },
+
                 search:function () {
                     setTimeout(function(){
                         parent.replace_iframe(ex.appendSearch(search_args))
@@ -84,7 +101,7 @@
 </style>
 
 
-<div id="filter-block" >
+<div id="filter-block" class="external">
     <transition name="slide_up" >
         <div v-show="show" class="_full_screen" style="border-top: 1px solid #8f8f8f;">
 
