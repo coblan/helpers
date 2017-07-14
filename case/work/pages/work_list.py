@@ -43,7 +43,7 @@ class WorkReadValidDepart(ValidDepart):
 
 class WorkListPage(TablePage):
     tableCls=WorkList
-    template='work/work_list_wx.html'
+    template='work/work_list_f7.html'
     def get_context(self):
         ctx=super(WorkListPage,self).get_context()
         employee=self.request.user.employee_set.first()
@@ -86,6 +86,6 @@ class WorkListForm(ModelFields):
 
 class WorkListFormPage(FormPage):
     fieldsCls=WorkListForm
-    template='work/work_list_form_wx.html'
+    template='work/work_list_form_f7.html'
 
 

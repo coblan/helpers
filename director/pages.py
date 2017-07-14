@@ -181,6 +181,8 @@ class TabGroup(object):
             return self.tab_page.get_template(prefer)
         elif self.template:
             return self.template
+        elif prefer=='f7':
+            return 'f7/tabgroup.html'
         elif prefer=='wx':
             return 'wx/tabgroup.html'
         else:

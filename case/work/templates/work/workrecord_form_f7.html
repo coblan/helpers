@@ -13,7 +13,7 @@
 <script type="text/javascript">
 
 
-    with_menu=false
+//    with_menu=false
     ex.each(heads,function(head){
         if(head.name=='work'){
             head.type='btn-dir'
@@ -35,24 +35,21 @@
         computed:{
 
         },
-//            mounted:function(){
-//                var self=this
-//                setTimeout(function(){
-//                    self.$refs.scroller.refresh()
-//                },500)
-//            },
+
         methods:{
-            router:function(state){
-                if(state.crt_view){
-                    this.crt_view=state.crt_view
-                }
+            after_sub:function(new_row){
+                var self=this
+                ff.back(function(last_win){
+                    if(self.kw.row.pk){
+                        var row = ex.findone(last_win.rows,{pk:new_row.pk})
+                        ex.assign(row,new_row)
+                        row.work=new_row._work_label
+                    }else{ // 新建
+                        last_win.location.reload()
+                    }
+
+                })
             },
-            goto:function(url){
-                location=url
-            },
-
-
-
             shrinked:function(heads){
                 if(this.is_shrink){
                     return ex.sort_by_names(this.kw.heads,['work','finish_time','count','short'])

@@ -13,176 +13,31 @@
 <script src="{% static 'js/fields_mb.pack.js' %}"></script>
 <script type="text/javascript">
 
-    function set_title(title){
-        $('.navbar-on-center .center').html(title)
-    }
-    function load_iframe(url,name){
-        var iframe_url='/_f7_iframe?name=iframe_'+name+'&src='+encodeURIComponent(url)
-        mainView.router.loadPage(iframe_url)
-    }
-    function replace_iframe(str){
-        var page_name=$('.page-on-center').attr('data-page')
-        var iframe=$('.page-on-center .iframe_wraper')
 
-        var html = '<iframe class="iframe_wraper" src='+str + ' frameborder="0" width="100%" height="100%" src="/f7/work.wkself.f7"></iframe>'
-        iframe.after(html)
-        iframe.remove();
-        history.replaceState({name:page_name,kind:'page'}, '');
-
-    }
-    function pop_menu(callback){
-        $('.navbar-on-center .pop-menu').css('visibility','visible')
-        if(callback){
-            $('.navbar-on-center .pop-menu')[0].onclick=callback
-        }
-    }
-    function back(callback){
-        if(callback){
-            callback($('.page-on-left .iframe_wraper')[0].contentWindow)
-        }
-        mainView.router.back()
-    }
-    function iframe_full_screen(value,second){
-        var second= second || 300
-        if(value){
-            $('.page-on-center .iframe_wraper').addClass('full-screen')
-            $('.toolbar').hide()
-            setTimeout(function(){
-                $('.navbar').hide()
-            },second)
-
-        }else{
-            $('.page-on-center .iframe_wraper').removeClass('full-screen')
-            $('.page-on-center .page-content').addClass('_no_bottom')
-            $('.navbar').show()
-            setTimeout(function(){
-                $('.toolbar').show()
-                $('.page-on-center .page-content').removeClass('_no_bottom')
-            },second)
-
-
-        }
-    }
-    function call_iframe(callback_name){
-        var args=Array.prototype.slice.call(arguments)
-        $('.page-on-center .iframe_wraper')[0].contentWindow[callback_name].apply(this,args.slice(1,args.length))
-    }
-    function add_nav(str){
-        $('.navbar-on-center').after(str)
-    }
-    function remove_nav(){
-        $('.navbar-on-center').next('.navbar').remove()
-    }
-
-    function init_page(){
-        state_stack=[]
-        add_history()
-    }
-//    function pushState(state){
-////        if(JSON.stringify(history.state)!=JSON.stringify(state)){
-////            ln.pushState(state)
-////        }
-//        state_stack.push(state)
-//    }
-    function add_history(){
-        for(var i=0;i<3;i++){
-            history.pushState({count:i},'')
-        }
-    }
-
-    add_history()
-
-    ln.history_handle({
-//        init:{viewIndex:0},
-        handler:function(state){
-            if(state.count<1){
-                add_history()
-            }
-            if(state_stack.length<=0){
-                mainView.router.back()
-            }else{
-                var real_state= state_stack.pop()
-                if(typeof(real_state) === 'function'){
-                    real_state()
-                }
-            }
-            hide_load()
-//            var page_name = $('.page-on-center').attr('data-page')
-//            if(state.name  && state.name != page_name){
-//                mainView.router.back()
-//            }else if(state.call_iframe){
-//                call_iframe(state.call_iframe,state)
-//            }else{
-//                mainView.router.back()
-//            }
-//            // 如果 mainView.history 没有了，还在 back，证明想退出
-        }
-    })
-    menu = {{ menu | jsonify }}
-
-    title_bar=false
-
-        $(function(){
-            new Vue({
-                el:'#there',
-                data:{
-                    menu:menu,
-
-                },
-
-                methods:{
-                }
-            })
-        })
-
-    $(function(){
-        setTimeout(function(){
-            $('body').removeClass('start')
-            $('body').addClass('ready')
-        })
-    })
 </script>
-
-<style type="text/css">
-    .pad{
-        background-color: white;
-        margin-top: 20px;
-    }
-    .nav .fake-active>i,.nav .fake-active>p{
-        color: green;
-
-    }
-     p.weui-tabbar__label{
-         margin: 0.2em;
-     }
-     .page-content{
-         z-index: auto;
-     }
-    /*.iframe-content{*/
-        /*width: 100%;*/
-        /*height: 100%;*/
-    /*}*/
-    .page-content._no_bottom{
-        padding-bottom: 0;
-    }
-    .iframe_wraper.full-screen{
-        position: fixed;
-        top:0;
-        left:0;
-        bottom: 0;
-        right: 0;
-        z-index: 5000;
-        margin: 0;
-        padding: 0;
-    }
-</style>
-
-
 
 {% endblock %}
 
 {% block page_content %}
+<script>
 
+    menu = {{ menu | jsonify }}
+
+    title_bar=false
+
+    $(function(){
+        new Vue({
+            el:'#there',
+            data:{
+                menu:menu,
+
+            },
+
+            methods:{
+            }
+        })
+    })
+</script>
 
 <div id="there">
 
@@ -210,96 +65,6 @@
 {% endblock %}
 
 {% block tool_bar %}
-
-<div class="_full_wraper hide general-loader">
-    <div class="general">
-        <span style="width:42px; height:42px" class="preloader"></span>
-    </div>
-</div>
-
-
-<style>
-    body.start{
-        opacity: 0;
-    }
-    body.ready{
-        background-color: #f7f5f3;
-        transition: all 0.2s ease;
-    }
-
-    ._full_wraper{
-        position: fixed;
-        top:0;
-        left:0;
-        right:0;
-        bottom: 0;
-        z-index:5000;
-    }
-    .hide{
-        display: none;
-    }
-    .general-loader .general{
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        transform: translate(-50%,-50%);
-    }
-
-</style>
-
-<script>
-
-    var load_timer=null
-
-    function show_load(timeout){
-        var timeout= timeout || 10*1000
-        $('.general-loader').removeClass('hide')
-
-        if(load_timer){
-            clearTimeout(load_timer)
-        }
-        load_timer =setTimeout(function(){
-            myApp.alert('请检查网络问题', '加载超时');
-            hide_load()
-        },timeout)
-    }
-    function hide_load(time){
-        if(load_timer){
-            clearTimeout(load_timer)
-            load_timer=null
-        }
-        var time= time || 20
-        setTimeout(function(){
-            $('.general-loader').addClass('hide')
-        },time)
-    }
-//    function fake_load(is_show){
-//
-//        $('.circle-loader').removeClass('hide')
-//        var circle = document.getElementById("circle");
-//
-//        if(!is_show){
-//            count=255
-//            $('.circle-loader').addClass('hide')
-//            circle.setAttribute("stroke-dashoffset", (255 - count) + "%");
-//            setTimeout(function(){
-//                $('.circle-loader').addClass('hide')
-//            },200)
-//        }else{
-//            var count=0
-//            var timmer=setInterval(function(){
-//                count+=2
-//                circle.setAttribute("stroke-dashoffset", (255 - count) + "%");
-//                if(count >220){
-//                    clearInterval(timmer)
-//                }
-//            },30)
-//        }
-//    }
-
-
-
-</script>
 
 <div class="toolbar">
     <div class="weui-tabbar nav footer">

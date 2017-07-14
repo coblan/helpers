@@ -1,10 +1,23 @@
-{% extends "wx/base.html" %}
+{% extends "f7/wraper.html" %}
 {% load static %}
 {% load jsonify %}
 
+{% block extra_script %}
+
+<link rel="stylesheet" href="{% static 'lib/bootstrap.min.css' %}">
+<link rel="stylesheet" href="{% static 'lib/weui.min.css' %}">
+<script src="{% static 'lib/jquery3.2.1.min.js' %}"></script>
+<link rel="stylesheet" href="{% static 'lib/font-awesome4.7/font-awesome4.7.min.css' %}">
+<script src="{% static 'lib/vue2.3.2.js' %}"></script>
+<script src="{% static 'js/fields_mb.pack.js' %}"></script>
+<script src="{% static 'js/uis_mb.pack.js?t=' %}"></script>
+<script src="{% static 'js/table_mb.pack.js?t=' %}"></script>
+<script type="text/javascript">
 
 
+</script>
 
+{% endblock %}
 {% block page_content %}
 <!--<script src="http://192.168.1.101:9999/target/target-script-min.js#anonymous"></script>-->
 
@@ -98,9 +111,9 @@
     }
 </style>
 
-<div id="there" v-cloak class="flex-grow" style="position: relative;">
+<div id="there" v-cloak>
 
-    <div class="scroll-wraper">
+    <!--<div class="scroll-wraper">-->
 
         <div v-if="no_emp">
             <h2>
@@ -149,7 +162,7 @@
                 <a v-if="!is_edit" type="button" class="btn btn-primary btn-sm" href="javascript:"  @click="start_edit()" style="width: 16em;">修改</a>
             </div>
         </div>
-    </div>
+    <!--</div>-->
 
 
 
@@ -163,3 +176,24 @@
 
 {% endblock %}
 
+
+{% block tool_bar %}
+
+<div class="toolbar">
+    <div class="weui-tabbar nav footer">
+        <a id="help-page" href="/f7/help.f7" class="weui-tabbar__item external">
+            <i class="fa fa-info-circle weui-tabbar__icon" aria-hidden="true" ></i>
+            <p class="weui-tabbar__label">信息</p>
+        </a>
+        <a id="work-panel" href="/f7/home.f7" class="weui-tabbar__item weui-bar__item_on external">
+            <i class="fa fa-th weui-tabbar__icon" aria-hidden="true" ></i>
+            <p class="weui-tabbar__label">工作</p>
+        </a>
+        <a id="employee-center" href="/f7/organize.employeeself.f7" class="weui-tabbar__item external">
+            <i class="fa fa-user-circle weui-tabbar__icon" aria-hidden="true" ></i>
+            <p class="weui-tabbar__label">我的信息</p>
+        </a>
+
+    </div>
+</div>
+{% endblock %}

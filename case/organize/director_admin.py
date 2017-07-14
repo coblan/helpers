@@ -61,8 +61,6 @@ class EmployeeItem(FormPage):
         self.fields=self.fieldsCls(instance= self.employee,crt_user=request.user)
         self.ctx=self.fields.get_context() 
     
-    def get_template(self, prefer=None):
-        return None
     def get_label(self):
         try:
             # emp=Employee.objects.get(pk=self.pk)
@@ -71,6 +69,8 @@ class EmployeeItem(FormPage):
             return '新建员工'
         # 
     def get_template(self, prefer=None):
+        if prefer=='f7':
+            return 'organize/employee_form_f7.html'
         if prefer=='wx':
             return 'organize/employee_form_wx.html'
         else:
@@ -94,8 +94,8 @@ class UserTab(UserFormPage):
         self.ctx=self.fields.get_context() 
     
     def get_template(self, prefer=None):
-        if prefer=='wx':
-            return 'wx/tabgroup.html'
+        if prefer=='f7':
+            return 'f7/tabgroup.html'
         else:
             return 'authuser/user_form_tab.html'
     def get_label(self):
@@ -141,7 +141,7 @@ class EmployeeTablePage(TablePage):
         return '员工列表'
     
 class EmployeeTablePageWX(EmployeeTablePage):
-    template='organize/employee_table_wx.html'
+    template='organize/employee_table_f7.html'
 
 
 class DepartmentForm(ModelFields):
@@ -164,8 +164,8 @@ class DepartmentPage(object):
         }
         return self.ctx  
     def get_template(self,prefer=None):
-        if prefer=='wx':
-            return 'organize/department_wx.html'
+        if prefer=='f7':
+            return 'organize/department_f7.html'
         else:
             return 'organize/department.html'
 
@@ -177,8 +177,8 @@ page_dc.update({
     'organize.department.edit':DepartmentGroup,
     
     
-    'organize.employee.wx':EmployeeTablePageWX,
-    'organize.employee.wx.edit':EmpGroup,
+    'organize.employee.f7':EmployeeTablePageWX,
+    'organize.employee.f7.edit':EmpGroup,
     'organize.employeeself.f7':EmployeeSelf,
     
    

@@ -215,12 +215,12 @@ class WorkRecordTablePage(TablePage):
         return '工作审批列表'
 
 class WorkRecordTablePageWX(WorkRecordTablePage):
-    template='work/workrecord_wx.html'
+    template='work/workrecord_f7.html'
 
     #template='workload/m_workrecord.html'
 
 class WorkRecordFormPageWX(WorkRecordFormPage):
-    template='work/workrecord_form_wx.html'
+    template='work/workrecord_form_f7.html'
 
 def pop_depart(depart,event):
     while depart.par:
@@ -396,7 +396,7 @@ class WorkIndex(object):
 
 
 class WorkIndexWX(WorkIndex):
-    template='work/workindex_wx.html'
+    template='work/workindex_f7.html'
 
 permit_list.append(WorkRecord)
 permit_list.append(Work)
@@ -413,7 +413,7 @@ model_dc[Index]={'fields':IndexForm}
 
 page_dc.update({
     'work.workindex':WorkIndex,
-    'work.workindex.wx':WorkIndexWX,
+    'work.workindex.f7':WorkIndexWX,
 
     'work.work':WorkTablePage,   # 平铺的 work，而 workindex 树状的work 
     'work.work.wx':WorkTablePage,
@@ -422,10 +422,10 @@ page_dc.update({
     'work.work.wx.edit':WorkFormPage,
 
     'work.workrecord':WorkRecordTablePage,
-    'work.workrecord.wx':WorkRecordTablePageWX,
+    'work.workrecord.f7':WorkRecordTablePageWX,
 
     'work.workrecord.edit':WorkRecordFormPage,
-    'work.workrecord.wx.edit':WorkRecordFormPageWX,
+    'work.workrecord.f7.edit':WorkRecordFormPageWX,
 
     'work.wkself.f7':WRselfTablePage,
     'work.wkself.f7.edit':WRselfFormPage,

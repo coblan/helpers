@@ -102,6 +102,7 @@ $(function(){
             parent.back(callback)
         },
         load:function(url,name){
+            var name=name.replace('.','_')
             parent.show_load()
             parent.load_iframe(url,name)
         },

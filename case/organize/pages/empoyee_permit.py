@@ -42,8 +42,8 @@ class EmployePermitTab(FormPage):
         return self.ctx    
     
     def get_template(self, prefer=None):
-        if prefer=='wx':
-            return 'organize/employee_permit_wx.html'
+        if prefer=='f7':
+            return 'organize/employee_permit_f7.html'
         else:
             return 'organize/employee_permit.html'
     
