@@ -20,34 +20,23 @@
 //    }
     })
 
-    //depart_logic={
-    //    data:function(){
-    //        return {
-    //            show_depart:false,
-    //            department_url:department_url,
-    //        }
-    //    },
-    //    mounted:function(){
-    ////        bus.$on('depart-btn-click',this.open_depart_win)
-    //    },
-    //    methods:{
-    //
-    //        on_dirclick:function(department){
-    ////            row.depart_obj=department
-    ////            row.depart=department.pk
-    //            this.depart_callback(department)
-    //            this.show_depart=false
-    //        },
-    //        open_depart_win:function(){
-    //            this.show_depart=true
-    //            if(row.depart_obj.pk){
-    //                this.$refs.catalog.dir_data(row.depart_obj)
-    //            }
-    //        }
-    //    }
-    //}
-
-    //form_logic.mixins=[field_fun]
+//    depart_logic={
+//        methods:{
+//            after_sub:function(new_row){
+//                var self=this
+//                ff.back(function(last_win){
+//                    if(self.kw.row.pk){
+//                        var row = ex.findone(last_win.table.rows,{pk:new_row.pk})
+//                        ex.assign(row,new_row)
+//                    }else{ // 新建
+//                        last_win.location.reload()
+//                    }
+//                })
+//            },
+//        }
+//    }
+//
+//    form_logic.mixins=[field_fun,depart_logic]
 
     Vue.component('department',{
         props:['name','row','kw'],

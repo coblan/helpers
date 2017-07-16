@@ -34,7 +34,8 @@ def to_dict(instance,filt_attr=None,include=None,exclude=None,):
     out=sim_dict(instance,filt_attr,include,exclude)
     out['pk']=instance.pk
     out['_class']= instance._meta.app_label+'.'+instance._meta.model_name
-    out['_label']=unicode(instance)
+    if '_label' not in out.keys():
+        out['_label']=unicode(instance)
     return out
 
 

@@ -103,7 +103,10 @@
                     var url=ex.template('{engine_url}/{page_name}.edit',{engine_url:engine_url,page_name:page_name})
                     search_args.pk=pk
                     var url = ex.appendSearch(url,search_args)
-                    ff.load(url,page_name+'_edit')
+                    setTimeout(function(){
+                        ff.load(url,page_name+'_edit')
+                    },300)
+
                 },
 
                 back:function(){
@@ -141,7 +144,7 @@
 
     <scroll-loader   :can_load="has_next_page" @load_more="load_next_page()">
         <table class="item-table">
-            <tr v-for="row in rows" @click="ge_edit(row.pk)">
+            <tr v-for="row in rows" @click="ge_edit(row.pk)" style="display: block" class="material-wave">
                 <td><img style="width: 3em;height: 3em" :src="get_row_img(row)" alt=""/></td>
                 <td><span v-text="row.work"></span></td>
 

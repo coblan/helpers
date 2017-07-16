@@ -2,53 +2,92 @@
 {% load static %}
 {% load jsonify %}
 
+{% block extra_body %}
+
+{% include 'wx/com/table_filter_wx.html' %}
+{% endblock %}
+
+{% block extra_head %}
+<script>
+    ff.pop_menu(function(){
+        var buttons = [
+            {
+                text: '新建',
+                onClick: function () {
+                    table.add_new();
+                }
+            },
+            {
+                text: '排序过滤',
+                onClick: function () {
+                    filter.open()
+                }
+            },
+        ];
+        if(table.help_url){
+            buttons.push({
+                text: '帮助',
+                onClick: function () {
+                    table.goto(help_url);
+                }
+            })
+        }
+
+        buttons.push({
+            text: '取消',
+            color: 'red',
+        })
+        ff.app.actions(buttons)
+    })
+</script>
+{% endblock %}
 
 {% block page_content %}
 
 <script type="text/javascript">
 
-    main_logic={
+    table_logic={
         el:'#there',
         data:{
 //            crt_view:crt_view,
-            in_wx_agent:in_wx_agent,
-            ln:ln,
-            page_label:page_label,
-            is_show_menu:false,
+//            in_wx_agent:in_wx_agent,
+//            ln:ln,
+//            page_label:page_label,
+//            is_show_menu:false,
         },
         mixins:[table_fun,scroll_loader],
-        mounted:function(){
-            var self=this
-//            Vue.nextTick(function(){
-//                self.$refs.scroller.refresh()
+//        mounted:function(){
+//            var self=this
+////            Vue.nextTick(function(){
+////                self.$refs.scroller.refresh()
+////            })
+//
+//            bus.$on('menu_click',function(){
+//                self.is_show_menu=true
 //            })
-
-            bus.$on('menu_click',function(){
-                self.is_show_menu=true
-            })
-        },
+//        },
         methods:{
-            goto:function(url){
-                location=url
-            },
+//            goto:function(url){
+//                location=url
+//            },
             ge_edit:function(pk){
                 var url = ex.template('{engine_url}/{page_name}.edit?pk={pk}',{engine_url:engine_url,page_name:page_name,pk:pk})
                 ff.load(url,page_name+'_edit')
             },
-            switch_to:function(name){
-//                history.pushState({view:name},'',ex.appendSearch({crt_view:name}))
-//                this.crt_view=name
-            },
-            back:function(){
-                location = document.referrer
-            },
+//            switch_to:function(name){
+////                history.pushState({view:name},'',ex.appendSearch({crt_view:name}))
+////                this.crt_view=name
+//            },
+//            back:function(){
+//                location = document.referrer
+//            },
 
         }
     }
 
 
     $(function(){
-        table= new Vue(main_logic)
+        table= new Vue(table_logic)
     })
 </script>
 
@@ -60,8 +99,7 @@
 
 </style>
 
-{% block extra_head %}
-{% endblock %}
+
 
 <div id="there" v-cloak class="flex-grow"  style="position: relative;">
 

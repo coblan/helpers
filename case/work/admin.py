@@ -66,6 +66,14 @@ class WorkForm(ModelFields):
 class WorkFormPage(FormPage):
     fieldsCls=WorkForm
 
+class WorkIdexForm(ModelFields):
+    class Meta:
+        model=Index
+        exclude=['par']
+        
+class WorkIndexFormPage(FormPage):
+    fieldsCls=WorkIdexForm
+    
 class WorkTable(ModelTable):
     model=Work
     def dict_row(self, inst):
@@ -419,7 +427,8 @@ page_dc.update({
     'work.work.wx':WorkTablePage,
 
     'work.work.edit':WorkFormPage,
-    'work.work.wx.edit':WorkFormPage,
+    'work.work.f7.edit':WorkFormPage,
+    'work.index.f7.edit':WorkIndexFormPage,
 
     'work.workrecord':WorkRecordTablePage,
     'work.workrecord.f7':WorkRecordTablePageWX,

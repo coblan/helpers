@@ -25,8 +25,8 @@ class TablePage(object):
     def get_template(self,prefer=None):
         if self.template:
             return self.template
-        elif prefer=='wx':
-            return 'wx/table.html'
+        elif prefer=='f7':
+            return 'f7/table.html'
         else:
             return 'director/table.html'
         
@@ -41,7 +41,8 @@ class TablePage(object):
         return ctx
     
     def get_label(self):
-        return '列表项'
+        return getattr(self,'page_label','列表项')
+
     
 class FormPage(object):
     template=''
@@ -57,8 +58,8 @@ class FormPage(object):
     def get_template(self,prefer=None): 
         if self.template:
             return self.template
-        elif prefer=='wx':
-            return 'wx/fields.html'
+        elif prefer=='f7':
+            return 'f7/fields.html'
         else:
             return 'director/fields.html'
     
@@ -88,8 +89,8 @@ class DelPage(object):
     def get_template(self,prefer=None):
         if self.template:
             return self.template
-        elif prefer=='wx':
-            return 'wx/del_rows.html'
+        elif prefer=='f7':
+            return 'f7/del_rows.html'
         else:
             return 'director/del_rows.html'
         

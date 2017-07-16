@@ -4,6 +4,7 @@
 <html>
 <head>
     <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no">
     <title>{{ page_label | default:''}}</title>
 
@@ -23,9 +24,80 @@
     <script src="{% static 'js/uis_mb.pack.js?t=' %}{{ stamp.uis_mb_pack_js }}"></script>
     <script src="{% static 'js/fields_mb.pack.js?t=' %}{{ stamp.fields_mb_pack_js}}"></script>
     <script src="{% static 'js/table_mb.pack.js?t=' %}{{ stamp.table_mb_pack_js }}"></script>
+    <script src="{% static 'js/wave.js?t=' %}{{ stamp.table_mb_pack_js }}"></script>
 
 
     {% include 'director/reverse.html' %}
+
+    <script>
+        ff={
+            app:parent.myApp,
+            push:function(obj){
+                parent.state_stack.push(obj)
+            },
+            pop:function(){
+                parent.state_stack.pop()
+            },
+            back:function(callback){
+                parent.back(callback)
+            },
+            load:function(url,name){
+                var name=name.replace(/\./g,'_')
+                parent.show_load()
+                parent.load_iframe(url,name)
+            },
+            replace:function(url){
+                parent.show_load()
+                parent.replace_iframe(url)
+            },
+            pop_menu:function(buttons){
+                parent.pop_menu(buttons)
+            },
+            hide_load:function(time){
+                parent.hide_load(time)
+            },
+            init_page:function(){
+                parent.init_page()
+                parent.set_title(page_label)
+            },
+            add_nav:function(str){
+                parent.add_nav(str)
+            }
+        }
+
+        if(!parent.myApp){
+            ff={
+                app:{
+                    actions:function(){
+
+                    }
+                },
+                push:function(obj){
+                },
+                pop:function(){
+                },
+                back:function(callback){
+                },
+                load:function(url,name){
+                    location=url
+                },
+                replace:function(url){
+                    location=url
+                },
+                pop_menu:function(buttons){
+
+                },
+                hide_load:function(time){
+                },
+                init_page:function(){
+
+                },
+                add_nav:function(str){
+
+                }
+            }
+        }
+    </script>
 
     <script type="text/javascript">
         //        var strategies = Vue.config.optionMergeStrategies
@@ -79,6 +151,10 @@
 
 
     </script>
+
+    {% block extra_head %}
+
+    {% endblock %}
 </head>
 <body class="start">
 
@@ -90,67 +166,7 @@ $(function(){
     ff.init_page()
 })
 
-    ff={
-        app:parent.myApp,
-        push:function(obj){
-            parent.state_stack.push(obj)
-        },
-        pop:function(){
-          parent.state_stack.pop()
-        },
-        back:function(callback){
-            parent.back(callback)
-        },
-        load:function(url,name){
-            var name=name.replace('.','_')
-            parent.show_load()
-            parent.load_iframe(url,name)
-        },
-        replace:function(url){
-            parent.show_load()
-            parent.replace_iframe(url)
-        },
-        pop_menu:function(buttons){
-            parent.pop_menu(buttons)
-        },
-        hide_load:function(time){
-            parent.hide_load(time)
-        },
-        init_page:function(){
-            parent.init_page()
-            parent.set_title(page_label)
-        }
-    }
 
-    if(!parent.myApp){
-        ff={
-            app:{
-                actions:function(){
-
-                }
-            },
-            push:function(obj){
-            },
-            pop:function(){
-            },
-            back:function(callback){
-            },
-            load:function(url,name){
-                location=url
-            },
-            replace:function(url){
-                location=url
-            },
-            pop_menu:function(buttons){
-
-            },
-            hide_load:function(time){
-            },
-            init_page:function(){
-
-            }
-        }
-    }
 
 
     var history_state={crt_view:'init'}
@@ -170,24 +186,24 @@ $(function(){
 
     bus=new Vue()
 
-    in_wx_agent=false
-
-    title_bar=true
-    with_back=true
-    with_menu=true
+//    in_wx_agent=false
+//
+//    title_bar=true
+//    with_back=true
+//    with_menu=true
 
 
     ln_state={
         crt_view:''
     }
-    $(function(){
-        ln.history_handle({
-            init:ln_state,
-            handler:function(state){
-                ex.assign(ln_state,state)
-            }
-        })
-    })
+//    $(function(){
+//        ln.history_handle({
+//            init:ln_state,
+//            handler:function(state){
+//                ex.assign(ln_state,state)
+//            }
+//        })
+//    })
 
 
 
@@ -274,9 +290,6 @@ $(function(){
 
 <style type="text/css">
 
-
-
-
     .field .error{
         color: red;
     }
@@ -298,47 +311,68 @@ $(function(){
 
 </style>
 
-<script type="application/javascript">
-    Vue.component('title-bar',{
-        template:'#title-bar',
-        props:['title','with_back','with_menu'],
-        methods:{
-            go_back:function(){
-                history.back()
-            },
-            on_menu_click:function(){
+<!--<script type="application/javascript">-->
+    <!--Vue.component('title-bar',{-->
+        <!--template:'#title-bar',-->
+        <!--props:['title','with_back','with_menu'],-->
+        <!--methods:{-->
+            <!--go_back:function(){-->
+                <!--history.back()-->
+            <!--},-->
+            <!--on_menu_click:function(){-->
 
-                bus.$emit('menu_click')
+                <!--bus.$emit('menu_click')-->
 
-            }
-        }
+            <!--}-->
+        <!--}-->
 
-    })
-</script>
+    <!--})-->
+<!--</script>-->
 
-<template id="title-bar">
-    <div class="flex title-bar" style="align-items:center;">
-        <div><div v-if="with_back" @click="go_back()"><i class="fa fa-chevron-left" aria-hidden="true"></i><span>返回</span></div></div>
-        <div  class="flex-grow" style="text-align: center;"><span v-text="title"></span></div>
-        <div><div v-if="with_menu" @click="on_menu_click()"><i  class="fa fa-align-justify" aria-hidden="true" style="font-size: 1.5em;"></i></div></div>
-    </div>
-</template>
+<!--<template id="title-bar">-->
+    <!--<div class="flex title-bar" style="align-items:center;">-->
+        <!--<div><div v-if="with_back" @click="go_back()"><i class="fa fa-chevron-left" aria-hidden="true"></i><span>返回</span></div></div>-->
+        <!--<div  class="flex-grow" style="text-align: center;"><span v-text="title"></span></div>-->
+        <!--<div><div v-if="with_menu" @click="on_menu_click()"><i  class="fa fa-align-justify" aria-hidden="true" style="font-size: 1.5em;"></i></div></div>-->
+    <!--</div>-->
+<!--</template>-->
 
 {% block extra_body %}
 {% endblock %}
 
 </body>
 
-<!--<script type="text/javascript" src="/static/lib/framework7/framework7.min.js"></script>-->
-<!--<link rel="stylesheet" href="/static/lib/framework7/framework7.ios.min.css">-->
-<!--<link rel="stylesheet" href="/static/lib/framework7/framework7.ios.colors.min.css">-->
+<script type="text/javascript" src="/static/lib/framework7/framework7.min.js"></script>
+<link rel="stylesheet" href="/static/lib/framework7/framework7.ios.min.css">
+<link rel="stylesheet" href="/static/lib/framework7/framework7.ios.colors.min.css">
 
 <script>
-//    $(function(){
-//        var sss = new Framework7();
-//    })
+    $(function(){
+        var sss = new Framework7({
+            fastClicks:false,
+        });
+    })
 
+    $(function(){
+        Vue.nextTick(function(){
+            material_wave_init()
+
+        })
+
+    })
 
 </script>
 
+<style>
+    /*.material-design {*/
+        /*position: relative;*/
+    /*}*/
+    /*.material-design canvas {*/
+        /*opacity: 0.25;*/
+        /*position: absolute;*/
+        /*top: 0;*/
+        /*left: 0;*/
+    /*}*/
+
+</style>
 </html>

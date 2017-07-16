@@ -11,7 +11,7 @@ class DepartmentForm(ModelFields):
     
     
 class DepartmentTab(FormPage):
-    template=''
+    template='organize/department_form_f7.html'
     fieldsCls=DepartmentForm
     # def __init__(self, request):
         # self.request=request

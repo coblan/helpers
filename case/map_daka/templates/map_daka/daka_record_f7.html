@@ -1,0 +1,63 @@
+{% extends "f7/table.html" %}
+{% load static %}
+{% load jsonify %}
+
+
+{% block extra_head %}
+<script>
+    ff.pop_menu(function(){
+        var buttons = [
+            {
+                text: '排序过滤',
+                onClick: function () {
+                    filter.open()
+                }
+            },
+            {
+                text: '显示选中',
+                onClick: function () {
+                    var ls=ex.map(table.selected,function(item){
+                        var pos=item.pos
+                        return [pos.lng,pos.lat]
+                    })
+                    ff.back(function(last_win){
+                        last_win.set_marker(ls)
+                    })
+                }
+            },
+        ];
+        if(table.help_url){
+            buttons.push({
+                text: '帮助',
+                onClick: function () {
+                    table.goto(help_url);
+                }
+            })
+        }
+
+        buttons.push({
+            text: '取消',
+            color: 'red',
+        })
+        ff.app.actions(buttons)
+    })
+</script>
+{% endblock %}
+
+
+{% block item_view %}
+<div class="weui-cells">
+    <span class="weui-cell" v-for="row in rows">
+        <div class="weui-cell__hd" style="padding: 0 1em 0 0.3em;">
+            <!--<input type="checkbox" v-model="selected" :value="row.pk"  />-->
+            <com-check-box v-model="selected" :value="row"></com-check-box>
+        </div>
+        <div class="weui-cell__bd" >
+            <p v-text="row._label"></p>
+            <p v-text="row.pos.addr"></p>
+        </div>
+        <div class="weui-cell__ft">
+        </div>
+    </span>
+</div>
+{% endblock %}

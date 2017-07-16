@@ -42,7 +42,10 @@
                 var url=ex.template('{engine_url}/{page_name}.edit',{engine_url:engine_url,page_name:page_name})
                 search_args.pk=pk
                 url = ex.appendSearch(url,search_args)
-                ff.load(url,page_name+'_edit')
+                setTimeout(function(){
+                    ff.load(url,page_name+'_edit')
+                },300)
+
             },
             get_row_img:function(row){
                 return  row.desp_img || row.work_desp_img || '/static/res/image/person-work.png'
@@ -70,11 +73,11 @@
 
     <scroll-loader :can_load="has_next_page" @load_more="load_next_page()">
         <div class="weui-cells">
-            <div class="weui-cell weui-cell_access"  v-for="row in rows" style="padding-top:1.6em;margin-bottom: 0.3em;padding-bottom: 0.1em;">
+            <div class="weui-cell weui-cell_access material-wave"  v-for="row in rows" style="padding-top:1.6em;margin-bottom: 0.3em;padding-bottom: 0.1em;" @click="ge_edit(row.pk)">
 
 
 
-                <div class="weui-cell__bd" @click="ge_edit(row.pk)" style="position: relative;">
+                <div class="weui-cell__bd"  style="position: relative;">
 
                     <!--<img style="position:absolute;right:1em;top:-0.4em;width: 1.5em;height: 1.5em;border-radius: 1em;" :src="row.emp.head" alt=""/>-->
                     <div v-if="row.status=='pass'" style="position:absolute;right:1em;top:-0.4em;color: green;">

@@ -9,6 +9,55 @@
 
 <script type="text/javascript">
 
+    ff.pop_menu(function(){
+        var buttons = [
+            {
+                text: '新建目录',
+                onClick: function () {
+                    table.$refs.catalog.dir_create();
+                }
+            },
+        ];
+        if(table.work_can_add){
+            buttons.push({
+                text: '新建工时',
+                onClick: function () {
+                    table.$refs.catalog.item_create()
+                }
+            })
+        }
+        if(table.state.has_select){
+            buttons.push({
+                text: '删除选中项',
+                onClick: function () {
+                    table.$refs.catalog.item_del()
+                }
+            })
+        }
+        if(table.state.can_cut){
+            buttons.push({
+                text: '剪切',
+                onClick: function () {
+                    table.$refs.catalog.cut()
+                }
+            })
+        }
+        if(table.state.can_paste){
+            buttons.push({
+                text: '粘贴',
+                onClick: function () {
+                    table.$refs.catalog.paste()
+                }
+            })
+        }
+
+        buttons.push({
+            text: '取消',
+            color: 'red',
+        })
+        ff.app.actions(buttons)
+    })
+
 
     workindex_url = '{% url "work.workindex" %}'
 
@@ -55,8 +104,8 @@
 //                selected:[],
 //                cut_list:[],
 
-                is_show_menu:false,
-                in_wx_agent:in_wx_agent,
+//                is_show_menu:false,
+//                in_wx_agent:in_wx_agent,
 
 //                ln:ln,
                 work_editable:work_editable,
@@ -69,6 +118,11 @@
                 workindex_url:workindex_url,
 
                 ln_state:ln_state,
+
+
+                rows:[],
+
+
 
 
             },
@@ -116,9 +170,18 @@
                 },
 
                 edit:function(item){
+                    this.rows=[item]
+                    if(item._class=='work.work'){
+                        var url = engine_url+ '/work.work.f7.edit?pk='+item.pk
+                        ff.load(url,page_name+'_edit')
+                    }else{
+                        var url = engine_url+ '/work.index.f7.edit?pk='+item.pk
+                        ff.load(url,page_name+'_edit')
+                    }
+
 //                    ln.pushState({op:'edit_aa',arg:item,crt_view:'editor'})
-                    ln.pushState({crt_view:'editor'})
-                    this.edit_aa(item)
+//                    ln.pushState({crt_view:'editor'})
+//                    this.edit_aa(item)
                 },
                 edit_aa:function(item){
 //                    this.crt_view='editor'
@@ -166,9 +229,9 @@
             </template>
 
 
-            <div slot="head_end" style="text-align: right;padding: 0.5em 1em;" v-if="in_wx_agent">
-                <i class="fa fa-align-justify fa-2x" aria-hidden="true" @click="is_show_menu=true"></i>
-            </div>
+            <!--<div slot="head_end" style="text-align: right;padding: 0.5em 1em;" v-if="in_wx_agent">-->
+                <!--<i class="fa fa-align-justify fa-2x" aria-hidden="true" @click="is_show_menu=true"></i>-->
+            <!--</div>-->
 
             <template scope="dir_icon">
                 <i class="fa fa-folder fa-2x" aria-hidden="true"></i>
@@ -188,22 +251,22 @@
         </com-catalog>
 
     </div>
-    <transition name="fade">
-        <modal v-show="is_show_menu" id="pop-menu">
-            <div class="weui-actionsheet__menu" @click.stop="" style="width: 80vw;">
-                <div class="weui-actionsheet__cell" @click="edit($refs.catalog.selected[0]);is_show_menu=false" v-show="state.has_select">编辑</div>
+    <!--<transition name="fade">-->
+        <!--<modal  id="pop-menu">-->
+            <!--<div class="weui-actionsheet__menu" @click.stop="" style="width: 80vw;">-->
+                <!--<div class="weui-actionsheet__cell" @click="edit($refs.catalog.selected[0]);is_show_menu=false" v-show="state.has_select">编辑</div>-->
 
-                <div class="weui-actionsheet__cell" @click="$refs.catalog.dir_create();is_show_menu=false" v-if="dir_can_add">新建目录</div>
-                <div class="weui-actionsheet__cell" @click="$refs.catalog.item_create();is_show_menu=false" v-if="work_can_add">新建工时</div>
-                <div class="weui-actionsheet__cell" @click="$refs.catalog.item_del();is_show_menu=false" v-show="state.has_select">删除选中项</div>
-                <div class="weui-actionsheet__cell" @click="$refs.catalog.cut();is_show_menu=false" v-show="state.can_cut">剪切</div>
-                <div class="weui-actionsheet__cell" @click="$refs.catalog.paste();is_show_menu=false" v-show="state.can_paste">粘贴</div>
-            </div>
-            <div class="weui-actionsheet__cell">
-                <div class="weui-actionsheet__cell" @click="is_show_menu=false">取消</div>
-            </div>
-        </modal>
-    </transition>
+                <!--<div class="weui-actionsheet__cell" @click="$refs.catalog.dir_create();is_show_menu=false" v-if="dir_can_add">新建目录</div>-->
+                <!--<div class="weui-actionsheet__cell" @click="$refs.catalog.item_create();is_show_menu=false" v-if="work_can_add">新建工时</div>-->
+                <!--<div class="weui-actionsheet__cell" @click="$refs.catalog.item_del();is_show_menu=false" v-show="state.has_select">删除选中项</div>-->
+                <!--<div class="weui-actionsheet__cell" @click="$refs.catalog.cut();is_show_menu=false" v-show="state.can_cut">剪切</div>-->
+                <!--<div class="weui-actionsheet__cell" @click="$refs.catalog.paste();is_show_menu=false" v-show="state.can_paste">粘贴</div>-->
+            <!--</div>-->
+            <!--<div class="weui-actionsheet__cell">-->
+                <!--<div class="weui-actionsheet__cell" @click="is_show_menu=false">取消</div>-->
+            <!--</div>-->
+        <!--</modal>-->
+    <!--</transition>-->
 
 
 

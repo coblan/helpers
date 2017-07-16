@@ -85,7 +85,10 @@
                     var url=ex.template('{engine_url}/{page_name}.edit',{engine_url:engine_url,page_name:page_name})
                     search_args.pk=pk
 //                    search_args.next=encodeURIComponent(location.href)
-                    ff.load(ex.appendSearch(url,search_args),'workself_edit')
+                    setTimeout(function(){
+                        ff.load(ex.appendSearch(url,search_args),'workself_edit')
+                    },300)
+
                 },
 
                 get_row_img:function(row){
@@ -110,91 +113,139 @@
 
 </script>
 
+<!--<style>-->
+    <!--.item-table{-->
+        <!--width: 100vw;-->
+    <!--}-->
+    <!--.item-table td{-->
+        <!--padding:1em 0.3em;-->
+        <!--min-width: 2em;-->
+        <!--text-align: center;-->
+    <!--}-->
+    <!--tr:nth-child(odd){background-color: #ffffff;}-->
+    <!--td:nth-child(1){-->
+        <!--padding-left: 0.5em;-->
+    <!--}-->
+    <!--.item-table img{-->
+        <!--box-shadow:0 0 10px rgba(38, 67, 201, 0.5);-->
+        <!--/*color: #d4d4d0;*/-->
+    <!--}-->
+<!--</style>-->
+
 <style>
-    .item-table{
-        width: 100vw;
+    .item-content{
+        padding: 1em 0.3em;
     }
-    .item-table td{
-        padding:1em 0.3em;
-        min-width: 2em;
-        text-align: center;
-    }
-    tr:nth-child(odd){background-color: #ffffff;}
-    td:nth-child(1){
-        padding-left: 0.5em;
-    }
-    .item-table img{
-        box-shadow:0 0 10px rgba(38, 67, 201, 0.5);
+    .inn.list-block{
+        margin: 0;
     }
 </style>
 
-<!--<script>-->
-    <!--Vue.directive('tap', {-->
-        <!--bind: function (el, binding) {-->
-            <!--el.addEventListener('tap', function(){-->
-                <!--binding.value.fun(binding.value.arg)-->
-            <!--}, false);-->
-
-        <!--}-->
-    <!--})-->
-<!--</script>-->
 
 
 <div id="there" class="cloak-block flex-grow"  style="position: relative;" v-cloak>
 
     <scroll-loader :can_load="has_next_page" @load_more="load_next_page()">
-        <table class="item-table">
-            <tr v-for="row in rows" @click="ge_edit(row.pk)">
-                <td><img style="width: 3em;height: 3em" :src="get_row_img(row)" alt=""/></td>
-                <td><span v-text="row.work"></span></td>
-                <td> <i v-if="row.status=='pass'" class="fa fa-circle" aria-hidden="true" style="color: #04be02"></i>
-                    <i v-if="row.status=='waiting'" class="fa fa-telegram" aria-hidden="true" style="color: #074bb6"></i>
-                    <i v-if="row.status=='reject'" class="fa fa-info-circle" aria-hidden="true" style="color: red"></i>
-                </td>
-                <td>
-                    <span v-text="row.create_time"></span>
-                </td>
 
-            </tr>
-        </table>
+
+        <div class="list-block inn">
+            <ul>
+                <li class="swipeout" v-for="row in rows" >
+                    <div class="swipeout-content item-content flex material-wave" @click="ge_edit(row.pk)">
+                        <div><img style="width: 3em;height: 3em" :src="get_row_img(row)" alt=""/></div>
+                        <span v-text="row.work"></span>
+                        <div> <i v-if="row.status=='pass'" class="fa fa-circle" aria-hidden="true" style="color: #04be02"></i>
+                            <i v-if="row.status=='waiting'" class="fa fa-telegram" aria-hidden="true" style="color: #074bb6"></i>
+                            <i v-if="row.status=='reject'" class="fa fa-info-circle" aria-hidden="true" style="color: red"></i>
+                        </div>
+                            <span v-text="row.create_time"></span>
+
+                    </div>
+                    <div class="swipeout-actions-right">
+                        <a href="#" class="swipeout-delete" data-confirm="Are you sure want to delete t">删除</a>
+                        <!--<a href="#">Action 1</a>-->
+                        <!--<a href="#">Action 2</a>-->
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <!--<table class="item-table">-->
+
+            <!--<tr >-->
+                <!--<td><img style="width: 3em;height: 3em" :src="get_row_img(row)" alt=""/></td>-->
+                <!--<td><span v-text="row.work"></span></td>-->
+                <!--<td> <i v-if="row.status=='pass'" class="fa fa-circle" aria-hidden="true" style="color: #04be02"></i>-->
+                    <!--<i v-if="row.status=='waiting'" class="fa fa-telegram" aria-hidden="true" style="color: #074bb6"></i>-->
+                    <!--<i v-if="row.status=='reject'" class="fa fa-info-circle" aria-hidden="true" style="color: red"></i>-->
+                <!--</td>-->
+                <!--<td>-->
+                    <!--<span v-text="row.create_time"></span>-->
+                <!--</td>-->
+            <!--</tr>-->
+        <!--</table>-->
     </scroll-loader>
-
-
-    <!--</div>-->
-    <!--<transition name="slide">-->
-    <!--<div v-show="crt_view=='search'" class="slide-win">-->
-    <!--<title-bar :with_back="true" title="筛选"></title-bar>-->
-    <!--<com-filter :row_filters="row_filters" :search_args="search_args" :search_tip='search_tip'></com-filter>-->
-
-    <!--<div class="weui-btn-area">-->
-    <!--<a class="weui-btn weui-btn_primary" href="javascript:" @click='search()' style="width: 50%;">-->
-    <!--<i class="fa fa-search" aria-hidden="true"></i>-->
-    <!--</a>-->
-    <!--</div>-->
-
-    <!--</div>-->
-    <!--</transition>-->
-
-
-    <!--<transition name="fade">-->
-        <!--<modal id="pop-menu" v-show="show_menu" @click.native="show_menu=false">-->
-            <!--<div class="weui-actionsheet__menu" @click.stop="" style="width: 80vw;">-->
-
-                <!--<div class="weui-actionsheet__cell" @click="add_new();show_menu=false" v-if="can_add">新建</div>-->
-                <!--<div class="weui-actionsheet__cell" @click="del_item();show_menu=false" v-if="can_del &&selected.length>0">删除选中</div>-->
-                <!--<div class="weui-actionsheet__cell" @click="open_filter()" v-if="can_search">排序过滤</div>-->
-                <!--<div class="weui-actionsheet__cell" v-if="help_url" @click="goto(help_url)">帮助</div>-->
-
-            <!--</div>-->
-
-            <!--<div class="weui-actionsheet__cell">-->
-                <!--<div class="weui-actionsheet__cell" @click="show_menu=false">取消</div>-->
-            <!--</div>-->
-        <!--</modal>-->
-    <!--</transition>-->
-
-
 </div>
+
+
+
+
+
+<!--<div id="there" class="cloak-block flex-grow"  style="position: relative;" v-cloak>-->
+
+    <!--<scroll-loader :can_load="has_next_page" @load_more="load_next_page()">-->
+        <!--<table class="item-table">-->
+
+            <!--<tr v-for="row in rows" @click="ge_edit(row.pk)" class="material-wave" style="display: block;">-->
+                    <!--<td><img style="width: 3em;height: 3em" :src="get_row_img(row)" alt=""/></td>-->
+                    <!--<td><span v-text="row.work"></span></td>-->
+                    <!--<td> <i v-if="row.status=='pass'" class="fa fa-circle" aria-hidden="true" style="color: #04be02"></i>-->
+                        <!--<i v-if="row.status=='waiting'" class="fa fa-telegram" aria-hidden="true" style="color: #074bb6"></i>-->
+                        <!--<i v-if="row.status=='reject'" class="fa fa-info-circle" aria-hidden="true" style="color: red"></i>-->
+                    <!--</td>-->
+                    <!--<td>-->
+                        <!--<span v-text="row.create_time"></span>-->
+                    <!--</td>-->
+            <!--</tr>-->
+        <!--</table>-->
+    <!--</scroll-loader>-->
+
+
+    <!--&lt;!&ndash;</div>&ndash;&gt;-->
+    <!--&lt;!&ndash;<transition name="slide">&ndash;&gt;-->
+    <!--&lt;!&ndash;<div v-show="crt_view=='search'" class="slide-win">&ndash;&gt;-->
+    <!--&lt;!&ndash;<title-bar :with_back="true" title="筛选"></title-bar>&ndash;&gt;-->
+    <!--&lt;!&ndash;<com-filter :row_filters="row_filters" :search_args="search_args" :search_tip='search_tip'></com-filter>&ndash;&gt;-->
+
+    <!--&lt;!&ndash;<div class="weui-btn-area">&ndash;&gt;-->
+    <!--&lt;!&ndash;<a class="weui-btn weui-btn_primary" href="javascript:" @click='search()' style="width: 50%;">&ndash;&gt;-->
+    <!--&lt;!&ndash;<i class="fa fa-search" aria-hidden="true"></i>&ndash;&gt;-->
+    <!--&lt;!&ndash;</a>&ndash;&gt;-->
+    <!--&lt;!&ndash;</div>&ndash;&gt;-->
+
+    <!--&lt;!&ndash;</div>&ndash;&gt;-->
+    <!--&lt;!&ndash;</transition>&ndash;&gt;-->
+
+
+    <!--&lt;!&ndash;<transition name="fade">&ndash;&gt;-->
+        <!--&lt;!&ndash;<modal id="pop-menu" v-show="show_menu" @click.native="show_menu=false">&ndash;&gt;-->
+            <!--&lt;!&ndash;<div class="weui-actionsheet__menu" @click.stop="" style="width: 80vw;">&ndash;&gt;-->
+
+                <!--&lt;!&ndash;<div class="weui-actionsheet__cell" @click="add_new();show_menu=false" v-if="can_add">新建</div>&ndash;&gt;-->
+                <!--&lt;!&ndash;<div class="weui-actionsheet__cell" @click="del_item();show_menu=false" v-if="can_del &&selected.length>0">删除选中</div>&ndash;&gt;-->
+                <!--&lt;!&ndash;<div class="weui-actionsheet__cell" @click="open_filter()" v-if="can_search">排序过滤</div>&ndash;&gt;-->
+                <!--&lt;!&ndash;<div class="weui-actionsheet__cell" v-if="help_url" @click="goto(help_url)">帮助</div>&ndash;&gt;-->
+
+            <!--&lt;!&ndash;</div>&ndash;&gt;-->
+
+            <!--&lt;!&ndash;<div class="weui-actionsheet__cell">&ndash;&gt;-->
+                <!--&lt;!&ndash;<div class="weui-actionsheet__cell" @click="show_menu=false">取消</div>&ndash;&gt;-->
+            <!--&lt;!&ndash;</div>&ndash;&gt;-->
+        <!--&lt;!&ndash;</modal>&ndash;&gt;-->
+    <!--&lt;!&ndash;</transition>&ndash;&gt;-->
+
+
+<!--</div>-->
 
 
 {% endblock %}

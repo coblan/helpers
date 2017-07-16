@@ -3,11 +3,54 @@
 {% load jsonify %}
 
 {% block page_content %}
-<script src='{% static "js/table.pack.js" %}'></script>
 <script src='{% static "js/ex_inputs.pack.js?t=12345" %}'></script>
 
 
 <script type="text/javascript">
+
+    ff.pop_menu(function(){
+        var buttons = [
+            {
+                text: '新建部门',
+                onClick: function () {
+                    table.$refs.catalog.dir_create();
+                }
+            },
+        ];
+        if(table.state.has_select){
+            buttons.push({
+                text: '删除选中项',
+                onClick: function () {
+                    table.$refs.catalog.item_del()
+                }
+            })
+        }
+        if(table.state.can_cut){
+            buttons.push({
+                text: '剪切',
+                onClick: function () {
+                    table.$refs.catalog.cut()
+                }
+            })
+        }
+        if(table.state.can_paste){
+            buttons.push({
+                text: '粘贴',
+                onClick: function () {
+                    table.$refs.catalog.paste()
+                }
+            })
+        }
+
+        buttons.push({
+            text: '取消',
+            color: 'red',
+        })
+        ff.app.actions(buttons)
+    })
+
+
+
 
     bus=new Vue()
 
@@ -15,25 +58,25 @@
     department_url = "{% url 'organize.department' %}"
 
 
-    $(function(){
-        ln.history_handle({
-            init:{crt_view:'main'},
-            handler:function(state){
-                if(state.crt_view) {
-                    table.crt_view = state.crt_view
-//                    Vue.nextTick(function(){
-//                        setTimeout(function(){
-//                            table.$refs.editor_scroller.refresh()
-//                        },500)
-//
-//                    })
-                }
-                if (state.op) {
-                    table[state.op](state.arg)
-                }
-            }
-        })
-    })
+//    $(function(){
+//        ln.history_handle({
+//            init:{crt_view:'main'},
+//            handler:function(state){
+//                if(state.crt_view) {
+//                    table.crt_view = state.crt_view
+////                    Vue.nextTick(function(){
+////                        setTimeout(function(){
+////                            table.$refs.editor_scroller.refresh()
+////                        },500)
+////
+////                    })
+//                }
+//                if (state.op) {
+//                    table[state.op](state.arg)
+//                }
+//            }
+//        })
+//    })
 
 
 
@@ -42,24 +85,24 @@
             el:'#there',
             data:{
 
-                crt_view:'main',
+//                crt_view:'main',
                 crt_name:'',
 
                 ex:ex,
-                is_show_menu:false,
-                in_wx_agent:in_wx_agent,
+//                is_show_menu:false,
+//                in_wx_agent:in_wx_agent,
                 state:{},
                 department_url:department_url,
 
-
+                rows:[]
             },
             mixins:[field_fun],
             mounted:function(){
                 this.$refs.catalog.dir_data()
-                var self=this
-                bus.$on('menu_click',function(){
-                    self.is_show_menu=true
-                })
+//                var self=this
+//                bus.$on('menu_click',function(){
+//                    self.is_show_menu=true
+//                })
 //                var self=this
 //                Vue.nextTick(function(){
 //                    setTimeout(function(){
@@ -69,6 +112,7 @@
 //                })
             },
             methods:{
+
                 set_state:function(state){
                     for(var k in state){
                         Vue.set(this.state,k,state[k])
@@ -98,6 +142,7 @@
                 },
 
                 edit:function(item){
+                    this.rows=[item]
                     var url=ex.template('{engine_url}/{page_name}.edit?pk={pk}',{
                         engine_url:engine_url,
                         page_name:page_name,
@@ -139,9 +184,9 @@
             </template>
 
 
-            <div slot="head_end" style="text-align: right;padding: 0.5em 1em;" v-if="in_wx_agent">
-                <i class="fa fa-align-justify fa-2x" aria-hidden="true" @click="is_show_menu=true"></i>
-            </div>
+            <!--<div slot="head_end" style="text-align: right;padding: 0.5em 1em;" v-if="in_wx_agent">-->
+                <!--<i class="fa fa-align-justify fa-2x" aria-hidden="true" @click="is_show_menu=true"></i>-->
+            <!--</div>-->
 
             <template scope="dir_icon">
                 <span></span>
@@ -164,44 +209,44 @@
 
         <!--@click.native="show_menu=false"-->
 
-        <transition name="fade">
-            <modal v-show="is_show_menu" id="pop-menu">
-                <div class="weui-actionsheet__menu" @click.stop="" style="width: 80vw;" v-if="can_edit">
-                    <div class="weui-actionsheet__cell" @click="edit($refs.catalog.selected[0]);is_show_menu=false" v-show="state.has_select">编辑</div>
+        <!--<transition name="fade">-->
+            <!--<modal v-show="is_show_menu" id="pop-menu">-->
+                <!--<div class="weui-actionsheet__menu" @click.stop="" style="width: 80vw;" v-if="can_edit">-->
+                    <!--<div class="weui-actionsheet__cell" @click="edit($refs.catalog.selected[0]);is_show_menu=false" v-show="state.has_select">编辑</div>-->
 
-                    <div class="weui-actionsheet__cell" @click="$refs.catalog.dir_create();is_show_menu=false">新建部门</div>
-                    <!--<div class="weui-actionsheet__cell" @click="$refs.catalog.item_create();show_menu=false" v-if="work_can_add">新建工时</div>-->
-                    <div class="weui-actionsheet__cell" @click="$refs.catalog.item_del();is_show_menu=false" v-show="state.has_select">删除选中项</div>
-                    <div class="weui-actionsheet__cell" @click="$refs.catalog.cut();is_show_menu=false" v-show="state.can_cut">剪切</div>
-                    <div class="weui-actionsheet__cell" @click="$refs.catalog.paste();is_show_menu=false" v-show="state.can_paste">粘贴</div>
-                </div>
-                <div class="weui-actionsheet__cell">
-                    <div class="weui-actionsheet__cell" @click="is_show_menu=false">取消</div>
-                </div>
-            </modal>
-        </transition>
+                    <!--<div class="weui-actionsheet__cell" @click="$refs.catalog.dir_create();is_show_menu=false">新建部门</div>-->
+                    <!--&lt;!&ndash;<div class="weui-actionsheet__cell" @click="$refs.catalog.item_create();show_menu=false" v-if="work_can_add">新建工时</div>&ndash;&gt;-->
+                    <!--<div class="weui-actionsheet__cell" @click="$refs.catalog.item_del();is_show_menu=false" v-show="state.has_select">删除选中项</div>-->
+                    <!--<div class="weui-actionsheet__cell" @click="$refs.catalog.cut();is_show_menu=false" v-show="state.can_cut">剪切</div>-->
+                    <!--<div class="weui-actionsheet__cell" @click="$refs.catalog.paste();is_show_menu=false" v-show="state.can_paste">粘贴</div>-->
+                <!--</div>-->
+                <!--<div class="weui-actionsheet__cell">-->
+                    <!--<div class="weui-actionsheet__cell" @click="is_show_menu=false">取消</div>-->
+                <!--</div>-->
+            <!--</modal>-->
+        <!--</transition>-->
 
 
     </div>
 
     <!--下面的滑动窗口暂时不用了，编辑department是跳转到其他tab页面进行编辑-->
-    <transition name="slide">
-        <div v-show="crt_view=='editor'" class="slide-win">
-            <!--<scroll-wraper ref="editor_scroller" style="width:100vw;height:90vh;">-->
-            <title-bar :with_back="true" title="编辑部门信息"></title-bar>
-            <div class="weui-cells__title">编辑</div>
+    <!--<transition name="slide">-->
+        <!--<div v-show="crt_view=='editor'" class="slide-win">-->
+            <!--&lt;!&ndash;<scroll-wraper ref="editor_scroller" style="width:100vw;height:90vh;">&ndash;&gt;-->
+            <!--<title-bar :with_back="true" title="编辑部门信息"></title-bar>-->
+            <!--<div class="weui-cells__title">编辑</div>-->
 
-            <div class="form-pad" >
-                <field  v-for='head in kw.heads' :key="head.name" :name='head.name' :kw='kw'></field>
-            </div>
+            <!--<div class="form-pad" >-->
+                <!--<field  v-for='head in kw.heads' :key="head.name" :name='head.name' :kw='kw'></field>-->
+            <!--</div>-->
 
-            <div v-btn-group>
-                <a state="success" @click="item_save()">确定</a><br/>
-            </div>
+            <!--<div v-btn-group>-->
+                <!--<a state="success" @click="item_save()">确定</a><br/>-->
+            <!--</div>-->
 
-            <!--</scroll-wraper>-->
-        </div>
-    </transition>
+            <!--&lt;!&ndash;</scroll-wraper>&ndash;&gt;-->
+        <!--</div>-->
+    <!--</transition>-->
 
 
 

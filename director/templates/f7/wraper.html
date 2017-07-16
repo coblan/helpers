@@ -65,15 +65,18 @@
                     <a href="/static/services.html?t=123">service</a>
                     {% endblock %}
                 </div>
+
+                {% block tool_bar %}
+                <div class="toolbar">
+                    <div class="toolbar-inner"><a href="#" class="link">Link 1</a><a href="#" class="link">Link 2</a></div>
+                </div>
+                {% endblock %}
+
             </div>
         </div>
         <!-- Bottom Toolbar-->
 
-        {% block tool_bar %}
-        <div class="toolbar">
-            <div class="toolbar-inner"><a href="#" class="link">Link 1</a><a href="#" class="link">Link 2</a></div>
-        </div>
-        {% endblock %}
+
     </div>
 </div>
 <!-- Path to Framework7 Library JS-->
@@ -139,7 +142,8 @@
     }
     function back(callback){
         if(callback){
-            callback($('.page-on-left .iframe_wraper')[0].contentWindow)
+            var last_win= $(mainView.activePage.fromPage.container).find('.iframe_wraper')[0].contentWindow
+            callback(last_win)
         }
         mainView.router.back()
     }
@@ -160,10 +164,19 @@
                 $('.toolbar').show()
                 $('.page-on-center .page-content').removeClass('_no_bottom')
             },second)
-
-
         }
     }
+
+    function show_toolbar(){
+        $('.page-content').removeClass('_no_bottom')
+        $('.toolbar').show()
+    }
+    function hide_toolbar(){
+        $('.toolbar').hide()
+        $('.page-content').addClass('_no_bottom')
+
+    }
+
     function call_iframe(callback_name){
         var args=Array.prototype.slice.call(arguments)
         $('.page-on-center .iframe_wraper')[0].contentWindow[callback_name].apply(this,args.slice(1,args.length))
@@ -266,7 +279,7 @@
         top: 50%;
         transform: translate(-50%,-50%);
     }
-
+    iframe { display: block; }
 </style>
 
 <script>
@@ -301,6 +314,7 @@
 
     var myApp = new Framework7({
 //        pushState:true,
+//        swipeBackPage:true,
     });
     var $$ = Dom7;
 
@@ -312,13 +326,33 @@
     });
 
 
+    function on_page_switch(page){
+//        if(page.name=='home'){
+//            show_toolbar()
+//        }else{
+//            hide_toolbar()
+//        }
+    }
+
+    myApp.onPageAfterBack('*', function(page){
+
+        on_page_switch(page.view.activePage)
+    })
+
     $$(document).on('pageInit', function (e) {
 
         // Get page data from event data
         var page = e.detail.page;
         state_stack=[]
 
+        if($('.page-on-right').attr('data-page')== page.name){
+            on_page_switch(page)
+        }
+
+
         if (page.name.startsWith('iframe_')) {
+
+            $(page.view.activePage.container).find('.page-content').addClass('_no_bottom')
 
             setTimeout(function(){
                 var el=$('.page-on-center').find('.iframe_wraper')
