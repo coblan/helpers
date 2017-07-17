@@ -8,7 +8,7 @@
 {% endblock %}
 
 {% block extra_head %}
-<script src="https://cdn.bootcss.com/moment.js/2.18.1/moment.min.js"></script>
+<script src="{% static 'lib/moment2.17.1.min.js' %}"></script>
 <script type="text/javascript" src="https://webapi.amap.com/maps?v=1.3&key=0909294a753dfe00a0aa124b6ecb93eb"></script>
 <script src="{% static 'lib/fingerprint2.min.js' %}"></script>
 <script>
@@ -80,7 +80,7 @@
 
 
             }else{
-                alert('open gps')
+                ff.alert(result.message )
             }
         })
     }
@@ -196,10 +196,10 @@
         position: fixed;
         right: 1em;
         bottom: 2em;
-        width: 5em;
-        height: 5em;
+        width: 4em;
+        height: 4em;
         background-color: #a6aaa6;
-        border-radius: 2.5em;
+        border-radius: 2em;
         z-index:200;
     }
     .float-btn.can_daka{
@@ -215,10 +215,11 @@
         <i style="pointer-events: none;" class="fa fa-plus fa-2x imiddle" aria-hidden="true"></i>
     </div>
     <scroll-loader :can_load="has_next_page" @load_more="load_next_page()">
-        <div class="weui-cells" style="margin-bottom: 10em;">
-            <div v-for="sub_rows in grouped_rows">
-                <h3 style="text-align: center;" v-text="norm_date( sub_rows.key)"></h3>
-            <span class="weui-cell" v-for="row in sub_rows.list">
+
+        <div v-for="sub_rows in grouped_rows">
+            <h3 style="text-align: center;" v-text="norm_date( sub_rows.key)"></h3>
+                <div class="weui-cells" style="margin-bottom: 2em;">
+                <span class="weui-cell" v-for="row in sub_rows.list">
                 <div class="weui-cell__hd" style="padding: 0 1em 0 0.3em;">
 
                     <!--<com-check-box v-model="selected" :value="row"></com-check-box>-->
@@ -236,12 +237,14 @@
                     <p v-text="row.pos.addr"></p>
 
                 </div>
-                <div class="weui-cell__ft">
-                </div>
+                <!--<div class="weui-cell__ft">-->
+                <!--</div>-->
             </span>
             </div>
 
         </div>
+
+
     </scroll-loader>
 
 

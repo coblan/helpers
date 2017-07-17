@@ -7,7 +7,7 @@
         depart_win=new Vue({
             el:'#depart_win',
             data:{
-                ln_state:ln_state,
+//                ln_state:ln_state,
                 department_url:department_url,
                 root:{pk:null,name:'公司'}
             },
@@ -36,15 +36,15 @@
 </script>
 
 <div id="depart_win">
-    <transition name="slide" >
-        <div v-show="ln_state.crt_view=='department_win'" class="slide-win">
-            <title-bar :with_back="true" title="编辑工作类型"></title-bar>
+    <!--<transition name="slide" >-->
+        <div v-show="false" class="">
+            <!--<title-bar :with_back="true" title="编辑工作类型"></title-bar>-->
             <div class="department-win">
                 <layer-tree ref="depart_tree" :url="department_url" :root="root"></layer-tree>
             </div>
 
         </div>
-    </transition>
+    <!--</transition>-->
 </div>
 
 <script>
