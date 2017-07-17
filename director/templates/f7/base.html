@@ -62,6 +62,12 @@
             },
             add_nav:function(str){
                 parent.add_nav(str)
+            },
+            alert:function(str){
+                parent.myApp.alert(str)
+            },
+            confirm:function(info,callback){
+                parent.myApp.confirm(info, callback);
             }
         }
 
@@ -94,6 +100,12 @@
                 },
                 add_nav:function(str){
 
+                },
+                alert:function(str){
+                    alert(str)
+                },
+                confirm:function(info,callback){
+                    confirm(info, callback);
                 }
             }
         }
@@ -348,7 +360,7 @@ $(function(){
 
 <script>
     $(function(){
-        var sss = new Framework7({
+        f7_app = new Framework7({
             fastClicks:false,
         });
     })

@@ -9,3 +9,4 @@ class DakaRecord(models.Model):
     user= models.ForeignKey(User,verbose_name='user',null=True,blank=True)
     create_time=models.DateTimeField(verbose_name='create time',auto_now=True)
     pos=models.CharField('position',max_length=800,blank=True)
+    device=models.CharField('device',max_length=300,blank=True)

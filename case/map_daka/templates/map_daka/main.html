@@ -4,6 +4,7 @@
 
 
 {% block page_content %}
+<!--<script src="{% static 'lib/fingerprint2.min.js' %}"></script>-->
 
 <style type="text/css">
     body,html,#container{
@@ -15,59 +16,70 @@
 
 <script>
 
-    ff.pop_menu(function(){
-        var buttons = [
-            {
-                text: '打卡',
-                onClick: function () {
-                    geolocation.getCurrentPosition(function(status,result){
-                        if(status=='complete'){
-                            var pos=result.position
-                            geocoder.getAddress([pos.lng,pos.lat], function(status, result_coder) {
-                                if (status === 'complete' && result_coder.info === 'OK') {
+//    ff.pop_menu(function(){
+//        var buttons = [
+//            {
+//                text: '打卡',
+//                onClick: function () {
+//                    geolocation.getCurrentPosition(function(status,result){
+//                        if(status=='complete'){
+//                            var pos=result.position
+//                            geocoder.getAddress([pos.lng,pos.lat], function(status, result_coder) {
+//                                if (status === 'complete' && result_coder.info === 'OK') {
+//
+//                                    pos.addr=result_coder.regeocode.formattedAddress
+//
+////                                    alert()
+////                                    //获得了有效的地址信息:
+////                                    //即，result.regeocode.formattedAddress
+//                                }else{
+//                                    //获取地址失败
+//                                }
+//
+//                                var post_data=[{fun:'daka',pos:pos,device:fingerprint }]
+//                                ex.post('/_ajax/'+app,JSON.stringify(post_data),function(resp){
+//                                    if(resp.daka.status=='success'){
+//                                        alert('打卡成功')
+//                                    }
+//                                })
+//                            });
+//
+//
+//
+//                        }else{
+//                            alert('open gps')
+//                        }
+//                    })
+//                }
+//            },
+//            {
+//                text: '打卡记录',
+//                onClick: function () {
+//                    var url=engine_url+'/map_daka.dakarecord.f7'
+//                  ff.load(url,'map_daka.dakarecord.f7')
+//                }
+//            },
+//
+//        ];
+//
+//
+//        buttons.push({
+//            text: '取消',
+//            color: 'red',
+//        })
+//        ff.app.actions(buttons)
+//    })
 
-                                    pos.addr=result_coder.regeocode.formattedAddress
-
-//                                    alert()
-//                                    //获得了有效的地址信息:
-//                                    //即，result.regeocode.formattedAddress
-                                }else{
-                                    //获取地址失败
-                                }
-
-                                var post_data=[{fun:'daka',pos:pos }]
-                                ex.post('/_ajax/'+app,JSON.stringify(post_data),function(resp){
-                                    if(resp.daka.status=='success'){
-                                        alert('打卡成功')
-                                    }
-                                })
-                            });
-
-
-
-                        }else{
-                            alert('open gps')
-                        }
-                    })
-                }
-            },
-            {
-                text: '打卡记录',
-                onClick: function () {
-                    var url=engine_url+'/map_daka.dakarecord.f7'
-                  ff.load(url,'map_daka.dakarecord.f7')
-                }
-            },
-
-        ];
-
-
-        buttons.push({
-            text: '取消',
-            color: 'red',
-        })
-        ff.app.actions(buttons)
-    })
+//
+//    fingerprint=''
+//    $(function(){
+//        setTimeout(function() {
+//            var fp = new Fingerprint2();
+//            fp.get(function (result, components) {
+//                        fingerprint=result
+//                })
+//        })
+//    })
 
 
     var mypos=[104.071756,30.666209]
@@ -96,36 +108,36 @@
 
 
 
-    $(function(){
-        new  Vue({
-            el:'#control',
-            methods:{
-                goto_orgin:function(){
-
-                    map.setCenter(mypos);
-                    this.pos_marker(mypos)
-                },
-                new_marker:function(){
-                    var content=$('.fuck')[0]
-                    var marker = new AMap.Marker({
-                        position: [116.480983, 39.989628],//marker所在的位置
-                        map:map,//创建时直接赋予map属性
-                        title:'这时一坨屎',
-                        content:content
-                    });
-                },
-                pos_marker:function(pos){
-                    var content=$('.fuck')[0]
-                    var marker = new AMap.Marker({
-                        position: pos,//marker所在的位置
-                        map:map,//创建时直接赋予map属性
-                        title:'这时一坨屎',
-                        content:content
-                    });
-                }
-            }
-        })
-    })
+//    $(function(){
+//        new  Vue({
+//            el:'#control',
+//            methods:{
+//                goto_orgin:function(){
+//
+//                    map.setCenter(mypos);
+//                    this.pos_marker(mypos)
+//                },
+//                new_marker:function(){
+//                    var content=$('.fuck')[0]
+//                    var marker = new AMap.Marker({
+//                        position: [116.480983, 39.989628],//marker所在的位置
+//                        map:map,//创建时直接赋予map属性
+//                        title:'这时一坨屎',
+//                        content:content
+//                    });
+//                },
+//                pos_marker:function(pos){
+//                    var content=$('.fuck')[0]
+//                    var marker = new AMap.Marker({
+//                        position: pos,//marker所在的位置
+//                        map:map,//创建时直接赋予map属性
+//                        title:'这时一坨屎',
+//                        content:content
+//                    });
+//                }
+//            }
+//        })
+//    })
 </script>
 
 <!--<div id="control">-->
@@ -140,11 +152,20 @@
 <script type="text/javascript" src="http://webapi.amap.com/maps?v=1.3&key=0909294a753dfe00a0aa124b6ecb93eb"></script>
 
 <script type="text/javascript">
+
+    var search_args=ex.parseSearch()
+    center=[search_args.lng,search_args.lat]
     var map = new AMap.Map('container',{
         resizeEnable: true,
-        zoom: 10,
-        center: [104.071756,30.666209]
+        zoom: 15,
+        center: center,
     });
+
+    marker = new AMap.Marker({
+        position: center,
+    });
+    marker.setMap(map);
+
     //    map.setMapStyle('amap://styles/darkblue');
 //    map.setFeatures(['road','point'])//多个种类要素显示
     AMap.plugin(['AMap.ToolBar','AMap.AdvancedInfoWindow'],function(){
@@ -202,13 +223,13 @@
     });
 
 
-    AMap.service('AMap.Geocoder',function(){//回调函数
-        //实例化Geocoder
-        geocoder = new AMap.Geocoder({
-            city: "010"//城市，默认：“全国”
-        });
-        //TODO: 使用geocoder 对象完成相关功能
-    })
+//    AMap.service('AMap.Geocoder',function(){//回调函数
+//        //实例化Geocoder
+//        geocoder = new AMap.Geocoder({
+//            city: "010"//城市，默认：“全国”
+//        });
+//        //TODO: 使用geocoder 对象完成相关功能
+//    })
 
 //    var lnglatXY=[116.396574, 39.992706];//地图上所标点的坐标
 //    geocoder.getAddress(lnglatXY, function(status, result) {
@@ -236,6 +257,7 @@
         })
 
     }
+
 
 </script>
 

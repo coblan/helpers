@@ -26,11 +26,16 @@ class DakaMain(object):
         else:
             pass
 
+class DakaForm(ModelFields):
+    class Meta:
+        model=DakaRecord
+        exclude=[]
+
 class DakaRecordFilter(RowFilter):
     model=DakaRecord
     range_fields=[{'name':'create_time','type':'date'}]
 
-class DakaRecord(ModelTable):
+class DakaRecordTable(ModelTable):
     model=DakaRecord
     filters=DakaRecordFilter
     exclude=[]
@@ -42,16 +47,18 @@ class DakaRecord(ModelTable):
             'pos':json.loads(inst.pos)
         }
 
-class DakaRecordPage(TablePage):
-    tableCls=DakaRecord
+class DakaRecordTablePage(TablePage):
+    tableCls=DakaRecordTable
     template='map_daka/daka_record_f7.html'
     
     def get_label(self):
         return  unicode(self.crt_user)+'的打卡记录'
     
     
+model_dc[DakaRecord]={'fields':DakaForm}
+permit_list.append(DakaRecord)
 
 page_dc.update({
-    'map_daka.main.f7':DakaMain,
-    'map_daka.dakarecord.f7':DakaRecordPage
+    'map_daka.map.f7':DakaMain,
+    'map_daka.dakarecord.f7':DakaRecordTablePage
 })
