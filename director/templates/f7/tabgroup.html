@@ -40,7 +40,7 @@
 
 {% endblock %}
 
-<div id="there" v-cloak class="flex-grow" style="position: relative">
+<div id="there" v-cloak class="flex-grow" style="position: relative;overflow: auto;">
 
 
     <!--scroll-wraper-->
@@ -61,11 +61,6 @@
             <a type="button" class="btn btn-success btn-sm" href="javascript:"  @click="submit()" style="width: 16em;">确定</a>
         </div>
     </div>
-
-
-    {% block extra_body %}
-
-    {% endblock %}
 
 </div>
 

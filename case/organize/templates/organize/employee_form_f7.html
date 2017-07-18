@@ -1,6 +1,8 @@
 {% extends "f7/tabgroup.html" %}
 {% load static %}
+
 {% block extra_head %}
+{% include 'f7/com/popup_page.html' %}
 <script src='{% static "js/ex_inputs.pack.js" %}'></script>
 <script>
 
@@ -97,9 +99,13 @@
     </div>
 </template>
 
-{% include 'organize/com_department_wx.html' %}
-
 {% endblock %}
+
+{% block extra_body %}
+    {% include 'organize/com_department_wx.html' %}
+{% endblock %}
+
+
 
 
 

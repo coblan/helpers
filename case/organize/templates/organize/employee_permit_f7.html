@@ -3,7 +3,7 @@
 {% load jsonify %}
 
 {% block page_content %}
-<script src='{% static "js/table.pack.js" %}'></script>
+
 <script type="text/javascript">
 
 
@@ -33,9 +33,9 @@
         methods:{
             item_link:function(name){
                 if(name!=this.crt_tab){
-                    return ex.appendSearch({_tab:name})
+                    ff.replace(ex.appendSearch({_tab:name}))
                 }else{
-                    return 'javascript:;'
+//                     'javascript:;'
                 }
             },
             submit:function () {
@@ -80,7 +80,7 @@
 
     <div  style="text-align: center;margin:1em 0;">
         <div class="btn-group" role="group" aria-label="..." >
-            <a type="button" :class="['btn btn-default',{'btn-info':crt_tab==tab.name}]" v-for="tab in tabs" :href="item_link(tab.name)" v-text="tab.label">Left</a>
+            <a type="button" :class="['btn btn-default',{'btn-info':crt_tab==tab.name}]" v-for="tab in tabs" @click="item_link(tab.name)" v-text="tab.label">Left</a>
         </div>
     </div>
 

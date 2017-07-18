@@ -1,6 +1,6 @@
 {% load jsonify %}
 
-{% include 'f7/com/popup_page.html' %}
+
 <script>
     data_key = '{{ data_key | default:"" }}'
     child_depart_list={{ child_depart_list | jsonify | default:'[]' }}
@@ -38,6 +38,7 @@
                     })
                     var post_data=[{fun:'save_emplyee_data',data_key:data_key,content:depart_pk_list}]
                     ex.post('/_ajax/organize',JSON.stringify(post_data),function(resp){
+                        ff.show_load()
                         location.reload(true)
                     })
                 },
@@ -54,7 +55,7 @@
         <div class="content-block">
             <div class="right-side-btn">
                 <span  @click="add()" style="color: #ccaa4b"><i class="fa fa-plus fa-2x" aria-hidden="true"></i></span>
-                <span  @click="save()" style="color: #6bdd62;"><i class="fa fa-check fa-2x" aria-hidden="true"></i></span>
+                <span  @click="assure()" style="color: #6bdd62;"><i class="fa fa-check fa-2x" aria-hidden="true"></i></span>
             </div>
 
             <div style="padding: 1em 0.5em;">

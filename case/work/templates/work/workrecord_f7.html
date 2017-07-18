@@ -3,6 +3,7 @@
 {% load jsonify %}
 
 {% block extra_head %}
+    {% include 'f7/com/popup_page.html' %}
     {% include 'f7/com/table_time_group.html' %}
 {% endblock %}
 
@@ -14,26 +15,6 @@
 {% include 'organize/com/active_department.html' %}
 
 
-
-<!--<transition name="fade">-->
-    <!--<modal id="pop-menu" v-show="show_menu" @click.native="show_menu=false">-->
-
-        <!--<div class="weui-actionsheet__menu up-menu" @click.stop="" style="width: 80vw;">-->
-            <!--&lt;!&ndash;<div class="weui-actionsheet__cell" @click="add_new();show_menu=false" v-if="can_add">新建</div>&ndash;&gt;-->
-            <!--<div class="weui-actionsheet__cell" @click="ln.pushState({crt_view:'show_active-depart'});show_menu=false" v-if="can_search">下属部门</div>-->
-            <!--<div class="weui-actionsheet__cell" @click="del_item();show_menu=false" v-if="can_del &&selected.length>0">删除选中</div>-->
-            <!--<div class="weui-actionsheet__cell" @click="ln.pushState({crt_view:'show_filter'});show_menu=false" v-if="can_search">排序过滤</div>-->
-            <!--<div class="weui-actionsheet__cell" v-if="help_url" @click="goto(help_url)">帮助</div>-->
-        <!--</div>-->
-        <!--<div class="weui-actionsheet__cell">-->
-            <!--<div class="weui-actionsheet__cell" @click="show_menu=false">取消</div>-->
-        <!--</div>-->
-
-    <!--</modal>-->
-<!--</transition>-->
-
-
-
 <script type="text/javascript">
 
     ff.pop_menu(function(){
@@ -42,7 +23,8 @@
                 text: '下属部门',
                 onClick: function () {
                     active_depart.open();
-                }},
+                }
+            },
             {
                 text: '新建',
                 onClick: function () {
@@ -164,10 +146,10 @@
                     <img style="width: 3em;height: 3em" :src="get_row_img(row)" alt=""/>
 
                     <div class="weui-cell__bd" >
-                        <div style="position: absolute;bottom: 5px;right: 2em;z-index: 200;">
-                                <span style="color: #b86150;padding: 0.5em" v-if="norm_date( sub_rows.key)=='今天'&&row.status=='waiting'" @click.stop="del_item(row)">
-                                    <i class="fa fa-trash" aria-hidden="true"></i></span>
-                        </div>
+                        <!--<div style="position: absolute;bottom: 5px;right: 2em;z-index: 200;">-->
+                                <!--<span style="color: #b86150;padding: 0.5em" v-if="norm_date( sub_rows.key)=='今天'&&row.status=='waiting'" @click.stop="del_item(row)">-->
+                                    <!--<i class="fa fa-trash" aria-hidden="true"></i></span>-->
+                        <!--</div>-->
 
                         <span v-text="row.work"></span>
                         <p v-text="norm_time(row.create_time)"></p>

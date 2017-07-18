@@ -3,6 +3,9 @@
 {% block content %}
 
 <script type="text/javascript">
+	if('hide_load' in parent){
+        parent.hide_load()
+	}
 	next="{{next |default:'/'}}"
 	regist_url='{{regist_url}}'
 	

@@ -27,7 +27,7 @@ def save_workpermit(permits,emp_pk,user):
     for permit in permits:
         depart=from_dict(permit.get('depart'))
         wp=WorkPermitModel.objects.get(emp=employee,depart=depart)
-        groups=[from_dict(x) for x in permit.get('groups')]
+        groups=[from_dict(x) for x in permit.get('groups') if x]
         #for group in groups:
             #wp.group.add(group)
         #for group in wp.groups.all():

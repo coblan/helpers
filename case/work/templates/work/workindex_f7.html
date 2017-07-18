@@ -3,7 +3,6 @@
 {% load jsonify %}
 
 {% block page_content %}
-<script src='{% static "js/table.pack.js" %}'></script>
 <script src='{% static "js/ex_inputs.pack.js?t=1236664" %}'></script>
 
 
@@ -99,7 +98,7 @@
             el:'#there',
             data:{
 
-                crt_view:'main',
+//                crt_view:'main',
                 crt_name:'',
 //                selected:[],
 //                cut_list:[],
@@ -117,7 +116,7 @@
                 ex:ex,
                 workindex_url:workindex_url,
 
-                ln_state:ln_state,
+//                ln_state:ln_state,
 
 
                 rows:[],
@@ -271,22 +270,22 @@
 
 
 
-    <transition name="slide">
-        <div v-show="ln_state.crt_view=='editor'" class="slide-win" style="overflow:auto;padding-bottom: 5em;">
-            <!--<scroll-wraper ref="editor_scroller" style="width:100vw;height:90vh;">-->
-            <title-bar :with_back="true" title="编辑工作类型"></title-bar>
-            <!--<div class="weui-cells__title">编辑</div>-->
+    <!--<transition name="slide">-->
+        <!--<div v-show="ln_state.crt_view=='editor'" class="slide-win" style="overflow:auto;padding-bottom: 5em;">-->
+            <!--&lt;!&ndash;<scroll-wraper ref="editor_scroller" style="width:100vw;height:90vh;">&ndash;&gt;-->
+            <!--<title-bar :with_back="true" title="编辑工作类型"></title-bar>-->
+            <!--&lt;!&ndash;<div class="weui-cells__title">编辑</div>&ndash;&gt;-->
 
-            <div class="form-pad" >
-                <field  v-for='head in kw.heads' :key="head.name" :name='head.name' :kw='kw'></field>
-            </div>
+            <!--<div class="form-pad" >-->
+                <!--<field  v-for='head in kw.heads' :key="head.name" :name='head.name' :kw='kw'></field>-->
+            <!--</div>-->
 
-            <div v-btn-group>
-                <a state="success" @click="item_save()">确定</a>
-            </div>
+            <!--<div v-btn-group>-->
+                <!--<a state="success" @click="item_save()">确定</a>-->
+            <!--</div>-->
 
-        </div>
-    </transition>
+        <!--</div>-->
+    <!--</transition>-->
 
 
 

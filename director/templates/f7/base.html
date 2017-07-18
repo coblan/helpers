@@ -54,6 +54,9 @@
             pop_menu:function(buttons){
                 parent.pop_menu(buttons)
             },
+            show_load:function(){
+                parent.show_load()
+            },
             hide_load:function(time){
                 parent.hide_load(time)
             },
@@ -93,6 +96,8 @@
                 },
                 pop_menu:function(buttons){
 
+                },
+                show_load:function(){
                 },
                 hide_load:function(time){
                 },
@@ -324,31 +329,6 @@ $(function(){
 
 </style>
 
-<!--<script type="application/javascript">-->
-    <!--Vue.component('title-bar',{-->
-        <!--template:'#title-bar',-->
-        <!--props:['title','with_back','with_menu'],-->
-        <!--methods:{-->
-            <!--go_back:function(){-->
-                <!--history.back()-->
-            <!--},-->
-            <!--on_menu_click:function(){-->
-
-                <!--bus.$emit('menu_click')-->
-
-            <!--}-->
-        <!--}-->
-
-    <!--})-->
-<!--</script>-->
-
-<!--<template id="title-bar">-->
-    <!--<div class="flex title-bar" style="align-items:center;">-->
-        <!--<div><div v-if="with_back" @click="go_back()"><i class="fa fa-chevron-left" aria-hidden="true"></i><span>返回</span></div></div>-->
-        <!--<div  class="flex-grow" style="text-align: center;"><span v-text="title"></span></div>-->
-        <!--<div><div v-if="with_menu" @click="on_menu_click()"><i  class="fa fa-align-justify" aria-hidden="true" style="font-size: 1.5em;"></i></div></div>-->
-    <!--</div>-->
-<!--</template>-->
 
 {% block extra_body %}
 {% endblock %}
@@ -388,7 +368,7 @@ $(function(){
     /*}*/
 
 </style>
-{% block extra_foot %}
+{% block extra_script %}
 {% endblock %}
 
 </html>
