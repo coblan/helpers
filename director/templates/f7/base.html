@@ -24,7 +24,8 @@
     <script src="{% static 'js/uis_mb.pack.js?t=' %}{{ stamp.uis_mb_pack_js }}"></script>
     <script src="{% static 'js/fields_mb.pack.js?t=' %}{{ stamp.fields_mb_pack_js}}"></script>
     <script src="{% static 'js/table_mb.pack.js?t=' %}{{ stamp.table_mb_pack_js }}"></script>
-    <script src="{% static 'js/wave.js?t=' %}{{ stamp.table_mb_pack_js }}"></script>
+    <!--<script src="{% static 'js/wave.js?t=' %}{{ stamp.table_mb_pack_js }}"></script>-->
+    <script src="{% static 'lib/moment2.17.1.min.js' %}"></script>
 
 
     {% include 'director/reverse.html' %}
@@ -181,15 +182,15 @@ $(function(){
 
 
 
-    var history_state={crt_view:'init'}
-
-    function pushState(state){
-        state.call_iframe='popState'
-        parent.pushState(state)
-    }
-    function popState(state){
-        ex.assign(history_state,state)
-    }
+//    var history_state={crt_view:'init'}
+//
+//    function pushState(state){
+//        state.call_iframe='popState'
+//        parent.pushState(state)
+//    }
+//    function popState(state){
+//        ex.assign(history_state,state)
+//    }
 
 //    pushState(history_state)
 
@@ -205,9 +206,9 @@ $(function(){
 //    with_menu=true
 
 
-    ln_state={
-        crt_view:''
-    }
+//    ln_state={
+//        crt_view:''
+//    }
 //    $(function(){
 //        ln.history_handle({
 //            init:ln_state,
@@ -387,4 +388,7 @@ $(function(){
     /*}*/
 
 </style>
+{% block extra_foot %}
+{% endblock %}
+
 </html>

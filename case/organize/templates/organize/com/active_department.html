@@ -1,22 +1,31 @@
 {% load jsonify %}
 
+{% include 'f7/com/popup_page.html' %}
 <script>
     data_key = '{{ data_key | default:"" }}'
     child_depart_list={{ child_depart_list | jsonify | default:'[]' }}
 
     $(function(){
-        new  Vue({
+        active_depart=  new  Vue({
             el:'#active-depart',
             data:{
-                ln_state:ln_state,
+//                ln_state:ln_state,
                 child_depart_list:child_depart_list
             },
+            mixins:[popup_page],
             methods:{
+                selector:function(){
+                    return '.popup-active-depart'
+                },
+                assure:function(){
+                    this.save()
+                    this.close()
+                },
                 add:function(){
                     var self=this
                     depart_win.get_department(crt_depart,function(depart){
-                        if(!ex.isin(depart,self.child_depart_list,function(src,dst){
-                                    return src.pk==dst.pk
+                        if(!ex.isin(depart,self.child_depart_list,function(child_depart){
+                                    return depart.pk==child_depart.pk
                                 })){
                             self.child_depart_list.push(depart)
                         }
@@ -41,13 +50,8 @@
 
 </script>
 <div id="active-depart">
-    <transition name="slide">
-        <div v-show="ln_state.crt_view=='show_active-depart'" class="slide-win">
-            <title-bar :with_back="true" title="选择下属部门"></title-bar>
-            <!--<div class="two-side-btn">-->
-                <!--<span  @click="add()" style="color: #ccaa4b"><i class="fa fa-plus fa-2x" aria-hidden="true"></i></span>-->
-                <!--<span  @click="save()" style="color: #6bdd62;"><i class="fa fa-check fa-2x" aria-hidden="true"></i></span>-->
-            <!--</div>-->
+    <div class="popup popup-active-depart">
+        <div class="content-block">
             <div class="right-side-btn">
                 <span  @click="add()" style="color: #ccaa4b"><i class="fa fa-plus fa-2x" aria-hidden="true"></i></span>
                 <span  @click="save()" style="color: #6bdd62;"><i class="fa fa-check fa-2x" aria-hidden="true"></i></span>
@@ -57,7 +61,21 @@
                 <com-tab-lite v-for="depart in child_depart_list" :label="depart.name" :value="depart.pk" @close="rm_depart(depart)"></com-tab-lite>
             </div>
         </div>
-    </transition>
+    </div>
+
+    <!--<transition name="slide">-->
+        <!--<div class="slide-win">-->
+            <!--<title-bar :with_back="true" title="选择下属部门"></title-bar>-->
+            <!--<div class="right-side-btn">-->
+                <!--<span  @click="add()" style="color: #ccaa4b"><i class="fa fa-plus fa-2x" aria-hidden="true"></i></span>-->
+                <!--<span  @click="save()" style="color: #6bdd62;"><i class="fa fa-check fa-2x" aria-hidden="true"></i></span>-->
+            <!--</div>-->
+
+            <!--<div style="padding: 1em 0.5em;">-->
+                <!--<com-tab-lite v-for="depart in child_depart_list" :label="depart.name" :value="depart.pk" @close="rm_depart(depart)"></com-tab-lite>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</transition>-->
 
 </div>
 

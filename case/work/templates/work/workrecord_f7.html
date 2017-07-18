@@ -2,6 +2,9 @@
 {% load static %}
 {% load jsonify %}
 
+{% block extra_head %}
+    {% include 'f7/com/table_time_group.html' %}
+{% endblock %}
 
 {% block page_content %}
 
@@ -35,6 +38,11 @@
 
     ff.pop_menu(function(){
         var buttons = [
+            {
+                text: '下属部门',
+                onClick: function () {
+                    active_depart.open();
+                }},
             {
                 text: '新建',
                 onClick: function () {
@@ -72,31 +80,33 @@
             el:'#there',
             data:{
 
-                ln:ln,
+//                ln:ln,
                 page_label:page_label,
-                show_menu:false,
+//                show_menu:false,
 
             },
-            mixins:[table_fun],
+            mixins:[table_fun,table_time_group],
             mounted:function(){
-                var self=this
-                bus.$on('menu_click',function(){
-                    self.show_menu=true
-                })
+//                var self=this
+//                bus.$on('menu_click',function(){
+//                    self.show_menu=true
+//                })
 //                Vue.nextTick(function(){
 //                    self.$refs.scroller.refresh()
 //                })
             },
             methods:{
+                get_group_key:function(row){
+                    return row.create_time.slice(0,10)
+                },
                 add_new: function add_new() {
                     // 启用
-                    var pathname=ex.template('{engine_url}/{page}.edit?', {
+                    var pathname=ex.template('{engine_url}/{page}.edit', {
                         engine_url: engine_url,
                         page: page_name,
                     });
                     var url=ex.appendSearch(pathname,search_args)
-                    var name=page_name.replace('.','_')
-                    ff.load(url,name+'_edit')
+                    ff.load(url,page_name+'_edit')
                 },
 
                 ge_edit:function(pk){
@@ -109,9 +119,9 @@
 
                 },
 
-                back:function(){
-                    location = document.referrer
-                },
+//                back:function(){
+//                    location = document.referrer
+//                },
                 get_row_img:function(row){
                     return  row.desp_img || row.work_desp_img || '/static/res/image/person-work.png'
                 }
@@ -143,20 +153,47 @@
 <div id="there" v-cloak class="flex-grow" style="position: relative;">
 
     <scroll-loader   :can_load="has_next_page" @load_more="load_next_page()">
-        <table class="item-table">
-            <tr v-for="row in rows" @click="ge_edit(row.pk)" style="display: block" class="material-wave">
-                <td><img style="width: 3em;height: 3em" :src="get_row_img(row)" alt=""/></td>
-                <td><span v-text="row.work"></span></td>
-
-                <td> <i v-if="row.status=='pass'" class="fa fa-circle" aria-hidden="true" style="color: #04be02"></i>
-                    <i v-if="row.status=='waiting'" class="fa fa-telegram" aria-hidden="true" style="color: #074bb6"></i>
-                    <i v-if="row.status=='reject'" class="fa fa-info-circle" aria-hidden="true" style="color: red"></i>
-                </td>
-                <td><span v-text="row.emp"></span></td>
-            </tr>
 
 
-        </table>
+        <div v-for="sub_rows in grouped_rows">
+            <h3 style="text-align: center;" v-text="norm_date( sub_rows.key)"></h3>
+
+            <div class="weui-cells" >
+                <div class="weui-cell weui-cell_access flex material-wave" v-for="row in sub_rows.list" @click="ge_edit(row.pk)">
+
+                    <img style="width: 3em;height: 3em" :src="get_row_img(row)" alt=""/>
+
+                    <div class="weui-cell__bd" >
+                        <div style="position: absolute;bottom: 5px;right: 2em;z-index: 200;">
+                                <span style="color: #b86150;padding: 0.5em" v-if="norm_date( sub_rows.key)=='今天'&&row.status=='waiting'" @click.stop="del_item(row)">
+                                    <i class="fa fa-trash" aria-hidden="true"></i></span>
+                        </div>
+
+                        <span v-text="row.work"></span>
+                        <p v-text="norm_time(row.create_time)"></p>
+                        <span v-text="row.emp"></span>
+
+                    </div>
+                    <div class="weui-cell__ft">
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+        <!--<table class="item-table">-->
+            <!--<tr v-for="row in rows" @click="ge_edit(row.pk)" style="display: block" class="material-wave">-->
+                <!--<td><img style="width: 3em;height: 3em" :src="get_row_img(row)" alt=""/></td>-->
+                <!--<td><span v-text="row.work"></span></td>-->
+
+                <!--<td> <i v-if="row.status=='pass'" class="fa fa-circle" aria-hidden="true" style="color: #04be02"></i>-->
+                    <!--<i v-if="row.status=='waiting'" class="fa fa-telegram" aria-hidden="true" style="color: #074bb6"></i>-->
+                    <!--<i v-if="row.status=='reject'" class="fa fa-info-circle" aria-hidden="true" style="color: red"></i>-->
+                <!--</td>-->
+                <!--<td><span v-text="row.emp"></span></td>-->
+            <!--</tr>-->
+        <!--</table>-->
     </scroll-loader>
 
     <!--</div>-->

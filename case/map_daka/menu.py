@@ -45,7 +45,7 @@ from django.core.exceptions import PermissionDenied
          #}
 
 f7_menu=[
-    {'name':'map_daka_dakarecord_f7','label':'地图打卡','url':page('map_daka.dakarecord.f7'),'icon':'<img src="/static/res/image/work_types.ico" />'}
+    {'name':'map_daka_dakarecord_f7','label':'地图打卡','url':page('map_daka.dakarecord.f7'),'icon':fa('fa-map fa-2x')}
 ]
 
 

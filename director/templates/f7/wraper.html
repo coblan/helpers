@@ -135,10 +135,14 @@
 
     }
     function pop_menu(callback){
-        $('.navbar-on-center .pop-menu').css('visibility','visible')
+        $('.view .navbar .navbar-inner:last-child .pop-menu').css('visibility','visible')
         if(callback){
-            $('.navbar-on-center .pop-menu')[0].onclick=callback
+            $('.view .navbar .navbar-inner:last-child .pop-menu')[0].onclick=callback
         }
+//        $('.navbar-on-center .pop-menu').css('visibility','visible')
+//        if(callback){
+//            $('.navbar-on-center .pop-menu')[0].onclick=callback
+//        }
     }
     function back(callback){
         if(callback){
@@ -182,10 +186,10 @@
         $('.page-on-center .iframe_wraper')[0].contentWindow[callback_name].apply(this,args.slice(1,args.length))
     }
     function add_nav(str){
-        $('.navbar-on-center').after(str)
+        $('.view .navbar .navbar-inner:last-child').after(str)
     }
     function remove_nav(){
-        $('.navbar-on-center').next('.navbar').remove()
+        $('.view .navbar .navbar-inner:last-child').remove()
     }
 
     function init_page(){

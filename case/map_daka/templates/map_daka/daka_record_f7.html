@@ -8,7 +8,7 @@
 {% endblock %}
 
 {% block extra_head %}
-<script src="{% static 'lib/moment2.17.1.min.js' %}"></script>
+
 <script type="text/javascript" src="https://webapi.amap.com/maps?v=1.3&key=0909294a753dfe00a0aa124b6ecb93eb"></script>
 <script src="{% static 'lib/fingerprint2.min.js' %}"></script>
 <script>
@@ -20,18 +20,18 @@
                     filter.open()
                 }
             },
-            {
-                text: '显示选中',
-                onClick: function () {
-                    var ls=ex.map(table.selected,function(item){
-                        var pos=item.pos
-                        return [pos.lng,pos.lat]
-                    })
-                    ff.back(function(last_win){
-                        last_win.set_marker(ls)
-                    })
-                }
-            },
+//            {
+//                text: '显示选中',
+//                onClick: function () {
+//                    var ls=ex.map(table.selected,function(item){
+//                        var pos=item.pos
+//                        return [pos.lng,pos.lat]
+//                    })
+//                    ff.back(function(last_win){
+//                        last_win.set_marker(ls)
+//                    })
+//                }
+//            },
         ];
         if(table.help_url){
             buttons.push({
