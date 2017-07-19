@@ -16,13 +16,14 @@
     <!-- Path to your custom app styles-->
     <!--<link rel="stylesheet" href="css/my-app.css">-->
     <script src='{% static "js/exfun.js?t="%}{{ stamp.exfun_js }}'></script>
+    <link rel="stylesheet" href="{% static 'lib/weui.min.css' %}">
+    <link rel="stylesheet" href="{% static 'lib/font-awesome4.7/font-awesome4.7.min.css' %}">
+    <script src="{% static 'lib/vue2.3.2.js' %}"></script>
 </head>
 
 {% include 'director/reverse.html' %}
 
-{% block extra_script %}
 
-{% endblock %}
 
 <body class="start">
 <!-- Status bar overlay for fullscreen mode-->
@@ -45,39 +46,40 @@
 <div class="views">
     <!-- Your main view, should have "view-main" class-->
     <div class="view view-main">
+        {% block navbar %}
         <!-- Top Navbar-->
         <div class="navbar">
             <div class="navbar-inner">
                 <!-- We have home navbar without left link-->
-                <div class="center">演示APP</div>
+                <div class="center"></div>
                 <div class="right">
                     <!--<a href="#" class="link icon-only open-panel"> <i class="icon icon-bars"></i></a>-->
                 </div>
             </div>
         </div>
+        {% endblock %}
+
         <!-- Pages, because we need fixed-through navbar and toolbar, it has additional appropriate classes-->
         <div class="pages navbar-through toolbar-through">
             <!-- Page, data-page contains page name-->
+            {% block page_content %}
             <div data-page="home" class="page">
                 <!-- Scrollable page content-->
-                <div class="page-content">
-                    {% block page_content %}
-                    <a href="/static/services.html?t=123">service</a>
-                    {% endblock %}
+                <div class="page-content" style="padding-bottom: 3em;">
                 </div>
-
-                {% block tool_bar %}
-                <div class="toolbar">
-                    <div class="toolbar-inner"><a href="#" class="link">Link 1</a><a href="#" class="link">Link 2</a></div>
-                </div>
-                {% endblock %}
-
+                <!--<div class="toolbar">-->
+                    <!--<div class="toolbar-inner"><a href="#" class="link">Link 1</a><a href="#" class="link">Link 2</a></div>-->
+                <!--</div>-->
             </div>
+            {% endblock %}
         </div>
         <!-- Bottom Toolbar-->
 
 
     </div>
+</div>
+<div class="temp-cache hide">
+
 </div>
 <!-- Path to Framework7 Library JS-->
 <script type="text/javascript" src="/static/lib/framework7/framework7.min.js"></script>
@@ -104,6 +106,9 @@
     .page-content._no_bottom{
         padding-bottom: 0;
     }
+    .page-content.no_top{
+        padding-top: 0;
+    }
     .iframe_wraper.full-screen{
         position: fixed;
         top:0;
@@ -116,15 +121,58 @@
     }
 </style>
 
+<script id="iframe-template" type="text/template">
+
+    <!-- We don't need full layout here, because this page will be parsed with Ajax-->
+    <!-- Top Navbar-->
+    <div class="navbar">
+        <div class="navbar-inner">
+            <div class="left"><a href="#" class="back link"> <i class="icon icon-back"></i><span>返回</span></a></div>
+            <div class="center"></div>
+            <div class="right pop-menu" style="visibility: hidden;">
+                <!-- Right link contains only icon - additional "icon-only" class-->
+                <a href="#" class="link icon-only"> <i class="icon icon-bars"></i></a>
+            </div>
+        </div>
+    </div>
+    <div class="pages">
+        <!-- Page, data-page contains page name-->
+        <div data-page="{name}" class="page">
+            <!-- Scrollable page content-->
+            <div class="page-content iframe_content _no_bottom">
+
+            </div>
+        </div>
+    </div>
+</script>
+
 <script>
-    function set_title(title){
-        $('.navbar-on-center .center').html(title)
-    }
+
     function load_iframe(url,name){
-        var iframe_url='/_f7_iframe?name=iframe_'+name+'&src='+encodeURIComponent(url)
-        mainView.router.loadPage(iframe_url)
+        show_load()
+        var html = $('#iframe-template').html()
+        html=ex.template(html,{name:name,url:url})
+        mainView.router.loadContent(html)
+        setTimeout(function(){
+            var iframe_str = ex.template('<iframe class="iframe_wraper" src="{url}" frameborder="0" width="100%" height="100%"></iframe>',{url:url})
+            $('.temp-cache').html(iframe_str)
+        },200)
+        setTimeout(function(){
+            $('.page-content.iframe_content').append($('.temp-cache .iframe_wraper'))
+        },300)
     }
+
+//    function load_iframe(url,name){
+//        var iframe_url='/_f7_iframe?name=iframe_'+name+'&src='+encodeURIComponent(url)
+//        mainView.router.loadPage(iframe_url)
+//    }
+
+    function set_title(title){
+        $('.navbar .navbar-inner:last-child .center').html(title)
+    }
+
     function replace_iframe(str){
+        // 采用新的history后推机制后，这个函数基本无用了。在iframe中直接调用location.replace就可以了。
         var page_name=$('.page-on-center').attr('data-page')
         var iframe=$('.page-on-center .iframe_wraper')
 
@@ -180,16 +228,24 @@
         $('.page-content').addClass('_no_bottom')
 
     }
+    function show_nav(){
+        mainView.showNavbar()
+        $('.pages .page-content').last().removeClass('_no_top')
+    }
+    function hide_nav(){
+        mainView.hideNavbar()
+        $('.pages .page-content').last().addClass('_no_top')
+    }
 
     function call_iframe(callback_name){
         var args=Array.prototype.slice.call(arguments)
         $('.page-on-center .iframe_wraper')[0].contentWindow[callback_name].apply(this,args.slice(1,args.length))
     }
     function add_nav(str){
-        $('.view .navbar .navbar-inner:last-child').after(str)
+        $('.view .navbar .navbar-inner').last().after(str)
     }
     function remove_nav(){
-        $('.view .navbar .navbar-inner:last-child').remove()
+        $('.view .navbar .navbar-inner').last().remove()
     }
 
     function init_page(){
@@ -283,9 +339,13 @@
         top: 50%;
         transform: translate(-50%,-50%);
     }
+
     iframe { display: block; }
 </style>
 
+
+
+</body>
 <script>
     var load_timer=null
 
@@ -336,11 +396,7 @@
 
 
     function on_page_switch(page){
-//        if(page.name=='home'){
-//            show_toolbar()
-//        }else{
-//            hide_toolbar()
-//        }
+
     }
 
     myApp.onPageAfterBack('*', function(page){
@@ -358,29 +414,34 @@
             on_page_switch(page)
         }
 
+//        if(page.name=='home'){
+//            home_init()
+//        }
 
-        if (page.name.startsWith('iframe_')) {
-
-            $(page.view.activePage.container).find('.page-content').addClass('_no_bottom')
-
-            setTimeout(function(){
-                var el=$('.page-on-center').find('.iframe_wraper')
-                var data = el.attr('data-src')
-                el.attr('src',data)
-                show_load(10*1000)
-            },500)
-        }else if(page.name=='home'){
-            new Vue({
-                el:'#there',
-                data:{
-                    menu:menu,
-
-                },
-                methods:{
-                }
-            })
-        }
+//        if (page.name.startsWith('iframe_')) {
+//
+//            $(page.view.activePage.container).find('.page-content').addClass('_no_bottom')
+//
+//            setTimeout(function(){
+//                var el=$('.page-on-center').find('.iframe_wraper')
+//                var data = el.attr('data-src')
+//                el.attr('src',data)
+//                show_load(10*1000)
+//            },500)
+//        }else if(page.name=='home'){
+//            new Vue({
+//                el:'#there',
+//                data:{
+//                    menu:menu,
+//
+//                },
+//                methods:{
+//                }
+//            })
+//        }
     })
 </script>
-</body>
+{% block extra_script %}
+
+{% endblock %}
 </html>

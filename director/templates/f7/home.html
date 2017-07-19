@@ -1,42 +1,41 @@
-{% extends "f7/wraper.html" %}
+{% extends "f7/base.html" %}
 {% load static %}
 {% load jsonify %}
 
 
-{% block extra_script %}
-
-
-<link rel="stylesheet" href="{% static 'lib/weui.min.css' %}">
-<script src="{% static 'lib/jquery3.2.1.min.js' %}"></script>
-<link rel="stylesheet" href="{% static 'lib/font-awesome4.7/font-awesome4.7.min.css' %}">
-<script src="{% static 'lib/vue2.3.2.js' %}"></script>
-<script src="{% static 'js/fields_mb.pack.js' %}"></script>
-<script type="text/javascript">
-
-
-</script>
-
-{% endblock %}
 
 {% block page_content %}
 <script>
 
+//    manager={
+//        init:function(){
+//            ff.hide_load(200)
+//            ff.init_page()
+//            ff.hide_nav()
+//        }
+//    }
+    page_label='首页'
+
     menu = {{ menu | jsonify }}
 
-    title_bar=false
-
-    $(function(){
-        new Vue({
+    function home_init(){
+        home=new Vue({
             el:'#there',
             data:{
                 menu:menu,
-
             },
-
             methods:{
+                load:function(url,name){
+                    ff.load(url,name)
+                }
             }
         })
+    }
+    $(function(){
+        home_init()
     })
+
+
 </script>
 
 <div id="there">
@@ -49,12 +48,13 @@
 
     <div class="pad">
     <div class="weui-grids">
-        <a :href="'/_f7_iframe?name=iframe_'+act.name+'&src='+act.url" class="weui-grid ajax" v-for="act in menu">
+        <!--<a :href="'/_f7_iframe?name=iframe_'+act.name+'&src='+act.url" class="weui-grid ajax" v-for="act in menu">-->
+        <span @click="load(act.url,act.name)" class="weui-grid ajax" v-for="act in menu">
             <div class="weui-grid__icon">
                 <span v-html="act.icon"></span>
             </div>
             <p class="weui-grid__label" v-text="act.label"></p>
-        </a>
+        </span>
     </div>
     </div>
 
@@ -64,24 +64,5 @@
 
 {% endblock %}
 
-{% block tool_bar %}
 
-<div class="toolbar">
-    <div class="weui-tabbar nav footer">
-        <a id="help-page" href="/f7/help.f7" class="weui-tabbar__item external">
-            <i class="fa fa-info-circle weui-tabbar__icon" aria-hidden="true" ></i>
-            <p class="weui-tabbar__label">信息</p>
-        </a>
-        <a id="work-panel" href="/f7/home.f7" class="weui-tabbar__item weui-bar__item_on external">
-            <i class="fa fa-th weui-tabbar__icon" aria-hidden="true" ></i>
-            <p class="weui-tabbar__label">工作</p>
-        </a>
-        <a id="employee-center" href="/f7/organize.employeeself.f7" class="weui-tabbar__item external">
-            <i class="fa fa-user-circle weui-tabbar__icon" aria-hidden="true" ></i>
-            <p class="weui-tabbar__label">我的信息</p>
-        </a>
-
-    </div>
- </div>
-{% endblock %}
 

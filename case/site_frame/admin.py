@@ -23,7 +23,10 @@ class F7Home(object):
         self.request=request
     
     def get_context(self):
-        return {}    
+        return {}  
+
+class F7HomeWraper(F7Home):
+    template='f7/home_wraper.html'
 
     
 class Help(object):
@@ -40,6 +43,7 @@ class Help(object):
 
 page_dc.update({
     'home.wx':MHome,
-    'home.f7':F7Home,
+    'home.f7':F7HomeWraper,
+    'home_real.f7':F7Home,
     'help.f7':Help,
 })

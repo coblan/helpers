@@ -60,9 +60,17 @@
             hide_load:function(time){
                 parent.hide_load(time)
             },
-            init_page:function(){
+            init_page:function(str){
+                ff.hide_load(200)
+                var str= str || page_label
                 parent.init_page()
-                parent.set_title(page_label)
+                parent.set_title(str)
+            },
+            show_nav:function(){
+                parent.show_nav()
+            },
+            hide_nav:function(){
+              parent.hide_nav()
             },
             add_nav:function(str){
                 parent.add_nav(str)
@@ -72,7 +80,8 @@
             },
             confirm:function(info,callback){
                 parent.myApp.confirm(info, callback);
-            }
+            },
+
         }
 
         if(!parent.myApp){
@@ -102,10 +111,12 @@
                 hide_load:function(time){
                 },
                 init_page:function(){
-
+                },
+                show_nav:function(){
+                },
+                hide_nav:function(){
                 },
                 add_nav:function(str){
-
                 },
                 alert:function(str){
                     alert(str)
@@ -113,6 +124,14 @@
                 confirm:function(info,callback){
                     confirm(info, callback);
                 }
+            }
+        }
+
+        manager={
+            init:function(){
+                ff.hide_load(200)
+                ff.init_page()
+//                ff.show_nav()
             }
         }
     </script>
@@ -178,10 +197,10 @@
 
 <script>
 
-$(function(){
 
-    ff.hide_load(200)
-    ff.init_page()
+
+$(function(){
+    manager.init()
 })
 
 
@@ -286,6 +305,10 @@ $(function(){
         width: 100vm;
     }
     .popup-overlay{z-index: 111 !important;}
+
+    div.toolbar{
+        height: auto;
+    }
 </style>
 
 <div class="flex-v total-page">
@@ -294,13 +317,18 @@ $(function(){
     <!--</div>-->
 
 
-    <div id="main-content-wrap" class="flex-grow flex-v" >
+    <div id="main-content-wrap" class="flex-grow flex-v" style="overflow: auto;">
 
         {% block page_content %}
 
         {% endblock %}
 
 
+    </div>
+    <div>
+        {% block tool_bar %}
+
+        {% endblock %}
     </div>
 </div>
 
