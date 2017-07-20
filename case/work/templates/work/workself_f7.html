@@ -135,6 +135,18 @@
         border-radius: 2em;
         z-index:200;
     }
+     .ctn-panel span{
+         margin-left: 0.6em;
+     }
+     .ctn-panel .work{
+         min-width: 4em;
+     }
+    .btm-panel span{
+        margin-left: 0.3em;
+    }
+    .item-panel{
+        padding-top: 1em;
+    }
 </style>
 
 
@@ -154,22 +166,34 @@
             <h3 style="text-align: center;" v-text="norm_date( sub_rows.key)"></h3>
 
             <div class="weui-cells" >
-                <div class="weui-cell weui-cell_access flex material-wave" v-for="row in sub_rows.list" @click="ge_edit(row.pk)">
+                <div class="weui-cell weui-cell_access material-wave item-panel" v-for="row in sub_rows.list" @click="ge_edit(row.pk)">
 
-                    <img style="width: 3em;height: 3em" :src="get_row_img(row)" alt=""/>
-
-                    <div class="weui-cell__bd" >
-                        <div style="position: absolute;bottom: 5px;right: 2em;z-index: 200;">
-                                <span style="color: #b86150;padding: 0.5em" v-if="norm_date( sub_rows.key)=='今天'&&row.status=='waiting'" @click.stop="del_item(row)">
-                                    <i class="fa fa-trash" aria-hidden="true"></i></span>
+                    <div class="weui-cell__bd flex" >
+                        <div style="width: 3em;height: 3em;flex-shrink: 0;">
+                            <img style="width: 100%;height: 100%;" :src="get_row_img(row)" alt=""/>
                         </div>
+                        <div class="flex-grow" style="padding: 0.3em;">
+                            <div class="flex ctn-panel">
+                                <span class="work" >
+                                    <span style="color: #425baf;" v-text="row.work"></span><br/>
+                                     <span style="font-size: 0.8em;" class="badge" v-text="row.count"></span>
+                                </span>
+                                <span style="font-size: 0.8em;color: #585b59;" v-text="row.short"></span>
+                            </div>
 
-                        <div> <i v-if="row.status=='pass'" class="fa fa-circle" aria-hidden="true" style="color: #04be02"></i>
-                            <i v-if="row.status=='waiting'" class="fa fa-telegram" aria-hidden="true" style="color: #074bb6"></i>
-                            <i v-if="row.status=='reject'" class="fa fa-info-circle" aria-hidden="true" style="color: red"></i>
+                            <div class="flex btm-panel" style="font-size: 0.6em;color: #7c7e87;position: absolute;bottom: 0;right: 4em;">
+                                <span>
+                                    <i v-if="row.status=='pass'" class="fa fa-circle" aria-hidden="true" style="color: #04be02"></i>
+                                    <i v-if="row.status=='waiting'" class="fa fa-telegram" aria-hidden="true" style="color: #074bb6"></i>
+                                    <i v-if="row.status=='reject'" class="fa fa-info-circle" aria-hidden="true" style="color: red"></i>
+                                </span>
+                                <span v-text="norm_time(row.create_time)"></span>
+                            </div>
                         </div>
-
-                        <p v-text="norm_time(row.create_time)"></p>
+                        <div style="position: absolute;top: 5px;right: 2em;z-index: 200;">
+                            <span style="color: #b86150;padding: 0.5em" v-if="norm_date( sub_rows.key)=='今天'&&row.status=='waiting'" @click.stop="del_item(row)">
+                                <i class="fa fa-trash" aria-hidden="true"></i></span>
+                        </div>
 
                     </div>
                     <div class="weui-cell__ft">

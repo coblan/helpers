@@ -14,6 +14,8 @@
 {% include 'wx/com/table_filter_wx.html' %}
 {% include 'organize/com/active_department.html' %}
 
+{% include 'work/com/workrecord_fast_display.html' %}
+
 
 <script type="text/javascript">
 
@@ -142,18 +144,25 @@
 
             <div class="weui-cells" >
                 <div class="weui-cell weui-cell_access flex material-wave" v-for="row in sub_rows.list" @click="ge_edit(row.pk)">
+                    <div>
+                        <img style="width: 3em;height: 3em" :src="get_row_img(row)" alt=""/>
+                    </div>
 
-                    <img style="width: 3em;height: 3em" :src="get_row_img(row)" alt=""/>
 
-                    <div class="weui-cell__bd" >
+                    <div class="weui-cell__bd flex" >
+
                         <!--<div style="position: absolute;bottom: 5px;right: 2em;z-index: 200;">-->
                                 <!--<span style="color: #b86150;padding: 0.5em" v-if="norm_date( sub_rows.key)=='今天'&&row.status=='waiting'" @click.stop="del_item(row)">-->
                                     <!--<i class="fa fa-trash" aria-hidden="true"></i></span>-->
                         <!--</div>-->
+                        <workrecord_display :row="row"></workrecord_display>
 
-                        <span v-text="row.work"></span>
-                        <p v-text="norm_time(row.create_time)"></p>
-                        <span v-text="row.emp"></span>
+                        <!--<span v-text="row.work"></span>-->
+                        <!--<div style="border-left: 1px solid black;">-->
+                            <!--<span>简短说明</span><span v-text="row.short"></span>-->
+                            <!--<span v-text="row.emp"></span><span v-text="norm_time(row.create_time)"></span>-->
+                        <!--</div>-->
+
 
                     </div>
                     <div class="weui-cell__ft">
@@ -164,18 +173,6 @@
 
         </div>
 
-        <!--<table class="item-table">-->
-            <!--<tr v-for="row in rows" @click="ge_edit(row.pk)" style="display: block" class="material-wave">-->
-                <!--<td><img style="width: 3em;height: 3em" :src="get_row_img(row)" alt=""/></td>-->
-                <!--<td><span v-text="row.work"></span></td>-->
-
-                <!--<td> <i v-if="row.status=='pass'" class="fa fa-circle" aria-hidden="true" style="color: #04be02"></i>-->
-                    <!--<i v-if="row.status=='waiting'" class="fa fa-telegram" aria-hidden="true" style="color: #074bb6"></i>-->
-                    <!--<i v-if="row.status=='reject'" class="fa fa-info-circle" aria-hidden="true" style="color: red"></i>-->
-                <!--</td>-->
-                <!--<td><span v-text="row.emp"></span></td>-->
-            <!--</tr>-->
-        <!--</table>-->
     </scroll-loader>
 
     <!--</div>-->

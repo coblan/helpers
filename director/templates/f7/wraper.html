@@ -163,7 +163,7 @@
                 <!--</div>-->
             <!--</div>-->
 
-            <div class="page-content iframe_content _no_bottom"></div>
+            <div class="page-content iframe_content "></div>
         </div>
     </div>
 </script>
@@ -271,7 +271,7 @@
             $('.temp-cache').html(iframe_str)
         },200)
         setTimeout(function(){
-            $('.page-content.iframe_content').append($('.temp-cache .iframe_wraper'))
+            $('.pages .page').last().find('.page-content.iframe_content').append($('.temp-cache .iframe_wraper'))
         },300)
         setTimeout(function(){
             mainView.showNavbar()

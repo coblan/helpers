@@ -1,0 +1,37 @@
+<script>
+Vue.component('workrecord_display',{
+    template:'#workrecord-fast-display',
+    props:['row'],
+
+})
+</script>
+
+<style>
+    .record-row{
+        padding: 0.2em 0;
+    }
+    .record-label{
+        text-align: right;
+        padding-right:0.5em;
+    }
+</style>
+<template id="workrecord-fast-display">
+    <table>
+        <tr class="record-row">
+            <td class='record-label' >名称</td>
+            <td v-text="row.work"></td>
+            <!--<td class='record-label' style="" v-text="ex.findone(heads,{name:info}).label"></td>-->
+            <!--<td v-text="row[info]"></td>-->
+        </tr>
+        <tr class="record-row">
+            <td class='record-label' >完成日期</td>
+            <td v-text="row.finish_time"></td>
+        </tr>
+        <tr class="record-row">
+            <td class='record-label' >数量</td>
+            <td v-text="row.count"></td>
+        </tr>
+
+
+    </table>
+</template>
