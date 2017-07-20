@@ -143,7 +143,13 @@ class WorkRecordForm(ModelFields):
             if self.instance.status!='waiting': 
                 raise forms.ValidationError('you have no permition to edit this workrecord again')
     
-
+    def save_form(self):
+        rt=super(WorkRecordForm,self).save_form()
+        if self.instance.status=='pass':
+            checker= self.crt_user.employee_set.first()
+            self.instance.checker= checker 
+            self.instance.save()
+        return rt
     #def can_access(self):
         #access = super(WorkRecordForm,self).can_access()
         #if not has_permit(self.crt_user,'workrecord.check_all'):
@@ -182,10 +188,15 @@ class WorkRecordTable(ModelTable):
 
     def dict_row(self,inst):
         dc={}
-        if  inst.work:
+        if inst.work:
             dc.update({
                 'work_desp_img': inst.work.desp_img,
                 'work':unicode(inst.work),
+                'work_span':inst.work.span,
+            })
+        if inst.checker:
+            dc.update({
+                'checker_name':unicode(inst.checker)
             })
         dc.update({
             'emp':unicode(inst.emp),

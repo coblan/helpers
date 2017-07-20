@@ -116,21 +116,21 @@
 </script>
 
 <style>
-    .item-table{
-        width: 100vw;
-    }
-    .item-table td{
-        padding:1em 0.3em;
-        min-width: 2em;
-        text-align: center;
-    }
-    tr:nth-child(odd){background-color: #ffffff;}
-    td:nth-child(1){
-        padding-left: 0.5em;
-    }
-    .item-table img{
-        box-shadow:0 0 10px rgba(38, 67, 201, 0.5);
-    }
+    /*.item-table{*/
+        /*width: 100vw;*/
+    /*}*/
+    /*.item-table td{*/
+        /*padding:1em 0.3em;*/
+        /*min-width: 2em;*/
+        /*text-align: center;*/
+    /*}*/
+    /*tr:nth-child(odd){background-color: #ffffff;}*/
+    /*td:nth-child(1){*/
+        /*padding-left: 0.5em;*/
+    /*}*/
+    /*.item-table img{*/
+        /*box-shadow:0 0 10px rgba(38, 67, 201, 0.5);*/
+    /*}*/
 </style>
 
 
@@ -144,8 +144,9 @@
 
             <div class="weui-cells" >
                 <div class="weui-cell weui-cell_access flex material-wave" v-for="row in sub_rows.list" @click="ge_edit(row.pk)">
-                    <div>
-                        <img style="width: 3em;height: 3em" :src="get_row_img(row)" alt=""/>
+                    <div style="width: 3em;">
+                        <img style="width: 100%;height: auto;" :src="get_row_img(row)" alt=""/>
+                        <!--<div style="text-align: center;margin-top: 0.5em;"><span style="font-size: 0.8em;color: #5c5862;" v-text="row.work"></span></div>-->
                     </div>
 
 

@@ -2,36 +2,121 @@
 Vue.component('workrecord_display',{
     template:'#workrecord-fast-display',
     props:['row'],
+    methods:{
+        total_hour:function(row){
+            return row.work_span*row.count+row.ex_span
+        },
+        norm_time:function(date_time){
+            return date_time.slice(11)
+        }
+    }
 
 })
 </script>
 
 <style>
+    .record-table td{
+        padding-top: 0.3em;
+        vertical-align: top;
+    }
+    .record-table td:first-child{
+        width: 4.3em;
+    }
+    .record-table td:nth-child(2){
+        width: 1em;
+    }
+    .record-table td:last-child{
+        padding-top: 0.3em;
+        vertical-align: middle;
+        text-align: left;
+    }
     .record-row{
         padding: 0.2em 0;
     }
     .record-label{
-        text-align: right;
-        padding-right:0.5em;
+        /*padding-right:0.5em;*/
+        width: 4em;
+        text-align:justify;
+        height: 1.2em;
+
+    }
+    .record-label:after {width: 100%;height: 0;margin: 0;display: inline-block;overflow: hidden;content: '';}
+    /*.record-table:after{*/
+        /*content:'.';*/
+        /*width: 100%;*/
+        /*display: inline-block;*/
+        /*overflow: hidden;*/
+        /*height: 0;*/
+    /*}*/
+    .lighter{
+        color: #7d7d7d;
+        font-size: 0.7em;
     }
 </style>
 <template id="workrecord-fast-display">
-    <table>
+    <table style="width: 100%" class="record-table">
+
         <tr class="record-row">
-            <td class='record-label' >名称</td>
-            <td v-text="row.work"></td>
-            <!--<td class='record-label' style="" v-text="ex.findone(heads,{name:info}).label"></td>-->
-            <!--<td v-text="row[info]"></td>-->
-        </tr>
-        <tr class="record-row">
-            <td class='record-label' >完成日期</td>
-            <td v-text="row.finish_time"></td>
-        </tr>
-        <tr class="record-row">
-            <td class='record-label' >数量</td>
-            <td v-text="row.count"></td>
+            <td>
+                <div class='record-label' style="color: #2e3bba;">提交人</div>
+            </td>
+            <td>:</td>
+            <td style="color: #2e3bba;">
+                <span v-text="row.emp"></span> <span class="lighter" v-text="norm_time(row.create_time)"></span>
+            </td>
         </tr>
 
+        <tr class="record-row">
+            <td  >
+                <div class='record-label'>工作类型</div>
+            </td>
+            <td>:</td>
+            <td v-text="row.work" class="lighter"></td>
+        </tr>
+
+        <tr class="record-row">
+            <td  >
+                <div class='record-label'>工时计数</div>
+            </td>
+            <td>:</td>
+            <td >
+                <span class="lighter"><span v-text="row.work_span"></span>X<span v-text="row.count"></span>+<span v-text="row.ex_span"></span>=</span> <span v-text="total_hour(row)"></span>
+            </td>
+        </tr>
+
+        <tr class="record-row">
+            <td  >
+                <div class='record-label'>完成日期</div>
+            </td>
+            <td>:</td>
+            <td v-text="row.finish_time"></td>
+        </tr>
+        <tr v-if="row.short || row.detail" class="record-row">
+            <td >
+                <div class='record-label'>说明</div>
+            </td>
+            <td>:</td>
+            <td >
+                <div class="lighter">
+                    <div v-text="row.short"></div>
+                    <div v-text="row.detail"></div>
+                </div>
+            </td>
+        </tr>
+        <tr class="record-row">
+            <td >
+                <div class='record-label'>部门</div>
+            </td>
+            <td>:</td>
+            <td ><span class="lighter"><span v-text="row._depart_label"></span> (<span v-text="row._tr_sub_type"></span>)</span></td>
+        </tr>
+        <tr v-if="row.checker">
+            <td >
+                <div class='record-label'>审核人</div>
+            </td>
+            <td>:</td>
+            <td><span class="lighter" v-text="row.checker_name"></span></td>
+        </tr>
 
     </table>
 </template>

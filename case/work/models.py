@@ -53,6 +53,7 @@ class WorkRecord(models.Model):
     sub_type=models.CharField('提交类型',max_length=50,choices=WORK_SUBMIT_TYPE,default='normal_work')
     depart=models.ForeignKey(Department,verbose_name='从属部门',blank=True,null=True)
     check_depart=models.ForeignKey(Department,verbose_name='审核部门',blank=True,null=True,related_name='check_workrecord')
+    checker=models.ForeignKey(Employee,verbose_name='审核人',blank=True,null=True,related_name='checked_workrecord')
     #tmp=models.BooleanField('临时工时',default=False)
     
     def __unicode__(self):

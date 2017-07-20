@@ -1,7 +1,8 @@
 from helpers.director.db_tools import from_dict
 from .admin import WRselfForm
 
-
+def get_global():
+    return globals()
 
 def save_workself(row,user,request):
     #instance=from_dict(row)
@@ -13,5 +14,3 @@ def save_workself(row,user,request):
     else:
         return {'errors':dict(fm.errors)}
 
-def get_global():
-    return globals()
