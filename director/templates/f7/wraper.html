@@ -168,71 +168,47 @@
     </div>
 </script>
 
-<!--<script id="iframe-nav" type="text/template">-->
 
-        <!--<div class="navbar-inner cached" data-page="{name}">-->
-            <!--<div class="left"><a href="#" class="back link"> <i class="icon icon-back"></i><span>返回</span></a></div>-->
-                <!--<div class="center"><span style="color: #999999"></span></div>-->
-                <!--<div class="right pop-menu" style="visibility: hidden;">-->
-                            <!--&lt;!&ndash; Right link contains only icon - additional "icon-only" class&ndash;&gt;-->
-                        <!--<a href="#" class="link icon-only"> <i class="icon icon-bars"></i></a>-->
-                <!--</div>-->
-                <!--</div>-->
+<!--<script id="iframe-template-fast" type="text/template">-->
 
-<!--</script>-->
-
-<!--<script id="iframe-page" type="text/template">-->
-
-    <!--&lt;!&ndash; We don't need full layout here, because this page will be parsed with Ajax&ndash;&gt;-->
     <!--&lt;!&ndash; Top Navbar&ndash;&gt;-->
-
-
-            <!--&lt;!&ndash; Page, data-page contains page name&ndash;&gt;-->
-            <!--<div data-page="{name}" class="page page-cus cached">-->
-                <!--<div class="page-content iframe_content _no_bottom">-->
-                    <!--&lt;!&ndash;<iframe class="iframe_wraper" src="{url}" frameborder="0" width="100%" height="100%"></iframe>&ndash;&gt;-->
-                <!--</div>-->
+    <!--<div class="navbar">-->
+        <!--<div class="navbar-inner">-->
+            <!--<div class="left"><a href="#" class="back link"> <i class="icon icon-back"></i><span>返回</span></a></div>-->
+            <!--<div class="center"><span style="color: #999999">加载...</span></div>-->
+            <!--<div class="right pop-menu" style="visibility: hidden;">-->
+                <!--&lt;!&ndash; Right link contains only icon - additional "icon-only" class&ndash;&gt;-->
+                <!--<a href="#" class="link icon-only"> <i class="icon icon-bars"></i></a>-->
             <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
+    <!--<div class="pages">-->
+        <!--&lt;!&ndash; Page, data-page contains page name&ndash;&gt;-->
+        <!--<div data-page="{name}" class="page page-cus">-->
 
-
-
+            <!--<div class="page-content iframe_content ">-->
+                <!--<iframe class="iframe_wraper"  frameborder="0" width="100%" height="100%"></iframe>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
 <!--</script>-->
-<!--<iframe class="iframe_wraper" src="{url}" frameborder="0" width="100%" height="100%"></iframe>-->
+
 <script>
 
-
-//    load_iframe_loaded_one=false
+//    <iframe class="iframe_wraper" src="{url}" frameborder="0" width="100%" height="100%"></iframe>
+//    load_animation_over=true
 //    function load_iframe(url,name){
+////        load_animation_over=false
 //        show_load()
-//        var nav_html=$('#iframe-nav').html()
-//        nav_html=ex.template(nav_html,{name:name})
-//        $('.navbar').append(nav_html)
-//
-//        var page_html=$('#iframe-page').html()
-//        page_html=ex.template(page_html,{name:name,url:url})
-//        $('.pages').append(page_html)
-//
-//
-//        var iframe_str = ex.template('<iframe class="iframe_wraper" src="{url}" frameborder="0" width="100%" height="100%"></iframe>',{url:url})
-//        $('.temp-cache').html(iframe_str)
-//        load_iframe_loaded_one=false
-//        setTimeout(function(){
-//            $('.temp-cache .iframe_wraper')[0].onload=function(){
-////            $('.pages .page').last().find('.iframe_wraper')[0].onload=function(){
-//                if(!load_iframe_loaded_one){
-//                    load_iframe_loaded_one=true
-//                    mainView.router.load({pageName:name})
-//                    setTimeout(function(){
-//                        $('.pages .page').last().find('.iframe_content').append($('.temp-cache .iframe_wraper'))
-//                    },200)
-//
-//                }
-//
-//
-//
-//            }
+//        url=ex.appendSearch(url,{'_ajax_html':'1'})
+//        $.get(url,function(resp){
+////            var data_url="data:text/html;charset=utf-8," + escape(resp);
+////            $('.pages .page').last().find('.iframe_wraper')[0].src=data_url
+//            var doc = $('.pages .page').last().find('.iframe_wraper')[0].contentWindow.document.write(resp);
+////            doc.write(resp)
+////            $(sub_frame).find('html').html(resp);
 //        })
-//
+//        var html = $('#iframe-template-fast').html()
 //
 //        html=ex.template(html,{name:name,url:url})
 //        mainView.router.loadContent(html)
@@ -240,19 +216,27 @@
 //        if(mainView.history.length>2){
 //            mainView.showNavbar()
 //        }else{
+//            // 在第二个页面，先隐藏住navbar，500毫秒后，再显示。
 //            mainView.hideNavbar()
+//            setTimeout(function(){
+//                mainView.showNavbar()
+//            },500)
 //        }
 //        setTimeout(function(){
-//
-//        },200)
-//        setTimeout(function(){
-//            $('.page-content.iframe_content').append($('.temp-cache .iframe_wraper'))
+//            load_animation_over=true
 //        },300)
+
 //        setTimeout(function(){
-//            mainView.showNavbar()
-//        },500)
+//            var iframe_str = ex.template('<iframe class="iframe_wraper" src="{url}" frameborder="0" width="100%" height="100%"></iframe>',{url:url})
+//            $('.temp-cache').html(iframe_str)
+//        },200)
+
+//        setTimeout(function(){
+//            $('.pages .page').last().find('.page-content.iframe_content').append($('.temp-cache .iframe_wraper'))
+//        },300)
+
 //    }
-//
+
 
     function load_iframe(url,name){
         show_load()
@@ -264,7 +248,11 @@
         if(mainView.history.length>2){
             mainView.showNavbar()
         }else{
+            // 在第二个页面，先隐藏住navbar，500毫秒后，再显示。
             mainView.hideNavbar()
+            setTimeout(function(){
+                mainView.showNavbar()
+            },500)
         }
         setTimeout(function(){
             var iframe_str = ex.template('<iframe class="iframe_wraper" src="{url}" frameborder="0" width="100%" height="100%"></iframe>',{url:url})
@@ -273,9 +261,7 @@
         setTimeout(function(){
             $('.pages .page').last().find('.page-content.iframe_content').append($('.temp-cache .iframe_wraper'))
         },300)
-        setTimeout(function(){
-            mainView.showNavbar()
-        },500)
+
     }
 
 //    function load_iframe(url,name){

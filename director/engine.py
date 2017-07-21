@@ -47,6 +47,7 @@ from django.db import models
 from django.core.exceptions import PermissionDenied
 import inspect
 import json
+from django.views.decorators.cache import patch_cache_control
 
 page_dc.update({
         'del_rows':DelPage,
@@ -76,9 +77,7 @@ class BaseEngine(object):
         if not dc in cls._pages:
             cls._pages.append(dc)
     
-    def view(self,request,name):
-        #if request.is_ajax():
-              
+    def view(self,request,name):     
         page_cls = self.get_page_cls(name)
         
         if getattr(page_cls,'need_login',True):
@@ -87,8 +86,8 @@ class BaseEngine(object):
                 
         page=page_cls(request)
         ctx=page.get_context()
-        if  request.is_ajax() and not getattr(page,'ajax_html',False):
-            return HttpResponse(json.dumps(ctx),content_type="application/json")
+        if  request.is_ajax() and not request.GET.get('_ajax_html') and not getattr(page,'ajax_html',False):
+            resp= HttpResponse(json.dumps(ctx),content_type="application/json")
         else:
             ctx['menu']=self.get_menu(request)   
             ctx['page_name']=name
@@ -105,7 +104,11 @@ class BaseEngine(object):
             #ctx=self.get_ctx(ctx)
             ctx['template']=template
             ctx=self.custome_ctx(ctx)
-            return render(request,template,context=ctx)
+            resp= render(request,template,context=ctx)
+        if getattr(page,'get_cache_control',None):
+            kw= page.get_cache_control()
+            patch_cache_control(resp,**kw)
+        return resp
        
     def custome_ctx(self,ctx):
         return ctx

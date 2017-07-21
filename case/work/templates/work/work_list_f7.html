@@ -15,6 +15,8 @@
 {% include 'wx/com/table_filter_wx.html' %}
 {% include 'organize/com/active_department.html' %}
 
+{% include 'work/com/workrecord_fast_display.html' %}
+
 <script type="text/javascript">
 
 
@@ -85,6 +87,9 @@
             get_row_img:function(row){
                 return  row.desp_img || row.work_desp_img || '/static/res/image/person-work.png'
             },
+            open_image:function(url){
+                ff.open_image(url)
+            },
 
 
         }
@@ -107,7 +112,7 @@
             <h3 style="text-align: center;" v-text="norm_date( sub_rows.key)"></h3>
 
             <div class="weui-cells" >
-                <div class="weui-cell weui-cell_access flex material-wave" v-for="row in sub_rows.list" @click="ge_edit(row.pk)">
+                <div class="weui-cell weui-cell_access flex " v-for="row in sub_rows.list" >
                     <div class="weui-cell__bd"  style="position: relative;">
 
                         <!--<img style="position:absolute;right:1em;top:-0.4em;width: 1.5em;height: 1.5em;border-radius: 1em;" :src="row.emp.head" alt=""/>-->
@@ -116,15 +121,20 @@
                         </div>
 
                         <div class="flex">
-                            <div><img style="width: 3em;height: 3em" :src="get_row_img(row)" alt=""/></div>
-                            <div style="padding: 0 1em;">
-                                <table>
-                                    <tr v-for="info in ['work','finish_time','count','depart']" style="padding: 0.2em 0;">
-                                        <td style="text-align: right;padding-right:0.5em;" v-text="ex.findone(heads,{name:info}).label"></td>
-                                        <td v-text="row[info]"></td>
-                                    </tr>
+                            <div @click="open_image(get_row_img(row))">
+                                <img style="width: 3em;height: 3em" :src="get_row_img(row)" alt=""/>
+                            </div>
+                            <div style="padding: 0 1em;" @click="ge_edit(row.pk)" class="material-wave">
 
-                                </table>
+                                <workrecord_display :row="row"></workrecord_display>
+
+                                <!--<table>-->
+                                    <!--<tr v-for="info in ['work','finish_time','count','depart']" style="padding: 0.2em 0;">-->
+                                        <!--<td style="text-align: right;padding-right:0.5em;" v-text="ex.findone(heads,{name:info}).label"></td>-->
+                                        <!--<td v-text="row[info]"></td>-->
+                                    <!--</tr>-->
+
+                                <!--</table>-->
                             </div>
 
                         </div>

@@ -31,6 +31,22 @@
     {% include 'director/reverse.html' %}
 
     <script>
+
+//        function sleep(milliseconds) {
+//            var start = new Date().getTime();
+//            for (var i = 0; i < 1e7; i++) {
+//                if ((new Date().getTime() - start) > milliseconds){
+//                    break;
+//                }
+//            }
+//        }
+//
+//        if(parent.myApp){
+//            while(!parent.load_animation_over){
+//                sleep(100)
+//            }
+//        }
+
         ff={
             app:parent.myApp,
             push:function(obj){
@@ -81,6 +97,16 @@
             confirm:function(info,callback){
                 parent.myApp.confirm(info, callback);
             },
+            open_image:function(str){
+                var myPhotoBrowser = parent.myApp.photoBrowser({
+                    zoom: 400,
+                    photos: [str]
+                });
+                myPhotoBrowser.open(); // open photo browser
+                ff.push(function(){
+                    myPhotoBrowser.close()
+                })
+            }
 
         }
 
@@ -123,6 +149,9 @@
                 },
                 confirm:function(info,callback){
                     confirm(info, callback);
+                },
+                open_image:function(str){
+                    alert(str)
                 }
             }
         }

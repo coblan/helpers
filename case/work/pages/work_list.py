@@ -21,12 +21,30 @@ class WorkList(ModelTable):
         query_depart=valid_depart.get_query_depart()
         return query.filter(depart__in=query_depart).order_by('-id')
     
-    def dict_row(self, inst):
-        return {
-            'emp':sim_dict(inst.emp.baseinfo),
-            'work':unicode(inst.work),
-            'depart':unicode(inst.depart)
-        }
+    def dict_row(self,inst):
+        dc={}
+        if inst.work:
+            dc.update({
+                'work_desp_img': inst.work.desp_img,
+                # 'work':unicode(inst.work),
+                'work_span':inst.work.span,
+            })
+        if inst.checker:
+            dc.update({
+                'checker_name':unicode(inst.checker)
+            })
+        dc.update({
+            # 'emp':unicode(inst.emp),
+            'desp_img':inst.desp_img,            
+        })
+        return dc
+    
+    # def dict_row(self, inst):
+        # return {
+            # 'emp':sim_dict(inst.emp.baseinfo),
+            # 'work':unicode(inst.work),
+            # 'depart':unicode(inst.depart)
+        # }
   
   
 

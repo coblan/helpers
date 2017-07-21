@@ -50,7 +50,7 @@ Vue.component('workrecord_display',{
     /*}*/
     .lighter{
         color: #7d7d7d;
-        font-size: 0.7em;
+        font-size: 0.8em;
     }
 </style>
 <template id="workrecord-fast-display">
@@ -58,11 +58,11 @@ Vue.component('workrecord_display',{
 
         <tr class="record-row">
             <td>
-                <div class='record-label' style="color: #2e3bba;">提交人</div>
+                <div class='record-label'>提交人</div>
             </td>
             <td>:</td>
             <td style="color: #2e3bba;">
-                <span v-text="row.emp"></span> <span class="lighter" v-text="norm_time(row.create_time)"></span>
+                <span v-text="row._emp_label"></span> <span class="lighter" style="margin-left: 2em;" v-text="norm_time(row.create_time)"></span>
             </td>
         </tr>
 
@@ -71,7 +71,7 @@ Vue.component('workrecord_display',{
                 <div class='record-label'>工作类型</div>
             </td>
             <td>:</td>
-            <td v-text="row.work" class="lighter"></td>
+            <td v-text="row._work_label" class="lighter"></td>
         </tr>
 
         <tr class="record-row">
@@ -80,7 +80,8 @@ Vue.component('workrecord_display',{
             </td>
             <td>:</td>
             <td >
-                <span class="lighter"><span v-text="row.work_span"></span>X<span v-text="row.count"></span>+<span v-text="row.ex_span"></span>=</span> <span v-text="total_hour(row)"></span>
+                <span class="lighter"><span v-text="row.work_span"></span>X<span v-text="row.count"></span>+<span v-text="row.ex_span"></span>=</span>
+                <span style="color: #2e3bba;" v-text="total_hour(row)"></span>
             </td>
         </tr>
 
@@ -89,7 +90,7 @@ Vue.component('workrecord_display',{
                 <div class='record-label'>完成日期</div>
             </td>
             <td>:</td>
-            <td v-text="row.finish_time"></td>
+            <td class="lighter" v-text="row.finish_time"></td>
         </tr>
         <tr v-if="row.short || row.detail" class="record-row">
             <td >
@@ -115,7 +116,7 @@ Vue.component('workrecord_display',{
                 <div class='record-label'>审核人</div>
             </td>
             <td>:</td>
-            <td><span class="lighter" v-text="row.checker_name"></span></td>
+            <td><span class="lighter" v-text="row._checker_label"></span></td>
         </tr>
 
     </table>

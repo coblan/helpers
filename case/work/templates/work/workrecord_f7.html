@@ -108,6 +108,25 @@
 //                },
                 get_row_img:function(row){
                     return  row.desp_img || row.work_desp_img || '/static/res/image/person-work.png'
+                },
+                open_image:function(url){
+                    ff.open_image(url)
+                },
+                switch_status:function(row){
+                    if(row.status!='pass'){
+                        row.status='pass'
+                    }else{
+                        row.status='waiting'
+                    }
+                    var post_data=[{fun:'save',row:row}]
+                    ex.post('/_ajax',JSON.stringify(post_data),function(resp){
+                        if(resp.save.errors){
+                            ff.alert(resp.save.errors)
+                        }else{
+                            ex.assign(row,resp.save.row)
+                        }
+
+                    })
                 }
 
             }
@@ -143,30 +162,37 @@
             <h3 style="text-align: center;" v-text="norm_date( sub_rows.key)"></h3>
 
             <div class="weui-cells" >
-                <div class="weui-cell weui-cell_access flex material-wave" v-for="row in sub_rows.list" @click="ge_edit(row.pk)">
-                    <div style="width: 3em;">
+                <div class="weui-cell  flex"  v-for="row in sub_rows.list"
+                      style="align-items:flex-start;padding-top: 1em;">
+                    <div style="width: 3em;margin-right: 0.3em;padding-top: 0.4em;" @click="open_image(get_row_img(row))">
                         <img style="width: 100%;height: auto;" :src="get_row_img(row)" alt=""/>
                         <!--<div style="text-align: center;margin-top: 0.5em;"><span style="font-size: 0.8em;color: #5c5862;" v-text="row.work"></span></div>-->
                     </div>
 
 
-                    <div class="weui-cell__bd flex" >
+                    <div class="weui-cell__bd " >
 
                         <!--<div style="position: absolute;bottom: 5px;right: 2em;z-index: 200;">-->
                                 <!--<span style="color: #b86150;padding: 0.5em" v-if="norm_date( sub_rows.key)=='今天'&&row.status=='waiting'" @click.stop="del_item(row)">-->
                                     <!--<i class="fa fa-trash" aria-hidden="true"></i></span>-->
                         <!--</div>-->
-                        <workrecord_display :row="row"></workrecord_display>
+                        <div class="material-wave" @click="ge_edit(row.pk)">
+                            <workrecord_display :row="row"></workrecord_display>
+                        </div>
+
 
                         <!--<span v-text="row.work"></span>-->
                         <!--<div style="border-left: 1px solid black;">-->
                             <!--<span>简短说明</span><span v-text="row.short"></span>-->
                             <!--<span v-text="row.emp"></span><span v-text="norm_time(row.create_time)"></span>-->
                         <!--</div>-->
-
+                        <div @click.stop="" @mousedown.stop="">
+                            <button @click="switch_status(row)" style="float: right;" :class="['button',{'color-green':row.status=='pass','color-red':row.status!='pass'}]" v-text="row._tr_status"></button>
+                        </div>
 
                     </div>
-                    <div class="weui-cell__ft">
+                    <div class="weui-cell__ft" style="align-self:center;">
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
                     </div>
 
                 </div>

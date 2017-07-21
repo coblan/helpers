@@ -191,7 +191,7 @@ class WorkRecordTable(ModelTable):
         if inst.work:
             dc.update({
                 'work_desp_img': inst.work.desp_img,
-                'work':unicode(inst.work),
+                # 'work':unicode(inst.work),
                 'work_span':inst.work.span,
             })
         if inst.checker:
@@ -199,7 +199,7 @@ class WorkRecordTable(ModelTable):
                 'checker_name':unicode(inst.checker)
             })
         dc.update({
-            'emp':unicode(inst.emp),
+            # 'emp':unicode(inst.emp),
             'desp_img':inst.desp_img,            
         })
         return dc
@@ -232,6 +232,9 @@ class WorkRecordTablePage(TablePage):
     
     def get_label(self):
         return '工作审批列表'
+    
+    # def get_cache_control(self):
+        # return dict(max_age=3600)
 
 class WorkRecordTablePageWX(WorkRecordTablePage):
     template='work/workrecord_f7.html'
