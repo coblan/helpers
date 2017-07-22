@@ -79,7 +79,7 @@
 
     </div>
 </div>
-<div class="temp-cache hide">
+<div class="iframe-cache hide">
 
 </div>
 <!-- Path to Framework7 Library JS-->
@@ -154,6 +154,7 @@
         <!-- Page, data-page contains page name-->
         <div data-page="{name}" class="page page-cus">
             <!-- Scrollable page content-->
+
             <!--<div class="navbar-custom flex">-->
                 <!--<div class="left" onclick="back()"><span class="back link"> <i class="fa fa-chevron-left" aria-hidden="true" style="font-size: 1.5em;"></i></span></div>-->
                 <!--<div class="center flex-grow" style="text-align: center;font-weight: 700;">jjss</div>-->
@@ -163,7 +164,10 @@
                 <!--</div>-->
             <!--</div>-->
 
-            <div class="page-content iframe_content "></div>
+            <div class="page-content iframe_content ">
+                <div style="height: 100vh;width: 5vw;position: fixed;z-index: 9000;background: rgba(0,0,0,0);top:0;left: 0;"></div>
+                <iframe class="iframe_wraper"  frameborder="0" width="100%" height="100%"></iframe>
+            </div>
         </div>
     </div>
 </script>
@@ -187,7 +191,7 @@
         <!--<div data-page="{name}" class="page page-cus">-->
 
             <!--<div class="page-content iframe_content ">-->
-                <!--<iframe class="iframe_wraper"  frameborder="0" width="100%" height="100%"></iframe>-->
+                <!--&lt;!&ndash;<iframe class="iframe_wraper" src="{url}"  frameborder="0" width="100%" height="100%"></iframe>&ndash;&gt;-->
             <!--</div>-->
         <!--</div>-->
     <!--</div>-->
@@ -195,19 +199,32 @@
 
 <script>
 
-//    <iframe class="iframe_wraper" src="{url}" frameborder="0" width="100%" height="100%"></iframe>
+//    function get_or_create_iframe(url,name){
+//        var cache_ifame = $('.iframe-cache iframe[name='+name+']')
+//        if(cache_ifame.length==0){
+//            url=ex.appendSearch(url,{_empty_data:1})
+//            var html=ex.template('<div class="iframe_div" name="{name}"><iframe class="iframe_wraper" src="{url}"   frameborder="0" width="100%" height="100%"></iframe></div>',{url:url,name:name})
+//            $('.iframe-cache').append(html)
+//        }
+//        return $('.iframe-cache .iframe_div[name='+name+']')
+//    }
+////    <iframe class="iframe_wraper" src="{url}" frameborder="0" width="100%" height="100%"></iframe>
 //    load_animation_over=true
 //    function load_iframe(url,name){
-////        load_animation_over=false
+//        load_animation_over=false
 //        show_load()
-//        url=ex.appendSearch(url,{'_ajax_html':'1'})
-//        $.get(url,function(resp){
-////            var data_url="data:text/html;charset=utf-8," + escape(resp);
-////            $('.pages .page').last().find('.iframe_wraper')[0].src=data_url
-//            var doc = $('.pages .page').last().find('.iframe_wraper')[0].contentWindow.document.write(resp);
-////            doc.write(resp)
-////            $(sub_frame).find('html').html(resp);
+//        ex.get(url,function(resp){
+//            alert(resp)
 //        })
+//
+////        url=ex.appendSearch(url,{'_ajax_html':'1'})
+////        $.get(url,function(resp){
+//////            var data_url="data:text/html;charset=utf-8," + escape(resp);
+//////            $('.pages .page').last().find('.iframe_wraper')[0].src=data_url
+////            var doc = $('.pages .page').last().find('.iframe_wraper')[0].contentWindow.document.write(resp);
+//////            doc.write(resp)
+//////            $(sub_frame).find('html').html(resp);
+////        })
 //        var html = $('#iframe-template-fast').html()
 //
 //        html=ex.template(html,{name:name,url:url})
@@ -224,17 +241,18 @@
 //        }
 //        setTimeout(function(){
 //            load_animation_over=true
-//        },300)
-
+//        },400)
+//
+////        setTimeout(function(){
+////            var iframe_str = ex.template('<iframe class="iframe_wraper" src="{url}" frameborder="0" width="100%" height="100%"></iframe>',{url:url})
+////            $('.temp-cache').html(iframe_str)
+////        },200)
+////
 //        setTimeout(function(){
-//            var iframe_str = ex.template('<iframe class="iframe_wraper" src="{url}" frameborder="0" width="100%" height="100%"></iframe>',{url:url})
-//            $('.temp-cache').html(iframe_str)
-//        },200)
-
-//        setTimeout(function(){
-//            $('.pages .page').last().find('.page-content.iframe_content').append($('.temp-cache .iframe_wraper'))
+//            var iframe_node=get_or_create_iframe(url,name)
+//            $('.pages .page').last().find('.page-content.iframe_content').append(iframe_node)
 //        },300)
-
+//
 //    }
 
 
@@ -252,22 +270,18 @@
             mainView.hideNavbar()
             setTimeout(function(){
                 mainView.showNavbar()
-            },500)
+            },200)
         }
         setTimeout(function(){
-            var iframe_str = ex.template('<iframe class="iframe_wraper" src="{url}" frameborder="0" width="100%" height="100%"></iframe>',{url:url})
-            $('.temp-cache').html(iframe_str)
-        },200)
-        setTimeout(function(){
-            $('.pages .page').last().find('.page-content.iframe_content').append($('.temp-cache .iframe_wraper'))
+            $('.pages .page').last().find('.page-content.iframe_content iframe').attr('src',url)
+//            var iframe_str = ex.template('<iframe class="iframe_wraper" src="{url}" frameborder="0" width="100%" height="100%"></iframe>',{url:url})
+//            $('.iframe-cache').html(iframe_str)
         },300)
+//        setTimeout(function(){
+//            $('.pages .page').last().find('.page-content.iframe_content').append($('.iframe-cache .iframe_wraper'))
+//        },300)
 
     }
-
-//    function load_iframe(url,name){
-//        var iframe_url='/_f7_iframe?name=iframe_'+name+'&src='+encodeURIComponent(url)
-//        mainView.router.loadPage(iframe_url)
-//    }
 
     function set_title(title){
         $('.navbar .navbar-inner:last-child .center').html(title)
@@ -381,23 +395,6 @@
 
     }, false);
 
-//    ln.history_handle({
-////        init:{viewIndex:0},
-//        handler:function(state){
-//            if(state.count<1){
-//                add_history()
-//            }
-//            if(state_stack.length<=0){
-//                mainView.router.back()
-//            }else{
-//                var real_state= state_stack.pop()
-//                if(typeof(real_state) === 'function'){
-//                    real_state()
-//                }
-//            }
-//            hide_load()
-//        }
-//    })
 </script>
 
 
@@ -508,6 +505,11 @@
         on_page_switch(page.view.activePage)
     })
 
+//    $$(document).on('pageBack', function (e) {
+//        // Do something here when page loaded and initialized
+//        $('.iframe-cache').append( $('.pages .page').last().find('.page-content.iframe_content .iframe_div'))
+//
+//    })
     $$(document).on('pageInit', function (e) {
 
         // Get page data from event data

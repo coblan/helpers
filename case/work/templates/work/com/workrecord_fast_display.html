@@ -58,11 +58,12 @@ Vue.component('workrecord_display',{
 
         <tr class="record-row">
             <td>
-                <div class='record-label'>提交人</div>
+                <div class='record-label'>提交</div>
             </td>
             <td>:</td>
             <td style="color: #2e3bba;">
-                <span v-text="row._emp_label"></span> <span class="lighter" style="margin-left: 2em;" v-text="norm_time(row.create_time)"></span>
+                <div class="flex" style="align-items:center;"><span  v-text="row._emp_label"></span><span class="lighter">于</span><span class="lighter" v-text="norm_time(row.create_time)"></span></div>
+
             </td>
         </tr>
 

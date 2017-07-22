@@ -31,7 +31,13 @@ class TablePage(object):
             return 'director/table.html'
         
     def get_context(self):
-        ctx = self.table.get_context()
+        """
+        _empty_data:是为了返回没有数据的页面，当作模版用，在framework7的优化过程中，产生了这个需求。但是没有成功，所以这个_empty_data可能没用。
+        """
+        if self.request.GET.get('_empty_data'):
+            ctx=self.table.get_head_context()
+        else:
+            ctx = self.table.get_context()
         ctx['can_add']=self.permit.can_add()
         ctx['can_del']=self.permit.can_del()
         if self.permit.changeable_fields:

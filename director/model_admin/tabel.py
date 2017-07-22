@@ -153,6 +153,8 @@ class RowFilter(object):
             ls=this_field.get_choices()
             ls=ls[1:]
             return [{'value':x[0],'label':x[1]} for x in ls]
+        elif not hasattr(self,'query'):
+            return []
         else:
             ls = list(set(self.query.values_list(name,flat=True)))
             ls.sort()

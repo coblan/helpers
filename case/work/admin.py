@@ -5,7 +5,7 @@ from __future__ import absolute_import
 from django.contrib import admin
 from .models import Work,WorkRecord,Index
 from helpers.director.shortcut import page_dc,FormPage,\
-     TablePage,ModelTable,ModelFields,model_dc,RowFilter,permit_list,has_permit,ModelPermit
+     TablePage,ModelTable,ModelFields,model_dc,RowFilter,permit_list,has_permit,ModelPermit,PageNum
      
 from django import forms
 from .pages.work_list import WorkListPage,WorkListFormPage
@@ -165,7 +165,9 @@ class WorkRecordForm(ModelFields):
 class WorkRecordFormPage(FormPage):
     fieldsCls=WorkRecordForm
 
-
+class WorkPageNum(PageNum):
+    perPage=5
+    
 class WorkRecordFilter(RowFilter):
     names=['status','work','ex_span']
     range_fields=[{'name':'create_time','type':'date'}]
@@ -174,6 +176,7 @@ class WorkRecordFilter(RowFilter):
 class WorkRecordTable(ModelTable):
     model=WorkRecord
     filters=WorkRecordFilter
+    pagenator=WorkPageNum
     
     def custom_permit(self):
         employee=self.crt_user.employee_set.first()
@@ -233,8 +236,8 @@ class WorkRecordTablePage(TablePage):
     def get_label(self):
         return '工作审批列表'
     
-    # def get_cache_control(self):
-        # return dict(max_age=3600)
+    #def get_cache_control(self):
+        #return dict(max_age=3600)
 
 class WorkRecordTablePageWX(WorkRecordTablePage):
     template='work/workrecord_f7.html'
