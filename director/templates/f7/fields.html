@@ -7,8 +7,8 @@
 <script src="{% static 'js/fields_mb.pack.js' %}"></script>
 <script type="text/javascript">
 
-    with_menu=false
-    ln.readCache()
+//    with_menu=false
+//    ln.readCache()
 
     form_logic={
         el:'#there',
@@ -30,7 +30,6 @@
                     }else{ // 新建
                         last_win.location.reload()
                     }
-
                 })
             },
         }
@@ -41,11 +40,7 @@
     })
 </script>
 
-{% block extra_head %}
-
-{% endblock %}
-
-<div id="there" v-cloak style="overflow: auto">
+<div id="there" v-cloak style="overflow: auto;padding-bottom: 5em;">
     <!--<div  class="page_label" v-text="page_label">编辑内容</div>-->
 
     {% block form_view %}
@@ -55,6 +50,10 @@
     {% endblock %}
 
     {% block sub_btn_group %}
+    <!--<div style="margin-bottom: 8em;">-->
+        <!--<a style="width: 60vw;margin: auto;margin-top: 2em;" href="#" class="button button-fill" @click="submit()">确定</a>-->
+    <!--</div>-->
+
     <div v-btn-group>
         <a v-if="can_edit" state="success"  @click="submit()">确定</a>
         <a v-if="can_del" state="danger" :href="get_del_link()">删除</a>

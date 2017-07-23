@@ -77,6 +77,30 @@ class EmployeeItem(FormPage):
             return 'organize/employee_form.html'
 
 
+class EmployeeSelfWorkinfo(EmployeeItem):
+    template='organize/employee_self_f7_workinfo.html'
+    def __init__(self, request):
+        self.employee=request.user.employee_set.first()
+        self.fields=self.fieldsCls(instance= self.employee,crt_user=request.user,nolimit=True)
+        self.ctx=self.fields.get_context()   
+    def get_template(self, prefer=None):
+        return self.template
+
+class EmployeeSelfBaseinfo(BaseinfoItem):
+    def __init__(self, request):
+        self.request=request
+        emp=request.user.employee_set.first()
+        base,c = BasicInfo.objects.get_or_create(employee=emp)
+        if c:
+            emp.baseinfo=base
+            emp.save()
+        self.emp=emp
+        self.fields=self.fieldsCls(instance= base,crt_user=request.user,nolimit=True)
+        self.permit=self.fields.permit
+        self.ctx=self.fields.get_context()
+    
+    def get_template(self, prefer=None):
+        return 'organize/employee_self_f7_baseinfo.html'
 
 class UserTab(UserFormPage):
     template=''
@@ -179,10 +203,10 @@ page_dc.update({
     
     'organize.employee.f7':EmployeeTablePageWX,
     'organize.employee.f7.edit':EmpGroup,
-    'organize.employeeself.f7':EmployeeSelf,
+    'organize.employeeself.f7':EmployeeSelf, 
     
-   
-    
+    'organize.employeeself.f7.workinfo':EmployeeSelfWorkinfo,
+    'organize.employeeself.f7.baseinfo':EmployeeSelfBaseinfo,
 })
 
 model_dc[Employee]={'fields':EmployeeFields}

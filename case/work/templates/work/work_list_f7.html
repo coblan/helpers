@@ -82,7 +82,6 @@
                 setTimeout(function(){
                     ff.load(url,page_name+'_edit')
                 },300)
-
             },
             get_row_img:function(row){
                 return  row.desp_img || row.work_desp_img || '/static/res/image/person-work.png'
@@ -112,61 +111,43 @@
             <h3 style="text-align: center;" v-text="norm_date( sub_rows.key)"></h3>
 
             <div class="weui-cells" >
-                <div class="weui-cell flex " v-for="row in sub_rows.list" style="padding-top: 2em;">
+                <workrecord-panel v-for="row in sub_rows.list" :row="row"></workrecord-panel>
+                <!--<div class="weui-cell flex " v-for="row in sub_rows.list" style="padding-top: 2em;">-->
 
 
 
-                    <div class="weui-cell__bd"  style="position: relative;">
+                    <!--<div class="weui-cell__bd"  style="position: relative;">-->
 
-                        <!--<img style="position:absolute;right:1em;top:-0.4em;width: 1.5em;height: 1.5em;border-radius: 1em;" :src="row.emp.head" alt=""/>-->
-                        <!--<div v-if="row.status=='pass'" style="position:absolute;right:1em;top:-0.4em;color: green;">-->
-                            <!--<i class="fa fa-check" aria-hidden="true"></i>-->
-                        <!--</div>-->
-
-
-
-                        <div class="flex">
-                            <div @click="open_image(get_row_img(row))">
-                                <img style="width: 3em;height: 3em" :src="get_row_img(row)" alt=""/>
-                            </div>
-                            <div style="padding: 0 1em;" @click="ge_edit(row.pk)" class="material-wave">
-
-                                <workrecord_display :row="row"></workrecord_display>
-
-                                <!--<table>-->
-                                    <!--<tr v-for="info in ['work','finish_time','count','depart']" style="padding: 0.2em 0;">-->
-                                        <!--<td style="text-align: right;padding-right:0.5em;" v-text="ex.findone(heads,{name:info}).label"></td>-->
-                                        <!--<td v-text="row[info]"></td>-->
-                                    <!--</tr>-->
-
-                                <!--</table>-->
-                            </div>
-
-                        </div>
+                        <!--&lt;!&ndash;<img style="position:absolute;right:1em;top:-0.4em;width: 1.5em;height: 1.5em;border-radius: 1em;" :src="row.emp.head" alt=""/>&ndash;&gt;-->
+                        <!--&lt;!&ndash;<div v-if="row.status=='pass'" style="position:absolute;right:1em;top:-0.4em;color: green;">&ndash;&gt;-->
+                            <!--&lt;!&ndash;<i class="fa fa-check" aria-hidden="true"></i>&ndash;&gt;-->
+                        <!--&lt;!&ndash;</div>&ndash;&gt;-->
 
 
-                            <!--<div class="flex-grow flex" style="margin-right:1.4em;font-size: 0.8em;color: #9e9d9d;">-->
 
-                                <!--<span v-text="row._emp_label" style="color: blue;font-size: 1em;"></span>-->
-                                <!--<span style="margin: 0 0.3em">于</span>-->
-                                <!--<span v-text="norm_time(row.create_time)"></span>-->
-                                <!--<span style="margin: 0 0.3em">提交</span>-->
+                        <!--<div class="flex">-->
+
+                            <!--<div style="padding: 0 1em;" @click="ge_edit(row.pk)" class="material-wave">-->
+
+                                <!--<workrecord_display :row="row"></workrecord_display>-->
+
                             <!--</div>-->
-                            <div @click.stop="" @mousedown.stop="" style="text-align: right;">
-                                <button  style="float: right;" :class="['button',{'color-green':row.status=='pass','color-red':row.status!='pass'}]" v-text="row._tr_status"></button>
-                            </div>
+                            <!--<div  class="flex-v" >-->
+                                <!--<img @click="open_image(get_row_img(row))" style="width: 4em;" :src="get_row_img(row)" alt=""/>-->
+                                <!--<div class="flex-grow" style="text-align: center;font-size: 1.5em;color: blue;margin-top: 0.4em;"><span v-text="row.work_span*row.count+row.ex_span"></span></div>-->
+                                <!--<div @click.stop="" @mousedown.stop="" style="text-align: right;">-->
+                                    <!--<button  style="float: right;" :class="['button',{'color-green':row.status=='pass','color-red':row.status!='pass'}]" v-text="row._tr_status"></button>-->
+                                <!--</div>-->
+                            <!--</div>-->
 
-
-                        <!--<div v-if="row.status=='pass'" style="position:absolute;right:1em;top:-0.4em;color: green;">-->
-                        <!--<i class="fa fa-check" aria-hidden="true"></i>-->
                         <!--</div>-->
+                        <!-- -->
+                    <!--</div>-->
+                    <!--<div class="weui-cell__ft" style="align-self:center;">-->
+                        <!--<i class="fa fa-angle-right" aria-hidden="true"></i>-->
+                    <!--</div>-->
 
-                    </div>
-                    <div class="weui-cell__ft" style="align-self:center;">
-                        <i class="fa fa-angle-right" aria-hidden="true"></i>
-                    </div>
-
-                </div>
+                <!--</div>-->
             </div>
         </div>
     </scroll-loader>

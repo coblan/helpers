@@ -42,7 +42,7 @@
                     if(self.kw.row.pk){
                         var row = ex.findone(last_win.rows,{pk:new_row.pk})
                         ex.assign(row,new_row)
-                        row.work=new_row._work_label
+//                        row.work=new_row._work_label
                     }else{ // 新建
                         last_win.location.reload()
                     }
