@@ -90,10 +90,16 @@ class EmployeeSelfBaseinfo(BaseinfoItem):
     def __init__(self, request):
         self.request=request
         emp=request.user.employee_set.first()
-        base,c = BasicInfo.objects.get_or_create(employee=emp)
-        if c:
+        if not hasattr(emp,'basicinfo'):
+            base=BasicInfo.objects.create()
             emp.baseinfo=base
             emp.save()
+        else:
+            base=emp.baseinfo
+        #base,c = BasicInfo.objects.get_or_create(employee=emp)
+        #if c:
+            #emp.baseinfo=base
+            #emp.save()
         self.emp=emp
         self.fields=self.fieldsCls(instance= base,crt_user=request.user,nolimit=True)
         self.permit=self.fields.permit

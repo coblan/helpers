@@ -30,7 +30,7 @@
 
             <div class="flex">
 
-                <div style="padding: 0 1em;" @click="ge_edit(row)" class="material-wave flex-grow">
+                <div  @click="ge_edit(row)" class="material-wave flex-grow">
 
                     <workrecord_display :row="row"></workrecord_display>
 
@@ -116,7 +116,8 @@ Vue.component('workrecord_display',{
             </td>
             <td>:</td>
             <td style="color: #2e3bba;">
-                <div class="flex" style="align-items:center;"><span  v-text="row._emp_label"></span><span class="lighter" style="margin-left:1em; ">于</span><span class="lighter" v-text="norm_time(row.create_time)"></span></div>
+                <div class="flex" style="align-items:center;">
+                    <span style="white-space:nowrap; " v-text="row._emp_label"></span><span class="lighter" style="margin-left:0.5em; ">于</span><span class="lighter" v-text="norm_time(row.create_time)"></span></div>
 
             </td>
         </tr>
