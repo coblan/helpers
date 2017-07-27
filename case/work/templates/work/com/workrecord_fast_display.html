@@ -1,7 +1,7 @@
 <script>
     Vue.component('workrecord-panel',{
         template:'#workrecord-panel',
-        props:['row'],
+        props:['row','checkable'],
         methods:{
             ge_edit:function(row){
                 var url=ex.template('{engine_url}/{page_name}.edit',{engine_url:engine_url,page_name:page_name})
@@ -27,19 +27,19 @@
 <template id="workrecord-panel">
     <div class="weui-cell flex "  style="padding-top: 2em;">
         <div class="weui-cell__bd"  style="position: relative;">
+            <div class="flex material-wave"  >
 
-            <div class="flex">
-
-                <div  @click="ge_edit(row)" class="material-wave flex-grow">
+                <div  class="flex-grow " @click="ge_edit(row)">
 
                     <workrecord_display :row="row"></workrecord_display>
 
                 </div>
-                <div  class="flex-v" >
+                <div @click.stop="" class="flex-v" >
                     <img @click="open_image(get_row_img(row))" style="width: 4em;" :src="get_row_img(row)" alt=""/>
                     <div class="flex-grow" style="text-align: center;font-size: 1.5em;color: blue;margin-top: 0.4em;"><span v-text="row.work_span*row.count+row.ex_span"></span></div>
-                    <div @click.stop="" @mousedown.stop="" style="text-align: right;">
-                        <button @click="switch_status(row)"  style="float: right;" :class="['button',{'color-green':row.status=='pass','color-red':row.status!='pass'}]" v-text="row._tr_status"></button>
+                    <div @click.stop="" style="text-align: right;">
+                        <button v-if="checkable" @click="switch_status(row)"  style="float: right;" :class="['button',{'color-green':row.status=='pass','color-red':row.status!='pass'}]" v-text="row._tr_status"></button>
+                        <span v-else  style="float: right;" :class="{'color-green':row.status=='pass','color-red':row.status!='pass'}" v-text="row._tr_status"></span>
                     </div>
                 </div>
 

@@ -144,7 +144,7 @@
             <h3 style="text-align: center;" v-text="norm_date( sub_rows.key)"></h3>
 
             <div class="weui-cells" >
-                <workrecord-panel v-for="row in sub_rows.list" :row="row" @switch_status="switch_status(row)"></workrecord-panel>
+                <workrecord-panel v-for="row in sub_rows.list" :row="row" @switch_status="switch_status(row)" :checkable="true"></workrecord-panel>
 
             </div>
 
