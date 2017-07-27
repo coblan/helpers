@@ -90,7 +90,7 @@ class EmployeeSelfBaseinfo(BaseinfoItem):
     def __init__(self, request):
         self.request=request
         emp=request.user.employee_set.first()
-        if not hasattr(emp,'basicinfo'):
+        if not hasattr(emp,'baseinfo'):
             base=BasicInfo.objects.create()
             emp.baseinfo=base
             emp.save()
