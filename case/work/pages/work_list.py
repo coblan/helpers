@@ -2,18 +2,25 @@
 
 from __future__ import unicode_literals
 
-from helpers.director.shortcut import ModelTable,TablePage,FormPage,ModelFields
+from helpers.director.shortcut import ModelTable,TablePage,FormPage,ModelFields,RowFilter
 from ..models import WorkRecord
 from helpers.case.organize.valid_depart import ValidDepart
 from helpers.case.organize.workpermit import has_depart_permit
 from helpers.director.db_tools import sim_dict
 from helpers.case.organize.workpermit import DepartModelPermit
 
+
+class WorkRecordFilter(RowFilter):
+    names=['status','work','ex_span']
+    range_fields=[{'name':'create_time','type':'date'}]
+    model=WorkRecord 
+
 class WorkList(ModelTable):
     """
     拥有 work.read_all 权限的人，查看本部门的所有工作列表
     """
     model=WorkRecord
+    filters=WorkRecordFilter
     
     def inn_filter(self, query):
         employee=self.crt_user.employee_set.first()
@@ -47,6 +54,8 @@ class WorkList(ModelTable):
         # }
   
   
+
+    
 
 class WorkReadValidDepart(ValidDepart):
     data_key='work_readall'
