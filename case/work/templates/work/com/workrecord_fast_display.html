@@ -4,12 +4,12 @@
         props:['row','checkable'],
         methods:{
             ge_edit:function(row){
-                var url=ex.template('{engine_url}/{page_name}.edit',{engine_url:engine_url,page_name:page_name})
-                search_args.pk=row.pk
-                url = ex.appendSearch(url,search_args)
-                setTimeout(function(){
-                    ff.load(url,page_name+'_edit')
-                },200)
+//                var url=ex.template('{engine_url}/{page_name}.edit',{engine_url:engine_url,page_name:page_name})
+//                search_args.pk=row.pk
+//                url = ex.appendSearch(url,search_args)
+//                setTimeout(function(){
+//                    ff.load(url,page_name+'_edit')
+//                },200)
             },
             get_row_img:function(row){
                 return  row.desp_img || row.work_desp_img || '/static/res/image/person-work.png'
