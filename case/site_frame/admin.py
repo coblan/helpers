@@ -37,7 +37,7 @@ class Help(object):
         
     def get_context(self):
         help_info_str=kv.get_value('help_info','')
-        help_info_str_list=help_info_str.split(',')
+        help_info_str_list=[x for x in help_info_str.split(',') if x]
         help_info_list=[]
         for help_page_name in help_info_str_list:
             help_page=WebPage.objects.get(name=help_page_name)
