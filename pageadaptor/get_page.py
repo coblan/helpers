@@ -15,7 +15,8 @@ class Press(object):
     
     def get_context(self):
         if self.page:
-            return {'ctx':json.loads(self.page.content)}
+            return {'ctx':json.loads(self.page.content),
+                    'page_label':self.page.label}
         else:
             return {}
        
@@ -25,7 +26,7 @@ class Press(object):
 
 class EnginPress(Press):
     """
-    当成direcotr.engine的page使用
+    用于direcotr.engine的page使用
     """
     def __init__(self,request):
         name = request.GET.get('_name')

@@ -1,4 +1,4 @@
-{% extends "wx/base.html" %}
+{% extends "f7/base.html" %}
 {% load static %}
 {% load jsonify %}
 
@@ -24,7 +24,7 @@
 
     //	{'name':'content','label':'content','type':'richtext'},
     //	{'name':'foot','label':'foot','type':'richtext'}
-
+    page_label="{{ page_label }}"
     var ctx={{ ctx | jsonify }}
     $(function(){
         new Vue({
@@ -39,7 +39,7 @@
 
 
 
-<div id="home_there">
+<div id="home_there" style="padding: 0.4em;">
     <div v-html="ctx.richcontent"></div>
 </div>
 

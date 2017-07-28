@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 from __future__ import absolute_import
 from helpers.director.shortcut import page_dc
 from helpers.director import kv
+from helpers.pageadaptor.models import WebPage
 
 
 class MHome(object):
@@ -35,9 +36,18 @@ class Help(object):
         self.request=request
         
     def get_context(self):
+        help_info_str=kv.get_value('help_info','')
+        help_info_str_list=help_info_str.split(',')
+        help_info_list=[]
+        for help_page_name in help_info_str_list:
+            help_page=WebPage.objects.get(name=help_page_name)
+            help_info_list.append({'name':help_page.name,'label':help_page.label})
         ctx={
-            'help_text':kv.get_value('help_text','')
-        }        
+            'help_info_list':help_info_list
+        }
+        # ctx={
+            # 'help_text':kv.get_value('help_text','')
+        # }        
         return ctx
 
 

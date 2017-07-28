@@ -56,4 +56,4 @@ page_dc.update({
 
 page_dc.update({'press':EnginPress})
 regist('pageadaptor/one_richtext.html','one rich text')
-regist('pageadaptor/one_richtext_wx.html','one rich text WX')
+regist('pageadaptor/one_richtext_f7.html','one rich text F7')
