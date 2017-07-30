@@ -160,8 +160,6 @@
 
     <scroll-loader :can_load="has_next_page" @load_more="load_next_page()">
 
-
-
         <div v-for="sub_rows in grouped_rows">
             <h3 style="text-align: center;" v-text="norm_date( sub_rows.key)"></h3>
 

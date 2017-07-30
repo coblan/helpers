@@ -21,7 +21,7 @@ module.exports =
     //    modules:["D:/coblan/webcode/node_modules"],
     //},
     resolveLoader: {
-        moduleExtensions:["D:/coblan/webcode/node_modules"],
+        //moduleExtensions:["D:/coblan/webcode/node_modules"],
         modules: ["D:/coblan/webcode/node_modules"],
         //resolver:["D:/coblan/webcode/node_modules"],
     },
@@ -67,7 +67,10 @@ module.exports =
              },
             sourceMap: true,
             mangle: false
-        })
+        }),
+        //new webpack.DefinePlugin({
+            //'process.env.NODE_ENV': JSON.stringify('production'),
+        //}),
     ]
 }
 
