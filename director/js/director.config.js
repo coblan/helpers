@@ -8,7 +8,7 @@ module.exports =
 {
     //context:__dirname,
     entry: {
-        director: './main.js',
+        director_f7: './f7/main.js',
         //file:'./js/vuejs/file.js'
     },
     output: {
@@ -60,14 +60,17 @@ module.exports =
 
     },
     plugins: [
-    	//new UglifyJSPlugin()
-        new webpack.optimize.UglifyJsPlugin({  //压缩包
-             compress: {
-               warnings: false
-             },
-            sourceMap: true,
-            mangle: false
-        }),
+        //new webpack.optimize.UglifyJsPlugin({  //压缩包
+         //    compress: {
+         //      warnings: false
+         //    },
+         //   sourceMap: true,
+         //   mangle: false
+        //}),
+
+
+
+        //new UglifyJSPlugin()
         //new webpack.DefinePlugin({
             //'process.env.NODE_ENV': JSON.stringify('production'),
         //}),

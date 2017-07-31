@@ -4,12 +4,12 @@
 
 
 {% block extra_head %}
-    {% include 'f7/com/popup_page.html' %}
-    {% include 'f7/com/table_time_group.html' %}
+    <!--{    % include 'f7/com/popup_page.html' %   }-->
+    <!--{    % include 'f7/com/table_time_group.html' %   }-->
 {% endblock %}
 {% block extra_body %}
 
-{% include 'wx/com/table_filter_wx.html' %}
+<!--{   % include 'wx/com/table_filter_wx.html' %   }-->
 
 
 
@@ -35,7 +35,8 @@
             {
                 text: '排序过滤',
                 onClick: function () {
-                    filter.open()
+//                    filter.open()
+                    filter_win.open(intro_info)
                 }
             },
         ];

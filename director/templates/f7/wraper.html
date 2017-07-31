@@ -378,7 +378,42 @@
 
     add_history()
 
+
+function cus_close(){
+    window.opener=null;
+    window.open('','_self');
+    window.close();
+}
+
+
+
+quit_ready=false
+function info_quit(){
+
+    if(quit_ready){
+        cus_close()
+    }else{
+        myApp.addNotification({
+            title: 'warning',
+            message: 'back one more time to quit App!',
+            hold:3000,
+            closeIcon:false,
+            additionalClass:'bottom_msg',
+        });
+        quit_ready=true
+
+        setTimeout(function(){
+            quit_ready=false
+        },3000)
+    }
+}
+
     window.addEventListener('popstate', function (e) {
+
+        if(mainView.history.length==1 && state_stack.length==0){
+            info_quit()
+        }
+
         var state= e.state
         if(state.count<1){
             add_history()
@@ -394,6 +429,16 @@
         hide_load()
 
     }, false);
+
+
+//    if(window.jsobj){
+console.log('js obj ')
+console.log(jsobj.contentShow)
+setTimeout(function(){
+    jsobj.contentShow()
+},1000)
+
+//    }
 
 </script>
 
@@ -414,6 +459,7 @@
 </script>
 
 <style>
+    .notifications .bottom_msg {top: 70vh; }
     body.start{
         opacity: 0;
     }
