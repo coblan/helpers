@@ -2,7 +2,9 @@
 from __future__ import unicode_literals
 from __future__ import absolute_import
 
+import json
 import inspect
+from django.http import HttpResponse
 from helpers.director.port import jsonpost
 from helpers.common.dir_man import DirMan
 from .models import Department
@@ -16,4 +18,7 @@ def manage_department(request):
 def tree_department(request):
     manager=LayerTree(Department)
     scope= dict(inspect.getmembers(manager,inspect.ismethod))
-    return jsonpost(request, scope)
+    if request.GET.get('get_class'):
+        return HttpResponse( json.dumps(scope.keys()),content_type="application/json")
+    else:
+        return jsonpost(request, scope)

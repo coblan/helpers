@@ -53,7 +53,10 @@ def ajax_view(request):
     """
     router=RouterAjax(request, scope,rt_except= not settings.DEBUG)
     rt = router.run()
-    return HttpResponse(json.dumps(rt), content_type="application/json") 
+    if isinstance(rt,HttpResponse):
+        return rt
+    else:
+        return HttpResponse(json.dumps(rt), content_type="application/json") 
 
 
 class RouterAjax(object):

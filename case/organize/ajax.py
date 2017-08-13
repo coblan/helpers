@@ -4,6 +4,12 @@ from helpers.director.db_tools import from_dict
 from .models import WorkPermitModel,Employee,EmployeeData
 import json
 
+#from .models import Department
+#from helpers.common.layer_tree import LayerTree
+#import inspect
+#from helpers.director.port import jsonpost
+
+
 def get_global():
     return globals()
 
@@ -46,4 +52,14 @@ def save_emplyee_data(data_key,content,user):
     emp.employeedata.content=json.dumps(dc)
     emp.employeedata.save()
     return {'status':'success'}
+
+
+#def tree_department(request):
+    #manager=LayerTree(Department)
+    #scope= dict(inspect.getmembers(manager,inspect.ismethod))
+    
+    #if request.GET.get('get_class'):
+        #return scope
+    #else:
+        #return jsonpost(request, scope)
 
