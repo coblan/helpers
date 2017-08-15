@@ -58,7 +58,6 @@
     department_url = "{% url 'organize.department' %}"
     depart_layer_tree = "{% url 'organize.tree_depart' %}"
 
-
     dk_manager=new BackOps(depart_layer_tree)
 
 
@@ -76,11 +75,23 @@
                 state:{},
                 department_url:department_url,
 
-                rows:[]
+                rows:[],
+
+                root:{pk:null,name:'公司'},
+                parents:[],
+                items:[]
+
             },
             mixins:[field_fun],
             mounted:function(){
                 this.$refs.catalog.dir_data()
+
+                var self=this
+                dk_manager.dir_data({root:this.root,par:this.root},function(resp){
+                    self.parents=resp.parents
+                    self.items=resp.items
+
+                })
 //                var self=this
 //                bus.$on('menu_click',function(){
 //                    self.is_show_menu=true
@@ -138,6 +149,15 @@
                 },
                 show:function(v){
                     alert(v)
+                },
+
+                dir_data:function(item){
+                    var self=this
+                    dk_manager.dir_data({root:this.root,par:item},function(resp){
+                        self.parents=resp.parents
+                        self.items=resp.items
+
+                    })
                 }
             },
 
@@ -151,6 +171,21 @@
 <div id='there' class="flex-grow" v-cloak style="position: relative;">
 
     <div class="scroll-wraper">
+
+
+
+        <ul>
+            <li v-for="par in parents">
+                <span v-text="par._label"></span>
+            </li>
+        </ul>
+        <ul>
+            <li v-for="item in items">
+                <span v-text="item._label" @click="dir_data(item)"></span>
+            </li>
+        </ul>
+
+
 
         <!--<scroll-wraper class="main-content" ref="scroller" style="width: 100vw;height:90vh;">-->
         <com-catalog class="mobile" ref="catalog" :url="department_url" :root="{pk:null,name:'公司'}"

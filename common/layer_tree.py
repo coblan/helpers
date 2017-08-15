@@ -74,6 +74,9 @@ class LayerTree(object):
         for par in parents:
             if unicode(par.pk)==root.pk:
                 find=True
+            elif par.pk is None and root.pk is None:
+                find=True
+                
         if not find:
             parents.append(root)
         parents.reverse()
