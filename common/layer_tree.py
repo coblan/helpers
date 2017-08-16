@@ -86,64 +86,32 @@ class LayerTree(object):
             'items':items,
         }
     
-        #par_permit=ModelPermit(self.DIR,user)
-        #if not par_permit.readable_fields():
-            #raise PermissionDenied,'can not read %s'% model_to_name(self.DIR) 
-        #DIR=self.DIR
+    def item_create(self,user,par=None):
+        if not ModelPermit(self.model,user).can_add():
+            raise PermissionDenied,'not permit create %s'%model_to_name(self.model)
         
-        #if self.ITEM:
-            #item_perm=ModelPermit(self.ITEM,user)
-            #if not item_perm.readable_fields():
-                #raise PermissionDenied,'can not read %s'%model_to_name(self.ITEM)
-        
-            #ITEM=self.ITEM 
-
-        #if par:
-            #query = DIR.objects.filter(par_id=par)
-        #else:
-            #query = DIR.objects.filter(par=None)
-        #rows=[to_dict(idx) for idx in query]
-        
-        #parents=[]
-        #if par:
-            #this_dir=DIR.objects.get(id=par)
-            #parents.append(this_dir)
-            #while this_dir.par:
-                #parents.append(this_dir.par)
-                #this_dir=this_dir.par
-        #parents.reverse()
-        #parents= [to_dict(idx) for idx in parents]
-        #items=[]   # 如果有item_model，才会去查询item项
-        #if self.ITEM:
-            #if par:
-                #items=[to_dict(item,include=item_perm.readable_fields()) for item in ITEM.objects.filter(par_id=par)]
-            #else:
-                #items=[to_dict(item,include=item_perm.readable_fields()) for item in ITEM.objects.filter(par=None)]
-        #return {'dirs':rows,'parents':parents,'items':items}
-    
-    
-    def item_create(self,user,kind,par=None):
-        if not ModelPermit(self.DIR,user).can_add():
-            raise PermissionDenied,'not permit create %s'%model_to_name(self.DIR)
-        
-        if not par:
-            i = self.DIR.objects.create()
+        par = from_dict(par,model=self.model)
+        if not par or not par.pk:
+            i = self.model.objects.create()
         else:
-            i = self.DIR.objects.create( par_id=par)
+            i = self.model.objects.create( par=par)
         return to_dict(i)
     
 
     
     def items_paste(self,rows,par,user):
         """粘贴 dir 和 item """
-        if par:
-            par_inst=self.DIR.objects.get(pk=par)
-        else:
-            par_inst=None
+        par = from_dict(par,model=self.model)
+        if not par.pk:
+            par=None
+        # if par and par.pk:
+            # par_inst=self.model.objects.get(pk=par)
+        # else:
+            # par_inst=None
         for row in rows:
             inst = from_dict(row)
             if 'par' in  ModelPermit(inst,user).changeable_fields():
-                inst.par=par_inst
+                inst.par=par
                 inst.save()
             else:
                 raise PermissionDenied,'can not modify par of %s'% model_to_name(inst)
