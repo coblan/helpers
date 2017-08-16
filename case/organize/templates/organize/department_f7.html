@@ -208,7 +208,7 @@
             </li>
         </ul>
 
-
+        <com-test></com-test>
 
         <!--<scroll-wraper class="main-content" ref="scroller" style="width: 100vw;height:90vh;">-->
         <!--<com-catalog class="mobile" ref="catalog" :url="department_url" :root="{pk:null,name:'公司'}"-->
@@ -291,6 +291,23 @@
 
 
 </div>
+
+
+<script>
+    Vue.component('com-test',{
+        template:'<span @click="say()">hello</span>',
+        methods:{
+            say:function(){
+                parent.load_vue_com('/static/apps/director_f7.pack.js','<com-fuck-try :name="myname"></com-fuck-try>',{myname:'dog'},'test',function(){
+                    alert('jj')
+                })
+//                parent.mainView.router.loadContent(this.$el)
+            }
+        }
+    })
+
+
+</script>
 
 
 <style type="text/css" media="screen" id="test">

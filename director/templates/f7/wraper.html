@@ -197,6 +197,32 @@
     <!--</div>-->
 <!--</script>-->
 
+<script id="vue-template" type="text/template">
+
+    <!-- We don't need full layout here, because this page will be parsed with Ajax-->
+    <!-- Top Navbar-->
+    <div class="navbar">
+        <div class="navbar-inner">
+            <div class="left"><a href="#" class="back link"> <i class="icon icon-back"></i><span>返回</span></a></div>
+            <div class="center"><span style="color: #999999">加载...</span></div>
+            <div class="right pop-menu" style="visibility: hidden;">
+                <!-- Right link contains only icon - additional "icon-only" class-->
+                <a href="#" class="link icon-only"> <i class="icon icon-bars"></i></a>
+            </div>
+        </div>
+    </div>
+    <div class="pages">
+        <!-- Page, data-page contains page name-->
+        <div data-page="{name}" class="page page-cus">
+            <!-- Scrollable page content-->
+
+            <div class="page-content vue_content">
+                {com_html}
+            </div>
+        </div>
+    </div>
+</script>
+
 <script>
 
 //    function get_or_create_iframe(url,name){
@@ -282,6 +308,55 @@
 //        },300)
 
     }
+
+//vue_data_stack=[]
+//vue_callback_stack=[]
+function load_vue_com(url,com_html,data,name,callback){
+    /*
+
+    * */
+//    show_load()
+
+//    vue_data_stack.push(data)
+//    vue_callback_stack.push(callback)
+
+    var html = $('#vue-template').html()
+
+    html=ex.template(html,{name:name,com_html:com_html})
+    mainView.router.loadContent(html)
+
+    if(mainView.history.length>2){
+        mainView.showNavbar()
+    }else{
+        // 在第二个页面，先隐藏住navbar，500毫秒后，再显示。
+        mainView.hideNavbar()
+        setTimeout(function(){
+            mainView.showNavbar()
+        },200)
+    }
+
+    ex.load_js(url,function(){
+        var el= $('.pages .page').last().find('.vue_content')[0]
+        new Vue({
+            el:el,
+            data:data,
+            methods:{
+                callback:callback
+            }
+        })
+    })
+
+//    setTimeout(function(){
+//        $('.pages .page').last().find('.page-content.iframe_content iframe').attr('src',url)
+////            var iframe_str = ex.template('<iframe class="iframe_wraper" src="{url}" frameborder="0" width="100%" height="100%"></iframe>',{url:url})
+////            $('.iframe-cache').html(iframe_str)
+//    },300)
+
+//        setTimeout(function(){
+//            $('.pages .page').last().find('.page-content.iframe_content').append($('.iframe-cache .iframe_wraper'))
+//        },300)
+
+}
 
     function set_title(title){
         $('.navbar .navbar-inner:last-child .center').html(title)
@@ -386,7 +461,6 @@ function cus_close(){
 }
 
 
-
 quit_ready=false
 function info_quit(){
 
@@ -419,6 +493,7 @@ function info_quit(){
             add_history()
         }
         if(state_stack.length<=0){
+            //注意：state_stack只能用来记录“非跨越f7.load”的状态。
             mainView.router.back()
         }else{
             var real_state= state_stack.pop()
@@ -430,6 +505,10 @@ function info_quit(){
 
     }, false);
 
+
+/*
+如果是在手机的webview里面运行，如果暴露了java对象，触发下面代码。
+* */
 
     if(window.jsobj){
         console.log('js obj ')
@@ -567,6 +646,15 @@ function info_quit(){
             on_page_switch(page)
         }
 
+//        if(page.name.endsWith('vue-com')){
+//            new Vue({
+//                el:page.container,
+//                data:vue_data_stack.pop(),
+//                methods:{
+//                    after_back:vue_callback_stack.pop()
+//                }
+//            })
+//        }
 //        if(page.name=='home'){
 //            home_init()
 //        }

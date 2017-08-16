@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 0);
+/******/ 	return __webpack_require__(__webpack_require__.s = 1);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -70,21 +70,97 @@
 "use strict";
 
 
-var _base = __webpack_require__(1);
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+//function popup_close(){
+//    window._popup_close()
+//}
+//function popup_assure(){
+//    window._popup_assure()
+//}
+
+window._popup_close = function () {};
+window._popup_assure = function () {};
+
+var popup_page = exports.popup_page = {
+    methods: {
+        selector: function selector() {
+            alert('must custom selector');
+        },
+        assure: function assure() {
+            alert('should assure function');
+            this.close();
+        },
+        open: function open() {
+            var self = this;
+            f7_app.popup(self.selector());
+            self.add_nav();
+            ff.push(this.close_);
+
+            this.old_popup_close = window._popup_close;
+            this.old_popup_assure = window._popup_assure;
+            window._popup_close = this.close;
+            window._popup_assure = function () {
+                self.assure();
+            };
+        },
+        close: function close() {
+            ff.pop();
+            this.close_();
+        },
+        close_: function close_() {
+            f7_app.closeModal(this.selector());
+            this.rm_nav();
+            window._popup_close = this.old_popup_close;
+            window._popup_assure = this.old_popup_assure;
+        },
+
+        //            search:function () {
+        //                setTimeout(function(){
+        //                    parent.replace_iframe(ex.appendSearch(search_args))
+        //                },300)
+        //            },
+        add_nav: function add_nav() {
+            ff.add_nav('<div class="navbar-inner temp-navbar" style="background-color: inherit;">\
+                            <div class="left"><a href=" javascript:void(0)" onclick="call_iframe(\'_popup_close\')" style="padding-left: 1em;">取消</a></div>\
+                            <div class="center"></div>\
+                            <div class="right"><a href=" javascript:void(0)" onclick="call_iframe(\'_popup_assure\')" style="padding-right: 1em;">确定 </a></div>\
+                            </div>');
+        },
+        rm_nav: function rm_nav() {
+            parent.remove_nav();
+        }
+
+    }
+};
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _base = __webpack_require__(2);
 
 var base = _interopRequireWildcard(_base);
 
-var _f = __webpack_require__(2);
+var _f = __webpack_require__(3);
 
 var f7 = _interopRequireWildcard(_f);
 
-var _filter_win = __webpack_require__(3);
+var _filter_win = __webpack_require__(4);
 
 var filter_win = _interopRequireWildcard(_filter_win);
 
 var _table_time_group = __webpack_require__(5);
 
-var _popup = __webpack_require__(4);
+var _popup = __webpack_require__(0);
+
+var _try = __webpack_require__(6);
+
+var try01 = _interopRequireWildcard(_try);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -96,7 +172,7 @@ window.popup_page = _popup.popup_page;
 window.ff = f7.ff;
 
 /***/ }),
-/* 1 */
+/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -133,7 +209,7 @@ function bye() {
 }
 
 /***/ }),
-/* 2 */
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -527,7 +603,7 @@ var F7Manager = exports.F7Manager = function () {
 //}, false);
 
 /***/ }),
-/* 3 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -538,7 +614,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.open = open;
 
-var _popup = __webpack_require__(4);
+var _popup = __webpack_require__(0);
 
 function open(info, callback) {
     var timestamp = Date.now();
@@ -588,78 +664,6 @@ function open(info, callback) {
         });
     });
 }
-
-/***/ }),
-/* 4 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-//function popup_close(){
-//    window._popup_close()
-//}
-//function popup_assure(){
-//    window._popup_assure()
-//}
-
-window._popup_close = function () {};
-window._popup_assure = function () {};
-
-var popup_page = exports.popup_page = {
-    methods: {
-        selector: function selector() {
-            alert('must custom selector');
-        },
-        assure: function assure() {
-            alert('should assure function');
-            this.close();
-        },
-        open: function open() {
-            var self = this;
-            f7_app.popup(self.selector());
-            self.add_nav();
-            ff.push(this.close_);
-
-            this.old_popup_close = window._popup_close;
-            this.old_popup_assure = window._popup_assure;
-            window._popup_close = this.close;
-            window._popup_assure = function () {
-                self.assure();
-            };
-        },
-        close: function close() {
-            ff.pop();
-            this.close_();
-        },
-        close_: function close_() {
-            f7_app.closeModal(this.selector());
-            this.rm_nav();
-            window._popup_close = this.old_popup_close;
-            window._popup_assure = this.old_popup_assure;
-        },
-
-        //            search:function () {
-        //                setTimeout(function(){
-        //                    parent.replace_iframe(ex.appendSearch(search_args))
-        //                },300)
-        //            },
-        add_nav: function add_nav() {
-            ff.add_nav('<div class="navbar-inner temp-navbar" style="background-color: inherit;">\
-                            <div class="left"><a href=" javascript:void(0)" onclick="call_iframe(\'_popup_close\')" style="padding-left: 1em;">取消</a></div>\
-                            <div class="center"></div>\
-                            <div class="right"><a href=" javascript:void(0)" onclick="call_iframe(\'_popup_assure\')" style="padding-right: 1em;">确定 </a></div>\
-                            </div>');
-        },
-        rm_nav: function rm_nav() {
-            parent.remove_nav();
-        }
-
-    }
-};
 
 /***/ }),
 /* 5 */
@@ -716,6 +720,25 @@ var table_time_group = exports.table_time_group = {
         }
     }
 };
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Vue.component('com-fuck-try', {
+    props: ['name'],
+    template: '<span v-text="name" @click="back()"></span>',
+    methods: {
+        back: function back() {
+            this.$parent.callback();
+            history.back();
+        }
+    }
+
+});
 
 /***/ })
 /******/ ]);
