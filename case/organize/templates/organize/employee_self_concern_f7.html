@@ -1,0 +1,29 @@
+{% extends "f7/base.html" %}
+{% load static %}
+{% load jsonify %}
+
+
+{% block page_content %}
+<script>
+    departs={{ departs | jsonify | default:'[]' }}
+
+    $(function(){
+        new Vue({
+            el:'#there',
+            data:{
+                departs:departs,
+            }
+
+        })
+    })
+
+</script>
+
+<div id="there">
+    <div v-for="depart in departs">
+        <span v-text="depart._label"></span>
+    </div>
+</div>
+<div>hello world</div>
+
+{% endblock %}

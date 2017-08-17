@@ -91,6 +91,10 @@
                 open_baseinfo:function(){
                     var url=engine_url+'/organize.employeeself.f7.baseinfo'
                     ff.load(url,'organize.employeeself.f7.baseinfo')
+                },
+                open_concern_depart:function(){
+                    var url=engine_url+'/organize.employeeself.f7.concern_depart'
+                    ff.load(url,'organize.employeeself.f7.concern_depart')
                 }
             }
         })
@@ -156,7 +160,7 @@
                 </div>
             </li>
             <li class="item-content">
-                <div class="item-inner material-wave">
+                <div class="item-inner material-wave" @click="open_concern_depart()">
                     <div class="item-title">部门信息</div>
                     <i style="float: right;" class="fa fa-angle-right" aria-hidden="true"></i>
                 </div>

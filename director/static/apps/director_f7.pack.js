@@ -239,6 +239,9 @@ var ff = {
         parent.show_load();
         parent.load_iframe(url, name);
     },
+    load_vue_com: function load_vue_com(kw) {
+        parent.load_vue_com(kw);
+    },
     replace: function replace(url) {
         parent.show_load();
         parent.replace_iframe(url);

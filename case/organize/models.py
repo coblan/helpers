@@ -102,3 +102,8 @@ class WorkPermitModel(models.Model):
 class EmployeeData(models.Model):
     emp=models.OneToOneField(Employee,verbose_name=_('employee'),blank=True,null=True)
     content=models.TextField(verbose_name=_('content'),blank=True)
+    
+class ConcernDepartModel(models.Model):
+    user=models.ForeignKey(User,verbose_name=_('account'),blank=True,null=True)
+    departs=models.ManyToManyField(Department,verbose_name=_('department'),blank=True,null=True)
+    

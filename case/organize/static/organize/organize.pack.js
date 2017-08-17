@@ -72,11 +72,7 @@
 
 var _department = __webpack_require__(1);
 
-var myrequest = _interopRequireWildcard(_department);
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-window.data = data;
+window.DepartSelect = _department.DepartSelect;
 
 /***/ }),
 /* 1 */
@@ -84,6 +80,14 @@ window.data = data;
 
 "use strict";
 
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var depart = {
     props: ['url', 'root'],
@@ -93,16 +97,17 @@ var depart = {
             items: [],
 
             checked: [],
-            clip: []
+            clip: [],
+            depart_back_call: back_ops(this.url)
         };
     },
     computed: {
         par: function par() {
             return this.parents[this.parents.length - 1];
-        },
-        root: function root() {
-            return this.parents[0];
         }
+        //root:function(){
+        //    return this.parents[0]
+        //}
     },
     mounted: function mounted() {
         this.dir_data(this.par);
@@ -111,17 +116,52 @@ var depart = {
         dir_data: function dir_data(item) {
             var self = this;
             this.checked = [];
-            dp_back_call([{ fun: 'dir_data', root: this.root, par: item }], function (resp) {
+            this.depart_back_call([{ fun: 'dir_data', root: this.root, par: item }], function (resp) {
                 self.parents = resp.dir_data.parents;
                 self.items = resp.dir_data.items;
             });
+        },
+
+        choice_me: function choice_me(item) {
+            this.$parent.callback(item);
+            mainView.router.back();
         }
     },
-    template: '\n        <div class="scroll-wraper">\n\n            <ul class="breadcrumb">\n                <li v-for="par in parents" @click="dir_data(par)">\n                    <span v-text="par._label"></span>\n                </li>\n            </ul>\n            <ul style="margin-left: 1em;">\n                <li v-for="item in items" class="flex" style="justify-content:space-between;">\n\n                    <span v-text="item._label" @click="dir_data(item)"></span>\n\n                </li>\n            </ul>\n        </div>\n    '
+    template: '\n        <div class="scroll-wraper">\n\n            <ul class="breadcrumb">\n                <li v-for="par in parents" @click="dir_data(par)">\n                    <span v-text="par._label"></span>\n                </li>\n            </ul>\n            <ul style="margin-left: 1em;">\n                <li v-for="item in items" class="flex" style="justify-content:space-between;">\n\n                    <span v-text="item._label" @click="dir_data(item)"></span>\n                    <button @click="choice_me(item)">\u9009\u62E9</button>\n                </li>\n            </ul>\n        </div>\n    '
 
 };
 
 Vue.component('com-depart-browser', depart);
+
+var DepartSelect = exports.DepartSelect = function () {
+    function DepartSelect(back_url, root) {
+        _classCallCheck(this, DepartSelect);
+
+        this.back_url = back_url;
+        this.root = root || { pk: null, name: '公司' };
+    }
+
+    _createClass(DepartSelect, [{
+        key: 'select',
+        value: function select(_callback) {
+            ff.load_vue_com({
+                url: "/static/organize/organize.pack.js",
+                name: 'depart_select',
+                label: '选择部门',
+                com_html: '<com-depart-browser :url="url" :root="root"></com-depart-browser>',
+                data: {
+                    url: this.back_url,
+                    root: this.root
+                },
+                callback: function callback(depart) {
+                    _callback(depart);
+                }
+            });
+        }
+    }]);
+
+    return DepartSelect;
+}();
 
 /***/ })
 /******/ ]);

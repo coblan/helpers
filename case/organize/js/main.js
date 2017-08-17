@@ -1,4 +1,4 @@
-import * as myrequest from './department.js'
+import {DepartSelect}  from './department.js'
 
 
-window.data=data
+window.DepartSelect=DepartSelect

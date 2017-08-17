@@ -200,6 +200,30 @@ class DepartmentPage(object):
             return 'organize/department.html'
 
 
+class EmployeeSelfConcernDepart(object):
+    def __init__(self, request):
+        self.request=request
+        emp=request.user.employee_set.first()
+        departs = emp.depart.all()
+        # if not hasattr(emp,'baseinfo'):
+            # base=BasicInfo.objects.create()
+            # emp.baseinfo=base
+            # emp.save()
+        # else:
+            # base=emp.baseinfo
+        # self.emp=emp
+        # self.fields=self.fieldsCls(instance= base,crt_user=request.user,nolimit=True)
+        # self.permit=self.fields.permit
+        self.ctx={
+            'departs':[to_dict(x) for x in departs]
+        }
+    
+    def get_context(self):
+        return self.ctx
+    
+    def get_template(self, prefer=None):
+        return 'organize/employee_self_concern_f7.html'
+
 page_dc.update({
     'organize.employee':EmployeeTablePage,
     'organize.employee.edit':EmpGroup,
@@ -213,6 +237,7 @@ page_dc.update({
     
     'organize.employeeself.f7.workinfo':EmployeeSelfWorkinfo,
     'organize.employeeself.f7.baseinfo':EmployeeSelfBaseinfo,
+    'organize.employeeself.f7.concern_depart':EmployeeSelfConcernDepart,
 })
 
 model_dc[Employee]={'fields':EmployeeFields}

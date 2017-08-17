@@ -20,6 +20,7 @@
     <link rel="stylesheet" href="{% static 'lib/font-awesome4.7/font-awesome4.7.min.css' %}">
     <script src="{% static 'lib/vue2.3.2.js' %}"></script>
     <script src="{% static 'js/uis_mb.pack.js?t=' %}{{ stamp.uis_mb_pack_js }}"></script>
+    <script src="{% static 'js/fields_mb.pack.js?t=' %}{{ stamp.fields_mb_pack_js }}"></script>
 </head>
 
 {% include 'director/reverse.html' %}
@@ -309,20 +310,38 @@
 
     }
 
-//vue_data_stack=[]
-//vue_callback_stack=[]
-function load_vue_com(url,com_html,data,name,callback){
+
+function load_vue_com(kw){
     /*
+        kw={
+            url:url string,
+            com_html:html string,
+            data:{},
+            name:string,
+            label:string,
+            callback:function,
+        }
+
+      callback的使用方法：
+
+      #在parent页面触发vue_com页面，
+      load_vue_com({other:xxx,  callback:function(com_resp){
+                dosomething(com_resp)
+        }
+
+      #在vue_com页面中，在返回parent页面时，要调用注册的回调函数。
+      methods:{
+        back:function(){
+            this.$parent.callback(my_resp)
+            mainView.router.back()
+        }
+      }
 
     * */
-//    show_load()
-
-//    vue_data_stack.push(data)
-//    vue_callback_stack.push(callback)
 
     var html = $('#vue-template').html()
 
-    html=ex.template(html,{name:name,com_html:com_html})
+    html=ex.template(html,{name:kw.name,com_html:kw.com_html})
     mainView.router.loadContent(html)
 
     if(mainView.history.length>2){
@@ -335,16 +354,20 @@ function load_vue_com(url,com_html,data,name,callback){
         },200)
     }
 
-    ex.load_js(url,function(){
-        var el= $('.pages .page').last().find('.vue_content')[0]
-        new Vue({
-            el:el,
-            data:data,
-            methods:{
-                callback:callback
-            }
+    setTimeout(function(){
+        ex.load_js(kw.url,function(){
+            var el= $('.pages .page').last().find('.vue_content')[0]
+            new Vue({
+                el:el,
+                data:kw.data,
+                methods:{
+                    callback:kw.callback
+                }
+            })
+            set_title(kw.label)
         })
-    })
+    },50)
+
 
 //    setTimeout(function(){
 //        $('.pages .page').last().find('.page-content.iframe_content iframe').attr('src',url)

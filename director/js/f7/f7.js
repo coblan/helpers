@@ -15,6 +15,9 @@
         parent.show_load()
         parent.load_iframe(url,name)
     },
+     load_vue_com:function(kw){
+         parent.load_vue_com(kw)
+     },
     replace:function(url){
         parent.show_load()
         parent.replace_iframe(url)

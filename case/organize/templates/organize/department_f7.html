@@ -298,9 +298,14 @@
         template:'<span @click="say()">hello</span>',
         methods:{
             say:function(){
-                parent.load_vue_com('/static/apps/director_f7.pack.js','<com-fuck-try :name="myname"></com-fuck-try>',{myname:'dog'},'test',function(){
+                ff.load_vue_com({url:'/static/apps/director_f7.pack.js',
+                                    com_html:'<com-fuck-try :name="myname"></com-fuck-try>',
+                                    data:{myname:'dog'},
+                                    name:'test',
+                                    label:'测试',
+                                    callback:function(){
                     alert('jj')
-                })
+                }})
 //                parent.mainView.router.loadContent(this.$el)
             }
         }
