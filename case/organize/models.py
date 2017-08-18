@@ -56,6 +56,15 @@ class Department(models.Model):
         self.save()
         for depart in self.childs.all():
             depart.update_parent_chain() 
+    
+    def is_par(self,depart):
+        par = depart.par
+        while par:
+            if par==self:
+                return True
+            else:
+                par=par.par
+        return False
 
 MANAGE_EVENT=(
     ('normal_work','普通工作'),

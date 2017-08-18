@@ -1,7 +1,7 @@
 # encoding:utf-8
 
 from helpers.director.db_tools import from_dict
-from .models import WorkPermitModel,Employee,EmployeeData
+from .models import WorkPermitModel,Employee,EmployeeData,ConcernDepartModel
 import json
 
 #from .models import Department
@@ -54,12 +54,15 @@ def save_emplyee_data(data_key,content,user):
     return {'status':'success'}
 
 
-#def tree_department(request):
-    #manager=LayerTree(Department)
-    #scope= dict(inspect.getmembers(manager,inspect.ismethod))
-    
-    #if request.GET.get('get_class'):
-        #return scope
-    #else:
-        #return jsonpost(request, scope)
+def save_concern_depart(depart,user):
+    depart=from_dict(depart)
+    concern,_ = ConcernDepartModel.objects.get_or_create(user=user)
+    if depart not in  concern.departs.all():
+        concern.departs.add(depart)
+    return {'status':'success'}
 
+def rm_concern_depart(depart,user):
+    depart=from_dict(depart)
+    concern,_ = ConcernDepartModel.objects.get_or_create(user=user) 
+    concern.departs.remove(depart)
+    return {'status':'success'}

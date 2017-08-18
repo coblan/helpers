@@ -43,7 +43,7 @@ class TablePage(object):
         if self.permit.changeable_fields:
             ctx['can_edit']=True
         ctx['app']=self.tableCls.model._meta.app_label
-        ctx['page_label'] =self.get_label()
+        # ctx['page_label'] =self.get_label()
         return ctx
     
     def get_label(self):
@@ -80,7 +80,7 @@ class FormPage(object):
             self.ctx['can_edit']=False
         
         self.ctx['app']=self.fieldsCls._meta.model._meta.app_label
-        self.ctx['page_label'] =self.get_label()
+        # self.ctx['page_label'] =self.get_label()
         return self.ctx
     
     def get_label(self):
@@ -125,7 +125,7 @@ class DelPage(object):
                 rows.append(to_dict(fields_obj.instance,include=fields_obj.permit.readable_fields()))
         ctx['infos']=infos
         ctx['rows']=rows  
-        ctx['page_label']=self.get_label()
+        # ctx['page_label']=self.get_label()
         return ctx   
     def get_label(self):
         return '数据表行删除'

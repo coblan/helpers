@@ -1,4 +1,27 @@
 
+
+export class DepartSelect{
+    constructor(back_url,root){
+        this.back_url=back_url
+        this.root=root || {pk:null,name:'公司'}
+    }
+    select(callback){
+        ff.load_vue_com({
+            url:"/static/organize/organize.pack.js",
+            name:'depart_select',
+            label:'选择部门',
+            com_html:`<com-depart-browser :url="url" :root="root"></com-depart-browser>`,
+            data:{
+                url:this.back_url,
+                root:this.root
+            },
+            callback:function(depart){
+                callback(depart)
+            }
+        })
+    }
+}
+
 var depart={
     props:['url','root'],
     data:function(){
@@ -40,16 +63,20 @@ var depart={
     template:`
         <div class="scroll-wraper">
 
-            <ul class="breadcrumb">
-                <li v-for="par in parents" @click="dir_data(par)">
+            <ul style="margin-top: 0.3em;font-size: 1.3em;">
+                <li v-for="par in parents" @click="dir_data(par)" style="display: inline-block;">
                     <span v-text="par._label"></span>
+                    <span style="display: inline-block;padding-left: 0.3em;padding-right: 0.3em;">
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </span>
+
                 </li>
             </ul>
-            <ul style="margin-left: 1em;">
-                <li v-for="item in items" class="flex" style="justify-content:space-between;">
+            <ul style="margin-left: 1em;font-size:1.1em;list-style:none;">
+                <li v-for="item in items" style="padding: 0.4em;">
 
                     <span v-text="item._label" @click="dir_data(item)"></span>
-                    <button @click="choice_me(item)">选择</button>
+                    <button style="float: right;margin-right: 1.5em;" @click="choice_me(item)">选择</button>
                 </li>
             </ul>
         </div>
@@ -59,24 +86,3 @@ var depart={
 
 Vue.component('com-depart-browser',depart)
 
-export class DepartSelect{
-    constructor(back_url,root){
-        this.back_url=back_url
-        this.root=root || {pk:null,name:'公司'}
-    }
-    select(callback){
-        ff.load_vue_com({
-            url:"/static/organize/organize.pack.js",
-            name:'depart_select',
-            label:'选择部门',
-            com_html:`<com-depart-browser :url="url" :root="root"></com-depart-browser>`,
-            data:{
-                url:this.back_url,
-                root:this.root
-            },
-            callback:function(depart){
-                callback(depart)
-            }
-        })
-    }
-}

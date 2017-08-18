@@ -103,6 +103,8 @@ class BaseEngine(object):
                 template=page.template
             #ctx=self.get_ctx(ctx)
             ctx['template']=template
+            if hasattr(page,'get_label'):
+                ctx['page_label'] =page.get_label()
             ctx=self.custome_ctx(ctx)
             resp= render(request,template,context=ctx)
         if getattr(page,'get_cache_control',None):

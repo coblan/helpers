@@ -89,6 +89,36 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+var DepartSelect = exports.DepartSelect = function () {
+    function DepartSelect(back_url, root) {
+        _classCallCheck(this, DepartSelect);
+
+        this.back_url = back_url;
+        this.root = root || { pk: null, name: '公司' };
+    }
+
+    _createClass(DepartSelect, [{
+        key: 'select',
+        value: function select(_callback) {
+            ff.load_vue_com({
+                url: "/static/organize/organize.pack.js",
+                name: 'depart_select',
+                label: '选择部门',
+                com_html: '<com-depart-browser :url="url" :root="root"></com-depart-browser>',
+                data: {
+                    url: this.back_url,
+                    root: this.root
+                },
+                callback: function callback(depart) {
+                    _callback(depart);
+                }
+            });
+        }
+    }]);
+
+    return DepartSelect;
+}();
+
 var depart = {
     props: ['url', 'root'],
     data: function data() {
@@ -127,41 +157,11 @@ var depart = {
             mainView.router.back();
         }
     },
-    template: '\n        <div class="scroll-wraper">\n\n            <ul class="breadcrumb">\n                <li v-for="par in parents" @click="dir_data(par)">\n                    <span v-text="par._label"></span>\n                </li>\n            </ul>\n            <ul style="margin-left: 1em;">\n                <li v-for="item in items" class="flex" style="justify-content:space-between;">\n\n                    <span v-text="item._label" @click="dir_data(item)"></span>\n                    <button @click="choice_me(item)">\u9009\u62E9</button>\n                </li>\n            </ul>\n        </div>\n    '
+    template: '\n        <div class="scroll-wraper">\n\n            <ul style="margin-top: 0.3em;font-size: 1.3em;">\n                <li v-for="par in parents" @click="dir_data(par)" style="display: inline-block;">\n                    <span v-text="par._label"></span>\n                    <span style="display: inline-block;padding-left: 0.3em;padding-right: 0.3em;">\n                        <i class="fa fa-angle-right" aria-hidden="true"></i>\n                    </span>\n\n                </li>\n            </ul>\n            <ul style="margin-left: 1em;font-size:1.1em;list-style:none;">\n                <li v-for="item in items" style="padding: 0.4em;">\n\n                    <span v-text="item._label" @click="dir_data(item)"></span>\n                    <button style="float: right;margin-right: 1.5em;" @click="choice_me(item)">\u9009\u62E9</button>\n                </li>\n            </ul>\n        </div>\n    '
 
 };
 
 Vue.component('com-depart-browser', depart);
-
-var DepartSelect = exports.DepartSelect = function () {
-    function DepartSelect(back_url, root) {
-        _classCallCheck(this, DepartSelect);
-
-        this.back_url = back_url;
-        this.root = root || { pk: null, name: '公司' };
-    }
-
-    _createClass(DepartSelect, [{
-        key: 'select',
-        value: function select(_callback) {
-            ff.load_vue_com({
-                url: "/static/organize/organize.pack.js",
-                name: 'depart_select',
-                label: '选择部门',
-                com_html: '<com-depart-browser :url="url" :root="root"></com-depart-browser>',
-                data: {
-                    url: this.back_url,
-                    root: this.root
-                },
-                callback: function callback(depart) {
-                    _callback(depart);
-                }
-            });
-        }
-    }]);
-
-    return DepartSelect;
-}();
 
 /***/ })
 /******/ ]);

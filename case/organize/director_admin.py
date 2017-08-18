@@ -204,18 +204,18 @@ class EmployeeSelfConcernDepart(object):
     def __init__(self, request):
         self.request=request
         emp=request.user.employee_set.first()
-        departs = emp.depart.all()
-        # if not hasattr(emp,'baseinfo'):
-            # base=BasicInfo.objects.create()
-            # emp.baseinfo=base
-            # emp.save()
-        # else:
-            # base=emp.baseinfo
-        # self.emp=emp
-        # self.fields=self.fieldsCls(instance= base,crt_user=request.user,nolimit=True)
-        # self.permit=self.fields.permit
+        depart_dc_list=[]
+        user=request.user
+        concern= user.concerndepartmodel_set.first()
+        for depart in emp.depart.all():
+            dc = to_dict(depart)
+            dc['concern_subdepart']=[]
+            if concern:
+                dc['concern_subdepart']=[to_dict(x) for x in concern.departs.all() if depart.is_par(x)]
+            depart_dc_list.append(dc)
+        
         self.ctx={
-            'departs':[to_dict(x) for x in departs]
+            'departs':depart_dc_list
         }
     
     def get_context(self):
@@ -223,6 +223,9 @@ class EmployeeSelfConcernDepart(object):
     
     def get_template(self, prefer=None):
         return 'organize/employee_self_concern_f7.html'
+    
+    def get_label(self):
+        return "关注部门"
 
 page_dc.update({
     'organize.employee':EmployeeTablePage,

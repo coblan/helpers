@@ -36,19 +36,30 @@ class ValidDepart(object):
         if not self.employee:
             raise PermissionDenied,'Only employee allowd access deparment data'
 
-    
     def get_query_depart(self):
         depart=self.get_crt_depart()
+        concern=self.employee.user.concerndepartmodel_set.first()
         depart_list=[]
-        if hasattr(self.employee,'employeedata') and  self.employee.employeedata.content:
-            dc = json.loads(self.employee.employeedata.content)
-            pk_list = dc.get(self.data_key,[])
-            depart_list=[Department.objects.get(pk=x) for x in pk_list]
+        if concern:
+            depart_list= concern.departs.all()
             depart_list=filter(lambda x: x.par_chain.startswith(depart.par_chain),depart_list)
         if depart not in depart_list:
             depart_list.append(depart)
             
         return depart_list
+    
+    # def get_query_depart(self):
+        # depart=self.get_crt_depart()
+        # depart_list=[]
+        # if hasattr(self.employee,'employeedata') and  self.employee.employeedata.content:
+            # dc = json.loads(self.employee.employeedata.content)
+            # pk_list = dc.get(self.data_key,[])
+            # depart_list=[Department.objects.get(pk=x) for x in pk_list]
+            # depart_list=filter(lambda x: x.par_chain.startswith(depart.par_chain),depart_list)
+        # if depart not in depart_list:
+            # depart_list.append(depart)
+            
+        # return depart_list
     
     
     def get_crt_depart(self):
