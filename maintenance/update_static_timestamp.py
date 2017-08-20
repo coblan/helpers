@@ -1,8 +1,13 @@
+# encoding:utf-8
+
 import os
 from django.conf import settings
 from helpers.base.dot_dict import DotObj
 
 def get_static_obj(path):
+    if not os.path.exists(path):
+        return
+    
     dc={}
     for name in os.listdir(path):
         abs_path=os.path.join(path,name)
@@ -16,3 +21,6 @@ org_static_file_path=os.path.join(settings.BASE_DIR,'static')
 volatile_static_file_path=os.path.join(org_static_file_path,'js')
 
 static_file_timestamp_dict=get_static_obj(volatile_static_file_path)
+
+
+
