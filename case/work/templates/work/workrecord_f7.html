@@ -9,24 +9,27 @@
 
 {% block page_content %}
 
+{% comment %}
 {% include 'organize/com_department_wx.html' %}
 {% include 'organize/com_depart_btn.html' %}
 {% include 'wx/com/table_filter_wx.html' %}
 {% include 'organize/com/active_department.html' %}
 
+{% endcomment %}
+
 {% include 'work/com/workrecord_fast_display.html' %}
 
-
+<script src='{% static "organize/organize.pack.js?t=" %}{{ stamp.organize_pack_js }}'></script>
 <script type="text/javascript">
 
     ff.pop_menu(function(){
         var buttons = [
-            {
-                text: '下属部门',
-                onClick: function () {
-                    active_depart.open();
-                }
-            },
+//            {
+//                text: '下属部门',
+//                onClick: function () {
+//                    active_depart.open();
+//                }
+//            },
             {
                 text: '新建',
                 onClick: function () {
@@ -57,6 +60,8 @@
     })
 
 
+    depart_list={{ depart_list | jsonify | default:'false' }}
+    crt_depart={{ crt_depart | jsonify | default:'false' }}
 
     $(function(){
 
@@ -66,7 +71,9 @@
 
 //                ln:ln,
                 page_label:page_label,
-//                show_menu:false,
+
+                depart_list:depart_list,
+                crt_depart:crt_depart,
 
             },
             mixins:[table_fun,table_time_group],
@@ -135,22 +142,25 @@
 </script>
 
 
-<div id="there" v-cloak class="flex-grow" style="position: relative;">
+<div id="there" v-cloak class="flex-grow flex-v" style="position: relative;">
 
-    <scroll-loader   :can_load="has_next_page" @load_more="load_next_page()">
+    <depart-btn-panel :depart_list="depart_list" :crt_depart="crt_depart"></depart-btn-panel>
+    <div class="flex-grow" style="position: relative;">
+        <scroll-loader   :can_load="has_next_page" @load_more="load_next_page()">
 
+            <div v-for="sub_rows in grouped_rows">
+                <h3 style="text-align: center;" v-text="norm_date( sub_rows.key)"></h3>
 
-        <div v-for="sub_rows in grouped_rows">
-            <h3 style="text-align: center;" v-text="norm_date( sub_rows.key)"></h3>
+                <div class="weui-cells" >
+                    <workrecord-panel v-for="row in sub_rows.list" :row="row" @switch_status="switch_status(row)" :checkable="true"></workrecord-panel>
 
-            <div class="weui-cells" >
-                <workrecord-panel v-for="row in sub_rows.list" :row="row" @switch_status="switch_status(row)" :checkable="true"></workrecord-panel>
+                </div>
 
             </div>
 
-        </div>
+        </scroll-loader>
+    </div>
 
-    </scroll-loader>
 
 
 </div>

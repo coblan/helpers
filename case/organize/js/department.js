@@ -62,19 +62,9 @@ var depart={
     },
     template:`
         <div class="scroll-wraper">
-
-            <ul style="margin-top: 0.3em;font-size: 1.3em;">
-                <li v-for="par in parents" @click="dir_data(par)" style="display: inline-block;">
-                    <span v-text="par._label"></span>
-                    <span style="display: inline-block;padding-left: 0.3em;padding-right: 0.3em;">
-                        <i class="fa fa-angle-right" aria-hidden="true"></i>
-                    </span>
-
-                </li>
-            </ul>
+            <lay-tree-head :items="parents" @item_click="dir_data($event)"></lay-tree-head>
             <ul style="margin-left: 1em;font-size:1.1em;list-style:none;">
                 <li v-for="item in items" style="padding: 0.4em;">
-
                     <span v-text="item._label" @click="dir_data(item)"></span>
                     <button style="float: right;margin-right: 1.5em;" @click="choice_me(item)">选择</button>
                 </li>
@@ -86,3 +76,11 @@ var depart={
 
 Vue.component('com-depart-browser',depart)
 
+//<ul style="margin-top: 0.3em;font-size: 1.3em;">
+//    <li v-for="par in parents" @click="dir_data(par)" style="display: inline-block;">
+//    <span v-text="par._label"></span>
+//    <span style="display: inline-block;padding-left: 0.3em;padding-right: 0.3em;">
+//    <i class="fa fa-angle-right" aria-hidden="true"></i>
+//    </span>
+//    </li>
+//    </ul>

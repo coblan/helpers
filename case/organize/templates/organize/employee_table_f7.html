@@ -3,6 +3,31 @@
 
 
 {% block extra_head %}
+<script>
+    ff.pop_menu(function(){
+        var buttons = [
+            {
+                text: '新建',
+                onClick: function () {
+                    table.add_new();
+                }
+            },
+            {
+                text: '排序过滤',
+                onClick: function () {
+                    filter.open()
+                }
+            },
+        ];
+        buttons.push({
+            text: '取消',
+            color: 'red',
+        })
+        ff.app.actions(buttons)
+    })
+</script>
+
+
 <style>
     .this-item{
         display: flex;

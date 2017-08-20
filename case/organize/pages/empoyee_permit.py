@@ -38,7 +38,7 @@ class EmployePermitTab(FormPage):
             self.ctx['can_edit']=False
         
         self.ctx['app']='organize'
-        self.ctx['page_label'] =self.get_label()
+        #self.ctx['page_label'] =self.get_label()
         return self.ctx    
     
     def get_template(self, prefer=None):

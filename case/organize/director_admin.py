@@ -162,7 +162,7 @@ class EmployeeTable(ModelTable):
             'baseinfo':unicode(inst.baseinfo),
             'head':inst.baseinfo.head if inst.baseinfo else ''
         }
-        return dc        
+        return dc 
 
 class EmployeeTablePage(TablePage):
     tableCls=EmployeeTable 

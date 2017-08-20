@@ -3,7 +3,7 @@
 {% load jsonify %}
 
 {% block page_content %}
-<script src='{% static "organize/organize.pack.js" %}'></script>
+<script src='{% static "organize/organize.pack.js?t=" %}{{ stamp.organize_pack_js }}'></script>
 
 
 <script>

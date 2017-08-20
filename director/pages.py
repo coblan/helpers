@@ -202,5 +202,11 @@ class TabGroup(object):
     def get_context(self):
         return self.ctx
     
+    def get_label(self):
+        if hasattr(self.tab_page,'get_label'):
+            return self.tab_page.get_label()
+        else:
+            return ''
+    
     
         

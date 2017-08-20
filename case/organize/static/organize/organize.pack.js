@@ -72,6 +72,12 @@
 
 var _department = __webpack_require__(1);
 
+var _depart_btn_panel = __webpack_require__(2);
+
+var depart_btn = _interopRequireWildcard(_depart_btn_panel);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
 window.DepartSelect = _department.DepartSelect;
 
 /***/ }),
@@ -135,9 +141,6 @@ var depart = {
         par: function par() {
             return this.parents[this.parents.length - 1];
         }
-        //root:function(){
-        //    return this.parents[0]
-        //}
     },
     mounted: function mounted() {
         this.dir_data(this.par);
@@ -157,11 +160,39 @@ var depart = {
             mainView.router.back();
         }
     },
-    template: '\n        <div class="scroll-wraper">\n\n            <ul style="margin-top: 0.3em;font-size: 1.3em;">\n                <li v-for="par in parents" @click="dir_data(par)" style="display: inline-block;">\n                    <span v-text="par._label"></span>\n                    <span style="display: inline-block;padding-left: 0.3em;padding-right: 0.3em;">\n                        <i class="fa fa-angle-right" aria-hidden="true"></i>\n                    </span>\n\n                </li>\n            </ul>\n            <ul style="margin-left: 1em;font-size:1.1em;list-style:none;">\n                <li v-for="item in items" style="padding: 0.4em;">\n\n                    <span v-text="item._label" @click="dir_data(item)"></span>\n                    <button style="float: right;margin-right: 1.5em;" @click="choice_me(item)">\u9009\u62E9</button>\n                </li>\n            </ul>\n        </div>\n    '
+    template: '\n        <div class="scroll-wraper">\n            <lay-tree-head :items="parents" @item_click="dir_data($event)"></lay-tree-head>\n            <ul style="margin-left: 1em;font-size:1.1em;list-style:none;">\n                <li v-for="item in items" style="padding: 0.4em;">\n                    <span v-text="item._label" @click="dir_data(item)"></span>\n                    <button style="float: right;margin-right: 1.5em;" @click="choice_me(item)">\u9009\u62E9</button>\n                </li>\n            </ul>\n        </div>\n    '
 
 };
 
 Vue.component('com-depart-browser', depart);
+
+//<ul style="margin-top: 0.3em;font-size: 1.3em;">
+//    <li v-for="par in parents" @click="dir_data(par)" style="display: inline-block;">
+//    <span v-text="par._label"></span>
+//    <span style="display: inline-block;padding-left: 0.3em;padding-right: 0.3em;">
+//    <i class="fa fa-angle-right" aria-hidden="true"></i>
+//    </span>
+//    </li>
+//    </ul>
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var depart_btn_panel = {
+    props: ['crt_depart', 'depart_list'],
+    template: '<div id="depart-btn" style="text-align: center;padding:0.3em 0;border-bottom: 1px solid #ffffff;">\n        <div class="btn-group" role="group" aria-label="..." >\n        <a type="button" :class="[\'btn btn-default\',{\'btn-info\':crt_depart.pk==depart.pk}]" v-for="depart in depart_list" @click="depart_link(depart.pk)" v-text="depart.label">Left</a>\n        </div>\n    </div>',
+    methods: {
+        depart_link: function depart_link(pk) {
+            ff.replace(ex.appendSearch({ _depart: pk }));
+        }
+    }
+};
+
+Vue.component('depart-btn-panel', depart_btn_panel);
 
 /***/ })
 /******/ ]);

@@ -188,27 +188,23 @@
     <div class="scroll-wraper">
 
 
+        <lay-tree-head :items="parents" @item_click="dir_data($event)"></lay-tree-head>
 
-        <ul class="breadcrumb">
-            <li v-for="par in parents" @click="dir_data(par)">
-                <span v-text="par._label"></span>
-            </li>
-        </ul>
-        <ul style="margin-left: 1em;">
-            <li v-for="item in items" class="flex" style="justify-content:space-between;">
+        <ul style="margin-left: 1em;list-style:none;">
+            <li v-for="item in items"  style="margin: 0.4em 1em;">
 
                 <input type="checkbox" :value="item" v-model="checked">
 
-                <span v-text="item._label" @click="dir_data(item)"></span>
+                <span style="margin-left: 1em;" v-text="item._label" @click="dir_data(item)"></span>
 
-                 <span style="color: #0092F2;margin-right: 2em;padding: 0.1em;">
+                 <span style="color: #0092F2;margin-right: 2em;padding: 0.1em;float: right;">
                         <i v-if="ex.isin(item,checked)" @click="edit(item)"  class="fa fa-pencil-square-o" aria-hidden="true"></i>
                  </span>
 
             </li>
         </ul>
 
-        <com-test></com-test>
+        <!--<com-test></com-test>-->
 
         <!--<scroll-wraper class="main-content" ref="scroller" style="width: 100vw;height:90vh;">-->
         <!--<com-catalog class="mobile" ref="catalog" :url="department_url" :root="{pk:null,name:'公司'}"-->
