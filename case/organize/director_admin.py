@@ -16,6 +16,8 @@ from .pages.myinfo import EmployeeSelf
 from .pages.baseinfo import BaseinfoItem,BasicInfoFields
 from .pages.department import DepartmentGroup
 from .pages.empoyee_permit import EmployePermitTab
+from django.conf import settings
+from helpers.ex import locate
 
 class EmployeeFields(ModelFields):
     
@@ -226,6 +228,12 @@ class EmployeeSelfConcernDepart(object):
     
     def get_label(self):
         return "关注部门"
+
+if settings.EMPGROUP:
+    get_empgroup=settings.EMPGROUP
+    EmpGroup=get_empgroup(**globals())
+
+
 
 page_dc.update({
     'organize.employee':EmployeeTablePage,

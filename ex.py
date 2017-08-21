@@ -14,5 +14,5 @@ def locate(path):
         for k in range(len(ls)):
             mod=__import__('.'.join(ls[:k+1]))
         return mod
-    except:
+    except Exception as e:
         return reduce(lambda obj,prop:getattr(obj,prop,None), ls[k:], mod)
