@@ -76,7 +76,10 @@ def sim_dict(instance,filt_attr=None,include=None,exclude=None):
                 else:
                     out['_%s_label'%field.name]=unicode(getattr(instance,field.name,''))
             else:
-                out[field.name]=field.get_prep_value( getattr(instance,field.name,None) )  
+                
+                # 考虑到使用到get_prep_value转换为str的field很少（大部分特殊的都在field_map类集中处理了。）
+                # 所以修改为直接读取属性，而不是使用get_prep_value转换，因为jsonfield需要直接输出python对象。
+                out[field.name]=getattr(instance,field.name,None) #field.get_prep_value( getattr(instance,field.name,None) )  
                 if field.choices:
                     org_value= out[field.name]
                     mt = [x for x in field.choices if x[0]==org_value]
@@ -144,6 +147,11 @@ class OneProc(object):
             model=field.rel.to
             return model.objects.get(pk=value)    
 
+#from helpers.base.jsonfield import JsonField
+#class JsonProc(object):
+    #def to_dict(self,inst,name):
+        #return getattr(inst,name)
+    #def from_dict(self,)
 
 field_map={
     models.DateTimeField:DatetimeProc,
@@ -177,7 +185,9 @@ def from_dict(dc,model=None,pre_proc=None):
                 if field_map.get(field.__class__):
                     processed[field.name] = field_map.get(field.__class__)().from_dict(value,field) 
                 else:
-                    processed[field.name]=u(value)
+                    # 由于有jsonfield这样的字段，不进行unicode处理，直接赋值python对象
+                    #processed[field.name]=u(value)
+                    processed[field.name]=value
             else:
                 processed[field.name]=None
 
