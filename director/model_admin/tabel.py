@@ -99,6 +99,8 @@ class RowFilter(object):
     """
     @names : 普通字段，用于过滤用.
     @range_fields: span字段，例如时间段
+    
+     range_fields=[{'name':'create_time','type':'date'}]
     """
     names=[]
     range_fields=[]
@@ -152,14 +154,18 @@ class RowFilter(object):
         elif isinstance(this_field,models.ForeignKey):
             ls=this_field.get_choices()
             ls=ls[1:]
-            return [{'value':x[0],'label':x[1]} for x in ls]
+            out= [{'value':x[0],'label':x[1]} for x in ls]
+            out=sorted(out,key=lambda x:x['label'].encode('gbk'))  # 尼玛，用GBK才能对常用的中国字进行拼音排序
+                                                                   # 不常用的字，以及unicode都是按照笔画排序的
+            return out
         elif not hasattr(self,'query'):
             return []
         else:
             ls = list(set(self.query.values_list(name,flat=True)))
-            ls.sort()
-            ls=[{'value':x,'label':unicode(x)} for x in ls]
-            return ls
+            #ls.sort()
+            out=[{'value':x,'label':unicode(x)} for x in ls]
+            out=sorted(out,key=lambda x:x['label'].encode('gbk'))  
+            return out            
     
 class RowSort(object):
     """
