@@ -11,7 +11,7 @@ class DepartmentForm(ModelFields):
     
     
 class DepartmentTab(FormPage):
-    template='organize/department_form_f7.html'
+    template=''
     fieldsCls=DepartmentForm
     # def __init__(self, request):
         # self.request=request
@@ -25,8 +25,11 @@ class DepartmentTab(FormPage):
         # self.fields=self.fieldsCls(instance= base,crt_user=request.user)
         # self.ctx=self.fields.get_context()
     
-    # def get_template(self, prefer=None):
-        # return None
+    def get_template(self, prefer=None):
+        if prefer=='f7':
+            return 'organize/department_form_f7.html'
+        else:
+            return 'director/tabgroup.html'
     
     # def get_label(self):
         # return '%s的个人基本信息'%self.emp.baseinfo.name

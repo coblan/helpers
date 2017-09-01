@@ -162,7 +162,8 @@ class EmployeeTable(ModelTable):
         dc={
             'user':unicode(inst.user),
             'baseinfo':unicode(inst.baseinfo),
-            'head':inst.baseinfo.head if inst.baseinfo else ''
+            'head':inst.baseinfo.head if inst.baseinfo else '',
+            'depart':','.join([unicode(x) for x in inst.depart.all()]),
         }
         return dc 
 
