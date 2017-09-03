@@ -24,6 +24,11 @@ class BasicInfo(models.Model):
 
     def __unicode__(self):
         return self.name
+    
+    def save(self, **kw):
+        super(BasicInfo,self).save(**kw)
+        self.employee.user.first_name=self.name
+        self.employee.user.save()
 
 class Department(models.Model):
     name=models.CharField(_('department name'),max_length=500,default='new department',validators=[has_str])

@@ -58,6 +58,13 @@ class UserTable(ModelTable):
     model=User
     include=['username','groups','first_name','is_active','is_staff','is_superuser','email',]
     
+    def get_heads(self):
+        heads=super(UserTable,self).get_heads()
+        for head in heads:
+            if head['name']=='username':
+                head['label']='账号'
+        return heads
+    
     #def get_rows(self):
         #rows=super(UserTable,self).get_rows()
         #for row in rows:

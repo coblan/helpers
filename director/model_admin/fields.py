@@ -14,6 +14,7 @@ from django.db import models
 from permit import ModelPermit
 from ..models import LogModel
 from helpers.pyenv import u
+import pinyin
 
 def save_row(row,user,request):
     for k in row: # convert model instance to pk for normal validation
@@ -182,12 +183,23 @@ class ModelFields(forms.ModelForm):
             if name in options.keys():
                 continue
             if isinstance(field,forms.models.ModelMultipleChoiceField):
-                options[name]=[{'value':x[0],'label':x[1]} for x in field.choices]            
+                options[name]=[{'value':x[0],'label':x[1]} for x in field.choices]
             elif isinstance(field,forms.models.ModelChoiceField):
                 options[name]=[{'value':x[0],'label':x[1]} for x in list(field.choices)]
+            if options.get(name,None):
+                options[name]=self.sort_option(options[name])
             
         return options
 
+    def sort_option(self,option):
+        index=0
+        for opt in option:
+            if opt['value']:
+                break
+            else:
+                index+=1
+        option[index:]=sorted(option[index:],key=lambda x:pinyin.get_initial(x['label']))
+        return option
     
     def dict_options(self):
         return {}
