@@ -214,7 +214,7 @@ def model_permit_info(model,user):
     for field in model._meta.fields:
         if getattr(field,'auto_now',False):
             fields_dc[field.name]=field.verbose_name  
-    ls=[]
+    ls=[{'name':'id','label':'ID'}]
     for k,v in fields_dc.items():
         if isinstance(v,(str,unicode)):
             label=v

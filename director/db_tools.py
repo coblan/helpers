@@ -7,7 +7,6 @@ import json
 from django.utils.timezone import localtime
 from datetime import datetime
 from django.utils.translation import ugettext as _
-
 from ..pyenv import u
 #from django.db.models.fields import related_descriptors
 
@@ -377,7 +376,6 @@ def AbstractClassWithoutFieldsNamed(bas_cls, *excl):
         cls._meta.local_fields.remove(f)
     return cls
        
-
 
 
 

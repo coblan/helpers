@@ -19,15 +19,15 @@
     <!--<script src="{% static 'lib/weui.min.js' %}"></script>-->
 
     <script src='{% static "js/i18n.js" %}'></script>
-    <script src='{% static "js/exfun.js?t="%}{{ stamp.exfun_js }}'></script>
+    <script src='{% static "js/exfun.js?t="%}{{ js_stamp.exfun_js }}'></script>
 
-    <script src="{% static 'js/uis_mb.pack.js?t=' %}{{ stamp.uis_mb_pack_js }}"></script>
-    <script src="{% static 'js/fields_mb.pack.js?t=' %}{{ stamp.fields_mb_pack_js}}"></script>
-    <script src="{% static 'js/table_mb.pack.js?t=' %}{{ stamp.table_mb_pack_js }}"></script>
+    <script src="{% static 'js/uis_mb.pack.js?t=' %}{{ js_stamp.uis_mb_pack_js }}"></script>
+    <script src="{% static 'js/fields_mb.pack.js?t=' %}{{ js_stamp.fields_mb_pack_js}}"></script>
+    <script src="{% static 'js/table_mb.pack.js?t=' %}{{ js_stamp.table_mb_pack_js }}"></script>
     <!--<script src="{% static 'js/wave.js?t=' %}{{ stamp.table_mb_pack_js }}"></script>-->
     <script src="{% static 'lib/moment2.17.1.min.js' %}"></script>
 
-    <script src="{% static 'apps/director_f7.pack.js' %}"></script>
+    <script src="{% static 'js/director_f7.pack.js?t=' %}{{ js_stamp.director_f7_pack_js}}"></script>
     {% include 'director/reverse.html' %}
 
     <script>

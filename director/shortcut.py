@@ -8,4 +8,5 @@ from .model_admin.fields import ModelFields,save_row
 from .model_admin.permit import ModelPermit,has_permit
 from .container import evalue_container
 from .short_gen import regist_director
+from .model_admin.short_func import form_dict
 

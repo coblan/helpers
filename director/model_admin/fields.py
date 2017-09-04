@@ -67,11 +67,12 @@ class ModelFields(forms.ModelForm):
             pk=dc.get('pk')
         form_kw={}
         if 'instance' not in kw:
-            if pk:
+            if pk=='-1':
+                form_kw['instance']=self._meta.model.objects.last()
+            elif pk:
                 form_kw['instance']= get_or_none( self._meta.model,pk=pk)
                 if not form_kw['instance']:
                     raise Http404('Id that you request is not exist in database')
-                
             else:
                 form_kw['instance'] = self._meta.model()
         else:

@@ -1,6 +1,6 @@
 import {popup_page} from './popup.js'
 
-export  function open(info,callback){
+export  function open(callback){
     var timestamp= Date.now()
     var uniq_id='uniq_'+timestamp
 
@@ -10,9 +10,9 @@ export  function open(info,callback){
     var filter_logic={
         el:'#'+uniq_id,
         data:{
-            row_filters:info.row_filters,
-            search_args:info.search_args,
-            search_tip:info.search_tip,
+            row_filters:row_filters,
+            search_args:search_args,
+            search_tip:search_tip,
         },
         mixins:[popup_page],
         methods:{
