@@ -9,7 +9,8 @@
             submit:function(){
                 var post_data=[{fun:'save_assem_group',row:this.kw.row}]
                 ex.post('/_ajax/director',JSON.stringify(post_data),function(resp){
-                    alert(resp)
+//                    alert(resp)
+                    alert('save success!')
                 })
             }
         }

@@ -180,7 +180,7 @@ class EmployeeTablePageWX(EmployeeTablePage):
 class DepartmentForm(ModelFields):
     class Meta:
         model=Department
-        exclude=['par']
+        exclude=['par','par_chain']
     
         
 class DepartmentPage(object):
