@@ -88,6 +88,7 @@ class ModelFields(forms.ModelForm):
     def custom_permit(self):
         self.permit=ModelPermit(self.Meta.model,self.crt_user,nolimit=self.nolimit)
         
+        
     def get_context(self):
         """
         """
@@ -144,6 +145,8 @@ class ModelFields(forms.ModelForm):
         """
         used to judge if self.crt_user has right to access self.instance
         """
+        if self.nolimit:
+            return True
         if not self.instance.pk:
             if self.permit.can_add():
                 return True
@@ -216,7 +219,7 @@ class ModelFields(forms.ModelForm):
         """
         call by model render engin
         """
-        if not (self.nolimit and self.crt_user.is_superuser):
+        if not (self.nolimit or self.crt_user.is_superuser):
             #if self.instance.pk:
                 #if not self.permit.changeable_fields():
                     #raise PermissionDenied,'you have no Permission changed %s'%self.instance._meta.model_name 
@@ -247,7 +250,7 @@ class ModelFields(forms.ModelForm):
             self.instance.save() # if instance is a new row , need save first then manytomany_relationship can create   
         
         for k,v in [(k,v) for (k,v) in self.cleaned_data.items() if k in self.changed_data]:
-            print((k,v))
+            #print((k,v))
             #if isinstance(v,unicode):
                 #v=v.encode('utf-8')
                 #print(('sss',v))

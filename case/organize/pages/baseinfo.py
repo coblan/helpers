@@ -8,7 +8,7 @@ class BasicInfoFields(ModelFields):
     class Meta:
         model=BasicInfo
         exclude=[]
-    
+        
     def get_heads(self):
         heads=super(BasicInfoFields,self).get_heads()
         for head in heads:
@@ -20,6 +20,16 @@ class BasicInfoFields(ModelFields):
                 'size':{'width':250,'height':250}
             }
         return heads
+    
+    def save_form(self):
+        #if not self.instance.pk or self.instance.employee.user==self.crt_user:
+            #self.
+        rt = super(self.__class__,self).save_form()
+        if not hasattr(self.instance,'employee'): # baseinfo 不允许没有员工与之相关
+            emp = self.crt_user.employee_set.first()
+            emp.baseinfo=self.instance
+            emp.save()
+        return rt
     
 class BaseinfoItem(FormPage):
     template=''
@@ -41,4 +51,8 @@ class BaseinfoItem(FormPage):
         return None
     
     def get_label(self):
-        return '%s的个人基本信息'%self.emp.baseinfo.name
+        if self.emp.baseinfo:
+            return '%s的个人基本信息'%self.emp.baseinfo.name
+        else:
+            return '个人基本信息'
+    

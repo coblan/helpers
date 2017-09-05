@@ -31,6 +31,7 @@ class BasicInfo(models.Model):
             self.employee.user.first_name=self.name
             self.employee.user.save()
 
+
 class Department(models.Model):
     name=models.CharField(_('department name'),max_length=500,default='new department',validators=[has_str])
     par = models.ForeignKey('self',verbose_name=_('parent department'),blank=True,null=True,related_name='childs')
