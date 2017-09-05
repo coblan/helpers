@@ -533,14 +533,28 @@ function info_quit(){
 如果是在手机的webview里面运行，如果暴露了java对象，触发下面代码。
 * */
 
-    if(window.jsobj){
-        console.log('js obj ')
-        console.log(jsobj.contentShow)
-        setTimeout(function(){
-            jsobj.contentShow()
-        },1000)
+//    if(window.jsobj){
+//        console.log('js obj ')
+//        console.log(jsobj.contentShow)
+//        setTimeout(function(){
+//            jsobj.contentShow()
+//        },1000)
+//
+//    }
 
+if(window.java_obj){
+    var now = Date.now()
+    var elapse= now- java_obj.getStartTimestamp()
+    if(elapse>2000){
+        var delay=0
+    }else{
+        var delay=2000-elapse
     }
+    setTimeout(function(){
+        java_obj.contentShow()
+    },delay)
+
+}
 
 </script>
 
