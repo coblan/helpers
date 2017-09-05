@@ -230,7 +230,7 @@ class EmployeeSelfConcernDepart(object):
     def get_label(self):
         return "关注部门"
 
-if settings.EMPGROUP:
+if  hasattr(settings,'EMPGROUP'):
     get_empgroup=settings.EMPGROUP
     EmpGroup=get_empgroup(**globals())
 
