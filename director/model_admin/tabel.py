@@ -156,7 +156,7 @@ class RowFilter(object):
             ls=this_field.get_choices()
             ls=ls[1:]
             out= [{'value':x[0],'label':x[1]} for x in ls]
-            out= self.sort_option(out) # 用pinyin排序 sorted(out,key=lambda x:x['label'].encode('gbk'))  # 尼玛，用GBK才能对常用的中国字进行拼音排序
+            #out= self.sort_option(out) # 用pinyin排序 sorted(out,key=lambda x:x['label'].encode('gbk'))  # 尼玛，用GBK才能对常用的中国字进行拼音排序
                                                                    # 不常用的字，以及unicode都是按照笔画排序的
             return out
         elif not hasattr(self,'query'):
@@ -165,7 +165,7 @@ class RowFilter(object):
             ls = list(set(self.query.values_list(name,flat=True)))
             #ls.sort()
             out=[{'value':x,'label':unicode(x)} for x in ls]
-            out= self.sort_option(out) # 用pinyin排序 sorted(out,key=lambda x:x['label'].encode('gbk'))  
+            #out= self.sort_option(out) # 用pinyin排序 sorted(out,key=lambda x:x['label'].encode('gbk'))  
             return out   
     
     def sort_option(self,option):
