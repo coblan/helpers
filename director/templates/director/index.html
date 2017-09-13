@@ -17,6 +17,7 @@
     <script src='{% static "js/exfun.js?t=" %}{{ js_stamp.exfun_js }}'></script>
     <script src='{% static "js/uis.pack.js?t=" %}{{ js_stamp.uis_pack_js }}'></script>
     <script src='{% static "js/fields.pack.js?t=" %}{{ js_stamp.fields_pack_js }}'></script>
+    <title></title>
 </head>
 
 {% include 'director/reverse.html' %}
@@ -59,6 +60,11 @@
 //	    	}
     })
 
+    $(function(){
+        if(!document.title && page_label){
+            document.title = page_label
+        }
+    })
 </script>
 <body >
 <div class="flex">
