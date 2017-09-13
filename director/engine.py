@@ -161,8 +161,15 @@ def can_list(ls):
                 return True
     return _func    
 
-def page(name,append=''):
-    return lambda url_name: reverse(url_name,args=(name,))+append
+def page(name,append=''):   
+    def _func(url_name,user):
+        if callable(append):
+            append_str=append(user) 
+        else:
+            append_str=append
+        return reverse(url_name,args=(name,))+append_str
+    return _func
+    # return lambda url_name: reverse(url_name,args=(name,))+append
 
 def fa(name):
     return '<i class="fa %s" aria-hidden="true"></i>'%name

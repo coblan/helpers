@@ -37,6 +37,8 @@
     {% endif %}
 
      search_args=ex.parseSearch()
+     user='{{ user.pk }}'
+    user_name= '{{ user.first_name }}'
 
 
     help_url = '{{ help_url |default:""}}'
