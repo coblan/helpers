@@ -61,9 +61,7 @@ class BaseEngine(object):
     prefer='pc'
     login_url=settings.LOGIN_URL
     root_page='/'
-    #def __init__(self):
-        #self.root_page='/'
-        
+    
     @classmethod
     def as_view(cls):
         if not getattr(cls,'_singleton',None):
@@ -77,13 +75,25 @@ class BaseEngine(object):
         if not dc in cls._pages:
             cls._pages.append(dc)
     
+    def login_authorized(self,request):
+        if request.user.is_superuser:
+            return True
+        if request.user.is_anonymous(): 
+            return False
+        elif not request.user.is_active or not request.user.is_staff:
+            raise PermissionDenied,'you have no permit to access this system'
+        else:
+            return True
+    
     def view(self,request,name):     
         page_cls = self.get_page_cls(name)
         
-        if getattr(page_cls,'need_login',True):
-            if request.user.is_anonymous() or not request.user.is_active:
-                return redirect(self.login_url+'?next='+request.get_full_path())
-                
+        # if getattr(page_cls,'need_login',True):
+            # if request.user.is_anonymous() or not request.user.is_active:
+                # return redirect(self.login_url+'?next='+request.get_full_path())
+        if not self.login_authorized(request):
+            return redirect(self.login_url+'?next='+request.get_full_path())
+          
         page=page_cls(request)
         ctx=page.get_context()
         if  request.is_ajax() and not request.GET.get('_ajax_html') : #and not getattr(page,'ajax_html',False):

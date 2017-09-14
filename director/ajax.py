@@ -33,7 +33,12 @@ def download_group_permit(items):
         obj = Group.objects.get(pk=pk)
         
         if obj.permitmodel:
-            dc={'group_name':obj.name,'permit_content':json.loads(obj.permitmodel.permit)}
+            if obj.name.startswith('assem.'):
+                ls=json.loads(obj.permitmodel.permit)
+                ls=[x.group.name for x in PermitModel.objects.filter(pk__in=ls)]
+                dc={'group_name':obj.name,'permit_content':ls}
+            else:
+                dc={'group_name':obj.name,'permit_content':json.loads(obj.permitmodel.permit)}
 
             str_list.append(dc)
         
@@ -47,13 +52,33 @@ def upload_group_permit(request):
         catch.write(chunk) 
     data=catch.getvalue()
     group_permit = json.loads(data)
+    
+    assem_groups=[]
+    other_groups=[]
     for gp in group_permit:
+        if gp['group_name'].startswith('assem.'):
+            assem_groups.append(gp)
+        else:
+            other_groups.append(gp)
+    
+    for gp in other_groups:
         name=gp['group_name']
         permit_content=json.dumps(gp['permit_content'])
         group,c = Group.objects.get_or_create(name=name)
         permitmodel,c=PermitModel.objects.get_or_create(group=group)
         permitmodel.permit=permit_content
         permitmodel.save()
+    
+    for gp in assem_groups:
+        name=gp['group_name']
+        permit_content=gp['permit_content']
+        group,c = Group.objects.get_or_create(name=name)
+        permitmodel,c=PermitModel.objects.get_or_create(group=group)
+        
+        permit_content=[x.pk for x in Group.objects.filter(name__in=permit_content)]
+        permitmodel.permit=json.dumps(permit_content)
+        permitmodel.save()
+        
     return {'status':'success'}
 
 def save_assem_group(row,user):

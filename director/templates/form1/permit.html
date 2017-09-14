@@ -39,9 +39,10 @@
 	                                if(!name){
 		                                return 
 	                                }
-	                                this.selected_heads=this.selected_heads.concat(ex.remove(this.permit_heads,function (head) {
-	                                	return name==head.name
-	                                }))
+									var selected_permit=ex.remove(this.permit_heads,function (head) {
+										return name==head.name
+									})
+	                                this.selected_heads=this.selected_heads.concat(selected_permit)
                                 },
                                 delet_permit:function (name) {
 	                                this.permit_heads = this.permit_heads.concat(ex.remove(this.selected_heads,function (head) {
