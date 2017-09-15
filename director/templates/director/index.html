@@ -12,6 +12,7 @@
     <script src="{% static 'lib/vue2.3.2.js' %}"></script>
     <link rel="stylesheet" href="{% static 'lib/bootstrap.min.css' %}">
 
+    <script src="{% static 'lib/moment2.17.1.min.js' %}"></script>
 
     <script src='{% static "js/i18n.js?t=" %}{{ js_stamp.i18n_js }}'></script>
     <script src='{% static "js/exfun.js?t=" %}{{ js_stamp.exfun_js }}'></script>
@@ -64,12 +65,18 @@
         if(!document.title && page_label){
             document.title = page_label
         }
+        var mom=moment()
+        $('.head-bar .date').html( mom.format('YYYY年M月D号 第w周 星期E'))
     })
 </script>
 <body >
 <div class="flex">
     <div class="flex-v page-wrap">
-        <div id='head' v-if="!search_args._pop">
+        <div id='head' class="head-bar" v-if="!search_args._pop">
+            <div style="float: left;margin-left: 17em;padding: 0.5em 1em 0.3em 1em;">
+                <i class="fa fa-calendar" aria-hidden="true"></i>
+                <span class="date"></span>
+            </div>
             <div class='crt_user'>
                 {% if user.is_authenticated %}
 			    <span>Welcome &nbsp
@@ -156,6 +163,7 @@
     }
     #head .crt_user{
         float: right;
+        padding: 0.4em 3em 0.3em 1em;
     }
 
     #wrap{
