@@ -8,6 +8,7 @@ from django.utils.timezone import localtime
 from datetime import datetime
 from django.utils.translation import ugettext as _
 from ..pyenv import u
+from .model_admin.base import model_dc
 #from django.db.models.fields import related_descriptors
 
 def get_or_none(model, **kw):
@@ -376,6 +377,10 @@ def AbstractClassWithoutFieldsNamed(bas_cls, *excl):
         cls._meta.local_fields.remove(f)
     return cls
        
+def permit_to_dict(user,inst):
+    fields_cls = model_dc[inst.__class__]["fields"]
+    fields_obj = fields_cls(instance=inst,crt_user=user)
+    return fields_obj.get_row()
 
 
 
