@@ -2,8 +2,8 @@
 from __future__ import unicode_literals
 
 # from model_admin.render import TablePage,FormPage
-from .pages import TablePage,FormPage
-from model_admin.tabel import ModelTable
+from .pages import TablePage,FormPage,TabGroup
+from model_admin.tabel import ModelTable,RowFilter
 from model_admin.fields import ModelFields
 from model_admin.base import model_dc,page_dc,permit_list
 from django.contrib.auth.models import Group,User
@@ -15,13 +15,40 @@ from .models import KVModel
 from . import short_gen
 import cgi
 from .admin_pages.assem_group import AssemGroupPage
+from .db_tools import to_dict
 
 class UserGroupTable(ModelTable):
+    
+    class GroupFilter(RowFilter):
+        names=['prefix']
+        
+        def get_query(self, query):
+            prefix=self.filter_args.get('prefix',None)
+            search_kwords={}
+            if prefix:
+                search_kwords['name__startswith']=prefix
+            return query.filter(**search_kwords)
+        
+    filters=GroupFilter
+    
     model=Group
     include=['name']
     
     def inn_filter(self, query):
         return query.order_by('name')
+    
+    def dict_row(self, inst):
+        dc={}
+        if hasattr(inst,'permitmodel'):
+            if inst.permitmodel.permit:
+                permit_dc = json.loads(inst.permitmodel.permit)
+                if isinstance(permit_dc,list):
+                    gp = Group.objects.filter(pk__in=permit_dc)
+                    dc= {
+                        'permit':[to_dict(x) for x in gp]
+                    }
+
+        return dc
         
 
 class UserGroupFields(ModelFields):
@@ -43,6 +70,23 @@ class UserGroupFields(ModelFields):
 class GroupTablePage(TablePage):
     template='authuser/group_table.html'
     tableCls=UserGroupTable
+
+class GroupAssemPage(TablePage):
+    tableCls=UserGroupTable
+    template='authuser/permit_assem.html'
+    
+class GroupPrimPage(TablePage):
+    tableCls=UserGroupTable
+    template='authuser/permit_prim.html'
+    
+
+class GroupGroup(TabGroup):
+    tabs=[{'name':'assem','label':'用户权限组','page_cls':GroupAssemPage,'suffix':'&prefix=assem.'},
+          {'name':'prim','label':'可用权限','page_cls':GroupPrimPage,'suffix':'&prefix=prim.'},
+          ]
+    def __init__(self, request):
+        super(self.__class__,self).__init__(request)
+        
 
 class GroupFormPage(FormPage):
     template='form1/permit.html'
@@ -94,7 +138,10 @@ page_dc.update({'user':UserTablePage,
                 'user.edit':UserFormPage,
                 'group':GroupTablePage,
                 'group.edit':GroupFormPage,
-                'group.assem.edit':AssemGroupPage})
+                'group.assem.edit':AssemGroupPage,
+                
+                'group_human':GroupGroup,
+                'group_human.edit':AssemGroupPage})
 
 permit_list.append(Group)
 permit_list.append(User)

@@ -171,7 +171,7 @@ class TabGroup(object):
         acture_tabs=self.get_tabs()
         tab_name = tab_name or acture_tabs[0].get('name')
         self.ctx={
-            'tabs':[{'name':x['name'],'label':x['label']} for x in acture_tabs],
+            'tabs':[{'name':x['name'],'label':x['label'],'suffix':x['suffix']} for x in acture_tabs],
             'crt_tab':tab_name,
         }
         tab_dict=findone(acture_tabs,{'name':tab_name}) or acture_tabs[0]

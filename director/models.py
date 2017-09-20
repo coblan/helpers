@@ -19,6 +19,7 @@ class PermitModel(models.Model):
     group = models.OneToOneField(Group,verbose_name=_('user group'))
     # model = models.CharField('model',max_length=200, default='')
     permit = models.TextField(verbose_name=_('user permit'),default='{}')
+    desp=models.TextField(verbose_name="描述",blank=True)
 
 EDITOR_TYPE=(
     ('blocktext','普通编辑器'),

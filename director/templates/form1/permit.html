@@ -66,10 +66,11 @@
                                         })
                                 },
                                 cancel:function () {
-									var search =ex.parseSearch();
-									if(search.next){
-										location=atob(search.next)
-									}
+									location=document.referrer
+//									var search =ex.parseSearch();
+//									if(search.next){
+//										location=atob(search.next)
+//									}
 								}
                         },
                 })

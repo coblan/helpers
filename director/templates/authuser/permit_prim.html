@@ -1,0 +1,160 @@
+{% extends "director/index.html" %}
+{% load static %}
+{% load jsonify %}
+
+{% block page_content %}
+
+<script src='{% static "js/table.pack.js?t=" %}{{ js_stamp.table_pack_js }}'></script>
+<script type="text/javascript">
+
+    tabs={{ tabs | jsonify | default:'[]' }}
+    crt_tab = '{{ crt_tab | default:'null' }}'
+    crt_tab = crt_tab || tabs[0].name
+
+    page_name="group"
+
+    heads.push({
+        name:'desp',
+        label:'描述',
+    })
+    
+    ex.each(rows,function(row){
+        row.name=row.name.slice(5)
+    })
+
+    table_logic={
+        el:'#there',
+        data:{
+            tabs:tabs,
+            crt_tab:crt_tab,
+        },
+        mixins:[table_fun],
+        watch:{
+            'row_sort.sort_str':function (v) {
+                this.search_args._sort=v
+                this.search()
+            }
+        },
+
+        methods:{
+            item_link:function(name){
+                if(name!=this.crt_tab){
+                    return ex.appendSearch({_tab:name})
+                }else{
+                    return 'javascript:;'
+                }
+            },
+//            form_link: function form_link(name, row) {
+//                return ex.template('<a href="{app_engin}/group.edit?pk={pk}&next={next}">{value}</a>', { edit: page_name + '.edit',
+//                    pk: row.pk,
+//                    next: encodeURIComponent(location.href),
+//                    value: row[name]
+//                });
+//            },
+        }
+
+    }
+    $(function () {
+        table=new Vue(table_logic)
+    })
+
+</script>
+
+
+<div id='there'>
+
+    <!--<div v-if="can_log" style='float: right;padding: 5px 20px;'>-->
+    <!--<a :href="log_url()">History</a>-->
+    <!--</div>-->
+    <path-nav :menu='menu'>
+        <li><span>编辑</span></li>
+    </path-nav>
+
+    <div class="flex">
+        <ul class="nav nav-tabs tabs flex-grow">
+            <li v-for="tab in tabs" :class="{'active':crt_tab==tab.name}"><a :href="item_link(tab.name)+tab.suffix" v-text="tab.label" ></a></li>
+        </ul>
+
+        <com-table-btn v-if="!search_args._pop" :add_new="add_new" :del_item="del_item">
+        </com-table-btn>
+
+    </div>
+
+    <com-table class='table fake-suit' :has_check="!search_args._pop" :map="map"
+               :row_sort="row_sort" :heads="heads" :rows="rows" v-model="selected"></com-table>
+
+    <paginator :nums='row_pages.options' :crt='row_pages.crt_page' @goto_page='goto_page($event)'></paginator>
+
+</div>
+
+<style type="text/css">
+    .tabs{
+        align-items: center;
+    }
+    .tabs li:first-child{
+        margin-left: 15px;
+    }
+    .tabs li{
+        display: inline-block;
+        margin-left:5px;
+        vertical-align: bottom;
+    }
+
+    .nav.tabs>li>a{
+        padding: 8px 18px 5px 18px;
+        background-color: #f6f7f8;
+        border: 1px solid #dddddd;
+        border-bottom: none;
+        position: relative;
+        margin-bottom: 1px;
+        font-weight: 400;
+    }
+    .nav li>a:hover{
+        text-underline: blue;
+        text-decoration: underline;
+    }
+
+    .nav li.active>a:after{
+        content: ' ';
+        position: absolute;
+        width: 100%;
+        height: 4px;
+        bottom: -4px;
+        left: 0;
+        background-color: #eee;
+    }
+    .nav li.active a{
+        text-decoration: none;
+        background-color: #eeeeee;
+        font-weight: 500;
+    }
+    .nav li.active a:hover{
+        border-bottom: none;
+        text-decoration: none;
+        color: #a2a2a2;
+        font-weight: 500;
+        background-color: #eeeeee;
+    }
+</style>
+
+<!--<template id="com-permit-show">-->
+    <!--<div> <span v-for='permit in row.permit' v-text='rm_prefix(permit.name)' style="margin-left: 2em;"></span></div>-->
+<!--</template>-->
+
+<!--<script>-->
+    <!--Vue.component('com-permit-show',{-->
+        <!--props:['row','name'],-->
+        <!--template:"#com-permit-show",-->
+        <!--methods:{-->
+            <!--rm_prefix:function(str){-->
+                <!--return str.slice(5)-->
+            <!--}-->
+        <!--}-->
+    <!--})-->
+<!--</script>-->
+{% endblock %}
+
+
+
+
+
