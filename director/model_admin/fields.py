@@ -78,7 +78,8 @@ class ModelFields(forms.ModelForm):
         else:
             form_kw['instance']=kw.pop('instance')
         self.nolimit = nolimit
-        self.kw=kw
+        self.kw=dc.copy()
+        self.kw.update(kw)
 
         super(ModelFields,self).__init__(dc,*args,**form_kw)
         self.custom_permit()

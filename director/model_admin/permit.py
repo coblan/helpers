@@ -67,16 +67,18 @@ def user_permit_dc(user):
             yield permit_dc
 
 def group_permit(group):
-    if hasattr(group,'permitmodel'):
-        permit_dc = json.loads( group.permitmodel.permit )
-        if isinstance(permit_dc,list):
-            for pk in permit_dc:
-                child_group=get_or_none(Group,pk=pk)
-                if child_group:
-                    for dc in group_permit(child_group):
-                        yield dc
-        else:
-            yield permit_dc
+    for permit in group.permitmodel_set.all():
+        yield permit.permit
+    # if hasattr(group,'permitmodel'):
+        # permit_dc = json.loads( group.permitmodel.permit )
+        # if isinstance(permit_dc,list):
+            # for pk in permit_dc:
+                # child_group=get_or_none(Group,pk=pk)
+                # if child_group:
+                    # for dc in group_permit(child_group):
+                        # yield dc
+        # else:
+            # yield permit_dc
             
 
 class ModelPermit(object):
