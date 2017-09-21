@@ -13,6 +13,9 @@
     permit_heads={{permit_heads | jsonify}}
     errors={}
 
+//    ex.each(heads,function(head){
+//        head.readonly=true
+//    })
     $(function () {
         haha= new Vue({
             el:'#there',
@@ -96,7 +99,7 @@
         <field  name='desp' :kw='kw'></field>
     </div>
 
-    <div>
+    <div style="text-align: center;">
         <span style='width:100px;display: inline-block;text-align: right;margin-right:20px;'><b>可用权限:</b></span>
         <select name="" id="available_permit" v-model='sld_md_name' class="form-control">
             <option value="">---</option>
@@ -155,7 +158,7 @@
         display: inline-block;
     }
     .row{
-        margin: 20px 0px 0px 120px;
+        margin: 20px 0px 0px 20px;
     }
     td{
         padding: 5px 10px;
