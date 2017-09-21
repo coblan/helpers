@@ -184,6 +184,12 @@
                 second_row_mark_all:false,
             }
         },
+//        mounted:function(){
+//            // 当数据库字段变少时，permit会变少，触发下面函数更新一下value，使得不用编辑，直接保存，就能修复
+//          if(this.permit.length != this.value.length){
+//              this.$emit('input',this.permit)
+//          }
+//        },
         watch:{
             permit:function (v) {
                 this.$emit('input',v)
@@ -211,6 +217,27 @@
                 }
             },
         },
+//        methods:{
+//            clean:function(value){
+//                var field_temp=ex.map(this.fields,function(field){
+//                    return field.name
+//                })
+//                var field_names=["can__log","can__create","can__delete"]
+//                ex.each(field_temp,function(name){
+//                    field_names.push(name+'__read')
+//                    field_names.push(name+'__write')
+//                })
+//                var out=ex.filter(value,function(key){
+//                    return ex.isin(key,field_names)
+//                })
+////                for( key in value){
+////                    if (ex.isin(key,field_names)){
+////                        out.push(key)
+////                    }
+////                }
+//                return out
+//            }
+//        }
     })
 </script>
 

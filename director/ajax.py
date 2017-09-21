@@ -29,8 +29,6 @@ def upload_permit(request):
     data=catch.getvalue()
     permits = json.loads(data)
     
-    
-    
     for permit in permits:
         permit_obj,_=PermitModel.objects.get_or_create(name=permit['name'])
         permit_obj.permit=permit['permit']

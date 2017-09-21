@@ -306,6 +306,12 @@ class ModelTable(object):
     
     def permited_fields(self):
         ls = self.permit.readable_fields()
+        
+        if 'id' not in self.exclude and 'id' not in ls:
+            ls.insert(0,'id')
+        elif 'id' in self.exclude and 'id' in ls:
+            ls.remove('id')
+            
         if self.include:
             return [x for x in self.include if x in ls]
         if self.exclude:
@@ -316,7 +322,7 @@ class ModelTable(object):
         """
         return:[{"name": "name", "label": "\u59d3\u540d"}, {"sortable": true, "name": "age", "label": "\u5e74\u9f84"}]
         """
-        ls = self.permited_fields()
+        ls = self.permited_fields()   
         heads = model_to_head(self.model,include=ls)
         #for head in heads:
             #if head.get('name') in self.sortable:
@@ -330,7 +336,7 @@ class ModelTable(object):
         query=self.get_query()
         out=[]
         for inst in query:
-            
+
             dc= to_dict(inst, include=self.permited_fields(),filt_attr=self.dict_row( inst))
             out.append(dc)
         return out

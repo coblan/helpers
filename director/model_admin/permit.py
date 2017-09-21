@@ -216,7 +216,7 @@ def model_permit_info(model,user):
     for field in model._meta.fields:
         if getattr(field,'auto_now',False):
             fields_dc[field.name]=field.verbose_name  
-    ls=[{'name':'id','label':'ID'}]
+    ls= [] #[{'name':'id','label':'ID'}]
     for k,v in fields_dc.items():
         if isinstance(v,(str,unicode)):
             label=v
@@ -226,3 +226,62 @@ def model_permit_info(model,user):
             label=v.label
         ls.append({'name':k,'label':label})
     return ls
+
+
+def permit_to_text(permit):
+    """
+    把permit字典转换为人能够读的文字表述
+    """
+    out_dc={}
+    model_dc={}
+    sp_dc={}
+    for k in permit_list:
+        if isinstance(k,dict):
+            sp_dc[k['name']]=k
+        else:
+            model_dc[model_to_name(k)]=k
+            
+            
+    for k,v in permit.items():
+        if k in model_dc:
+            model = model_dc[k]
+            dc = _get_model_permit_text(model,v)
+        elif k in sp_dc:
+            sp=sp_dc[k]
+            dc = _get_sp_permit_text(sp,v)
+        out_dc.update(dc)
+    return out_dc
+
+def _get_model_permit_text(model,v):
+    key=model._meta.verbose_name
+    value=""
+    value_list=[]
+    if "can__log" in v:
+        value_list.append("查看日志")
+    if "can__create" in v:
+        value_list.append("创建")
+    if "can__delete" in v:
+        value_list.append("删除")
+    for field in model._meta.fields:
+        name = field.name
+        op=[]
+        if "%s__read"%name in v:
+            op.append('读')
+        if "%s__write"%name in v:
+            op.append("写")
+        if op:
+            op_str='/'.join(op)
+            value_list.append("%s(%s)"%(field.verbose_name,op_str))
+    if value_list:
+        value=','.join(value_list)
+    return {key:value}
+        
+
+def _get_sp_permit_text(sp,v):
+    key=sp['label']
+    value_list=[]
+    for field in sp['fields']:
+        if field['name'] in v:
+            value_list.append(field['label'])
+    return {key:','.join(value_list)}
+    

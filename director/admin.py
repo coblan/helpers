@@ -15,9 +15,10 @@ from .models import KVModel,PermitModel
 from . import short_gen
 import cgi
 from .admin_pages.assem_group import AssemGroupPage
-from .db_tools import to_dict
+from .db_tools import to_dict,model_to_name
 from django import forms
 from django.utils.translation import ugettext as _
+from model_admin.permit import permit_to_text
 
 class UserGroupTable(ModelTable):
     
@@ -117,6 +118,11 @@ class PermitPage(TablePage):
     class PermitTable(ModelTable):
         model=PermitModel
         exclude=['group']
+    
+        def dict_row(self, inst):
+            return {'permit' :permit_to_text( inst.permit)}
+            
+        
     tableCls=PermitTable
     template='authuser/permit_table.html'
     
@@ -145,6 +151,7 @@ class PermitFormPage(FormPage):
             # else:
                 # ctx['permits']={}
             ctx['permit_heads']=self.permit.get_heads()
+
             return ctx
         def clean_name(self):
             name = self.cleaned_data.get('name')
@@ -152,6 +159,34 @@ class PermitFormPage(FormPage):
                 raise forms.ValidationError(_('permit name has been exist'))
             else:
                 return name
+        def clean_permit(self):
+            permit= self.cleaned_data.get('permit')
+            dc={}
+            for perm in permit_list:
+                if isinstance(perm,dict):
+                    dc[perm['name']]=perm
+                else:
+                    dc[model_to_name(perm)]=perm
+             
+            out_permit={}
+            for k,v in permit.items():
+                permit_content=dc[k]
+                if isinstance(permit_content,dict):
+                    names_permit=map(lambda x :x['name'],permit_content['fields'])
+                    out_permit[k]=[x for x in v if x in names_permit]
+                else:
+                    fields_cls = model_dc.get(permit_content).get('fields')
+                    fields = fields_cls(crt_user=self.crt_user,nolimit=True).fields
+                    names = fields.keys()
+                    names_permit=[x+'__read' for x in names]
+                    names_permit.extend([x+'__write' for x in names])
+                    names_permit.extend(['can__log','can__create','can__delete'])
+                    out_permit[k]=[x for x in v if x in names_permit]
+            return out_permit
+            #for 
+            #for head in heads:
+                #if 
+            
             
     template='authuser/permit_form.html'
     fieldsCls=PermitForm
