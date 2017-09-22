@@ -44,10 +44,13 @@ def has_permit(user,name):
     """
     special.sp1
     """
-    if user.is_superuser:
-        return True    
-    
     cls,perm=name.split('.')
+    if user.is_superuser:
+        if perm.startswith('-'):
+            return False
+        else:
+            return True  
+        
     for permit_dc in user_permit_dc(user):
         sp_permit_list= permit_dc.get(cls,[])
         if perm in sp_permit_list:
@@ -250,6 +253,8 @@ def permit_to_text(permit):
         elif k in sp_dc:
             sp=sp_dc[k]
             dc = _get_sp_permit_text(sp,v)
+        else:
+            dc={}
         out_dc.update(dc)
     return out_dc
 

@@ -85,6 +85,8 @@ def sim_dict(instance,filt_attr=None,include=None,exclude=None):
                     mt = [x for x in field.choices if x[0]==org_value]
                     if mt:
                         out['_tr_'+field.name]=mt[0][1]
+    if instance.id:
+        out['id']=instance.id
     return out
     
 
