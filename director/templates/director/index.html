@@ -68,12 +68,22 @@
         }
         var mom=moment()
         $('.head-bar .date').html( mom.format('YYYY年M月D号 第w周 星期E'))
+
+        if(!search_args._pop){
+            $('.head-bar.hide').removeClass('hide')
+        }
     })
 </script>
+
+<style>
+    .hide{
+        display: none;
+    }
+</style>
 <body >
 <div class="flex">
     <div class="flex-v page-wrap">
-        <div id='head' class="head-bar" v-if="!search_args._pop">
+        <div id='head' class="head-bar hide" v-if="!search_args._pop">
             <div style="float: left;margin-left: 17em;padding: 0.5em 1em 0.3em 1em;">
                 <i class="fa fa-calendar" aria-hidden="true"></i>
                 <span class="date"></span>
