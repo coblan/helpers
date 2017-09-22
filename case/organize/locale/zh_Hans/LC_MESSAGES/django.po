@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-06-23 11:50+0800\n"
+"POT-Creation-Date: 2017-09-22 10:30+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -54,55 +54,63 @@ msgstr "性别"
 msgid "phone"
 msgstr "电话号码"
 
-#: .\helpers\case\organize\models.py:29
+#: .\helpers\case\organize\models.py:34
+msgid "Employee Basic info Table"
+msgstr "员工基本信息表"
+
+#: .\helpers\case\organize\models.py:38
 msgid "department name"
-msgstr "部门"
+msgstr "部门名称"
 
-#: .\helpers\case\organize\models.py:30
+#: .\helpers\case\organize\models.py:39
 msgid "parent department"
-msgstr "上级"
+msgstr "上级部门"
 
-#: .\helpers\case\organize\models.py:31
+#: .\helpers\case\organize\models.py:40
 msgid "detail"
-msgstr "细节"
+msgstr "详细"
 
-#: .\helpers\case\organize\models.py:67 .\helpers\case\organize\models.py:76
-#: .\helpers\case\organize\models.py:97
+#: .\helpers\case\organize\models.py:44
+msgid "Department Table"
+msgstr "部门信息表"
+
+#: .\helpers\case\organize\models.py:88 .\helpers\case\organize\models.py:97
+#: .\helpers\case\organize\models.py:117 .\helpers\case\organize\models.py:129
 msgid "department"
 msgstr "部门"
 
-#: .\helpers\case\organize\models.py:68
+#: .\helpers\case\organize\models.py:89
 msgid "recive pop event"
 msgstr "接受事件"
 
-#: .\helpers\case\organize\models.py:71
+#: .\helpers\case\organize\models.py:92 .\helpers\case\organize\models.py:128
 msgid "account"
 msgstr "账号"
 
-#: .\helpers\case\organize\models.py:72
+#: .\helpers\case\organize\models.py:93
 msgid "employee id"
 msgstr "员工号"
 
-#: .\helpers\case\organize\models.py:73
+#: .\helpers\case\organize\models.py:94
 msgid "basic info"
 msgstr "基本信息"
 
-#: .\helpers\case\organize\models.py:74
+#: .\helpers\case\organize\models.py:95
 msgid "job position"
 msgstr "职位"
 
-#: .\helpers\case\organize\models.py:81
-msgid "Employee Info"
-msgstr "雇员信息"
+#: .\helpers\case\organize\models.py:101
+msgid "Employee info Table"
+msgstr "员工工作信息表"
 
-#: .\helpers\case\organize\models.py:98
+#: .\helpers\case\organize\models.py:118
 msgid "group"
 msgstr "权限组"
 
-#: .\helpers\case\organize\models.py:99 .\helpers\case\organize\models.py:103
+#: .\helpers\case\organize\models.py:119 .\helpers\case\organize\models.py:124
 msgid "employee"
-msgstr "雇员"
+msgstr "员工"
 
-#: .\helpers\case\organize\models.py:104
+#: .\helpers\case\organize\models.py:125
 msgid "content"
 msgstr "内容"

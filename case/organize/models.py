@@ -30,6 +30,8 @@ class BasicInfo(models.Model):
         if hasattr(self,'employee') and self.employee.user:
             self.employee.user.first_name=self.name
             self.employee.user.save()
+    class Meta:
+        verbose_name=_("Employee Basic info Table")
 
 
 class Department(models.Model):
@@ -38,6 +40,9 @@ class Department(models.Model):
     detail=models.TextField(verbose_name=_('detail'),blank=True)
     par_chain=models.CharField('parent chain',max_length=200,blank=True)
 
+    class Meta:
+        verbose_name=_("Department Table")
+        
     def __unicode__(self):
         return self.name
     
@@ -90,11 +95,10 @@ class Employee(models.Model):
     position = models.CharField(_('job position'),max_length=100,blank=True)
     #depart=models.ForeignKey(Department,verbose_name=_('department'),blank=True,null=True,on_delete=models.SET_NULL)
     depart=models.ManyToManyField(Department,verbose_name=_('department'),blank=True,null=True)
-    #manage_depart=models.ManyToManyField(Department,verbose_name=_('managed department'),blank=True,null=True,related_name='manage')
-    #follow_depart=models.ManyToManyField(Department,verbose_name=_('followed department'),blank=True,null=True,related_name='follow')
+    
 
     class Meta:
-        verbose_name=_('Employee Info')
+        verbose_name=_('Employee info Table')
         
     def __unicode__(self):
         if self.baseinfo:
@@ -113,6 +117,7 @@ class WorkPermitModel(models.Model):
     depart=models.ForeignKey(Department,verbose_name=_('department'),blank=True,null=True)
     group=models.ManyToManyField(Group,verbose_name=_('group'),blank=True,null=True)
     emp=models.ForeignKey(Employee,verbose_name=_('employee'),blank=True,null=True)
+    
     
 
 class EmployeeData(models.Model):

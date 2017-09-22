@@ -184,6 +184,7 @@ class RowSort(object):
     row_sort: 'name1,-name2'
     """
     names=[]
+    chinese_words=[]
     def __init__(self,row_sort=[],user=None,allowed_names=[],kw={}):
         self.valid_name=[x for x in self.names if x in allowed_names]
         ls=[]
@@ -198,9 +199,19 @@ class RowSort(object):
     def get_query(self,query):
         if self.sort_str:
             ls=self.sort_str.split(',')
-            return query.order_by(*ls)
-        else:
-            return query
+            for name in ls:
+                if name.startswith('-'):
+                    norm_name=name.lstrip('-')
+                    direction='-'
+                else:
+                    norm_name=name
+                    direction=''                    
+                if norm_name in self.chinese_words:
+                    query= query.extra(select={'converted_%s'%norm_name: 'CONVERT(%s USING gbk)'%norm_name},order_by=['%sconverted_%s'%(direction,norm_name)])
+                else:
+                    query= query.ordery_by(name)
+
+        return query
 
   
 class ModelTable(object):

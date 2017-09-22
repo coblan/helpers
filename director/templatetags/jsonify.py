@@ -12,7 +12,8 @@ def jsonify(obj):
     if obj is None:
         return ''
     else:
-        return mark_safe( json.dumps(obj) )
+        outstr=json.dumps(obj)
+        return mark_safe( outstr )
 
     #if isinstance(object, ValuesListQuerySet):
         #return mark_safe(json.dumps(list(object)))

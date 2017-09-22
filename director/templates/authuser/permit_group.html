@@ -17,6 +17,13 @@
         label:'包含权限',
         type:'com-permit-show'
     })
+
+    ex.each(heads,function(head){
+        if(head.name=='users'){
+            head.type='com-user-show'
+        }
+    })
+    heads = ex.sort_by_names(heads,['name','permit','users'])
 //    heads.push({
 //        name:'desp',
 //        label:'描述',
@@ -161,7 +168,10 @@
 
 <style>
     .td_permit{
-        width: 70%;
+        width: 30%;
+    }
+    .td_users{
+        width: 40%;
     }
 </style>
 <template id="com-permit-show">
@@ -183,6 +193,26 @@
         }
     })
 </script>
+
+<template id="com-user-show">
+    <div> <a v-for='user in row.users' v-text='user.first_name?user.first_name:user.username' style="margin-left: 2em;"
+             :href="user_link(user)"></a></div>
+</template>
+<script>
+    Vue.component('com-user-show',{
+        props:['row','name'],
+        template:"#com-user-show",
+        methods:{
+            user_link:function(user){
+                return engine_url+ '/user.edit?pk='+user.pk
+            }
+        }
+    })
+
+</script>
+
+
+
 {% endblock %}
 
 

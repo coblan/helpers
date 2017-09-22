@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 
 # from model_admin.render import TablePage,FormPage
 from .pages import TablePage,FormPage,TabGroup
-from model_admin.tabel import ModelTable,RowFilter
+from model_admin.tabel import ModelTable,RowFilter,RowSort
 from model_admin.fields import ModelFields
 from model_admin.base import model_dc,page_dc,permit_list
 from django.contrib.auth.models import Group,User
@@ -40,9 +40,15 @@ class UserGroupTable(ModelTable):
     def inn_filter(self, query):
         return query.order_by('name')
     
+    def get_heads(self):
+        heads = super(self.__class__,self).get_heads()
+        heads.append({'name':'users','label':'包含用户'})
+        return heads
+    
     def dict_row(self, inst):
         dc={
-            'permit':[to_dict(x) for x in inst.permitmodel_set.all()]
+            'permit':[to_dict(x) for x in inst.permitmodel_set.all()],
+            'users':[to_dict(u,include=['first_name','username']) for u in inst.user_set.all()]
         }
         
         # if hasattr(inst,'permitmodel'):
@@ -91,7 +97,10 @@ class GroupFormPage(FormPage):
         
         def get_row(self):
             row=super(self.__class__,self).get_row()
-            row['permit']=[x.pk for x in self.instance.permitmodel_set.all()]
+            if self.instance.pk:
+                row['permit']=[x.pk for x in self.instance.permitmodel_set.all()]
+            else:
+                row['permit']=[]
             return row
         
         def save_form(self):
@@ -115,6 +124,23 @@ class GroupAssemPage(TablePage):
     template='authuser/permit_group.html'
     
 class PermitPage(TablePage):
+    class PermitSort(RowSort):
+        names=['name']
+        chinese_words=['name']
+        # def get_query(self, query):
+            # if self.sort_str:
+                # ls=self.sort_str.replace('name','converted').split(',')
+                # ls=self.sort_str.split(',')
+                # if 'name' in ls:
+                    # query= query.extra(select={'converted': 'CONVERT(name USING gbk)'},order_by=['converted'])
+                    
+                # return query.order_by(*ls)
+            # else:
+                # return query
+            
+           
+            
+        
     class PermitTable(ModelTable):
         model=PermitModel
         exclude=['group']
@@ -122,7 +148,7 @@ class PermitPage(TablePage):
         def dict_row(self, inst):
             return {'permit' :permit_to_text( inst.permit)}
             
-        
+    PermitTable.sort=PermitSort
     tableCls=PermitTable
     template='authuser/permit_table.html'
     
@@ -170,7 +196,9 @@ class PermitFormPage(FormPage):
              
             out_permit={}
             for k,v in permit.items():
-                permit_content=dc[k]
+                permit_content=dc.get(k,None)
+                if not permit_content:
+                    continue
                 if isinstance(permit_content,dict):
                     names_permit=map(lambda x :x['name'],permit_content['fields'])
                     out_permit[k]=[x for x in v if x in names_permit]
@@ -246,7 +274,9 @@ page_dc.update({'user':UserTablePage,
 
 permit_list.append(Group)
 permit_list.append(User)
-
+permit_list.append({'name':'myauth','label':'账号管理','fields':[
+    {'name':'modify_other_pswd','label':'修改所有人密码','type':'bool'},]
+})
 
 class KVTable(ModelTable):
     model=KVModel

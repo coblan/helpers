@@ -5,7 +5,7 @@ from helpers.director.engine import BaseEngine,can_list,can_touch,fa,page
 from .models import BasicInfo,Employee,Department
 
 pc_menu={
-    'label':'组织管理','icon':fa('fa-sitemap'),'visible':can_list((BasicInfo,Employee)),
+    'label':'组织管理','icon':fa('fa-sitemap'),'visible':can_list((Employee,Department)),
         'submenu':[
                  {'label':'部门管理','url':page('organize.department'),'visible':can_touch(Department)},   
                  {'label':'员工名册','url':page('organize.employee'),'visible':can_touch(Employee)},

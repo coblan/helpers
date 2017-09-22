@@ -6,7 +6,7 @@ from __future__ import absolute_import
 from helpers.director.container import evalue_container
 from helpers.director.admin import UserFields,User,UserFormPage
 from helpers.director.engine import and_list
-from helpers.director.shortcut import FormPage,TablePage,ModelFields,ModelTable,page_dc,model_dc,permit_list,TabGroup
+from helpers.director.shortcut import FormPage,TablePage,ModelFields,ModelTable,page_dc,model_dc,permit_list,TabGroup,has_permit
 from helpers.director.db_tools import to_dict
 from django.contrib import admin
 from .models import Employee,BasicInfo,Department,WorkPermitModel
@@ -98,14 +98,15 @@ class EmployeeSelfBaseinfo(BaseinfoItem):
             emp.save()
         else:
             base=emp.baseinfo
-        #base,c = BasicInfo.objects.get_or_create(employee=emp)
-        #if c:
-            #emp.baseinfo=base
-            #emp.save()
         self.emp=emp
         self.fields=self.fieldsCls(instance= base,crt_user=request.user,nolimit=True)
         self.permit=self.fields.permit
         self.ctx=self.fields.get_context()
+        
+        # heads=self.ctx['heads']
+        # if not has_permit(request.user,"self_admin.modify_self_info"):
+            # for head in heads:
+                # head['readonly']=True
     
     def get_template(self, prefer=None):
         return 'organize/employee_self_f7_baseinfo.html'
@@ -257,4 +258,10 @@ model_dc[Employee]={'fields':EmployeeFields}
 model_dc[BasicInfo]={'fields':BasicInfoFields}
 permit_list.append(Employee)
 permit_list.append(BasicInfo)
-permit_list.append(WorkPermitModel)
+permit_list.append(Department)
+
+# permit_list.append({'name':'self_admin','label':'人员信息设置','fields':[
+    # {'name':'modify_self_info','label':'修改基本信息','type':'bool'}
+# ]
+# })
+# permit_list.append(WorkPermitModel)

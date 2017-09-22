@@ -2,7 +2,7 @@ from django.contrib.auth.models import User
 from django.contrib import auth 
 from helpers.director.db_tools import get_or_none,from_dict
 from helpers.director.forms import AuthForm,LoginForm
-
+from ..model_admin.permit import has_permit
 
 def get_globe():
     return globals()
@@ -71,7 +71,7 @@ def changepswd(user,row):
         return {'errors':{'first_pswd':['must input password']}}
         
     md_user= User.objects.get(pk=row.get('uid'))
-    if user.is_superuser or md_user.check_password(row.get('old_pswd')):
+    if user.is_superuser or has_permit(user,"myauth.modify_other_pswd")  or md_user.check_password(row.get('old_pswd')):
         md_user.set_password(row.get('first_pswd'))
         md_user.save()
         dc={'status':'success'}
