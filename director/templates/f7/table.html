@@ -7,21 +7,24 @@
 {% block extra_head %}
 <script>
     ff.pop_menu(function(){
-        var buttons = [
-            {
+        var buttons = []
+        if (can_add){
+            buttons.push({
                 text: '新建',
                 onClick: function () {
                     table.add_new();
                 }
-            },
-            {
-                text: '排序过滤',
-                onClick: function () {
+            })
+        }
+
+        buttons.push({
+            text: '排序过滤',
+            onClick: function () {
 //                    filter.open()
-                    filter_win.open()
-                }
-            },
-        ];
+                filter_win.open()
+            }
+        })
+        
         if(table.help_url){
             buttons.push({
                 text: '帮助',
@@ -40,7 +43,12 @@
 </script>
 {% endblock %}
 
+
 {% block page_content %}
+
+{% block init_data %}
+{% endblock %}
+
 
 <script type="text/javascript">
 

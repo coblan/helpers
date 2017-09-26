@@ -10,10 +10,10 @@
     back:function(callback){
         parent.back(callback)
     },
-    load:function(url,name){
+    load:function(url,name,callback){
         var name=name.replace(/\./g,'_')
         parent.show_load()
-        parent.load_iframe(url,name)
+        parent.load_iframe(url,name,callback)
     },
      load_vue_com:function(kw){
          parent.load_vue_com(kw)

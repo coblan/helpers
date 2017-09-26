@@ -23,14 +23,20 @@
         methods:{
             after_sub:function(new_row){
                 var self=this
-                ff.back(function(last_win){
-                    if(self.kw.row.pk){
-                        var row = ex.findone(last_win.table.rows,{pk:new_row.pk})
-                        ex.assign(row,new_row)
-                    }else{ // 新建
-                        last_win.location.reload()
-                    }
-                })
+                if(window.ret){
+                    window.ret(new_row)
+                    ff.back()
+                }else{
+                    ff.back(function(last_win){
+                        if(self.kw.row.pk){
+                            var row = ex.findone(last_win.table.rows,{pk:new_row.pk})
+                            ex.assign(row,new_row)
+                        }else{ // 新建
+                            last_win.location.reload()
+                        }
+                    })
+                }
+
             },
         }
     }
