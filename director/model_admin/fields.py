@@ -64,7 +64,8 @@ class ModelFields(forms.ModelForm):
         else:
             self.crt_user = crt_user
         
-        if pk is None:
+        # if pk is None:
+        if dc.get('pk'):
             pk=dc.get('pk')
         form_kw={}
         if 'instance' not in kw:
