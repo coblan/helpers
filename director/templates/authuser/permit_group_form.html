@@ -28,6 +28,17 @@
 //				can_log:can_log,
 //			},
         mixins:[field_fun],
+        methods:{
+            save:function(){
+                var self=this
+                show_upload()
+                var post_data=[{fun:'save_group_permit',row:this.kw.row}]
+                ex.post('/_ajax/director',JSON.stringify(post_data),function(resp){
+                    hide_upload(200)
+                    self.after_sub()
+                })
+            }
+        }
 
     }
 
@@ -49,7 +60,7 @@
         <li><span>编辑</span></li>
     </path-nav>
 
-    <com-form-btn :submit="submit" :del_row="del_row" :cancel="cancel"></com-form-btn>
+    <com-form-btn :submit="save" :del_row="del_row" :cancel="cancel"></com-form-btn>
     <!--<div style='overflow: hidden;'>-->
     <!--<div class="btn-group" style='float: right;'>-->
     <!--<button type="button" class="btn btn-default" @click='submit()' v-if='can_add'>Save</button>-->

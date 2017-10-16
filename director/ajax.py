@@ -10,7 +10,15 @@ import io
 def get_global():
     return globals()
 
-
+def save_group_permit(row,user):
+    field_obj = permit_save_model(user, row)
+    inst = field_obj.instance
+    exist_permitmodel = row.get('permit',[])
+    for ee  in inst.permitmodel_set.exclude(pk__in=exist_permitmodel):
+        inst.permitmodel_set.remove(ee)
+    
+    
+    
 def download_permit(items):
     pk_list=items.split('-')
     pk_list=[x for x in pk_list if x ]

@@ -1,6 +1,6 @@
 # encoding:utf-8
-
-from helpers.director.db_tools import from_dict
+from __future__ import unicode_literals
+from helpers.director.db_tools import from_dict,permit_save_model
 from .models import WorkPermitModel,Employee,EmployeeData,ConcernDepartModel
 import json
 
@@ -15,9 +15,13 @@ def get_global():
 
 def save_self_info(base_info,user):
     """
+    **这个函数没用了，现在直接调用的 save 函数**  准备删除
+    员工保存自身基本信息
     """
+    
     instance = from_dict(base_info)
-    instance.save()
+    permit_save_model(user,instance)
+    # instance.save()
     if getattr(instance,'employee',None) is None:
         emp =user.employee_set.first()
         emp.baseinfo=instance

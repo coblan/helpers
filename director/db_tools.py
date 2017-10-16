@@ -9,6 +9,7 @@ from datetime import datetime
 from django.utils.translation import ugettext as _
 from ..pyenv import u
 from .model_admin.base import model_dc
+from django.core.exceptions import ValidationError
 #from django.db.models.fields import related_descriptors
 
 def get_or_none(model, **kw):
@@ -265,50 +266,50 @@ def model_to_head(model,include=[],exclude=[]):
         out=[x for x in out if x.get('name') not in exclude]
     return out
 
-def save_model(row,scope):
-    if '_form' in row:
-        form = scope.get(row.get('_form'))
-    else:
-        model=apps.get_model(row['_class'])
-        for k,v in scope.items():
-            if isinstance(v,type) and issubclass(v,forms.ModelForm):
-                if hasattr(v,'Meta') and v.Meta.model==model:
-                    form = v
-                    break
-    return model_form_save(form,row)
+# def save_model(row,scope):
+    # if '_form' in row:
+        # form = scope.get(row.get('_form'))
+    # else:
+        # model=apps.get_model(row['_class'])
+        # for k,v in scope.items():
+            # if isinstance(v,type) and issubclass(v,forms.ModelForm):
+                # if hasattr(v,'Meta') and v.Meta.model==model:
+                    # form = v
+                    # break
+    # return model_form_save(form,row)
 
 
-def model_form_save(form,models,success=None,**kw):
-    """
-    保存 ModelForm。这个函数不如save_model智能。需要手动传入form。如果前端页面有_class信息，最好使用使用自动化的save_model函数
+# def model_form_save(form,models,success=None,**kw):
+    # """
+    # 保存 ModelForm。这个函数不如save_model智能。需要手动传入form。如果前端页面有_class信息，最好使用使用自动化的save_model函数
     
-    @form : 普通的django form
-    @models: dict: 代表是所有field的值
+    # @form : 普通的django form
+    # @models: dict: 代表是所有field的值
     
-    @success: callback(obj) : 
-    @kw : 可以传入user 等  /// 可以没有用处，等等调整它.
+    # @success: callback(obj) : 
+    # @kw : 可以传入user 等  /// 可以没有用处，等等调整它.
     
-    """
-    model_dict= models # kw.pop('models')
-    model_dict.update(kw)
-    model = form.Meta.model
-    pk=models.get('pk',None)
-    if pk:
-        inst = model.objects.get(pk=pk)
-        iform = form(model_dict,instance=inst)
-    else:
-        iform = form(model_dict)
+    # """
+    # model_dict= models # kw.pop('models')
+    # model_dict.update(kw)
+    # model = form.Meta.model
+    # pk=models.get('pk',None)
+    # if pk:
+        # inst = model.objects.get(pk=pk)
+        # iform = form(model_dict,instance=inst)
+    # else:
+        # iform = form(model_dict)
 
-    if iform.is_valid():
-        model_dict.update(iform.cleaned_data)
-        obj = from_dict(model_dict,model)
-        if success:
-            return success(obj)
-        else:
-            obj.save()
-            return {'status':'success'}
-    else:
-        return {'errors':iform.errors}
+    # if iform.is_valid():
+        # model_dict.update(iform.cleaned_data)
+        # obj = from_dict(model_dict,model)
+        # if success:
+            # return success(obj)
+        # else:
+            # obj.save()
+            # return {'status':'success'}
+    # else:
+        # return {'errors':iform.errors}
 
 
 def delete_related_query(inst):
@@ -384,6 +385,36 @@ def permit_to_dict(user,inst):
     fields_obj = fields_cls(instance=inst,crt_user=user)
     return fields_obj.get_row()
 
+def permit_save_model(user,row):
+    for k in row: # convert model instance to pk for normal validation
+        if isinstance(row[k],models.Model):
+            row[k]=row[k].pk
+            
+    model= name_to_model(row['_class'])
+    fields_cls = model_dc.get(model).get('fields')
+
+    fields_obj = fields_cls(row,crt_user=user)
+    if fields_obj.is_valid():
+        fields_obj.save_form()
+        return fields_obj
+    else:
+        raise ValidationError(fields_obj.errors)
+
+
+# for k in row: # convert model instance to pk for normal validation
+    # if isinstance(row[k],models.Model):
+        # row[k]=row[k].pk
+
+# model= name_to_model(row['_class'])
+# fields_cls = model_dc.get(model).get('fields')
+
+# kw=request.GET.dict()
+# fields_obj=fields_cls(row,crt_user=user,**kw)
+# if fields_obj.is_valid():
+    # fields_obj.save_form()
+    # return fields_obj.get_row()
+# else:
+    # raise ValidationError(fields_obj.errors)
 
 
 

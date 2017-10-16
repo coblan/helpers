@@ -1,6 +1,8 @@
 # encoding:utf-8
 from __future__ import unicode_literals
 import inspect
+import copy
+
 
 """
 >->helpers/container.rst>
@@ -48,15 +50,26 @@ def evalue_dict(dc,**kw):
 def evalue_list(ls,**kw):
     new_ls=[]
     for item in ls:
-        tmp=evalue_container(item,**kw)
-        if isinstance(tmp,dict) and tmp.has_key('visible') and not tmp.get('visible'):
-            continue
-        tmp.pop('visible',None)
+        # 如果不是 visible，就去掉该项，**连其他key对应的function都不要运行**
+        tmp = copy.deepcopy(item)
+        if isinstance(tmp,dict) and tmp.has_key('visible'):
+            visible= tmp.get('visible')
+            if inspect.isfunction(visible):
+                visible=run_func(visible,**kw)
+            if not visible:
+                continue  
+            tmp.pop('visible',None)
+        tmp=evalue_container(tmp,**kw)
         new_ls.append(tmp)
     return new_ls
 
-
-
+def run_func(func,**kw):
+    args=inspect.getargspec(func).args
+    real_kw={}
+    for k,v in kw.items():
+        if k in args:
+            real_kw[k]=v  
+    return func(**real_kw)
 
 def find_one(collection,dc):
     for doc in collection:

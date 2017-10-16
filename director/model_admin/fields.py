@@ -266,6 +266,8 @@ class ModelFields(forms.ModelForm):
         if op:
             log =LogModel(key='{model_label}.{pk}'.format(model_label=model_to_name(self.instance),pk=self.instance.pk),kind=op,user=self.crt_user,detail=detail)
             log.save()
+            
+        return self.instance
  
     
     def del_form(self):

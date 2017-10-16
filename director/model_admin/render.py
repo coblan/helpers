@@ -6,7 +6,7 @@ from django.shortcuts import render,Http404
 #from tabel import ModelTable
 #from fields import ModelFields
 from django.forms import ModelForm
-from ..db_tools import model_form_save,from_dict,delete_related_query,to_dict
+from ..db_tools import from_dict,delete_related_query,to_dict
 from ..port import jsonpost
 import json
 from django.apps import apps
