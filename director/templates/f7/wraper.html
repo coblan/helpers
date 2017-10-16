@@ -300,12 +300,20 @@
             },200)
         }
         setTimeout(function(){
-            $('.pages .page').last().find('.page-content.iframe_content iframe').attr('src',url)
-            if(callback){
-                $('.pages .page').last().find('.page-content.iframe_content iframe').on('load',function(){
+            var last_iframe= $('.pages .page').last().find('.page-content.iframe_content iframe')
+            last_iframe.attr('src',url)
+//            if(callback){
+//                last_iframe.on('load',function(){
+//                    this.contentWindow.ret=function(node){return callback(node)}
+//                })
+//            }
+            last_iframe.on('load',function(){
+                hide_load(200)
+                if(callback){
+                    // 这个是干什么的？ 忘了
                     this.contentWindow.ret=function(node){return callback(node)}
-                })
-            }
+                }
+            })
 
 //            var iframe_str = ex.template('<iframe class="iframe_wraper" src="{url}" frameborder="0" width="100%" height="100%"></iframe>',{url:url})
 //            $('.iframe-cache').html(iframe_str)
