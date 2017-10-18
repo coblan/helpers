@@ -26,7 +26,8 @@ def save(row,user,request):
     """
     """
     try:
-        field_obj = permit_save_model(user, row)
+        kw=request.GET.dict()
+        field_obj = permit_save_model(user, row,**kw)
         dc = field_obj.get_row()
         # dc = save_row(row, user,request)
         # perm=ModelPermit(instance,user)
