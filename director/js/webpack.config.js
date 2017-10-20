@@ -9,6 +9,7 @@ module.exports =
     //context:__dirname,
     entry: {
         director_f7: './f7/main.js',
+        f7_wrap:'./f7_wrap/f7_wrap.js',
         //file:'./js/vuejs/file.js'
     },
     output: {

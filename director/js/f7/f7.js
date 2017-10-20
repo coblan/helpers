@@ -1,5 +1,7 @@
 
- var ff={
+ export var ff={
+     // 子iframe页面调用该对象方法，
+
     app:parent.myApp,
     push:function(obj){
         parent.state_stack.push(obj)
@@ -8,9 +10,17 @@
         parent.state_stack.pop()
     },
     back:function(callback){
-        parent.back(callback)
+        // 在子frame中调用该函数，会向上一个frame注入“修改代码”。
+        if(callback){
+            var last_win= $(parent.mainView.activePage.fromPage.container).find('.iframe_wraper')[0].contentWindow
+            callback(last_win)
+        }
+        parent.mainView.router.back()
+
+        //parent.back(callback)
     },
     load:function(url,name,callback){
+        // 利用iframe来加载页面。@url是地址，@name framework7页面名字
         var name=name.replace(/\./g,'_')
         parent.show_load()
         parent.load_iframe(url,name,callback)
@@ -34,7 +44,7 @@
     init_page:function(str){
         ff.hide_load(200)
         var str= str || page_label
-        parent.init_page()
+        //parent.init_page()
         parent.set_title(str)
     },
     show_nav:function(){
@@ -47,12 +57,15 @@
         parent.add_nav(str)
     },
     alert:function(str){
+        // 警告框
         parent.myApp.alert(str)
     },
     confirm:function(info,callback){
+        // 弹出框，确认框
         parent.myApp.confirm(info, callback);
     },
     open_image:function(str){
+        // 弹出框，显示图片
         var myPhotoBrowser = parent.myApp.photoBrowser({
             zoom: 400,
             photos: [str]
@@ -65,6 +78,7 @@
 
 }
 
+ // 当页面不在framework7的iframe内时，自动切换为下面的函数。例如，单独开发某个页面时。
 if(!parent.myApp){
   ff={
         app:{
@@ -109,8 +123,8 @@ if(!parent.myApp){
     }
 }
 
-export var ff=ff
 
+// 下面这个类好像没有用过。初衷应该大概是：把wrap.html中的函数出去出来，放在该类中。
 export  class F7Manager{
     constructor(app,mainView){
         this.app=app;
@@ -235,128 +249,3 @@ export  class F7Manager{
         },time)
     }
 }
-
-//
-//var load_timer=null
-//
-//function show_load(timeout){
-//    var timeout= timeout || 10*1000
-//    $('.general-loader').removeClass('hide')
-//
-//    if(load_timer){
-//        clearTimeout(load_timer)
-//    }
-//    load_timer =setTimeout(function(){
-//        myApp.alert('请检查网络问题', '加载超时');
-//        hide_load()
-//    },timeout)
-//}
-//function hide_load(time){
-//    if(load_timer){
-//        clearTimeout(load_timer)
-//        load_timer=null
-//    }
-//    var time= time || 20
-//    setTimeout(function(){
-//        $('.general-loader').addClass('hide')
-//    },time)
-//}
-//
-//
-//
-//function pop_menu(callback){
-//    $('.view .navbar .navbar-inner:last-child .pop-menu').css('visibility','visible')
-//    if(callback){
-//        $('.view .navbar .navbar-inner').last().find('.pop-menu')[0].onclick=callback
-////            $('.view .navbar-custom').last().find('.pop-menu')[0].onclick=callback
-//    }
-////        $('.navbar-on-center .pop-menu').css('visibility','visible')
-////        if(callback){
-////            $('.navbar-on-center .pop-menu')[0].onclick=callback
-////        }
-//}
-//function back(callback){
-//    if(callback){
-//        var last_win= $(mainView.activePage.fromPage.container).find('.iframe_wraper')[0].contentWindow
-//        callback(last_win)
-//    }
-//    mainView.router.back()
-//}
-//function iframe_full_screen(value,second){
-//    var second= second || 300
-//    if(value){
-//        $('.page-on-center .iframe_wraper').addClass('full-screen')
-//        $('.toolbar').hide()
-//        setTimeout(function(){
-//            $('.navbar').hide()
-//        },second)
-//
-//    }else{
-//        $('.page-on-center .iframe_wraper').removeClass('full-screen')
-//        $('.page-on-center .page-content').addClass('_no_bottom')
-//        $('.navbar').show()
-//        setTimeout(function(){
-//            $('.toolbar').show()
-//            $('.page-on-center .page-content').removeClass('_no_bottom')
-//        },second)
-//    }
-//}
-//
-//function show_toolbar(){
-//    $('.page-content').removeClass('_no_bottom')
-//    $('.toolbar').show()
-//}
-//function hide_toolbar(){
-//    $('.toolbar').hide()
-//    $('.page-content').addClass('_no_bottom')
-//
-//}
-//function show_nav(){
-//    mainView.showNavbar()
-//    $('.pages .page-content').last().removeClass('_no_top')
-//}
-//function hide_nav(){
-//    mainView.hideNavbar()
-//    $('.pages .page-content').last().addClass('_no_top')
-//}
-//
-//function call_iframe(callback_name){
-//    var args=Array.prototype.slice.call(arguments)
-//    $('.page-on-center .iframe_wraper')[0].contentWindow[callback_name].apply(this,args.slice(1,args.length))
-//}
-//function add_nav(str){
-//    $('.view .navbar .navbar-inner').last().after(str)
-//}
-//function remove_nav(){
-//    $('.view .navbar .navbar-inner').last().remove()
-//}
-//
-//function init_page(){
-//    state_stack=[]
-//    add_history()
-//}
-//
-//function add_history(){
-//    for(var i=0;i<3;i++){
-//        history.pushState({count:i},'')
-//    }
-//}
-//
-//add_history()
-//
-//window.addEventListener('popstate', function (e) {
-//    var state= e.state
-//    if(state.count<1){
-//        add_history()
-//    }
-//    if(state_stack.length<=0){
-//        mainView.router.back()
-//    }else{
-//        var real_state= state_stack.pop()
-//        if(typeof(real_state) === 'function'){
-//            real_state()
-//        }
-//    }
-//    hide_load()
-//
-//}, false);
