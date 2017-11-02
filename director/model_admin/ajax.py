@@ -8,7 +8,7 @@ from __future__ import unicode_literals
 
 from permit import ModelPermit
 from base import model_dc
-from ..db_tools import name_to_model,model_to_name,to_dict
+from ..db_tools import name_to_model,model_to_name,to_dict,permit_save_model
 from fields import save_row
 from django.core.exceptions import ValidationError
 from ..models import PermitModel
@@ -26,7 +26,10 @@ def save(row,user,request):
     """
     """
     try:
-        dc = save_row(row, user,request)
+        kw=request.GET.dict()
+        field_obj = permit_save_model(user, row,**kw)
+        dc = field_obj.get_row()
+        # dc = save_row(row, user,request)
         # perm=ModelPermit(instance,user)
         # dc =to_dict(instance,include=perm.readable_fields())
         return {'status':'success','row':dc}

@@ -60,7 +60,13 @@
 						if(data.do_login.errors){
 							update_vue_obj(self.meta.errors,data.do_login.errors)
 						}else{
-							location=next;
+							if(parent){
+								// 手机版里面，iframe内容直接跳转到首页
+								parent.location= parent.root_page
+							}else{
+								location=next;
+							}
+
 						}
 						//is_valid(data.do_login,self.meta.errors,function () {
 						//	location=next;
