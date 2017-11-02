@@ -17,7 +17,7 @@ class EmployePermitTab(FormPage):
             permit,c = WorkPermitModel.objects.get_or_create(emp=self.emp,depart=depart)
             out.append({'groups':[to_dict(x) for x in permit.group.all()],
                         'depart':to_dict(permit.depart)})
-        groups=[to_dict(x) for x in Group.objects.filter(name__startswith='depart.')] 
+        groups=[to_dict(x) for x in Group.objects.all()] #.filter(name__startswith='depart.')] 
         self.ctx={
             'permits':out,
             'groups':groups

@@ -72,17 +72,21 @@ def user_permit_dc(user):
 def group_permit(group):
     for permit in group.permitmodel_set.all():
         yield permit.permit
-    # if hasattr(group,'permitmodel'):
-        # permit_dc = json.loads( group.permitmodel.permit )
-        # if isinstance(permit_dc,list):
-            # for pk in permit_dc:
-                # child_group=get_or_none(Group,pk=pk)
-                # if child_group:
-                    # for dc in group_permit(child_group):
-                        # yield dc
-        # else:
-            # yield permit_dc
-            
+
+def group_has_permit(group,name):
+    """
+    判断一个组是否具备name权限。
+    @name:package.permit_name
+    """
+    cls,perm=name.split('.')
+    for permit_dc in group_permit(group):
+        sp_permit_list= permit_dc.get(cls,[])
+        if perm in sp_permit_list:
+            return True   
+    return False
+
+
+
 
 class ModelPermit(object):
     """
@@ -209,7 +213,7 @@ class ModelPermit(object):
 
 def model_permit_info(model,user):
     """
-    返回model权限字段，
+    返回model权限字段，现在应该是用来拼凑前端页面。该页面用于编辑用户的权限。
     
     [{u'name': u'task', u'label': u'\u6240\u5c5e\u4efb\u52a1'},]
     """
@@ -234,7 +238,7 @@ def model_permit_info(model,user):
 
 def permit_to_text(permit):
     """
-    把permit字典转换为人能够读的文字表述
+    把permit字典转换为人能够读的文字表述。现在用于显示在前端页面上。
     """
     out_dc={}
     model_dc={}

@@ -114,6 +114,9 @@ class Employee(models.Model):
             self.save()
 
 class WorkPermitModel(models.Model):
+    """
+    记录同一个员工，在不同部门的不同权限
+    """
     depart=models.ForeignKey(Department,verbose_name=_('department'),blank=True,null=True)
     group=models.ManyToManyField(Group,verbose_name=_('group'),blank=True,null=True)
     emp=models.ForeignKey(Employee,verbose_name=_('employee'),blank=True,null=True)
@@ -125,6 +128,9 @@ class EmployeeData(models.Model):
     content=models.TextField(verbose_name=_('content'),blank=True)
     
 class ConcernDepartModel(models.Model):
+    """
+    关注的下级部门
+    """
     user=models.ForeignKey(User,verbose_name=_('account'),blank=True,null=True)
     departs=models.ManyToManyField(Department,verbose_name=_('department'),blank=True,null=True)
     
