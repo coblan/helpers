@@ -6,6 +6,9 @@ from helpers.director.model_admin.permit import ModelPermit,has_permit
 from helpers.director.db_tools import model_to_name
 
 class DepartModelPermit(ModelPermit):
+    """
+    相对于父类，ModelPermit增加了一个department参数。如果不传入department，会自动提取雇员从属的第一个部门。注意：这里的user必须是employee。
+    """
     def __init__(self,model,employee,department=None,nolimit=False):
         self.employee= employee
         if not department:

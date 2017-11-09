@@ -370,7 +370,7 @@ class WRselfTablePage(TablePage):
         
     def get_context(self):
         ctx=super(WRselfTablePage,self).get_context()
-        ctx=self.valid_depart.get_context(ctx)
+        ctx.update( self.valid_depart.get_context() )
         return ctx
     #def get_allowed_depart(self,employee,user):
         #return get_depart_can_submit_work(employee, user)
