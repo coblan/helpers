@@ -37,7 +37,7 @@ from django.apps import apps
 import json
 from django.db import models
 from base import model_dc,permit_list
-from django.contrib.auth.models import Group
+# from django.contrib.auth.models import Group
 
 
 def has_permit(user,name):
