@@ -5,6 +5,9 @@ import json
 from django.forms import CharField
 
 class JsonField(models.TextField):
+    """
+    默认值 default可以直接设置python对象，例如{},[]
+    """
     def  from_db_value(self,value, expression, connection,ctx):
         return json.loads(value)
     
@@ -25,5 +28,8 @@ class JsonField(models.TextField):
         return super(self.__class__, self).formfield(**defaults)
 
 class JsonFormField(CharField):
+    """
+    **可能** 是用于From类中，外部不要去调用。
+    """
     def clean(self, value):
         return value
