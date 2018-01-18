@@ -19,6 +19,11 @@
     <script src='{% static "js/exfun.js?t=" %}{{ js_stamp.exfun_js }}'></script>
     <script src='{% static "js/uis.pack.js?t=" %}{{ js_stamp.uis_pack_js }}'></script>
     <script src='{% static "js/fields.pack.js?t=" %}{{ js_stamp.fields_pack_js }}'></script>
+
+    {% for js in ex_js %}
+        <script src='{{js}}'></script>
+    {% endfor%}
+
     <title></title>
 </head>
 

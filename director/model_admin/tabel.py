@@ -335,6 +335,7 @@ class ModelTable(object):
         """
         ls = self.permited_fields()   
         heads = model_to_head(self.model,include=ls)
+        heads = [self.dict_head(head) for head in heads]
         #for head in heads:
             #if head.get('name') in self.sortable:
                 #head['sortable'] = True 
@@ -351,6 +352,9 @@ class ModelTable(object):
             dc= to_dict(inst, include=self.permited_fields(),filt_attr=self.dict_row( inst))
             out.append(dc)
         return out
+    
+    def dict_head(self,head):
+        return head
     
     def dict_row(self,inst):
         """

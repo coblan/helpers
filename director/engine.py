@@ -58,6 +58,7 @@ class BaseEngine(object):
     _pages=None
     menu={}
     url_name='baseengine'
+    brand = 'Admin System'
     prefer='pc'
     login_url=settings.LOGIN_URL
     root_page='/'

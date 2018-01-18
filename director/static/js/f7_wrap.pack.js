@@ -60,18 +60,57 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 7);
+/******/ 	return __webpack_require__(__webpack_require__.s = 8);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 7:
+/***/ 10:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _myhistory = __webpack_require__(8);
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.info_quit = info_quit;
+function cus_close() {
+    window.opener = null;
+    window.open('', '_self');
+    window.close();
+}
+
+var quit_ready = false;
+function info_quit() {
+
+    if (quit_ready) {
+        cus_close();
+    } else {
+        myApp.addNotification({
+            title: 'warning',
+            message: '再次点击退出应用程序!',
+            hold: 3000,
+            closeIcon: false,
+            additionalClass: 'bottom_msg'
+        });
+        quit_ready = true;
+
+        setTimeout(function () {
+            quit_ready = false;
+        }, 3000);
+    }
+}
+
+/***/ }),
+
+/***/ 8:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _myhistory = __webpack_require__(9);
 
 var myhistory = _interopRequireWildcard(_myhistory);
 
@@ -184,7 +223,7 @@ window.init_page = init_page;
 
 /***/ }),
 
-/***/ 8:
+/***/ 9:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -198,7 +237,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 exports.enable_custom_history = enable_custom_history;
 
-var _win = __webpack_require__(9);
+var _win = __webpack_require__(10);
 
 var win = _interopRequireWildcard(_win);
 
@@ -254,45 +293,6 @@ var HistoryManager = function () {
 
     return HistoryManager;
 }();
-
-/***/ }),
-
-/***/ 9:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.info_quit = info_quit;
-function cus_close() {
-    window.opener = null;
-    window.open('', '_self');
-    window.close();
-}
-
-var quit_ready = false;
-function info_quit() {
-
-    if (quit_ready) {
-        cus_close();
-    } else {
-        myApp.addNotification({
-            title: 'warning',
-            message: '再次点击退出应用程序!',
-            hold: 3000,
-            closeIcon: false,
-            additionalClass: 'bottom_msg'
-        });
-        quit_ready = true;
-
-        setTimeout(function () {
-            quit_ready = false;
-        }, 3000);
-    }
-}
 
 /***/ })
 
