@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 13);
+/******/ 	return __webpack_require__(__webpack_require__.s = 17);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -373,32 +373,7 @@ function updateLink(linkElement, obj) {
 
 /***/ }),
 /* 2 */,
-/* 3 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(15);
-if(typeof content === 'string') content = [[module.i, content, '']];
-// add the styles to the DOM
-var update = __webpack_require__(1)(content, {});
-if(content.locals) module.exports = content.locals;
-// Hot Module Replacement
-if(false) {
-	// When the styles change, update the <style> tags
-	if(!content.locals) {
-		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./multi_picture.scss", function() {
-			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./multi_picture.scss");
-			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-			update(newContent);
-		});
-	}
-	// When the module is disposed, remove the <style> tags
-	module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
+/* 3 */,
 /* 4 */,
 /* 5 */,
 /* 6 */,
@@ -408,113 +383,47 @@ if(false) {
 /* 10 */,
 /* 11 */,
 /* 12 */,
-/* 13 */
+/* 13 */,
+/* 14 */,
+/* 15 */,
+/* 16 */,
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _multi_picture = __webpack_require__(14);
-
-var _file_uploader = __webpack_require__(16);
-
-Vue.component('com-multi-picture', _multi_picture.com_multi_picture);
-Vue.component('com-file-uploader', _file_uploader.com_file_uploader);
-Vue.component('field-file-uploader', _file_uploader.field_file_uploader);
+__webpack_require__(18);
+__webpack_require__(20);
 
 /***/ }),
-/* 14 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
+// style-loader: Adds some css to the DOM by adding a <style> tag
 
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-__webpack_require__(3);
-
-var com_multi_picture = exports.com_multi_picture = {
-    props: ['to', 'value'],
-    data: function data() {
-        return {
-            picstr: this.value,
-            pictures: this.value ? this.value.split(';') : [],
-            crt_pic: ''
-        };
-    },
-    template: '<div class="com_multi_picture">\n\n    <input class="pic-input" type="file" @change="upload_pictures(event)" accept="image/*" multiple="multiple">\n\n     <ul class="sortable">\n        <li  v-for="pic in pictures" class="item" >\n            <img :src="pic" alt=""/>\n            <!--<span class="remove-btn" title="remove image" @click="remove(pic)">-->\n                <!--<i class="fa fa-window-close" aria-hidden="true"></i>-->\n            <!--</span>-->\n\n        </li>\n    </ul>\n\n    </div>',
-    mounted: function mounted() {
-        var self = this;
-        ex.load_js("/static/lib/sortable.min.js", function () {
-            new Sortable($(self.$el).find('.sortable')[0], {
-                onSort: function onSort( /**Event*/evt) {
-                    self.ajust_order();
-                }
-            });
-        });
-    },
-    computed: {
-        res_url: function res_url() {
-            return this.to ? this.to : "/res/upload";
-        }
-
-    },
-    watch: {
-        value: function value(new_val, old_val) {
-            if (this.picstr != new_val) {
-                this.picstr = new_val;
-                this.pictures = this.value ? this.value.split(';') : [];
-            }
-            if (!this.picstr) {
-                $(this.$el).find('.pic-input').val("");
-            }
-        }
-    },
-    methods: {
-        enter: function enter(pic) {
-            this.crt_pic = pic;
-        },
-        out: function out() {
-            this.crt_pic = '';
-        },
-        upload_pictures: function upload_pictures(event) {
-            var self = this;
-            var file_list = event.target.files;
-            if (file_list.length == 0) {
-                return;
-            }
-            var upload_url = this.res_url;
-            fl.uploads(file_list, upload_url, function (resp) {
-                if (resp) {
-                    var val = resp.join(';');
-                    self.$emit('input', val);
-                }
-            });
-        },
-        ajust_order: function ajust_order() {
-            var list = $(this.$el).find('ul.sortable img');
-            var url_list = [];
-            for (var i = 0; i < list.length; i++) {
-                var ele = list[i];
-                url_list.push($(ele).attr('src'));
-            }
-            var val = url_list.join(';');
-            this.picstr = val;
-            this.$emit('input', val);
-        }
-        //remove:function(pic){
-        //    var pics =this.picstr.split(';')
-        //    ex.remove(pics,function(item){return pic==item})
-        //    var val= pics.join(';')
-        //    this.$emit('input',val)
-        //}
-    }
-
-};
+// load the styles
+var content = __webpack_require__(19);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// add the styles to the DOM
+var update = __webpack_require__(1)(content, {});
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./tab_group.scss", function() {
+			var newContent = require("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./tab_group.scss");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
 
 /***/ }),
-/* 15 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -522,146 +431,50 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, ".com_multi_picture .item img {\n  max-width: 300px; }\n\n.com_multi_picture .sortable {\n  display: flex;\n  flex-wrap: wrap; }\n  .com_multi_picture .sortable li {\n    display: block;\n    margin: 0.5em;\n    padding: 0.3em;\n    border: 1px solid #cbcbcb;\n    background-color: #f6f6f6;\n    position: relative; }\n", ""]);
+exports.push([module.i, ".tabs {\n  align-items: center; }\n\n.tabs li:first-child {\n  margin-left: 15px; }\n\n.tabs li {\n  display: inline-block;\n  margin-left: 5px;\n  vertical-align: bottom; }\n\n.nav.tabs > li > a {\n  padding: 8px 18px 5px 18px;\n  background-color: #f6f7f8;\n  border: 1px solid #dddddd;\n  border-bottom: none;\n  position: relative;\n  margin-bottom: 1px;\n  font-weight: 400; }\n\n.nav li > a:hover {\n  text-underline: blue;\n  text-decoration: underline; }\n\n.nav li.active > a:after {\n  content: ' ';\n  position: absolute;\n  width: 100%;\n  height: 4px;\n  bottom: -4px;\n  left: 0;\n  background-color: #eee; }\n\n.nav li.active a {\n  text-decoration: none;\n  background-color: #eeeeee;\n  font-weight: 500; }\n\n.nav li.active a:hover {\n  border-bottom: none;\n  text-decoration: none;\n  color: #a2a2a2;\n  font-weight: 500;\n  background-color: #eeeeee; }\n", ""]);
 
 // exports
 
 
 /***/ }),
-/* 16 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(21);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// add the styles to the DOM
+var update = __webpack_require__(1)(content, {});
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./index.scss", function() {
+			var newContent = require("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./index.scss");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 21 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(0)();
+// imports
 
 
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-__webpack_require__(3);
+// module
+exports.push([module.i, ".head-item {\n  display: inline-block; }\n  .head-item.brand {\n    font-size: 150%;\n    width: 10em;\n    padding: 0.3em 1em; }\n\n#menu ._expand_menu {\n  margin-top: 1em; }\n  #menu ._expand_menu > ul > li {\n    margin-bottom: 0.2em; }\n", ""]);
 
-/*
-* config={
-*    accept:""
-* }
-* */
+// exports
 
-var field_file_uploader = exports.field_file_uploader = {
-    props: ['name', 'row', 'kw'],
-    template: '<div><com-file-uploader v-model="row[name]" :config="kw.config"></com-file-uploader></div>'
-};
-
-var com_file_uploader = exports.com_file_uploader = {
-    props: ['to', 'value', 'config'],
-    data: function data() {
-
-        return {
-            picstr: this.value,
-            pictures: this.value ? this.value.split(';') : [],
-            crt_pic: ''
-        };
-    },
-
-    template: '<div class="com_multi_picture">\n\n    <input v-if="cpt_config.multiple" class="pic-input" type="file" @change="upload_pictures($event)" :accept="cpt_config.accept" multiple="multiple">\n    <input v-else class="pic-input" type="file" @change="upload_pictures($event)" :accept="cpt_config.accept">\n\n     <ul class="sortable">\n        <li  v-for="pic in pictures" class="item" >\n            <img v-if="is_image(pic)" :src="pic" alt=""/>\n            <div v-else style="width: 12em;text-align: center;padding:1em 0;word-wrap: break-word;">\n                <span v-text="get_res_type(pic)" style="font-size: 300%;font-weight: 700;"></span>\n                <span v-text="get_res_basename(pic)"></span>\n            </div>\n            <!--<span class="remove-btn" title="remove image" @click="remove(pic)">-->\n                <!--<i class="fa fa-window-close" aria-hidden="true"></i>-->\n            <!--</span>-->\n\n        </li>\n    </ul>\n\n    </div>',
-    mounted: function mounted() {
-        var self = this;
-        if (this.cpt_config.sortable) {
-            ex.load_js("/static/lib/sortable.min.js", function () {
-                new Sortable($(self.$el).find('.sortable')[0], {
-                    onSort: function onSort( /**Event*/evt) {
-                        self.ajust_order();
-                    }
-                });
-            });
-        }
-    },
-    computed: {
-        res_url: function res_url() {
-            return this.to ? this.to : "/_face/upload";
-        },
-        cpt_config: function cpt_config() {
-            var def_config = {
-                accept: 'image/*',
-                multiple: true,
-                sortable: true
-            };
-            if (this.config) {
-                ex.assign(def_config, this.config);
-            }
-            return def_config;
-        }
-
-    },
-    watch: {
-        value: function value(new_val, old_val) {
-            if (this.picstr != new_val) {
-                this.picstr = new_val;
-                this.pictures = this.value ? this.value.split(';') : [];
-            }
-            if (!this.picstr) {
-                $(this.$el).find('.pic-input').val("");
-            }
-        }
-    },
-    methods: {
-        enter: function enter(pic) {
-            this.crt_pic = pic;
-        },
-        out: function out() {
-            this.crt_pic = '';
-        },
-        upload_pictures: function upload_pictures(event) {
-            var self = this;
-            var file_list = event.target.files;
-            if (file_list.length == 0) {
-                return;
-            }
-            var upload_url = this.res_url;
-            fl.uploads(file_list, upload_url, function (resp) {
-                if (resp) {
-                    var val = resp.join(';');
-                    self.$emit('input', val);
-                }
-            });
-        },
-        ajust_order: function ajust_order() {
-            var list = $(this.$el).find('ul.sortable img');
-            var url_list = [];
-            for (var i = 0; i < list.length; i++) {
-                var ele = list[i];
-                url_list.push($(ele).attr('src'));
-            }
-            var val = url_list.join(';');
-            this.picstr = val;
-            this.$emit('input', val);
-        },
-        //remove:function(pic){
-        //    var pics =this.picstr.split(';')
-        //    ex.remove(pics,function(item){return pic==item})
-        //    var val= pics.join(';')
-        //    this.$emit('input',val)
-        //}
-        is_image: function is_image(url) {
-            var type = this.get_res_type(url);
-            return ex.isin(type.toLowerCase(), ['jpg', 'png', 'webp', 'gif', 'jpeg', 'ico']);
-        },
-        get_res_type: function get_res_type(url) {
-            var mt = /[^.]+$/.exec(url);
-            if (mt.length > 0) {
-                return mt[0];
-            } else {
-                return "";
-            }
-        },
-        get_res_basename: function get_res_basename(url) {
-            var mt = /[^/]+$/.exec(url);
-            if (mt.length > 0) {
-                return mt[0];
-            } else {
-                return mt[0];
-            }
-        }
-    }
-};
 
 /***/ })
 /******/ ]);

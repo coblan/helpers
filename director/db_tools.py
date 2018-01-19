@@ -161,11 +161,23 @@ class OneProc(object):
         #return getattr(inst,name)
     #def from_dict(self,)
 
+class DateProc(object):
+    def to_dict(self,inst,name):
+        date=getattr(inst,name)
+        if date:
+            return date.isoformat()
+        else:
+            return ""
+    def from_dict(self,value,field):
+        """may need test"""
+        return value     
+
 field_map={
     models.DateTimeField:DatetimeProc,
     models.ForeignKey : ForeignProc,
     models.ManyToManyField:ManyProc,
     models.OneToOneField:OneProc,
+    models.DateField:DateProc,
 }
 
 def from_dict(dc,model=None,pre_proc=None):

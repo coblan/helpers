@@ -20,6 +20,8 @@
     <script src='{% static "js/uis.pack.js?t=" %}{{ js_stamp.uis_pack_js }}'></script>
     <script src='{% static "js/fields.pack.js?t=" %}{{ js_stamp.fields_pack_js }}'></script>
 
+    <script src='{% static "js/director.pack.js?t=" %}{{ js_stamp.director_pack_js }}'></script>
+
     {% for js in ex_js %}
         <script src='{{js}}'></script>
     {% endfor%}
@@ -89,7 +91,11 @@
 <div class="flex">
     <div class="flex-v page-wrap">
         <div id='head' class="head-bar hide" v-if="!search_args._pop">
-            <div style="float: left;margin-left: 17em;padding: 0.5em 1em 0.3em 1em;">
+            <div class="head-item brand">
+                <b>{{brand}}</b>
+            </div>
+
+            <div class="head-item" style="padding: 0.5em 1em 0.3em 1em;">
                 <i class="fa fa-calendar" aria-hidden="true"></i>
                 <span class="date"></span>
             </div>

@@ -11,7 +11,8 @@ module.exports =
         director_f7: './f7/main.js',
         f7_wrap:'./f7_wrap/f7_wrap.js',
         //file:'./js/vuejs/file.js'
-        inputs_uis:'./uis/input_uis.js'
+        inputs_uis:'./uis/input_uis.js',
+        director:'./director/director.js'
     },
     output: {
         path:path.resolve(__dirname, '../static/js'),
