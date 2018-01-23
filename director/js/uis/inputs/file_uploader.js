@@ -97,11 +97,15 @@ export var com_file_uploader = {
                 return
             }
             var upload_url=this.res_url
+
+            show_upload()
+
             fl.uploads(file_list,upload_url,function(resp){
                 if(resp){
                     var val= resp.join(';')
                     self.$emit('input',val)
                 }
+                hide_upload(300)
             })
         },
         ajust_order:function (){
