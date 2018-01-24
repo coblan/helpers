@@ -393,17 +393,198 @@ function updateLink(linkElement, obj) {
 "use strict";
 
 
-__webpack_require__(18);
+var _main = __webpack_require__(18);
+
+var inputs = _interopRequireWildcard(_main);
+
+var _main2 = __webpack_require__(27);
+
+var table = _interopRequireWildcard(_main2);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
 __webpack_require__(20);
+__webpack_require__(22);
 
 /***/ }),
 /* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
+"use strict";
+
+
+var _date = __webpack_require__(19);
+
+var date = _interopRequireWildcard(_date);
+
+var _file_uploader = __webpack_require__(24);
+
+var file_uploaer = _interopRequireWildcard(_file_uploader);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+/***/ }),
+/* 19 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+/**
+ * Created by heyulin on 2017/1/24.
+ *
+ >->front/input.rst>
+ =======
+ inputs
+ =======
+
+ date
+ ========
+ ::
+
+ <date v-model='variable'></date>  // 选择默认set=date ,即选择日期
+
+ <date v-model='variable' set='month'></date> // 选择 set=month ,即选择月份
+
+ <date v-model='variable' set='month' :config='{}'></date>  //  config 是自定义的配置对象，具体需要参加帮助文件
+
+ datetime
+ ===========
+ ::
+
+ <datetime v-model='variable' :config='{}'></datetime> // 选择日期和时间
+
+ color
+ ======
+
+ forign-edit
+ ============
+ 示例::
+
+ <forign-edit :kw="person.emp_info" name="user" page_name="user" ></forign-edit>
+
+ <-<
+ */
+
+var date_config_set = {
+    date: {
+        language: "zh-CN",
+        format: "yyyy-mm-dd",
+        autoclose: true,
+        todayHighlight: true
+
+    },
+    month: {
+        language: "zh-CN",
+        format: "yyyy-mm",
+        startView: "months",
+        minViewMode: "months",
+        autoclose: true
+
+    }
+};
+
+Vue.component('date', {
+    //template:'<input type="text" class="form-control">',
+    template: " <div class=\"input-group datetime-picker\" style=\"width: 12em;\">\n                <input type=\"text\" class=\"form-control\" readonly :placeholder=\"placeholder\"/>\n                <div class=\"input-group-addon\" >\n                    <i v-if=\"! value\" @click=\"click_input()\" class=\"fa fa-calendar\" aria-hidden=\"true\"></i>\n                    <i v-else @click=\"$emit('input','')\" class=\"fa fa-calendar-times-o\" aria-hidden=\"true\"></i>\n                </div>\n                </div>",
+    props: ['value', 'set', 'config', 'placeholder'],
+    mounted: function mounted() {
+        var self = this;
+        if (!this.set) {
+            var def_conf = date_config_set.date;
+        } else {
+            var def_conf = date_config_set[this.set];
+        }
+        if (this.config) {
+            ex.assign(def_conf, this.config);
+        }
+        self.input = $(this.$el).find('input');
+
+        ex.load_css('/static/lib/bootstrap-datepicker1.6.4.min.css');
+
+        ex.load_js('/static/lib/bootstrap-datepicker1.6.4.min.js', function () {
+            ex.load_js('/static/lib/bootstrap-datepicker1.6.4.zh-CN.min.js', function () {
+                self.input.datepicker(def_conf).on('changeDate', function (e) {
+                    self.$emit('input', self.input.val());
+                });
+                // if has init value,then init it
+                if (self.value) {
+                    self.input.datepicker('update', self.value);
+                    self.input.val(self.value);
+                }
+            });
+        });
+    },
+    methods: {
+        click_input: function click_input() {
+            this.input.focus();
+        }
+    },
+    watch: {
+        value: function value(n) {
+            this.input.datepicker('update', n);
+            this.input.val(n);
+        }
+    }
+});
+
+Vue.component('datetime', {
+    //data:function(){
+    //    return {
+    //        input_value:'',
+    //    }
+    //},
+    //template:'<input type="text" class="form-control">',
+    template: "<span class=\"datetime-picker\">\n                <span class=\"cross\" @click=\"$emit('input','')\">X</span>\n                <input type=\"text\" readonly/>\n                </span>",
+    props: ['value', 'config'],
+    mounted: function mounted() {
+        var self = this;
+        var def_conf = {
+            language: "zh-CN",
+            format: "yyyy-mm-dd hh:ii",
+            autoclose: true,
+            todayHighlight: true
+        };
+        if (self.config) {
+            ex.assign(def_conf, this.config);
+        }
+        self.input = $(this.$el).find('input');
+
+        ex.load_css('/static/lib/smalot-bootstrap-datetimepicker2.4.3.min.css');
+        ex.load_js('/static/lib/moment2.17.1.min.js');
+        ex.load_js('/static/lib/smalot-bootstrap-datetimepicker2.4.3.min.js', function () {
+
+            self.input.datetimepicker(def_conf).on('changeDate', function (e) {
+                self.$emit('input', self.input.val());
+            });
+
+            // if has init value,then init it
+            if (self.value) {
+                self.input.datepicker('update', self.value);
+                self.input.val(self.value);
+            }
+        });
+    },
+
+    watch: {
+        value: function value(n) {
+            this.input.val(n);
+            this.input.val(n);
+        }
+        //input_value:function(n){
+        //    this.$emit('input',n)
+        //}
+    }
+});
+
+/***/ }),
+/* 20 */
+/***/ (function(module, exports, __webpack_require__) {
+
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(19);
+var content = __webpack_require__(21);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -423,7 +604,7 @@ if(false) {
 }
 
 /***/ }),
-/* 19 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -437,13 +618,13 @@ exports.push([module.i, ".tabs {\n  align-items: center; }\n\n.tabs li:first-chi
 
 
 /***/ }),
-/* 20 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(21);
+var content = __webpack_require__(23);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -463,7 +644,7 @@ if(false) {
 }
 
 /***/ }),
-/* 21 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -475,6 +656,356 @@ exports.push([module.i, ".head-item {\n  display: inline-block; }\n  .head-item.
 
 // exports
 
+
+/***/ }),
+/* 24 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+__webpack_require__(25);
+
+/*
+* config={
+*    accept:""
+* }
+* */
+
+var field_file_uploader = exports.field_file_uploader = {
+    props: ['name', 'row', 'kw'],
+    template: '<div><com-file-uploader v-model="row[name]" :config="kw.config"></com-file-uploader></div>'
+};
+
+var com_file_uploader = exports.com_file_uploader = {
+    props: ['to', 'value', 'config'],
+    data: function data() {
+
+        return {
+            picstr: this.value,
+            pictures: this.value ? this.value.split(';') : [],
+            crt_pic: ''
+        };
+    },
+
+    template: '<div class="file-uploader">\n\n    <input v-if="cpt_config.multiple" class="pic-input" type="file" @change="upload_pictures($event)" :accept="cpt_config.accept" multiple="multiple">\n    <input v-else class="pic-input" type="file" @change="upload_pictures($event)" :accept="cpt_config.accept">\n\n     <ul class="sortable">\n        <li  v-for="pic in pictures" class="item" >\n            <img v-if="is_image(pic)" :src="pic" alt="" @click="cpt_config.on_click(pic)"/>\n            <div class="file-wrap" @click="cpt_config.on_click(pic)" v-else>\n                <span class="file-type" v-text="get_res_type(pic)"></span>\n                <!--<span v-text="get_res_basename(pic)"></span>-->\n            </div>\n            <!--<span class="remove-btn" title="remove image" @click="remove(pic)">-->\n                <!--<i class="fa fa-window-close" aria-hidden="true"></i>-->\n            <!--</span>-->\n\n        </li>\n    </ul>\n\n    </div>',
+    mounted: function mounted() {
+        var self = this;
+        if (this.cpt_config.sortable) {
+            ex.load_js("/static/lib/sortable.min.js", function () {
+                new Sortable($(self.$el).find('.sortable')[0], {
+                    onSort: function onSort( /**Event*/evt) {
+                        self.ajust_order();
+                    }
+                });
+            });
+        }
+    },
+    computed: {
+        res_url: function res_url() {
+            return this.to ? this.to : "/_face/upload";
+        },
+        cpt_config: function cpt_config() {
+            var def_config = {
+                accept: 'image/*',
+                multiple: true,
+                sortable: true,
+                on_click: function on_click(url) {
+                    window.open(url, '_blank' // <- This is what makes it open in a new window.
+                    );
+                }
+            };
+            if (this.config) {
+                ex.assign(def_config, this.config);
+            }
+            return def_config;
+        }
+
+    },
+    watch: {
+        value: function value(new_val, old_val) {
+            if (this.picstr != new_val) {
+                this.picstr = new_val;
+                this.pictures = this.value ? this.value.split(';') : [];
+            }
+            if (!this.picstr) {
+                $(this.$el).find('.pic-input').val("");
+            }
+        }
+    },
+    methods: {
+        enter: function enter(pic) {
+            this.crt_pic = pic;
+        },
+        out: function out() {
+            this.crt_pic = '';
+        },
+        upload_pictures: function upload_pictures(event) {
+            var self = this;
+            var file_list = event.target.files;
+            if (file_list.length == 0) {
+                return;
+            }
+            var upload_url = this.res_url;
+
+            show_upload();
+
+            fl.uploads(file_list, upload_url, function (resp) {
+                if (resp) {
+                    var val = resp.join(';');
+                    self.$emit('input', val);
+                }
+                hide_upload(300);
+            });
+        },
+        ajust_order: function ajust_order() {
+            var list = $(this.$el).find('ul.sortable img');
+            var url_list = [];
+            for (var i = 0; i < list.length; i++) {
+                var ele = list[i];
+                url_list.push($(ele).attr('src'));
+            }
+            var val = url_list.join(';');
+            this.picstr = val;
+            this.$emit('input', val);
+        },
+        //remove:function(pic){
+        //    var pics =this.picstr.split(';')
+        //    ex.remove(pics,function(item){return pic==item})
+        //    var val= pics.join(';')
+        //    this.$emit('input',val)
+        //}
+        is_image: function is_image(url) {
+            var type = this.get_res_type(url);
+            return ex.isin(type.toLowerCase(), ['jpg', 'png', 'webp', 'gif', 'jpeg', 'ico']);
+        },
+        get_res_type: function get_res_type(url) {
+            var mt = /[^.]+$/.exec(url);
+            if (mt.length > 0) {
+                return mt[0];
+            } else {
+                return "";
+            }
+        },
+        get_res_basename: function get_res_basename(url) {
+            var mt = /[^/]+$/.exec(url);
+            if (mt.length > 0) {
+                return mt[0];
+            } else {
+                return mt[0];
+            }
+        }
+    }
+};
+
+Vue.component('com-file-uploader', com_file_uploader);
+Vue.component('field-file-uploader', field_file_uploader);
+
+/***/ }),
+/* 25 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(26);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// add the styles to the DOM
+var update = __webpack_require__(1)(content, {});
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./file_uploader.scss", function() {
+			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./file_uploader.scss");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 26 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(0)();
+// imports
+
+
+// module
+exports.push([module.i, ".file-uploader .item img {\n  max-width: 300px;\n  cursor: pointer; }\n\n.file-uploader .sortable {\n  display: flex;\n  flex-wrap: wrap; }\n  .file-uploader .sortable li {\n    display: block;\n    margin: 0.5em;\n    padding: 0.3em;\n    position: relative; }\n    .file-uploader .sortable li .file-wrap {\n      width: 10em;\n      height: 12em;\n      border: 2em solid #68abff;\n      text-align: center;\n      padding: 1em 0;\n      background-color: white;\n      box-shadow: 10px 10px 5px #888888;\n      color: #68abff;\n      display: table-cell;\n      vertical-align: middle;\n      cursor: pointer; }\n      .file-uploader .sortable li .file-wrap .file-type {\n        font-size: 250%;\n        font-weight: 700;\n        text-transform: uppercase; }\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 27 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _table_fun = __webpack_require__(28);
+
+window.table_fun = _table_fun.table_fun;
+
+/***/ }),
+/* 28 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+var table_fun = exports.table_fun = {
+    data: function data() {
+        //heads[0].type='first-col'
+
+        return {
+            heads: heads,
+            rows: rows,
+            row_filters: row_filters,
+            row_sort: row_sort,
+            row_pages: row_pages,
+            search_tip: search_tip,
+            selected: [],
+            del_info: [],
+            menu: menu,
+
+            can_add: can_add,
+            can_del: can_del,
+            can_edit: can_edit,
+
+            search_args: ex.parseSearch(),
+            ex: ex,
+            help_url: help_url
+        };
+    },
+    watch: {
+        'row_sort.sort_str': function row_sortSort_str(v) {
+            this.search_args._sort = v;
+            this.search();
+        }
+    },
+    methods: {
+        goto: function goto(url) {
+            location = url;
+        },
+        search: function search() {
+            location = ex.appendSearch(this.search_args);
+            //location =ex.template('{path}{search}',{path:location.pathname,
+            //    search: encodeURI(ex.searchfy(this.search_args,'?')) })
+        },
+        //rt_win:function(row){
+        //    ln.rtWin(row)
+        //},
+        filter_minus: function filter_minus(array) {
+            // 移到 com-table 中去了
+            return ex.map(array, function (v) {
+                if (v.startsWith('-')) {
+                    return v.slice(1);
+                } else {
+                    return v;
+                }
+            });
+        },
+        is_sorted: function is_sorted(sort_str, name) {
+            // 该函数被移到 com-table 中去了。
+            var ls = sort_str.split(',');
+            var norm_ls = this.filter_minus(ls);
+            return ex.isin(name, norm_ls);
+        },
+        // 我放到 com table 去，试试。如果行，证明这里的无用了。
+        toggle: function toggle(sort_str, name) {
+            var ls = ex.split(sort_str, ',');
+            var norm_ls = this.filter_minus(ls);
+            var idx = norm_ls.indexOf(name);
+            if (idx != -1) {
+                ls[idx] = ls[idx].startsWith('-') ? name : '-' + name;
+            } else {
+                ls.push(name);
+            }
+            return ls.join(',');
+        },
+        remove_sort: function remove_sort(sort_str, name) {
+            var ls = ex.split(sort_str, ',');
+            ls = ex.filter(ls, function (v) {
+                return v != '-' + name && v != name;
+            });
+            return ls.join(',');
+        },
+        map: function map(name, row) {
+            var content = row[name];
+            //if(name==this.heads[0].name){
+            //    if(this.search_args._pop){
+            //        return '<a onclick="ln.ret(row)">'+row[name]+'</a>'
+            //    }else{
+            //        return this.form_link(name,row)
+            //    }
+            //}else
+            if (content === true) {
+                return '<img src="//res.enjoyst.com/true.png" width="15px" />';
+            } else if (content === false) {
+                return '<img src="//res.enjoyst.com/false.png" width="15px" />';
+            } else {
+                return content;
+            }
+        },
+        form_link: function form_link(name, row) {
+            return ex.template('<a href="{edit}?pk={pk}&next={next}">{value}</a>', { edit: page_name + '.edit',
+                pk: row.pk,
+                next: encodeURIComponent(location.href),
+                value: row[name]
+            });
+        },
+
+        del_item: function del_item() {
+            if (this.selected.length == 0) {
+                return;
+            }
+            var del_obj = {};
+            for (var j = 0; j < this.selected.length; j++) {
+                var pk = this.selected[j];
+                for (var i = 0; i < this.rows.length; i++) {
+                    if (this.rows[i].pk.toString() == pk) {
+                        if (!del_obj[this.rows[i]._class]) {
+                            del_obj[this.rows[i]._class] = [];
+                        }
+                        del_obj[this.rows[i]._class].push(pk);
+                    }
+                }
+            }
+            var out_str = '';
+            for (var key in del_obj) {
+                out_str += key + ':' + del_obj[key].join(':') + ',';
+            }
+            location = ex.template("{engine_url}/del_rows?rows={rows}&next={next}", { engine_url: engine_url,
+                rows: encodeURI(out_str),
+                next: encodeURIComponent(location.href) });
+        },
+        goto_page: function goto_page(page) {
+            this.search_args._page = page;
+            this.search();
+        },
+        add_new: function add_new() {
+            var url = ex.template('{engine_url}/{page}.edit/?next={next}', {
+                engine_url: engine_url,
+                page: page_name,
+                next: encodeURIComponent(location.href)
+            });
+            location = url;
+        }
+    }
+
+};
 
 /***/ })
 /******/ ]);

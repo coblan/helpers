@@ -1,4 +1,4 @@
-require('./scss/multi_picture.scss')
+require('./scss/file_uploader.scss')
 
 /*
 * config={
@@ -22,17 +22,17 @@ export var com_file_uploader = {
         }
     },
 
-    template:`<div class="com_multi_picture">
+    template:`<div class="file-uploader">
 
     <input v-if="cpt_config.multiple" class="pic-input" type="file" @change="upload_pictures($event)" :accept="cpt_config.accept" multiple="multiple">
     <input v-else class="pic-input" type="file" @change="upload_pictures($event)" :accept="cpt_config.accept">
 
      <ul class="sortable">
         <li  v-for="pic in pictures" class="item" >
-            <img v-if="is_image(pic)" :src="pic" alt=""/>
-            <div v-else style="width: 5em;text-align: center;padding:1em 0;word-wrap: break-word;">
-                <span v-text="get_res_type(pic)" style="font-size: 300%;font-weight: 700;"></span>
-                <span v-text="get_res_basename(pic)"></span>
+            <img v-if="is_image(pic)" :src="pic" alt="" @click="cpt_config.on_click(pic)"/>
+            <div class="file-wrap" @click="cpt_config.on_click(pic)" v-else>
+                <span class="file-type" v-text="get_res_type(pic)"></span>
+                <!--<span v-text="get_res_basename(pic)"></span>-->
             </div>
             <!--<span class="remove-btn" title="remove image" @click="remove(pic)">-->
                 <!--<i class="fa fa-window-close" aria-hidden="true"></i>-->
@@ -64,6 +64,12 @@ export var com_file_uploader = {
                 accept:'image/*',
                 multiple:true,
                 sortable:true,
+                on_click:function(url){
+                    window.open(
+                        url,
+                        '_blank' // <- This is what makes it open in a new window.
+                    );
+                }
             }
             if(this.config){
                 ex.assign(def_config,this.config)
@@ -147,4 +153,8 @@ export var com_file_uploader = {
         }
     }
 }
+
+
+Vue.component('com-file-uploader',com_file_uploader)
+Vue.component('field-file-uploader',field_file_uploader)
 

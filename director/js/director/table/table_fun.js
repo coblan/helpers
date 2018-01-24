@@ -1,7 +1,7 @@
 
 export var table_fun={
     data:function(){
-        heads[0].type='first-col'
+        //heads[0].type='first-col'
 
         return {
             heads:heads,

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-22 10:30+0800\n"
+"POT-Creation-Date: 2018-01-24 12:09+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -75,7 +75,7 @@ msgid "Department Table"
 msgstr "部门信息表"
 
 #: .\helpers\case\organize\models.py:88 .\helpers\case\organize\models.py:97
-#: .\helpers\case\organize\models.py:117 .\helpers\case\organize\models.py:129
+#: .\helpers\case\organize\models.py:120 .\helpers\case\organize\models.py:135
 msgid "department"
 msgstr "部门"
 
@@ -83,7 +83,7 @@ msgstr "部门"
 msgid "recive pop event"
 msgstr "接受事件"
 
-#: .\helpers\case\organize\models.py:92 .\helpers\case\organize\models.py:128
+#: .\helpers\case\organize\models.py:92 .\helpers\case\organize\models.py:134
 msgid "account"
 msgstr "账号"
 
@@ -103,14 +103,14 @@ msgstr "职位"
 msgid "Employee info Table"
 msgstr "员工工作信息表"
 
-#: .\helpers\case\organize\models.py:118
+#: .\helpers\case\organize\models.py:121
 msgid "group"
 msgstr "权限组"
 
-#: .\helpers\case\organize\models.py:119 .\helpers\case\organize\models.py:124
+#: .\helpers\case\organize\models.py:122 .\helpers\case\organize\models.py:127
 msgid "employee"
 msgstr "员工"
 
-#: .\helpers\case\organize\models.py:125
+#: .\helpers\case\organize\models.py:128
 msgid "content"
 msgstr "内容"
