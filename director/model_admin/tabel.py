@@ -168,15 +168,15 @@ class RowFilter(object):
             #out= self.sort_option(out) # 用pinyin排序 sorted(out,key=lambda x:x['label'].encode('gbk'))  
             return out   
     
-    def sort_option(self,option):
-        index=0
-        for opt in option:
-            if opt['value']:
-                break
-            else:
-                index+=1
-        option[index:]=sorted(option[index:],key=lambda x:pinyin.get_initial(x['label']))
-        return option
+    # def sort_option(self,option):
+        # index=0
+        # for opt in option:
+            # if opt['value']:
+                # break
+            # else:
+                # index+=1
+        # option[index:]=sorted(option[index:],key=lambda x:pinyin.get_initial(x['label']))
+        # return option
     
     
 class RowSort(object):

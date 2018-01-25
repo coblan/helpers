@@ -418,6 +418,12 @@ var _multi_picture = __webpack_require__(14);
 
 var _file_uploader = __webpack_require__(16);
 
+// �����ļ������������д�����ʱ�����ˡ�
+// ���� com-multi-picture ��������Ϊ color��featureʱ���õ�������������
+// com_file_uploader ������ͼƬ�ϴ������й��ܣ��Ѿ��Ƶ���director/inputsĿ¼��
+// �Լ���Ŀ���棬��ʵ���԰�uis����Ŀ¼ɾ���ˡ���ΪuisӦ���Ƶ�direcor(PC)����f7(�ֻ�)Ŀ¼��ȥ
+
+
 Vue.component('com-multi-picture', _multi_picture.com_multi_picture);
 
 /***/ }),

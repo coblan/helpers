@@ -2,6 +2,9 @@
 export var table_fun={
     data:function(){
         //heads[0].type='first-col'
+        if(table_fun_config.detail_link){
+            heads.push({name:'_detail_link',label:''})
+        }
 
         return {
             heads:heads,
@@ -77,20 +80,28 @@ export var table_fun={
             return ls.join(',')
         },
         map:function(name,row){
-            var content=row[name]
-            //if(name==this.heads[0].name){
-            //    if(this.search_args._pop){
-            //        return '<a onclick="ln.ret(row)">'+row[name]+'</a>'
-            //    }else{
-            //        return this.form_link(name,row)
-            //    }
-            //}else
-            if(content===true){
+            if(name==this.heads[0].name && !table_fun_config.detail_link){
+                return ex.template('<a href="{edit}?pk={pk}">{text}</a>',
+                    {
+                        text: row[name],
+                        edit: page_name + '.edit',
+                        pk: row.pk,
+                    })
+            }
+            if(name=='_detail_link') {
+                return ex.template('<a href="{edit}?pk={pk}">{text}</a>',
+                    {
+                        text: table_fun_config.detail_link,
+                        edit: page_name + '.edit',
+                        pk: row.pk,
+                    })
+            }
+            if(row[name]===true){
                 return '<img src="//res.enjoyst.com/true.png" width="15px" />'
-            }else if(content===false){
+            }else if(row[name]===false){
                 return '<img src="//res.enjoyst.com/false.png" width="15px" />'
             }else{
-                return content
+                return row[name]
             }
         },
         form_link:function(name,row){
