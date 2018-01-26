@@ -24,27 +24,36 @@ export var com_file_uploader = {
 
     template:`<div class="file-uploader">
 
-    <input v-if="cpt_config.multiple" class="pic-input" type="file" @change="upload_pictures($event)" :accept="cpt_config.accept" multiple="multiple">
-    <input v-else class="pic-input" type="file" @change="upload_pictures($event)" :accept="cpt_config.accept">
+    <input v-if="cfg.multiple" v-show="!cfg.com_btn" class="pic-input" type="file" @change="upload_pictures($event)" :accept="cfg.accept" multiple="multiple">
+    <input v-else v-show="!cfg.com_btn" class="pic-input" type="file" @change="upload_pictures($event)" :accept="cfg.accept">
 
-     <ul class="sortable">
-        <li  v-for="pic in pictures" class="item" >
-            <img v-if="is_image(pic)" :src="pic" alt="" @click="cpt_config.on_click(pic)"/>
-            <div class="file-wrap" @click="cpt_config.on_click(pic)" v-else>
-                <span class="file-type" v-text="get_res_type(pic)"></span>
-                <!--<span v-text="get_res_basename(pic)"></span>-->
-            </div>
-            <!--<span class="remove-btn" title="remove image" @click="remove(pic)">-->
-                <!--<i class="fa fa-window-close" aria-hidden="true"></i>-->
-            <!--</span>-->
+    <div class="wrap">
+        <ul class="sortable">
+            <li  v-for="pic in pictures" class="item" >
+                <img v-if="is_image(pic)" :src="pic" alt="" @click="cfg.on_click(pic)"/>
+                <div class="file-wrap" @click="cfg.on_click(pic)" v-else>
+                    <span class="file-type" v-text="get_res_type(pic)"></span>
+                    <!--<span v-text="get_res_basename(pic)"></span>-->
+                </div>
 
-        </li>
-    </ul>
+                <span v-show="cfg.multiple" class="remove-btn" title="remove image" @click="remove(pic)">
+                    <!--<i class="fa fa-window-close" aria-hidden="true"></i>-->
+                    <i class="fa fa-times" aria-hidden="true"></i>
+                </span>
+
+            </li>
+        </ul>
+    </div>
+
+
+     <component v-if="cfg.com_btn" :is="cfg.com_btn" @click.native="browse()"></component>
+
+
 
     </div>`,
     mounted:function(){
         var self=this
-        if(this.cpt_config.sortable){
+        if(this.cfg.sortable){
             ex.load_js("/static/lib/sortable.min.js",function(){
                 new Sortable($(self.$el).find('.sortable')[0],{
                     onSort: function (/**Event*/evt) {
@@ -59,7 +68,7 @@ export var com_file_uploader = {
         res_url:function(){
             return this.to ? this.to: "/_face/upload"
         },
-        cpt_config:function(){
+        cfg:function(){
             var def_config = {
                 accept:'image/*',
                 multiple:true,
@@ -71,9 +80,13 @@ export var com_file_uploader = {
                     );
                 }
             }
+            if(! this.config.hasOwnProperty('multiple') || this.config.multiple){
+                def_config.com_btn='file-uploader-btn-plus'
+            }
             if(this.config){
                 ex.assign(def_config,this.config)
             }
+
             return def_config
         }
 
@@ -90,6 +103,9 @@ export var com_file_uploader = {
         }
     },
     methods:{
+        browse:function(){
+          $(this.$el).find('input').click()
+        },
         enter:function(pic){
             this.crt_pic= pic
         },
@@ -108,11 +124,29 @@ export var com_file_uploader = {
 
             fl.uploads(file_list,upload_url,function(resp){
                 if(resp){
-                    var val= resp.join(';')
-                    self.$emit('input',val)
+                    if(self.cfg.multiple){
+                        self.add_value(resp)
+                    }else{
+                        self.set_value(resp)
+                    }
+
                 }
                 hide_upload(300)
             })
+        },
+        set_value:function(value){
+            //@value: [url1,url2]
+            var val= value.join(';')
+            self.$emit('input',val)
+        },
+        add_value:function(value){
+            var self=this
+            var real_add = ex.filter(value,function(item){
+                return !ex.isin(item,self.pictures)
+            })
+            var real_list= self.pictures.concat(real_add)
+            var val= real_list.join(';')
+            self.$emit('input',val)
         },
         ajust_order:function (){
             var list = $(this.$el).find('ul.sortable img')
@@ -125,12 +159,12 @@ export var com_file_uploader = {
             this.picstr=val
             this.$emit('input',val)
         },
-        //remove:function(pic){
-        //    var pics =this.picstr.split(';')
-        //    ex.remove(pics,function(item){return pic==item})
-        //    var val= pics.join(';')
-        //    this.$emit('input',val)
-        //}
+        remove:function(pic){
+            var pics =this.picstr.split(';')
+            ex.remove(pics,function(item){return pic==item})
+            var val= pics.join(';')
+            this.$emit('input',val)
+        },
         is_image:function(url){
             var type = this.get_res_type(url)
             return ex.isin(type.toLowerCase(),['jpg','png','webp','gif','jpeg','ico'])
@@ -154,6 +188,14 @@ export var com_file_uploader = {
     }
 }
 
+var plus_btn={
+    props:['accept'],
+    template:`<div class="file-uploader-btn-plus">
+        <div class="inn-btn"><span>+</span></div>
+        <div style="text-align: center">添加文件</div>
+    </div>`,
+}
+Vue.component('file-uploader-btn-plus',plus_btn)
 
 Vue.component('com-file-uploader',com_file_uploader)
 Vue.component('field-file-uploader',field_file_uploader)
