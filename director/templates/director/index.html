@@ -69,10 +69,38 @@
 //	    	}
     })
 
+
+    function get_active_menu_list(menu){
+        var ls=[]
+        ex.each(menu,function(act){
+            if(act.selected){
+                ls.push(act)
+                if(act.submenu){
+                    ex.each(act.submenu,function(sub_act){
+                        if(sub_act.active){
+                            ls.push(sub_act)
+                        }
+                    })
+                }
+            }
+        })
+        return ls
+    }
+
+
+
     $(function(){
-        if(!document.title && page_label){
-            document.title = page_label
+        // 注意哦，menu本身不具备active属性，是由menu组件来识别active属性后，再添加到menu数据上
+        act_menu_list= get_active_menu_list(menu)
+
+        if(!document.title){
+            if( page_label !=''){
+                document.title = page_label + '| {{brand}}'
+            }else if(act_menu_list.length>0){
+                document.title = act_menu_list[act_menu_list.length-1].label + '| {{brand}}'
+             }
         }
+
         var mom=moment()
         $('.head-bar .date').html( mom.format('YYYY年M月D号 第w周 星期E'))
 
@@ -101,7 +129,7 @@
             </div>
             <div class='crt_user'>
                 {% if user.is_authenticated %}
-			    <span>Welcome &nbsp
+			    <span>欢迎 &nbsp
 			    {% if user.first_name %}
 			    	{{ user.first_name}}
 			    {% else %}

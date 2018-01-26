@@ -56,7 +56,10 @@ class TablePage(object):
         return ctx
     
     def get_label(self):
-        return getattr(self,'page_label','列表项')
+        """
+        返回空，让title默认显示菜单项的名字
+        """
+        return getattr(self,'page_label','')
 
     
 class FormPage(object):
@@ -103,7 +106,7 @@ class FormPage(object):
         return self.ctx
     
     def get_label(self):
-        return '编辑表单'    
+        return  unicode(self.fields.instance)  #'编辑表单'    
 
 class DelPage(object):
     template=''
