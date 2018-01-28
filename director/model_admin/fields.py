@@ -281,6 +281,7 @@ class ModelFields(forms.ModelForm):
         # del_perm = self.instance._meta.app_label+'.del_'+self.instance._meta.model_name
         # if self.crt_user.has_perm(del_perm):
             # self.instance.delete()
+    
 
     
     
