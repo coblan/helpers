@@ -1,3 +1,6 @@
+# encoding:utf-8
+
+from __future__ import unicode_literals
 from django.contrib.auth.models import User
 from django.contrib import auth 
 from helpers.director.db_tools import get_or_none,from_dict
@@ -13,7 +16,25 @@ def logout(request):
     return {'status':'success'}
 
 
-def do_login(username,password,request):
+def do_login(username,password,auto_login,request):
+    """
+    登录函数：
+    """
+    form=LoginForm({'username':username,'password':password})
+    
+    if form.is_valid():
+        user= auth.authenticate(username=username,password=password)
+        if not auto_login:
+            request.session.set_expiry(0)
+        auth.login(request, user)
+        return {'status':'success'}
+    else:
+        return {'errors':form.errors}
+
+def do_login_old(username,password,request):
+    """
+    原来的登录函数
+    """
     form=LoginForm({'username':username,'password':password})
     if form.is_valid():
         user= auth.authenticate(username=username,password=password)
