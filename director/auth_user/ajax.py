@@ -16,7 +16,7 @@ def logout(request):
     return {'status':'success'}
 
 
-def do_login(username,password,auto_login,request):
+def do_login(username,password,request,auto_login=False):
     """
     登录函数：
     """
