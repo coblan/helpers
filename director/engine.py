@@ -58,6 +58,7 @@ class BaseEngine(object):
     _pages=None
     menu={}
     url_name='baseengine'
+    brand = 'Admin System'
     prefer='pc'
     login_url=settings.LOGIN_URL
     root_page='/'
@@ -99,6 +100,7 @@ class BaseEngine(object):
         if  request.is_ajax() and not request.GET.get('_ajax_html') : #and not getattr(page,'ajax_html',False):
             resp= HttpResponse(json.dumps(ctx),content_type="application/json")
         else:
+            ctx['brand'] = self.brand
             ctx['menu']=self.get_menu(request)   
             ctx['page_name']=name
             ctx['engine_url']=reverse(self.url_name,args=('aa',))[:-3]

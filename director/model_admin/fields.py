@@ -58,7 +58,10 @@ class ModelFields(forms.ModelForm):
         return cls(pk=pk,crt_user=request.user,**dc) 
     
     def __init__(self,dc={},pk=None,crt_user=None,nolimit=False,*args,**kw):
-        
+        """
+        @dc: 当post save时 ,dc是前端传来的row字典
+             当get 时，dc是前端传来的url参数，排除pk后的额外的字典
+        """
         if not crt_user:
             self.crt_user=dc.get('crt_user')
         else:
@@ -278,6 +281,7 @@ class ModelFields(forms.ModelForm):
         # del_perm = self.instance._meta.app_label+'.del_'+self.instance._meta.model_name
         # if self.crt_user.has_perm(del_perm):
             # self.instance.delete()
+    
 
     
     

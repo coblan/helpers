@@ -1,3 +1,5 @@
+# encoding:utf-8
+from __future__ import unicode_literals
 from django import forms
 from django.contrib.auth.models import User
 from db_tools import get_or_none
@@ -48,6 +50,10 @@ class LoginForm(forms.ModelForm):
         password=self.cleaned_data.get('password')
         user= auth.authenticate(username=username,password=password)
         if not username or not password:
+            for k,v in self.errors.items():
+                field = self.fields.get(k)
+                if field.error_messages.has_key('required'):
+                    self.errors[k]=['必须输入%s'%unicode(field.label),]
             return
         
         if user: 

@@ -83,6 +83,8 @@ def change_pswd(request):
 def trival(request):
     pass
 
+def forget(request):
+    return render(request,'authuser/forget.html')
 
 """
 >5>helpers/port.rst>

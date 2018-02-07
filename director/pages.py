@@ -11,12 +11,21 @@ from .db_tools import to_dict,sim_dict,model_to_head
 from .models import LogModel
 from ..ex import findone
 from .container import evalue_container
+from .model_admin.tabel import ModelTable
+from .model_admin.fields import ModelFields
+import inspect
 
 class TablePage(object):
     template=''
     tableCls=''
     ajax_scope={}
     def __init__(self,request):
+        if not self.tableCls:
+            for k,v in self.__class__.__dict__.items():
+                if inspect.isclass(v) and issubclass(v,ModelTable):
+                    self.tableCls = v
+                    break
+        
         self.request=request
         self.table = self.tableCls.parse_request(request)
         self.crt_user=request.user
@@ -47,18 +56,31 @@ class TablePage(object):
         return ctx
     
     def get_label(self):
-        return getattr(self,'page_label','列表项')
+        """
+        返回空，让title默认显示菜单项的名字
+        """
+        return getattr(self,'page_label','')
 
     
 class FormPage(object):
     template=''
     fieldsCls=''
     ajax_scope={}
+    ex_js=[]
+    ex_css=[]
     def __init__(self,request):
+        if not self.fieldsCls:
+            for k,v in self.__class__.__dict__.items():
+                if inspect.isclass(v) and issubclass(v,ModelFields):
+                    self.fieldsCls = v
+                    break            
+        
         self.request=request
         #self.pk=request.GET.get('pk')
         self.fields = self.fieldsCls.parse_request(request) # (pk=self.pk,crt_user=request.user,request=request)
         self.ctx=self.fields.get_context()
+        self.ctx['ex_js']=self.ex_js
+        self.ctx['ex_css'] = self.ex_css
         
     
     def get_template(self,prefer=None): 
@@ -84,7 +106,7 @@ class FormPage(object):
         return self.ctx
     
     def get_label(self):
-        return '编辑表单'    
+        return  unicode(self.fields.instance)  #'编辑表单'    
 
 class DelPage(object):
     template=''

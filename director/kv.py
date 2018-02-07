@@ -6,3 +6,6 @@ def get_value(key,default=None):
         return inst.value
     except KVModel.DoesNotExist:
         return default
+
+def set_value(key,value):
+    KVModel.objects.update_or_create(key=key,defaults={'value':value})

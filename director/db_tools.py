@@ -161,11 +161,23 @@ class OneProc(object):
         #return getattr(inst,name)
     #def from_dict(self,)
 
+class DateProc(object):
+    def to_dict(self,inst,name):
+        date=getattr(inst,name)
+        if date:
+            return date.isoformat()
+        else:
+            return ""
+    def from_dict(self,value,field):
+        """may need test"""
+        return value     
+
 field_map={
     models.DateTimeField:DatetimeProc,
     models.ForeignKey : ForeignProc,
     models.ManyToManyField:ManyProc,
     models.OneToOneField:OneProc,
+    models.DateField:DateProc,
 }
 
 def from_dict(dc,model=None,pre_proc=None):
@@ -255,6 +267,8 @@ def form_to_head(form,include=None):
         out.append(dc)
     return out
 
+ID_tr=_('ID')
+
 def model_to_head(model,include=[],exclude=[]):
     out = []
     for field in model._meta.get_fields():
@@ -262,7 +276,7 @@ def model_to_head(model,include=[],exclude=[]):
             #if isinstance(field._verbose_name, (str,unicode)):
                 #dc = {'name':field.name,'label':_(field._verbose_name),}
             #else:
-            dc= {'name':field.name,'label':u(field.verbose_name)}
+            dc= {'name':field.name,'label':_(field.verbose_name)}
             out.append(dc)
     if include:
         out=[x for x in out if x.get('name') in include]
