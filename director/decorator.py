@@ -33,6 +33,8 @@ def warn_free(fun):
                 'status':'fail',
                 'msg':unicode(e)
             }
-        
-        return HttpResponse(json.dumps(dc),content_type="application/json")
+        if isinstance(dc,HttpResponse):
+            return dc
+        else:
+            return HttpResponse(json.dumps(dc),content_type="application/json")
     return _fun
