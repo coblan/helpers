@@ -18,7 +18,7 @@ export var urlparse={
     },
     searchfy:function (obj,pre) {
         var outstr=pre||''
-        for(x in obj){
+        for(var x in obj){
             var value=obj[x]
             if(value===true){value='1'}
             if(value===false){value='0'}
