@@ -80,10 +80,10 @@ export var com_file_uploader = {
                     );
                 }
             }
-            if(! this.config.hasOwnProperty('multiple') || this.config.multiple){
-                def_config.com_btn='file-uploader-btn-plus'
-            }
             if(this.config){
+                if(! this.config.hasOwnProperty('multiple') || this.config.multiple){
+                    def_config.com_btn='file-uploader-btn-plus'
+                }
                 ex.assign(def_config,this.config)
             }
 
@@ -137,7 +137,7 @@ export var com_file_uploader = {
         set_value:function(value){
             //@value: [url1,url2]
             var val= value.join(';')
-            self.$emit('input',val)
+            this.$emit('input',val)
         },
         add_value:function(value){
             var self=this

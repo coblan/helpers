@@ -1,7 +1,7 @@
-// ����ļ�����������д�����ʱ�����ˡ�
-// ���� com-multi-picture ��������Ϊ color��featureʱ���õ�����������
-// com_file_uploader ������ͼƬ�ϴ������й��ܣ��Ѿ��Ƶ���director/inputsĿ¼��
-// �Լ���Ŀ���棬��ʵ���԰�uis���Ŀ¼ɾ���ˡ���ΪuisӦ���Ƶ�direcor(PC)����f7(�ֻ�)Ŀ¼��ȥ
+// 这个文件夹里面的所有代码暂时不用了。
+// 留下 com-multi-picture 好像是因为 color的feature时，用到了这个组件。
+// com_file_uploader 包含了图片上传的所有功能，已经移到了director/inputs目录下
+// 自己项目里面，其实可以把uis这个目录删除了。因为uis应该移到direcor(PC)或者f7(手机)目录下去
 
 
 
