@@ -144,7 +144,7 @@ class ManyProc(object):
 
 class OneProc(object):
     def to_dict(self,inst,name):
-        foreign=getattr(inst,name)
+        foreign=getattr(inst,name,None)
         if foreign:
             return foreign.pk 
     def from_dict(self,value,field):

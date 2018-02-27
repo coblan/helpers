@@ -10,10 +10,12 @@ from .model_admin.base import model_dc,permit_list,page_dc
 def regist_director(name='',src_model=None,prefix_list=[]):
     """
     name和prefix_list二选一，有name时优先用name
-    @name
+    @name:一般是 模块名.表明
     @prefix_list : 名字列表
     
     之所以用prefix_list，因为有时需要生成pc和移动两个 model manage 页面，这是就需要传入pc和移动的 prefix list，会生成两个
+    
+    return：返回一个字典，page_dc.update(dc)，就注册了。
     """
     class ThisForm(ModelFields):
         class Meta:
