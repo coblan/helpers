@@ -53,7 +53,7 @@ import * as ck from './ckeditor.js'
 import * as multi from './multi_sel.js'
 import * as inputs from './inputs.js'
 import * as ln from './link.js'
-
+import * as form_btn from './com_form_btn.js'
 //import * as fb from './field_base.js'
 //import * as js from './adapt.js'
 import  {field_base} from  './fields_base.js'
@@ -115,27 +115,7 @@ export function merge(mains,subs) {
 
 
 
-Vue.component('com-form-btn',{
-    data:function(){
-        return {
-            can_add:can_add,
-            can_del:can_del,
-        }
-    },
-    props:['submit','del_row','cancel'],
-    computed:{
-        del_link:function(){
-            return this.del_row()
-        }
-    },
-    template:`<div style='overflow: hidden;'>
-		<div class="btn-group" style='float: right;'>
-			<button type="button" class="btn btn-default" @click='submit()' v-if='can_add'>保存</button>
-			<a type="button" class="btn btn-default" v-if='can_del &&del_link' :href='del_link'>删除</a>
-			<button type="button" class="btn btn-default" @click='cancel()' >取消</button>
-		</div>
-	</div>`
-})
+
 
 var fieldset_fun={
     data:function(){

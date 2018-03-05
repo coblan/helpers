@@ -27,6 +27,7 @@ form_logic={
 //				can_del:can_del,
 //				can_log:can_log,
 //			},
+
 	mixins:[field_fun],
 
 }
@@ -45,11 +46,13 @@ form_logic={
 	<div v-if="can_log" style='float: right;padding: 5px 20px;'>
 		<a :href="log_url()">日志</a>
 	</div>
-	<path-nav :menu='menu'>
-		<li><span>编辑</span></li>
-	</path-nav>
 
-	<com-form-btn :submit="submit" :del_row="del_row" :cancel="cancel"></com-form-btn>
+	<ol v-if="page_label" class="breadcrumb">
+		<b v-text="page_label"></b>
+	</ol>
+	<path-nav v-else :menu='menu'></path-nav>
+
+	<com-form-btn :form_bus="this"></com-form-btn>
 	<!--<div style='overflow: hidden;'>-->
 		<!--<div class="btn-group" style='float: right;'>-->
 			<!--<button type="button" class="btn btn-default" @click='submit()' v-if='can_add'>Save</button>-->

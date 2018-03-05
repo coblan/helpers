@@ -16,6 +16,7 @@ export var field_fun={
 
             page_label:page_label,
             help_url:help_url,
+
         }
     },
     methods:{
@@ -23,7 +24,6 @@ export var field_fun={
             location=url
         },
         after_sub:function(new_row){
-            //ff.back()
             if(search_args.next){
                 location=decodeURIComponent(search_args.next)
             }else{
@@ -32,6 +32,14 @@ export var field_fun={
         },
         before_sub:function(){
 
+        },
+        // 退出改页面
+        goto_next:function(){
+            if(search_args.next){
+                location=decodeURIComponent(search_args.next)
+            }else{
+                location=document.referrer
+            }
         },
         submit:function () {
             this.before_sub()
@@ -49,6 +57,25 @@ export var field_fun={
                     self.kw.errors = resp.save.errors
                 }else{
                     self.after_sub(resp.save.row)
+                }
+            })
+        },
+        submit_return:function(){
+            this.before_sub()
+            var self =this;
+            if(window.bus){
+                window.bus.$emit('sync_data')
+            }
+            show_upload()
+            var search =ex.parseSearch()
+            var post_data=[{fun:'save',row:this.kw.row}]
+            var url = ex.appendSearch('/_ajax',search_args)
+            ex.post(url,JSON.stringify(post_data),function (resp) {
+                hide_upload(500)
+                if( resp.save.errors){
+                    self.kw.errors = resp.save.errors
+                }else{
+                    self.goto_next(resp.save.row)
                 }
             })
         },

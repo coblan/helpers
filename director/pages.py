@@ -187,6 +187,7 @@ class LogPage(object):
 class TabGroup(object):
     tabs=[]
     template=''
+    page_label=''
     def __init__(self, request):
         self.request=request
         tab_name=request.GET.get('_tab')
@@ -227,10 +228,14 @@ class TabGroup(object):
         return self.ctx
     
     def get_label(self):
+        
         if hasattr(self.tab_page,'get_label'):
             return self.tab_page.get_label()
+        elif self.page_label:
+            return self.page_label
         else:
             return ''
+
     
     
         

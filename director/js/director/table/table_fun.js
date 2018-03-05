@@ -1,7 +1,8 @@
 
+
 export var table_fun={
     data:function(){
-        //heads[0].type='first-col'
+
         if(table_fun_config.detail_link){
             heads.push({name:'_detail_link',label:''})
         }
@@ -24,6 +25,7 @@ export var table_fun={
             search_args:ex.parseSearch(),
             ex:ex,
             help_url:help_url,
+            page_label:page_label,
         }
     },
     watch:{
@@ -81,19 +83,21 @@ export var table_fun={
         },
         map:function(name,row){
             if(name==this.heads[0].name && !table_fun_config.detail_link){
-                return ex.template('<a href="{edit}?pk={pk}">{text}</a>',
+                return ex.template('<a href="{edit}?pk={pk}&next={next}">{text}</a>',
                     {
                         text: row[name],
                         edit: page_name + '.edit',
                         pk: row.pk,
+                        next:encodeURIComponent(ex.appendSearch(location.pathname,search_args))
                     })
             }
             if(name=='_detail_link') {
-                return ex.template('<a href="{edit}?pk={pk}">{text}</a>',
+                return ex.template('<a href="{edit}?pk={pk}&next={next}">{text}</a>',
                     {
                         text: table_fun_config.detail_link,
                         edit: page_name + '.edit',
                         pk: row.pk,
+                        next:encodeURIComponent(ex.appendSearch(location.pathname,search_args))
                     })
             }
             if(row[name]===true){
@@ -145,10 +149,12 @@ export var table_fun={
             var  url = ex.template('{engine_url}/{page}.edit/?next={next}',{
                 engine_url:engine_url,
                 page:page_name,
-                next:encodeURIComponent(location.href)
+                next:encodeURIComponent(ex.appendSearch(location.pathname,search_args))
             })
             location = url
         },
     },
 
 }
+
+window.table_fun = table_fun
