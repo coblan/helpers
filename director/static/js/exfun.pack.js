@@ -60,26 +60,26 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 62);
+/******/ 	return __webpack_require__(__webpack_require__.s = 72);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 62:
+/***/ 72:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _old = __webpack_require__(63);
+var _old = __webpack_require__(73);
 
-var _network = __webpack_require__(64);
+var _network = __webpack_require__(74);
 
-var _urlparse = __webpack_require__(65);
+var _urlparse = __webpack_require__(75);
 
-var _collection = __webpack_require__(66);
+var _collection = __webpack_require__(76);
 
-var _patch = __webpack_require__(67);
+var _patch = __webpack_require__(77);
 
 var path = _interopRequireWildcard(_patch);
 
@@ -102,7 +102,7 @@ window.ex = ex;
 
 /***/ }),
 
-/***/ 63:
+/***/ 73:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -332,47 +332,47 @@ var old = exports.old = {
         return out_list;
     }
 
-    //function parseSearch(queryString) {
-    //    var queryString = queryString || location.search
-    //    if(queryString.startsWith('?')){
-    //        var queryString=queryString.substring(1)
-    //    }
-    //    var params = {}
-    //    // Split into key/value pairs
-    //    var queries = queryString.split("&");
-    //    // Convert the array of strings into an object
-    //    for (var i = 0; i < queries.length; i++ ) {
-    //        var mt = /([^=]+?)=(.+)/.exec(queries[i])
-    //        params[mt[1]] = mt[2];
-    //    }
-    //    return params;
-    //}
-    //function searchfy(obj,pre){
-    //    var outstr=pre||''
-    //    for(x in obj){
-    //        if(obj[x]){
-    //            outstr+=x.toString()+'='+ obj[x].toString()+'&';
-    //        }
-    //
-    //    }
-    //    if(outstr.endsWith('&')){
-    //        return outstr.slice(0,-1)
-    //    }else{
-    //        return outstr
-    //    }
-    //
-    //}
-    //function update(dst_obj,src_obj) {
-    //    for(x in src_obj){
-    //        dst_obj[x]=src_obj[x]
-    //    }
-    //}
-
 };
+
+//function parseSearch(queryString) {
+//    var queryString = queryString || location.search
+//    if(queryString.startsWith('?')){
+//        var queryString=queryString.substring(1)
+//    }
+//    var params = {}
+//    // Split into key/value pairs
+//    var queries = queryString.split("&");
+//    // Convert the array of strings into an object
+//    for (var i = 0; i < queries.length; i++ ) {
+//        var mt = /([^=]+?)=(.+)/.exec(queries[i])
+//        params[mt[1]] = mt[2];
+//    }
+//    return params;
+//}
+//function searchfy(obj,pre){
+//    var outstr=pre||''
+//    for(x in obj){
+//        if(obj[x]){
+//            outstr+=x.toString()+'='+ obj[x].toString()+'&';
+//        }
+//
+//    }
+//    if(outstr.endsWith('&')){
+//        return outstr.slice(0,-1)
+//    }else{
+//        return outstr
+//    }
+//
+//}
+//function update(dst_obj,src_obj) {
+//    for(x in src_obj){
+//        dst_obj[x]=src_obj[x]
+//    }
+//}
 
 /***/ }),
 
-/***/ 64:
+/***/ 74:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -457,7 +457,7 @@ var network = exports.network = {
 
 /***/ }),
 
-/***/ 65:
+/***/ 75:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -560,7 +560,7 @@ function para_encode(para_str) {
 
 /***/ }),
 
-/***/ 66:
+/***/ 76:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -761,7 +761,7 @@ var collection = exports.collection = {
 
 /***/ }),
 
-/***/ 67:
+/***/ 77:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

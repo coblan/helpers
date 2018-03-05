@@ -8,11 +8,11 @@ require('./scss/file_uploader.scss')
 
 export var field_file_uploader={
     props:['name','row','kw'],
-    template:`<div><com-file-uploader v-model="row[name]" :config="kw.config"></com-file-uploader></div>`
+    template:`<div><com-file-uploader v-model="row[name]" :config="kw.config" :readonly="kw.readonly"></com-file-uploader></div>`
 }
 
 export var com_file_uploader = {
-    props:['to','value','config'],
+    props:['to','value','readonly','config'],
     data:function(){
 
         return {
@@ -23,9 +23,11 @@ export var com_file_uploader = {
     },
 
     template:`<div class="file-uploader">
+    <div v-if="!readonly">
+        <input v-if="cfg.multiple" v-show="!cfg.com_btn" class="pic-input" type="file" @change="upload_pictures($event)" :accept="cfg.accept" multiple="multiple">
+        <input v-else v-show="!cfg.com_btn" class="pic-input" type="file" @change="upload_pictures($event)" :accept="cfg.accept">
+    </div>
 
-    <input v-if="cfg.multiple" v-show="!cfg.com_btn" class="pic-input" type="file" @change="upload_pictures($event)" :accept="cfg.accept" multiple="multiple">
-    <input v-else v-show="!cfg.com_btn" class="pic-input" type="file" @change="upload_pictures($event)" :accept="cfg.accept">
 
     <div class="wrap">
         <ul class="sortable">
@@ -36,7 +38,7 @@ export var com_file_uploader = {
                     <!--<span v-text="get_res_basename(pic)"></span>-->
                 </div>
 
-                <span v-show="cfg.multiple" class="remove-btn" title="remove image" @click="remove(pic)">
+                <span v-if="! readonly" v-show="cfg.multiple" class="remove-btn" title="remove image" @click="remove(pic)">
                     <!--<i class="fa fa-window-close" aria-hidden="true"></i>-->
                     <i class="fa fa-times" aria-hidden="true"></i>
                 </span>
@@ -46,7 +48,7 @@ export var com_file_uploader = {
     </div>
 
 
-     <component v-if="cfg.com_btn" :is="cfg.com_btn" @click.native="browse()"></component>
+     <component v-if="cfg.com_btn && ! readonly" :is="cfg.com_btn" @click.native="browse()"></component>
 
 
 
