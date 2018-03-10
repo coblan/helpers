@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 68);
+/******/ 	return __webpack_require__(__webpack_require__.s = 78);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -82,7 +82,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 exports.enable_custom_history = enable_custom_history;
 
-var _win = __webpack_require__(39);
+var _win = __webpack_require__(45);
 
 var win = _interopRequireWildcard(_win);
 
@@ -141,7 +141,7 @@ var HistoryManager = function () {
 
 /***/ }),
 
-/***/ 39:
+/***/ 45:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -180,7 +180,7 @@ function info_quit() {
 
 /***/ }),
 
-/***/ 68:
+/***/ 78:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
