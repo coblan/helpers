@@ -6,6 +6,7 @@ require('./scss/flex.scss')
 require('./scss/button.scss')
 require('./scss/adapt.scss')
 require('./scss/aliagn.scss')
+require('./scss/text.scss')
 
 
 
