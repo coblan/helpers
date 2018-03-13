@@ -22,7 +22,7 @@ Vue.component('com-form-btn',{
     <div style="float: right;">
         <div class="btn-group">
             <button type="button" class="btn btn-success" @click='form_bus.submit_return()' v-if='can_add'>保存并返回</button>
-            <button type="button" class="btn btn-default" @click='submit()' v-if='can_add'>保存</button>
+            <button type="button" class="btn btn-default" @click='form_bus.submit()' v-if='can_add'>保存</button>
             <button type="button" class="btn btn-default" @click='form_bus.goto_next()' >取消</button>
         </div>
         <!--<div class="btn-group" >-->
