@@ -9,7 +9,7 @@ from django.core.exceptions import PermissionDenied
 from permit import ModelPermit
 from ..db_tools import model_to_name,to_dict,model_to_head,model_to_name
 from django.db import models
-import pinyin
+#import pinyin
 #from forms import MobilePageForm
 
 
