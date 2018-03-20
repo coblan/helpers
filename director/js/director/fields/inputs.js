@@ -60,8 +60,9 @@ Vue.component('date',{
     //template:'<input type="text" class="form-control">',
     template:` <div class="input-group datetime-picker" style="width: 12em;">
                 <input type="text" class="form-control" readonly :placeholder="placeholder"/>
-                <div class="input-group-addon" @click="$emit('input','')">
-                    <i class="fa fa-calendar-times-o" aria-hidden="true"></i>
+                <div class="input-group-addon" >
+                    <i v-if="value" @click="$emit('input','')" class="fa fa-calendar-times-o" aria-hidden="true"></i>
+                    <i v-else @click="click_input()" class="fa fa-calendar" aria-hidden="true"></i>
                 </div>
                 </div>`,
     props:['value','set','config','placeholder'],
