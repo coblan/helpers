@@ -405,14 +405,14 @@ var _main3 = __webpack_require__(37);
 
 var uis = _interopRequireWildcard(_main3);
 
-var _main4 = __webpack_require__(51);
+var _main4 = __webpack_require__(53);
 
 var fields = _interopRequireWildcard(_main4);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
-__webpack_require__(68);
 __webpack_require__(70);
+__webpack_require__(72);
 
 /***/ }),
 /* 18 */
@@ -1517,6 +1517,7 @@ __webpack_require__(43);
 __webpack_require__(45);
 __webpack_require__(47);
 __webpack_require__(49);
+__webpack_require__(51);
 
 /***/ }),
 /* 38 */
@@ -1892,6 +1893,46 @@ exports.push([module.i, "@charset \"UTF-8\";\n.center-vh {\n  position: absolute
 /* 51 */
 /***/ (function(module, exports, __webpack_require__) {
 
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(52);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// add the styles to the DOM
+var update = __webpack_require__(1)(content, {});
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./text.scss", function() {
+			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./text.scss");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 52 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(0)();
+// imports
+
+
+// module
+exports.push([module.i, ".ellipsis {\n  white-space: nowrap;\n  text-overflow: ellipsis;\n  /* for internet explorer */\n  overflow: hidden;\n  width: 190px;\n  display: block; }\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 53 */
+/***/ (function(module, exports, __webpack_require__) {
+
 "use strict";
 
 
@@ -1900,37 +1941,37 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.merge = merge;
 
-var _ajax_fun = __webpack_require__(52);
+var _ajax_fun = __webpack_require__(54);
 
-var _file = __webpack_require__(53);
+var _file = __webpack_require__(55);
 
 var f = _interopRequireWildcard(_file);
 
-var _ckeditor = __webpack_require__(56);
+var _ckeditor = __webpack_require__(58);
 
 var ck = _interopRequireWildcard(_ckeditor);
 
-var _multi_sel = __webpack_require__(57);
+var _multi_sel = __webpack_require__(59);
 
 var multi = _interopRequireWildcard(_multi_sel);
 
-var _inputs = __webpack_require__(58);
+var _inputs = __webpack_require__(60);
 
 var inputs = _interopRequireWildcard(_inputs);
 
-var _link = __webpack_require__(59);
+var _link = __webpack_require__(61);
 
 var ln = _interopRequireWildcard(_link);
 
-var _com_form_btn = __webpack_require__(62);
+var _com_form_btn = __webpack_require__(64);
 
 var form_btn = _interopRequireWildcard(_com_form_btn);
 
-var _fields_base = __webpack_require__(63);
+var _fields_base = __webpack_require__(65);
 
-var _field_fun = __webpack_require__(64);
+var _field_fun = __webpack_require__(66);
 
-var _order = __webpack_require__(65);
+var _order = __webpack_require__(67);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -1982,7 +2023,7 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 
 //import {use_color} from '../dosome/color.js'
 //import {load_js,load_css} from '../dosome/pkg.js'
-__webpack_require__(66);
+__webpack_require__(68);
 //import * as fb from './field_base.js'
 //import * as js from './adapt.js'
 
@@ -2114,7 +2155,7 @@ window.merge = merge;
 window.order_by_key = _order.order_by_key;
 
 /***/ }),
-/* 52 */
+/* 54 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2234,7 +2275,7 @@ if (!window.__uploading_mark) {
 }
 
 /***/ }),
-/* 53 */
+/* 55 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2338,7 +2379,7 @@ img-uploador
 <<<<
 */
 
-__webpack_require__(54);
+__webpack_require__(56);
 
 var fl = {
     read: function read(file, callback) {
@@ -2722,13 +2763,13 @@ Vue.component('logo-input', {
 window.fl = fl;
 
 /***/ }),
-/* 54 */
+/* 56 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(55);
+var content = __webpack_require__(57);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -2748,7 +2789,7 @@ if(false) {
 }
 
 /***/ }),
-/* 55 */
+/* 57 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -2762,7 +2803,7 @@ exports.push([module.i, ".img-uploader input {\n  display: none; }\n\n.img-uploa
 
 
 /***/ }),
-/* 56 */
+/* 58 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2924,7 +2965,7 @@ var edit_level = {
 };
 
 /***/ }),
-/* 57 */
+/* 59 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3011,7 +3052,7 @@ Vue.component('tow-col-sel', {
 });
 
 /***/ }),
-/* 58 */
+/* 60 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3292,7 +3333,7 @@ var check_box = {
 Vue.component('com-check-box', check_box);
 
 /***/ }),
-/* 59 */
+/* 61 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3370,7 +3411,7 @@ popUrlListen:
 <-<
  */
 
-__webpack_require__(60);
+__webpack_require__(62);
 
 var ln = {
     history_handle: function history_handle(obj) {
@@ -3592,13 +3633,13 @@ var ln = {
 window.ln = ln;
 
 /***/ }),
-/* 60 */
+/* 62 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(61);
+var content = __webpack_require__(63);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -3618,7 +3659,7 @@ if(false) {
 }
 
 /***/ }),
-/* 61 */
+/* 63 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -3632,7 +3673,7 @@ exports.push([module.i, "@charset \"UTF-8\";\n#_load_frame_wrap {\n  position: f
 
 
 /***/ }),
-/* 62 */
+/* 64 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3658,11 +3699,11 @@ Vue.component('com-form-btn', {
     //		<button type="button" class="btn btn-default" @click='cancel()' >取消</button>
     //	</div>
     //</div>`
-    template: '<div style="min-height: 1.5em;">\n    <div style="float: right;">\n        <div class="btn-group">\n            <button type="button" class="btn btn-success" @click=\'form_bus.submit_return()\' v-if=\'can_add\'>\u4FDD\u5B58\u5E76\u8FD4\u56DE</button>\n            <button type="button" class="btn btn-default" @click=\'submit()\' v-if=\'can_add\'>\u4FDD\u5B58</button>\n            <button type="button" class="btn btn-default" @click=\'form_bus.goto_next()\' >\u53D6\u6D88</button>\n        </div>\n        <!--<div class="btn-group" >-->\n          <!--<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">-->\n                <!--\u5176\u4ED6 <span class="caret"></span>-->\n              <!--</button>-->\n              <!--<ul class="dropdown-menu">-->\n                <!--&lt;!&ndash;<li><a href="#" @click=\'form_bus.submit()\' v-if=\'can_add\'>\u4FDD\u5B58</a></li>&ndash;&gt;-->\n                <!--<li><a v-if=\'can_del &&del_link\' :href=\'form_bus.del_row()\'>\u5220\u9664</a></li>-->\n\n                <!--&lt;!&ndash;<li role="separator" class="divider"></li>&ndash;&gt;-->\n              <!--</ul>-->\n        <!--</div>-->\n    </div>\n\n</div>'
+    template: '<div style="min-height: 1.5em;">\n    <div style="float: right;">\n        <div class="btn-group">\n            <button type="button" class="btn btn-success" @click=\'form_bus.submit_return()\' v-if=\'can_add\'>\u4FDD\u5B58\u5E76\u8FD4\u56DE</button>\n            <button type="button" class="btn btn-default" @click=\'form_bus.submit()\' v-if=\'can_add\'>\u4FDD\u5B58</button>\n            <button type="button" class="btn btn-default" @click=\'form_bus.goto_next()\' >\u53D6\u6D88</button>\n        </div>\n        <!--<div class="btn-group" >-->\n          <!--<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">-->\n                <!--\u5176\u4ED6 <span class="caret"></span>-->\n              <!--</button>-->\n              <!--<ul class="dropdown-menu">-->\n                <!--&lt;!&ndash;<li><a href="#" @click=\'form_bus.submit()\' v-if=\'can_add\'>\u4FDD\u5B58</a></li>&ndash;&gt;-->\n                <!--<li><a v-if=\'can_del &&del_link\' :href=\'form_bus.del_row()\'>\u5220\u9664</a></li>-->\n\n                <!--&lt;!&ndash;<li role="separator" class="divider"></li>&ndash;&gt;-->\n              <!--</ul>-->\n        <!--</div>-->\n    </div>\n\n</div>'
 });
 
 /***/ }),
-/* 63 */
+/* 65 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3935,7 +3976,7 @@ var field_base = exports.field_base = {
 };
 
 /***/ }),
-/* 64 */
+/* 66 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4063,7 +4104,7 @@ var field_fun = exports.field_fun = {
 window.field_fun = field_fun;
 
 /***/ }),
-/* 65 */
+/* 67 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4101,13 +4142,13 @@ function order_by_key(array, key) {
 }
 
 /***/ }),
-/* 66 */
+/* 68 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(67);
+var content = __webpack_require__(69);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -4127,46 +4168,6 @@ if(false) {
 }
 
 /***/ }),
-/* 67 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(0)();
-// imports
-
-
-// module
-exports.push([module.i, ".error {\n  color: red; }\n\n.field-panel {\n  background-color: #F5F5F5;\n  margin: 20px;\n  padding: 20px 30px;\n  position: relative;\n  border: 1px solid #D9D9D9; }\n  .field-panel:after {\n    content: '';\n    display: block;\n    position: absolute;\n    top: 0px;\n    left: 0px;\n    bottom: 0px;\n    width: 180px;\n    border-radius: 6px;\n    background-color: #fff;\n    z-index: 0; }\n  .field-panel .form-group.field {\n    display: flex;\n    align-items: flex-start; }\n    .field-panel .form-group.field .field_input {\n      flex-grow: 0;\n      padding: 5px 20px; }\n      .field-panel .form-group.field .field_input .ckeditor {\n        padding: 20px; }\n    .field-panel .form-group.field:first-child .control-label {\n      border-top: 5px solid #FFF; }\n    .field-panel .form-group.field .control-label {\n      width: 150px;\n      text-align: right;\n      padding: 5px 30px;\n      z-index: 100;\n      flex-shrink: 0;\n      border-top: 1px solid #EEE; }\n  .field-panel .form-group.field .field_input ._tow-col-sel {\n    /*width:750px;*/ }\n  .field-panel .form-group.field .help_text {\n    padding: 10px;\n    color: #999;\n    font-style: italic;\n    font-size: 0.9em; }\n  .field-panel .field.error .error {\n    display: inline-block;\n    vertical-align: top;\n    padding-top: 8px; }\n\n._tow-col-sel select {\n  min-height: 7em; }\n\nimg.img-uploador {\n  max-width: 100px;\n  max-height: 100px; }\n\n.req_star {\n  color: red; }\n", ""]);
-
-// exports
-
-
-/***/ }),
-/* 68 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(69);
-if(typeof content === 'string') content = [[module.i, content, '']];
-// add the styles to the DOM
-var update = __webpack_require__(1)(content, {});
-if(content.locals) module.exports = content.locals;
-// Hot Module Replacement
-if(false) {
-	// When the styles change, update the <style> tags
-	if(!content.locals) {
-		module.hot.accept("!!./../../../../../../../../coblan/webcode/node_modules/.0.26.1@css-loader/index.js!./../../../../../../../../coblan/webcode/node_modules/.6.0.0@sass-loader/lib/loader.js!./tab_group.scss", function() {
-			var newContent = require("!!./../../../../../../../../coblan/webcode/node_modules/.0.26.1@css-loader/index.js!./../../../../../../../../coblan/webcode/node_modules/.6.0.0@sass-loader/lib/loader.js!./tab_group.scss");
-			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-			update(newContent);
-		});
-	}
-	// When the module is disposed, remove the <style> tags
-	module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
 /* 69 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -4175,7 +4176,7 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, ".scss-comment {\n  content: 'director/scss/tab_group.scss'; }\n\n.nav.tabs {\n  align-items: center; }\n  .nav.tabs li {\n    display: inline-block;\n    margin-left: 5px;\n    vertical-align: bottom; }\n    .nav.tabs li:first-child {\n      margin-left: 15px; }\n    .nav.tabs li > a {\n      padding: 8px 18px 5px 18px;\n      background-color: #f6f7f8;\n      border: 1px solid #dddddd;\n      border-bottom: none;\n      position: relative;\n      margin-bottom: 1px;\n      font-weight: 400; }\n      .nav.tabs li > a:hover {\n        text-underline: blue;\n        text-decoration: underline; }\n  .nav.tabs li.active > a:after {\n    content: ' ';\n    position: absolute;\n    width: 100%;\n    height: 4px;\n    bottom: -4px;\n    left: 0;\n    background-color: #eee; }\n  .nav.tabs li.active a {\n    text-decoration: none;\n    background-color: #eeeeee;\n    font-weight: 500; }\n  .nav.tabs li.active a:hover {\n    border-bottom: none;\n    text-decoration: none;\n    color: #a2a2a2;\n    font-weight: 500;\n    background-color: #eeeeee; }\n", ""]);
+exports.push([module.i, ".error {\n  color: red; }\n\n.field-panel {\n  background-color: #F5F5F5;\n  margin: 20px;\n  padding: 20px 30px;\n  position: relative;\n  border: 1px solid #D9D9D9; }\n  .field-panel:after {\n    content: '';\n    display: block;\n    position: absolute;\n    top: 0px;\n    left: 0px;\n    bottom: 0px;\n    width: 180px;\n    border-radius: 6px;\n    background-color: #fff;\n    z-index: 0; }\n  .field-panel .form-group.field {\n    display: flex;\n    align-items: flex-start; }\n    .field-panel .form-group.field .field_input {\n      flex-grow: 0;\n      padding: 5px 20px; }\n      .field-panel .form-group.field .field_input .ckeditor {\n        padding: 20px; }\n    .field-panel .form-group.field:first-child .control-label {\n      border-top: 5px solid #FFF; }\n    .field-panel .form-group.field .control-label {\n      width: 150px;\n      text-align: right;\n      padding: 5px 30px;\n      z-index: 100;\n      flex-shrink: 0;\n      border-top: 1px solid #EEE; }\n  .field-panel .form-group.field .field_input ._tow-col-sel {\n    /*width:750px;*/ }\n  .field-panel .form-group.field .help_text {\n    padding: 10px;\n    color: #999;\n    font-style: italic;\n    font-size: 0.9em; }\n  .field-panel .field.error .error {\n    display: inline-block;\n    vertical-align: top;\n    padding-top: 8px; }\n\n._tow-col-sel select {\n  min-height: 7em; }\n\nimg.img-uploador {\n  max-width: 100px;\n  max-height: 100px; }\n\n.req_star {\n  color: red; }\n", ""]);
 
 // exports
 
@@ -4196,6 +4197,46 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
+		module.hot.accept("!!./../../../../../../../../coblan/webcode/node_modules/.0.26.1@css-loader/index.js!./../../../../../../../../coblan/webcode/node_modules/.6.0.0@sass-loader/lib/loader.js!./tab_group.scss", function() {
+			var newContent = require("!!./../../../../../../../../coblan/webcode/node_modules/.0.26.1@css-loader/index.js!./../../../../../../../../coblan/webcode/node_modules/.6.0.0@sass-loader/lib/loader.js!./tab_group.scss");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 71 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(0)();
+// imports
+
+
+// module
+exports.push([module.i, ".scss-comment {\n  content: 'director/scss/tab_group.scss'; }\n\n.nav.tabs {\n  align-items: center; }\n  .nav.tabs li {\n    display: inline-block;\n    margin-left: 5px;\n    vertical-align: bottom; }\n    .nav.tabs li:first-child {\n      margin-left: 15px; }\n    .nav.tabs li > a {\n      padding: 8px 18px 5px 18px;\n      background-color: #f6f7f8;\n      border: 1px solid #dddddd;\n      border-bottom: none;\n      position: relative;\n      margin-bottom: 1px;\n      font-weight: 400; }\n      .nav.tabs li > a:hover {\n        text-underline: blue;\n        text-decoration: underline; }\n  .nav.tabs li.active > a:after {\n    content: ' ';\n    position: absolute;\n    width: 100%;\n    height: 4px;\n    bottom: -4px;\n    left: 0;\n    background-color: #eee; }\n  .nav.tabs li.active a {\n    text-decoration: none;\n    background-color: #eeeeee;\n    font-weight: 500; }\n  .nav.tabs li.active a:hover {\n    border-bottom: none;\n    text-decoration: none;\n    color: #a2a2a2;\n    font-weight: 500;\n    background-color: #eeeeee; }\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 72 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(73);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// add the styles to the DOM
+var update = __webpack_require__(1)(content, {});
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
 		module.hot.accept("!!./../../../../../../../../coblan/webcode/node_modules/.0.26.1@css-loader/index.js!./../../../../../../../../coblan/webcode/node_modules/.6.0.0@sass-loader/lib/loader.js!./index.scss", function() {
 			var newContent = require("!!./../../../../../../../../coblan/webcode/node_modules/.0.26.1@css-loader/index.js!./../../../../../../../../coblan/webcode/node_modules/.6.0.0@sass-loader/lib/loader.js!./index.scss");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
@@ -4207,7 +4248,7 @@ if(false) {
 }
 
 /***/ }),
-/* 71 */
+/* 73 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
