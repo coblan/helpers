@@ -1,12 +1,15 @@
 from __future__ import absolute_import
 
-from .model_admin.base import model_dc,page_dc,render_dc,permit_list
-#from .model_admin.render import TablePage,FormPage
-from .pages import TablePage,FormPage,TabGroup
-from .model_admin.tabel import ModelTable,PageNum,TrivalPageNum,RowFilter,RowSearch,RowSort
-from .model_admin.fields import ModelFields,save_row
-from .model_admin.permit import ModelPermit,has_permit
+from .base_data import model_dc,page_dc,permit_list
+from .table.tablepage import TablePage,TablePage
+from .table.table import ModelTable,PageNum,TrivalPageNum,RowFilter,RowSearch,RowSort
+
+from .fields.fieldspage import FieldsPage 
+from .fields.fields import ModelFields,save_row
+
+from .userpermit.permit import ModelPermit,has_permit
+#
 from .container import evalue_container
 from .short_gen import regist_director
-from .model_admin.short_func import form_dict
+from .model_func.short_func import form_dict
 

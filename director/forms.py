@@ -44,7 +44,6 @@ class LoginForm(forms.ModelForm):
         model = User
         fields = ['username', 'password']
     
-  
     def clean(self):
         username=self.cleaned_data.get('username')
         password=self.cleaned_data.get('password')
@@ -63,10 +62,10 @@ class LoginForm(forms.ModelForm):
             else:
                 self.add_error('username',_('user has been disabled'))
         else:
-            user=get_or_none(User,username=username)
-            if user:
+            try:
+                user=User.objects.get(username=username)
                 self.add_error('username',_('user exist,but password not match'))
-            else:
+            except User.DoesNotExist:
                 self.add_error('username',_('user not exist'))
         
     

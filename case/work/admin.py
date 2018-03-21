@@ -63,7 +63,7 @@ class WorkForm(ModelFields):
                 }
         return heads
 
-class WorkFormPage(FormPage):
+class WorkFormPage(FieldsPage):
     fieldsCls=WorkForm
 
 class WorkIdexForm(ModelFields):
@@ -71,7 +71,7 @@ class WorkIdexForm(ModelFields):
         model=Index
         exclude=['par']
         
-class WorkIndexFormPage(FormPage):
+class WorkIndexFormPage(FieldsPage):
     fieldsCls=WorkIdexForm
     
 class WorkTable(ModelTable):
@@ -162,7 +162,7 @@ class WorkRecordForm(ModelFields):
 
 
 
-class WorkRecordFormPage(FormPage):
+class WorkRecordFormPage(FieldsPage):
     fieldsCls=WorkRecordForm
 
 class WorkPageNum(PageNum):
@@ -311,7 +311,7 @@ class WRselfForm(ModelFields):
         return rt
     
 
-class WRselfFormPage(FormPage):
+class WRselfFormPage(FieldsPage):
     template='work/workself_form_f7.html'
     fieldsCls=WRselfForm
 

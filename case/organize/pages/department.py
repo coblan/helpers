@@ -10,7 +10,7 @@ class DepartmentForm(ModelFields):
         exclude=['par','par_chain']
     
     
-class DepartmentTab(FormPage):
+class DepartmentTab(FieldsPage):
     template=''
     fieldsCls=DepartmentForm
     # def __init__(self, request):
@@ -57,7 +57,7 @@ class DepartManageForm(ModelFields):
     
     
         
-class DepartManageTab(FormPage):
+class DepartManageTab(FieldsPage):
     template=''
     fieldsCls=DepartManageForm
     def __init__(self,request):
@@ -81,7 +81,7 @@ class DepartManageTab(FormPage):
         # self.ctx=self.fields.get_context()
     
 
-class DepartmentGroup(TabGroup):
+class DepartmentGroup(TabPage):
     tabs=[{'name':'department','label':'基本信息','page_cls':DepartmentTab},
           {'name':'departmanage','label':'管理设置','page_cls':DepartManageTab}
           ]

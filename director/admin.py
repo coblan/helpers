@@ -1,24 +1,29 @@
 # encoding:utf-8
 from __future__ import unicode_literals
 
-# from model_admin.render import TablePage,FormPage
-from .pages import TablePage,FormPage,TabGroup
-from model_admin.tabel import ModelTable,RowFilter,RowSort
-from model_admin.fields import ModelFields
-from model_admin.base import model_dc,page_dc,permit_list
+from .base_data import model_dc,page_dc,permit_list
+from .fields.fieldspage import FieldsPage
+from .fields.fields import ModelFields
+
+from .table.tablepage import TablePage
+from .table.tabpage import TabPage
+from .table.table import ModelTable,RowFilter,RowSort
+
 from django.contrib.auth.models import Group,User
-import ajax
-import json
-from .model_admin.base import page_dc
 from django.conf import settings
-from .models import KVModel,PermitModel
-from . import short_gen
-import cgi
-from .admin_pages.assem_group import AssemGroupPage
-from .db_tools import to_dict,model_to_name
 from django import forms
+
+import json
+
+
+from .models import PermitModel 
+
+from .userpermit.assem_group import AssemGroupPage
+from .model_func.dictfy import to_dict,model_to_name
+
 from django.utils.translation import ugettext as _
-from model_admin.permit import permit_to_text
+from .userpermit.permit import permit_to_text
+import ajax
 
 class UserGroupTable(ModelTable):
     
@@ -79,7 +84,7 @@ class UserGroupFields(ModelFields):
         # ctx['permit_heads']=self.permit.get_heads()
         # return ctx
 
-class GroupFormPage(FormPage):
+class GroupFormPage(FieldsPage):
     template='authuser/permit_group_form.html'
     class GroupForm(ModelFields):
         class Meta:
@@ -153,7 +158,7 @@ class PermitPage(TablePage):
     template='authuser/permit_table.html'
     
 
-class GroupGroup(TabGroup):
+class GroupGroup(TabPage):
     tabs=[{'name':'assem','label':'用户权限组','page_cls':GroupAssemPage,'suffix':''},
           {'name':'prim','label':'可用权限','page_cls':PermitPage,'suffix':''},
           ]
@@ -161,7 +166,7 @@ class GroupGroup(TabGroup):
         super(self.__class__,self).__init__(request)
         
 
-class PermitFormPage(FormPage):
+class PermitFormPage(FieldsPage):
     class PermitForm(ModelFields):
         class Meta:
             model=PermitModel
@@ -252,7 +257,7 @@ class UserTablePage(TablePage):
     #template='authuser/user_table.html'
     tableCls=UserTable
 
-class UserFormPage(FormPage):
+class UserFormPage(FieldsPage):
     template='authuser/user_form.html'
     fieldsCls=UserFields
 
@@ -278,38 +283,3 @@ permit_list.append({'name':'myauth','label':'账号管理','fields':[
     {'name':'modify_other_pswd','label':'修改所有人密码','type':'bool'},]
 })
 
-class KVTable(ModelTable):
-    model=KVModel
-    exclude=[]
-    def dict_row(self, inst):
-        if len(inst.value)>50:
-            value=inst.value[:50]+'...'
-        else:
-            value=inst.value
-        return {
-            'value':cgi.escape(value)
-        }
-
-class KvTablePage(TablePage):
-    tableCls=KVTable
-
-class KvFields(ModelFields):
-    class Meta:
-        model=KVModel
-        exclude=[]
-
-class KvFormPage(FormPage):
-    fieldsCls=KvFields
-    def get_template(self, prefer=None):
-        if prefer=='wx':
-            return 'wx/kvform.html'
-        else:
-            return 'director/kvform.html'
-
-# short_gen.regist_director(['kv','kv.wx'],KVModel)
-page_dc.update({
-    'kv':KvTablePage,
-    'kv.edit':KvFormPage,
-})
-
-model_dc[KVModel]={'fields':KvFields}

@@ -50,7 +50,7 @@ class EmployeeFields(ModelFields):
             #'depart':[],
         }
     
-class EmployeeItem(FormPage):
+class EmployeeItem(FieldsPage):
     template=''
     fieldsCls=EmployeeFields
     
@@ -135,7 +135,7 @@ class UserTab(UserFormPage):
         name = self.emp.baseinfo.name if self.emp.baseinfo else 'unnamed employee'
         return '%s的账号信息'%name
 
-class EmpGroup(TabGroup):
+class EmpGroup(TabPage):
     tabs=[{'name':'emp','label':'员工','page_cls':EmployeeItem},
           {'name':'baseinfo','label':'基本信息','page_cls':BaseinfoItem,'visible':and_list([BasicInfo])},
           {'name':'user','label':'账号','page_cls':UserTab,'visible':and_list([User])},

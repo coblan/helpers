@@ -31,7 +31,7 @@ class BasicInfoFields(ModelFields):
             emp.save()
         return rt
     
-class BaseinfoItem(FormPage):
+class BaseinfoItem(FieldsPage):
     template=''
     fieldsCls=BasicInfoFields
     def __init__(self, request):

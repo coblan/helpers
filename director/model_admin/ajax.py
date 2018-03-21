@@ -1,5 +1,7 @@
 # encoding:Utf-8
 """
+这个文件不用了，所有功能往director.ajax转移。
+========
 这里的ajax函数是被所有由render生成的页面共用的。
 如果TablePage或者FormPage的ajax_scope中有相同名字的函数，则优先调用。
 
@@ -22,27 +24,7 @@ def model_perm(user,perm,model):
     return getattr(validator,perm)()
 
 
-def save(row,user,request):
-    """
-    """
-    try:
-        kw=request.GET.dict()
-        field_obj = permit_save_model(user, row,**kw)
-        dc = field_obj.get_row()
-        # dc = save_row(row, user,request)
-        # perm=ModelPermit(instance,user)
-        # dc =to_dict(instance,include=perm.readable_fields())
-        return {'status':'success','row':dc}
-    except ValidationError as e:
-        return {'errors':dict(e)}
-    #model= name_to_model(row['_class'])
-    #fields_cls = model_dc.get(model).get('fields')
 
-    #fields_obj=fields_cls(row,crt_user=user)
-    #if fields_obj.is_valid():
-        #return fields_obj.save_form()
-    #else:
-        #return {'errors':fields_obj.errors}
         
 def save_fieldset(fieldset,save_step,user):
     out={}
@@ -66,14 +48,7 @@ def save_fieldset(fieldset,save_step,user):
     
 
 
-def del_rows(rows,user):
-    for row in rows:
-        model = name_to_model(row.get('_class'))
-        fields_cls = model_dc.get(model).get('fields')
-        fields_obj = fields_cls(row,crt_user=user)
-        fields_obj.del_form()
-   
-    return rows
+
 
 #def save_group_and_permit(row,permits,user): 
     #field_cls = model_dc.get(Group).get('fields')
