@@ -8,7 +8,9 @@ require('./scss/file_uploader.scss')
 
 export var field_file_uploader={
     props:['name','row','kw'],
-    template:`<div><com-file-uploader v-model="row[name]" :config="kw.config" :readonly="kw.readonly"></com-file-uploader></div>`
+    template:`<div :id='"id_"+name'>
+        <com-file-uploader v-model="row[name]" :config="kw.config" :readonly="kw.readonly"></com-file-uploader>
+    </div>`
 }
 
 export var com_file_uploader = {
@@ -33,10 +35,13 @@ export var com_file_uploader = {
         <ul class="sortable">
             <li  v-for="pic in pictures" class="item" >
                 <img v-if="is_image(pic)" :src="pic" alt="" @click="cfg.on_click(pic)"/>
-                <div class="file-wrap" @click="cfg.on_click(pic)" v-else>
-                    <span class="file-type" v-text="get_res_type(pic)"></span>
-                    <!--<span v-text="get_res_basename(pic)"></span>-->
+                <div class="file-box" v-else>
+                    <div class="file-wrap" @click="cfg.on_click(pic)" >
+                        <span class="file-type" v-text="get_res_type(pic)"></span>
+                    </div>
+                    <div class="file-name" v-text="get_res_basename(pic)"></div>
                 </div>
+
 
                 <span v-if="! readonly" v-show="cfg.multiple" class="remove-btn" title="remove image" @click="remove(pic)">
                     <!--<i class="fa fa-window-close" aria-hidden="true"></i>-->
@@ -182,7 +187,13 @@ export var com_file_uploader = {
         get_res_basename:function(url){
             var mt = /[^/]+$/.exec(url)
             if(mt.length>0){
-                return mt[0]
+                var name = mt[0]
+                    var mt2=   /\w+___(.+)/.exec(name)
+                if(mt2){
+                    return mt2[1]
+                }else{
+                    return name
+                }
             }else{
                 return mt[0]
             }

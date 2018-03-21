@@ -24,8 +24,18 @@
         visibility:visible ;
       }
 
-      .file-wrap{
+      .file-box{
+        max-width: 12em;
+        text-align: center;
+        word-break: break-all;
 
+        .file-name{
+          margin-top: 1em;
+        }
+      }
+      .file-wrap{
+        position: relative;
+        left: 1em;
         width: 10em;
         height: 12em;
         border: 2em solid #68abff;

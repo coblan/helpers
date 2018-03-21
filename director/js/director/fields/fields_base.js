@@ -94,7 +94,7 @@ export var field_base={
             //},
             template: `<div>
             <span v-if='kw.readonly' v-text='row[name]'></span>
-            <textarea v-else class="form-control" rows="3" :id="'id_'+name" v-model="row[name]" :placeholder="kw.placeholder" :readonly='kw.readonly'></textarea>
+            <textarea v-else class="form-control" rows="5" :id="'id_'+name" v-model="row[name]" :placeholder="kw.placeholder" :readonly='kw.readonly'></textarea>
             </div>`
         },
         color:{

@@ -29,10 +29,14 @@
   .form-group.field{
     display: flex;
     align-items:flex-start;
+    margin-bottom: 0;
     .field_input{
         flex-grow:0;
         padding:5px 20px;
 
+      textarea{
+        min-width: 30em;
+      }
       .ckeditor{
           padding: 20px;
       }

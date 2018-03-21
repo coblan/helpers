@@ -9,10 +9,12 @@ var template_str=`
 				@click='main_act_click(act)'>
 				<span v-html='act.icon' class='_icon'></span><span v-text='act.label'></span>
 				<span v-show="act.submenu">
-					<span v-if="opened_submenu==act.submenu ||act.selected">[-]</span>
-					<span v-else>[+]</span>
+					<span v-if="opened_submenu==act.submenu ||act.selected" style="float: right;margin-right: 1em;">
+						<i class="fa fa-chevron-down"></i>
+					</span>
+					<span v-else style="float: right;margin-right: 1em;"><i class="fa fa-chevron-left"></i></span>
 				</span>
-				<span class='left-arrow' v-if='act.selected'></span>
+				<!--<span class='left-arrow' v-if='act.selected'></span>-->
 			</a>
 			
 			<ul class='submenu' v-show='opened_submenu==act.submenu ||act.selected' transition="expand">
