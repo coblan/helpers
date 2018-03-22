@@ -33,7 +33,7 @@ port
 <-<
 """
 
-def jsonpost(request, scope):
+def ajax_router(request, scope):
     """
     该函数会路由ajax请求，ajax发送的json格式为{'order':['func3','func2'],func1:{name:'heyulin'},func2:{arg:..},func3:{arg:}}
     jsonpost根据参数scope里面查询同名函数，按照循序，优先调用order中的函数

@@ -1,6 +1,8 @@
+# encoding:utf-8
+from __future__ import unicode_literals
 from django.contrib import admin
-
-# Register your models here.
+from helpers.director.shortcut import ModelTable,TablePage,ModelFields,FieldsPage,page_dc,model_dc
+from .models import KVModel
 import cgi
 
 class KVTable(ModelTable):

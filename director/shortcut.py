@@ -9,7 +9,7 @@ from .fields.fields import ModelFields,save_row
 
 from .userpermit.permit import ModelPermit,has_permit
 #
-from .container import evalue_container
-from .short_gen import regist_director
-from .model_func.short_func import form_dict
+#from .container import evalue_container
+#from .short_gen import regist_director
+#from .model_func.short_func import form_dict
 

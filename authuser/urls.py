@@ -1,6 +1,8 @@
+# encoding:utf-8
+from __future__ import unicode_literals
 from django.conf.urls import include, url
 import views
-from model_admin import render
+
 urlpatterns = [
     url(r'^login/?$',views.login,name='login'),
     url(r'^regist/?$',views.regist_user,name='regist'),
