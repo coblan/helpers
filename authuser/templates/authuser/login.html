@@ -52,11 +52,9 @@
 			methods:{
 				submit_info:function () {
 					var models=this.meta.row
-					var post_data={
-						do_login:{username:models.username,password:models.password}
-					}
+					var post_data=[{fun:'do_login',username:models.username,password:models.password}]
 					var self=this;
-					$.post('',JSON.stringify(post_data),function (data) {
+					$.post('/d/ajax/authuser/',JSON.stringify(post_data),function (data) {
 						if(data.do_login.errors){
 							update_vue_obj(self.meta.errors,data.do_login.errors)
 						}else{

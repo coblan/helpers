@@ -10,7 +10,7 @@ from __future__ import unicode_literals
 
 from permit import ModelPermit
 from base import model_dc
-from ..db_tools import name_to_model,model_to_name,to_dict,permit_save_model
+from ..model_func.dictfy import name_to_model,model_to_name,to_dict,permit_save_model
 from fields import save_row
 from django.core.exceptions import ValidationError
 from ..models import PermitModel

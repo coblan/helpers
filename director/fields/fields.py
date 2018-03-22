@@ -11,7 +11,7 @@ from django.core.exceptions import ValidationError
 from ..base_data import model_dc
 import base64
 from django.db import models
-from ..userpermit.permit import ModelPermit
+from ..access.permit import ModelPermit
 from ..models import LogModel
 
 def save_row(row,user,request):

@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 from django import forms
 from django.contrib.auth.models import User
-from db_tools import get_or_none
+#from helpers.director.model_func.dictfy import get_or_none
 from django.contrib import auth 
 from django.utils.translation import ugettext as _
 

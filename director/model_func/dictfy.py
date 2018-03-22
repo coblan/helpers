@@ -3,10 +3,10 @@ from __future__ import unicode_literals
 
 from ..base_data import model_dc
 
+import json
 from django.db import models
 from django.apps import apps
 from django import forms
-import json
 from django.utils.timezone import localtime,datetime
 from django.utils.translation import ugettext as _
 

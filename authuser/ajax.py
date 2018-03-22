@@ -3,11 +3,11 @@
 from __future__ import unicode_literals
 from django.contrib.auth.models import User
 from django.contrib import auth 
-from helpers.director.db_tools import get_or_none,from_dict
-from helpers.director.forms import AuthForm,LoginForm
-from ..model_admin.permit import has_permit
+from helpers.director.model_func.dictfy import from_dict
+from .forms import AuthForm,LoginForm
+from helpers.director.access.permit import has_permit
 
-def get_globe():
+def get_global():
     return globals()
 
 

@@ -37,22 +37,17 @@ from django.core.urlresolvers import reverse
 from django.shortcuts import redirect
 from django.conf import settings
 from django.http import HttpResponse
-from .model_admin import ajax
-from .container import evalue_container,find_one_r
-from .model_admin.permit import ModelPermit,has_permit
-from .port import jsonpost
-from .pages import DelPage,LogPage
-from .model_admin.base import page_dc
+#from .model_admin import ajax
+from helpers.func.collection.container import evalue_container,find_one_r
+from .access.permit import ModelPermit,has_permit
+#from helpers.func.network.ajax_router import jsonpost
+
 from django.db import models
 from django.core.exceptions import PermissionDenied
 import inspect
 import json
 from django.views.decorators.cache import patch_cache_control
 
-page_dc.update({
-        'del_rows':DelPage,
-        'log':LogPage,
-    } )
 
 class BaseEngine(object):
     _pages=None

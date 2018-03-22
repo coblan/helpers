@@ -6,7 +6,7 @@ from __future__ import unicode_literals
 import json
 from django.db.models import Q,fields
 from django.core.exceptions import PermissionDenied
-from ..userpermit.permit import ModelPermit
+from ..access.permit import ModelPermit
 from ..model_func.dictfy import model_to_name,to_dict,model_to_head,model_to_name
 from django.db import models
 #import pinyin

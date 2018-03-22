@@ -7,7 +7,7 @@ from .table.table import ModelTable,PageNum,TrivalPageNum,RowFilter,RowSearch,Ro
 from .fields.fieldspage import FieldsPage 
 from .fields.fields import ModelFields,save_row
 
-from .userpermit.permit import ModelPermit,has_permit
+from .access.permit import ModelPermit,has_permit
 #
 #from .container import evalue_container
 #from .short_gen import regist_director

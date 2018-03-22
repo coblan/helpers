@@ -1,24 +1,15 @@
 #encoding:utf-8
 from django.shortcuts import render,redirect
 from django.http import HttpResponse
-from port import jsonpost
 
-import auth_user.ajax as auth_ajax
 import json
-from db_tools import form_to_head
-from forms import AuthForm
-from django.contrib import auth 
 
-
-from .port import jsonpost,naked_router
 from pydoc import locate
 from django.utils.translation import ugettext as _
-from django.contrib.auth.models import User
 from . import ajax
 import urllib
 from django.apps import apps
-
-
+from .ajax_router import ajax_router
 
 """
 >5>helpers/port.rst>

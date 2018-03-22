@@ -18,12 +18,20 @@ import json
 
 from .models import PermitModel 
 
-from .userpermit.assem_group import AssemGroupPage
+from .access.assem_group import AssemGroupPage
 from .model_func.dictfy import to_dict,model_to_name
 
 from django.utils.translation import ugettext as _
-from .userpermit.permit import permit_to_text
+from .access.permit import permit_to_text
 import ajax
+from .fields.delpage import DelPage
+from .log.logpage import LogPage
+from .base_data import page_dc
+
+page_dc.update({
+    'del_rows':DelPage,
+        'log':LogPage,
+} )
 
 class UserGroupTable(ModelTable):
     
