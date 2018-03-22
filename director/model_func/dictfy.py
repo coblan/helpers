@@ -251,6 +251,8 @@ def form_to_head(form,include=None):
             #dc['no_auto_label']=True
         elif v.__class__ in [forms.fields.IntegerField,forms.fields.FloatField]:
             dc['type']='number'
+        elif v.__class__  == forms.fields.DateField:
+            dc['type']='date'
         if v.__class__ ==forms.models.ModelMultipleChoiceField and \
             isinstance(v.widget,forms.widgets.SelectMultiple):
             dc['type']='tow_col'

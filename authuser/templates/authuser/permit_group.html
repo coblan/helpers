@@ -4,7 +4,6 @@
 
 {% block page_content %}
 
-<script src='{% static "js/table.pack.js?t=" %}{{ js_stamp.table_pack_js }}'></script>
 <script type="text/javascript">
 
     tabs={{ tabs | jsonify | default:'[]' }}
@@ -100,7 +99,7 @@
             <li v-for="tab in tabs" :class="{'active':crt_tab==tab.name}"><a :href="item_link(tab.name)+tab.suffix" v-text="tab.label" ></a></li>
         </ul>
 
-        <com-table-btn v-if="!search_args._pop" :add_new="add_new" :del_item="del_item">
+        <com-table-btn v-if="!search_args._pop" :add_new="add_new" :del_item="del_item" :table_bus="this">
             <button type="button" class="btn btn-default btn-sm" @click="export_data()">下载</button>
             <button type="button" class="btn btn-default btn-sm" @click="import_data()">导入</button>
         </com-table-btn>
