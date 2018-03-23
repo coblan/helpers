@@ -224,6 +224,24 @@ class UserFields(ModelFields):
     class Meta:
         model=User
         fields=['username','first_name','is_active','is_staff','is_superuser','email','groups']
+    
+    def clean_first_pswd(self):
+        print('hello')
+    def clean(self):
+        if self.kw.get('first_pswd') or self.kw.get('second_pswd'):
+            if self.kw.get('first_pswd') != self.kw.get('second_pswd'):
+                self.errors['first_pswd']='两次密码不匹配'
+                raise forms.ValidationError('两次密码不匹配')                
+        return ModelFields.clean(self)
+    
+    def save_form(self):
+        rt = ModelFields.save_form(self)
+        if self.kw.get('first_pswd'):
+            user= self.instance
+            user.set_password(self.kw.get('first_pswd'))
+            user.save()
+        return rt
+
 
 class UserTable(ModelTable):
     model=User

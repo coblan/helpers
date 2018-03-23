@@ -7,10 +7,21 @@
 <script type="text/javascript">
     change_password_url='{% url "change_password" %}'
 
+    name1 = ex.map(heads,function(head){
+        return head.name
+    })
+    heads2=[
+        {name:'first_pswd',type:'password',label:'新密码'},
+        {name:'second_pswd',type:'password',label:'确认输入'}]
+    heads= heads.concat(heads2)
+
     $(function () {
         new Vue({
             el:'#there',
-
+            data:{
+              name1 :name1,
+                name2:['first_pswd','second_pswd']
+            },
             mixins:[field_fun],
             methods:{
                 change_pswd_link:function(){
@@ -34,16 +45,19 @@
 
     <com-form-btn :submit="submit" :del_row="del_row" :cancel="cancel" :form_bus="this"></com-form-btn>
 
-    <div style="padding: 0px 20px;">
-        <a :href="change_pswd_link()">修改用户密码</a>
-    </div>
+    <!--<div style="padding: 0px 20px;">-->
+        <!--<a :href="change_pswd_link()">修改用户密码</a>-->
+    <!--</div>-->
 
 
     <div class='field-panel'>
 
-        <field  v-for='head in kw.heads' :key="head.name" :name='head.name' :kw='kw'></field>
+        <field  v-for='name in name1' :key="name" :name='name' :kw='kw'></field>
     </div>
+    <div class='field-panel'>
 
+        <field  v-for='name in name2' :key="name" :name='name' :kw='kw'></field>
+    </div>
 
 </div>
 
