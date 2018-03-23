@@ -62,7 +62,7 @@ export var table_fun={
             var norm_ls=this.filter_minus(ls)
             return ex.isin(name,norm_ls)
         },
-        // 我放到 com table 去，试试。如果行，证明这里的无用了。
+        // 移到sort_mark
         toggle:function (sort_str,name) {
             var ls=ex.split(sort_str,',')
             var norm_ls=this.filter_minus(ls)
@@ -74,13 +74,14 @@ export var table_fun={
             }
             return ls.join(',')
         },
-        remove_sort:function (sort_str,name) {
-            var ls=ex.split(sort_str,',')
-            ls=ex.filter(ls,function (v) {
-                return v!='-'+name && v!=name
-            })
-            return ls.join(',')
-        },
+        //remove_sort:function (sort_str,name) {
+        // 移到sort_mark.js 去了
+        //    var ls=ex.split(sort_str,',')
+        //    ls=ex.filter(ls,function (v) {
+        //        return v!='-'+name && v!=name
+        //    })
+        //    return ls.join(',')
+        //},
         map:function(name,row){
             if(name==this.heads[0].name && !table_fun_config.detail_link){
                 return ex.template('<a href="{edit}?pk={pk}&next={next}">{text}</a>',

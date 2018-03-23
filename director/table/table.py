@@ -9,6 +9,7 @@ from django.core.exceptions import PermissionDenied
 from ..access.permit import ModelPermit
 from ..model_func.dictfy import model_to_name,to_dict,model_to_head,model_to_name
 from django.db import models
+import math
 #import pinyin
 #from forms import MobilePageForm
 
@@ -20,12 +21,21 @@ class PageNum(object):
     perPage=20
     def __init__(self,pageNumber=1,kw={}):
         self.pageNumber = int(pageNumber)
+        
     
     def get_query(self,query):
-        self.pagenator = Paginator(query,self.perPage)
+        count = query.count()
+        totalpage = int( math.ceil( float( count )/self.perPage) )
+        self.totalpage = totalpage
+        #self.pagenator = Paginator(query,self.perPage)
         self.query = query  
-        page_num=min(self.pagenator.num_pages,abs(int( self.pageNumber)))
-        return self.pagenator.page(page_num)
+        crt_page=min(totalpage,abs(int( self.pageNumber)))
+        start = (crt_page -1)*self.perPage
+        end = min(crt_page*self.perPage,count)
+        return query[start:end]
+        #pag = self.pagenator.page(page_num)
+        #return query[pag.start_index():pag.end_index()]#
+        
     
     def get_context(self):
         """
@@ -33,7 +43,7 @@ class PageNum(object):
              'crt_page':2
             }
         """
-        choice_len = len(self.pagenator.page_range)
+        choice_len = self.totalpage # len(self.pagenator.page_range)
         k=3
         a=-1
         while a < 1:
@@ -209,7 +219,7 @@ class RowSort(object):
                 if norm_name in self.chinese_words:
                     query= query.extra(select={'converted_%s'%norm_name: 'CONVERT(%s USING gbk)'%norm_name},order_by=['%sconverted_%s'%(direction,norm_name)])
                 else:
-                    query= query.ordery_by(name)
+                    query= query.order_by(name)
 
         return query
 
@@ -378,7 +388,8 @@ class ModelTable(object):
         if not self.crt_user.is_superuser and not self.permit.readable_fields():
             raise PermissionDenied,'no permission to browse %s'%self.model._meta.model_name
         else:
-            return query.order_by('-id')
+            #return query
+            return query.order_by('-pk')
     
     #def search_filter(self,query):
         #return self.row_search.get_query(query)

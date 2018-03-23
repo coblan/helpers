@@ -1060,7 +1060,7 @@ Vue.component('com-form-btn', {
     //		<button type="button" class="btn btn-default" @click='cancel()' >取消</button>
     //	</div>
     //</div>`
-    template: '<div style="min-height: 1.5em;">\n    <div style="float: right;">\n        <div class="btn-group">\n            <button type="button" class="btn btn-success" @click=\'form_bus.submit_return()\' v-if=\'can_add\'>\u4FDD\u5B58\u5E76\u8FD4\u56DE</button>\n            <button type="button" class="btn btn-default" @click=\'form_bus.submit()\' v-if=\'can_add\'>\u4FDD\u5B58</button>\n            <button type="button" class="btn btn-default" @click=\'form_bus.goto_next()\' >\u53D6\u6D88</button>\n        </div>\n        <!--<div class="btn-group" >-->\n          <!--<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">-->\n                <!--\u5176\u4ED6 <span class="caret"></span>-->\n              <!--</button>-->\n              <!--<ul class="dropdown-menu">-->\n                <!--&lt;!&ndash;<li><a href="#" @click=\'form_bus.submit()\' v-if=\'can_add\'>\u4FDD\u5B58</a></li>&ndash;&gt;-->\n                <!--<li><a v-if=\'can_del &&del_link\' :href=\'form_bus.del_row()\'>\u5220\u9664</a></li>-->\n\n                <!--&lt;!&ndash;<li role="separator" class="divider"></li>&ndash;&gt;-->\n              <!--</ul>-->\n        <!--</div>-->\n    </div>\n\n</div>'
+    template: '<div style="min-height: 1.5em;">\n    <div style="float: right;">\n        <div class="btn-group">\n            <button type="button" class="btn btn-success btn-sm" @click=\'form_bus.submit_return()\' v-if=\'can_add\'>\u4FDD\u5B58\u5E76\u8FD4\u56DE</button>\n            <button type="button" class="btn btn-default btn-sm" @click=\'form_bus.submit()\' v-if=\'can_add\'>\u4FDD\u5B58</button>\n            <button type="button" class="btn btn-default btn-sm" @click=\'form_bus.goto_next()\' >\u53D6\u6D88</button>\n        </div>\n        <!--<div class="btn-group" >-->\n          <!--<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">-->\n                <!--\u5176\u4ED6 <span class="caret"></span>-->\n              <!--</button>-->\n              <!--<ul class="dropdown-menu">-->\n                <!--&lt;!&ndash;<li><a href="#" @click=\'form_bus.submit()\' v-if=\'can_add\'>\u4FDD\u5B58</a></li>&ndash;&gt;-->\n                <!--<li><a v-if=\'can_del &&del_link\' :href=\'form_bus.del_row()\'>\u5220\u9664</a></li>-->\n\n                <!--&lt;!&ndash;<li role="separator" class="divider"></li>&ndash;&gt;-->\n              <!--</ul>-->\n        <!--</div>-->\n    </div>\n\n</div>'
 });
 
 /***/ }),
@@ -3191,30 +3191,49 @@ Vue.component('sort-mark', {
             }
             return 'no_sort';
         }
-    }
-    //methods:{
+    },
+    methods: {
+        remove_sort: function remove_sort(sort_str, name) {
+            var ls = ex.split(sort_str, ',');
+            ls = ex.filter(ls, function (v) {
+                return v != '-' + name && v != name;
+            });
+            return ls.join(',');
+        },
+        toggle: function toggle(sort_str, name) {
+            var ls = ex.split(sort_str, ',');
+            var norm_ls = this.filter_minus(ls);
+            var idx = norm_ls.indexOf(name);
+            if (idx != -1) {
+                ls[idx] = ls[idx].startsWith('-') ? name : '-' + name;
+            } else {
+                ls.push(name);
+            }
+            return ls.join(',');
+        }
+        //methods:{
 
-    //	get_status:function () {
-    //		var sorted=this.sort_str.split(',')
-    //		for(var x=0;x<sorted.length;x++){
-    //			var org_name=sorted[x]
-    //			if(org_name.startsWith('-')){
-    //				var name=org_name.slice(1)
-    //				var minus='up'
-    //			}else{
-    //				var name=org_name
-    //				var minus='down'
-    //			}
-    //			if(name==this.name){
-    //				this.index=x+1
-    //				return minus
-    //			}
-    //		}
-    //		return 'no_sort'
-    //	}
-    //}
+        //	get_status:function () {
+        //		var sorted=this.sort_str.split(',')
+        //		for(var x=0;x<sorted.length;x++){
+        //			var org_name=sorted[x]
+        //			if(org_name.startsWith('-')){
+        //				var name=org_name.slice(1)
+        //				var minus='up'
+        //			}else{
+        //				var name=org_name
+        //				var minus='down'
+        //			}
+        //			if(name==this.name){
+        //				this.index=x+1
+        //				return minus
+        //			}
+        //		}
+        //		return 'no_sort'
+        //	}
+        //}
 
-});
+    } });
 
 /***/ }),
 /* 32 */
@@ -3453,7 +3472,7 @@ var table_fun = exports.table_fun = {
             var norm_ls = this.filter_minus(ls);
             return ex.isin(name, norm_ls);
         },
-        // 我放到 com table 去，试试。如果行，证明这里的无用了。
+        // 移到sort_mark
         toggle: function toggle(sort_str, name) {
             var ls = ex.split(sort_str, ',');
             var norm_ls = this.filter_minus(ls);
@@ -3465,13 +3484,14 @@ var table_fun = exports.table_fun = {
             }
             return ls.join(',');
         },
-        remove_sort: function remove_sort(sort_str, name) {
-            var ls = ex.split(sort_str, ',');
-            ls = ex.filter(ls, function (v) {
-                return v != '-' + name && v != name;
-            });
-            return ls.join(',');
-        },
+        //remove_sort:function (sort_str,name) {
+        // 移到sort_mark.js 去了
+        //    var ls=ex.split(sort_str,',')
+        //    ls=ex.filter(ls,function (v) {
+        //        return v!='-'+name && v!=name
+        //    })
+        //    return ls.join(',')
+        //},
         map: function map(name, row) {
             if (name == this.heads[0].name && !table_fun_config.detail_link) {
                 return ex.template('<a href="{edit}?pk={pk}&next={next}">{text}</a>', {
