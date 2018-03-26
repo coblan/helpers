@@ -19,6 +19,8 @@ from .db_tools import to_dict,model_to_name
 from django import forms
 from django.utils.translation import ugettext as _
 from model_admin.permit import permit_to_text
+from helpers.director.model_admin.tabel import chinese_order
+
 
 class UserGroupTable(ModelTable):
     
@@ -38,7 +40,9 @@ class UserGroupTable(ModelTable):
     include=['name']
     
     def inn_filter(self, query):
+        #return chinese_order(query, 'name')
         return query.order_by('name')
+    
     
     def get_heads(self):
         heads = super(self.__class__,self).get_heads()
@@ -147,6 +151,9 @@ class PermitPage(TablePage):
     
         def dict_row(self, inst):
             return {'permit' :permit_to_text( inst.permit)}
+        
+        def inn_filter(self, query):
+            return chinese_order(query, 'name')
             
     PermitTable.sort=PermitSort
     tableCls=PermitTable

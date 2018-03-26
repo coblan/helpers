@@ -10,6 +10,7 @@ from permit import ModelPermit
 from ..db_tools import model_to_name,to_dict,model_to_head,model_to_name
 from django.db import models
 import pinyin
+from django.conf import settings
 #from forms import MobilePageForm
 
 
@@ -207,13 +208,35 @@ class RowSort(object):
                     norm_name=name
                     direction=''                    
                 if norm_name in self.chinese_words:
-                    query= query.extra(select={'converted_%s'%norm_name: 'CONVERT(%s USING gbk)'%norm_name},order_by=['%sconverted_%s'%(direction,norm_name)])
+                    engine= settings.DATABASES.get(query.db)['ENGINE'] 
+                  
+                    if engine == 'django.contrib.gis.db.backends.postgis':
+                        # postgresql
+                        query= query.extra(select={'converted_%s'%norm_name: "convert_to(%s,'GBK')"%norm_name},order_by=['%sconverted_%s'%(direction,norm_name)])
+                    else:
+                        # mysql 按照拼音排序
+                        query= query.extra(select={'converted_%s'%norm_name: 'CONVERT(%s USING gbk)'%norm_name},order_by=['%sconverted_%s'%(direction,norm_name)])                        
                 else:
                     query= query.ordery_by(name)
 
         return query
 
-  
+
+def chinese_order(query,norm_name,direction=''):
+    """
+    @norm_name: 张三
+    @direction: - 负号
+    """
+    engine= settings.DATABASES.get(query.db)['ENGINE'] 
+    if engine == 'django.contrib.gis.db.backends.postgis':
+        # postgresql
+        query= query.extra(select={'converted_%s'%norm_name: "convert_to(%s,'GBK')"%norm_name},order_by=['%sconverted_%s'%(direction,norm_name)])
+    else:
+        # mysql 按照拼音排序
+        query= query.extra(select={'converted_%s'%norm_name: 'CONVERT(%s USING gbk)'%norm_name},order_by=['%sconverted_%s'%(direction,norm_name)])  
+    return query
+
+
 class ModelTable(object):
     """
     
