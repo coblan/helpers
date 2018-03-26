@@ -175,7 +175,7 @@
     }
 </style>
 <template id="com-permit-show">
-    <div> <a v-for='permit in row.permit' v-text='permit.name' style="margin-left: 2em;"
+    <div> <a v-for='permit in row.permit' v-text='permit.name' style="margin-left: 2em;white-space: nowrap;display: inline-block;"
              :title="permit.desp" :href="permit_edit_link(permit)"></a></div>
 </template>
 
@@ -195,7 +195,7 @@
 </script>
 
 <template id="com-user-show">
-    <div> <a v-for='user in row.users' v-text='user.first_name?user.first_name:user.username' style="margin-left: 2em;"
+    <div> <a v-for='user in row.users' v-text='user.first_name?user.first_name:user.username' style="margin-left: 2em;white-space: nowrap;display: inline-block;"
              :href="user_link(user)"></a></div>
 </template>
 <script>
