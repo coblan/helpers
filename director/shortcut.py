@@ -3,6 +3,7 @@ from __future__ import absolute_import
 from .base_data import model_dc,page_dc,permit_list
 from .table.tablepage import TablePage,TablePage
 from .table.table import ModelTable,PageNum,TrivalPageNum,RowFilter,RowSearch,RowSort
+from .table.tabpage import TabPage
 
 from .fields.fieldspage import FieldsPage 
 from .fields.fields import ModelFields,save_row

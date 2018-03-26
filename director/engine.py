@@ -48,6 +48,7 @@ import inspect
 import json
 from django.views.decorators.cache import patch_cache_control
 
+import time
 
 class BaseEngine(object):
     _pages=None
@@ -81,15 +82,15 @@ class BaseEngine(object):
         else:
             return True
     
-    def view(self,request,name):     
+    def view(self,request,name):    
         page_cls = self.get_page_cls(name)
-        
+
         # if getattr(page_cls,'need_login',True):
             # if request.user.is_anonymous() or not request.user.is_active:
                 # return redirect(self.login_url+'?next='+request.get_full_path())
         if not self.login_authorized(request):
             return redirect(self.login_url+'?next='+request.get_full_path())
-          
+        
         page=page_cls(request)
         ctx=page.get_context()
         if  request.is_ajax() and not request.GET.get('_ajax_html') : #and not getattr(page,'ajax_html',False):

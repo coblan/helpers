@@ -183,8 +183,11 @@ class ModelFields(forms.ModelForm):
             #include= self.fields
             
         # self.fields 是经过 权限 处理了的。可读写的字段
-        return to_dict(self.instance,include=self.fields)
+        return to_dict(self.instance,filt_attr=self.dict_row,include=self.fields)
 
+    def dict_row(self,row):
+        return {}
+    
     def get_options(self):
         options=self.dict_options()
         

@@ -10,6 +10,7 @@ from ..access.permit import ModelPermit
 from ..model_func.dictfy import model_to_name,to_dict,model_to_head,model_to_name
 from django.db import models
 import math
+import time
 #import pinyin
 #from forms import MobilePageForm
 
@@ -24,17 +25,20 @@ class PageNum(object):
         
     
     def get_query(self,query):
-        count = query.count()
-        totalpage = int( math.ceil( float( count )/self.perPage) )
-        self.totalpage = totalpage
-        #self.pagenator = Paginator(query,self.perPage)
-        self.query = query  
-        crt_page=min(totalpage,abs(int( self.pageNumber)))
-        start = (crt_page -1)*self.perPage
-        end = min(crt_page*self.perPage,count)
-        return query[start:end]
-        #pag = self.pagenator.page(page_num)
-        #return query[pag.start_index():pag.end_index()]#
+        #count = query.count()
+        #totalpage = int( math.ceil( float( count )/self.perPage) )
+        #self.totalpage = max(totalpage,1)
+        
+        #self.query = query  
+        #crt_page=min(self.totalpage,abs(int( self.pageNumber)))
+        #start = (crt_page -1)*self.perPage
+        #end = min(crt_page*self.perPage,count)
+        #return query[start:end]
+        self.pagenator = Paginator(query,self.perPage)
+        page_num=min(self.pagenator.num_pages,abs(int( self.pageNumber)))
+        return self.pagenator.page(page_num)
+        #return self.pagenator.page(self.pageNumber)
+        
         
     
     def get_context(self):
@@ -43,7 +47,8 @@ class PageNum(object):
              'crt_page':2
             }
         """
-        choice_len = self.totalpage # len(self.pagenator.page_range)
+        start = time.time()
+        choice_len = len(self.pagenator.page_range)
         k=3
         a=-1
         while a < 1:
@@ -57,6 +62,10 @@ class PageNum(object):
         for i in range(len(page_nums)):
             num = page_nums[i]
         page_nums=[str(x) for x in page_nums]
+        
+        end = time.time()
+        print('final %s '%(end-start))
+        
         return {'options':page_nums,'crt_page':self.pageNumber}    
 
 class TrivalPageNum(object):
@@ -250,6 +259,7 @@ class ModelTable(object):
     include=None
     exclude=[]
     pagenator=PageNum
+    fields_sort=[]
     def __init__(self,page=1,row_sort=[],row_filter={},row_search={},crt_user=None,**kw):
         self.kw=kw
         self.crt_user=crt_user 
@@ -349,8 +359,20 @@ class ModelTable(object):
         #for head in heads:
             #if head.get('name') in self.sortable:
                 #head['sortable'] = True 
+        heads = self.fields_sort_heads(heads)
         return heads
     
+    def fields_sort_heads(self,heads):
+        tmp_heads = []
+        for k in self.fields_sort:
+            for head in heads:
+                if head['name'] == k:
+                    tmp_heads.append(head)
+                    heads.remove(head)
+                    break
+        tmp_heads.extend(heads)
+        return tmp_heads
+            
     def get_rows(self):
         """
         return: [{"name": "heyul0", "age": "32", "user": null, "pk": 1, "_class": "user_admin.BasicInfo", "id": 1}]

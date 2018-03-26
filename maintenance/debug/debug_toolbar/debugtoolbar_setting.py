@@ -4,7 +4,7 @@ def SET(scope):
     scope['INSTALLED_APPS'].extend(['debug_toolbar',])
     scope['MIDDLEWARE_CLASSES'].extend([
         'debug_toolbar.middleware.DebugToolbarMiddleware',
-        'helpers.debug.debug_toolbar.json_as_html.JsonAsHTML',
+        'helpers.maintenance.debug.debug_toolbar.json_as_html.JsonAsHTML',
         
         ])
     scope['DEBUG_TOOLBAR_CONFIG'] = {  'JQUERY_URL' : r"/static/lib/jquery3.2.1.min.js"}

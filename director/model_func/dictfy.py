@@ -165,12 +165,21 @@ class DateProc(object):
         """may need test"""
         return value     
 
+class DecimalProc(object):
+    def to_dict(self,inst,name):
+        data = getattr(inst,name)
+        return unicode(data)
+    
+    def from_dict(self,value,field):
+        return float(value)
+
 field_map={
     models.DateTimeField:DatetimeProc,
     models.ForeignKey : ForeignProc,
     models.ManyToManyField:ManyProc,
     models.OneToOneField:OneProc,
     models.DateField:DateProc,
+    models.DecimalField:DecimalProc,
 }
 
 def from_dict(dc,model=None,pre_proc=None):
