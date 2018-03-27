@@ -76,6 +76,15 @@ export var urlparse={
             segments: a.pathname.replace(/^\//,'').split('/')
         };
     },
+    cdLast:function(path){
+        var mt = /(.*?)\/([^\/]*)\/?$/.exec(path)
+        if (mt){
+            return mt[1]
+        }else{
+            return '/'
+        }
+
+    }
 }
 
 function para_encode(para_str){

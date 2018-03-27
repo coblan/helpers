@@ -82,20 +82,23 @@ export var table_fun={
             return ls.join(',')
         },
         map:function(name,row){
+
             if(name==this.heads[0].name && !table_fun_config.detail_link){
+                var prefix = ex.cdLast(location.pathname)
                 return ex.template('<a href="{edit}?pk={pk}&next={next}">{text}</a>',
                     {
                         text: row[name],
-                        edit: page_name + '.edit',
+                        edit: prefix +'/'+page_name + '.edit',
                         pk: row.pk,
                         next:encodeURIComponent(ex.appendSearch(location.pathname,search_args))
                     })
             }
             if(name=='_detail_link') {
+                var prefix = ex.cdLast(location.pathname)
                 return ex.template('<a href="{edit}?pk={pk}&next={next}">{text}</a>',
                     {
                         text: table_fun_config.detail_link,
-                        edit: page_name + '.edit',
+                        edit: prefix +'/'+page_name + '.edit',
                         pk: row.pk,
                         next:encodeURIComponent(ex.appendSearch(location.pathname,search_args))
                     })
