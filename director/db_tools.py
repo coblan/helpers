@@ -256,6 +256,8 @@ def form_to_head(form,include=None):
                 dc.update({'type':'blocktext'})
         elif v.__class__==forms.fields.BooleanField:
             dc['type']='bool'
+        elif v.__class__==forms.fields.DateField:
+            dc['type']='date'        
             #dc['no_auto_label']=True
         elif v.__class__ in [forms.fields.IntegerField,forms.fields.FloatField]:
             dc['type']='number'

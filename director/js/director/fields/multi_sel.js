@@ -1,3 +1,6 @@
+
+require('./scss/multi_sel.scss')
+
 if(!window.__multi_sel){
 	document.write(`
 	
