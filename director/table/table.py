@@ -35,8 +35,8 @@ class PageNum(object):
         #end = min(crt_page*self.perPage,count)
         #return query[start:end]
         self.pagenator = Paginator(query,self.perPage)
-        page_num=min(self.pagenator.num_pages,abs(int( self.pageNumber)))
-        return self.pagenator.page(page_num)
+        self.pageNumber = min(self.pagenator.num_pages,abs(int( self.pageNumber)))
+        return self.pagenator.page(self.pageNumber)
         #return self.pagenator.page(self.pageNumber)
         
         
@@ -47,7 +47,6 @@ class PageNum(object):
              'crt_page':2
             }
         """
-        start = time.time()
         choice_len = len(self.pagenator.page_range)
         k=3
         a=-1
@@ -62,10 +61,7 @@ class PageNum(object):
         for i in range(len(page_nums)):
             num = page_nums[i]
         page_nums=[str(x) for x in page_nums]
-        
-        end = time.time()
-        print('final %s '%(end-start))
-        
+
         return {'options':page_nums,'crt_page':self.pageNumber}    
 
 class TrivalPageNum(object):
@@ -302,7 +298,21 @@ class ModelTable(object):
             arg = kw.pop(k,None)
             if arg:
                 row_filter[k]=arg
-        return cls(page,row_sort,row_filter,q,request.user,**kw)    
+        return cls(page,row_sort,row_filter,q,request.user,**kw)
+    
+    @classmethod
+    def gen_from_search_args(cls,search_args,user):
+        kw = search_args
+        page = kw.pop('_page','1')
+        row_sort = kw.pop('_sort','').split(',')
+        row_sort=filter(lambda x: x!='',row_sort)
+        q=kw.pop('_q',None)
+        row_filter={}
+        for k in cls.filters.names:
+            arg = kw.pop(k,None)
+            if arg:
+                row_filter[k]=arg
+        return cls(page,row_sort,row_filter,q,user,**kw)
         
     def get_context(self):
         return {

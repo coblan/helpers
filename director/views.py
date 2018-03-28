@@ -9,7 +9,7 @@ from django.utils.translation import ugettext as _
 from . import ajax
 import urllib
 from django.apps import apps
-from .ajax_router import ajax_router
+from helpers.func.network.ajax_router import ajax_router
 
 """
 >5>helpers/port.rst>

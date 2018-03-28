@@ -116,3 +116,10 @@ ul.pagination li span:hover:not(.active) {background-color: #ddd;}
 //.table.suit-style tr:hover{
 //  background-color: #F5F5F5;
 //}
+
+.sortmark{
+  color: #d9d9de;
+  &.sort-col{
+    color: black;
+  }
+}

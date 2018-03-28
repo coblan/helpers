@@ -22,8 +22,6 @@ Vue.component('com-filter',{
     <form v-if='search_tip || heads.length>0' class="com-filter flex flex-grow flex-ac">
                 <input style="max-width: 20em;min-width: 10em;" v-if='search_tip' type="text" name="_q" v-model='search._q' :placeholder='search_tip' class='form-control'/>
                 <div class="flex row-filter"  style="flex-grow:0;min-width: 10em;">
-                    <!--<component is="sim-filter"  v-model='search[filter.name]' v-if="filter.options"  v-for='filter in heads' :id="'filter-'+filter.name"-->
-                    <!--</component>-->
                      <component :is="filter.type?filter.type:'sim-filter'" :config="filter.config" :filter="filter" v-model='search[filter.name]' v-if="filter.options"  v-for='filter in heads' :id="'filter-'+filter.name">
                     </component>
                 </div>

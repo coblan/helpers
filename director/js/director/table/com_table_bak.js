@@ -56,20 +56,15 @@ var com_table={
             return ex.isin(name,this.row_sort.sortable)
         },
         toggle:function (sort_str,name) {
-            if(sort_str == name){
-                return '-'+name
-            }else {
-                return name
+            var ls=ex.split(sort_str,',')
+            var norm_ls=this.filter_minus(ls)
+            var idx = norm_ls.indexOf(name)
+            if(idx!=-1){
+                ls[idx]=ls[idx].startsWith('-')?name:'-'+name
+            }else{
+                ls.push(name)
             }
-            //var ls=ex.split(sort_str,',')
-            //var norm_ls=this.filter_minus(ls)
-            //var idx = norm_ls.indexOf(name)
-            //if(idx!=-1){
-            //    ls[idx]=ls[idx].startsWith('-')?name:'-'+name
-            //}else{
-            //    ls.push(name)
-            //}
-            //return ls.join(',')
+            return ls.join(',')
         },
         toggle_all:function(e){
             var checked = e.currentTarget.checked
@@ -88,23 +83,17 @@ var com_table={
 					<input type="checkbox" name="test" value="" @click="toggle_all($event)"/>
 				</th>
 				<th v-for='head in heads' :class='["td_"+head.name,{"selected":is_sorted(row_sort.sort_str ,head.name )}]'>
-					<div v-if='is_sortable(head.name)'  class='clickable' style="white-space: nowrap;"
-						@click='row_sort.sort_str = toggle( row_sort.sort_str,head.name)'>
-						    <span v-text='head.label'></span>
-						    <div style="font-size: 0.7em;display: inline-block;margin: 0 0.2em;">
-                                <i :class='["fa fa-caret-up sortmark",{"sort-col":row_sort.sort_str==head.name}]' style="position: relative;top: 0.7em;"></i><br>
-                                <i :class='["fa fa-caret-down sortmark",{"sort-col":row_sort.sort_str=="-"+head.name}]' class="fa fa-caret-down"></i>
-						    </div>
-					</div>
+					<span v-if='is_sortable(head.name)' v-text='head.label' class='clickable'
+						@click='row_sort.sort_str = toggle( row_sort.sort_str,head.name)'></span>
 					<span v-else v-text='head.label'></span>
-					<!--<sort-mark class='sort-mark' v-model='row_sort.sort_str' :name='head.name'></sort-mark>-->
+					<sort-mark class='sort-mark' v-model='row_sort.sort_str' :name='head.name'></sort-mark>
 				</th>
 			</tr>
 		</thead>
 		<tbody>
 			<tr v-for='row in rows'>
 				<td v-if='has_check'>
-					<input type="checkbox" name="test" :value="row" v-model='selected'/>
+					<input type="checkbox" name="test" :value="row.pk" v-model='selected'/>
 				</td>
 				<td v-for='head in heads' :class='"td_"+head.name'>
 				    <component v-if="head.type" :is="head.type" :name="head.name" :row="row"></component>
