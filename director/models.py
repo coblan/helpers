@@ -38,4 +38,5 @@ EDITOR_TYPE=(
 class KVModel(models.Model):
     key=models.CharField('key',max_length=500,blank=True)
     value=models.TextField(verbose_name='value',blank=True)
+    desp = models.TextField(verbose_name='描述',blank=True)
     editor_type=models.CharField('编辑器类型',max_length=30,default='blocktext',choices=EDITOR_TYPE)
