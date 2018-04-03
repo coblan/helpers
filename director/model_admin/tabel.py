@@ -211,7 +211,7 @@ class RowSort(object):
                     engine= settings.DATABASES.get(query.db)['ENGINE'] 
                   
                     if engine == 'django.contrib.gis.db.backends.postgis':
-                        # postgresql
+                        # postgresql 注意，postgre的默认中文排序，好像是按照拼音来的（如果这样的话，下面这句程序就没用了。），待以后确认
                         query= query.extra(select={'converted_%s'%norm_name: "convert_to(%s,'GBK')"%norm_name},order_by=['%sconverted_%s'%(direction,norm_name)])
                     else:
                         # mysql 按照拼音排序
