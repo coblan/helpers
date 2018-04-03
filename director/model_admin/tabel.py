@@ -217,7 +217,7 @@ class RowSort(object):
                         # mysql 按照拼音排序
                         query= query.extra(select={'converted_%s'%norm_name: 'CONVERT(%s USING gbk)'%norm_name},order_by=['%sconverted_%s'%(direction,norm_name)])                        
                 else:
-                    query= query.ordery_by(name)
+                    query= query.order_by(name)
 
         return query
 
