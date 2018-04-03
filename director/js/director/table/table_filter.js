@@ -34,11 +34,13 @@ Vue.component('com-filter',{
                     <div>
                          <date v-if="filter.type=='month'" set="month" v-model="search['_start_'+filter.name]"></date>
                         <date v-if="filter.type=='date'"  v-model="search['_start_'+filter.name]"></date>
+                        <datetime v-if="filter.type=='datetime'"  v-model="search['_start_'+filter.name]"></datetime>
                     </div>
                     <span>{To}</span>
                     <div>
                         <date v-if="filter.type=='month'" set="month" v-model="search['_end_'+filter.name]"></date>
                         <date v-if="filter.type=='date'"  v-model="search['_end_'+filter.name]"></date>
+                        <datetime v-if="filter.type=='datetime'"  v-model="search['_end_'+filter.name]"></datetime>
                     </div>
 
                 </div>
