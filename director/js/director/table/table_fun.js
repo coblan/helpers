@@ -74,13 +74,7 @@ export var table_fun={
             }
             return ls.join(',')
         },
-        remove_sort:function (sort_str,name) {
-            var ls=ex.split(sort_str,',')
-            ls=ex.filter(ls,function (v) {
-                return v!='-'+name && v!=name
-            })
-            return ls.join(',')
-        },
+
         map:function(name,row){
 
             if(name==this.heads[0].name && !table_fun_config.detail_link){

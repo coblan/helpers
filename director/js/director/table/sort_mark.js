@@ -37,6 +37,15 @@ Vue.component('sort-mark',{
             return 'no_sort'
         }
     },
+    methods:{
+        remove_sort:function (sort_str,name) {
+            var ls=ex.split(sort_str,',')
+            ls=ex.filter(ls,function (v) {
+                return v!='-'+name && v!=name
+            })
+            return ls.join(',')
+        },
+    }
     //methods:{
 
     //	get_status:function () {
