@@ -16,8 +16,9 @@ var template_str=`
 				</span>
 				<!--<span class='left-arrow' v-if='act.selected'></span>-->
 			</a>
-			
-			<ul class='submenu' v-show='opened_submenu==act.submenu ||act.selected' transition="expand">
+
+			<!--v-show='opened_submenu==act.submenu ||act.selected'-->
+			<ul class='submenu' v-show="is_show(act)"  transition="expand">
 				<li v-for='sub_act in act.submenu' :class='{"active":sub_act.active}'>
 					<a :href='sub_act.url' class='sub_item'>
 						<span v-text='sub_act.label'></span>
@@ -96,18 +97,31 @@ Vue.component('expand_menu',{
 			},
 			
 			data:function () {
+				var list =[]
+				ex.each(this.menu,function(act){
+					list.push(act)
+				})
 				return {
-					opened_submenu:''
+					opened_submenu:'',
+					open_list:list
 				}
 			},
 			methods:{
+				is_show:function(act){
+					return ex.isin(act,this.open_list)
+				},
 				main_act_click:function (act) {
 					if(!act.submenu)return
-					if(this.opened_submenu==act.submenu){
-						this.opened_submenu=''
+					if(ex.isin(act,this.open_list)){
+						ex.remove(this.open_list,act)
 					}else{
-						this.opened_submenu=act.submenu
+						this.open_list.push(act)
 					}
+					//if(this.opened_submenu==act.submenu){
+					//	this.opened_submenu=''
+					//}else{
+					//	this.opened_submenu=act.submenu
+					//}
 				}
 			}
 		})
