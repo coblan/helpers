@@ -47,7 +47,6 @@ from django.core.exceptions import PermissionDenied
 import inspect
 import json
 from django.views.decorators.cache import patch_cache_control
-
 import time
 
 class BaseEngine(object):
@@ -55,6 +54,7 @@ class BaseEngine(object):
     menu={}
     url_name='baseengine'
     brand = 'Admin System'
+    mini_brand = 'AdSys'
     prefer='pc'
     login_url=settings.LOGIN_URL
     root_page='/'
@@ -113,6 +113,7 @@ class BaseEngine(object):
             ctx['template']=template
             if hasattr(page,'get_label'):
                 ctx['page_label'] =page.get_label()
+            ctx['head_bar_data']=self.get_head_bar_data(request)
             ctx=self.custome_ctx(ctx)
             resp= render(request,template,context=ctx)
         if getattr(page,'get_cache_control',None):
@@ -126,6 +127,15 @@ class BaseEngine(object):
     def get_url(self,name):
         return reverse(self.url_name,args=(name,))
     
+    def get_head_bar_data(self,request):
+        user = request.user
+        return {
+            'user':{'first_name':user.first_name,
+                    'username':user.username,
+                    },
+            'brand':self.brand,
+            'mini_brand':self.mini_brand            
+        }
     def get_page_cls(self,name):
         if self._pages:
             for dc in self._pages:
@@ -178,6 +188,7 @@ def page(name,append=''):
         return reverse(url_name,args=(name,))+append_str
     return _func
     # return lambda url_name: reverse(url_name,args=(name,))+append
+
 
 def fa(name):
     return '<i class="fa %s" aria-hidden="true"></i>'%name

@@ -120,9 +120,9 @@ var fl={
             if(ex.is_fun(url)){
                 var progress = success
                 var success = url
-                var url='/_face/upload'
+                var url='/d/upload'
             }else{
-                var url=url||'/_face/upload'
+                var url=url||'/d/upload'
             }
 
             var fd = new FormData();
@@ -155,9 +155,9 @@ var fl={
             if(ex.is_fun(url)){
                 var progress = success
                 var success = url
-                var url='/face/upload'
+                var url='/d/upload'
             }else{
-                var url=url||'/face/upload'
+                var url=url||'/d/upload'
             }
 
         	var fd = new FormData();
@@ -190,7 +190,7 @@ var fl={
 
 var file_input= {
     template: "<input class='file-input' type='file' @change='on_change($event)'>",
-    props: ['value'],
+    props: ['value','name'],
     data: function () {
         return {
             files: []
@@ -201,7 +201,8 @@ var file_input= {
             // when input clear selected file, Component file-input need clear too.
             // Brower prohebit to set to Un-none string
             if (v == '') {
-                this.$el.value = v
+                $(this.$el).val('')
+                //this.$el.value = v
             }
         }
         ,
@@ -211,6 +212,9 @@ var file_input= {
             this.files = event.target.files
             this.$emit('input', this.files)
         },
+        clear:function(){
+            $(this.$el).val('')
+        }
     }
 }
 
@@ -234,10 +238,21 @@ var img_uploader={
         }
     },
     computed:{
-        is_crop:function(){
-            return this.config && this.config.crop
+        cfg:function(){
+            var dc ={
+                crop:false,
+                crop_config:{}
+            }
+            if(this.config){
+                ex.assign(dc,this.config)
+            }
+            return dc
         },
+        //is_crop:function(){
+        //    return this.config && this.config.crop
+        //},
         crop_config:function(){
+            // 用cfg来代表内部设置，本来不应该有这个属性了，但是没弄清楚，以后来整个这个属性。
             if(this.config && this.config.crop){
                 var temp_config=ex.copy(this.config)
                 delete temp_config.crop
@@ -250,11 +265,12 @@ var img_uploader={
 
     template:`
           <div :class='["up_wrap logo-input img-uploader",{"disable":disable}]'>
-            <file-input v-if="!is_crop"
+            <file-input v-if="!cfg.crop"
+                ref="file_input"
                 accept='image/*'
                 v-model= 'img_files'>
             </file-input>
-            <img-crop class='input' v-if='is_crop' v-model='img_files' :config="crop_config">
+            <img-crop class='input' v-if='cfg.crop' v-model='img_files' :config="crop_config">
             </img-crop>
             <div style="padding: 40px" @click="select()">
                 <a class='choose'>Choose</a>
@@ -272,9 +288,16 @@ var img_uploader={
         img_files:function(v){
             var self=this
             console.log('start upload')
+            if(v==""){
+                return
+            }
+            if(! self.validate(v[0])){
+                return
+            }
             fl.upload(v[0],this.up_url,function(url_list){
                 self.url=url_list[0]
                 self.$emit('input',self.url)
+                self.$emit('select')
             })
         }
     },
@@ -282,8 +305,23 @@ var img_uploader={
         clear:function () {
             console.log('clear image data')
             this.img_files=''
-            this.url=''
+            //this.url=''
             this.$emit('input','')
+            this.$refs.file_input.clear()
+        },
+        validate:function(img_fl){
+            //重载该函数，验证文件
+
+            if(this.cfg.maxsize){
+                if(img_fl.size > this.cfg.maxsize){
+                    var msg = ex.template(cfg.tr.picture_size_excceed,{maxsize:this.cfg.maxsize})
+                    cfg.showMsg(msg)
+                    this.clear()
+                    return false
+                }
+            }
+            //console.log(img_fl.size)
+            return true
         },
         select:function(){
             console.log('before select')

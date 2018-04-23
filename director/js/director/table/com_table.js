@@ -81,7 +81,7 @@ var com_table={
         }
 
     },
-    template:`	<table>
+    template:`	<table data-toggle="table">
 		<thead>
 			<tr >
 				<th style='width:50px' v-if='has_check'>

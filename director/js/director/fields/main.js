@@ -68,23 +68,33 @@ hook_ajax_csrf()
 
 var field={
     mixins:[field_base],
+    methods:{
+        show_msg:function(msg,event){
+            layer.tips(msg, event.target);
+        }
+    },
     template:`
-		<div for='field' class="form-group field" :class='{"error":error_data(name)}' v-if="head">
-		<label :for="'id_'+name"  class="control-label" v-if='head.label && head.label!=""'>
-			<span v-text="head.label"></span><span class="req_star" v-if='head.required'>*</span>
-		</label>
+    		<div :class='["form-group field",{"error":head.error}]' v-if="head">
+            <label :for="'id_'+head.name"  class="control-label" v-if='head.label && head.label!=""'>
+                <span v-text="head.label"></span><span class="req_star" v-if='head.required'>*</span>
+            </label>
+            <div class="field_input">
+                <component :is='head.editor'
+                    :row='row'
+                    :head='head'>
+                </component>
 
-		<div class="field_input">
-			<component :is='head.type'
-				:row='row'
-				:name='name'
-				:kw='head'>
-			</component>
+            </div>
+             <div class="msg" style="position: relative;left: -10px;bottom: 1px;">
+                    <i v-if="head.help_text" @click="show_msg(head.help_text,$event)" class="fa fa-shield" ></i>
+                    <i v-if="head.error" @click="show_msg(head.error,$event)" class="fa fa-shield  error" ></i>
+                    <!--<span class="help_text" v-text="head.help_text"></span>-->
+                    <!--<span v-if="head.error_msg" class="error_msg error"  v-text='head.error_msg'></span>-->
+             </div>
+
 		</div>
-		<div class="help_text"><span v-text="head.help_text"></span></div>
-		<slot> </slot>
-		<div v-for='error in error_data(name)' v-text='error' class='error'></div>
-		</div>
+
+
 	`,
 
 }

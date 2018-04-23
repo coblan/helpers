@@ -102,7 +102,7 @@ class GroupFormPage(FieldsPage):
             heads= super(self.__class__,self).get_heads()
             heads.append({
                 'name':'permit',
-                'type':'tow_col',
+                'editor':'tow_col',
                 'label':'权限选择',
                 'options':[{'value':x.pk,'label':unicode(x)} for x in PermitModel.objects.all()]
             })
@@ -237,6 +237,11 @@ class UserFields(ModelFields):
     class Meta:
         model=User
         fields=['username','first_name','is_active','is_staff','is_superuser','email','groups']
+        
+    def dict_head(self, head):
+        if head['name']=='groups':
+            head['editor']='field_multi_chosen'
+        return head
 
 class UserTable(ModelTable):
     model=User

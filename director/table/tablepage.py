@@ -25,7 +25,7 @@ class TablePage(object):
             return 'f7/table.html'
         else:
             return 'director/table.html'
-        
+    
     def get_context(self):
         """
         _empty_data:是为了返回没有数据的页面，当作模版用，在framework7的优化过程中，产生了这个需求。但是没有成功，所以这个_empty_data可能没用。
@@ -48,4 +48,6 @@ class TablePage(object):
         """
         返回空，让title默认显示菜单项的名字
         """
-        return getattr(self,'page_label','')
+        return getattr(self,'page_label',' ')
+    
+

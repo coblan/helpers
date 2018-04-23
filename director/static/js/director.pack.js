@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 67);
+/******/ 	return __webpack_require__(__webpack_require__.s = 74);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -382,42 +382,67 @@ function updateLink(linkElement, obj) {
 "use strict";
 
 
+window.cfg = {
+    showMsg: function showMsg(msg) {
+        alert(msg);
+    },
+    tr: {
+        'picture_size_excceed': '图片尺寸不能超过{maxsize}'
+    },
+    show_load: function show_load() {
+        this._loader_index = layer.load(1);
+    },
+    hide_load: function hide_load(delay) {
+        layer.close(this._loader_index);
+        if (delay) {
+            layer.msg('操作成功', { time: delay });
+        }
+    }
+};
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.merge = merge;
 
-var _ajax_fun = __webpack_require__(16);
+var _ajax_fun = __webpack_require__(19);
 
-var _file = __webpack_require__(21);
+var _file = __webpack_require__(24);
 
 var f = _interopRequireWildcard(_file);
 
-var _ckeditor = __webpack_require__(17);
+var _ckeditor = __webpack_require__(20);
 
 var ck = _interopRequireWildcard(_ckeditor);
 
-var _multi_sel = __webpack_require__(24);
+var _multi_sel = __webpack_require__(27);
 
 var multi = _interopRequireWildcard(_multi_sel);
 
-var _inputs = __webpack_require__(22);
+var _inputs = __webpack_require__(25);
 
 var inputs = _interopRequireWildcard(_inputs);
 
-var _link = __webpack_require__(23);
+var _link = __webpack_require__(26);
 
 var ln = _interopRequireWildcard(_link);
 
-var _com_form_btn = __webpack_require__(18);
+var _com_form_btn = __webpack_require__(21);
 
 var form_btn = _interopRequireWildcard(_com_form_btn);
 
-var _fields_base = __webpack_require__(20);
+var _fields_base = __webpack_require__(23);
 
-var _field_fun = __webpack_require__(19);
+var _field_fun = __webpack_require__(22);
 
-var _order = __webpack_require__(25);
+var _order = __webpack_require__(28);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -469,7 +494,7 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 
 //import {use_color} from '../dosome/color.js'
 //import {load_js,load_css} from '../dosome/pkg.js'
-__webpack_require__(54);
+__webpack_require__(61);
 //import * as fb from './field_base.js'
 //import * as js from './adapt.js'
 
@@ -479,7 +504,12 @@ __webpack_require__(54);
 
 var field = {
     mixins: [_fields_base.field_base],
-    template: '\n\t\t<div for=\'field\' class="form-group field" :class=\'{"error":error_data(name)}\' v-if="head">\n\t\t<label :for="\'id_\'+name"  class="control-label" v-if=\'head.label && head.label!=""\'>\n\t\t\t<span v-text="head.label"></span><span class="req_star" v-if=\'head.required\'>*</span>\n\t\t</label>\n\n\t\t<div class="field_input">\n\t\t\t<component :is=\'head.type\'\n\t\t\t\t:row=\'row\'\n\t\t\t\t:name=\'name\'\n\t\t\t\t:kw=\'head\'>\n\t\t\t</component>\n\t\t</div>\n\t\t<div class="help_text"><span v-text="head.help_text"></span></div>\n\t\t<slot> </slot>\n\t\t<div v-for=\'error in error_data(name)\' v-text=\'error\' class=\'error\'></div>\n\t\t</div>\n\t'
+    methods: {
+        show_msg: function show_msg(msg, event) {
+            layer.tips(msg, event.target);
+        }
+    },
+    template: '\n    \t\t<div :class=\'["form-group field",{"error":head.error}]\' v-if="head">\n            <label :for="\'id_\'+head.name"  class="control-label" v-if=\'head.label && head.label!=""\'>\n                <span v-text="head.label"></span><span class="req_star" v-if=\'head.required\'>*</span>\n            </label>\n            <div class="field_input">\n                <component :is=\'head.editor\'\n                    :row=\'row\'\n                    :head=\'head\'>\n                </component>\n\n            </div>\n             <div class="msg" style="position: relative;left: -10px;bottom: 1px;">\n                    <i v-if="head.help_text" @click="show_msg(head.help_text,$event)" class="fa fa-shield" ></i>\n                    <i v-if="head.error" @click="show_msg(head.error,$event)" class="fa fa-shield  error" ></i>\n                    <!--<span class="help_text" v-text="head.help_text"></span>-->\n                    <!--<span v-if="head.error_msg" class="error_msg error"  v-text=\'head.error_msg\'></span>-->\n             </div>\n\n\t\t</div>\n\n\n\t'
 
 };
 
@@ -602,61 +632,25 @@ window.merge = merge;
 window.order_by_key = _order.order_by_key;
 
 /***/ }),
-/* 4 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _date = __webpack_require__(26);
-
-var date = _interopRequireWildcard(_date);
-
-var _file_uploader = __webpack_require__(27);
-
-var file_uploaer = _interopRequireWildcard(_file_uploader);
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-/***/ }),
 /* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _com_table = __webpack_require__(28);
+var _date = __webpack_require__(29);
 
-var com_table = _interopRequireWildcard(_com_table);
+var date = _interopRequireWildcard(_date);
 
-var _table_fun = __webpack_require__(34);
+var _file_uploader = __webpack_require__(30);
 
-var table_fun = _interopRequireWildcard(_table_fun);
+var file_uploaer = _interopRequireWildcard(_file_uploader);
 
-var _table_filter = __webpack_require__(33);
+var _multi_chosen = __webpack_require__(31);
 
-var table_filter = _interopRequireWildcard(_table_filter);
-
-var _table_btn = __webpack_require__(32);
-
-var table_btn = _interopRequireWildcard(_table_btn);
-
-var _pagenator = __webpack_require__(30);
-
-var pagenator = _interopRequireWildcard(_pagenator);
-
-var _sort_mark = __webpack_require__(31);
-
-var sort_mark = _interopRequireWildcard(_sort_mark);
-
-var _first_col = __webpack_require__(29);
-
-var first_col = _interopRequireWildcard(_first_col);
+var multi_chosen = _interopRequireWildcard(_multi_chosen);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-__webpack_require__(59);
-__webpack_require__(58);
 
 /***/ }),
 /* 6 */
@@ -665,41 +659,83 @@ __webpack_require__(58);
 "use strict";
 
 
-var _expand_menu = __webpack_require__(35);
+var _com_table = __webpack_require__(32);
+
+var com_table = _interopRequireWildcard(_com_table);
+
+var _table_fun = __webpack_require__(41);
+
+var table_fun = _interopRequireWildcard(_table_fun);
+
+var _table_filter = __webpack_require__(40);
+
+var table_filter = _interopRequireWildcard(_table_filter);
+
+var _table_btn = __webpack_require__(39);
+
+var table_btn = _interopRequireWildcard(_table_btn);
+
+var _pagenator = __webpack_require__(37);
+
+var pagenator = _interopRequireWildcard(_pagenator);
+
+var _sort_mark = __webpack_require__(38);
+
+var sort_mark = _interopRequireWildcard(_sort_mark);
+
+var _first_col = __webpack_require__(36);
+
+var first_col = _interopRequireWildcard(_first_col);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+__webpack_require__(66);
+__webpack_require__(65);
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _expand_menu = __webpack_require__(42);
 
 var f = _interopRequireWildcard(_expand_menu);
 
-var _modal = __webpack_require__(36);
+var _modal = __webpack_require__(43);
 
 var a = _interopRequireWildcard(_modal);
 
-var _page_tab = __webpack_require__(37);
+var _page_tab = __webpack_require__(44);
 
 var page = _interopRequireWildcard(_page_tab);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
-__webpack_require__(65);
-__webpack_require__(63);
-__webpack_require__(61);
-__webpack_require__(62);
-__webpack_require__(66);
+__webpack_require__(72);
+__webpack_require__(70);
+__webpack_require__(68);
+__webpack_require__(69);
+__webpack_require__(73);
 
 /***/ }),
-/* 7 */,
 /* 8 */,
 /* 9 */,
 /* 10 */,
 /* 11 */,
 /* 12 */,
 /* 13 */,
-/* 14 */
+/* 14 */,
+/* 15 */,
+/* 16 */,
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(42);
+var content = __webpack_require__(49);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -719,13 +755,13 @@ if(false) {
 }
 
 /***/ }),
-/* 15 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(43);
+var content = __webpack_require__(50);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -745,7 +781,7 @@ if(false) {
 }
 
 /***/ }),
-/* 16 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -865,7 +901,7 @@ if (!window.__uploading_mark) {
 }
 
 /***/ }),
-/* 17 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1034,7 +1070,7 @@ var edit_level = {
 };
 
 /***/ }),
-/* 18 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1064,7 +1100,7 @@ Vue.component('com-form-btn', {
 });
 
 /***/ }),
-/* 19 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1192,7 +1228,7 @@ var field_fun = exports.field_fun = {
 window.field_fun = field_fun;
 
 /***/ }),
-/* 20 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1203,32 +1239,34 @@ Object.defineProperty(exports, "__esModule", {
 });
 var field_base = exports.field_base = {
     props: {
-        name: {
+        head: {
             required: true
         },
-        kw: {
+        row: {
             required: true
         }
+        //kw:{
+        //    required:true
+        //},
     },
     computed: {
-        row: function row() {
-            return this.kw.row;
-        },
-        errors: function errors() {
-            if (!this.kw.errors) {
-                Vue.set(this.kw, 'errors', {});
-            }
-            return this.kw.errors;
-        },
-        head: function head() {
-            var heads = this.kw.heads;
-            for (var x = 0; x < heads.length; x++) {
-                var head = heads[x];
-                if (head.name == this.name) {
-                    return head;
-                }
-            }
-        }
+        //row:function(){return this.kw.row},
+        //errors:function() {
+        //    if(!this.kw.errors){
+        //        Vue.set(this.kw,'errors',{})
+        //    }
+        //    return this.kw.errors
+        //},
+        //head:function(){
+        //    var heads = this.kw.heads
+        //    for (var x=0;x<heads.length;x++) {
+        //        var head = heads[x]
+        //        if (head.name == this.name) {
+        //            return head
+        //        }
+        //    }
+        //
+        //}
     },
     methods: {
         error_data: function error_data(name) {
@@ -1241,20 +1279,20 @@ var field_base = exports.field_base = {
     },
     components: {
         linetext: {
-            props: ['name', 'row', 'kw'],
-            template: '<div>\n            \t\t\t<span v-if=\'kw.readonly\' v-text=\'row[name]\'></span>\n            \t\t\t<input v-else type="text" class="form-control" v-model="row[name]" :id="\'id_\'+name"\n                        \t:placeholder="kw.placeholder" :autofocus="kw.autofocus" :maxlength=\'kw.maxlength\'>\n                       </div>'
+            props: ['row', 'head'],
+            template: '<div>\n            \t\t\t<span v-if=\'head.readonly\' v-text=\'row[head.name]\'></span>\n            \t\t\t<input v-else type="text" class="form-control input-sm" v-model="row[head.name]"\n            \t\t \t    :id="\'id_\'+head.name" :name="head.name"\n                        \t:placeholder="head.placeholder" :autofocus="head.autofocus" :maxlength=\'head.maxlength\'>\n                       </div>'
         },
         number: {
-            props: ['name', 'row', 'kw'],
+            props: ['row', 'head'],
 
-            template: '<div><span v-if=\'kw.readonly\' v-text=\'row[name]\'></span>\n            \t\t<input v-else type="number" class="form-control" v-model="row[name]" :id="\'id_\'+name"\n                        :placeholder="kw.placeholder" :autofocus="kw.autofocus"></div>'
+            template: '<div><span v-if=\'head.readonly\' v-text=\'row[head.name]\'></span>\n            \t\t<input v-else type="number" class="form-control input-sm" v-model="row[head.name]" :id="\'id_\'+head.name"\n            \t\t    :name="head.name"\n                        :placeholder="head.placeholder" :autofocus="head.autofocus"></div>'
         },
         password: {
-            props: ['name', 'row', 'kw'],
-            template: '<input type="password" :id="\'id_\'+name" class="form-control" v-model="row[name]" :placeholder="kw.placeholder" :readonly=\'kw.readonly\'>'
+            props: ['row', 'head'],
+            template: '<input type="password" :id="\'id_\'+head.name" class="form-control input-sm" v-model="row[head.name]" :placeholder="head.placeholder" :readonly=\'head.readonly\'>'
         },
         blocktext: {
-            props: ['name', 'row', 'kw'],
+            props: ['row', 'head'],
             //data:function(){
             //    return {
             //        org_height:0,
@@ -1290,7 +1328,7 @@ var field_base = exports.field_base = {
             //        })
             //    }
             //},
-            template: '<div>\n            <span v-if=\'kw.readonly\' v-text=\'row[name]\'></span>\n            <textarea v-else class="form-control" rows="3" :id="\'id_\'+name" v-model="row[name]" :placeholder="kw.placeholder" :readonly=\'kw.readonly\'></textarea>\n            </div>'
+            template: '<div>\n            <span v-if=\'head.readonly\' v-text=\'row[head.name]\'></span>\n            <textarea v-else class="form-control input-sm" rows="3" :id="\'id_\'+head.name" v-model="row[head.name]" :placeholder="head.placeholder" :readonly=\'head.readonly\'></textarea>\n            </div>'
         },
         color: {
             props: ['name', 'row', 'kw'],
@@ -1337,25 +1375,30 @@ var field_base = exports.field_base = {
             template: '<logo-input :up_url="kw.up_url" :web_url.sync="row[name]" :id="\'id_\'+name"></logo-input>'
         },
         picture: {
-            props: ['name', 'row', 'kw'],
-            template: '<div><img class="img-uploador" v-if=\'kw.readonly\' :src=\'row[name]\'/>\n\t\t\t<img-uploador v-else :up_url="kw.up_url" v-model="row[name]" :id="\'id_\'+name" :config="kw.config"></img-uploador></div>'
+            props: ['row', 'head'],
+            template: '<div class="picture">\n            <input class="virtual_input" style="position:absolute;height: 0;width: 0;" type="text"  :name="head.name" v-model="row[head.name]">\n            <img class="img-uploador" v-if=\'head.readonly\' :src=\'row[head.name]\'/>\n\t\t\t<img-uploador @select="on_uploader_click()" v-else :up_url="head.up_url" v-model="row[head.name]" :id="\'id_\'+head.name" :config="head.config"></img-uploador></div>',
+            methods: {
+                on_uploader_click: function on_uploader_click() {
+                    $(this.$el).find('.virtual_input').focus();
+                }
+            }
         },
         sim_select: {
-            props: ['name', 'row', 'kw'],
+            props: ['row', 'head'],
             data: function data() {
                 var inn_config = {};
-                if (this.kw.config) {
-                    ex.assign(inn_config, this.kw.config);
+                if (this.head.config) {
+                    ex.assign(inn_config, this.head.config);
                 }
                 return {
-                    model: this.row[this.name],
+                    model: this.row[this.head.name],
                     cfg: inn_config
                 };
             },
-            template: '<div>\n            <span v-if=\'kw.readonly\' v-text=\'get_label(kw.options,row[name])\'></span>\n            <select v-else v-model=\'row[name]\'  :id="\'id_\'+name"  class="form-control">\n            \t<option v-for=\'opt in orderBy(kw.options,"label")\' :value=\'opt.value\' v-text=\'opt.label\'></option>\n            </select>\n            </div>',
+            template: '<div>\n            <span v-if=\'head.readonly\' v-text=\'get_label(head.options,row[head.name])\'></span>\n            <select v-else v-model=\'row[head.name]\'  :id="\'id_\'+head.name"  class="form-control input-sm">\n            \t<option v-for=\'opt in orderBy(head.options,"label")\' :value=\'opt.value\' v-text=\'opt.label\'></option>\n            </select>\n            </div>',
             mounted: function mounted() {
-                if (this.kw.default && !this.row[this.name]) {
-                    Vue.set(this.row, this.name, this.kw.default);
+                if (this.head.default && !this.row[this.head.name]) {
+                    Vue.set(this.row, this.head.name, this.head.default);
                     //this.row[this.name]=this.kw.default
                 }
             },
@@ -1369,7 +1412,7 @@ var field_base = exports.field_base = {
                     }
                 },
                 orderBy: function orderBy(array, key) {
-                    if (this.kw.orgin_order || this.cfg.orgin_order) {
+                    if (this.head.orgin_order || this.cfg.orgin_order) {
                         return array;
                     } else {
                         return order_by_key(array, key);
@@ -1378,17 +1421,17 @@ var field_base = exports.field_base = {
             }
         },
         search_select: {
-            props: ['name', 'row', 'kw'],
+            props: ['row', 'head'],
             data: function data() {
                 return {
-                    model: this.row[this.name]
+                    model: this.row[this.head.name]
                 };
             },
-            template: '<div>\n            <span v-if=\'kw.readonly\' v-text=\'get_label(kw.options,row[name])\'></span>\n            <select v-else v-model=\'row[name]\'  :id="\'id_\'+name"  class="selectpicker form-control" data-live-search="true">\n            \t<option v-for=\'opt in orderBy(kw.options,"label")\' :value=\'opt.value\'\n            \t :data-tokens="opt.label" v-text=\'opt.label\'></option>\n            </select>\n            </div>',
+            template: '<div>\n            <span v-if=\'head.readonly\' v-text=\'get_label(head.options,row[head.name])\'></span>\n            <select v-else v-model=\'row[head.name]\'  :id="\'id_\'+head.name"  class="selectpicker form-control" data-live-search="true">\n            \t<option v-for=\'opt in orderBy(head.options,"label")\' :value=\'opt.value\'\n            \t :data-tokens="opt.label" v-text=\'opt.label\'></option>\n            </select>\n            </div>',
             mounted: function mounted() {
                 var self = this;
-                if (this.kw.default && !this.row[this.name]) {
-                    Vue.set(this.row, this.name, this.kw.default);
+                if (this.head.default && !this.row[this.head.name]) {
+                    Vue.set(this.row, this.head.name, this.head.default);
                 }
                 ex.load_css("/static/lib/bootstrap-select.min.css");
                 ex.load_js("/static/lib/bootstrap-select.min.js", function () {
@@ -1411,11 +1454,11 @@ var field_base = exports.field_base = {
         },
 
         check_select: {
-            props: ['name', 'row', 'kw'],
+            props: ['row', 'head'],
             computed: {
                 selected: {
                     get: function get() {
-                        var data = this.row[this.name];
+                        var data = this.row[this.head.name];
                         if (data) {
                             return data.split(',');
                         } else {
@@ -1423,29 +1466,43 @@ var field_base = exports.field_base = {
                         }
                     },
                     set: function set(v) {
-                        this.row[this.name] = v.join(',');
+                        this.row[this.head.name] = v.join(',');
                     }
 
                 }
             },
-            template: '<div>\n                <ul>\n                <li v-for=\'option in kw.options\' v-if="option.value"><input type="checkbox" :value="option.value" v-model="selected"/><span v-text="option.label"></span></li>\n                </ul>\n            </div>'
+            template: '<div>\n                <ul>\n                <li v-for=\'option in head.options\' v-if="option.value"><input type="checkbox" :value="option.value" v-model="selected"/><span v-text="option.label"></span></li>\n                </ul>\n            </div>'
         },
-        tow_col: {
-            props: ['name', 'row', 'kw'],
-            template: '<div>\n\t        \t<ul v-if=\'kw.readonly\'><li v-for=\'value in row[name]\' v-text=\'get_label(value)\'></li></ul>\n\t        \t<tow-col-sel v-else v-model=\'row[name]\' :id="\'id_\'+name" :choices=\'kw.options\' :size=\'kw.size\' ></tow-col-sel>\n\t        \t</div>',
+        field_multi_chosen: {
+            props: ['row', 'head'],
+            template: '<div>\n\t        \t<ul v-if=\'head.readonly\'><li v-for=\'value in row[head.name]\' v-text=\'get_label(value)\'></li></ul>\n\t        \t<multi-chosen v-else v-model=\'row[head.name]\' :id="\'id_\'+head.name" :options=\'head.options\'></multi-chosen>\n\t        \t</div>',
             methods: {
                 get_label: function get_label(value) {
-                    for (var i = 0; i < this.kw.options.length; i++) {
-                        if (this.kw.options[i].value == value) {
-                            return this.kw.options[i].label;
+                    for (var i = 0; i < this.head.options.length; i++) {
+                        if (this.head.options[i].value == value) {
+                            return this.head.options[i].label;
+                        }
+                    }
+                }
+            }
+        },
+
+        tow_col: {
+            props: ['row', 'head'],
+            template: '<div>\n\t        \t<ul v-if=\'head.readonly\'><li v-for=\'value in row[head.name]\' v-text=\'get_label(value)\'></li></ul>\n\t        \t<tow-col-sel v-else v-model=\'row[head.name]\' :id="\'id_\'+head.name" :choices=\'head.options\' :size=\'head.size\' ></tow-col-sel>\n\t        \t</div>',
+            methods: {
+                get_label: function get_label(value) {
+                    for (var i = 0; i < this.head.options.length; i++) {
+                        if (this.head.options[i].value == value) {
+                            return this.head.options[i].label;
                         }
                     }
                 }
             }
         },
         bool: {
-            props: ['name', 'row', 'kw'],
-            template: '<div class="checkbox">\n\t        <input type="checkbox" :id="\'id_\'+name" v-model=\'row[name]\' :disabled="kw.readonly">\n\t\t\t <label :for="\'id_\'+name"><span v-text=\'kw.label\'></span></label>\n\t\t\t\t\t  </div>'
+            props: ['row', 'head'],
+            template: '<div class="checkbox">\n\t        <input type="checkbox" :id="\'id_\'+head.name" v-model=\'row[head.name]\' :disabled="head.readonly">\n\t\t\t <label :for="\'id_\'+head.name"><span v-text=\'head.label\'></span></label>\n\t\t\t\t\t  </div>'
         },
         date: {
             props: ['name', 'row', 'kw'],
@@ -1465,7 +1522,7 @@ var field_base = exports.field_base = {
 };
 
 /***/ }),
-/* 21 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1569,7 +1626,7 @@ img-uploador
 <<<<
 */
 
-__webpack_require__(55);
+__webpack_require__(62);
 
 var fl = {
     read: function read(file, callback) {
@@ -1590,9 +1647,9 @@ var fl = {
         if (ex.is_fun(url)) {
             var progress = success;
             var success = url;
-            var url = '/_face/upload';
+            var url = '/d/upload';
         } else {
-            var url = url || '/_face/upload';
+            var url = url || '/d/upload';
         }
 
         var fd = new FormData();
@@ -1625,9 +1682,9 @@ var fl = {
         if (ex.is_fun(url)) {
             var progress = success;
             var success = url;
-            var url = '/face/upload';
+            var url = '/d/upload';
         } else {
-            var url = url || '/face/upload';
+            var url = url || '/d/upload';
         }
 
         var fd = new FormData();
@@ -1660,7 +1717,7 @@ var fl = {
 
 var file_input = {
     template: "<input class='file-input' type='file' @change='on_change($event)'>",
-    props: ['value'],
+    props: ['value', 'name'],
     data: function data() {
         return {
             files: []
@@ -1671,7 +1728,8 @@ var file_input = {
             // when input clear selected file, Component file-input need clear too.
             // Brower prohebit to set to Un-none string
             if (v == '') {
-                this.$el.value = v;
+                $(this.$el).val('');
+                //this.$el.value = v
             }
         }
 
@@ -1680,6 +1738,9 @@ var file_input = {
         on_change: function on_change(event) {
             this.files = event.target.files;
             this.$emit('input', this.files);
+        },
+        clear: function clear() {
+            $(this.$el).val('');
         }
     }
 };
@@ -1703,10 +1764,21 @@ var img_uploader = {
         };
     },
     computed: {
-        is_crop: function is_crop() {
-            return this.config && this.config.crop;
+        cfg: function cfg() {
+            var dc = {
+                crop: false,
+                crop_config: {}
+            };
+            if (this.config) {
+                ex.assign(dc, this.config);
+            }
+            return dc;
         },
+        //is_crop:function(){
+        //    return this.config && this.config.crop
+        //},
         crop_config: function crop_config() {
+            // 用cfg来代表内部设置，本来不应该有这个属性了，但是没弄清楚，以后来整个这个属性。
             if (this.config && this.config.crop) {
                 var temp_config = ex.copy(this.config);
                 delete temp_config.crop;
@@ -1717,7 +1789,7 @@ var img_uploader = {
         }
     },
 
-    template: '\n          <div :class=\'["up_wrap logo-input img-uploader",{"disable":disable}]\'>\n            <file-input v-if="!is_crop"\n                accept=\'image/*\'\n                v-model= \'img_files\'>\n            </file-input>\n            <img-crop class=\'input\' v-if=\'is_crop\' v-model=\'img_files\' :config="crop_config">\n            </img-crop>\n            <div style="padding: 40px" @click="select()">\n                <a class=\'choose\'>Choose</a>\n            </div>\n            <div v-if=\'url\' class="closeDiv">\n            <div class="close" @click=\'clear()\'><i class="fa fa-times" aria-hidden="true" style="padding: 5px;"></i></div>\n            <img :src="url" alt="" class="logoImg">\n            </div>\n            </div>\n        ',
+    template: '\n          <div :class=\'["up_wrap logo-input img-uploader",{"disable":disable}]\'>\n            <file-input v-if="!cfg.crop"\n                ref="file_input"\n                accept=\'image/*\'\n                v-model= \'img_files\'>\n            </file-input>\n            <img-crop class=\'input\' v-if=\'cfg.crop\' v-model=\'img_files\' :config="crop_config">\n            </img-crop>\n            <div style="padding: 40px" @click="select()">\n                <a class=\'choose\'>Choose</a>\n            </div>\n            <div v-if=\'url\' class="closeDiv">\n            <div class="close" @click=\'clear()\'><i class="fa fa-times" aria-hidden="true" style="padding: 5px;"></i></div>\n            <img :src="url" alt="" class="logoImg">\n            </div>\n            </div>\n        ',
     watch: {
         value: function value(v) {
             this.url = v;
@@ -1725,9 +1797,16 @@ var img_uploader = {
         img_files: function img_files(v) {
             var self = this;
             console.log('start upload');
+            if (v == "") {
+                return;
+            }
+            if (!self.validate(v[0])) {
+                return;
+            }
             fl.upload(v[0], this.up_url, function (url_list) {
                 self.url = url_list[0];
                 self.$emit('input', self.url);
+                self.$emit('select');
             });
         }
     },
@@ -1735,8 +1814,23 @@ var img_uploader = {
         clear: function clear() {
             console.log('clear image data');
             this.img_files = '';
-            this.url = '';
+            //this.url=''
             this.$emit('input', '');
+            this.$refs.file_input.clear();
+        },
+        validate: function validate(img_fl) {
+            //重载该函数，验证文件
+
+            if (this.cfg.maxsize) {
+                if (img_fl.size > this.cfg.maxsize) {
+                    var msg = ex.template(cfg.tr.picture_size_excceed, { maxsize: this.cfg.maxsize });
+                    cfg.showMsg(msg);
+                    this.clear();
+                    return false;
+                }
+            }
+            //console.log(img_fl.size)
+            return true;
         },
         select: function select() {
             console.log('before select');
@@ -1953,7 +2047,7 @@ Vue.component('logo-input', {
 window.fl = fl;
 
 /***/ }),
-/* 22 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1967,21 +2061,6 @@ window.fl = fl;
 inputs
 =======
 
-date
-========
-::
-
-<date v-model='variable'></date>  // 选择默认set=date ,即选择日期
-
-<date v-model='variable' set='month'></date> // 选择 set=month ,即选择月份
-
-<date v-model='variable' set='month' :config='{}'></date>  //  config 是自定义的配置对象，具体需要参加帮助文件
-
-datetime
-===========
-::
-
-<datetime v-model='variable' :config='{}'></datetime> // 选择日期和时间
 
 color
 ======
@@ -1995,122 +2074,9 @@ forign-edit
 <-<
  */
 
-//import * as tab from './inputs/tab_box.js'
-
-var date_config_set = {
-    date: {
-        language: "zh-CN",
-        format: "yyyy-mm-dd",
-        autoclose: true,
-        todayHighlight: true
-
-    },
-    month: {
-        language: "zh-CN",
-        format: "yyyy-mm",
-        startView: "months",
-        minViewMode: "months",
-        autoclose: true
-
-    }
-};
-
-Vue.component('date', {
-    //template:'<input type="text" class="form-control">',
-    template: " <div class=\"input-group datetime-picker\" style=\"width: 12em;\">\n                <input type=\"text\" class=\"form-control\" readonly :placeholder=\"placeholder\"/>\n                <div class=\"input-group-addon\" @click=\"$emit('input','')\">\n                    <i class=\"fa fa-calendar-times-o\" aria-hidden=\"true\"></i>\n                </div>\n                </div>",
-    props: ['value', 'set', 'config', 'placeholder'],
-    mounted: function mounted() {
-        var self = this;
-        if (!this.set) {
-            var def_conf = date_config_set.date;
-        } else {
-            var def_conf = date_config_set[this.set];
-        }
-        if (this.config) {
-            ex.assign(def_conf, this.config);
-        }
-        self.input = $(this.$el).find('input');
-
-        ex.load_css('/static/lib/bootstrap-datepicker1.6.4.min.css');
-
-        ex.load_js('/static/lib/bootstrap-datepicker1.6.4.min.js', function () {
-            ex.load_js('/static/lib/bootstrap-datepicker1.6.4.zh-CN.min.js', function () {
-                self.input.datepicker(def_conf).on('changeDate', function (e) {
-                    self.$emit('input', self.input.val());
-                });
-                // if has init value,then init it
-                if (self.value) {
-                    self.input.datepicker('update', self.value);
-                    self.input.val(self.value);
-                }
-            });
-        });
-    },
-    methods: {
-        click_input: function click_input() {
-            this.input.focus();
-        }
-    },
-    watch: {
-        value: function value(n) {
-            this.input.datepicker('update', n);
-            this.input.val(n);
-        }
-    }
-});
-
-Vue.component('datetime', {
-    //data:function(){
-    //    return {
-    //        input_value:'',
-    //    }
-    //},
-    //template:'<input type="text" class="form-control">',
-    template: "<span class=\"datetime-picker\">\n                <span class=\"cross\" @click=\"$emit('input','')\">X</span>\n                <input type=\"text\" readonly/>\n                </span>",
-    props: ['value', 'config'],
-    mounted: function mounted() {
-        var self = this;
-        var def_conf = {
-            language: "zh-CN",
-            format: "yyyy-mm-dd hh:ii",
-            autoclose: true,
-            todayHighlight: true
-        };
-        if (self.config) {
-            ex.assign(def_conf, this.config);
-        }
-        self.input = $(this.$el).find('input');
-
-        ex.load_css('/static/lib/smalot-bootstrap-datetimepicker2.4.3.min.css');
-        ex.load_js('/static/lib/moment2.17.1.min.js');
-        ex.load_js('/static/lib/smalot-bootstrap-datetimepicker2.4.3.min.js', function () {
-
-            self.input.datetimepicker(def_conf).on('changeDate', function (e) {
-                self.$emit('input', self.input.val());
-            });
-
-            // if has init value,then init it
-            if (self.value) {
-                self.input.datepicker('update', self.value);
-                self.input.val(self.value);
-            }
-        });
-    },
-
-    watch: {
-        value: function value(n) {
-            this.input.val(n);
-            this.input.val(n);
-        }
-        //input_value:function(n){
-        //    this.$emit('input',n)
-        //}
-    }
-});
-
 var color = {
     props: ['value'],
-    template: "<input type=\"text\">",
+    template: '<input type="text">',
     methods: {
         init_and_listen: function init_and_listen() {
             var self = this;
@@ -2146,10 +2112,10 @@ var color = {
 
 Vue.component('color', color);
 
-ex.append_css("<style type=\"text/css\" media=\"screen\">\n    /*.datetime-picker{*/\n        /*position: relative;*/\n        /*display: inline-block;*/\n    /*}*/\n    .datetime-picker input[readonly]{\n        background-color: white;\n    }\n\t/*.datetime-picker .cross{*/\n\t    /*display: none;*/\n\t/*}*/\n\t/*.datetime-picker:hover .cross{*/\n\t    /*display: inline-block;*/\n\t    /*position: absolute;*/\n\t    /*right: 8px;*/\n\t    /*top:3px;*/\n\t    /*cursor: pointer;*/\n\n\t/*}*/\n</style>\n ");
+ex.append_css('<style type="text/css" media="screen">\n    /*.datetime-picker{*/\n        /*position: relative;*/\n        /*display: inline-block;*/\n    /*}*/\n    .datetime-picker input[readonly]{\n        background-color: white;\n    }\n\t/*.datetime-picker .cross{*/\n\t    /*display: none;*/\n\t/*}*/\n\t/*.datetime-picker:hover .cross{*/\n\t    /*display: inline-block;*/\n\t    /*position: absolute;*/\n\t    /*right: 8px;*/\n\t    /*top:3px;*/\n\t    /*cursor: pointer;*/\n\n\t/*}*/\n</style>\n ');
 
 var forignEdit = {
-    template: "<div class=\"forign-key-panel\">\n        <button v-if=\"has_pk()\" @click=\"jump_edit(kw.row[name])\" title=\"edit\">\n            <i class=\"fa fa-pencil-square-o\" aria-hidden=\"true\"></i></button>\n        <button @click=\"jump_edit()\" title=\"create new\"><i class=\"fa fa-plus\" aria-hidden=\"true\"></i></button>\n    </div>",
+    template: '<div class="forign-key-panel">\n        <button v-if="has_pk()" @click="jump_edit(kw.row[name])" title="edit">\n            <i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>\n        <button @click="jump_edit()" title="create new"><i class="fa fa-plus" aria-hidden="true"></i></button>\n    </div>',
     props: ['kw', 'name', 'page_name'],
     methods: {
         jump_edit: function jump_edit(pk) {
@@ -2193,7 +2159,7 @@ var forignEdit = {
     }
 };
 
-ex.append_css("\n<style type=\"text/css\">\n    .forign-key-panel{\n        padding: 6px;\n    }\n</style>");
+ex.append_css('\n<style type="text/css">\n    .forign-key-panel{\n        padding: 6px;\n    }\n</style>');
 
 Vue.component('forign-edit', forignEdit);
 
@@ -2232,12 +2198,12 @@ var check_box = {
             }
         }
     },
-    template: " <span class=\"com-checkbox\" @click=\"on_click()\">\n                <input type=\"checkbox\" :value=\"value\" v-model='inn_checked' style=\"display: none\"/>\n                  <i class=\"fa fa-check-circle\" aria-hidden=\"true\" v-if='is_checked' style=\"color: #009926\"></i>\n                  <i class=\"fa fa-circle-thin\" aria-hidden=\"true\" v-else></i>\n              </span>"
+    template: ' <span class="com-checkbox" @click="on_click()">\n                <input type="checkbox" :value="value" v-model=\'inn_checked\' style="display: none"/>\n                  <i class="fa fa-check-circle" aria-hidden="true" v-if=\'is_checked\' style="color: #009926"></i>\n                  <i class="fa fa-circle-thin" aria-hidden="true" v-else></i>\n              </span>'
 };
 Vue.component('com-check-box', check_box);
 
 /***/ }),
-/* 23 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2315,7 +2281,7 @@ popUrlListen:
 <-<
  */
 
-__webpack_require__(56);
+__webpack_require__(63);
 
 var ln = {
     history_handle: function history_handle(obj) {
@@ -2537,7 +2503,7 @@ var ln = {
 window.ln = ln;
 
 /***/ }),
-/* 24 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2624,7 +2590,7 @@ Vue.component('tow-col-sel', {
 });
 
 /***/ }),
-/* 25 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2662,7 +2628,7 @@ function order_by_key(array, key) {
 }
 
 /***/ }),
-/* 26 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2724,7 +2690,7 @@ var date_config_set = {
 
 Vue.component('date', {
     //template:'<input type="text" class="form-control">',
-    template: " <div class=\"input-group datetime-picker\" style=\"width: 12em;\">\n                <input type=\"text\" class=\"form-control\" readonly :placeholder=\"placeholder\"/>\n                <div class=\"input-group-addon\" >\n                    <i v-if=\"! value\" @click=\"click_input()\" class=\"fa fa-calendar\" aria-hidden=\"true\"></i>\n                    <i v-else @click=\"$emit('input','')\" class=\"fa fa-calendar-times-o\" aria-hidden=\"true\"></i>\n                </div>\n                </div>",
+    template: " <div class=\"input-group datetime-picker\" style=\"width: 12em;\">\n                <input type=\"text\" class=\"form-control input-sm\" readonly :placeholder=\"placeholder\"/>\n                <div class=\"input-group-addon\" >\n                    <i v-if=\"! value\" @click=\"click_input()\" class=\"fa fa-calendar\" aria-hidden=\"true\"></i>\n                    <i v-else @click=\"$emit('input','')\" class=\"fa fa-calendar-times-o\" aria-hidden=\"true\"></i>\n                </div>\n                </div>",
     props: ['value', 'set', 'config', 'placeholder'],
     mounted: function mounted() {
         var self = this;
@@ -2816,7 +2782,7 @@ Vue.component('datetime', {
 });
 
 /***/ }),
-/* 27 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2825,7 +2791,7 @@ Vue.component('datetime', {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-__webpack_require__(57);
+__webpack_require__(64);
 
 /*
 * config={
@@ -2995,7 +2961,46 @@ Vue.component('com-file-uploader', com_file_uploader);
 Vue.component('field-file-uploader', field_file_uploader);
 
 /***/ }),
-/* 28 */
+/* 31 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+__webpack_require__(78);
+
+var multi_chosen = {
+    props: ['value', 'options'],
+    template: '<select  multiple="multiple" class="multi-chosen form-control">\n    <option v-for="option in options" :value="option.value" v-text="option.label"></option>\n</select>',
+    mounted: function mounted() {
+        var self = this;
+        ex.load_css('https://cdn.bootcss.com/chosen/1.8.2/chosen.min.css');
+        ex.load_js('https://cdn.bootcss.com/chosen/1.8.2/chosen.jquery.min.js', function () {
+            $(self.$el).chosen({
+                search_contains: true
+            }).change(function (event) {
+                self.$emit('input', $(this).val());
+            });
+            self.setValue(self.value);
+        });
+    },
+    watch: {
+        value: function value(nv) {
+            this.setValue(nv);
+        }
+    },
+    methods: {
+        setValue: function setValue(val) {
+            $(this.$el).val(val);
+            $(this.$el).trigger("chosen:updated");
+        }
+    }
+};
+
+Vue.component('multi-chosen', multi_chosen);
+
+/***/ }),
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3086,13 +3091,126 @@ var com_table = {
         }
 
     },
-    template: '\t<table>\n\t\t<thead>\n\t\t\t<tr >\n\t\t\t\t<th style=\'width:50px\' v-if=\'has_check\'>\n\t\t\t\t\t<input type="checkbox" name="test" value="" @click="toggle_all($event)"/>\n\t\t\t\t</th>\n\t\t\t\t<th v-for=\'head in heads\' :class=\'["td_"+head.name,{"selected":is_sorted(row_sort.sort_str ,head.name )}]\'>\n\t\t\t\t\t<div v-if=\'is_sortable(head.name)\'  class=\'clickable\' style="white-space: nowrap;"\n\t\t\t\t\t\t@click=\'row_sort.sort_str = toggle( row_sort.sort_str,head.name)\'>\n\t\t\t\t\t\t    <span v-text=\'head.label\'></span>\n\t\t\t\t\t\t    <div style="font-size: 0.7em;display: inline-block;margin: 0 0.2em;">\n                                <i :class=\'["fa fa-caret-up sortmark",{"sort-col":row_sort.sort_str==head.name}]\' style="position: relative;top: 0.7em;"></i><br>\n                                <i :class=\'["fa fa-caret-down sortmark",{"sort-col":row_sort.sort_str=="-"+head.name}]\' class="fa fa-caret-down"></i>\n\t\t\t\t\t\t    </div>\n\t\t\t\t\t</div>\n\t\t\t\t\t<span v-else v-text=\'head.label\'></span>\n\t\t\t\t\t<!--<sort-mark class=\'sort-mark\' v-model=\'row_sort.sort_str\' :name=\'head.name\'></sort-mark>-->\n\t\t\t\t</th>\n\t\t\t</tr>\n\t\t</thead>\n\t\t<tbody>\n\t\t\t<tr v-for=\'row in rows\'>\n\t\t\t\t<td v-if=\'has_check\'>\n\t\t\t\t\t<input type="checkbox" name="test" :value="row" v-model=\'selected\'/>\n\t\t\t\t</td>\n\t\t\t\t<td v-for=\'head in heads\' :class=\'"td_"+head.name\'>\n\t\t\t\t    <component v-if="head.type" :is="head.type" :name="head.name" :row="row"></component>\n\t\t\t\t\t<span v-else v-html=\'m_map(head.name,row)\'></span>\n\t\t\t\t</td>\n\t\t\t</tr>\n\t\t</tbody>\n\t</table>'
+    template: '\t<table data-toggle="table">\n\t\t<thead>\n\t\t\t<tr >\n\t\t\t\t<th style=\'width:50px\' v-if=\'has_check\'>\n\t\t\t\t\t<input type="checkbox" name="test" value="" @click="toggle_all($event)"/>\n\t\t\t\t</th>\n\t\t\t\t<th v-for=\'head in heads\' :class=\'["td_"+head.name,{"selected":is_sorted(row_sort.sort_str ,head.name )}]\'>\n\t\t\t\t\t<div v-if=\'is_sortable(head.name)\'  class=\'clickable\' style="white-space: nowrap;"\n\t\t\t\t\t\t@click=\'row_sort.sort_str = toggle( row_sort.sort_str,head.name)\'>\n\t\t\t\t\t\t    <span v-text=\'head.label\'></span>\n\t\t\t\t\t\t    <div style="font-size: 0.7em;display: inline-block;margin: 0 0.2em;">\n                                <i :class=\'["fa fa-caret-up sortmark",{"sort-col":row_sort.sort_str==head.name}]\' style="position: relative;top: 0.7em;"></i><br>\n                                <i :class=\'["fa fa-caret-down sortmark",{"sort-col":row_sort.sort_str=="-"+head.name}]\' class="fa fa-caret-down"></i>\n\t\t\t\t\t\t    </div>\n\t\t\t\t\t</div>\n\t\t\t\t\t<span v-else v-text=\'head.label\'></span>\n\t\t\t\t\t<!--<sort-mark class=\'sort-mark\' v-model=\'row_sort.sort_str\' :name=\'head.name\'></sort-mark>-->\n\t\t\t\t</th>\n\t\t\t</tr>\n\t\t</thead>\n\t\t<tbody>\n\t\t\t<tr v-for=\'row in rows\'>\n\t\t\t\t<td v-if=\'has_check\'>\n\t\t\t\t\t<input type="checkbox" name="test" :value="row" v-model=\'selected\'/>\n\t\t\t\t</td>\n\t\t\t\t<td v-for=\'head in heads\' :class=\'"td_"+head.name\'>\n\t\t\t\t    <component v-if="head.type" :is="head.type" :name="head.name" :row="row"></component>\n\t\t\t\t\t<span v-else v-html=\'m_map(head.name,row)\'></span>\n\t\t\t\t</td>\n\t\t\t</tr>\n\t\t</tbody>\n\t</table>'
 };
 
 Vue.component('com-table', com_table);
 
 /***/ }),
-/* 29 */
+/* 33 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var com_date_range = {
+    props: ['head', 'search_args'],
+    data: function data() {
+        if (!this.search_args['_start_' + this.head.name]) {
+            Vue.set(this.search_args, '_start_' + this.head.name, '');
+        }
+        if (!this.search_args['_end_' + this.head.name]) {
+            Vue.set(this.search_args, '_end_' + this.head.name, '');
+        }
+        return {};
+    },
+    template: '<div  class="date-filter flex flex-ac">\n                     <date v-model="search_args[\'_start_\'+head.name]" :placeholder="head.label"></date>\n                    <div style="display: inline-block;margin: 0 2px;" >-</div>\n                        <date  v-model="search_args[\'_end_\'+head.name]" :placeholder="head.label"></date>\n                </div>'
+
+};
+Vue.component('com-date-range-filter', com_date_range);
+
+//var com_date_range={
+//    props:['head','search_args'],
+//    template:`<div  v-for='filter in heads' v-if="['time','date','month'].indexOf(filter.type)!=-1" class="date-filter flex flex-ac">
+//                    <span v-text="filter.label"></span>
+//                    <span>{From}</span>
+//                    <div>
+//                        <date v-if="filter.type=='month'" set="month" v-model="search['_start_'+filter.name]"></date>
+//                        <date v-if="filter.type=='date'"  v-model="search['_start_'+filter.name]"></date>
+//                    </div>
+//                    <span>{To}</span>
+//                    <div>
+//                        <date v-if="filter.type=='month'" set="month" v-model="search['_end_'+filter.name]"></date>
+//                        <date v-if="filter.type=='date'"  v-model="search['_end_'+filter.name]"></date>
+//                    </div>
+//                </div>`,
+//
+//}
+
+/***/ }),
+/* 34 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var com_search = {
+         props: ['head', 'search_args'],
+         template: '<div>\n    <input style="max-width: 20em;min-width: 10em;"\n             type="text"\n             name="_q"\n             v-model=\'search_args._q\'\n             :placeholder=\'head.search_tip\'\n             @keyup.13="$emit(\'submit\')"\n             class=\'form-control input-sm\'/>\n    </div> '
+};
+Vue.component('com-search-filter', com_search);
+
+/***/ }),
+/* 35 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var com_select = {
+    props: ['head', 'search_args', 'config'],
+    template: '<select v-model=\'search_args[head.name]\' class="form-control input-sm" >\n        <option :value="undefined" v-text=\'head.label\'></option>\n        <option :value="null" disabled >---</option>\n        <option v-for=\'option in orderBy( head.options,"label")\' :value="option.value" v-text=\'option.label\'></option>\n    </select>\n    ',
+    data: function data() {
+        var inn_cfg = {
+            sort: true
+        };
+        ex.assign(inn_cfg, this.config);
+        return {
+            cfg: inn_cfg
+        };
+    },
+    watch: {
+        myvalue: function myvalue(v) {
+            this.$emit('input', v);
+        }
+    },
+    methods: {
+        orderBy: function orderBy(array, key) {
+            if (!this.cfg.sort) {
+                return array;
+            } else {
+                return array.slice().sort(function (a, b) {
+                    if (isChinese(a[key]) && isChinese(b[key])) {
+                        return a[key].localeCompare(b[key], 'zh');
+                    } else {
+                        return compare(a[key], b[key]);
+                    }
+                });
+            }
+        }
+    }
+};
+Vue.component('com-select-filter', com_select);
+
+function isChinese(temp) {
+    var re = /[^\u4E00-\u9FA5]/;
+    if (re.test(temp[0])) {
+        return false;
+    }
+    return true;
+}
+function compare(temp1, temp2) {
+    if (temp1 < temp2) {
+        return -1;
+    } else if (temp1 == temp2) {
+        return 0;
+    } else {
+        return 1;
+    }
+}
+
+/***/ }),
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3123,7 +3241,7 @@ var first_col = {
 Vue.component('first-col', first_col);
 
 /***/ }),
-/* 30 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3161,7 +3279,7 @@ Vue.component('paginator', {
 });
 
 /***/ }),
-/* 31 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3241,7 +3359,7 @@ Vue.component('sort-mark', {
     } });
 
 /***/ }),
-/* 32 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3261,33 +3379,46 @@ var com_table_btn = {
 Vue.component('com-table-btn', com_table_btn);
 
 /***/ }),
-/* 33 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-/**
- >5>front/table.rst>
+var _com_search = __webpack_require__(34);
 
- table的过滤器
- ============
- ::
+var com_search = _interopRequireWildcard(_com_search);
 
- class SalaryFilter(RowFilter):
- names=['is_checked']
- range_fields=[{'name':'month','type':'month'}]
- model=SalaryRecords
+var _com_select = __webpack_require__(35);
 
+var com_select = _interopRequireWildcard(_com_select);
 
- <-<
- */
+var _com_date_range = __webpack_require__(33);
 
-__webpack_require__(60);
+var com_date_range = _interopRequireWildcard(_com_date_range);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+__webpack_require__(67); /**
+                                      >5>front/table.rst>
+                                     
+                                      table的过滤器
+                                      ============
+                                      ::
+                                     
+                                      class SalaryFilter(RowFilter):
+                                      names=['is_checked']
+                                      range_fields=[{'name':'month','type':'month'}]
+                                      model=SalaryRecords
+                                     
+                                     
+                                      <-<
+                                      */
+
 
 Vue.component('com-filter', {
-    props: ['heads', 'search', 'search_tip'],
-    template: ex.template('\n    <form v-if=\'search_tip || heads.length>0\' class="com-filter flex flex-grow flex-ac">\n                <input style="max-width: 20em;min-width: 10em;" v-if=\'search_tip\' type="text" name="_q" v-model=\'search._q\' :placeholder=\'search_tip\' class=\'form-control\'/>\n                <div class="flex row-filter"  style="flex-grow:0;min-width: 10em;">\n                     <component :is="filter.type?filter.type:\'sim-filter\'" :config="filter.config" :filter="filter" v-model=\'search[filter.name]\' v-if="filter.options"  v-for=\'filter in heads\' :id="\'filter-\'+filter.name">\n                    </component>\n                </div>\n\n                <div  v-for=\'filter in heads\' v-if="[\'time\',\'date\',\'month\'].indexOf(filter.type)!=-1" class="date-filter flex flex-ac">\n                    <span v-text="filter.label"></span>\n                    <span>{From}</span>\n                    <div>\n                         <date v-if="filter.type==\'month\'" set="month" v-model="search[\'_start_\'+filter.name]"></date>\n                        <date v-if="filter.type==\'date\'"  v-model="search[\'_start_\'+filter.name]"></date>\n                    </div>\n                    <span>{To}</span>\n                    <div>\n                        <date v-if="filter.type==\'month\'" set="month" v-model="search[\'_end_\'+filter.name]"></date>\n                        <date v-if="filter.type==\'date\'"  v-model="search[\'_end_\'+filter.name]"></date>\n                    </div>\n\n                </div>\n\n                <slot></slot>\n\n          <button name="go" type="button" class="btn btn-info btn-sm" @click=\'m_submit()\' >{search}</button>\n        </form>\n    ', ex.trList(['From', 'To', 'search'])),
+    props: ['heads', 'search_args'],
+    template: '<div v-if=\'heads.length>0\' class="com-filter flex flex-grow flex-ac">\n                <div v-for="filter in heads" :id="\'filter-\'+filter.name" class="filter-item">\n                    <component @submit="m_submit()" :is="filter.editor" :head="filter" :search_args=\'search_args\' > </component>\n                </div>\n                <button name="go" type="button" class="btn btn-info btn-sm" @click=\'m_submit()\' >\n          <i class="fa fa-search"></i>\n          </button>\n        </div>\n    ',
     created: function created() {
         var self = this;
         ex.each(self.heads, function (filter) {
@@ -3317,59 +3448,6 @@ Vue.component('com-filter', {
     }
 
 });
-
-function isChinese(temp) {
-    var re = /[^\u4E00-\u9FA5]/;
-    if (re.test(temp[0])) {
-        return false;
-    }
-    return true;
-}
-function compare(temp1, temp2) {
-    if (temp1 < temp2) {
-        return -1;
-    } else if (temp1 == temp2) {
-        return 0;
-    } else {
-        return 1;
-    }
-}
-
-var sim_filter = {
-    props: ['filter', 'value', 'config'],
-    data: function data() {
-        var inn_config = {};
-        if (this.config) {
-            ex.assign(inn_config, this.config);
-        }
-        return {
-            myvalue: this.value,
-            cfg: inn_config
-        };
-    },
-    watch: {
-        myvalue: function myvalue(v) {
-            this.$emit('input', v);
-        }
-    },
-    methods: {
-        orderBy: function orderBy(array, key) {
-            if (this.cfg.orgin_order) {
-                return array;
-            } else {
-                return array.slice().sort(function (a, b) {
-                    if (isChinese(a[key]) && isChinese(b[key])) {
-                        return a[key].localeCompare(b[key], 'zh');
-                    } else {
-                        return compare(a[key], b[key]);
-                    }
-                });
-            }
-        }
-    },
-    template: '<select  v-if="filter.options"\n    v-model=\'myvalue\' class=\'form-control\' >\n    <option :value="undefined" v-text=\'filter.label\'></option>\n    <option value="">-------</option>\n    <option v-for=\'option in orderBy( filter.options,"label")\' :value="option.value" v-text=\'option.label\'></option>\n    </select>\n\n    '
-};
-Vue.component('sim-filter', sim_filter);
 
 var sim_filter_with_search = {
     props: ['filter', 'value'],
@@ -3406,7 +3484,7 @@ var sim_filter_with_search = {
 Vue.component('sel-search-filter', sim_filter_with_search);
 
 /***/ }),
-/* 34 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3573,13 +3651,13 @@ var table_fun = exports.table_fun = {
 window.table_fun = table_fun;
 
 /***/ }),
-/* 35 */
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(64);
+__webpack_require__(71);
 var template_str = '\n<div class=\'_expand_menu\'>\n\t<ul>\n\t\t<li v-for=\'act in normed_menu\'>\n\t\t\t<a :class=\'["menu_item",{"selected":act.selected,"opened_submenu":opened_submenu==act.submenu}]\'\n\t\t\t\t:href=\'act.submenu?"javascript:void(0)":act.url\'\n\t\t\t\t@click=\'main_act_click(act)\'>\n\t\t\t\t<span v-html=\'act.icon\' class=\'_icon\'></span><span v-text=\'act.label\'></span>\n\t\t\t\t<span v-show="act.submenu">\n\t\t\t\t\t<span v-if="opened_submenu==act.submenu ||act.selected" style="float: right;margin-right: 1em;">\n\t\t\t\t\t\t<i class="fa fa-chevron-down"></i>\n\t\t\t\t\t</span>\n\t\t\t\t\t<span v-else style="float: right;margin-right: 1em;"><i class="fa fa-chevron-left"></i></span>\n\t\t\t\t</span>\n\t\t\t\t<!--<span class=\'left-arrow\' v-if=\'act.selected\'></span>-->\n\t\t\t</a>\n\n\t\t\t<ul class=\'submenu\' v-show=\'opened_submenu==act.submenu ||act.selected\' transition="expand">\n\t\t\t\t<li v-for=\'sub_act in act.submenu\' :class=\'{"active":sub_act.active}\'>\n\t\t\t\t\t<a :href=\'sub_act.url\' class=\'sub_item\'>\n\t\t\t\t\t\t<span v-text=\'sub_act.label\'></span>\n\t\t\t\t\t</a>\n\n\t\t\t\t</li>\n\t\t\t</ul>\n\t\t</li>\n\t</ul>\n</div>\n';
 
 Vue.component('expand_menu', {
@@ -3677,7 +3755,7 @@ Vue.component('expand_menu', {
 //})
 
 /***/ }),
-/* 36 */
+/* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3728,7 +3806,7 @@ Vue.component('modal', {
 	} });
 
 /***/ }),
-/* 37 */
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3742,104 +3820,6 @@ Vue.component('page-tab', {
 document.write('\n <style type="text/css" media="screen" id="test">\n.inst-menu{\n\t\tmargin: 30px auto;\n\t\tborder-bottom: 1px solid #DADCDE;\n\t}\n.inst-menu li{\n\tdisplay: inline-block;\n\tpadding: 10px 20px;\n\tfont-size: 16px;\n}\n.inst-menu li:hover{\n\tcursor: pointer;\n}\n.inst-menu .active{\n\tborder-bottom: 5px solid #0092F2;\n\tcolor: #0092F2;\n}\n</style>\n');
 
 /***/ }),
-/* 38 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(0)();
-// imports
-
-
-// module
-exports.push([module.i, ".error {\n  color: red; }\n\n.field-panel {\n  background-color: #F5F5F5;\n  margin: 20px;\n  padding: 20px 30px;\n  position: relative;\n  border: 1px solid #D9D9D9; }\n  .field-panel:after {\n    content: '';\n    display: block;\n    position: absolute;\n    top: 0px;\n    left: 0px;\n    bottom: 0px;\n    width: 180px;\n    border-radius: 6px;\n    background-color: #fff;\n    z-index: 0; }\n  .field-panel .form-group.field {\n    display: flex;\n    align-items: flex-start;\n    margin-bottom: 0; }\n    .field-panel .form-group.field .field_input {\n      flex-grow: 0;\n      padding: 5px 20px; }\n      .field-panel .form-group.field .field_input .ckeditor {\n        padding: 20px; }\n    .field-panel .form-group.field:first-child .control-label {\n      border-top: 5px solid #FFF; }\n    .field-panel .form-group.field .control-label {\n      width: 150px;\n      text-align: right;\n      padding: 5px 30px;\n      z-index: 100;\n      flex-shrink: 0;\n      border-top: 1px solid #EEE; }\n  .field-panel .form-group.field .field_input ._tow-col-sel {\n    /*width:750px;*/ }\n  .field-panel .form-group.field .help_text {\n    padding: 10px;\n    color: #999;\n    font-style: italic;\n    font-size: 0.9em; }\n  .field-panel .field.error .error {\n    display: inline-block;\n    vertical-align: top;\n    padding-top: 8px; }\n\n._tow-col-sel select {\n  min-height: 7em; }\n\nimg.img-uploador {\n  max-width: 100px;\n  max-height: 100px; }\n\n.req_star {\n  color: red; }\n", ""]);
-
-// exports
-
-
-/***/ }),
-/* 39 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(0)();
-// imports
-
-
-// module
-exports.push([module.i, ".img-uploader input {\n  display: none; }\n\n.img-uploader.disable {\n  background-color: #e3e2e1; }\n\n.up_wrap {\n  position: relative;\n  text-align: center;\n  border: 2px dashed #ccc;\n  background: #FDFDFD;\n  width: 200px; }\n\n.closeDiv {\n  width: 100%;\n  height: 100%;\n  position: absolute;\n  top: 0;\n  left: 0;\n  background-color: #ffffff; }\n\n.choose {\n  display: inline-block;\n  text-decoration: none;\n  padding: 5px;\n  border: 1px solid #0092F2;\n  border-radius: 4px;\n  font-size: 14px;\n  color: #0092F2;\n  cursor: pointer; }\n\n.choose:hover, .choose:active {\n  text-decoration: none;\n  color: #0092F2; }\n\n.close {\n  position: absolute;\n  top: 5px;\n  right: 10px;\n  cursor: pointer;\n  font-size: 14px;\n  color: #242424; }\n\n.logoImg {\n  max-height: 100px !important;\n  vertical-align: middle;\n  margin-top: 5px; }\n\n.img-crop .total-wrap {\n  padding: 30px; }\n\n.img-crop .crop-wrap {\n  max-width: 100%;\n  max-height: 90%;\n  overflow: hidden; }\n\n.img-crop .crop-img {\n  max-width: 100%;\n  max-height: 100%; }\n", ""]);
-
-// exports
-
-
-/***/ }),
-/* 40 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(0)();
-// imports
-
-
-// module
-exports.push([module.i, "@charset \"UTF-8\";\n#_load_frame_wrap {\n  position: fixed;\n  top: 0;\n  left: 0;\n  right: 0;\n  bottom: 0;\n  display: none;\n  z-index: 1000;\n  background: rgba(88, 88, 88, 0.2); }\n\n#_load_frame {\n  width: 100%;\n  height: 100%;\n  border-top: 1px solid #b6b6b6; }\n\n.imiddle {\n  position: absolute;\n  top: 50%;\n  left: 50%;\n  transform: translate(-50%, -50%);\n  -ms-transform: translate(-50%, -50%);\n  /* IE 9 */\n  -moz-transform: translate(-50%, -50%);\n  /* Firefox */\n  -webkit-transform: translate(-50%, -50%);\n  /* Safari 和 Chrome */\n  -o-transform: translate(-50%, -50%);\n  text-align: center;\n  /*display: table;*/\n  z-index: 10000; }\n\n.popframe {\n  max-width: 90vw;\n  max-height: 90vh;\n  min-width: 40em;\n  min-height: 30em;\n  border: 2px solid #8e8e8e;\n  -moz-box-shadow: 2px 2px 20px #d0d0d0;\n  -webkit-box-shadow: 2px 2px 20px #b7b698;\n  box-shadow: 2px 2px 20px #828282;\n  border-radius: 1em;\n  padding-top: 3em;\n  background-color: white; }\n  .popframe .close-btn {\n    position: absolute;\n    right: 0.5em;\n    top: 0.4em;\n    cursor: pointer; }\n  .popframe .title {\n    position: absolute;\n    top: 0.5em;\n    left: 50%;\n    transform: translate(-50%, 0); }\n", ""]);
-
-// exports
-
-
-/***/ }),
-/* 41 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(0)();
-// imports
-
-
-// module
-exports.push([module.i, ".file-uploader .item img {\n  max-width: 300px;\n  cursor: pointer; }\n\n.file-uploader .wrap {\n  display: inline-block; }\n\n.file-uploader .sortable {\n  display: flex;\n  flex-wrap: wrap; }\n  .file-uploader .sortable li {\n    display: block;\n    margin: 0.5em;\n    padding: 0.3em;\n    position: relative; }\n    .file-uploader .sortable li:hover .remove-btn {\n      visibility: visible; }\n    .file-uploader .sortable li .file-wrap {\n      width: 10em;\n      height: 12em;\n      border: 2em solid #68abff;\n      text-align: center;\n      padding: 1em 0;\n      background-color: white;\n      box-shadow: 10px 10px 5px #888888;\n      color: #68abff;\n      display: table-cell;\n      vertical-align: middle;\n      cursor: pointer; }\n      .file-uploader .sortable li .file-wrap .file-type {\n        font-size: 250%;\n        font-weight: 700;\n        text-transform: uppercase; }\n\n.file-uploader .remove-btn {\n  font-size: 2em;\n  position: absolute;\n  top: -1em;\n  right: 0.3em;\n  visibility: hidden; }\n  .file-uploader .remove-btn i {\n    color: red; }\n\n.file-uploader-btn-plus {\n  display: inline-block;\n  vertical-align: top; }\n  .file-uploader-btn-plus .inn-btn {\n    width: 5em;\n    height: 5em;\n    display: table-cell;\n    text-align: center;\n    vertical-align: middle;\n    border: 1px solid #e1e1e1;\n    cursor: pointer; }\n    .file-uploader-btn-plus .inn-btn span {\n      font-size: 300%; }\n    .file-uploader-btn-plus .inn-btn:hover {\n      background-color: #e1e1e1; }\n", ""]);
-
-// exports
-
-
-/***/ }),
-/* 42 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(0)();
-// imports
-
-
-// module
-exports.push([module.i, ".head-item {\n  display: inline-block; }\n  .head-item.brand {\n    font-size: 150%;\n    width: 10em;\n    padding: 0.3em 1em; }\n\n#menu ._expand_menu {\n  margin-top: 1em; }\n  #menu ._expand_menu > ul > li {\n    margin-bottom: 0.2em; }\n", ""]);
-
-// exports
-
-
-/***/ }),
-/* 43 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(0)();
-// imports
-
-
-// module
-exports.push([module.i, ".scss-comment {\n  content: 'director/scss/tab_group.scss'; }\n\n.nav.tabs {\n  align-items: center; }\n  .nav.tabs li {\n    display: inline-block;\n    margin-left: 5px;\n    vertical-align: bottom; }\n    .nav.tabs li:first-child {\n      margin-left: 15px; }\n    .nav.tabs li > a {\n      padding: 8px 18px 5px 18px;\n      background-color: #f6f7f8;\n      border: 1px solid #dddddd;\n      border-bottom: none;\n      position: relative;\n      margin-bottom: 1px;\n      font-weight: 400; }\n      .nav.tabs li > a:hover {\n        text-underline: blue;\n        text-decoration: underline; }\n  .nav.tabs li.active > a:after {\n    content: ' ';\n    position: absolute;\n    width: 100%;\n    height: 4px;\n    bottom: -4px;\n    left: 0;\n    background-color: #eee; }\n  .nav.tabs li.active a {\n    text-decoration: none;\n    background-color: #eeeeee;\n    font-weight: 500; }\n  .nav.tabs li.active a:hover {\n    border-bottom: none;\n    text-decoration: none;\n    color: #a2a2a2;\n    font-weight: 500;\n    background-color: #eeeeee; }\n", ""]);
-
-// exports
-
-
-/***/ }),
-/* 44 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(0)();
-// imports
-
-
-// module
-exports.push([module.i, "table.fake-suit {\n  border: 1px solid #DDD;\n  border-radius: 6px; }\n  table.fake-suit th {\n    font-weight: bold;\n    background-color: #e5e5e5;\n    background-image: linear-gradient(to bottom, #f3f3f3, #e5e5e5); }\n  table.fake-suit td {\n    border-left: 1px solid #F5F5F5; }\n  table.fake-suit tr > td:first-child {\n    border-left: none; }\n  table.fake-suit tbody tr {\n    background-color: white; }\n  table.fake-suit tbody td {\n    border-top: 1px solid #E7E7E7;\n    padding-top: 3px;\n    padding-bottom: 3px; }\n  table.fake-suit tbody tr:nth-child(even) {\n    background-color: #FAFAFA; }\n  table.fake-suit tbody tr:hover {\n    background-color: #F5F5F5; }\n\n.paginator input {\n  width: 20px; }\n\n.paginator .page-input-block {\n  display: inline-block; }\n\n.paginator button {\n  vertical-align: top; }\n\n.sort-mark img {\n  width: 10px; }\n\nul.pagination li {\n  display: inline;\n  cursor: pointer; }\n\nul.pagination li span {\n  color: black;\n  float: left;\n  padding: 4px 10px;\n  text-decoration: none;\n  border: 1px solid #ddd; }\n\nul.pagination li span.active {\n  background-color: #4CAF50;\n  color: white; }\n\nul.pagination li span:hover:not(.active) {\n  background-color: #ddd; }\n\n.com-filter .date-filter {\n  padding-left: 10px; }\n  .com-filter .date-filter span {\n    padding-left: 5px; }\n  .com-filter .date-filter .datetime-picker {\n    min-width: 10em;\n    max-width: 14em; }\n\n.clickable {\n  cursor: pointer;\n  color: #39718e; }\n\n.sortmark {\n  color: #d9d9de; }\n  .sortmark.sort-col {\n    color: black; }\n", ""]);
-
-// exports
-
-
-/***/ }),
 /* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -3848,7 +3828,7 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, ".table-btn-group {\n  min-width: 9em; }\n", ""]);
+exports.push([module.i, ".error {\n  color: red; }\n\n.field-panel {\n  background-color: #F5F5F5;\n  margin: 20px;\n  padding: 20px 30px;\n  position: relative;\n  border: 1px solid #D9D9D9; }\n  .field-panel:after {\n    content: '';\n    display: block;\n    position: absolute;\n    top: 0px;\n    left: 0px;\n    bottom: 0px;\n    width: 180px;\n    border-radius: 6px;\n    background-color: #fff;\n    z-index: 0; }\n  .field-panel .form-group.field {\n    display: flex;\n    align-items: flex-start;\n    margin-bottom: 0; }\n    .field-panel .form-group.field .field_input {\n      flex-grow: 0;\n      padding: 5px 20px;\n      width: 25em; }\n      .field-panel .form-group.field .field_input .ckeditor {\n        padding: 20px; }\n    .field-panel .form-group.field:first-child .control-label {\n      border-top: 5px solid #FFF; }\n    .field-panel .form-group.field .control-label {\n      width: 150px;\n      text-align: right;\n      padding: 5px 30px;\n      z-index: 100;\n      flex-shrink: 0;\n      border-top: 1px solid #EEE; }\n  .field-panel .form-group.field .field_input ._tow-col-sel {\n    /*width:750px;*/ }\n  .field-panel .form-group.field .help_text {\n    padding: 10px;\n    color: #999;\n    font-style: italic;\n    font-size: 0.9em; }\n  .field-panel .field {\n    position: relative; }\n\n._tow-col-sel select {\n  min-height: 7em; }\n\nimg.img-uploador {\n  max-width: 100px;\n  max-height: 100px; }\n\n.req_star {\n  color: red; }\n", ""]);
 
 // exports
 
@@ -3862,7 +3842,7 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, ".date-filter {\n  margin: 0 1em; }\n\n.com-filter {\n  align-items: flex-start;\n  flex-wrap: wrap; }\n\n.row-filter .bootstrap-select {\n  min-width: 10em; }\n", ""]);
+exports.push([module.i, ".img-uploader input {\n  display: none !important; }\n\n.img-uploader.disable {\n  background-color: #e3e2e1; }\n\n.up_wrap {\n  position: relative;\n  text-align: center;\n  border: 2px dashed #ccc;\n  background: #FDFDFD;\n  width: 200px; }\n\n.closeDiv {\n  width: 100%;\n  height: 100%;\n  position: absolute;\n  top: 0;\n  left: 0;\n  background-color: #ffffff; }\n\n.choose {\n  display: inline-block;\n  text-decoration: none;\n  padding: 5px;\n  border: 1px solid #0092F2;\n  border-radius: 4px;\n  font-size: 14px;\n  color: #0092F2;\n  cursor: pointer; }\n\n.choose:hover, .choose:active {\n  text-decoration: none;\n  color: #0092F2; }\n\n.close {\n  position: absolute;\n  top: 5px;\n  right: 10px;\n  cursor: pointer;\n  font-size: 14px;\n  color: #242424; }\n\n.logoImg {\n  max-height: 100px !important;\n  vertical-align: middle;\n  margin-top: 5px; }\n\n.img-crop .total-wrap {\n  padding: 30px; }\n\n.img-crop .crop-wrap {\n  max-width: 100%;\n  max-height: 90%;\n  overflow: hidden; }\n\n.img-crop .crop-img {\n  max-width: 100%;\n  max-height: 100%; }\n", ""]);
 
 // exports
 
@@ -3876,7 +3856,7 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, "template {\n  display: none; }\n\nhtml, body {\n  height: 100%;\n  margin: 0;\n  padding: 0; }\n\nbody.modal-show {\n  position: fixed;\n  width: 100%;\n  height: 100%; }\n", ""]);
+exports.push([module.i, "@charset \"UTF-8\";\n#_load_frame_wrap {\n  position: fixed;\n  top: 0;\n  left: 0;\n  right: 0;\n  bottom: 0;\n  display: none;\n  z-index: 1000;\n  background: rgba(88, 88, 88, 0.2); }\n\n#_load_frame {\n  width: 100%;\n  height: 100%;\n  border-top: 1px solid #b6b6b6; }\n\n.imiddle {\n  position: absolute;\n  top: 50%;\n  left: 50%;\n  transform: translate(-50%, -50%);\n  -ms-transform: translate(-50%, -50%);\n  /* IE 9 */\n  -moz-transform: translate(-50%, -50%);\n  /* Firefox */\n  -webkit-transform: translate(-50%, -50%);\n  /* Safari 和 Chrome */\n  -o-transform: translate(-50%, -50%);\n  text-align: center;\n  /*display: table;*/\n  z-index: 10000; }\n\n.popframe {\n  max-width: 90vw;\n  max-height: 90vh;\n  min-width: 40em;\n  min-height: 30em;\n  border: 2px solid #8e8e8e;\n  -moz-box-shadow: 2px 2px 20px #d0d0d0;\n  -webkit-box-shadow: 2px 2px 20px #b7b698;\n  box-shadow: 2px 2px 20px #828282;\n  border-radius: 1em;\n  padding-top: 3em;\n  background-color: white; }\n  .popframe .close-btn {\n    position: absolute;\n    right: 0.5em;\n    top: 0.4em;\n    cursor: pointer; }\n  .popframe .title {\n    position: absolute;\n    top: 0.5em;\n    left: 50%;\n    transform: translate(-50%, 0); }\n", ""]);
 
 // exports
 
@@ -3890,7 +3870,7 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, "@charset \"UTF-8\";\n.center-vh {\n  position: absolute;\n  top: 50%;\n  left: 50%;\n  transform: translate(-50%, -50%);\n  -ms-transform: translate(-50%, -50%);\n  /* IE 9 */\n  -moz-transform: translate(-50%, -50%);\n  /* Firefox */\n  -webkit-transform: translate(-50%, -50%);\n  /* Safari 和 Chrome */\n  -o-transform: translate(-50%, -50%);\n  /*text-align: center;*/\n  /*z-index: 1000;*/ }\n\n.center-v {\n  position: absolute;\n  top: 50%;\n  transform: translateY(-50%);\n  /*text-align: center;*/\n  /*z-index: 1000;*/ }\n\n.center-h {\n  position: absolute;\n  left: 50%;\n  transform: translateX(-50%);\n  /*text-align: center;*/\n  /*z-index: 1000;*/ }\n", ""]);
+exports.push([module.i, ".file-uploader .item img {\n  max-width: 300px;\n  cursor: pointer; }\n\n.file-uploader .wrap {\n  display: inline-block; }\n\n.file-uploader .sortable {\n  display: flex;\n  flex-wrap: wrap; }\n  .file-uploader .sortable li {\n    display: block;\n    margin: 0.5em;\n    padding: 0.3em;\n    position: relative; }\n    .file-uploader .sortable li:hover .remove-btn {\n      visibility: visible; }\n    .file-uploader .sortable li .file-wrap {\n      width: 10em;\n      height: 12em;\n      border: 2em solid #68abff;\n      text-align: center;\n      padding: 1em 0;\n      background-color: white;\n      box-shadow: 10px 10px 5px #888888;\n      color: #68abff;\n      display: table-cell;\n      vertical-align: middle;\n      cursor: pointer; }\n      .file-uploader .sortable li .file-wrap .file-type {\n        font-size: 250%;\n        font-weight: 700;\n        text-transform: uppercase; }\n\n.file-uploader .remove-btn {\n  font-size: 2em;\n  position: absolute;\n  top: -1em;\n  right: 0.3em;\n  visibility: hidden; }\n  .file-uploader .remove-btn i {\n    color: red; }\n\n.file-uploader-btn-plus {\n  display: inline-block;\n  vertical-align: top; }\n  .file-uploader-btn-plus .inn-btn {\n    width: 5em;\n    height: 5em;\n    display: table-cell;\n    text-align: center;\n    vertical-align: middle;\n    border: 1px solid #e1e1e1;\n    cursor: pointer; }\n    .file-uploader-btn-plus .inn-btn span {\n      font-size: 300%; }\n    .file-uploader-btn-plus .inn-btn:hover {\n      background-color: #e1e1e1; }\n", ""]);
 
 // exports
 
@@ -3904,7 +3884,7 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, ".checkbox {\n  padding-left: 20px; }\n\n.checkbox label {\n  display: inline-block;\n  vertical-align: middle;\n  position: relative;\n  padding-left: 5px; }\n\n.checkbox label::before {\n  content: \"\";\n  display: inline-block;\n  position: absolute;\n  width: 17px;\n  height: 17px;\n  left: 0;\n  margin-left: -20px;\n  border: 1px solid #cccccc;\n  border-radius: 3px;\n  background-color: #fff;\n  -webkit-transition: border 0.15s ease-in-out, color 0.15s ease-in-out;\n  -o-transition: border 0.15s ease-in-out, color 0.15s ease-in-out;\n  transition: border 0.15s ease-in-out, color 0.15s ease-in-out; }\n\n.checkbox label::after {\n  display: inline-block;\n  position: absolute;\n  width: 16px;\n  height: 16px;\n  left: 0;\n  top: 0;\n  margin-left: -20px;\n  padding-left: 3px;\n  padding-top: 1px;\n  font-size: 11px;\n  color: #555555; }\n\n.checkbox input[type=\"checkbox\"],\n.checkbox input[type=\"radio\"] {\n  opacity: 0;\n  z-index: 1; }\n\n.checkbox input[type=\"checkbox\"]:focus + label::before,\n.checkbox input[type=\"radio\"]:focus + label::before {\n  outline: thin dotted;\n  outline: 5px auto -webkit-focus-ring-color;\n  outline-offset: -2px; }\n\n.checkbox input[type=\"checkbox\"]:checked + label::after,\n.checkbox input[type=\"radio\"]:checked + label::after {\n  font-family: \"FontAwesome\";\n  content: \"\\F00C\"; }\n\n.checkbox input[type=\"checkbox\"]:indeterminate + label::after,\n.checkbox input[type=\"radio\"]:indeterminate + label::after {\n  display: block;\n  content: \"\";\n  width: 10px;\n  height: 3px;\n  background-color: #555555;\n  border-radius: 2px;\n  margin-left: -16.5px;\n  margin-top: 7px; }\n\n.checkbox input[type=\"checkbox\"]:disabled + label,\n.checkbox input[type=\"radio\"]:disabled + label {\n  opacity: 0.65; }\n\n.checkbox input[type=\"checkbox\"]:disabled + label::before,\n.checkbox input[type=\"radio\"]:disabled + label::before {\n  background-color: #eeeeee;\n  cursor: not-allowed; }\n\n.checkbox.checkbox-circle label::before {\n  border-radius: 50%; }\n\n.checkbox.checkbox-inline {\n  margin-top: 0; }\n\n.checkbox-primary input[type=\"checkbox\"]:checked + label::before,\n.checkbox-primary input[type=\"radio\"]:checked + label::before {\n  background-color: #337ab7;\n  border-color: #337ab7; }\n\n.checkbox-primary input[type=\"checkbox\"]:checked + label::after,\n.checkbox-primary input[type=\"radio\"]:checked + label::after {\n  color: #fff; }\n\n.checkbox-danger input[type=\"checkbox\"]:checked + label::before,\n.checkbox-danger input[type=\"radio\"]:checked + label::before {\n  background-color: #d9534f;\n  border-color: #d9534f; }\n\n.checkbox-danger input[type=\"checkbox\"]:checked + label::after,\n.checkbox-danger input[type=\"radio\"]:checked + label::after {\n  color: #fff; }\n\n.checkbox-info input[type=\"checkbox\"]:checked + label::before,\n.checkbox-info input[type=\"radio\"]:checked + label::before {\n  background-color: #5bc0de;\n  border-color: #5bc0de; }\n\n.checkbox-info input[type=\"checkbox\"]:checked + label::after,\n.checkbox-info input[type=\"radio\"]:checked + label::after {\n  color: #fff; }\n\n.checkbox-warning input[type=\"checkbox\"]:checked + label::before,\n.checkbox-warning input[type=\"radio\"]:checked + label::before {\n  background-color: #f0ad4e;\n  border-color: #f0ad4e; }\n\n.checkbox-warning input[type=\"checkbox\"]:checked + label::after,\n.checkbox-warning input[type=\"radio\"]:checked + label::after {\n  color: #fff; }\n\n.checkbox-success input[type=\"checkbox\"]:checked + label::before,\n.checkbox-success input[type=\"radio\"]:checked + label::before {\n  background-color: #5cb85c;\n  border-color: #5cb85c; }\n\n.checkbox-success input[type=\"checkbox\"]:checked + label::after,\n.checkbox-success input[type=\"radio\"]:checked + label::after {\n  color: #fff; }\n\n.checkbox-primary input[type=\"checkbox\"]:indeterminate + label::before,\n.checkbox-primary input[type=\"radio\"]:indeterminate + label::before {\n  background-color: #337ab7;\n  border-color: #337ab7; }\n\n.checkbox-primary input[type=\"checkbox\"]:indeterminate + label::after,\n.checkbox-primary input[type=\"radio\"]:indeterminate + label::after {\n  background-color: #fff; }\n\n.checkbox-danger input[type=\"checkbox\"]:indeterminate + label::before,\n.checkbox-danger input[type=\"radio\"]:indeterminate + label::before {\n  background-color: #d9534f;\n  border-color: #d9534f; }\n\n.checkbox-danger input[type=\"checkbox\"]:indeterminate + label::after,\n.checkbox-danger input[type=\"radio\"]:indeterminate + label::after {\n  background-color: #fff; }\n\n.checkbox-info input[type=\"checkbox\"]:indeterminate + label::before,\n.checkbox-info input[type=\"radio\"]:indeterminate + label::before {\n  background-color: #5bc0de;\n  border-color: #5bc0de; }\n\n.checkbox-info input[type=\"checkbox\"]:indeterminate + label::after,\n.checkbox-info input[type=\"radio\"]:indeterminate + label::after {\n  background-color: #fff; }\n\n.checkbox-warning input[type=\"checkbox\"]:indeterminate + label::before,\n.checkbox-warning input[type=\"radio\"]:indeterminate + label::before {\n  background-color: #f0ad4e;\n  border-color: #f0ad4e; }\n\n.checkbox-warning input[type=\"checkbox\"]:indeterminate + label::after,\n.checkbox-warning input[type=\"radio\"]:indeterminate + label::after {\n  background-color: #fff; }\n\n.checkbox-success input[type=\"checkbox\"]:indeterminate + label::before,\n.checkbox-success input[type=\"radio\"]:indeterminate + label::before {\n  background-color: #5cb85c;\n  border-color: #5cb85c; }\n\n.checkbox-success input[type=\"checkbox\"]:indeterminate + label::after,\n.checkbox-success input[type=\"radio\"]:indeterminate + label::after {\n  background-color: #fff; }\n\n.radio {\n  padding-left: 20px; }\n\n.radio label {\n  display: inline-block;\n  vertical-align: middle;\n  position: relative;\n  padding-left: 5px; }\n\n.radio label::before {\n  content: \"\";\n  display: inline-block;\n  position: absolute;\n  width: 17px;\n  height: 17px;\n  left: 0;\n  margin-left: -20px;\n  border: 1px solid #cccccc;\n  border-radius: 50%;\n  background-color: #fff;\n  -webkit-transition: border 0.15s ease-in-out;\n  -o-transition: border 0.15s ease-in-out;\n  transition: border 0.15s ease-in-out; }\n\n.radio label::after {\n  display: inline-block;\n  position: absolute;\n  content: \" \";\n  width: 11px;\n  height: 11px;\n  left: 3px;\n  top: 3px;\n  margin-left: -20px;\n  border-radius: 50%;\n  background-color: #555555;\n  -webkit-transform: scale(0, 0);\n  -ms-transform: scale(0, 0);\n  -o-transform: scale(0, 0);\n  transform: scale(0, 0);\n  -webkit-transition: -webkit-transform 0.1s cubic-bezier(0.8, -0.33, 0.2, 1.33);\n  -moz-transition: -moz-transform 0.1s cubic-bezier(0.8, -0.33, 0.2, 1.33);\n  -o-transition: -o-transform 0.1s cubic-bezier(0.8, -0.33, 0.2, 1.33);\n  transition: transform 0.1s cubic-bezier(0.8, -0.33, 0.2, 1.33); }\n\n.radio input[type=\"radio\"] {\n  opacity: 0;\n  z-index: 1; }\n\n.radio input[type=\"radio\"]:focus + label::before {\n  outline: thin dotted;\n  outline: 5px auto -webkit-focus-ring-color;\n  outline-offset: -2px; }\n\n.radio input[type=\"radio\"]:checked + label::after {\n  -webkit-transform: scale(1, 1);\n  -ms-transform: scale(1, 1);\n  -o-transform: scale(1, 1);\n  transform: scale(1, 1); }\n\n.radio input[type=\"radio\"]:disabled + label {\n  opacity: 0.65; }\n\n.radio input[type=\"radio\"]:disabled + label::before {\n  cursor: not-allowed; }\n\n.radio.radio-inline {\n  margin-top: 0; }\n\n.radio-primary input[type=\"radio\"] + label::after {\n  background-color: #337ab7; }\n\n.radio-primary input[type=\"radio\"]:checked + label::before {\n  border-color: #337ab7; }\n\n.radio-primary input[type=\"radio\"]:checked + label::after {\n  background-color: #337ab7; }\n\n.radio-danger input[type=\"radio\"] + label::after {\n  background-color: #d9534f; }\n\n.radio-danger input[type=\"radio\"]:checked + label::before {\n  border-color: #d9534f; }\n\n.radio-danger input[type=\"radio\"]:checked + label::after {\n  background-color: #d9534f; }\n\n.radio-info input[type=\"radio\"] + label::after {\n  background-color: #5bc0de; }\n\n.radio-info input[type=\"radio\"]:checked + label::before {\n  border-color: #5bc0de; }\n\n.radio-info input[type=\"radio\"]:checked + label::after {\n  background-color: #5bc0de; }\n\n.radio-warning input[type=\"radio\"] + label::after {\n  background-color: #f0ad4e; }\n\n.radio-warning input[type=\"radio\"]:checked + label::before {\n  border-color: #f0ad4e; }\n\n.radio-warning input[type=\"radio\"]:checked + label::after {\n  background-color: #f0ad4e; }\n\n.radio-success input[type=\"radio\"] + label::after {\n  background-color: #5cb85c; }\n\n.radio-success input[type=\"radio\"]:checked + label::before {\n  border-color: #5cb85c; }\n\n.radio-success input[type=\"radio\"]:checked + label::after {\n  background-color: #5cb85c; }\n\ninput[type=\"checkbox\"].styled:checked + label:after,\ninput[type=\"radio\"].styled:checked + label:after {\n  font-family: 'FontAwesome';\n  content: \"\\F00C\"; }\n\ninput[type=\"checkbox\"] .styled:checked + label::before,\ninput[type=\"radio\"] .styled:checked + label::before {\n  color: #fff; }\n\ninput[type=\"checkbox\"] .styled:checked + label::after,\ninput[type=\"radio\"] .styled:checked + label::after {\n  color: #fff; }\n", ""]);
+exports.push([module.i, ".head-item {\n  display: inline-block; }\n  .head-item.brand {\n    font-size: 150%;\n    width: 10em;\n    padding: 0.3em 1em; }\n\n#menu ._expand_menu {\n  margin-top: 1em; }\n  #menu ._expand_menu > ul > li {\n    margin-bottom: 0.2em; }\n", ""]);
 
 // exports
 
@@ -3918,7 +3898,7 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, "._expand_menu {\n  background-color: #364150; }\n  ._expand_menu a {\n    color: #8f97a3; }\n    ._expand_menu a:hover {\n      text-decoration: none; }\n  ._expand_menu ul {\n    padding: 0px; }\n    ._expand_menu ul li {\n      list-style-type: none;\n      cursor: pointer;\n      position: relative;\n      padding: 0px; }\n    ._expand_menu ul.submenu li {\n      padding: 5px 0px;\n      padding-left: 20px;\n      color: #B4BCC8; }\n      ._expand_menu ul.submenu li:hover, ._expand_menu ul.submenu li.active {\n        background-color: #3E4B5C; }\n        ._expand_menu ul.submenu li:hover a, ._expand_menu ul.submenu li.active a {\n          color: white; }\n  ._expand_menu ._icon {\n    padding: 0px 10px; }\n  ._expand_menu .menu_item {\n    border-top: 1px solid #475563;\n    padding: 5px 0px;\n    display: block; }\n  ._expand_menu .sub_item {\n    display: block; }\n\n._expand_menu ul.submenu {\n  padding: 0px; }\n\n._expand_menu .menu_item:hover {\n  background-color: #2C3542;\n  color: #A7BCAE; }\n\n._expand_menu .menu_item.selected {\n  background-color: #1CAF9A;\n  color: white; }\n\n._expand_menu .left-arrow {\n  position: absolute;\n  right: 0px;\n  border-top: 12px solid transparent;\n  border-bottom: 12px solid transparent;\n  border-right: 12px solid white; }\n\n.expand-transition {\n  transition: max-height .3s ease; }\n", ""]);
+exports.push([module.i, ".scss-comment {\n  content: 'director/scss/tab_group.scss'; }\n\n.nav.tabs {\n  align-items: center; }\n  .nav.tabs li {\n    display: inline-block;\n    margin-left: 5px;\n    vertical-align: bottom; }\n    .nav.tabs li:first-child {\n      margin-left: 15px; }\n    .nav.tabs li > a {\n      padding: 8px 18px 5px 18px;\n      background-color: #f6f7f8;\n      border: 1px solid #dddddd;\n      border-bottom: none;\n      position: relative;\n      margin-bottom: 1px;\n      font-weight: 400; }\n      .nav.tabs li > a:hover {\n        text-underline: blue;\n        text-decoration: underline; }\n  .nav.tabs li.active > a:after {\n    content: ' ';\n    position: absolute;\n    width: 100%;\n    height: 4px;\n    bottom: -4px;\n    left: 0;\n    background-color: #eee; }\n  .nav.tabs li.active a {\n    text-decoration: none;\n    background-color: #eeeeee;\n    font-weight: 500; }\n  .nav.tabs li.active a:hover {\n    border-bottom: none;\n    text-decoration: none;\n    color: #a2a2a2;\n    font-weight: 500;\n    background-color: #eeeeee; }\n", ""]);
 
 // exports
 
@@ -3932,7 +3912,7 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, ".flex {\n  display: flex; }\n\n.flex-v {\n  display: flex;\n  flex-direction: column; }\n\n.flex-grow {\n  flex-grow: 10; }\n\n.flex-jc {\n  justify-content: center; }\n\n.flex-ac {\n  align-items: center; }\n\n.flex-sb {\n  justify-content: space-between; }\n\n.flex-vh-center {\n  justify-content: center;\n  align-items: center; }\n", ""]);
+exports.push([module.i, "table.fake-suit {\n  border: 1px solid #DDD;\n  border-radius: 6px; }\n  table.fake-suit th {\n    font-weight: bold;\n    background-color: #e5e5e5;\n    background-image: linear-gradient(to bottom, #f3f3f3, #e5e5e5); }\n  table.fake-suit td {\n    border-left: 1px solid #F5F5F5; }\n  table.fake-suit tr > td:first-child {\n    border-left: none; }\n  table.fake-suit tbody tr {\n    background-color: white; }\n  table.fake-suit tbody td {\n    border-top: 1px solid #E7E7E7;\n    padding-top: 3px;\n    padding-bottom: 3px; }\n  table.fake-suit tbody tr:nth-child(even) {\n    background-color: #FAFAFA; }\n  table.fake-suit tbody tr:hover {\n    background-color: #F5F5F5; }\n\n.paginator input {\n  width: 20px; }\n\n.paginator .page-input-block {\n  display: inline-block; }\n\n.paginator button {\n  vertical-align: top; }\n\n.sort-mark img {\n  width: 10px; }\n\nul.pagination li {\n  display: inline;\n  cursor: pointer; }\n\nul.pagination li span {\n  color: black;\n  float: left;\n  padding: 4px 10px;\n  text-decoration: none;\n  border: 1px solid #ddd; }\n\nul.pagination li span.active {\n  background-color: #4CAF50;\n  color: white; }\n\nul.pagination li span:hover:not(.active) {\n  background-color: #ddd; }\n\n.com-filter .date-filter {\n  padding-left: 10px; }\n  .com-filter .date-filter span {\n    padding-left: 5px; }\n  .com-filter .date-filter .datetime-picker {\n    min-width: 10em;\n    max-width: 14em; }\n\n.clickable {\n  cursor: pointer;\n  color: #39718e; }\n\n.sortmark {\n  color: #d9d9de; }\n  .sortmark.sort-col {\n    color: black; }\n", ""]);
 
 // exports
 
@@ -3946,20 +3926,118 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
+exports.push([module.i, ".table-btn-group {\n  min-width: 9em; }\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 53 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(0)();
+// imports
+
+
+// module
+exports.push([module.i, ".filter-item {\n  margin-right: 0.5em; }\n\n.com-filter {\n  align-items: flex-start;\n  flex-wrap: wrap; }\n\n.row-filter .bootstrap-select {\n  min-width: 10em; }\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 54 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(0)();
+// imports
+
+
+// module
+exports.push([module.i, "template {\n  display: none; }\n\nhtml, body {\n  height: 100%;\n  margin: 0;\n  padding: 0; }\n\nbody.modal-show {\n  position: fixed;\n  width: 100%;\n  height: 100%; }\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 55 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(0)();
+// imports
+
+
+// module
+exports.push([module.i, "@charset \"UTF-8\";\n.center-vh {\n  position: absolute;\n  top: 50%;\n  left: 50%;\n  transform: translate(-50%, -50%);\n  -ms-transform: translate(-50%, -50%);\n  /* IE 9 */\n  -moz-transform: translate(-50%, -50%);\n  /* Firefox */\n  -webkit-transform: translate(-50%, -50%);\n  /* Safari 和 Chrome */\n  -o-transform: translate(-50%, -50%);\n  /*text-align: center;*/\n  /*z-index: 1000;*/ }\n\n.center-v {\n  position: absolute;\n  top: 50%;\n  transform: translateY(-50%);\n  /*text-align: center;*/\n  /*z-index: 1000;*/ }\n\n.center-h {\n  position: absolute;\n  left: 50%;\n  transform: translateX(-50%);\n  /*text-align: center;*/\n  /*z-index: 1000;*/ }\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 56 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(0)();
+// imports
+
+
+// module
+exports.push([module.i, ".checkbox {\n  padding-left: 20px; }\n\n.checkbox label {\n  display: inline-block;\n  vertical-align: middle;\n  position: relative;\n  padding-left: 5px; }\n\n.checkbox label::before {\n  content: \"\";\n  display: inline-block;\n  position: absolute;\n  width: 17px;\n  height: 17px;\n  left: 0;\n  margin-left: -20px;\n  border: 1px solid #cccccc;\n  border-radius: 3px;\n  background-color: #fff;\n  -webkit-transition: border 0.15s ease-in-out, color 0.15s ease-in-out;\n  -o-transition: border 0.15s ease-in-out, color 0.15s ease-in-out;\n  transition: border 0.15s ease-in-out, color 0.15s ease-in-out; }\n\n.checkbox label::after {\n  display: inline-block;\n  position: absolute;\n  width: 16px;\n  height: 16px;\n  left: 0;\n  top: 0;\n  margin-left: -20px;\n  padding-left: 3px;\n  padding-top: 1px;\n  font-size: 11px;\n  color: #555555; }\n\n.checkbox input[type=\"checkbox\"],\n.checkbox input[type=\"radio\"] {\n  opacity: 0;\n  z-index: 1; }\n\n.checkbox input[type=\"checkbox\"]:focus + label::before,\n.checkbox input[type=\"radio\"]:focus + label::before {\n  outline: thin dotted;\n  outline: 5px auto -webkit-focus-ring-color;\n  outline-offset: -2px; }\n\n.checkbox input[type=\"checkbox\"]:checked + label::after,\n.checkbox input[type=\"radio\"]:checked + label::after {\n  font-family: \"FontAwesome\";\n  content: \"\\F00C\"; }\n\n.checkbox input[type=\"checkbox\"]:indeterminate + label::after,\n.checkbox input[type=\"radio\"]:indeterminate + label::after {\n  display: block;\n  content: \"\";\n  width: 10px;\n  height: 3px;\n  background-color: #555555;\n  border-radius: 2px;\n  margin-left: -16.5px;\n  margin-top: 7px; }\n\n.checkbox input[type=\"checkbox\"]:disabled + label,\n.checkbox input[type=\"radio\"]:disabled + label {\n  opacity: 0.65; }\n\n.checkbox input[type=\"checkbox\"]:disabled + label::before,\n.checkbox input[type=\"radio\"]:disabled + label::before {\n  background-color: #eeeeee;\n  cursor: not-allowed; }\n\n.checkbox.checkbox-circle label::before {\n  border-radius: 50%; }\n\n.checkbox.checkbox-inline {\n  margin-top: 0; }\n\n.checkbox-primary input[type=\"checkbox\"]:checked + label::before,\n.checkbox-primary input[type=\"radio\"]:checked + label::before {\n  background-color: #337ab7;\n  border-color: #337ab7; }\n\n.checkbox-primary input[type=\"checkbox\"]:checked + label::after,\n.checkbox-primary input[type=\"radio\"]:checked + label::after {\n  color: #fff; }\n\n.checkbox-danger input[type=\"checkbox\"]:checked + label::before,\n.checkbox-danger input[type=\"radio\"]:checked + label::before {\n  background-color: #d9534f;\n  border-color: #d9534f; }\n\n.checkbox-danger input[type=\"checkbox\"]:checked + label::after,\n.checkbox-danger input[type=\"radio\"]:checked + label::after {\n  color: #fff; }\n\n.checkbox-info input[type=\"checkbox\"]:checked + label::before,\n.checkbox-info input[type=\"radio\"]:checked + label::before {\n  background-color: #5bc0de;\n  border-color: #5bc0de; }\n\n.checkbox-info input[type=\"checkbox\"]:checked + label::after,\n.checkbox-info input[type=\"radio\"]:checked + label::after {\n  color: #fff; }\n\n.checkbox-warning input[type=\"checkbox\"]:checked + label::before,\n.checkbox-warning input[type=\"radio\"]:checked + label::before {\n  background-color: #f0ad4e;\n  border-color: #f0ad4e; }\n\n.checkbox-warning input[type=\"checkbox\"]:checked + label::after,\n.checkbox-warning input[type=\"radio\"]:checked + label::after {\n  color: #fff; }\n\n.checkbox-success input[type=\"checkbox\"]:checked + label::before,\n.checkbox-success input[type=\"radio\"]:checked + label::before {\n  background-color: #5cb85c;\n  border-color: #5cb85c; }\n\n.checkbox-success input[type=\"checkbox\"]:checked + label::after,\n.checkbox-success input[type=\"radio\"]:checked + label::after {\n  color: #fff; }\n\n.checkbox-primary input[type=\"checkbox\"]:indeterminate + label::before,\n.checkbox-primary input[type=\"radio\"]:indeterminate + label::before {\n  background-color: #337ab7;\n  border-color: #337ab7; }\n\n.checkbox-primary input[type=\"checkbox\"]:indeterminate + label::after,\n.checkbox-primary input[type=\"radio\"]:indeterminate + label::after {\n  background-color: #fff; }\n\n.checkbox-danger input[type=\"checkbox\"]:indeterminate + label::before,\n.checkbox-danger input[type=\"radio\"]:indeterminate + label::before {\n  background-color: #d9534f;\n  border-color: #d9534f; }\n\n.checkbox-danger input[type=\"checkbox\"]:indeterminate + label::after,\n.checkbox-danger input[type=\"radio\"]:indeterminate + label::after {\n  background-color: #fff; }\n\n.checkbox-info input[type=\"checkbox\"]:indeterminate + label::before,\n.checkbox-info input[type=\"radio\"]:indeterminate + label::before {\n  background-color: #5bc0de;\n  border-color: #5bc0de; }\n\n.checkbox-info input[type=\"checkbox\"]:indeterminate + label::after,\n.checkbox-info input[type=\"radio\"]:indeterminate + label::after {\n  background-color: #fff; }\n\n.checkbox-warning input[type=\"checkbox\"]:indeterminate + label::before,\n.checkbox-warning input[type=\"radio\"]:indeterminate + label::before {\n  background-color: #f0ad4e;\n  border-color: #f0ad4e; }\n\n.checkbox-warning input[type=\"checkbox\"]:indeterminate + label::after,\n.checkbox-warning input[type=\"radio\"]:indeterminate + label::after {\n  background-color: #fff; }\n\n.checkbox-success input[type=\"checkbox\"]:indeterminate + label::before,\n.checkbox-success input[type=\"radio\"]:indeterminate + label::before {\n  background-color: #5cb85c;\n  border-color: #5cb85c; }\n\n.checkbox-success input[type=\"checkbox\"]:indeterminate + label::after,\n.checkbox-success input[type=\"radio\"]:indeterminate + label::after {\n  background-color: #fff; }\n\n.radio {\n  padding-left: 20px; }\n\n.radio label {\n  display: inline-block;\n  vertical-align: middle;\n  position: relative;\n  padding-left: 5px; }\n\n.radio label::before {\n  content: \"\";\n  display: inline-block;\n  position: absolute;\n  width: 17px;\n  height: 17px;\n  left: 0;\n  margin-left: -20px;\n  border: 1px solid #cccccc;\n  border-radius: 50%;\n  background-color: #fff;\n  -webkit-transition: border 0.15s ease-in-out;\n  -o-transition: border 0.15s ease-in-out;\n  transition: border 0.15s ease-in-out; }\n\n.radio label::after {\n  display: inline-block;\n  position: absolute;\n  content: \" \";\n  width: 11px;\n  height: 11px;\n  left: 3px;\n  top: 3px;\n  margin-left: -20px;\n  border-radius: 50%;\n  background-color: #555555;\n  -webkit-transform: scale(0, 0);\n  -ms-transform: scale(0, 0);\n  -o-transform: scale(0, 0);\n  transform: scale(0, 0);\n  -webkit-transition: -webkit-transform 0.1s cubic-bezier(0.8, -0.33, 0.2, 1.33);\n  -moz-transition: -moz-transform 0.1s cubic-bezier(0.8, -0.33, 0.2, 1.33);\n  -o-transition: -o-transform 0.1s cubic-bezier(0.8, -0.33, 0.2, 1.33);\n  transition: transform 0.1s cubic-bezier(0.8, -0.33, 0.2, 1.33); }\n\n.radio input[type=\"radio\"] {\n  opacity: 0;\n  z-index: 1; }\n\n.radio input[type=\"radio\"]:focus + label::before {\n  outline: thin dotted;\n  outline: 5px auto -webkit-focus-ring-color;\n  outline-offset: -2px; }\n\n.radio input[type=\"radio\"]:checked + label::after {\n  -webkit-transform: scale(1, 1);\n  -ms-transform: scale(1, 1);\n  -o-transform: scale(1, 1);\n  transform: scale(1, 1); }\n\n.radio input[type=\"radio\"]:disabled + label {\n  opacity: 0.65; }\n\n.radio input[type=\"radio\"]:disabled + label::before {\n  cursor: not-allowed; }\n\n.radio.radio-inline {\n  margin-top: 0; }\n\n.radio-primary input[type=\"radio\"] + label::after {\n  background-color: #337ab7; }\n\n.radio-primary input[type=\"radio\"]:checked + label::before {\n  border-color: #337ab7; }\n\n.radio-primary input[type=\"radio\"]:checked + label::after {\n  background-color: #337ab7; }\n\n.radio-danger input[type=\"radio\"] + label::after {\n  background-color: #d9534f; }\n\n.radio-danger input[type=\"radio\"]:checked + label::before {\n  border-color: #d9534f; }\n\n.radio-danger input[type=\"radio\"]:checked + label::after {\n  background-color: #d9534f; }\n\n.radio-info input[type=\"radio\"] + label::after {\n  background-color: #5bc0de; }\n\n.radio-info input[type=\"radio\"]:checked + label::before {\n  border-color: #5bc0de; }\n\n.radio-info input[type=\"radio\"]:checked + label::after {\n  background-color: #5bc0de; }\n\n.radio-warning input[type=\"radio\"] + label::after {\n  background-color: #f0ad4e; }\n\n.radio-warning input[type=\"radio\"]:checked + label::before {\n  border-color: #f0ad4e; }\n\n.radio-warning input[type=\"radio\"]:checked + label::after {\n  background-color: #f0ad4e; }\n\n.radio-success input[type=\"radio\"] + label::after {\n  background-color: #5cb85c; }\n\n.radio-success input[type=\"radio\"]:checked + label::before {\n  border-color: #5cb85c; }\n\n.radio-success input[type=\"radio\"]:checked + label::after {\n  background-color: #5cb85c; }\n\ninput[type=\"checkbox\"].styled:checked + label:after,\ninput[type=\"radio\"].styled:checked + label:after {\n  font-family: 'FontAwesome';\n  content: \"\\F00C\"; }\n\ninput[type=\"checkbox\"] .styled:checked + label::before,\ninput[type=\"radio\"] .styled:checked + label::before {\n  color: #fff; }\n\ninput[type=\"checkbox\"] .styled:checked + label::after,\ninput[type=\"radio\"] .styled:checked + label::after {\n  color: #fff; }\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 57 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(0)();
+// imports
+
+
+// module
+exports.push([module.i, "._expand_menu {\n  background-color: #364150; }\n  ._expand_menu a {\n    color: #8f97a3; }\n    ._expand_menu a:hover {\n      text-decoration: none; }\n  ._expand_menu ul {\n    padding: 0px; }\n    ._expand_menu ul li {\n      list-style-type: none;\n      cursor: pointer;\n      position: relative;\n      padding: 0px; }\n    ._expand_menu ul.submenu li {\n      padding: 5px 0px;\n      padding-left: 20px;\n      color: #B4BCC8; }\n      ._expand_menu ul.submenu li:hover, ._expand_menu ul.submenu li.active {\n        background-color: #3E4B5C; }\n        ._expand_menu ul.submenu li:hover a, ._expand_menu ul.submenu li.active a {\n          color: white; }\n  ._expand_menu ._icon {\n    padding: 0px 10px; }\n  ._expand_menu .menu_item {\n    border-top: 1px solid #475563;\n    padding: 5px 0px;\n    display: block; }\n  ._expand_menu .sub_item {\n    display: block; }\n\n._expand_menu ul.submenu {\n  padding: 0px; }\n\n._expand_menu .menu_item:hover {\n  background-color: #2C3542;\n  color: #A7BCAE; }\n\n._expand_menu .menu_item.selected {\n  background-color: #1CAF9A;\n  color: white; }\n\n._expand_menu .left-arrow {\n  position: absolute;\n  right: 0px;\n  border-top: 12px solid transparent;\n  border-bottom: 12px solid transparent;\n  border-right: 12px solid white; }\n\n.expand-transition {\n  transition: max-height .3s ease; }\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 58 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(0)();
+// imports
+
+
+// module
+exports.push([module.i, ".flex {\n  display: flex; }\n\n.flex-v {\n  display: flex;\n  flex-direction: column; }\n\n.flex-grow {\n  flex-grow: 10; }\n\n.flex-jc {\n  justify-content: center; }\n\n.flex-ac {\n  align-items: center; }\n\n.flex-sb {\n  justify-content: space-between; }\n\n.flex-vh-center {\n  justify-content: center;\n  align-items: center; }\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 59 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(0)();
+// imports
+
+
+// module
 exports.push([module.i, ".ellipsis {\n  white-space: nowrap;\n  text-overflow: ellipsis;\n  /* for internet explorer */\n  overflow: hidden;\n  width: 190px;\n  display: block; }\n", ""]);
 
 // exports
 
 
 /***/ }),
-/* 53 */,
-/* 54 */
+/* 60 */,
+/* 61 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(38);
+var content = __webpack_require__(45);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -3979,13 +4057,13 @@ if(false) {
 }
 
 /***/ }),
-/* 55 */
+/* 62 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(39);
+var content = __webpack_require__(46);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -4005,13 +4083,13 @@ if(false) {
 }
 
 /***/ }),
-/* 56 */
+/* 63 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(40);
+var content = __webpack_require__(47);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -4031,137 +4109,7 @@ if(false) {
 }
 
 /***/ }),
-/* 57 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(41);
-if(typeof content === 'string') content = [[module.i, content, '']];
-// add the styles to the DOM
-var update = __webpack_require__(1)(content, {});
-if(content.locals) module.exports = content.locals;
-// Hot Module Replacement
-if(false) {
-	// When the styles change, update the <style> tags
-	if(!content.locals) {
-		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./file_uploader.scss", function() {
-			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./file_uploader.scss");
-			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-			update(newContent);
-		});
-	}
-	// When the module is disposed, remove the <style> tags
-	module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 58 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(44);
-if(typeof content === 'string') content = [[module.i, content, '']];
-// add the styles to the DOM
-var update = __webpack_require__(1)(content, {});
-if(content.locals) module.exports = content.locals;
-// Hot Module Replacement
-if(false) {
-	// When the styles change, update the <style> tags
-	if(!content.locals) {
-		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./table.scss", function() {
-			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./table.scss");
-			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-			update(newContent);
-		});
-	}
-	// When the module is disposed, remove the <style> tags
-	module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 59 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(45);
-if(typeof content === 'string') content = [[module.i, content, '']];
-// add the styles to the DOM
-var update = __webpack_require__(1)(content, {});
-if(content.locals) module.exports = content.locals;
-// Hot Module Replacement
-if(false) {
-	// When the styles change, update the <style> tags
-	if(!content.locals) {
-		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./table_btn_group.scss", function() {
-			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./table_btn_group.scss");
-			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-			update(newContent);
-		});
-	}
-	// When the module is disposed, remove the <style> tags
-	module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 60 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(46);
-if(typeof content === 'string') content = [[module.i, content, '']];
-// add the styles to the DOM
-var update = __webpack_require__(1)(content, {});
-if(content.locals) module.exports = content.locals;
-// Hot Module Replacement
-if(false) {
-	// When the styles change, update the <style> tags
-	if(!content.locals) {
-		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./table_filter.scss", function() {
-			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./table_filter.scss");
-			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-			update(newContent);
-		});
-	}
-	// When the module is disposed, remove the <style> tags
-	module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 61 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(47);
-if(typeof content === 'string') content = [[module.i, content, '']];
-// add the styles to the DOM
-var update = __webpack_require__(1)(content, {});
-if(content.locals) module.exports = content.locals;
-// Hot Module Replacement
-if(false) {
-	// When the styles change, update the <style> tags
-	if(!content.locals) {
-		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./adapt.scss", function() {
-			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./adapt.scss");
-			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-			update(newContent);
-		});
-	}
-	// When the module is disposed, remove the <style> tags
-	module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 62 */
+/* 64 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
@@ -4176,60 +4124,8 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./aliagn.scss", function() {
-			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./aliagn.scss");
-			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-			update(newContent);
-		});
-	}
-	// When the module is disposed, remove the <style> tags
-	module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 63 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(49);
-if(typeof content === 'string') content = [[module.i, content, '']];
-// add the styles to the DOM
-var update = __webpack_require__(1)(content, {});
-if(content.locals) module.exports = content.locals;
-// Hot Module Replacement
-if(false) {
-	// When the styles change, update the <style> tags
-	if(!content.locals) {
-		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./button.scss", function() {
-			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./button.scss");
-			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-			update(newContent);
-		});
-	}
-	// When the module is disposed, remove the <style> tags
-	module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 64 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(50);
-if(typeof content === 'string') content = [[module.i, content, '']];
-// add the styles to the DOM
-var update = __webpack_require__(1)(content, {});
-if(content.locals) module.exports = content.locals;
-// Hot Module Replacement
-if(false) {
-	// When the styles change, update the <style> tags
-	if(!content.locals) {
-		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./expand_menu.scss", function() {
-			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./expand_menu.scss");
+		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./file_uploader.scss", function() {
+			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./file_uploader.scss");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -4254,8 +4150,8 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./flex.scss", function() {
-			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./flex.scss");
+		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./table.scss", function() {
+			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./table.scss");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -4280,8 +4176,8 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./text.scss", function() {
-			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./text.scss");
+		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./table_btn_group.scss", function() {
+			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./table_btn_group.scss");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -4294,29 +4190,257 @@ if(false) {
 /* 67 */
 /***/ (function(module, exports, __webpack_require__) {
 
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(53);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// add the styles to the DOM
+var update = __webpack_require__(1)(content, {});
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./table_filter.scss", function() {
+			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./table_filter.scss");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 68 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(54);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// add the styles to the DOM
+var update = __webpack_require__(1)(content, {});
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./adapt.scss", function() {
+			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./adapt.scss");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 69 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(55);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// add the styles to the DOM
+var update = __webpack_require__(1)(content, {});
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./aliagn.scss", function() {
+			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./aliagn.scss");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 70 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(56);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// add the styles to the DOM
+var update = __webpack_require__(1)(content, {});
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./button.scss", function() {
+			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./button.scss");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 71 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(57);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// add the styles to the DOM
+var update = __webpack_require__(1)(content, {});
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./expand_menu.scss", function() {
+			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./expand_menu.scss");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 72 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(58);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// add the styles to the DOM
+var update = __webpack_require__(1)(content, {});
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./flex.scss", function() {
+			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./flex.scss");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 73 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(59);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// add the styles to the DOM
+var update = __webpack_require__(1)(content, {});
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./text.scss", function() {
+			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./text.scss");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 74 */
+/***/ (function(module, exports, __webpack_require__) {
+
 "use strict";
 
 
-var _main = __webpack_require__(4);
+var _main = __webpack_require__(5);
 
 var inputs = _interopRequireWildcard(_main);
 
-var _main2 = __webpack_require__(5);
+var _main2 = __webpack_require__(6);
 
 var table = _interopRequireWildcard(_main2);
 
-var _main3 = __webpack_require__(6);
+var _main3 = __webpack_require__(7);
 
 var uis = _interopRequireWildcard(_main3);
 
-var _main4 = __webpack_require__(3);
+var _main4 = __webpack_require__(4);
 
 var fields = _interopRequireWildcard(_main4);
 
+var _cfg = __webpack_require__(3);
+
+var cfg = _interopRequireWildcard(_cfg);
+
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
-__webpack_require__(15);
-__webpack_require__(14);
+__webpack_require__(18);
+__webpack_require__(17);
+
+/***/ }),
+/* 75 */,
+/* 76 */,
+/* 77 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(0)();
+// imports
+
+
+// module
+exports.push([module.i, "div.chosen-drop > ul.chosen-results > li.result-selected {\n  display: none; }\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 78 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(77);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// add the styles to the DOM
+var update = __webpack_require__(1)(content, {});
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./multi_chosen.scss", function() {
+			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./multi_chosen.scss");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
 
 /***/ })
 /******/ ]);

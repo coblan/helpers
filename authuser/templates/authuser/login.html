@@ -31,8 +31,8 @@
 			password:'',
 		},
 		heads:[
-			{name:'username',label:'用户名',type:'linetext',autofocus:true,placeholder:'username'},
-			{name:'password',label:'密码',type:'password',placeholder:'your password',},
+			{name:'username',label:'用户名',editor:'linetext',autofocus:true,placeholder:'username'},
+			{name:'password',label:'密码',editor:'password',placeholder:'your password',},
 		]
 	}
 
@@ -84,8 +84,8 @@
 	<div class="flex-vh-center flex panel">
 		<form name="logForm" ng-submit='submit_func(logForm.$valid)' class='form-signin' novalidate>
 			<h2 class='form-signin-heading'>欢迎登陆</h2>
-			<field name='username' :kw='meta'></field>
-			<field name='password' :kw='meta'></field>
+			<field name='username' :row="meta.row" :head='meta.heads[0]'></field>
+			<field name='password' :row="meta.row" :head='meta.heads[1]'></field>
 	
 			<button name="test" type="button" value="val" @click='submit_info()'>登陆</button>
 	

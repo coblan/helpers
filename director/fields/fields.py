@@ -1,7 +1,7 @@
 # encoding:utf-8
 from __future__ import unicode_literals
 from django import forms
-from ..model_func.dictfy import form_to_head,to_dict,delete_related_query,model_to_name,from_dict,name_to_model
+from ..model_func.dictfy import form_to_head,to_dict,delete_related_query,model_to_name,from_dict,name_to_model,field_map
 from django.http import Http404
 import json
 from django.db import models
@@ -14,22 +14,32 @@ from django.db import models
 from ..access.permit import ModelPermit
 from ..models import LogModel
 
-def save_row(row,user,request):
-    for k in row: # convert model instance to pk for normal validation
-        if isinstance(row[k],models.Model):
-            row[k]=row[k].pk
+#def save_row(row,user,request):
+    #for k in row: # convert model instance to pk for normal validation
+        #if isinstance(row[k],models.Model):
+            #row[k]=row[k].pk
     
-    model= name_to_model(row['_class'])
-    fields_cls = model_dc.get(model).get('fields')
+    #model= name_to_model(row['_class'])
+    #fields_cls = model_dc.get(model).get('fields')
     
-    kw=request.GET.dict()
-    fields_obj=fields_cls(row,crt_user=user,**kw)
-    if fields_obj.is_valid():
-        fields_obj.save_form()
-        return fields_obj.get_row()
-    else:
-        raise ValidationError(fields_obj.errors)
-    
+    #kw=request.GET.dict()
+    #fields_obj=fields_cls(row,crt_user=user,**kw)
+    #if fields_obj.is_valid():
+        #fields_obj.save_form()
+        #return fields_obj.get_row()
+    #else:
+        #raise ValidationError(fields_obj.errors)
+
+def clean_dict(dc,model):
+    model_name = model_to_name(model)
+    for k,v in dc.items():
+        if not k.startswith('_'):
+            field_path = model_name+'.'+k
+            if field_map.get(field_path):
+                map_cls = field_map[field_path]
+                field = model._meta.get_fields()
+                dc[k]=map_cls().from_dict(v,model._meta.get_field(k)) 
+    return dc
 
 class ModelFields(forms.ModelForm):
     """
@@ -41,7 +51,7 @@ class ModelFields(forms.ModelForm):
     
     """
     readonly=[]
-    
+    field_sort=[]
     @classmethod
     def parse_request(cls,request):
         """
@@ -57,9 +67,15 @@ class ModelFields(forms.ModelForm):
     
     def __init__(self,dc={},pk=None,crt_user=None,nolimit=False,*args,**kw):
         """
+        调用情况：
+        1. ajax save 时
+        2. ajax get 时，获取数据，或者获取一个新的row数据。
+        
         @dc: 当post save时 ,dc是前端传来的row字典
              当get 时，dc是前端传来的url参数，排除pk后的额外的字典
         """
+        #dc = clean_dict(dc, self._meta.model)
+        dc = self.clean_dict(dc)
         if not crt_user:
             self.crt_user=dc.get('crt_user')
         else:
@@ -90,9 +106,21 @@ class ModelFields(forms.ModelForm):
         self.pop_fields()
         self.init_value()
     
+    def clean_dict(self,dc):
+        """利用field_map字典，查找前端传来的dc中，某个字段的转换方式"""
+        model = self.Meta.model
+        model_name = model_to_name(model)
+        for k,v in dc.items():
+            if not k.startswith('_'):
+                field_path = model_name+'.'+k
+                if field_map.get(field_path):
+                    map_cls = field_map[field_path]
+                    field = model._meta.get_fields()
+                    dc[k]=map_cls().from_dict(v,model._meta.get_field(k))         
+        return dc
+    
     def custom_permit(self):
         self.permit=ModelPermit(self.Meta.model,self.crt_user,nolimit=self.nolimit)
-        
         
     def get_context(self):
         """
@@ -100,9 +128,31 @@ class ModelFields(forms.ModelForm):
         return {
             'heads':self.get_heads(),
             'row': self.get_row(),
+            #'permit':self.get_permit(),
+            'ops':self.get_operations(),
         }  
+
+    
     def get_del_info(self):
         return {'%(model)s:%(inst)s <id=%(pk)s>'%{'model':self.instance.__class__.__name__,'inst':unicode(self.instance),'pk':self.instance.pk}:delete_related_query(self.instance)}
+    
+    def get_operations(self):
+        ls=[]
+        if self.permit.changeable_fields():
+            ls.append({
+                'name':'save','editor':'com-field-op-btn','label':'保存'
+            })
+        return ls
+    
+    def get_permit(self):
+        permit_dc = {
+            'can_add':self.permit.can_add(),
+            'can_del':self.permit.can_del() ,
+            'can_log':self.permit.can_log(),
+            'can_edit':bool( self.permit.changeable_fields() )
+        }
+
+        return permit_dc
     
     def pop_fields(self):
         """
@@ -144,7 +194,16 @@ class ModelFields(forms.ModelForm):
                     head['readonly']=True 
         for head in heads:
             self.dict_head(head)
-        return heads
+        if self.field_sort:
+            tmp_heads = []
+            for k in self.field_sort:
+                for head in heads:
+                    if head['name'] == k:
+                        tmp_heads.append(head)
+                        
+            return tmp_heads
+        else:
+            return heads
     
     def can_access(self):
         """
@@ -185,7 +244,7 @@ class ModelFields(forms.ModelForm):
         # self.fields 是经过 权限 处理了的。可读写的字段
         return to_dict(self.instance,filt_attr=self.dict_row,include=self.fields)
 
-    def dict_row(self,row):
+    def dict_row(self,inst):
         return {}
     
     def get_options(self):
@@ -203,16 +262,6 @@ class ModelFields(forms.ModelForm):
             
         return options
 
-    #def sort_option(self,option):
-        #index=0
-        #for opt in option:
-            #if opt['value']:
-                #break
-            #else:
-                #index+=1
-        #option[index:]=sorted(option[index:],key=lambda x:pinyin.get_initial(x['label']))
-        #return option
-    
     def dict_options(self):
         return {}
     

@@ -47,6 +47,7 @@ def sim_dict(instance,filt_attr=None,include=None,exclude=None):
     
     注意，返回的字典，是可以json化的才行。
     """
+    model_path = instance._meta.app_label+'.'+instance._meta.model_name
     fields=instance._meta.get_fields() # 如果用  instance._meta.fields 没有 manytomany (测试过) ,可能也没有 onetoone
     fields=[field for field in fields if isinstance(field,models.Field)]
     if include:
@@ -65,9 +66,14 @@ def sim_dict(instance,filt_attr=None,include=None,exclude=None):
            #isinstance(field,(models.ManyToManyRel,models.ManyToOneRel)):
             continue
         else:
-            proxy_cls = field_map.get(field.__class__)
+            proxy_cls=field_map.get('%s.%s'%(model_path,field.name))
+            if not proxy_cls:
+                proxy_cls = field_map.get(field.__class__)
             if proxy_cls:
-                out[field.name] = proxy_cls().to_dict(instance,field.name)
+                mapper = proxy_cls()
+                out[field.name] = mapper.to_dict(instance,field.name)
+                if hasattr(mapper,'get_label'):
+                    out['_%s_label']=mapper.get_label(instance,field.name)
                 if isinstance(out[field.name],list):
                     # 如果遇到 manytomany的情况，是一个list
                     out['_%s_label'%field.name]=[unicode(x) for x in out[field.name]]
@@ -82,8 +88,8 @@ def sim_dict(instance,filt_attr=None,include=None,exclude=None):
                     org_value= out[field.name]
                     mt = [x for x in field.choices if x[0]==org_value]
                     if mt:
-                        out['_tr_'+field.name]=mt[0][1]
-    if 'id' in instance._meta.get_all_field_names() and \
+                        out[ '_%s_label'%field.name]=mt[0][1]
+    if 'id' in [x.name for x in instance._meta.get_fields()] and \
        instance.id:
         out['id']=instance.id
     return out
@@ -108,7 +114,12 @@ class ForeignProc(object):
         foreign=getattr(inst,name,None)
         if foreign:
             return foreign.pk
-        
+    
+    def get_label(self,inst,name):
+        foreign=getattr(inst,name,None)
+        if foreign:
+            return unicode(foreign)
+    
     def from_dict(self,value,field):
         if isinstance(value,models.Model):
             return value
@@ -182,6 +193,7 @@ field_map={
     models.DecimalField:DecimalProc,
 }
 
+
 def from_dict(dc,model=None,pre_proc=None):
     """
 
@@ -246,26 +258,27 @@ def form_to_head(form,include=None):
         dc = {'name':k,'label':_(v.label),
               'required':v.required,
               'help_text':unicode(v.help_text),
-              'type':'linetext'}
+              'editor':'linetext'}
         
         if isinstance(v.widget,forms.widgets.Select):
-            dc['type'] = 'sim_select' 
+            dc['editor'] = 'sim_select' 
             dc['options']=[{'value':val,'label':lab} for val,lab in v.widget.choices]
         elif v.__class__==forms.fields.CharField:
             if v.max_length:
-                dc.update({'type':'linetext','maxlength':v.max_length})
+                dc.update({'editor':'linetext','maxlength':v.max_length})
             else:
-                dc.update({'type':'blocktext'})
+                dc.update({'editor':'blocktext'})
         elif v.__class__==forms.fields.BooleanField:
-            dc['type']='bool'
+            dc['editor']='bool'
             #dc['no_auto_label']=True
         elif v.__class__ in [forms.fields.IntegerField,forms.fields.FloatField]:
-            dc['type']='number'
+            dc['editor']='number'
         elif v.__class__  == forms.fields.DateField:
-            dc['type']='date'
+            dc['editor']='date'
         if v.__class__ ==forms.models.ModelMultipleChoiceField and \
             isinstance(v.widget,forms.widgets.SelectMultiple):
-            dc['type']='tow_col'
+            dc['editor']='multi_chosen'
+            #dc['editor']='tow_col'
         # elif v.__class__==forms.models.ModelChoiceField and \
         
         out.append(dc)

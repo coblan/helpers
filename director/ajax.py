@@ -25,12 +25,39 @@ def save(row,user,request):
     except ValidationError as e:
         return {'errors':dict(e)}
 
-def get_row(model_name,pk,user):
+def get_new_row_ctx(model_name,user):
     model = name_to_model(model_name)
-    instance = model.objects.get(pk =pk)
     fields_cls = model_dc[model].get('fields')
-    fields_obj = fields_cls(instance=instance,crt_user = user)
+    return fields_cls(crt_user = user).get_context()
+    
+def get_row(model_name,pk=None,user=None,**kws):
+    model = name_to_model(model_name)
+    fields_cls = model_dc[model].get('fields')
+    if pk:
+        instance = model.objects.get(pk =pk)
+        fields_obj = fields_cls(instance=instance,crt_user = user)
+    elif kws:
+        instance = model.objects.get(**kws)
+        fields_obj = fields_cls(instance=instance,crt_user = user)
+    else:
+        fields_obj =fields_cls(crt_user = user)
     return fields_obj.get_row()
+
+def get_rows(model_name,search_args,user):
+    model = name_to_model(model_name)
+    table_cls = model_dc[model].get('table')
+    table_obj = table_cls.gen_from_search_args(search_args,user)
+    return table_obj.get_data_context()
+
+def save_rows(rows,user,request):
+    kw=request.GET.dict()
+    ls =[]
+    for row in rows:
+        field_obj = permit_save_model(user, row,**kw)
+        dc = field_obj.get_row() 
+        ls.append(dc)
+    return ls
+
 
 def del_rows(rows,user):
     for row in rows:

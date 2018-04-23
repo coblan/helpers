@@ -34,6 +34,7 @@
     .field_input{
         flex-grow:0;
         padding:5px 20px;
+        width:25em;
 
       .ckeditor{
           padding: 20px;
@@ -61,10 +62,8 @@
     font-style: italic;
     font-size: 0.9em;
   }
-  .field.error .error{
-    display: inline-block;
-    vertical-align: top;
-    padding-top: 8px;
+  .field{
+    position: relative;
   }
 
 }
