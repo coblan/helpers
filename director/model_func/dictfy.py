@@ -277,7 +277,7 @@ def form_to_head(form,include=None):
             dc['editor']='date'
         if v.__class__ ==forms.models.ModelMultipleChoiceField and \
             isinstance(v.widget,forms.widgets.SelectMultiple):
-            dc['editor']='multi_chosen'
+            dc['editor']='field_multi_chosen'
             #dc['editor']='tow_col'
         # elif v.__class__==forms.models.ModelChoiceField and \
         

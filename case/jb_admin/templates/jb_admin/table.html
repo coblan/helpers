@@ -139,7 +139,13 @@
 
     }
     $(function () {
+        $('#there').height(window.innerHeight -80)
+        $(window).resize(function() {
+            $('#there').height(window.innerHeight -80)
+        });
+
         table=new Vue(table_logic)
+
     })
 
 </script>
@@ -152,8 +158,9 @@
         pointer-events: none;
     }
 </style>
-<div id='there' class="flex-v" style="height: 85vh;">
+<div id='there' class="flex-v">
 
+    {% block flag %}
     <ol v-if="page_label" class="breadcrumb">
         <b v-text="page_label"></b>
 
@@ -169,8 +176,9 @@
                        @operation="on_operation(op)"></component>
         </span>
     </ol>
-    <!--<path-nav v-else :menu='menu'></path-nav>-->
+    {% endblock %}
 
+    {% block table-content %}
     <div id="main-page" class="rows-block" v-show="tabgroup.crt =='main'">
         <div class='flex' v-if="row_filters.length > 0" style="min-height: 3em;">
             <com-filter class="flex" :heads="row_filters" :search_args="search_args"
@@ -230,7 +238,7 @@
 
     </div>
 
-
+    {% endblock %}
 
 </div>
 <style>

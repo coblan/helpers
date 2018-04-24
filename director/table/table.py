@@ -287,6 +287,7 @@ class ModelTable(object):
     exclude=[]
     pagenator=PageNum
     fields_sort=[]
+    pop_edit_field=""
     def __init__(self,_page=1,row_sort=[],row_filter={},row_search={},crt_user=None,perpage=None,**kw):
         self.kw=kw
         self.crt_user=crt_user 
@@ -383,6 +384,7 @@ class ModelTable(object):
             'ops' : self.get_operation()
         }        
     
+
     def get_data_context(self):
         return {
             'rows': self.get_rows(),
@@ -411,8 +413,33 @@ class ModelTable(object):
         heads = model_to_head(self.model,include=ls)
         heads = self.fields_sort_heads(heads)
         heads=[self.fields_map_head(head) for head in heads]
+        heads= self.make_pop_edit_field(heads)
         heads = [self.dict_head(head) for head in heads]
         
+        return heads
+    
+    def make_pop_edit_field(self,heads):
+        if self.pop_edit_field:
+            for head in heads:
+                if head['name']==self.pop_edit_field:
+                    model_form = model_dc[self.model].get('fields')
+                    head['name'] ==self.pop_edit_field
+                    head['editor'] = 'com-table-pop-fields'
+                    head['fields_heads']=model_form(crt_user=self.crt_user).get_heads()
+                    head['get_row'] = {
+                        #'fun':'use_table_row'
+                        "fun":'get_table_row'
+                        #'fun':'get_with_relat_field',
+                        #'kws':{
+                            #"model_name":model_to_name(TbBanner),
+                            #'relat_field':'pk'
+                        #}
+                    }
+                    head['after_save']={
+                        #'fun':'do_nothing'
+                        'fun':'update_or_insert'
+                    }
+                    head['ops']=model_form(crt_user=self.crt_user).get_operations()
         return heads
     
     def dict_head(self,head):

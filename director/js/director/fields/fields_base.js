@@ -306,17 +306,17 @@ export var field_base={
 					  </div>`
         },
         date: {
-            props:['name','row','kw'],
-            template:`<div><span v-if='kw.readonly' v-text='row[name]'></span>
-                                <date v-else v-model="row[name]" :id="'id_'+name"
-                                    :placeholder="kw.placeholder"></date>
+            props:['row','head'],
+            template:`<div><span v-if='head.readonly' v-text='row[head.name]'></span>
+                                <date v-else v-model="row[head.name]" :id="'id_'+head.name"
+                                    :placeholder="head.placeholder"></date>
                                </div>`,
         },
         datetime:{
-            props:['name','row','kw'],
-            template:`<div><span v-if='kw.readonly' v-text='row[name]'></span>
-            			<datetime  v-model="row[name]" :id="'id_'+name"
-                        	:placeholder="kw.placeholder"></datetime>
+            props:['row','head'],
+            template:`<div><span v-if='head.readonly' v-text='row[head.name]'></span>
+            			<datetime  v-model="row[head.name]" :id="'id_'+head.name"
+                        	:placeholder="head.placeholder"></datetime>
                        </div>`,
         },
         richtext:{
