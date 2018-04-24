@@ -725,6 +725,7 @@ var urlparse = exports.urlparse = {
             segments: a.pathname.replace(/^\//, '').split('/')
         };
     }
+
 };
 
 function para_encode(para_str) {

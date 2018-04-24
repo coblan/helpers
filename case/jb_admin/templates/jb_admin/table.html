@@ -31,13 +31,14 @@
             row_sort:row_sort,
             row_pages:row_pages,
             selected:[],
-            search_args:ex.parseSearch(),
+            search_args:{}, //ex.parseSearch(),
             ops:ops,
+            crt_row:{},
             tabgroup:{
                 crt:'main',
                 tabs:tabs
             },
-            crt_row:{}
+
 
         },
         mixins:[mix_table_data,mix_v_table_adapter],
@@ -70,43 +71,11 @@
         },
         methods:{
 
-
-
             on_td_event:function(e){
                 this.op_funs[e.name](e)
-
-//                if(e.name=='row-changed'){
-//                    var row= e.row
-//                    if(!ex.isin(row,this.changed_rows)){
-//                        this.changed_rows.push(row)
-//                    }
-//                }
-//                if(e.name=='switch_to_tab'){
-//                    this.show_tab(e.tab_name)
-//                    this.crt_row= e.row
-//                }
-//                if(e.name=='update_or_insert'){
-//                    var new_row = e.new_row
-//                    var old_row= e.old_row
-//                    if(! old_row.pk) {
-//                        this.rows.splice(0, 0, new_row)
-//                    }else{
-//                        var table_row = ex.findone(this.rows,{pk:new_row.pk})
-//                        ex.assign(table_row,new_row)
-//                    }
-//                }
             },
             on_tab_event:function(e){
                 this.op_funs[e.name](e)
-//                if(e.name=='update-or-insert'){
-//                    var new_row = e.new_row
-//                    var old_row= e.old_row
-//                    if(! old_row.pk) {
-//                        this.rows.splice(0, 0, new_row)
-//                    }else{
-//                        ex.assign(this.crt_row,new_row)
-//                    }
-//                }
             },
             on_select_group_change:function(sel,v){
                 this.selected= sel

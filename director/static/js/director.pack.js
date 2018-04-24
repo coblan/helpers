@@ -1774,6 +1774,20 @@ var img_uploader = {
             }
             return dc;
         },
+        //real_url:function(){
+        //    if(this.config.url_prefix){
+        //        var mt = /\w+:\/\//.exec(this.url)
+        //        // 表示地址没有域名
+        //        if(!mt){
+        //            return this.config.url_prefix + this.url
+        //        }else {
+        //            return this.url
+        //        }
+        //    }else{
+        //        return this.url
+        //    }
+        //
+        //},
         //is_crop:function(){
         //    return this.config && this.config.crop
         //},
