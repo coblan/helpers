@@ -147,7 +147,7 @@
     </ol>
     {% endblock %}
 
-    {% block table-content %}
+    {% block tab-content %}
     <div id="main-page" class="rows-block" v-show="tabgroup.crt =='main'">
         <div class='flex' v-if="row_filters.length > 0" style="min-height: 3em;">
             <com-filter class="flex" :heads="row_filters" :search_args="search_args"

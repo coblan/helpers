@@ -13,7 +13,7 @@ Vue.component('com-pop-fields',{
         },
         after_save:function(new_row){
             this.$emit('sub_success',{new_row:new_row,old_row:this.row})
-            ex.assign(this.row,new_row)
+            //ex.assign(this.row,new_row)
         },
         del_row:function(){
             var self=this

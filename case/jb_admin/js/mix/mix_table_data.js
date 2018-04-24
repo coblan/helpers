@@ -53,9 +53,9 @@ var mix_table_data={
         },
         update_or_insert:function(new_row,old_row){
             if(old_row && ! old_row.pk) {
-                self.rows.splice(0, 0, new_row)
+                this.rows.splice(0, 0, new_row)
             }else{
-                var table_row = ex.findone(self.rows,{pk:new_row.pk})
+                var table_row = ex.findone(this.rows,{pk:new_row.pk})
                 ex.assign(table_row,new_row)
             }
         },
