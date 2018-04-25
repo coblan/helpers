@@ -92,7 +92,8 @@ def changepswd(user,row):
         return {'errors':{'first_pswd':['must input password']}}
         
     md_user= User.objects.get(pk=row.get('uid'))
-    if user.is_superuser or has_permit(user,"myauth.modify_other_pswd")  or md_user.check_password(row.get('old_pswd')):
+    #if user.is_superuser or has_permit(user,"myauth.modify_other_pswd")  or  md_user.check_password(row.get('old_pswd')):
+    if md_user.check_password(row.get('old_pswd')):
         md_user.set_password(row.get('first_pswd'))
         md_user.save()
         dc={'status':'success'}

@@ -47,7 +47,37 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- Google Font -->
     <!--<link rel="stylesheet"-->
           <!--href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">-->
-
+    <script src="https://cdn.bootcss.com/nprogress/0.2.0/nprogress.min.js"></script>
+    <link href="https://cdn.bootcss.com/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">
+    <script>
+        (function(){
+            document.onreadystatechange = function(){
+                NProgress.configure({ showSpinner: false });
+                NProgress.start();
+                console.log(document.readyState);
+                if(document.readyState == "Uninitialized"){
+                    NProgress.set(1);
+                }
+                if(document.readyState == "Interactive"){
+                    NProgress.set(0.5);
+                }
+                if(document.readyState == "complete"){
+                    NProgress.done();
+                }
+            }
+        })();
+        window.onbeforeunload=function(){
+            NProgress.start();
+            setInterval(function(){
+                NProgress.inc()
+            },300)
+        }
+    </script>
+    <style>
+        .bar{
+            background: #dd453b !important;
+        }
+    </style>
     {% block head-script %}
     {% endblock %}
 </head>
@@ -228,7 +258,7 @@ desired effect
                             <!-- Menu Footer-->
                             <li class="user-footer">
                                 <div class="pull-left">
-                                    <a href="#" class="btn btn-default btn-flat">修改密码</a>
+                                    <a href="/accounts/pswd" class="btn btn-default btn-flat">修改密码</a>
                                 </div>
                                 <div class="pull-right">
                                     <a href="#" class="btn btn-default btn-flat">退出</a>
@@ -245,7 +275,7 @@ desired effect
         </nav>
     </header>
     <!-- Left side column. contains the logo and sidebar -->
-    <aside class="main-sidebar">
+    <aside class="main-sidebar" id="main-sidebar">
 
         <!-- sidebar: style can be found in sidebar.less -->
         <section class="sidebar">
@@ -263,23 +293,23 @@ desired effect
             <!--</div>-->
 
             <!-- search form (Optional) -->
-            <!--<form action="#" method="get" class="sidebar-form">-->
-                <!--<div class="input-group">-->
-                    <!--<input type="text" name="q" class="form-control" placeholder="Search...">-->
-          <!--<span class="input-group-btn">-->
-              <!--<button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>-->
-              <!--</button>-->
-            <!--</span>-->
-                <!--</div>-->
-            <!--</form>-->
+            <div action="#" method="get" class="sidebar-form">
+                <div class="input-group">
+                    <input type="text" name="q" class="form-control" v-model="menu_search" :placeholder="tr.search+'...'">
+                <span class="input-group-btn">
+                  <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
+                  </button>
+                </span>
+                </div>
+            </div>
             <!-- /.search form -->
 
             <!-- Sidebar Menu -->
             <ul class="sidebar-menu" data-widget="tree">
                 <!--<li class="header">HEADER</li>-->
                 <!-- Optionally, you can add icons to the links -->
-                <li style="height: 20px;"></li>
-                <li v-for="action in menu" :class="{active:is_active(action),treeview:action.submenu}">
+                <!--<li style="height: 20px;"></li>-->
+                <li v-for="action in filted_menu" :class="{active:is_active(action),treeview:action.submenu}">
                     <a :href="action.url">
                         <i v-html="action.icon"></i>
                         <!--<i class="fa fa-link"></i>-->
@@ -468,9 +498,44 @@ desired effect
 
     eventBus=new Vue()
         new Vue({
-            el:'.sidebar-menu',
+            el: '#main-sidebar',//'.sidebar-menu',
             data:{
                 menu:menu,
+                menu_search:'',
+                tr:cfg.tr
+            },
+            computed:{
+                filted_menu:function(){
+                    var tmp_menus = ex.copy(this.menu)
+                    if(this.menu_search == ''){
+                        return tmp_menus
+                    }
+                    var self=this
+                    var valid_menus = ex.filter(tmp_menus,function(menu){
+                            return menu.label.toLowerCase().indexOf(self.menu_search.toLowerCase()) !=-1
+                    })
+
+                    ex.each(tmp_menus,function(menu){
+                        if(menu.submenu && menu.submenu.length != 0 ){
+                            if(! ex.isin(menu,valid_menus)){
+                                ex.remove(menu.submenu,function(act){
+                                    return act.label.toLowerCase().indexOf(self.menu_search.toLowerCase()) ==-1
+                                })
+                            }
+                        }
+                    })
+                    ex.remove(tmp_menus,function(menu){
+                        if(ex.isin(menu,valid_menus)){
+                            return false
+                        }
+                        if(!menu.submenu || menu.submenu.length == 0){
+                            return true
+                        }else{
+                            return false
+                        }
+                    })
+                    return tmp_menus
+                }
             },
             methods:{
                 is_active:function(action){
@@ -495,6 +560,7 @@ desired effect
             user:head_bar_data.user,
             mini_brand:head_bar_data.mini_brand,
             brand:head_bar_data.brand,
+
         },
         mounted:function(){
             $('.sidebar-toggle').click(function(){

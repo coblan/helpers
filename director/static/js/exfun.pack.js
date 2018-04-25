@@ -756,6 +756,8 @@ var _cookie = __webpack_require__(9);
 
 var _obj = __webpack_require__(11);
 
+var _vuetools = __webpack_require__(79);
+
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 var ex = {
@@ -772,8 +774,32 @@ ex.assign(ex, _urlparse.urlparse);
 ex.assign(ex, _collection.collection);
 ex.assign(ex, _cookie.cookie);
 ex.assign(ex, _obj.obj_control);
+ex.assign(ex, _vuetools.vuetool);
 
 window.ex = ex;
+
+/***/ }),
+
+/***/ 79:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+var vuetool = exports.vuetool = {
+    vueSuper: function vueSuper(self, mixin, name, args) {
+        var index = self.$options.mixins.indexOf(mixin);
+        for (var i = index - 1; i > -1; i--) {
+            var mix = self.$options.mixins[i];
+            if (mix[name]) {
+                return mix.apply(self, args);
+            }
+        }
+    }
+};
 
 /***/ }),
 

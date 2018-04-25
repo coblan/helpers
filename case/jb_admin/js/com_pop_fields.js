@@ -3,14 +3,7 @@ Vue.component('com-pop-fields',{
     mixins:[mix_fields_data,mix_nice_validator],
 
     methods:{
-        before_save:function(){
-            eventBus.$emit('sync_data')
-            if(this.nice_validator.isValid()){
-                return 'continue'
-            }else{
-                return 'break'
-            }
-        },
+
         after_save:function(new_row){
             this.$emit('sub_success',{new_row:new_row,old_row:this.row})
             //ex.assign(this.row,new_row)

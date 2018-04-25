@@ -38,6 +38,7 @@
                 crt:'main',
                 tabs:tabs
             },
+            tr:cfg.tr
 
 
         },
@@ -133,9 +134,13 @@
     <ol v-if="page_label" class="breadcrumb">
         <b v-text="page_label"></b>
 
-        <button v-show="tabgroup.crt != 'main'" @click="back_to_main_page()">back</button>
+        <button type="button"
+                class="btn btn-default"
+                v-show="tabgroup.crt != 'main'"
+                @click="back_to_main_page()">
+            <i class="fa fa-arrow-circle-o-left fa-lg"></i><span v-text="tr.back"></span></button>
 
-        <span class="oprations">
+        <span class="oprations" v-show="tabgroup.crt == 'main'">
             <component style="padding: 0.5em;" v-for="op in ops"
                        :is="op.editor"
                        :ref="'op_'+op.name"

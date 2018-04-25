@@ -30,13 +30,13 @@ export var field_base={
         //}
     },
     methods: {
-        error_data: function (name) {
-            if (this.errors[name]) {
-                return this.errors[name]
-            } else {
-                return ''
-            }
-        }
+        //error_data: function (name) {
+        //    if (this.errors[name]) {
+        //        return this.errors[name]
+        //    } else {
+        //        return ''
+        //    }
+        //}
     },
     components: {
         linetext: {

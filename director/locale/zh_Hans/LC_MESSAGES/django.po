@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-04-11 17:04+0800\n"
+"POT-Creation-Date: 2018-04-25 10:22+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -24,7 +24,7 @@ msgstr ""
 msgid "permit name has been exist"
 msgstr "用户名已经存在了"
 
-#: .\helpers\director\model_func\dictfy.py:287
+#: .\helpers\director\model_func\dictfy.py:288
 msgid "ID"
 msgstr "序号"
 

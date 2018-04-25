@@ -407,11 +407,6 @@ window.cfg = {
 "use strict";
 
 
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.merge = merge;
-
 var _ajax_fun = __webpack_require__(19);
 
 var _file = __webpack_require__(24);
@@ -503,130 +498,134 @@ __webpack_require__(62);
 (0, _ajax_fun.hook_ajax_csrf)();
 
 var field = {
-    mixins: [_fields_base.field_base],
-    methods: {
-        show_msg: function show_msg(msg, event) {
-            layer.tips(msg, event.target);
-        }
-    },
-    template: '\n    \t\t<div :class=\'["form-group field",{"error":head.error}]\' v-if="head">\n            <label :for="\'id_\'+head.name"  class="control-label" v-if=\'head.label && head.label!=""\'>\n                <span v-text="head.label"></span><span class="req_star" v-if=\'head.required\'>*</span>\n            </label>\n            <div class="field_input">\n                <component :is=\'head.editor\'\n                    :row=\'row\'\n                    :head=\'head\'>\n                </component>\n\n            </div>\n             <div class="msg" style="position: relative;left: -10px;bottom: 1px;">\n                    <i v-if="head.help_text" @click="show_msg(head.help_text,$event)" class="fa fa-shield" ></i>\n                    <i v-if="head.error" @click="show_msg(head.error,$event)" class="fa fa-shield  error" ></i>\n                    <!--<span class="help_text" v-text="head.help_text"></span>-->\n                    <!--<span v-if="head.error_msg" class="error_msg error"  v-text=\'head.error_msg\'></span>-->\n             </div>\n\n\t\t</div>\n\n\n\t'
+  mixins: [_fields_base.field_base],
+  methods: {
+    show_msg: function show_msg(msg, event) {
+      layer.tips(msg, event.target);
+    }
+  },
+  template: '\n    \t\t<div :class=\'["form-group field",{"error":head.error}]\' v-if="head" style="position: relative;">\n                <label :for="\'id_\'+head.name"  class="control-label" v-if=\'head.label && head.label!=""\'>\n                    <span v-text="head.label"></span><span class="req_star" v-if=\'head.required\'>*</span>\n                </label>\n                <div class="field_input">\n                    <component :is=\'head.editor\'\n                        :row=\'row\'\n                        :head=\'head\'>\n                    </component>\n\n                </div>\n                 <div class="msg" style="position: absolute;right: 5px;top: 1px;">\n                        <i v-if="head.help_text" @click="show_msg(head.help_text,$event)" class="fa fa-shield" ></i>\n\n                        <span class="fa-stack error" v-if="head.error" @click="show_msg(head.error,$event)" style="font-size: 0.5em;">\n                              <i class="fa fa-cloud fa-stack-2x" style="color: black"></i>\n                              <i class="fa fa-close fa-stack-1x" style="color: red"></i>\n                        </span>\n\n                        <!--<i v-if="head.error" @click="show_msg(head.error,$event)" class="fa fa-shield  error" ></i>-->\n                        <!--<span class="help_text" v-text="head.help_text"></span>-->\n                        <!--<span v-if="head.error_msg" class="error_msg error"  v-text=\'head.error_msg\'></span>-->\n                 </div>\n\t\t</div>\n\n\n\t'
 
 };
 
 Vue.component('field', field);
 
-function update_vue_obj(vue_obj, obj) {
-    for (var x in vue_obj) {
-        Vue.delete(vue_obj, x);
-    }
-    for (var _x in obj) {
-        Vue.set(vue_obj, _x, obj[_x]);
-    }
-}
+//function update_vue_obj(vue_obj,obj) {
+//    for(let x in vue_obj){
+//        Vue.delete(vue_obj,x)
+//    }
+//    for(let x in obj){
+//        Vue.set(vue_obj,x,obj[x])
+//    }
+//}
 
-function merge(mains, subs) {
-    mains.each(function (first) {
-        subs.each(function (second) {
-            if (first.name == second.name) {
-                for (var x in second) {
-                    first[x] = second[x];
-                }
-            }
-        });
-    });
-}
+//export function merge(mains,subs) {
+//    mains.each(function (first) {
+//        subs.each(function (second) {
+//            if(first.name==second.name){
+//                for(var x in second){
+//                    first[x]=second[x]
+//                }
+//            }
+//        })
+//    })
+//}
 
-var fieldset_fun = {
-    data: function data() {
-        return {
-            fieldset: fieldset,
-            namelist: namelist,
-            menu: menu,
-            search_args: ex.parseSearch(),
-            can_add: can_add,
-            can_del: can_del,
-            can_log: can_log
-        };
-    },
 
-    methods: {
-        submit: function submit() {
-            var self = this;
-            (0, _ajax_fun.show_upload)();
-            var search = ex.parseSearch();
-            var fieldset_row = {};
-            for (var k in this.fieldset) {
-                fieldset_row[k] = this.fieldset[k].row;
-            }
-
-            var post_data = [{ fun: 'save_fieldset', fieldset: fieldset_row, save_step: save_step }];
-            ex.post('', JSON.stringify(post_data), function (resp) {
-                if (resp.save_fieldset.errors) {
-                    var error_path = resp.save_fieldset.path;
-                    ex.set(self.fieldset, error_path, resp.save_fieldset.errors);
-                    (0, _ajax_fun.hide_upload)(200);
-                } else if (search._pop == 1) {
-                    window.ln.rtWin({ row: resp.save_fieldset.fieldset });
-                } else if (search.next) {
-
-                    location = decodeURIComponent(search.next);
-                } else {
-                    (0, _ajax_fun.hide_upload)(200);
-                }
-            });
-        },
-        cancel: function cancel() {
-            var search = ex.parseSearch(); //parseSearch(location.search)
-            if (search._pop) {
-                window.close();
-            } else {
-                history.back();
-            }
-        },
-        del_row: function del_row(path) {
-            var self = this;
-            var search_args = ex.parseSearch();
-            var rows = [];
-            ex.each(delset, function (name) {
-                var row = self.fieldset[name].row;
-                if (row.pk) {
-                    rows.push(row._class + ':' + row.pk);
-                }
-            });
-            if (rows.length > 1) {
-                return ex.template('{engine_url}/del_rows?rows={rows}&next={next}&_pop={pop}', { engine_url: engine_url,
-                    rows: rows,
-                    next: search_args.next,
-                    pop: search_args._pop
-                });
-            } else {
-                return null;
-            }
-        },
-        log_url: function log_url() {
-            var rows = [];
-            for (var k in this.fieldset) {
-                var kw = this.fieldset[k];
-                rows.push(kw.row._class + ':' + kw.row.pk);
-            }
-            var obj = {
-                rows: rows.join(','),
-                engine_url: engine_url
-                //page_name:page_name,
-            };
-            return ex.template('{engine_url}/log?rows={rows}', obj);
-        }
-    }
-};
-window.fieldset_fun = fieldset_fun;
+//var fieldset_fun={
+//    data:function(){
+//        return {
+//            fieldset:fieldset,
+//            namelist:namelist,
+//            menu:menu,
+//            search_args:ex.parseSearch(),
+//            can_add:can_add,
+//            can_del:can_del,
+//            can_log:can_log,
+//        }
+//    },
+//
+//    methods:{
+//        submit:function () {
+//            var self =this;
+//            show_upload()
+//            var search =ex.parseSearch()
+//            var fieldset_row={}
+//            for(var k in this.fieldset){
+//                fieldset_row[k]=this.fieldset[k].row
+//            }
+//
+//            var post_data=[{fun:'save_fieldset',fieldset:fieldset_row,save_step:save_step}]
+//            ex.post('',JSON.stringify(post_data),function (resp) {
+//                if( resp.save_fieldset.errors ){
+//                    var error_path =resp.save_fieldset.path
+//                    ex.set(self.fieldset,error_path,resp.save_fieldset.errors)
+//                    hide_upload(200)
+//                }else if(search._pop==1){
+//                    window.ln.rtWin({row:resp.save_fieldset.fieldset})
+//                }else if(search.next){
+//
+//                    location=decodeURIComponent(search.next)
+//                }else{
+//                    hide_upload(200)
+//
+//                }
+//            })
+//        },
+//        cancel:function () {
+//            var search =ex.parseSearch() //parseSearch(location.search)
+//            if(search._pop){
+//                window.close()
+//            }else{
+//                history.back()
+//            }
+//        },
+//        del_row:function (path) {
+//            var self=this
+//            var search_args=ex.parseSearch()
+//            var rows=[]
+//            ex.each(delset,function(name){
+//                var row = self.fieldset[name].row
+//                if (row.pk){
+//                    rows.push(row._class+':'+row.pk)
+//                }
+//            })
+//            if(rows.length>1){
+//                return ex.template('{engine_url}/del_rows?rows={rows}&next={next}&_pop={pop}',
+//                    {engine_url:engine_url,
+//                        rows:rows,
+//                        next:search_args.next,
+//                        pop:search_args._pop,
+//                    })
+//            }else{
+//                return null
+//            }
+//
+//        },
+//        log_url:function(){
+//            var rows=[]
+//            for(var k in this.fieldset){
+//                var kw=this.fieldset[k]
+//                rows.push(kw.row._class+':'+kw.row.pk)
+//            }
+//            var obj={
+//                rows:rows.join(','),
+//                engine_url:engine_url,
+//                //page_name:page_name,
+//            }
+//            return ex.template('{engine_url}/log?rows={rows}',obj)
+//        },
+//    }
+//}
+//window.fieldset_fun=fieldset_fun
 
 window.field_fun = _field_fun.field_fun;
 window.hook_ajax_msg = _ajax_fun.hook_ajax_msg;
-window.update_vue_obj = update_vue_obj;
-window.use_ckeditor = ck.use_ckeditor;
+//window.update_vue_obj=update_vue_obj
+//window.use_ckeditor= ck.use_ckeditor
 window.show_upload = _ajax_fun.show_upload;
 window.hide_upload = _ajax_fun.hide_upload;
-window.merge = merge;
+//window.merge=merge;
 //window.BackOps=BackOps
 //window.back_ops=back_ops
 window.order_by_key = _order.order_by_key;
@@ -1269,13 +1268,13 @@ var field_base = exports.field_base = {
         //}
     },
     methods: {
-        error_data: function error_data(name) {
-            if (this.errors[name]) {
-                return this.errors[name];
-            } else {
-                return '';
-            }
-        }
+        //error_data: function (name) {
+        //    if (this.errors[name]) {
+        //        return this.errors[name]
+        //    } else {
+        //        return ''
+        //    }
+        //}
     },
     components: {
         linetext: {
