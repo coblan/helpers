@@ -25,7 +25,8 @@ var mix_fields_data ={
                 if(errors[head.name]){
                     Vue.set(head,'error',errors[head.name].join(';'))
                 }else if(head.error){
-                    delete head.error
+                    //delete head.error
+                    Vue.delete(head,'error')
                     //Vue.set(head,'error',null)
                 }
             })

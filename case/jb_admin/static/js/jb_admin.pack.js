@@ -345,7 +345,8 @@ var mix_fields_data = {
                 if (errors[head.name]) {
                     Vue.set(head, 'error', errors[head.name].join(';'));
                 } else if (head.error) {
-                    delete head.error;
+                    //delete head.error
+                    Vue.delete(head, 'error');
                     //Vue.set(head,'error',null)
                 }
             });
@@ -391,6 +392,7 @@ var mix_fields_data = {
             //})
         },
         before_save: function before_save() {
+            this.setErrors({});
             eventBus.$emit('sync_data');
             return 'continue';
         },
@@ -437,7 +439,7 @@ var nice_validator = {
     },
     methods: {
         before_save: function before_save() {
-            ex.vueSuper(this, nice_validator, 'before_save');
+            ex.vueSuper(this, { mixin: nice_validator, fun: 'before_save' });
             //this.setErrors({})
             //eventBus.$emit('sync_data')
             if (this.nice_validator.isValid()) {

@@ -63,8 +63,8 @@
 				},
 				after_save:function(row){
 					ex.vueSuper(this,{fun:'after_save',args:[row]})
-
-				}
+					location = '/'
+				},
 //				submit:function(){
 //					var  self =this
 //					var post_data=[{fun:'changepswd',row:this.row},]
@@ -85,9 +85,9 @@
 //
 //					})
 //				},
-//				cancel:function(){
-//					history.back()
-//				}
+				cancel:function(){
+					history.back()
+				}
 			}
 		})
 	})

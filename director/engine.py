@@ -48,6 +48,7 @@ import inspect
 import json
 from django.views.decorators.cache import patch_cache_control
 import time
+from django.shortcuts import redirect
 
 class BaseEngine(object):
     _pages=None

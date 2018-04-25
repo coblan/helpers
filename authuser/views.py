@@ -5,6 +5,9 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import ensure_csrf_cookie
 from helpers.func.network.ajax_router import ajax_router
+import urllib
+from django.contrib import auth
+from django.shortcuts import redirect
 # Create your views here.
 
 @ensure_csrf_cookie
