@@ -49,6 +49,7 @@ import json
 from django.views.decorators.cache import patch_cache_control
 import time
 from django.shortcuts import redirect
+from .base_data import js_tr_list
 
 class BaseEngine(object):
     _pages=None
@@ -115,6 +116,7 @@ class BaseEngine(object):
             if hasattr(page,'get_label'):
                 ctx['page_label'] =page.get_label()
             ctx['head_bar_data']=self.get_head_bar_data(request)
+            ctx['js_config'] = self.getJsConfig()
             ctx=self.custome_ctx(ctx)
             resp= render(request,template,context=ctx)
         if getattr(page,'get_cache_control',None):
@@ -145,6 +147,19 @@ class BaseEngine(object):
 
     def get_menu(self,request):
         return evalue_container( self.menu,request=request,user=request.user,url_name=self.url_name)
+    
+    def getJsConfig(self):
+        lans = []
+        for k,v in settings.LANGUAGES:
+            lans.append({'value':k,'label':v})
+        
+        tr_dc = {}
+        for fun in js_tr_list:
+            tr_dc.update(fun())
+        return {
+            'lans':lans,
+            'tr':tr_dc          
+        }
     
     #def get_ctx(self,ctx):
         #"""ctx的hook"""
