@@ -7,3 +7,5 @@ model_dc={
 }
 
 permit_list=[]
+
+js_tr_list=[]
