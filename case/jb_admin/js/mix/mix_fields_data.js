@@ -33,8 +33,8 @@ var mix_fields_data ={
         },
         dataSaver:function(callback){
             var post_data=[{fun:'save',row:this.row}]
-            var url = ex.appendSearch('/d/ajax',this.search_args)
-            ex.post(url,JSON.stringify(post_data),function (resp) {
+            //var url = ex.appendSearch('/d/ajax',this.search_args)
+            ex.post('/d/ajax',JSON.stringify(post_data),function (resp) {
                 callback(resp.save)
             })
         },

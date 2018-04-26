@@ -101,15 +101,17 @@ var mix_table_data={
             var self=this
             layer.confirm('真的删除吗?', {icon: 3, title:'确认'}, function(index) {
                 layer.close(index);
-                var ss = layer.load(2);
+                //var ss = layer.load(2);
+                cfg.show_load()
                 var post_data = [{fun: 'del_rows', rows: self.selected}]
                 $.post('/d/ajax', JSON.stringify(post_data), function (resp) {
-                    layer.close(ss)
+                    //layer.close(ss)
                     ex.each(self.selected,function(item){
-                        ex.remove(self.rows,item )
+                        ex.remove(self.rows,{pk:item.pk} )
                     })
                     self.selected=[]
-                    layer.msg('删除成功',{time:2000})
+                    cfg.hide_load(200)
+                    //layer.msg('删除成功',{time:2000})
                 })
             })
         },

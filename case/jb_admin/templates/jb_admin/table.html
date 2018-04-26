@@ -87,9 +87,10 @@
             show_tab:function(name){
                 this.tabgroup.crt = name
                 var self =this
-                Vue.nextTick(function(){
-                    self.$refs['_tab_'+name][0].on_show()
-                })
+
+//                Vue.nextTick(function(){
+//                    self.$refs['_tab_'+name][0].on_show()
+//                })
 
             },
             get_attr:function(name){
@@ -192,7 +193,7 @@
             </div>
         </div>
     </div>
-    <div id="tab-wrap" v-if="tabgroup.crt!='main'">
+    <div id="tab-wrap" v-if="tabgroup.crt!='main'" class="flex-grow flex-v">
         <div class="flex">
             <ul class="nav nav-tabs tabs flex-grow">
                 <li v-for="tab in tabgroup.tabs"

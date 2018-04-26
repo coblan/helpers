@@ -1,41 +1,41 @@
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
-/******/
+
 /******/ 	// The require function
 /******/ 	function __webpack_require__(moduleId) {
-/******/
+
 /******/ 		// Check if module is in cache
 /******/ 		if(installedModules[moduleId])
 /******/ 			return installedModules[moduleId].exports;
-/******/
+
 /******/ 		// Create a new module (and put it into the cache)
 /******/ 		var module = installedModules[moduleId] = {
 /******/ 			i: moduleId,
 /******/ 			l: false,
 /******/ 			exports: {}
 /******/ 		};
-/******/
+
 /******/ 		// Execute the module function
 /******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
-/******/
+
 /******/ 		// Flag the module as loaded
 /******/ 		module.l = true;
-/******/
+
 /******/ 		// Return the exports of the module
 /******/ 		return module.exports;
 /******/ 	}
-/******/
-/******/
+
+
 /******/ 	// expose the modules object (__webpack_modules__)
 /******/ 	__webpack_require__.m = modules;
-/******/
+
 /******/ 	// expose the module cache
 /******/ 	__webpack_require__.c = installedModules;
-/******/
+
 /******/ 	// identity function for calling harmony imports with the correct context
 /******/ 	__webpack_require__.i = function(value) { return value; };
-/******/
+
 /******/ 	// define getter function for harmony exports
 /******/ 	__webpack_require__.d = function(exports, name, getter) {
 /******/ 		if(!__webpack_require__.o(exports, name)) {
@@ -46,7 +46,7 @@
 /******/ 			});
 /******/ 		}
 /******/ 	};
-/******/
+
 /******/ 	// getDefaultExport function for compatibility with non-harmony modules
 /******/ 	__webpack_require__.n = function(module) {
 /******/ 		var getter = module && module.__esModule ?
@@ -55,15 +55,15 @@
 /******/ 		__webpack_require__.d(getter, 'a', getter);
 /******/ 		return getter;
 /******/ 	};
-/******/
+
 /******/ 	// Object.prototype.hasOwnProperty.call
 /******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
-/******/
+
 /******/ 	// __webpack_public_path__
 /******/ 	__webpack_require__.p = "";
-/******/
+
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 24);
+/******/ 	return __webpack_require__(__webpack_require__.s = 25);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -266,10 +266,6 @@ function pop_fields_layer(row, heads, ops, pop_id) {
 
                 eventBus.$emit('pop-win-' + pop_id, { name: 'after_save', new_row: event.new_row, old_row: event.old_row });
             }
-            //on_del:function(){
-            //    ex.remove(self.rows,row)
-            //    layer.close(self.opened_layer_indx)
-            //},
         }
     });
 }
@@ -353,8 +349,8 @@ var mix_fields_data = {
         },
         dataSaver: function dataSaver(callback) {
             var post_data = [{ fun: 'save', row: this.row }];
-            var url = ex.appendSearch('/d/ajax', this.search_args);
-            ex.post(url, JSON.stringify(post_data), function (resp) {
+            //var url = ex.appendSearch('/d/ajax',this.search_args)
+            ex.post('/d/ajax', JSON.stringify(post_data), function (resp) {
                 callback(resp.save);
             });
         },
@@ -449,18 +445,19 @@ var nice_validator = {
             }
         }
     }
+};
 
-    //$.validator.config({
-    //    rules: {
-    //        error_msg: function(ele,param){
-    //
-    //        }
-    //    }
-    //}
-    //
-    //);
+//$.validator.config({
+//    rules: {
+//        error_msg: function(ele,param){
+//
+//        }
+//    }
+//}
+//
+//);
 
-};window.mix_nice_validator = nice_validator;
+window.mix_nice_validator = nice_validator;
 
 /***/ }),
 /* 7 */
@@ -572,57 +569,21 @@ var mix_table_data = {
             var self = this;
             layer.confirm('真的删除吗?', { icon: 3, title: '确认' }, function (index) {
                 layer.close(index);
-                var ss = layer.load(2);
+                //var ss = layer.load(2);
+                cfg.show_load();
                 var post_data = [{ fun: 'del_rows', rows: self.selected }];
                 $.post('/d/ajax', JSON.stringify(post_data), function (resp) {
-                    layer.close(ss);
+                    //layer.close(ss)
                     ex.each(self.selected, function (item) {
-                        ex.remove(self.rows, item);
+                        ex.remove(self.rows, { pk: item.pk });
                     });
                     self.selected = [];
-                    layer.msg('删除成功', { time: 2000 });
+                    cfg.hide_load(200);
+                    //layer.msg('删除成功',{time:2000})
                 });
             });
         }
 
-        //del_item: function () {
-        //    if (this.selected.length == 0) {
-        //        return
-        //    }
-        //    var del_obj = {}
-        //    for (var j = 0; j < this.selected.length; j++) {
-        //        var pk = this.selected[j]
-        //        for (var i = 0; i < this.rows.length; i++) {
-        //            if (this.rows[i].pk.toString() == pk) {
-        //                if (!del_obj[this.rows[i]._class]) {
-        //                    del_obj[this.rows[i]._class] = []
-        //                }
-        //                del_obj[this.rows[i]._class].push(pk)
-        //            }
-        //        }
-        //    }
-        //    var out_str = ''
-        //    for (var key in del_obj) {
-        //        out_str += (key + ':' + del_obj[key].join(':') + ',')
-        //    }
-        //    location = ex.template("{engine_url}/del_rows?rows={rows}&next={next}", {
-        //        engine_url: engine_url,
-        //        rows: encodeURI(out_str),
-        //        next: encodeURIComponent(location.href)
-        //    })
-        //},
-        //goto_page: function (page) {
-        //    this.search_args._page = page
-        //    this.get_data()
-        //},
-        //add_new: function () {
-        //    var url = ex.template('{engine_url}/{page}.edit/?next={next}', {
-        //        engine_url: engine_url,
-        //        page: page_name,
-        //        next: encodeURIComponent(ex.appendSearch(location.pathname, search_args))
-        //    })
-        //    location = url
-        //},
     }
 };
 
@@ -928,6 +889,43 @@ var after_save = {
 "use strict";
 
 
+var select = {
+    props: ['rowData', 'field', 'index'],
+    template: '<div >\n    <select style="width: 100%" @change="on_changed()"  v-model="rowData[field]">\n        <option v-for="op in head.options" :value="op.value" v-text="op.label"></option>\n    </select>\n    </div>',
+    data: function data() {
+        return {};
+    },
+    created: function created() {
+        // find head from parent table
+        var table_par = this.$parent;
+        while (true) {
+            if (table_par.heads) {
+                break;
+            }
+            table_par = table_par.$parent;
+            if (!table_par) {
+                break;
+            }
+        }
+        this.table_par = table_par;
+        this.head = ex.findone(this.table_par.heads, { name: this.field });
+    },
+    methods: {
+        on_changed: function on_changed() {
+            this.$emit('on-custom-comp', { name: 'row_changed', row: this.rowData });
+        }
+    }
+};
+
+Vue.component('com-table-select', select);
+
+/***/ }),
+/* 16 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
 var switch_to_tab = {
     props: ['rowData', 'field', 'index'],
     template: '<span v-text="rowData[field]" @click="goto_tab()" class="clickable"></span>',
@@ -958,7 +956,7 @@ var switch_to_tab = {
 Vue.component('com-table-switch-to-tab', switch_to_tab);
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -985,7 +983,7 @@ var delete_op = {
 Vue.component('com-op-delete', delete_op);
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1011,7 +1009,7 @@ var op_a = {
 Vue.component('com-op-a', op_a);
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1080,10 +1078,11 @@ var ajax_fields = {
             }
             this.row = new_row;
         }
-        // data_getter  回调函数，获取数据,
+    }
+    // data_getter  回调函数，获取数据,
 
 
-    } };
+};
 
 Vue.component('com_tab_fields', ajax_fields);
 
@@ -1111,7 +1110,7 @@ var _after_save = {
 };
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1239,23 +1238,23 @@ var get_data = {
 };
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(21);
+var content = __webpack_require__(22);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
-var update = __webpack_require__(23)(content, {});
+var update = __webpack_require__(24)(content, {});
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./fields.scss", function() {
-			var newContent = require("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./fields.scss");
+		module.hot.accept("!!./../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!./../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./fields.scss", function() {
+			var newContent = require("!!./../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!./../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./fields.scss");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -1265,10 +1264,10 @@ if(false) {
 }
 
 /***/ }),
-/* 21 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(22)();
+exports = module.exports = __webpack_require__(23)();
 // imports
 
 
@@ -1279,7 +1278,7 @@ exports.push([module.i, ".msg-hide .field .msg {\n  display: none; }\n\n.field .
 
 
 /***/ }),
-/* 22 */
+/* 23 */
 /***/ (function(module, exports) {
 
 /*
@@ -1335,7 +1334,7 @@ module.exports = function() {
 
 
 /***/ }),
-/* 23 */
+/* 24 */
 /***/ (function(module, exports) {
 
 /*
@@ -1351,7 +1350,7 @@ var stylesInDom = {},
 		};
 	},
 	isOldIE = memoize(function() {
-		return /msie [6-9]\b/.test(self.navigator.userAgent.toLowerCase());
+		return /msie [6-9]\b/.test(window.navigator.userAgent.toLowerCase());
 	}),
 	getHeadElement = memoize(function () {
 		return document.head || document.getElementsByTagName("head")[0];
@@ -1587,7 +1586,7 @@ function updateLink(linkElement, obj) {
 
 
 /***/ }),
-/* 24 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1609,11 +1608,11 @@ var _mix_fields_data = __webpack_require__(5);
 
 var mix_fields_data = _interopRequireWildcard(_mix_fields_data);
 
-var _ajax_fields = __webpack_require__(18);
+var _ajax_fields = __webpack_require__(19);
 
 var ajax_fields = _interopRequireWildcard(_ajax_fields);
 
-var _ajax_table = __webpack_require__(19);
+var _ajax_table = __webpack_require__(20);
 
 var ajax_table = _interopRequireWildcard(_ajax_table);
 
@@ -1653,19 +1652,31 @@ var _check_box = __webpack_require__(9);
 
 var table_checkbox = _interopRequireWildcard(_check_box);
 
-var _switch_to_tab = __webpack_require__(15);
+var _switch_to_tab = __webpack_require__(16);
 
 var switch_to_tab = _interopRequireWildcard(_switch_to_tab);
+
+var _select = __webpack_require__(15);
+
+var select = _interopRequireWildcard(_select);
+
+var _extra_click = __webpack_require__(26);
+
+var extra_click = _interopRequireWildcard(_extra_click);
+
+var _array_mapper = __webpack_require__(27);
+
+var array_mapper = _interopRequireWildcard(_array_mapper);
 
 var _label_shower2 = __webpack_require__(3);
 
 var field_label_shower = _interopRequireWildcard(_label_shower2);
 
-var _operator_a = __webpack_require__(17);
+var _operator_a = __webpack_require__(18);
 
 var op_a = _interopRequireWildcard(_operator_a);
 
-var _delete_op = __webpack_require__(16);
+var _delete_op = __webpack_require__(17);
 
 var delete_op = _interopRequireWildcard(_delete_op);
 
@@ -1675,7 +1686,7 @@ var btn = _interopRequireWildcard(_btn);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
-__webpack_require__(20);
+__webpack_require__(21);
 
 //table mix
 
@@ -1687,6 +1698,89 @@ __webpack_require__(20);
 
 
 //fields operator
+
+/***/ }),
+/* 26 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+/*
+额外的点击列，例如“详情”
+* */
+
+var extra_click = {
+    props: ['rowData', 'field', 'index'],
+    template: '<span class="clickable" v-text="head.extra_label" @click="on_click()"></span>',
+    created: function created() {
+        // find head from parent table
+        var table_par = this.$parent;
+        while (true) {
+            if (table_par.heads) {
+                break;
+            }
+            table_par = table_par.$parent;
+            if (!table_par) {
+                break;
+            }
+        }
+        this.table_par = table_par;
+        this.head = ex.findone(this.table_par.heads, { name: this.field });
+    },
+    methods: {
+        on_click: function on_click() {
+            this.$emit('on-custom-comp', { name: this.head.extra_fun, row: this.rowData });
+        }
+
+    }
+};
+
+Vue.component('com-table-extraclick', extra_click);
+
+/***/ }),
+/* 27 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var array_mapper = {
+    props: ['rowData', 'field', 'index'],
+    template: '<span v-text="show_data"></span>',
+    created: function created() {
+        // find head from parent table
+        var table_par = this.$parent;
+        while (true) {
+            if (table_par.heads) {
+                break;
+            }
+            table_par = table_par.$parent;
+            if (!table_par) {
+                break;
+            }
+        }
+        this.table_par = table_par;
+    },
+    computed: {
+        show_data: function show_data() {
+            if (this.table_par) {
+                var value = this.rowData[this.field];
+                var head = ex.findone(this.table_par.heads, { name: this.field });
+                var options = head.options;
+                var str = '';
+                ex.each(value, function (itm) {
+                    str += options[itm];
+                    str += ';';
+                });
+                return str;
+                //return options[value]
+            }
+        }
+    }
+};
+
+Vue.component('com-table-array-mapper', array_mapper);
 
 /***/ })
 /******/ ]);

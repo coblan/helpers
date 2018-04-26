@@ -23,6 +23,9 @@ import * as table_pop_fields from  './table_editor/pop_fields.js'
 import * as table_linetext from  './table_editor/linetext.js'
 import * as table_checkbox from  './table_editor/check_box.js'
 import * as switch_to_tab from  './table_editor/switch_to_tab.js'
+import * as select from  './table_editor/select.js'
+import * as extra_click from  './table_editor/extra_click.js'
+import * as array_mapper from  './table_editor/array_mapper.js'
 
 
 import * as field_label_shower from  './field_editor/label_shower.js'

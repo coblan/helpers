@@ -6,7 +6,7 @@ from django.contrib.auth.models import Group,User
 from helpers.director.shortcut import TablePage,ModelTable,page_dc,model_dc,ModelFields
 from helpers.director.models import PermitModel 
 import re
-import js_translation
+import js_cfg
 # Register your models here.
 class UserPage(TablePage):
     template='jb_admin/table.html'

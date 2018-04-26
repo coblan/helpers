@@ -49,7 +49,7 @@ import json
 from django.views.decorators.cache import patch_cache_control
 import time
 from django.shortcuts import redirect
-from .base_data import js_tr_list
+from .base_data import js_tr_list,js_lib
 
 class BaseEngine(object):
     _pages=None
@@ -158,7 +158,8 @@ class BaseEngine(object):
             tr_dc.update(fun())
         return {
             'lans':lans,
-            'tr':tr_dc          
+            'tr':tr_dc ,
+            'js_lib':js_lib
         }
     
     #def get_ctx(self,ctx):
