@@ -1,41 +1,41 @@
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
-/******/
+
 /******/ 	// The require function
 /******/ 	function __webpack_require__(moduleId) {
-/******/
+
 /******/ 		// Check if module is in cache
 /******/ 		if(installedModules[moduleId])
 /******/ 			return installedModules[moduleId].exports;
-/******/
+
 /******/ 		// Create a new module (and put it into the cache)
 /******/ 		var module = installedModules[moduleId] = {
 /******/ 			i: moduleId,
 /******/ 			l: false,
 /******/ 			exports: {}
 /******/ 		};
-/******/
+
 /******/ 		// Execute the module function
 /******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
-/******/
+
 /******/ 		// Flag the module as loaded
 /******/ 		module.l = true;
-/******/
+
 /******/ 		// Return the exports of the module
 /******/ 		return module.exports;
 /******/ 	}
-/******/
-/******/
+
+
 /******/ 	// expose the modules object (__webpack_modules__)
 /******/ 	__webpack_require__.m = modules;
-/******/
+
 /******/ 	// expose the module cache
 /******/ 	__webpack_require__.c = installedModules;
-/******/
+
 /******/ 	// identity function for calling harmony imports with the correct context
 /******/ 	__webpack_require__.i = function(value) { return value; };
-/******/
+
 /******/ 	// define getter function for harmony exports
 /******/ 	__webpack_require__.d = function(exports, name, getter) {
 /******/ 		if(!__webpack_require__.o(exports, name)) {
@@ -46,7 +46,7 @@
 /******/ 			});
 /******/ 		}
 /******/ 	};
-/******/
+
 /******/ 	// getDefaultExport function for compatibility with non-harmony modules
 /******/ 	__webpack_require__.n = function(module) {
 /******/ 		var getter = module && module.__esModule ?
@@ -55,15 +55,15 @@
 /******/ 		__webpack_require__.d(getter, 'a', getter);
 /******/ 		return getter;
 /******/ 	};
-/******/
+
 /******/ 	// Object.prototype.hasOwnProperty.call
 /******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
-/******/
+
 /******/ 	// __webpack_public_path__
 /******/ 	__webpack_require__.p = "";
-/******/
+
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 77);
+/******/ 	return __webpack_require__(__webpack_require__.s = 78);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -405,43 +405,43 @@ var old = exports.old = {
         return out_list;
     }
 
-    //function parseSearch(queryString) {
-    //    var queryString = queryString || location.search
-    //    if(queryString.startsWith('?')){
-    //        var queryString=queryString.substring(1)
-    //    }
-    //    var params = {}
-    //    // Split into key/value pairs
-    //    var queries = queryString.split("&");
-    //    // Convert the array of strings into an object
-    //    for (var i = 0; i < queries.length; i++ ) {
-    //        var mt = /([^=]+?)=(.+)/.exec(queries[i])
-    //        params[mt[1]] = mt[2];
-    //    }
-    //    return params;
-    //}
-    //function searchfy(obj,pre){
-    //    var outstr=pre||''
-    //    for(x in obj){
-    //        if(obj[x]){
-    //            outstr+=x.toString()+'='+ obj[x].toString()+'&';
-    //        }
-    //
-    //    }
-    //    if(outstr.endsWith('&')){
-    //        return outstr.slice(0,-1)
-    //    }else{
-    //        return outstr
-    //    }
-    //
-    //}
-    //function update(dst_obj,src_obj) {
-    //    for(x in src_obj){
-    //        dst_obj[x]=src_obj[x]
-    //    }
-    //}
-
 };
+
+//function parseSearch(queryString) {
+//    var queryString = queryString || location.search
+//    if(queryString.startsWith('?')){
+//        var queryString=queryString.substring(1)
+//    }
+//    var params = {}
+//    // Split into key/value pairs
+//    var queries = queryString.split("&");
+//    // Convert the array of strings into an object
+//    for (var i = 0; i < queries.length; i++ ) {
+//        var mt = /([^=]+?)=(.+)/.exec(queries[i])
+//        params[mt[1]] = mt[2];
+//    }
+//    return params;
+//}
+//function searchfy(obj,pre){
+//    var outstr=pre||''
+//    for(x in obj){
+//        if(obj[x]){
+//            outstr+=x.toString()+'='+ obj[x].toString()+'&';
+//        }
+//
+//    }
+//    if(outstr.endsWith('&')){
+//        return outstr.slice(0,-1)
+//    }else{
+//        return outstr
+//    }
+//
+//}
+//function update(dst_obj,src_obj) {
+//    for(x in src_obj){
+//        dst_obj[x]=src_obj[x]
+//    }
+//}
 
 /***/ }),
 
@@ -734,7 +734,37 @@ function para_encode(para_str) {
 
 /***/ }),
 
-/***/ 77:
+/***/ 15:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+var vuetool = exports.vuetool = {
+    vueSuper: function vueSuper(self, kws) {
+        var mixin = kws.mixin;
+        var name = kws.fun;
+        var args = kws.args || [];
+        if (mixin) {
+            var index = self.$options.mixins.indexOf(mixin);
+        } else {
+            var index = self.$options.mixins.length;
+        }
+        for (var i = index - 1; i > -1; i--) {
+            var mix = self.$options.mixins[i];
+            if (mix[name]) {
+                return mix.apply(self, args);
+            }
+        }
+    }
+};
+
+/***/ }),
+
+/***/ 78:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -756,7 +786,7 @@ var _cookie = __webpack_require__(9);
 
 var _obj = __webpack_require__(11);
 
-var _vuetools = __webpack_require__(79);
+var _vuetools = __webpack_require__(15);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -777,29 +807,6 @@ ex.assign(ex, _obj.obj_control);
 ex.assign(ex, _vuetools.vuetool);
 
 window.ex = ex;
-
-/***/ }),
-
-/***/ 79:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-var vuetool = exports.vuetool = {
-    vueSuper: function vueSuper(self, mixin, name, args) {
-        var index = self.$options.mixins.indexOf(mixin);
-        for (var i = index - 1; i > -1; i--) {
-            var mix = self.$options.mixins[i];
-            if (mix[name]) {
-                return mix.apply(self, args);
-            }
-        }
-    }
-};
 
 /***/ }),
 
