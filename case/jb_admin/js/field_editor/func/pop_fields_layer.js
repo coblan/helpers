@@ -18,6 +18,12 @@ export  function pop_fields_layer (row,heads,ops,pop_id){
     self.opened_layer_indx = layer.open({
         type: 1,
         area: ['700px', '400px'],
+        title: '详细',
+        resize:true,
+        resizing: function(layero){
+            var total_height= $('#fields-pop-'+pop_id).parents('.layui-layer').height()
+             $('#fields-pop-'+pop_id).parents('.layui-layer-content').height(total_height-42)
+        },
         shadeClose: true, //点击遮罩关闭
         content:`<div id="fields-pop-${pop_id}" style="height: 100%;">
                     <com-pop-fields @del_success="on_del()" @sub_success="on_sub_success($event)"
