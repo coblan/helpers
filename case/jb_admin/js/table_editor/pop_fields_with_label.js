@@ -1,5 +1,5 @@
 var pop_fields={
-    template:'<span v-text="show_text" @click="edit_me()" class="clickable"></span>',
+    template:'<span v-text="rowData[field]" @click="edit_me()" class="clickable"></span>',
     props:['rowData','field','index'],
     created:function(){
         // find head from parent table
@@ -18,15 +18,6 @@ var pop_fields={
             this.head  = ex.findone(table_par.heads,{name:this.field})
         }
 
-    },
-    computed:{
-        show_text:function(){
-            if(this.head.show_label){
-                return show_label[this.head.show_label.fun](this.rowData,this.head.show_label)
-            }else {
-                return this.rowData[this.field]
-            }
-        }
     },
     methods:{
         edit_me:function(){
@@ -56,12 +47,6 @@ var pop_fields={
 }
 Vue.component('com-table-pop-fields',pop_fields)
 
-var show_label={
-    use_other_field:function(row,kws){
-        var other_field=kws.other_field
-        return row[other_field]
-    }
-}
 
 var get_row={
     use_table_row:function(callback,row,kws){

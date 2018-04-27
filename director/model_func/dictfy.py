@@ -72,8 +72,10 @@ def sim_dict(instance,filt_attr=None,include=None,exclude=None):
             if proxy_cls:
                 mapper = proxy_cls()
                 out[field.name] = mapper.to_dict(instance,field.name)
+                if '_%s_label'%field.name in out:
+                    continue
                 if hasattr(mapper,'get_label'):
-                    out['_%s_label']=mapper.get_label(instance,field.name)
+                    out['_%s_label'%field.name]=mapper.get_label(instance,field.name)
                 if isinstance(out[field.name],list):
                     # 如果遇到 manytomany的情况，是一个list
                     out['_%s_label'%field.name]=[unicode(x) for x in out[field.name]]
@@ -84,6 +86,8 @@ def sim_dict(instance,filt_attr=None,include=None,exclude=None):
                 # 考虑到使用到get_prep_value转换为str的field很少（大部分特殊的都在field_map类集中处理了。）
                 # 所以修改为直接读取属性，而不是使用get_prep_value转换，因为jsonfield需要直接输出python对象。
                 out[field.name]=getattr(instance,field.name,None) #field.get_prep_value( getattr(instance,field.name,None) )  
+                if '_%s_label'%field.name in out:
+                    continue                
                 if field.choices:
                     org_value= out[field.name]
                     mt = [x for x in field.choices if x[0]==org_value]

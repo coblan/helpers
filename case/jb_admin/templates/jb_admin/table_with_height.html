@@ -1,0 +1,24 @@
+{% extends "jb_admin/table.html" %}
+
+
+{% block table_content %}
+<v-table ref="vtable" is-horizontal-resize
+         is-vertical-resize
+         :vertical-resize-offset="74"
+         :title-row-height="30"
+         :row-height="100"
+         :multiple-sort="false"
+         :sort-always="true"
+         odd-bg-color="#f0f6f8"
+         column-width-drag
+         style="width: 100%;"
+         :columns="columns"
+         :table-data="rows"
+         @on-custom-comp="on_td_event($event)"
+         @sort-change="sortChange"
+         :select-group-change="on_select_group_change"
+         :select-all="on_select_group_change"
+         row-hover-color="#eee"
+         row-click-color="#edf7ff">
+</v-table>
+{% endblock %}
