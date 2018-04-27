@@ -194,7 +194,7 @@
         </div>
     </div>
     <div id="tab-wrap" v-if="tabgroup.crt!='main'" class="flex-grow flex-v">
-        <div class="flex">
+        <div class="flex" v-if="tabgroup.tabs.length >1">
             <ul class="nav nav-tabs tabs flex-grow">
                 <li v-for="tab in tabgroup.tabs"
                     :class="{'active':tabgroup.crt==tab.name}"
