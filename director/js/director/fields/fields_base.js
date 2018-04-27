@@ -320,9 +320,9 @@ export var field_base={
                        </div>`,
         },
         richtext:{
-            props:['name','row','kw'],
-            template:`<div><span v-if='kw.readonly' v-text='row[name]'></span>
-            			<ckeditor  v-model="row[name]" :id="'id_'+name"></ckeditor>
+            props:['row','head'],
+            template:`<div><span v-if='head.readonly' v-text='row[head.name]'></span>
+            			<ckeditor  v-model="row[head.name]" :id="'id_'+head.name"></ckeditor>
                        </div>`,
         },
 

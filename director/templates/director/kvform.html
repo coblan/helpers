@@ -10,6 +10,11 @@
     $(function () {
         new Vue({
             el:'#there',
+            data:{
+                heads:heads,
+                row:row,
+                errors:{}
+            },
             mixins:[field_fun],
             computed:{
                 editor_type:function(){
@@ -56,7 +61,7 @@
 
     <div class='field-panel'>
 
-        <field  v-for='head in kw.heads' :key="head.name" :name='head.name' :kw='kw'></field>
+        <field  v-for='head in heads' :key="head.name" :name='head.name' :row="row" :head='head'></field>
     </div>
 </div>
 

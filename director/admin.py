@@ -27,6 +27,7 @@ import ajax
 from .fields.delpage import DelPage
 from .log.logpage import LogPage
 from .base_data import page_dc
+import admin_kv
 
 page_dc.update({
     'del_rows':DelPage,
