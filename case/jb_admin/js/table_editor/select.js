@@ -1,10 +1,15 @@
+require('./scss/select.scss')
+
 var select = {
         props:['rowData','field','index'],
         template:`
     <el-dropdown trigger="click" placement="bottom" @command="handleCommand">
     <span class="el-dropdown-link clickable" v-text="show_label"></span>
     <el-dropdown-menu slot="dropdown">
-        <el-dropdown-item v-for="op in head.options" :command="op.value"><span v-text="op.label"></span></el-dropdown-item>
+        <el-dropdown-item v-for="op in head.options"
+        :command="op.value"
+        :class="{'crt-value':rowData[field]==op.value}"
+        ><span v-text="op.label"></span></el-dropdown-item>
         <!--<el-dropdown-item>狮子头</el-dropdown-item>-->
         <!--<el-dropdown-item>螺蛳粉</el-dropdown-item>-->
         <!--<el-dropdown-item>双皮奶</el-dropdown-item>-->
@@ -41,12 +46,17 @@ var select = {
         methods:{
             handleCommand(command) {
                 //this.$message('click on item ' + command);
-                this.rowData[this.field] = command
-                this.on_changed()
+                if(this.rowData[this.field] != command){
+                    this.rowData[this.field] = command
+                    this.on_changed()
+                }
+
             },
             setSelect:function(value){
-                this.rowData[this.field] = value
-                this.on_changed()
+                if(this.rowData[this.field] != value){
+                    this.rowData[this.field] = value
+                    this.on_changed()
+                }
             },
             on_changed:function(){
                 this.$emit('on-custom-comp',{name:'row_changed',row:this.rowData})
@@ -55,14 +65,15 @@ var select = {
     }
 
 
+Vue.component('com-table-select',select)
 
 
-Vue.component('com-table-select',function(resolve,reject){
-    ex.load_css('https://unpkg.com/element-ui/lib/theme-chalk/index.css')
-    ex.load_js('https://unpkg.com/element-ui/lib/index.js',function(){
-        resolve(select)
-    })
-})
+//Vue.component('com-table-select',function(resolve,reject){
+//    ex.load_css('https://unpkg.com/element-ui/lib/theme-chalk/index.css')
+//    ex.load_js('https://unpkg.com/element-ui/lib/index.js',function(){
+//        resolve(select)
+//    })
+//})
 
 
 //var select = {
