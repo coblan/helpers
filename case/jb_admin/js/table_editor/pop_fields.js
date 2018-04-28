@@ -34,7 +34,7 @@ var pop_fields={
         },
         open_layer:function(){
             var self=this
-            var pop_id = new Date().getTime()
+            //var pop_id = new Date().getTime()
             //eventBus.$on('pop-win-'+pop_id,function(kws){
             //    if(kws.name =='after_save'){
             //        var fun = after_save[self.head.after_save.fun]

@@ -529,6 +529,7 @@ function pop_fields_layer(row, heads, ops, callback) {
     //}else{
     //    var lay_row ={}
     //}
+    var pop_id = new Date().getTime();
 
     self.opened_layer_indx = layer.open({
         type: 1,
@@ -662,10 +663,10 @@ var mix_fields_data = {
             });
         },
         dataSaver: function dataSaver(callback) {
-            var post_data = [{ fun: 'save', row: this.row }];
+            var post_data = [{ fun: 'save_row', row: this.row }];
             //var url = ex.appendSearch('/d/ajax',this.search_args)
             ex.post('/d/ajax', JSON.stringify(post_data), function (resp) {
-                callback(resp.save);
+                callback(resp.save_row);
             });
         },
         save: function save() {
@@ -826,12 +827,15 @@ var mix_table_data = {
             ex.post('/d/ajax', JSON.stringify(post_data), function (resp) {
                 cfg.hide_load();
                 var new_row = resp.get_row;
-                var pop_id = new Date().getTime();
+                //var pop_id= new Date().getTime()
                 // e = {name:'after_save',new_row:event.new_row,old_row:event.old_row}
-                eventBus.$on('pop-win-' + pop_id, function (e) {
+                //eventBus.$on('pop-win-'+pop_id,function(e){
+                //    self.update_or_insert(e.new_row, e.old_row)
+                //})
+                //pop_fields_layer(new_row,kws.heads,kws.ops,pop_id)
+                pop_fields_layer(new_row, kws.heads, kws.ops, function (e) {
                     self.update_or_insert(e.new_row, e.old_row);
                 });
-                pop_fields_layer(new_row, kws.heads, kws.ops, pop_id);
             });
         },
         update_or_insert: function update_or_insert(new_row, old_row) {
@@ -1281,7 +1285,7 @@ var pop_fields = {
         },
         open_layer: function open_layer() {
             var self = this;
-            var pop_id = new Date().getTime();
+            //var pop_id = new Date().getTime()
             //eventBus.$on('pop-win-'+pop_id,function(kws){
             //    if(kws.name =='after_save'){
             //        var fun = after_save[self.head.after_save.fun]

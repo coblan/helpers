@@ -44,12 +44,15 @@ var mix_table_data={
             ex.post('/d/ajax',JSON.stringify(post_data),function(resp){
                 cfg.hide_load()
                 var new_row = resp.get_row
-                var pop_id= new Date().getTime()
+                //var pop_id= new Date().getTime()
                 // e = {name:'after_save',new_row:event.new_row,old_row:event.old_row}
-                eventBus.$on('pop-win-'+pop_id,function(e){
+                //eventBus.$on('pop-win-'+pop_id,function(e){
+                //    self.update_or_insert(e.new_row, e.old_row)
+                //})
+                //pop_fields_layer(new_row,kws.heads,kws.ops,pop_id)
+                pop_fields_layer(new_row,kws.heads,kws.ops,function(e){
                     self.update_or_insert(e.new_row, e.old_row)
                 })
-                pop_fields_layer(new_row,kws.heads,kws.ops,pop_id)
             })
         },
         update_or_insert:function(new_row,old_row){

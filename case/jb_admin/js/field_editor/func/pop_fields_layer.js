@@ -14,6 +14,7 @@ export  function pop_fields_layer (row,heads,ops,callback){
     //}else{
     //    var lay_row ={}
     //}
+    var pop_id =new Date().getTime()
 
     self.opened_layer_indx = layer.open({
         type: 1,
@@ -30,6 +31,7 @@ export  function pop_fields_layer (row,heads,ops,callback){
                     :row="row" :heads="fields_heads" :ops="ops"></com-pop-fields>
                 </div>`
     });
+
 
     new Vue({
         el:'#fields-pop-'+pop_id,
