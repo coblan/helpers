@@ -26,6 +26,7 @@ import * as switch_to_tab from  './table_editor/switch_to_tab.js'
 import * as select from  './table_editor/select.js'
 import * as extra_click from  './table_editor/extra_click.js'
 import * as array_mapper from  './table_editor/array_mapper.js'
+import * as operations from  './table_editor/operations.js'
 
 
 import * as field_label_shower from  './field_editor/label_shower.js'

@@ -17,6 +17,20 @@ def get_static_obj(path):
     
     return DotObj(dc)
 
+def get_static_dc(path):
+    if not os.path.exists(path):
+        return {}
+    
+    dc={}
+    for name in os.listdir(path):
+        abs_path=os.path.join(path,name)
+        if os.path.isfile(abs_path):
+            key=name.replace('.','_')
+            dc[key]=int(os.path.getmtime(abs_path))
+    
+    return dc
+
+
 org_static_file_path=os.path.join(settings.BASE_DIR,'static')
 volatile_static_file_path=os.path.join(org_static_file_path,'js')
 
@@ -25,6 +39,8 @@ static_file_timestamp_dict=get_static_obj(volatile_static_file_path)
 
 # 下面这个名字短点
 js_stamp=get_static_obj(volatile_static_file_path)
+
+js_stamp_dc = get_static_dc(volatile_static_file_path)
 
 
 

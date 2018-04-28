@@ -19,6 +19,8 @@
     //	can_del=
     //	search_args=ex.parseSearch()
     //	search字段从 search_args._q 来取值
+    extra_table_logic='{{ extra_table_logic }}'
+
     tabs={{ tabs | jsonify | default:'[]' }}
 
     table_logic={
@@ -115,6 +117,9 @@
             $('#there').height(window.innerHeight -80)
         });
 
+        if(extra_table_logic){
+            table_logic.mixins.push(window[extra_table_logic])
+        }
         table=new Vue(table_logic)
 
     })

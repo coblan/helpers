@@ -1,3 +1,5 @@
+# encoding:utf-8
+from __future__ import unicode_literals
 from .models import PermitModel
 from .base_data import model_dc
 from django.contrib.auth.models import Group
@@ -16,14 +18,19 @@ def get_global():
 
 def save(row,user,request):
     """
+    为了兼顾老的调用
     """
+    save_row(row, user, request)
+    
+
+def save_row(row,user,request):
     try:
         kw=request.GET.dict()
         field_obj = permit_save_model(user, row,**kw)
         dc = field_obj.get_row()
         return {'status':'success','row':dc}
     except ValidationError as e:
-        return {'errors':dict(e)}
+        return {'errors':dict(e)}    
 
 def get_new_row_ctx(model_name,user):
     model = name_to_model(model_name)

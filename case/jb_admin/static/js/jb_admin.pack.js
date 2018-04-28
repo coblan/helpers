@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 29);
+/******/ 	return __webpack_require__(__webpack_require__.s = 30);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -517,7 +517,7 @@ exports.pop_fields_layer = pop_fields_layer;
 * root 层面创建Vue组件，形成弹出框
 * */
 
-function pop_fields_layer(row, heads, ops, pop_id) {
+function pop_fields_layer(row, heads, ops, callback) {
     // row,head ->//model_name,relat_field
 
 
@@ -577,8 +577,8 @@ function pop_fields_layer(row, heads, ops, pop_id) {
                 //}else{
                 //    trigger.update_row()
                 //}
-
-                eventBus.$emit('pop-win-' + pop_id, { name: 'after_save', new_row: event.new_row, old_row: event.old_row });
+                callback({ name: 'after_save', new_row: event.new_row, old_row: event.old_row });
+                //eventBus.$emit('pop-win-'+pop_id,{name:'after_save',new_row:event.new_row,old_row:event.old_row})
             }
         }
     });
@@ -812,7 +812,8 @@ var mix_table_data = {
     },
     methods: {
         on_operation: function on_operation(kws) {
-            this.op_funs[kws.name](kws);
+            var fun_name = kws.fun || kws.name;
+            this.op_funs[fun_name](kws);
         },
         search: function search() {
             this.search_args._page = 1;
@@ -1182,6 +1183,50 @@ Vue.component('com-table-mapper', mapper);
 "use strict";
 
 
+/*
+ 额外的点击列，例如“详情”
+ * */
+
+/*
+* head={
+*
+* }
+* */
+var operations = {
+    props: ['rowData', 'field', 'index'],
+    template: '<div>\n        <span style="margin-right: 1em" v-for="op in head.operations" v-show="! rowData[\'_op_\'+op.name+\'_hide\']" class="clickable" v-text="op.label" @click="on_click()"></span>\n    </div>',
+    created: function created() {
+        // find head from parent table
+        var table_par = this.$parent;
+        while (true) {
+            if (table_par.heads) {
+                break;
+            }
+            table_par = table_par.$parent;
+            if (!table_par) {
+                break;
+            }
+        }
+        this.table_par = table_par;
+        this.head = ex.findone(this.table_par.heads, { name: this.field });
+    },
+    methods: {
+        on_click: function on_click() {
+            this.$emit('on-custom-comp', { name: this.head.extra_fun, row: this.rowData });
+        }
+
+    }
+};
+
+Vue.component('com-table-operations', operations);
+
+/***/ }),
+/* 18 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
 var picture = {
     props: ['rowData', 'field', 'index'],
     template: '<span>\n        <img @click="open()" :src="rowData[field]" alt="" height="96px" style="cursor: pointer;">\n        </span>',
@@ -1195,7 +1240,7 @@ var picture = {
 Vue.component('com-table-picture', picture);
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1237,19 +1282,24 @@ var pop_fields = {
         open_layer: function open_layer() {
             var self = this;
             var pop_id = new Date().getTime();
-            eventBus.$on('pop-win-' + pop_id, function (kws) {
-                if (kws.name == 'after_save') {
-                    var fun = after_save[self.head.after_save.fun];
-                    fun(self, kws.new_row, kws.old_row);
-                }
-            });
+            //eventBus.$on('pop-win-'+pop_id,function(kws){
+            //    if(kws.name =='after_save'){
+            //        var fun = after_save[self.head.after_save.fun]
+            //        fun(self,kws.new_row,kws.old_row)
+            //    }
+            //})
 
             var ops = this.head.ops;
 
             var fun = get_row[this.head.get_row.fun];
             var kws = this.head.get_row.kws;
             fun(function (pop_row) {
-                pop_fields_layer(pop_row, self.head.fields_heads, ops, pop_id);
+                pop_fields_layer(pop_row, self.head.fields_heads, ops, function (kws) {
+                    if (kws.name == 'after_save') {
+                        var fun = after_save[self.head.after_save.fun];
+                        fun(self, kws.new_row, kws.old_row);
+                    }
+                });
             }, this.rowData, kws);
         }
 
@@ -1301,13 +1351,13 @@ var after_save = {
 };
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(28);
+__webpack_require__(29);
 
 var select = {
     props: ['rowData', 'field', 'index'],
@@ -1404,7 +1454,7 @@ Vue.component('com-table-select', select);
 //Vue.component('com-table-select',select)
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1440,7 +1490,7 @@ var switch_to_tab = {
 Vue.component('com-table-switch-to-tab', switch_to_tab);
 
 /***/ }),
-/* 21 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1467,7 +1517,7 @@ var delete_op = {
 Vue.component('com-op-delete', delete_op);
 
 /***/ }),
-/* 22 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1493,7 +1543,7 @@ var op_a = {
 Vue.component('com-op-a', op_a);
 
 /***/ }),
-/* 23 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1594,7 +1644,7 @@ var _after_save = {
 };
 
 /***/ }),
-/* 24 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1722,13 +1772,13 @@ var get_data = {
 };
 
 /***/ }),
-/* 25 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(26);
+var content = __webpack_require__(27);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -1748,7 +1798,7 @@ if(false) {
 }
 
 /***/ }),
-/* 26 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -1762,7 +1812,7 @@ exports.push([module.i, ".msg-hide .field .msg {\n  display: none; }\n\n.field .
 
 
 /***/ }),
-/* 27 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -1776,13 +1826,13 @@ exports.push([module.i, ".el-dropdown-menu__item.crt-value {\n  background-color
 
 
 /***/ }),
-/* 28 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(27);
+var content = __webpack_require__(28);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -1802,7 +1852,7 @@ if(false) {
 }
 
 /***/ }),
-/* 29 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1824,11 +1874,11 @@ var _mix_fields_data = __webpack_require__(7);
 
 var mix_fields_data = _interopRequireWildcard(_mix_fields_data);
 
-var _ajax_fields = __webpack_require__(23);
+var _ajax_fields = __webpack_require__(24);
 
 var ajax_fields = _interopRequireWildcard(_ajax_fields);
 
-var _ajax_table = __webpack_require__(24);
+var _ajax_table = __webpack_require__(25);
 
 var ajax_table = _interopRequireWildcard(_ajax_table);
 
@@ -1844,7 +1894,7 @@ var _ele_tree_name_layer = __webpack_require__(3);
 
 var ele_tree = _interopRequireWildcard(_ele_tree_name_layer);
 
-var _picture = __webpack_require__(17);
+var _picture = __webpack_require__(18);
 
 var table_picture = _interopRequireWildcard(_picture);
 
@@ -1856,7 +1906,7 @@ var _mapper = __webpack_require__(16);
 
 var table_mapper = _interopRequireWildcard(_mapper);
 
-var _pop_fields = __webpack_require__(18);
+var _pop_fields = __webpack_require__(19);
 
 var table_pop_fields = _interopRequireWildcard(_pop_fields);
 
@@ -1868,11 +1918,11 @@ var _check_box = __webpack_require__(12);
 
 var table_checkbox = _interopRequireWildcard(_check_box);
 
-var _switch_to_tab = __webpack_require__(20);
+var _switch_to_tab = __webpack_require__(21);
 
 var switch_to_tab = _interopRequireWildcard(_switch_to_tab);
 
-var _select = __webpack_require__(19);
+var _select = __webpack_require__(20);
 
 var select = _interopRequireWildcard(_select);
 
@@ -1884,15 +1934,19 @@ var _array_mapper = __webpack_require__(11);
 
 var array_mapper = _interopRequireWildcard(_array_mapper);
 
+var _operations = __webpack_require__(17);
+
+var operations = _interopRequireWildcard(_operations);
+
 var _label_shower2 = __webpack_require__(5);
 
 var field_label_shower = _interopRequireWildcard(_label_shower2);
 
-var _operator_a = __webpack_require__(22);
+var _operator_a = __webpack_require__(23);
 
 var op_a = _interopRequireWildcard(_operator_a);
 
-var _delete_op = __webpack_require__(21);
+var _delete_op = __webpack_require__(22);
 
 var delete_op = _interopRequireWildcard(_delete_op);
 
@@ -1902,7 +1956,7 @@ var btn = _interopRequireWildcard(_btn);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
-__webpack_require__(25);
+__webpack_require__(26);
 
 //table mix
 

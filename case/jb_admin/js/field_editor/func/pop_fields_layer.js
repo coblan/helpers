@@ -2,7 +2,7 @@
 * root 层面创建Vue组件，形成弹出框
 * */
 
-export  function pop_fields_layer (row,heads,ops,pop_id){
+export  function pop_fields_layer (row,heads,ops,callback){
     // row,head ->//model_name,relat_field
 
 
@@ -65,8 +65,8 @@ export  function pop_fields_layer (row,heads,ops,pop_id){
                 //}else{
                 //    trigger.update_row()
                 //}
-
-                eventBus.$emit('pop-win-'+pop_id,{name:'after_save',new_row:event.new_row,old_row:event.old_row})
+                callback({name:'after_save',new_row:event.new_row,old_row:event.old_row})
+                //eventBus.$emit('pop-win-'+pop_id,{name:'after_save',new_row:event.new_row,old_row:event.old_row})
 
             },
             //on_del:function(){

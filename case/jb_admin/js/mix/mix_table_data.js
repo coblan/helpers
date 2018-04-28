@@ -30,7 +30,8 @@ var mix_table_data={
     },
     methods: {
         on_operation:function(kws){
-            this.op_funs[kws.name](kws)
+            var fun_name = kws.fun || kws.name
+            this.op_funs[fun_name](kws)
         },
         search:function(){
             this.search_args._page=1

@@ -5,7 +5,8 @@ import time
 class TablePage(object):
     template=''
     tableCls=''
-    ajax_scope={}
+    #ajax_scope={}
+    extra_js=[]
     def __init__(self,request):
         if not self.tableCls:
             for k,v in self.__class__.__dict__.items():
@@ -42,6 +43,7 @@ class TablePage(object):
             ctx['can_edit']=True
         ctx['app']=self.tableCls.model._meta.app_label
         # ctx['page_label'] =self.get_label()
+        ctx['extra_js'] = self.extra_js
         return ctx
     
     def get_label(self):
