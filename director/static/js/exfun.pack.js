@@ -63,12 +63,71 @@
 /******/ 	__webpack_require__.p = "";
 
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 78);
+/******/ 	return __webpack_require__(__webpack_require__.s = 80);
 /******/ })
 /************************************************************************/
 /******/ ({
 
 /***/ 10:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+/*
+setCookie('name', 1111, 5);
+setCookie('name1', 22222, 5);
+
+console.log(getCookie('name'));
+console.log(getAllCookie());
+
+delCookie('name1');
+clearCookie('undefined')    //清除未定义的名的cookie
+*/
+/*set cookie*/
+var cookie = exports.cookie = {
+    setCookie: function setCookie(name, value, Days) {
+        if (Days == null || Days == '') {
+            Days = 300;
+        }
+        var exp = new Date();
+        exp.setTime(exp.getTime() + Days * 24 * 60 * 60 * 1000);
+        document.cookie = name + "=" + escape(value) + "; path=/;expires=" + exp.toGMTString();
+        //document.cookie = name + "="+ escape (value) + ";expires=" + exp.toGMTString();
+    },
+
+    /*get cookie*/
+    getCookie: function getCookie(name) {
+        var arr,
+            reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+        if (arr = document.cookie.match(reg)) return unescape(arr[2]);else return null;
+    },
+
+    /*get all cookie*/
+    getAllCookie: function getAllCookie() {
+        return document.cookie;
+    },
+
+    /* clear cookie*/
+    clearCookie: function clearCookie(name) {
+        setCookie(name, '', -1);
+    },
+
+    /* del cookie*/
+    delCookie: function delCookie(name) {
+        var exp = new Date();
+        exp.setTime(exp.getTime() - 1);
+        var cval = getCookie(name);
+        if (cval != null) document.cookie = name + "=" + cval + "; path=/;expires=" + exp.toGMTString();
+    }
+};
+
+/***/ }),
+
+/***/ 12:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -153,7 +212,7 @@ var network = exports.network = {
 
 /***/ }),
 
-/***/ 11:
+/***/ 13:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -175,7 +234,7 @@ var obj_control = exports.obj_control = {
 
 /***/ }),
 
-/***/ 12:
+/***/ 14:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -445,7 +504,7 @@ var old = exports.old = {
 
 /***/ }),
 
-/***/ 13:
+/***/ 15:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -630,7 +689,7 @@ if (!window.atob) {
 
 /***/ }),
 
-/***/ 14:
+/***/ 16:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -734,7 +793,7 @@ function para_encode(para_str) {
 
 /***/ }),
 
-/***/ 15:
+/***/ 17:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -764,29 +823,83 @@ var vuetool = exports.vuetool = {
 
 /***/ }),
 
-/***/ 78:
+/***/ 8:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _old = __webpack_require__(12);
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+var code = exports.code = {
+    //hashCode:function (str){
+    //    var str =btoa(str)
+    //    var h = 0, off = 0;
+    //    var len = str.length;
+    //    for(var i = 0; i < len; i++){
+    //        h = 31 * h + str.charCodeAt(off++);
+    //    }
+    //    var t=-2147483648*2;
+    //    while(h>2147483647){
+    //        h+=t
+    //    }
+    //    return h;
+    //}
 
-var _network = __webpack_require__(10);
 
-var _urlparse = __webpack_require__(14);
+    hashCode: function hashCode(input) {
+        var I64BIT_TABLE = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-'.split('');
+        var hash = 5381;
+        var i = input.length - 1;
 
-var _collection = __webpack_require__(8);
+        if (typeof input == 'string') {
+            for (; i > -1; i--) {
+                hash += (hash << 5) + input.charCodeAt(i);
+            }
+        } else {
+            for (; i > -1; i--) {
+                hash += (hash << 5) + input[i];
+            }
+        }
+        var value = hash & 0x7FFFFFFF;
 
-var _patch = __webpack_require__(13);
+        var retValue = '';
+        do {
+            retValue += I64BIT_TABLE[value & 0x3F];
+        } while (value >>= 6);
+
+        return retValue;
+    }
+};
+
+/***/ }),
+
+/***/ 80:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _old = __webpack_require__(14);
+
+var _network = __webpack_require__(12);
+
+var _urlparse = __webpack_require__(16);
+
+var _collection = __webpack_require__(9);
+
+var _patch = __webpack_require__(15);
 
 var path = _interopRequireWildcard(_patch);
 
-var _cookie = __webpack_require__(9);
+var _cookie = __webpack_require__(10);
 
-var _obj = __webpack_require__(11);
+var _obj = __webpack_require__(13);
 
-var _vuetools = __webpack_require__(15);
+var _vuetools = __webpack_require__(17);
+
+var _code = __webpack_require__(8);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -798,6 +911,8 @@ var ex = {
     }
 };
 
+//import {md5} from  './md5.min'
+
 ex.assign(ex, _old.old);
 ex.assign(ex, _network.network);
 ex.assign(ex, _urlparse.urlparse);
@@ -805,12 +920,13 @@ ex.assign(ex, _collection.collection);
 ex.assign(ex, _cookie.cookie);
 ex.assign(ex, _obj.obj_control);
 ex.assign(ex, _vuetools.vuetool);
-
+ex.assign(ex, _code.code);
+//ex.md5=md5
 window.ex = ex;
 
 /***/ }),
 
-/***/ 8:
+/***/ 9:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1007,65 +1123,6 @@ var collection = exports.collection = {
         return out_list;
     }
 
-};
-
-/***/ }),
-
-/***/ 9:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-/*
-setCookie('name', 1111, 5);
-setCookie('name1', 22222, 5);
-
-console.log(getCookie('name'));
-console.log(getAllCookie());
-
-delCookie('name1');
-clearCookie('undefined')    //清除未定义的名的cookie
-*/
-/*set cookie*/
-var cookie = exports.cookie = {
-    setCookie: function setCookie(name, value, Days) {
-        if (Days == null || Days == '') {
-            Days = 300;
-        }
-        var exp = new Date();
-        exp.setTime(exp.getTime() + Days * 24 * 60 * 60 * 1000);
-        document.cookie = name + "=" + escape(value) + "; path=/;expires=" + exp.toGMTString();
-        //document.cookie = name + "="+ escape (value) + ";expires=" + exp.toGMTString();
-    },
-
-    /*get cookie*/
-    getCookie: function getCookie(name) {
-        var arr,
-            reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
-        if (arr = document.cookie.match(reg)) return unescape(arr[2]);else return null;
-    },
-
-    /*get all cookie*/
-    getAllCookie: function getAllCookie() {
-        return document.cookie;
-    },
-
-    /* clear cookie*/
-    clearCookie: function clearCookie(name) {
-        setCookie(name, '', -1);
-    },
-
-    /* del cookie*/
-    delCookie: function delCookie(name) {
-        var exp = new Date();
-        exp.setTime(exp.getTime() - 1);
-        var cval = getCookie(name);
-        if (cval != null) document.cookie = name + "=" + cval + "; path=/;expires=" + exp.toGMTString();
-    }
 };
 
 /***/ })
