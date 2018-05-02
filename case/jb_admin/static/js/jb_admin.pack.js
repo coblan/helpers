@@ -1,41 +1,41 @@
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
-
+/******/
 /******/ 	// The require function
 /******/ 	function __webpack_require__(moduleId) {
-
+/******/
 /******/ 		// Check if module is in cache
 /******/ 		if(installedModules[moduleId])
 /******/ 			return installedModules[moduleId].exports;
-
+/******/
 /******/ 		// Create a new module (and put it into the cache)
 /******/ 		var module = installedModules[moduleId] = {
 /******/ 			i: moduleId,
 /******/ 			l: false,
 /******/ 			exports: {}
 /******/ 		};
-
+/******/
 /******/ 		// Execute the module function
 /******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
-
+/******/
 /******/ 		// Flag the module as loaded
 /******/ 		module.l = true;
-
+/******/
 /******/ 		// Return the exports of the module
 /******/ 		return module.exports;
 /******/ 	}
-
-
+/******/
+/******/
 /******/ 	// expose the modules object (__webpack_modules__)
 /******/ 	__webpack_require__.m = modules;
-
+/******/
 /******/ 	// expose the module cache
 /******/ 	__webpack_require__.c = installedModules;
-
+/******/
 /******/ 	// identity function for calling harmony imports with the correct context
 /******/ 	__webpack_require__.i = function(value) { return value; };
-
+/******/
 /******/ 	// define getter function for harmony exports
 /******/ 	__webpack_require__.d = function(exports, name, getter) {
 /******/ 		if(!__webpack_require__.o(exports, name)) {
@@ -46,7 +46,7 @@
 /******/ 			});
 /******/ 		}
 /******/ 	};
-
+/******/
 /******/ 	// getDefaultExport function for compatibility with non-harmony modules
 /******/ 	__webpack_require__.n = function(module) {
 /******/ 		var getter = module && module.__esModule ?
@@ -55,13 +55,13 @@
 /******/ 		__webpack_require__.d(getter, 'a', getter);
 /******/ 		return getter;
 /******/ 	};
-
+/******/
 /******/ 	// Object.prototype.hasOwnProperty.call
 /******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
-
+/******/
 /******/ 	// __webpack_public_path__
 /******/ 	__webpack_require__.p = "";
-
+/******/
 /******/ 	// Load entry module and return exports
 /******/ 	return __webpack_require__(__webpack_require__.s = 34);
 /******/ })
@@ -139,7 +139,7 @@ var stylesInDom = {},
 		};
 	},
 	isOldIE = memoize(function() {
-		return /msie [6-9]\b/.test(window.navigator.userAgent.toLowerCase());
+		return /msie [6-9]\b/.test(self.navigator.userAgent.toLowerCase());
 	}),
 	getHeadElement = memoize(function () {
 		return document.head || document.getElementsByTagName("head")[0];
@@ -581,6 +581,10 @@ function pop_fields_layer(row, heads, ops, callback) {
                 callback({ name: 'after_save', new_row: event.new_row, old_row: event.old_row });
                 //eventBus.$emit('pop-win-'+pop_id,{name:'after_save',new_row:event.new_row,old_row:event.old_row})
             }
+            //on_del:function(){
+            //    ex.remove(self.rows,row)
+            //    layer.close(self.opened_layer_indx)
+            //},
         }
     });
 }
@@ -760,19 +764,18 @@ var nice_validator = {
             }
         }
     }
-};
 
-//$.validator.config({
-//    rules: {
-//        error_msg: function(ele,param){
-//
-//        }
-//    }
-//}
-//
-//);
+    //$.validator.config({
+    //    rules: {
+    //        error_msg: function(ele,param){
+    //
+    //        }
+    //    }
+    //}
+    //
+    //);
 
-window.mix_nice_validator = nice_validator;
+};window.mix_nice_validator = nice_validator;
 
 /***/ }),
 /* 9 */
@@ -903,6 +906,44 @@ var mix_table_data = {
             });
         }
 
+        //del_item: function () {
+        //    if (this.selected.length == 0) {
+        //        return
+        //    }
+        //    var del_obj = {}
+        //    for (var j = 0; j < this.selected.length; j++) {
+        //        var pk = this.selected[j]
+        //        for (var i = 0; i < this.rows.length; i++) {
+        //            if (this.rows[i].pk.toString() == pk) {
+        //                if (!del_obj[this.rows[i]._class]) {
+        //                    del_obj[this.rows[i]._class] = []
+        //                }
+        //                del_obj[this.rows[i]._class].push(pk)
+        //            }
+        //        }
+        //    }
+        //    var out_str = ''
+        //    for (var key in del_obj) {
+        //        out_str += (key + ':' + del_obj[key].join(':') + ',')
+        //    }
+        //    location = ex.template("{engine_url}/del_rows?rows={rows}&next={next}", {
+        //        engine_url: engine_url,
+        //        rows: encodeURI(out_str),
+        //        next: encodeURIComponent(location.href)
+        //    })
+        //},
+        //goto_page: function (page) {
+        //    this.search_args._page = page
+        //    this.get_data()
+        //},
+        //add_new: function () {
+        //    var url = ex.template('{engine_url}/{page}.edit/?next={next}', {
+        //        engine_url: engine_url,
+        //        page: page_name,
+        //        next: encodeURIComponent(ex.appendSearch(location.pathname, search_args))
+        //    })
+        //    location = url
+        //},
     }
 };
 
@@ -1042,17 +1083,14 @@ Vue.component('com-table-array-mapper', array_mapper);
 "use strict";
 
 
+var _mix_editor = __webpack_require__(37);
+
+__webpack_require__(36);
+
 var check_box = {
     props: ['rowData', 'field', 'index'],
-    template: '<div ><input style="width: 100%" @change="on_changed()" type="checkbox" v-model="rowData[field]"></div>',
-    data: function data() {
-        return {};
-    },
-    methods: {
-        on_changed: function on_changed() {
-            this.$emit('on-custom-comp', { name: 'row_changed', row: this.rowData });
-        }
-    }
+    template: '<div :class="[\'com-table-checkbox\',{\'dirty\':is_dirty}]"><input style="width: 100%" @change="on_changed()" type="checkbox" v-model="rowData[field]"></div>',
+    mixins: [_mix_editor.mix_editor]
 };
 
 Vue.component('com-table-checkbox', check_box);
@@ -1148,7 +1186,12 @@ var line_text = {
     },
     methods: {
         on_changed: function on_changed() {
-            this.$emit('on-custom-comp', { name: 'row_changed', row: this.rowData });
+            var value = this.rowData[this.field];
+            if (value == this.org_value) {
+                this.$emit('on-custom-comp', { name: 'row_changed_undo_act', row: this.rowData });
+            } else {
+                this.$emit('on-custom-comp', { name: 'row_changed', row: this.rowData });
+            }
         }
     }
 };
@@ -1629,11 +1672,10 @@ var ajax_fields = {
             }
             this.row = new_row;
         }
-    }
-    // data_getter  回调函数，获取数据,
+        // data_getter  回调函数，获取数据,
 
 
-};
+    } };
 
 Vue.component('com_tab_fields', ajax_fields);
 
@@ -1804,8 +1846,8 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!./../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!./../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./fields.scss", function() {
-			var newContent = require("!!./../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!./../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./fields.scss");
+		module.hot.accept("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./fields.scss", function() {
+			var newContent = require("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./fields.scss");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -1830,8 +1872,8 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!./../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!./../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./table_editor_base.scss", function() {
-			var newContent = require("!!./../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!./../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./table_editor_base.scss");
+		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./table_editor_base.scss", function() {
+			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./table_editor_base.scss");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -1912,8 +1954,8 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!./../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!./../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./linetext.scss", function() {
-			var newContent = require("!!./../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!./../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./linetext.scss");
+		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./linetext.scss", function() {
+			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./linetext.scss");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -1938,8 +1980,8 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!./../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!./../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./select.scss", function() {
-			var newContent = require("!!./../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!./../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./select.scss");
+		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./select.scss", function() {
+			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./select.scss");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -2066,6 +2108,79 @@ __webpack_require__(27);
 
 
 //fields operator
+
+/***/ }),
+/* 35 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(0)();
+// imports
+
+
+// module
+exports.push([module.i, ".com-table-checkbox.dirty input {\n  background-color: yellow; }\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 36 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(35);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// add the styles to the DOM
+var update = __webpack_require__(1)(content, {});
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./check_box.scss", function() {
+			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./check_box.scss");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 37 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+var mix_editor = exports.mix_editor = {
+    data: function data() {
+        return {
+            org_value: this.rowData[this.field]
+        };
+    },
+    computed: {
+        is_dirty: function is_dirty() {
+            return this.rowData[this.field] != this.org_value;
+        }
+    },
+    methods: {
+        on_changed: function on_changed() {
+            var value = this.rowData[this.field];
+            if (value == this.org_value) {
+                this.$emit('on-custom-comp', { name: 'row_changed_undo_act', row: this.rowData });
+            } else {
+                this.$emit('on-custom-comp', { name: 'row_changed', row: this.rowData });
+            }
+        }
+    }
+};
 
 /***/ })
 /******/ ]);
