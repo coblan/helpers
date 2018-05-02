@@ -9,6 +9,11 @@ export var mix_editor={
             return this.rowData[this.field] != this.org_value
         }
     },
+    watch:{
+        'rowData._hash':function(){
+            this.org_value=this.rowData[this.field]
+        }
+    },
     methods:{
         on_changed:function(){
             var value = this.rowData[this.field]

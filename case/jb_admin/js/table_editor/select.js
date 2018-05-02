@@ -1,21 +1,21 @@
 require('./scss/select.scss')
+import {mix_editor} from  './mix_editor.js'
 
 var select = {
         props:['rowData','field','index'],
-        template:`
-    <el-dropdown trigger="click" placement="bottom" @command="handleCommand">
-    <span class="el-dropdown-link clickable" v-text="show_label"></span>
-    <el-dropdown-menu slot="dropdown">
-        <el-dropdown-item v-for="op in head.options"
-        :command="op.value"
-        :class="{'crt-value':rowData[field]==op.value}"
-        ><span v-text="op.label"></span></el-dropdown-item>
-        <!--<el-dropdown-item>狮子头</el-dropdown-item>-->
-        <!--<el-dropdown-item>螺蛳粉</el-dropdown-item>-->
-        <!--<el-dropdown-item>双皮奶</el-dropdown-item>-->
-        <!--<el-dropdown-item>蚵仔煎</el-dropdown-item>-->
-    </el-dropdown-menu>
-    </el-dropdown>
+        template:`<div :class="['com-table-select',{'dirty':is_dirty}]">
+            <el-dropdown trigger="click" placement="bottom" @command="handleCommand">
+                <span class="el-dropdown-link clickable" v-html="show_label"></span>
+                <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item v-for="op in head.options"
+                    :command="op.value"
+                    :class="{'crt-value':rowData[field]==op.value}" >
+                    <div v-text="op.label"></div>
+                    </el-dropdown-item>
+                </el-dropdown-menu>
+            </el-dropdown>
+        </div>
+
     `,
         data:function(){
             return {
@@ -36,11 +36,12 @@ var select = {
             this.table_par = table_par
             this. head  = ex.findone(this.table_par.heads,{name:this.field})
         },
+    mixins:[mix_editor],
     computed:{
         show_label:function(){
             var value = this.rowData[this.field]
             var opt = ex.findone(this.head.options,{value:value})
-            return opt.label
+            return opt.html_label ||  opt.label
         }
     },
         methods:{
@@ -58,12 +59,11 @@ var select = {
                     this.on_changed()
                 }
             },
-            on_changed:function(){
-                this.$emit('on-custom-comp',{name:'row_changed',row:this.rowData})
-            }
+            //on_changed:function(){
+            //    this.$emit('on-custom-comp',{name:'row_changed',row:this.rowData})
+            //}
         }
     }
-
 
 Vue.component('com-table-select',select)
 
