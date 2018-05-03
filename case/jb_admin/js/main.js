@@ -1,4 +1,5 @@
 require('./scss/fields.scss')
+require('./table_editor/scss/table_editor_base.scss')
 
 
 //table mix
@@ -28,8 +29,9 @@ import * as extra_click from  './table_editor/extra_click.js'
 import * as array_mapper from  './table_editor/array_mapper.js'
 import * as operations from  './table_editor/operations.js'
 
-
+// field editor
 import * as field_label_shower from  './field_editor/label_shower.js'
+import * as ele_transfer from  './field_editor/ele_transfer.js'
 
 // table operator
 import * as op_a from  './table_operator/operator_a.js'

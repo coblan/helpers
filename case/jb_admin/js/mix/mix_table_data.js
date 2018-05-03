@@ -13,11 +13,26 @@ var mix_table_data={
                 self.changed_rows=[]
             },
             add_new:function(kws){
+                /*
+                * model_name,
+                * */
                 self.add_new(kws)
             },
             delete:function(){
                 self.del_selected()
             },
+            selected_set_value:function(kws){
+                /* kws ={ field,value }
+                * */
+                ex.each(self.selected,function(row){
+                    row[kws.field]=kws.value
+                    if(row._hash != ex.hashDict(row)){
+                        if(!ex.isin(row,self.changed_rows)){
+                            self.changed_rows.push(row)
+                        }
+                    }
+                })
+            }
 
         })
         //this.$refs.op_save_changed_rows[0].set_enable(false)
@@ -55,6 +70,7 @@ var mix_table_data={
                 })
             })
         },
+
         update_or_insert:function(new_row,old_row){
             if(old_row && ! old_row.pk) {
                 this.rows.splice(0, 0, new_row)

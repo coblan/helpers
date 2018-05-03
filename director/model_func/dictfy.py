@@ -9,7 +9,8 @@ from django.apps import apps
 from django import forms
 from django.utils.timezone import localtime,datetime
 from django.utils.translation import ugettext as _
-
+#from md5 import md5
+from .hash_dict import hash_dict
 
 
 def model_to_name(model):
@@ -23,7 +24,7 @@ def name_to_model(app_model_string):
     return apps.get_model(app_model_string)
     
 
-def to_dict(instance,filt_attr=None,include=None,exclude=None,form=False):
+def to_dict(instance,filt_attr=None,include=None,exclude=None,hash_keys=None,form=False):
     if form:
         form_cls=model_dc.get(instance.__class__).get('fields')
         form_obj = form_cls(instance=instance,nolimit=True)
@@ -34,6 +35,9 @@ def to_dict(instance,filt_attr=None,include=None,exclude=None,form=False):
     out['_class']= instance._meta.app_label+'.'+instance._meta.model_name
     if '_label' not in out.keys():
         out['_label']=unicode(instance)
+    if '_hash' not in out.keys():
+        out['_hash']=hash_dict(out,hash_keys)
+        #out['_md5']=md5(out).hexdigest() 
     return out
 
 

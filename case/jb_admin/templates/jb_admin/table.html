@@ -59,6 +59,12 @@
                         self.changed_rows.push(row)
                     }
                 },
+                row_changed_undo_act:function(kws){
+                    var md5= ex.hashDict(kws.row)
+                    if(md5 == kws.row._hash){
+                        ex.remove(self.changed_rows,{pk:kws.row.pk})
+                    }
+                },
                 switch_to_tab:function(kws){
                     self.show_tab(kws.tab_name)
                     self.crt_row= kws.row
@@ -90,9 +96,9 @@
                 this.tabgroup.crt = name
                 var self =this
 
-//                Vue.nextTick(function(){
-//                    self.$refs['_tab_'+name][0].on_show()
-//                })
+                Vue.nextTick(function(){
+                    self.$refs['_tab_'+name][0].on_show()
+                })
 
             },
             get_attr:function(name){
