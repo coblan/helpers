@@ -312,13 +312,63 @@ export var field_base={
                                     :placeholder="head.placeholder"></date>
                                </div>`,
         },
-        datetime:{
+
+        field_datetime:{
             props:['row','head'],
             template:`<div><span v-if='head.readonly' v-text='row[head.name]'></span>
-            			<datetime  v-model="row[head.name]" :id="'id_'+head.name"
-                        	:placeholder="head.placeholder"></datetime>
+                         <input v-else type="text">
+            			<!--<datetime  v-model="row[head.name]" :id="'id_'+head.name"-->
+                        	<!--:placeholder="head.placeholder"></datetime>-->
                        </div>`,
+            mounted:function(){
+                var self=this
+
+                //layui.use('laydate', function(){
+                //    var laydate = layui.laydate;
+                //    laydate.render({
+                //        elem: $(self.$el).find('input')[0], //指定元素
+                //        type: 'datetime',
+                //    });
+                //
+                //});
+
+
+                ex.load_js('/static/lib/layui/lay/modules/laydate.js',function(){
+
+                        laydate.render({
+                            elem: $(self.$el).find('input')[0], //指定元素
+                            type: 'datetime',
+                        });
+
+                })
+
+
+
+            }
         },
+
+        //field_datetime:{
+        //    props:['row','head'],
+        //    template:`<div><span v-if='head.readonly' v-text='row[head.name]'></span>
+        //    			<datetime  v-model="row[head.name]" :id="'id_'+head.name"
+        //                	:placeholder="head.placeholder"></datetime>
+        //               </div>`,
+        //},
+
+        //field_datetime:{
+        //    props:['row','head'],
+        //    template:`<div ><span v-if='head.readonly' v-text='row[head.name]'></span>
+        //    			    <el-date-picker
+        //    			        :zIndex= 99999999
+        //                        v-model="row[head.name]"
+        //                        :id="'id_'+head.name"
+        //                        type="datetime"
+        //                        :placeholder="head.placeholder">
+        //                    </el-date-picker>
+        //               </div>`,
+        //},
+
+
         richtext:{
             props:['row','head'],
             template:`<div><span v-if='head.readonly' v-text='row[head.name]'></span>

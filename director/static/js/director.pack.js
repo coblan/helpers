@@ -386,6 +386,9 @@ window.cfg = {
     showMsg: function showMsg(msg) {
         alert(msg);
     },
+    warning: function warning(msg) {
+        alert(msg);
+    },
     tr: {
         'picture_size_excceed': '图片尺寸不能超过{maxsize}'
     },
@@ -1498,10 +1501,55 @@ var field_base = exports.field_base = {
             props: ['row', 'head'],
             template: '<div><span v-if=\'head.readonly\' v-text=\'row[head.name]\'></span>\n                                <date v-else v-model="row[head.name]" :id="\'id_\'+head.name"\n                                    :placeholder="head.placeholder"></date>\n                               </div>'
         },
-        datetime: {
+
+        field_datetime: {
             props: ['row', 'head'],
-            template: '<div><span v-if=\'head.readonly\' v-text=\'row[head.name]\'></span>\n            \t\t\t<datetime  v-model="row[head.name]" :id="\'id_\'+head.name"\n                        \t:placeholder="head.placeholder"></datetime>\n                       </div>'
+            template: '<div><span v-if=\'head.readonly\' v-text=\'row[head.name]\'></span>\n                         <input v-else type="text">\n            \t\t\t<!--<datetime  v-model="row[head.name]" :id="\'id_\'+head.name"-->\n                        \t<!--:placeholder="head.placeholder"></datetime>-->\n                       </div>',
+            mounted: function mounted() {
+                var self = this;
+
+                //layui.use('laydate', function(){
+                //    var laydate = layui.laydate;
+                //    laydate.render({
+                //        elem: $(self.$el).find('input')[0], //指定元素
+                //        type: 'datetime',
+                //    });
+                //
+                //});
+
+
+                ex.load_js('/static/lib/layui/lay/modules/laydate.js', function () {
+
+                    laydate.render({
+                        elem: $(self.$el).find('input')[0], //指定元素
+                        type: 'datetime'
+                    });
+                });
+            }
         },
+
+        //field_datetime:{
+        //    props:['row','head'],
+        //    template:`<div><span v-if='head.readonly' v-text='row[head.name]'></span>
+        //    			<datetime  v-model="row[head.name]" :id="'id_'+head.name"
+        //                	:placeholder="head.placeholder"></datetime>
+        //               </div>`,
+        //},
+
+        //field_datetime:{
+        //    props:['row','head'],
+        //    template:`<div ><span v-if='head.readonly' v-text='row[head.name]'></span>
+        //    			    <el-date-picker
+        //    			        :zIndex= 99999999
+        //                        v-model="row[head.name]"
+        //                        :id="'id_'+head.name"
+        //                        type="datetime"
+        //                        :placeholder="head.placeholder">
+        //                    </el-date-picker>
+        //               </div>`,
+        //},
+
+
         richtext: {
             props: ['row', 'head'],
             template: '<div><span v-if=\'head.readonly\' v-text=\'row[head.name]\'></span>\n            \t\t\t<ckeditor  v-model="row[head.name]" :id="\'id_\'+head.name"></ckeditor>\n                       </div>'
@@ -2688,7 +2736,6 @@ var date_config_set = {
         startView: "months",
         minViewMode: "months",
         autoclose: true
-
     }
 };
 
@@ -2743,8 +2790,14 @@ Vue.component('datetime', {
     //    }
     //},
     //template:'<input type="text" class="form-control">',
-    template: "<span class=\"datetime-picker\">\n                <span class=\"cross\" @click=\"$emit('input','')\">X</span>\n                <input type=\"text\" readonly/>\n                </span>",
-    props: ['value', 'config'],
+    //template:`<span class="datetime-picker">
+    //            <span class="cross" @click="$emit('input','')">X</span>
+    //            <input type="text" readonly/>
+    //            </span>`,
+    template: " <div class=\"input-group datetime-picker\" style=\"width: 12em;\">\n                <input type=\"text\" class=\"form-control input-sm\" readonly :placeholder=\"placeholder\"/>\n                <div class=\"input-group-addon\" >\n                    <i v-if=\"! value\" @click=\"click_input()\" class=\"fa fa-calendar\" aria-hidden=\"true\"></i>\n                    <i v-else @click=\"$emit('input','')\" class=\"fa fa-calendar-times-o\" aria-hidden=\"true\"></i>\n                </div>\n                </div>",
+
+    //props:['value','config'],
+    props: ['value', 'set', 'config', 'placeholder'],
     mounted: function mounted() {
         var self = this;
         var def_conf = {
@@ -2773,7 +2826,11 @@ Vue.component('datetime', {
             }
         });
     },
-
+    methods: {
+        click_input: function click_input() {
+            this.input.focus();
+        }
+    },
     watch: {
         value: function value(n) {
             this.input.val(n);
