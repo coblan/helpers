@@ -67,11 +67,18 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 }
             }
         })();
+
         window.onbeforeunload=function(){
             NProgress.start();
             setInterval(function(){
                 NProgress.inc()
             },300)
+
+            if($('body').hasClass('sidebar-collapse')){
+                sessionStorage.setItem("sidebar-collapse",true);
+            }else{
+                sessionStorage.removeItem("sidebar-collapse");
+            }
         }
     </script>
     <style>
@@ -140,6 +147,11 @@ desired effect
     }
 </style>
 <body class="hold-transition skin-blue sidebar-mini">
+<script>
+    if(sessionStorage.getItem('sidebar-collapse')){
+        $('body').addClass('sidebar-collapse')
+    }
+</script>
 <div class="wrapper">
 
     <!-- Main Header -->
@@ -269,9 +281,11 @@ desired effect
                         </ul>
                     </li>
                     <!-- Control Sidebar Toggle Button -->
+                    {% if fast_config_panel %}
                     <li>
                         <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
                     </li>
+                    {% endif %}
                 </ul>
             </div>
         </nav>

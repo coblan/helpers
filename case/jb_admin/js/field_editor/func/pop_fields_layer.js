@@ -18,7 +18,7 @@ export  function pop_fields_layer (row,heads,ops,callback){
 
     self.opened_layer_indx = layer.open({
         type: 1,
-        area: ['700px', '400px'],
+        area: ['800px', '500px'],
         title: '详细',
         resize:true,
         resizing: function(layero){
