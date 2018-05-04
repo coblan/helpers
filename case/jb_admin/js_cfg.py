@@ -9,7 +9,8 @@ def get_tr():
         'search':_('Search'),
         'change_password':_('Change Password'),
         'logout':_('LogOut'),
-        'login':_('LogIn'),            
+        'login':_('LogIn'), 
+        
     }
 
 js_tr_list.append(get_tr)
