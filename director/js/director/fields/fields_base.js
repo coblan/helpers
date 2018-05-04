@@ -312,6 +312,7 @@ export var field_base={
                                     :placeholder="head.placeholder"></date>
                                </div>`,
         },
+
         datetime:{
             props:['row','head'],
             template:`<div><span v-if='head.readonly' v-text='row[head.name]'></span>
