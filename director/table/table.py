@@ -423,7 +423,7 @@ class ModelTable(object):
             for head in heads:
                 if head['name']==self.pop_edit_field:
                     model_form = model_dc[self.model].get('fields')
-                    head['name'] ==self.pop_edit_field
+                    #head['name'] ==self.pop_edit_field
                     head['editor'] = 'com-table-pop-fields'
                     head['fields_heads']=model_form(crt_user=self.crt_user).get_heads()
                     head['get_row'] = {
@@ -450,6 +450,8 @@ class ModelTable(object):
         if field.choices:
             head['options']=dict(field.choices)
             head['editor']='com-table-mapper'
+        elif isinstance(field,models.BooleanField):
+            head['editor']='com-table-bool-shower'
         return head
 
     def fields_sort_heads(self,heads):
