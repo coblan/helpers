@@ -373,13 +373,21 @@ class ModelTable(object):
         """
         有些时候，最先不需要返回rows，而只返回filters，head等，等待用户选择后，才返回rows
         """
+        ls=[]
+        search_head = self.row_search.get_context()
+        row_filters = self.row_filter.get_context()
+        # 合并search和rowfilter 为rowfilter
+        if search_head:
+            ls.append( search_head)
+        if row_filters:
+            ls.extend(row_filters)
         return {
             'heads':self.get_heads(),
             'rows': [], #self.get_rows(),
             'row_pages':{}, # self.pagenum.get_context(),
             'row_sort':self.row_sort.get_context(),
-            'row_filters':self.row_filter.get_context(),
-            'search_tip':self.row_search.get_context(),
+            'row_filters': ls , #self.row_filter.get_context(),
+            #'search_tip':self.row_search.get_context(),
             'model':model_to_name(self.model),
             'ops' : self.get_operation()
         }        
@@ -423,7 +431,7 @@ class ModelTable(object):
             for head in heads:
                 if head['name']==self.pop_edit_field:
                     model_form = model_dc[self.model].get('fields')
-                    head['name'] ==self.pop_edit_field
+                    #head['name'] ==self.pop_edit_field
                     head['editor'] = 'com-table-pop-fields'
                     head['fields_heads']=model_form(crt_user=self.crt_user).get_heads()
                     head['get_row'] = {
@@ -450,6 +458,8 @@ class ModelTable(object):
         if field.choices:
             head['options']=dict(field.choices)
             head['editor']='com-table-mapper'
+        elif isinstance(field,models.BooleanField):
+            head['editor']='com-table-bool-shower'
         return head
 
     def fields_sort_heads(self,heads):

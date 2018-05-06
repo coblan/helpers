@@ -103,6 +103,14 @@ class ModelFields(forms.ModelForm):
 
         super(ModelFields,self).__init__(dc,*args,**form_kw)
         self.custom_permit()
+        
+        #all_fields = self._meta.model._meta.get_fields()
+        #if self._meta.exclude:
+            #all_fields = filter(lambda x : x.name not in self._meta.exclude,all_fields )
+        #all_fields = filter(lambda x : x.name not in self.fields,all_fields)
+        #for field in all_fields:
+            #self.fields[field.name]=field
+            
         self.pop_fields()
         self.init_value()
     
@@ -242,7 +250,18 @@ class ModelFields(forms.ModelForm):
             #include= self.fields
             
         # self.fields 是经过 权限 处理了的。可读写的字段
-        return to_dict(self.instance,filt_attr=self.dict_row,include=self.fields)
+        row = to_dict(self.instance,filt_attr=self.dict_row,include=self.fields)
+        
+        ls=[]
+        ls.extend(self.permit.readable_fields())
+        ls.extend(self.permit.changeable_fields())
+        
+        for field in self.instance._meta.get_fields():
+            if isinstance(field,(models.AutoField,models.BigAutoField)):
+                if field.name in ls and field.name not in self._meta.exclude and\
+                   field.name not in row:
+                    row[field.name]=getattr(self.instance,field.name)
+        return row
 
     def dict_row(self,inst):
         return {}
@@ -254,9 +273,9 @@ class ModelFields(forms.ModelForm):
             if name in options.keys():
                 continue
             if isinstance(field,forms.models.ModelMultipleChoiceField):
-                options[name]=[{'value':x[0],'label':x[1]} for x in field.choices]
+                options[name]=[{'value':x[0],'label':unicode(x[1])} for x in field.choices]
             elif isinstance(field,forms.models.ModelChoiceField):
-                options[name]=[{'value':x[0],'label':x[1]} for x in list(field.choices)]
+                options[name]=[{'value':x[0],'label':unicode(x[1])} for x in list(field.choices)]
             #if options.get(name,None):
                 #options[name]=self.sort_option(options[name])
             

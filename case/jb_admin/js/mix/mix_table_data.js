@@ -21,6 +21,9 @@ var mix_table_data={
             delete:function(){
                 self.del_selected()
             },
+            //get_data:function(){
+            //    self.getRows()
+            //},
             selected_set_value:function(kws){
                 /* kws ={ field,value }
                 * */
@@ -79,6 +82,20 @@ var mix_table_data={
                 ex.assign(table_row,new_row)
             }
         },
+        getRows:function(){
+            /*
+            以后都用这个函数，不用什么get_data 或者 data_getter 了
+            * */
+            var self=this
+
+            cfg.show_load()
+            var post_data=[{fun:'get_rows',model_name:self.model_name,search_args:self.search_args}]
+            $.post('/d/ajax',JSON.stringify(post_data),function(resp){
+                self.rows = resp.get_rows.rows
+                self.row_pages = resp.get_rows.row_pages
+                cfg.hide_load()
+            })
+        },
         get_data: function () {
             this.data_getter(this)
         },
@@ -92,9 +109,10 @@ var mix_table_data={
         data_getter:function(){
             // 默认的 data_getter
             var self=this
-            //var loader = layer.load(2);
+
             cfg.show_load()
-            $.get(ex.appendSearch(this.search_args),function(resp){
+            var post_data=[{fun:'get_rows',model_name:this.model_name,search_args:this.search_args}]
+            $.get('/d/ajax',JSON.stringify(post_data),function(resp){
                 self.rows = resp.rows
                 self.row_pages = resp.row_pages
                 cfg.hide_load()

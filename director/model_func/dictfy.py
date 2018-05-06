@@ -97,9 +97,11 @@ def sim_dict(instance,filt_attr=None,include=None,exclude=None):
                     mt = [x for x in field.choices if x[0]==org_value]
                     if mt:
                         out[ '_%s_label'%field.name]=mt[0][1]
-    if 'id' in [x.name for x in instance._meta.get_fields()] and \
-       instance.id:
-        out['id']=instance.id
+                        
+
+    #if 'id' in [x.name for x in instance._meta.get_fields()] and \
+       #instance.id:
+        #out['id']=instance.id
     return out
     
 
@@ -192,6 +194,10 @@ class DecimalProc(object):
     def from_dict(self,value,field):
         return float(value)
 
+class BoolProc(object):
+    pass
+
+
 field_map={
     models.DateTimeField:DatetimeProc,
     models.ForeignKey : ForeignProc,
@@ -264,13 +270,14 @@ def form_to_head(form,include=None):
         if isinstance(include,(tuple,list)) and k not in include:
             continue
         dc = {'name':k,'label':_(v.label),
-              'required':v.required,
               'help_text':unicode(v.help_text),
               'editor':'linetext'}
+        if hasattr(v,'required'):
+            dc['required'] = v.required
         
-        if isinstance(v.widget,forms.widgets.Select):
+        if hasattr(v,'widget') and isinstance(v.widget,forms.widgets.Select):
             dc['editor'] = 'sim_select' 
-            dc['options']=[{'value':val,'label':lab} for val,lab in v.widget.choices]
+            dc['options']=[{'value':val,'label':unicode(lab)} for val,lab in v.widget.choices]
         elif v.__class__==forms.fields.CharField:
             if v.max_length:
                 dc.update({'editor':'linetext','maxlength':v.max_length})
@@ -303,6 +310,8 @@ def model_to_head(model,include=[],exclude=[]):
                 #dc = {'name':field.name,'label':_(field._verbose_name),}
             #else:
             dc= {'name':field.name,'label':_(field.verbose_name)}
+            if isinstance(field,models.ForeignKey):
+                dc['editor']='com-table-label-shower'
             out.append(dc)
     if include:
         out=[x for x in out if x.get('name') in include]

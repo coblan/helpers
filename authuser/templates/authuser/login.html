@@ -56,7 +56,7 @@
 					var self=this;
 					$.post('/d/ajax/authuser/',JSON.stringify(post_data),function (data) {
 						if(data.do_login.errors){
-							update_vue_obj(self.meta.errors,data.do_login.errors)
+							ex.assign(self.meta.errors,data.do_login.errors)
 						}else{
 							if(parent.root_page){
 								// 手机版里面，iframe内容直接跳转到首页
