@@ -47,7 +47,7 @@ var pop_fields={
             var fun= get_row[this.head.get_row.fun]
             var kws= this.head.get_row.kws
             fun(function(pop_row){
-                pop_fields_layer(pop_row,self.head.fields_heads,ops,function(kws){
+                pop_fields_layer(pop_row,self.head.fields_heads,ops,self.head.extra_mixins,function(kws){
                     if(kws.name =='after_save'){
                         var fun = after_save[self.head.after_save.fun]
                         fun(self,kws.new_row,kws.old_row)

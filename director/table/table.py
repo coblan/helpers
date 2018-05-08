@@ -431,9 +431,10 @@ class ModelTable(object):
             for head in heads:
                 if head['name']==self.pop_edit_field:
                     model_form = model_dc[self.model].get('fields')
+                    form_obj = model_form(crt_user=self.crt_user)
                     #head['name'] ==self.pop_edit_field
                     head['editor'] = 'com-table-pop-fields'
-                    head['fields_heads']=model_form(crt_user=self.crt_user).get_heads()
+                    head['fields_heads']=form_obj.get_heads()
                     head['get_row'] = {
                         #'fun':'use_table_row'
                         "fun":'get_table_row'
@@ -447,7 +448,8 @@ class ModelTable(object):
                         #'fun':'do_nothing'
                         'fun':'update_or_insert'
                     }
-                    head['ops']=model_form(crt_user=self.crt_user).get_operations()
+                    head['ops']=form_obj.get_operations()
+                    head['extra_mixins']=form_obj.extra_mixins
         return heads
     
     def dict_head(self,head):
@@ -514,15 +516,17 @@ class ModelTable(object):
     def get_operation(self):
         if not model_dc.get(self.model) or not model_dc.get(self.model).get('fields'):
             return []
-        model_name =model_to_name(self.model)
+        #model_name =model_to_name(self.model)
         fieldCls=model_dc[self.model].get('fields')
         fieldobj=fieldCls(crt_user=self.crt_user)
         return [{'name':'add_new',
                  'editor':'com-op-a',
                  'label':'创建',
-                 'heads':fieldobj.get_heads(),
-                 'ops': fieldobj.get_operations(), # model_dc[self.model].get('fields'),
-                 'model_name':model_name,},
+                 'fields_ctx':fieldobj.get_head_context(),
+                 #'heads':fieldobj.get_heads(),
+                 #'ops': fieldobj.get_operations(), # model_dc[self.model].get('fields'),
+                 #'model_name':model_name,
+                 },
                 {'name':'save_changed_rows','editor':'com-op-a','label':'保存','hide':'!changed'},
                 {'name':'delete','editor':'com-op-a','label':'删除','disabled':'!has_select'},
                 ]      

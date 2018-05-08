@@ -10,9 +10,8 @@ import * as mix_fields_data from './mix/mix_fields_data.js'
 
 import * as ajax_fields from './tabs/ajax_fields.js'
 import * as ajax_table from './tabs/ajax_table.js'
-import * as com_pop_fields from './com_pop_fields.js'
+//import * as com_pop_fields from './com_pop_fields.js'
 
-import * as pop_fields_layer from  './field_editor/func/pop_fields_layer.js'
 import * as ele_tree from  './field_editor/ele_tree_name_layer'
 
 
@@ -47,7 +46,10 @@ import * as btn from  './field_operator/btn.js'
 
 import * as validate from  './validator'
 
-import * as com_table from  './misc/com_table.js'
+//import * as com_table from  './misc/com_table.js'
+
+//misc
 import * as pop_table_layer from  './misc/pop_table_layer.js'
+import * as pop_fields_layer from  './misc/pop_fields_layer.js'
 
 

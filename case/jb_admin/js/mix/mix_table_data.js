@@ -65,7 +65,8 @@ var mix_table_data={
         },
         add_new:function(kws){
             var self = this
-            var post_data=[{fun:'get_row',model_name:kws.model_name},]
+            var fields_ctx=kws.fields_ctx
+            var post_data=[{fun:'get_row',model_name:fields_ctx.model_name},]
             cfg.show_load()
             ex.post('/d/ajax',JSON.stringify(post_data),function(resp){
                 cfg.hide_load()
@@ -76,7 +77,7 @@ var mix_table_data={
                 //    self.update_or_insert(e.new_row, e.old_row)
                 //})
                 //pop_fields_layer(new_row,kws.heads,kws.ops,pop_id)
-                pop_fields_layer(new_row,kws.heads,kws.ops,function(e){
+                pop_fields_layer(new_row,fields_ctx.heads,fields_ctx.ops,fields_ctx.extra_mixins,function(e){
                     self.update_or_insert(e.new_row, e.old_row)
                 })
             })

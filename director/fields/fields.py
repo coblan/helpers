@@ -52,6 +52,7 @@ class ModelFields(forms.ModelForm):
     """
     readonly=[]
     field_sort=[]
+    extra_mixins=[]
     @classmethod
     def parse_request(cls,request):
         """
@@ -138,8 +139,15 @@ class ModelFields(forms.ModelForm):
             'row': self.get_row(),
             #'permit':self.get_permit(),
             'ops':self.get_operations(),
-        }  
-
+        } 
+    
+    def get_head_context(self):
+        return {
+            'heads':self.get_heads(),
+            'ops':self.get_operations(),
+            'model_name':model_to_name(self._meta.model),
+            'extra_mixins':self.extra_mixins
+        }         
     
     def get_del_info(self):
         return {'%(model)s:%(inst)s <id=%(pk)s>'%{'model':self.instance.__class__.__name__,'inst':unicode(self.instance),'pk':self.instance.pk}:delete_related_query(self.instance)}
