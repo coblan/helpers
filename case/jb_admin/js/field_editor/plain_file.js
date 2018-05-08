@@ -1,20 +1,18 @@
 require('./scss/file_uploader.scss')
 
 /*
-* config={
-*    accept:"xx.jpg",
-*     multiple:true,
-*
-* }
-* */
+ * config={
+ *    accept:""
+ * }
+ * */
 
 export var field_file_uploader={
     props:['row','head'],
-    template:`<div><com-file-uploader v-model="row[head.name]" :config="head.config" :readonly="head.readonly"></com-file-uploader></div>`
+    template:`<div><com-file-uploader-tmp v-model="row[head.name]" :config="head.config" :readonly="head.readonly"></com-file-uploader-tmp></div>`
 }
 
 export var com_file_uploader = {
-    props:['to','value','readonly','config'],
+    props:['value','readonly','config'],
     data:function(){
 
         return {
@@ -30,27 +28,11 @@ export var com_file_uploader = {
         <input v-else v-show="!cfg.com_btn" class="pic-input" type="file" @change="upload_pictures($event)" :accept="cfg.accept">
     </div>
 
-
     <div class="wrap">
-        <ul class="sortable">
-            <li  v-for="pic in pictures" class="item" >
-                <img v-if="is_image(pic)" :src="pic" alt="" @click="cfg.on_click(pic)"/>
-                <div class="file-wrap" @click="cfg.on_click(pic)" v-else>
-                    <span class="file-type" v-text="get_res_type(pic)"></span>
-                    <!--<span v-text="get_res_basename(pic)"></span>-->
-                </div>
-
-                <span v-if="! readonly" v-show="cfg.multiple" class="remove-btn" title="remove image" @click="remove(pic)">
-                    <!--<i class="fa fa-window-close" aria-hidden="true"></i>-->
-                    <i class="fa fa-times" aria-hidden="true"></i>
-                </span>
-
-            </li>
-        </ul>
+           <a v-for="pic in pictures" :href="pic"><span  v-text="pic"></span></a>
     </div>
 
-
-     <component v-if="cfg.com_btn && ! readonly" :is="cfg.com_btn" @click.native="browse()"></component>
+     <!--<component v-if="cfg.com_btn && ! readonly" :is="cfg.com_btn" @click.native="browse()"></component>-->
 
 
 
@@ -69,11 +51,12 @@ export var com_file_uploader = {
 
     },
     computed:{
-        res_url:function(){
-            return this.to ? this.to: "/_face/upload"
-        },
+        //res_url:function(){
+        //    return this.cfg.upload_url ? this.to: "/_face/upload"
+        //},
         cfg:function(){
             var def_config = {
+                upload_url:'/d/upload',
                 accept:'image/*',
                 multiple:true,
                 sortable:true,
@@ -85,9 +68,9 @@ export var com_file_uploader = {
                 }
             }
             if(this.config){
-                if(! this.config.hasOwnProperty('multiple') || this.config.multiple){
-                    def_config.com_btn='file-uploader-btn-plus'
-                }
+                //if(! this.config.hasOwnProperty('multiple') || this.config.multiple){
+                //    def_config.com_btn='file-uploader-btn-plus'
+                //}
                 ex.assign(def_config,this.config)
             }
 
@@ -108,7 +91,7 @@ export var com_file_uploader = {
     },
     methods:{
         browse:function(){
-          $(this.$el).find('input').click()
+            $(this.$el).find('input').click()
         },
         enter:function(pic){
             this.crt_pic= pic
@@ -122,11 +105,13 @@ export var com_file_uploader = {
             if(file_list.length==0){
                 return
             }
-            var upload_url=this.res_url
+            var upload_url=this.cfg.upload_url
 
-            show_upload()
+            //show_upload()
 
+            cfg.show_load()
             fl.uploads(file_list,upload_url,function(resp){
+                cfg.hide_load()
                 if(resp){
                     if(self.cfg.multiple){
                         self.add_value(resp)
@@ -135,7 +120,7 @@ export var com_file_uploader = {
                     }
 
                 }
-                hide_upload(300)
+                //hide_upload(300)
             })
         },
         set_value:function(value){
@@ -192,17 +177,15 @@ export var com_file_uploader = {
     }
 }
 
-var plus_btn={
-    props:['accept'],
-    template:`<div class="file-uploader-btn-plus">
-        <div class="inn-btn"><span>+</span></div>
-        <div style="text-align: center">添加文件</div>
-    </div>`,
-}
-Vue.component('file-uploader-btn-plus',plus_btn)
+//var plus_btn={
+//    props:['accept'],
+//    template:`<div class="file-uploader-btn-plus">
+//        <div class="inn-btn"><span>+</span></div>
+//        <div style="text-align: center">添加文件</div>
+//    </div>`,
+//}
+//Vue.component('file-uploader-btn-plus',plus_btn)
 
-
-
-Vue.component('com-file-uploader',com_file_uploader)
-Vue.component('field-file-uploader',field_file_uploader)
+Vue.component('com-file-uploader-tmp',com_file_uploader)
+Vue.component('com-field-plain-file',field_file_uploader)
 

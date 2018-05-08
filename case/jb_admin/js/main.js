@@ -29,12 +29,14 @@ import * as extra_click from  './table_editor/extra_click.js'
 import * as array_mapper from  './table_editor/array_mapper.js'
 import * as operations from  './table_editor/operations.js'
 import * as bool_shower from  './table_editor/bool_shower.js'
+import * as foreign_click_select from  './table_editor/foreign_click_select.js'
 
 // field editor
 import * as field_label_shower from  './field_editor/label_shower.js'
 import * as ele_transfer from  './field_editor/ele_transfer.js'
 import * as datetime from  './field_editor/datetime.js'
 import * as pop_table_select from  './field_editor/pop_table_select.js'
+import * as plain_file from  './field_editor/plain_file.js'
 
 // table operator
 import * as op_a from  './table_operator/operator_a.js'

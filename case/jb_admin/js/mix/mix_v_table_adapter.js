@@ -55,7 +55,7 @@ var mix_v_table_adapter={
         on_perpage_change:function(perpage){
             this.search_args._perpage=perpage
             this.search_args._page=1
-            this.get_data()
+            this.getRows()
         },
         sortChange(params){
             var self=this

@@ -44,6 +44,7 @@ var com_table={
                          :columns="columns"
                          :table-data="rows"
                          @sort-change="sortChange"
+                         @on-custom-comp="on_td_event($event)"
                          row-hover-color="#eee"
                          row-click-color="#edf7ff">
                 </v-table>
@@ -61,6 +62,9 @@ var com_table={
     </div>`,
 
     methods:{
+        on_td_event:function(e){
+            this.op_funs[e.name](e)
+        },
 //        data_getter:function(){
 //            // 这里clear，数据被清空，造成table的pagenator上下抖动
 ////                       com.clear()

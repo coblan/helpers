@@ -2,7 +2,8 @@ var pop_table_select =  {
     props:['row','head'],
     template:`<div>
         <span v-if='head.readonly' v-text='label'></span>
-        <span @click="open_win">xxx</span>
+        <span  v-text="label"></span>
+        <span class="clickable" @click="open_win"><i class="fa fa-search"></i></span>
     </div>`,
     computed:{
         label:function(){
@@ -12,10 +13,10 @@ var pop_table_select =  {
     methods:{
         open_win:function(){
             var self=this
-            pop_table_layer(this.row,this.head.table_ctx,function(for_row){
+            pop_table_layer(this.row,this.head.table_ctx,function(foreign_row){
 
-                self.row[this.head_name]=for_row.pk
-                self.row['_'+this.head.name+'_label'] = for_row._label
+                self.row[self.head.name]=foreign_row.pk
+                self.row['_'+self.head.name+'_label'] = foreign_row._label
             })
         }
     }

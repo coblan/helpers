@@ -35,6 +35,9 @@ var mix_table_data={
                         }
                     }
                 })
+            },
+            emitEvent:function(e){
+                self.$emit(e)
             }
 
         })
@@ -51,9 +54,14 @@ var mix_table_data={
             var fun_name = kws.fun || kws.name
             this.op_funs[fun_name](kws)
         },
+        on_td_event:function(kws){
+            var fun_name = kws.fun || kws.name
+            this.op_funs[fun_name](kws)
+            //this.op_funs[e.name](e)
+        },
         search:function(){
             this.search_args._page=1
-            this.get_data()
+            this.getRows()
         },
         add_new:function(kws){
             var self = this
@@ -101,7 +109,7 @@ var mix_table_data={
         },
         get_page: function (page_number) {
             this.search_args._page = page_number
-            this.get_data()
+            this.getRows()
         },
         get_search_args: function () {
             return this.search_args
