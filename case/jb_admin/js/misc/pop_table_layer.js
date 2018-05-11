@@ -78,7 +78,7 @@ export  function pop_table_layer (row,table_ctx,callback){
             heads:table_ctx.heads,
             row_filters:table_ctx.row_filters,
             row_sort:table_ctx.row_sort,
-            model_name:table_ctx.model,
+            director_name:table_ctx.director_name,
             row_pages:{},
             rows:[],
             selected:[],

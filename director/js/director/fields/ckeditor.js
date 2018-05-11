@@ -81,7 +81,7 @@ var ck_complex = {
 };
 
 
-Vue.component('ckeditor',{
+var ckeditor = {
 	template:`<div class='ckeditor'>
 		    	<textarea class="form-control" name="ri" ></textarea>
 	    	</div>`,
@@ -94,12 +94,18 @@ Vue.component('ckeditor',{
 	},
 	created:function(){
 		var self=this
-		if(!window.bus){
-			window.bus=new Vue()
-		}
-		bus.$on('sync_data',function(){
+		//if(!window.bus){
+		//	window.bus=new Vue()
+		//}
+		eventBus.$on('sync_data',function(){
 			self.$emit('input',self.editor.getData())
 		})
+	},
+	watch:{
+		value:function(v){
+			this.editor.setData(this.value)
+			this.editor.checkDirty()
+		}
 	},
 	mounted:function () {
 		var self=this
@@ -114,7 +120,7 @@ Vue.component('ckeditor',{
 		ex.assign(config,self.config)
 		// 4.5.10   4.6.2   ///static/lib/ckeditor4.6.2.js
 		//
-		ex.load_js('https://cdn.bootcss.com/ckeditor/4.6.2/ckeditor.js',function(){
+		//ex.load_js('https://cdn.bootcss.com/ckeditor/4.6.2/ckeditor.js',function(){
 			//CKEDITOR.timestamp='GABCDFDGff'
 			//self.input.value=self.value
 
@@ -137,7 +143,7 @@ Vue.component('ckeditor',{
 			//		is_changed=false
 			//	}
 			//},3000)
-		})
+		//})
 
 	},
 	//events:{
@@ -145,8 +151,13 @@ Vue.component('ckeditor',{
 	//		this.model=this.editor.getData()
 	//	}
 	//}
-})
+}
 
+Vue.component('ckeditor',function(resolve,reject){
+	ex.load_js('https://cdn.bootcss.com/ckeditor/4.6.2/ckeditor.js',function(){
+		resolve(ckeditor)
+	})
+})
 
 var edit_level = {
 	// Define changes to default configuration here.

@@ -14,6 +14,55 @@ import hashlib
 import re
 from django.views.decorators.csrf import csrf_exempt
 
+class GeneralUpload(object):
+    def recieve(self,request):
+        self.request=request
+        path = self.getPath()
+        try:
+            par_path= os.path.join(settings.MEDIA_ROOT,path)
+            os.makedirs(par_path)
+        except os.error:
+            pass   
+        
+        file_dict = request.FILES
+        for name, fl in file_dict.items():
+            catch = io.BytesIO()
+            m = hashlib.md5()        
+            for chunk in fl.chunks():
+                catch.write(chunk) 
+                m.update(chunk)    
+                
+            catch.flush()
+             
+        
+    
+    def getPath(self):
+        path = self.request.GET.get('path','general_upload')
+        folder = self.request.GET.get('folder')
+        today = datetime.today().date()
+        if folder=='month':
+            path = os.path .join(path,today.strftime('%Y_%m'))
+        elif folder =='date':
+            path = os.path.join(path,today.strftime('%Y_%m_%d'))
+        return path
+    
+    def getFileName(self,file_data):
+        name_after = self.request.GET.get('name_after')
+        m = hashlib.md5() 
+        m.update(file_data)    
+        mid_name = m.hexdigest()
+        if name_after=='sufix_old':
+            
+            pass
+    
+    
+    
+
+        
+    
+    
+    
+
 try:
     general_upload= os.path.join(settings.MEDIA_ROOT,'general_upload')
     os.makedirs(general_upload)

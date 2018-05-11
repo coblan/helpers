@@ -2,11 +2,12 @@
 var ajax_table={
     props:['tab_head','par_row'],//['heads','row_filters','kw'],
     data:function(){
-        var heads_ctx = this.tab_head.heads_ctx
+        var heads_ctx = this.tab_head.table_ctx
         return {
             heads:heads_ctx.heads,
             row_filters:heads_ctx.row_filters,
             row_sort:heads_ctx.row_sort,
+            director_name:heads_ctx.director_name,
 
             rows:[],
             row_pages:{},
@@ -137,13 +138,13 @@ Vue.component('com_tab_table',ajax_table)
 var get_data={
     get_rows:function(callback,row,kws,search_args){
         var relat_field = kws.relat_field
-        var model_name = kws.model_name
+        var director_name = kws.director_name
 
         var self=this
         var relat_pk = row[kws.relat_field]
         var relat_field = kws.relat_field
         search_args[relat_field] = relat_pk
-        var post_data=[{fun:'get_rows',search_args:search_args,model_name:model_name}]
+        var post_data=[{fun:'get_rows',search_args:search_args,director_name:director_name}]
         cfg.show_load()
         $.post('/d/ajax',JSON.stringify(post_data),function(resp){
             cfg.hide_load()

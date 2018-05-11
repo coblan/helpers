@@ -3,8 +3,12 @@
 * */
 import {com_pop_field} from  './com_pop_fields'
 
-export  function pop_fields_layer (row,heads,ops,extra_mixins,callback){
+export  function pop_fields_layer (row,fields_ctx,callback){
     // row,head ->//model_name,relat_field
+
+    var heads = fields_ctx.heads
+    var ops = fields_ctx.ops
+    var extra_mixins=fields_ctx.extra_mixins || []
 
     var com_id = md5(extra_mixins)
     if(! window['_vue_com_'+com_id]){

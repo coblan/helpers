@@ -1,9 +1,9 @@
 
 /*
-options:{
-    key:value
-}
-* */
+ options:{
+ key:value
+ }
+ * */
 var mapper = {
     props:['rowData','field','index'],
     template:`<span v-text="show_data"></span>`,
@@ -27,11 +27,12 @@ var mapper = {
                 var value = this.rowData[this.field]
                 var head  = ex.findone(this.table_par.heads,{name:this.field})
                 var options = head.options
-                return options[value]
+                var opt = ex.findone(options,{value:value})
+                return opt.label
             }
 
         }
     }
 }
 
-Vue.component('com-table-mapper',mapper)
+Vue.component('com-table-array-option-mapper',mapper)

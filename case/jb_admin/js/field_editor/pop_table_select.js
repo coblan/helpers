@@ -1,9 +1,8 @@
 var pop_table_select =  {
     props:['row','head'],
     template:`<div>
-        <span v-if='head.readonly' v-text='label'></span>
         <span  v-text="label"></span>
-        <span class="clickable" @click="open_win"><i class="fa fa-search"></i></span>
+        <span v-if="!head.readonly" class="clickable" @click="open_win"><i class="fa fa-search"></i></span>
     </div>`,
     computed:{
         label:function(){

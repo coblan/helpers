@@ -12,6 +12,7 @@ from django.db import models
 import math
 import time
 from django.conf import settings
+from helpers.director.base_data import director
 #import pinyin
 #from forms import MobilePageForm
 
@@ -345,10 +346,19 @@ class ModelTable(object):
         row_filter={}
         for k in cls.filters.names:
             arg = kw.pop(k,None)
-            if arg:
+            if arg is not None:
                 row_filter[k]=arg
         return cls(page,row_sort,row_filter,q,user,perpage=perpage,**kw)
-        
+    
+    @classmethod
+    def get_director_name(cls):
+        director_name = ''
+        for k,v in director.items():
+            if v==cls: # self.__class__:
+                director_name=k
+                break
+        return director_name
+    
     def get_context(self):
         ls=[]
         search_head = self.row_search.get_context()
@@ -358,6 +368,9 @@ class ModelTable(object):
             ls.append( search_head)
         if row_filters:
             ls.extend(row_filters)
+        
+        director_name =self.get_director_name()
+        
         return {
             'heads':self.get_heads(),
             'rows': self.get_rows(),
@@ -365,7 +378,8 @@ class ModelTable(object):
             'row_sort':self.row_sort.get_context(),
             'row_filters':ls,
             #'search_tip':self.row_search.get_context(),
-            'model':model_to_name(self.model),
+            'director_name':director_name,
+            'model_name':model_to_name(self.model),
             'ops' : self.get_operation()
         }
     
@@ -388,7 +402,7 @@ class ModelTable(object):
             'row_sort':self.row_sort.get_context(),
             'row_filters': ls , #self.row_filter.get_context(),
             #'search_tip':self.row_search.get_context(),
-            'model':model_to_name(self.model),
+            'director_name': self.get_director_name(),#model_to_name(self.model),
             'ops' : self.get_operation()
         }        
     
@@ -419,6 +433,7 @@ class ModelTable(object):
         """
         ls = self.permited_fields()   
         heads = model_to_head(self.model,include=ls)
+        
         heads = self.fields_sort_heads(heads)
         heads=[self.fields_map_head(head) for head in heads]
         heads= self.make_pop_edit_field(heads)
@@ -427,14 +442,19 @@ class ModelTable(object):
         return heads
     
     def make_pop_edit_field(self,heads):
+        """
+        确定弹出框 列
+        """
         if self.pop_edit_field:
             for head in heads:
                 if head['name']==self.pop_edit_field:
-                    model_form = model_dc[self.model].get('fields')
+                    director_name = self.get_director_name()
+                    #model_form = model_dc[self.model].get('fields')
+                    model_form = director.get(director_name+'.edit')
                     form_obj = model_form(crt_user=self.crt_user)
                     #head['name'] ==self.pop_edit_field
                     head['editor'] = 'com-table-pop-fields'
-                    head['fields_heads']=form_obj.get_heads()
+                    head['fields_ctx']=form_obj.get_head_context()
                     head['get_row'] = {
                         #'fun':'use_table_row'
                         "fun":'get_table_row'
@@ -484,9 +504,11 @@ class ModelTable(object):
         """
         query=self.get_query()
         out=[]
+        director_name = self.get_director_name()
         for inst in query:
 
             dc= to_dict(inst, include=self.permited_fields(),filt_attr=self.dict_row( inst))
+            dc['_director_name'] = director_name+'.edit'
             out.append(dc)
         return out
     
@@ -514,10 +536,16 @@ class ModelTable(object):
         return query.order_by('-pk')
     
     def get_operation(self):
-        if not model_dc.get(self.model) or not model_dc.get(self.model).get('fields'):
+        director_name = self.get_director_name()
+        #model_form = model_dc[self.model].get('fields')
+        fieldCls = director.get(director_name+'.edit')     
+        if not fieldCls:
             return []
+        #if not model_dc.get(self.model) or not model_dc.get(self.model).get('fields'):
+            #return []
         #model_name =model_to_name(self.model)
-        fieldCls=model_dc[self.model].get('fields')
+           
+        #fieldCls=model_dc[self.model].get('fields')
         fieldobj=fieldCls(crt_user=self.crt_user)
         return [{'name':'add_new',
                  'editor':'com-op-a',

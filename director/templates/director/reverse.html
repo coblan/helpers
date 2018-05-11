@@ -31,6 +31,8 @@
     delset={{ delset | jsonify | default:'[]' }}
     save_step={{ save_step | jsonify | default:'[]' }}
 
+    model_name='{{ model_name }}'
+    director_name = '{{ director_name }}'
     app='{{ app }}'
     {% if app  %}
         ajax_url="{% url 'ajax_url' app=app %}"
@@ -44,6 +46,7 @@
 
     table_fun_config= {{ table_fun_config | jsonify }}
 
+    {% comment %}
         intro_info={
                 template: '{{ template }}',
                 root_page:'{{ root_page }}',
@@ -84,6 +87,8 @@
     {% if intro_info.app  %}
         intro_info.ajax_url="{% url 'ajax_url' app=app %}"
      {% endif %}
+
+    {% endcomment %}
 
 
 </script>

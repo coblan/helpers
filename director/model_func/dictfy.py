@@ -70,16 +70,17 @@ def sim_dict(instance,filt_attr=None,include=None,exclude=None):
            #isinstance(field,(models.ManyToManyRel,models.ManyToOneRel)):
             continue
         else:
-            proxy_cls=field_map.get('%s.%s'%(model_path,field.name))
-            if not proxy_cls:
-                proxy_cls = field_map.get(field.__class__)
-            if proxy_cls:
-                mapper = proxy_cls()
-                out[field.name] = mapper.to_dict(instance,field.name)
+            mapper_cls=field_map.get('%s.%s'%(model_path,field.name))
+            if not mapper_cls:
+                mapper_cls = field_map.get(field.__class__)
+                
+            if mapper_cls:
+                mapper = mapper_cls()
+                out.update( mapper.to_dict(instance,field.name) )
                 if '_%s_label'%field.name in out:
                     continue
-                if hasattr(mapper,'get_label'):
-                    out['_%s_label'%field.name]=mapper.get_label(instance,field.name)
+                #if hasattr(mapper,'get_label'):
+                    #out['_%s_label'%field.name]=mapper.get_label(instance,field.name)
                 if isinstance(out[field.name],list):
                     # 如果遇到 manytomany的情况，是一个list
                     out['_%s_label'%field.name]=[unicode(x) for x in out[field.name]]
@@ -296,6 +297,11 @@ def form_to_head(form,include=None):
             #dc['editor']='tow_col'
         # elif v.__class__==forms.models.ModelChoiceField and \
         
+        model_field = form._meta.model._meta.get_field(k)
+        if model_field.__class__ in field_map:
+            mapper=field_map[model_field.__class__]
+            if hasattr(mapper,'dict_field_head'):
+                dc.update( mapper().dict_field_head(dc) )
         out.append(dc)
     return out
 
@@ -312,6 +318,12 @@ def model_to_head(model,include=[],exclude=[]):
             dc= {'name':field.name,'label':_(field.verbose_name)}
             if isinstance(field,models.ForeignKey):
                 dc['editor']='com-table-label-shower'
+            
+            if field.__class__ in field_map:
+                mapper = field_map.get(field.__class__)
+                if hasattr(mapper,'dict_table_head'):
+                    dc.update(mapper().dict_table_head(dc))
+                
             out.append(dc)
     if include:
         out=[x for x in out if x.get('name') in include]

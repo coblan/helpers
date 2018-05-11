@@ -15,7 +15,8 @@ var mix_fields_data ={
     },
     methods:{
         on_operation:function(op){
-            this.op_funs[op.name](op.kws)
+            var fun_name = op.fun || op.name
+            this.op_funs[fun_name](op.kws)
         },
         get_data:function(){
             this.data_getter(this)
@@ -39,6 +40,10 @@ var mix_fields_data ={
         },
         save:function () {
             var self =this;
+
+            this.setErrors({})
+            eventBus.$emit('sync_data')
+
             if(self.before_save() == 'break'){
                 return
             }
@@ -57,8 +62,6 @@ var mix_fields_data ={
             })
         },
         before_save:function(){
-            this.setErrors({})
-            eventBus.$emit('sync_data')
             return 'continue'
         },
         afterSave:function(resp){

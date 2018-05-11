@@ -13,6 +13,7 @@ import base64
 from django.db import models
 from ..access.permit import ModelPermit
 from ..models import LogModel
+from helpers.director.base_data import director
 
 #def save_row(row,user,request):
     #for k in row: # convert model instance to pk for normal validation
@@ -76,6 +77,7 @@ class ModelFields(forms.ModelForm):
              当get 时，dc是前端传来的url参数，排除pk后的额外的字典
         """
         #dc = clean_dict(dc, self._meta.model)
+        dc = self._clean_dict(dc)
         dc = self.clean_dict(dc)
         if not crt_user:
             self.crt_user=dc.get('crt_user')
@@ -114,23 +116,43 @@ class ModelFields(forms.ModelForm):
             
         self.pop_fields()
         self.init_value()
-    
-    def clean_dict(self,dc):
+        
+    def _clean_dict(self,dc):
         """利用field_map字典，查找前端传来的dc中，某个字段的转换方式"""
         model = self.Meta.model
         model_name = model_to_name(model)
         for k,v in dc.items():
             if not k.startswith('_'):
+                all_field_names =[f.name for f in model._meta.get_fields()]
+                if k in all_field_names:
+                    field = model._meta.get_field(k)
+                    if field_map.get(field.__class__):
+                        mapper_cls = field_map.get(field.__class__)
+                        if hasattr(mapper_cls,'clean_field'):
+                            dc[k] =  mapper_cls().clean_field(dc,k)
+                        
                 field_path = model_name+'.'+k
                 if field_map.get(field_path):
                     map_cls = field_map[field_path]
                     field = model._meta.get_fields()
-                    dc[k]=map_cls().from_dict(v,model._meta.get_field(k))         
+                    dc[k]=map_cls().clean_field(dc,k) 
+        return dc
+    
+    def clean_dict(self,dc):    
         return dc
     
     def custom_permit(self):
         self.permit=ModelPermit(self.Meta.model,self.crt_user,nolimit=self.nolimit)
-        
+    
+    @classmethod
+    def get_director_name(cls):
+        director_name = ''
+        for k,v in director.items():
+            if v==cls:
+                director_name=k
+                break
+        return director_name    
+    
     def get_context(self):
         """
         """
@@ -138,6 +160,7 @@ class ModelFields(forms.ModelForm):
             'heads':self.get_heads(),
             'row': self.get_row(),
             #'permit':self.get_permit(),
+            'director_name':self.get_director_name(),
             'ops':self.get_operations(),
         } 
     
@@ -145,7 +168,8 @@ class ModelFields(forms.ModelForm):
         return {
             'heads':self.get_heads(),
             'ops':self.get_operations(),
-            'model_name':model_to_name(self._meta.model),
+            'director_name':self.get_director_name(),
+            #'model_name':model_to_name(self._meta.model),
             'extra_mixins':self.extra_mixins
         }         
     
@@ -269,6 +293,7 @@ class ModelFields(forms.ModelForm):
                 if field.name in ls and field.name not in self._meta.exclude and\
                    field.name not in row:
                     row[field.name]=getattr(self.instance,field.name)
+        row['_director_name']=self.get_director_name()
         return row
 
     def dict_row(self,inst):
@@ -352,7 +377,7 @@ class ModelFields(forms.ModelForm):
  
     
     def del_form(self):
-        if self.permit.can_del():
+        if self.permit.can_del() and self.instance.pk:
             self.instance.delete()
         else:
             raise PermissionDenied('No permission to delete %s'%str(self.instance))

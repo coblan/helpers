@@ -99,7 +99,7 @@ export var field_base={
             //},
             template: `<div>
             <span v-if='head.readonly' v-text='row[head.name]'></span>
-            <textarea v-else class="form-control input-sm" rows="3" :id="'id_'+head.name" v-model="row[head.name]" :placeholder="head.placeholder" :readonly='head.readonly'></textarea>
+            <textarea :style="head.style" v-else :maxlength="head.maxlength" class="form-control input-sm" rows="3" :id="'id_'+head.name" v-model="row[head.name]" :placeholder="head.placeholder" :readonly='head.readonly'></textarea>
             </div>`
         },
         color:{
@@ -161,7 +161,10 @@ export var field_base={
         sim_select:{
             props:['row','head'],
             data:function(){
-                var inn_config={}
+                var inn_config={
+                    //orgin_order:true,
+                    order:false
+                }
                 if(this.head.config){
                     ex.assign(inn_config,this.head.config)
                 }
@@ -192,10 +195,10 @@ export var field_base={
                     }
                 },
                 orderBy:function(array,key){
-                    if(this.head.orgin_order || this.cfg.orgin_order){
-                        return array
-                    }else{
+                    if(this.head.order || this.cfg.order){
                         return order_by_key(array,key)
+                    }else{
+                        return array
                     }
 
                 }
@@ -322,8 +325,8 @@ export var field_base={
         },
         richtext:{
             props:['row','head'],
-            template:`<div><span v-if='head.readonly' v-text='row[head.name]'></span>
-            			<ckeditor  v-model="row[head.name]" :id="'id_'+head.name"></ckeditor>
+            template:`<div style="position: relative"><span v-if='head.readonly' v-text='row[head.name]'></span>
+            			<ckeditor :style="head.style" v-model="row[head.name]" :id="'id_'+head.name" :config="head.config"></ckeditor>
                        </div>`,
         },
 
