@@ -110,9 +110,11 @@ class DatetimeProc(object):
     def to_dict(self,inst,name):
         value = getattr(inst,name,None)
         if value:
-            return localtime(value).strftime('%Y-%m-%d %H:%M:%S')
+            return {
+                name:localtime(value).strftime('%Y-%m-%d %H:%M:%S')
+                }
         else:
-            return ''
+            return {}
     
     def from_dict(self,value,field):
         """
@@ -124,7 +126,9 @@ class ForeignProc(object):
     def to_dict(self,inst,name):
         foreign=getattr(inst,name,None)
         if foreign:
-            return foreign.pk
+            return {name:foreign.pk}
+        else:
+            return {}
     
     def get_label(self,inst,name):
         foreign=getattr(inst,name,None)
@@ -143,13 +147,14 @@ class ForeignProc(object):
 
 class ManyProc(object):
     def to_dict(self,inst,name):
-        if not inst.pk:
-            return []
-        else:
-            out =[]
+        out =[]
+        if inst.pk:
             for item in getattr(getattr(inst,name),'all')():
                 out.append(item.pk)
-            return out
+        return {
+            name:out
+            }
+
     
     def from_dict(self,value,field):
         """
@@ -161,7 +166,10 @@ class OneProc(object):
     def to_dict(self,inst,name):
         foreign=getattr(inst,name,None)
         if foreign:
-            return foreign.pk 
+            return {name: foreign.pk }
+        else:
+            return {}
+        
     def from_dict(self,value,field):
         """may need test"""
         if isinstance(value,models.Model):
@@ -180,9 +188,9 @@ class DateProc(object):
     def to_dict(self,inst,name):
         date=getattr(inst,name)
         if date:
-            return date.isoformat()
+            return {name:date.isoformat()}
         else:
-            return ""
+            return {}
     def from_dict(self,value,field):
         """may need test"""
         return value     
@@ -190,7 +198,7 @@ class DateProc(object):
 class DecimalProc(object):
     def to_dict(self,inst,name):
         data = getattr(inst,name)
-        return unicode(data)
+        return {name:unicode(data)}
     
     def from_dict(self,value,field):
         return float(value)
