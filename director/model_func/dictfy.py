@@ -81,7 +81,7 @@ def sim_dict(instance,filt_attr=None,include=None,exclude=None):
                     continue
                 #if hasattr(mapper,'get_label'):
                     #out['_%s_label'%field.name]=mapper.get_label(instance,field.name)
-                if isinstance(out[field.name],list):
+                if isinstance(out.get(field.name),list):
                     # 如果遇到 manytomany的情况，是一个list
                     out['_%s_label'%field.name]=[unicode(x) for x in out[field.name]]
                 else:

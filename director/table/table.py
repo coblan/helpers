@@ -427,16 +427,22 @@ class ModelTable(object):
             return [x for x in ls if x not in self.exclude]
         return ls
     
+    def getExtraHead(self):
+        return []
+    
     def get_heads(self):
         """
         return:[{"name": "name", "label": "\u59d3\u540d"}, {"sortable": true, "name": "age", "label": "\u5e74\u9f84"}]
         """
         ls = self.permited_fields()   
         heads = model_to_head(self.model,include=ls)
-        
-        heads = self.fields_sort_heads(heads)
         heads=[self.fields_map_head(head) for head in heads]
+        
+        heads.extend(self.getExtraHead())
+        heads = self.fields_sort_heads(heads)   
+        
         heads= self.make_pop_edit_field(heads)
+              
         heads = [self.dict_head(head) for head in heads]
         
         return heads
@@ -529,9 +535,13 @@ class ModelTable(object):
     
         query=self.row_search.get_query(query)
         query = self.row_sort.get_query(query)
+        self.statistics(query)
         query = self.pagenum.get_query(query)  
         return query
- 
+    
+    def statistics(self,query):
+        pass
+    
     def inn_filter(self,query):
         return query.order_by('-pk')
     

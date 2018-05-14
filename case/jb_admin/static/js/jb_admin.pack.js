@@ -1325,7 +1325,8 @@ var mix_v_table_adapter = {
                 width: 60,
                 titleAlign: 'center',
                 columnAlign: 'center',
-                type: 'selection'
+                type: 'selection',
+                isFrozen: true
             };
             var cols = [first_col];
             var converted_heads = ex.map(this.heads, function (head) {
