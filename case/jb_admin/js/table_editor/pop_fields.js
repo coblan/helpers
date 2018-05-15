@@ -70,10 +70,10 @@ var get_row={
         callback(cache_row)
     },
     get_with_relat_field:function(callback,row,kws){
-        var model_name=kws.model_name
+        var director_name=kws.director_name
         var relat_field = kws.relat_field
 
-        var dc ={fun:'get_row',model_name:model_name}
+        var dc ={fun:'get_row',director_name:director_name}
         dc[relat_field] = row[relat_field]
         var post_data=[dc]
         cfg.show_load()

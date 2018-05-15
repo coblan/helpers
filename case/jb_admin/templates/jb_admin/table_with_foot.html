@@ -1,5 +1,5 @@
 {% extends "jb_admin/table.html" %}
-
+{% load jsonify %}
 {% block extra_head %}
 
 <style>
@@ -24,11 +24,24 @@
 
 <script>
 
-    footer = ['-','tournamentzh','matchid','matchdate','matchscore','team_zh','statuscode','nums_stake',
-        'nums_account','sum_betamount','sum_betoutcome','sum_profit']
+
+//    footer = ['-','tournamentzh','matchid','matchdate','matchscore','team_zh','statuscode','nums_stake',
+//        'nums_account','sum_betamount','sum_betoutcome','sum_profit']
+size={
+    height:window.innerHeight -80 -150
+}
+footer={{ footer |jsonify }}
+
+$(function(){
+    $(window).resize(function() {
+        size.height = window.innerHeight -80 -150
+    });
+})
+
     this_logic = {
         data:{
-            footer:[footer],
+            footer:footer,
+            size:size
         },
         methods:{
             is_sort:function(head){
@@ -56,8 +69,13 @@
 
             },
             getSum:function(param){
-                return footer
-            }
+                return this.footer
+            },
+            on_perpage_change:function(perpage){
+                this.search_args._perpage=perpage
+                this.search_args._page=1
+                this.getRows()
+            },
         },
         computed:{
 
@@ -116,7 +134,7 @@
         :data="rows"
         border
         show-summary
-        height="400"
+          :max-height="size.height"
         :fit="false"
           :stripe="true"
           size="mini"
