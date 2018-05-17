@@ -9,7 +9,7 @@ from django.utils.timezone import datetime
 import json
 import hashlib
 import io
-import urlparse
+from urllib.parse import urljoin
 import hashlib
 import re
 from django.views.decorators.csrf import csrf_exempt
@@ -100,7 +100,7 @@ def general(request):
             with open(file_path,'wb') as general_file:
                 general_file.write(catch.getvalue())
                 
-        file_url=urlparse.urljoin(settings.MEDIA_URL, 'general_upload/{par_dir}/{file_name}'.format(par_dir=par_dir,file_name=file_name))
+        file_url=urljoin(settings.MEDIA_URL, 'general_upload/{par_dir}/{file_name}'.format(par_dir=par_dir,file_name=file_name))
         file_url_list.append(file_url)
     
     return HttpResponse(json.dumps(file_url_list),content_type="application/json")

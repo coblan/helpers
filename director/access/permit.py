@@ -96,7 +96,7 @@ class ModelPermit(object):
     """
     def __init__(self,model,user=None,nolimit=False):
         self.user=user
-        if isinstance(model,(str,unicode)):
+        if isinstance(model,str):
             model=apps.get_model(model)
         elif isinstance(model,models.Model):
             model=model.__class__

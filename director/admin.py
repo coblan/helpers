@@ -23,11 +23,11 @@ from .model_func.dictfy import to_dict,model_to_name
 
 from django.utils.translation import ugettext as _
 from .access.permit import permit_to_text
-import ajax
+from . import  ajax
 from .fields.delpage import DelPage
 from .log.logpage import LogPage
 from .base_data import page_dc
-import admin_kv
+from . import  admin_kv
 from .model_func.field_procs import dateproc,datetimeproc,decimalproc,foreignproc,manyproc,oneproc,charproc,intproc
 page_dc.update({
     'del_rows':DelPage,

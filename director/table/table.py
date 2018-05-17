@@ -515,7 +515,7 @@ class ModelTable(object):
     
     def get_query(self):
         if not self.crt_user.is_superuser and not self.permit.readable_fields():
-            raise PermissionDenied,'no permission to browse %s'%self.model._meta.model_name
+            raise PermissionDenied('no permission to browse %s'%self.model._meta.model_name)
         
         query = self.inn_filter(self.model.objects.all())
         query=self.row_filter.get_query(query)

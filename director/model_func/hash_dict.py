@@ -1,6 +1,7 @@
 # encoding:utf-8
 from __future__ import unicode_literals
-from md5 import md5
+from hashlib import md5
+#from sha import md5
 from base64 import b64encode
 import json
 

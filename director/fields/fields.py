@@ -346,7 +346,7 @@ class ModelFields(forms.ModelForm):
                 if data in self.get_readonly_fields():
                     #self.cleaned_data.pop(data)
                     #print("Can't change {data} of {model},I pop it".format(data=data,model=model_str))
-                    raise PermissionDenied,"Can't change {data}".format(data=data)
+                    raise PermissionDenied("Can't change {data}".format(data=data))
         
         op=None
         if self.changed_data:

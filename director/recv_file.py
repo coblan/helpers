@@ -9,7 +9,7 @@ from django.utils.timezone import datetime
 import json
 import hashlib
 import io
-import urlparse
+from urllib.parse import urljoin
 import hashlib
 import re
 from django.views.decorators.csrf import csrf_exempt
@@ -75,7 +75,7 @@ class BasicReciever(object):
         else:
             return ''
     def getFileUrl(self,file_name):
-        file_url=urlparse.urljoin(settings.MEDIA_URL, 'general_upload/{file_name}'.format(file_name=file_name))
+        file_url=urljoin(settings.MEDIA_URL, 'general_upload/{file_name}'.format(file_name=file_name))
         return  file_url
 
 class GeneralUpload(BasicReciever):
@@ -110,7 +110,7 @@ class GeneralUpload(BasicReciever):
     
     def getFileUrl(self,file_path):
         file_url = file_path.replace('\\', '/')
-        absolute_file_url=urlparse.urljoin(settings.MEDIA_URL, file_url)
+        absolute_file_url=urljoin(settings.MEDIA_URL, file_url)
         return  absolute_file_url    
     
     def adapt_name(fl_name):

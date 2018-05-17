@@ -82,7 +82,7 @@ class RouterAjax(object):
         elif self.request.method=='POST':
             self.commands = json.loads(self.request.body)
         else:
-            raise UserWarning,'port can not parse request url and body'
+            raise UserWarning('port can not parse request url and body')
                     
         if isinstance(self.commands,list):
             return self.run_list()
@@ -156,7 +156,7 @@ class RouterAjax(object):
             if user:
                 kw['user']=user
             else:
-                raise UserWarning,'function need user ,but you are not login'
+                raise UserWarning('function need user ,but you are not login')
                 
         return func(**kw)    
     

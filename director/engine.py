@@ -80,7 +80,7 @@ class BaseEngine(object):
         if request.user.is_anonymous(): 
             return False
         elif not request.user.is_active or not request.user.is_staff:
-            raise PermissionDenied,'you have no permit to access this system'
+            raise PermissionDenied('you have no permit to access this system')
         else:
             return True
     

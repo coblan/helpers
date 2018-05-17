@@ -254,7 +254,7 @@ def from_dict(dc,model=None,pre_proc=None):
     if model is None and '_class' in dc:
         model=apps.get_model(dc['_class'])
     if not model:
-        raise UserWarning,'when constuct model object, but no model set'
+        raise UserWarning('when constuct model object, but no model set')
     if pre_proc:
         processed=pre_proc(dc,model)
     for k in processed:
