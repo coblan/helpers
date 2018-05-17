@@ -235,7 +235,7 @@ class ModelFields(forms.ModelForm):
         Note:Only convert Meta.fields ,not All fields
         """
         if not self.can_access():
-            raise PermissionDenied,'you have no Permission access %s'%self.instance._meta.model_name
+            raise PermissionDenied('you have no Permission access %s'%self.instance._meta.model_name)
         #if self._meta.fields:
             #include = [x for x in self._meta.fields if x in self.fields]
         #else:
@@ -282,7 +282,7 @@ class ModelFields(forms.ModelForm):
                     #raise PermissionDenied,'you have no Permission changed %s'%self.instance._meta.model_name 
             #else:
             if not self.can_access():
-                raise PermissionDenied,'you have no Permission access %s'%self.instance._meta.model_name  
+                raise PermissionDenied('you have no Permission access %s'%self.instance._meta.model_name  )
             # table_perm = self.instance._meta.app_label+'.%s_'%op+self.instance._meta.model_name
             # if not self.crt_user.has_perm(table_perm):
                 # raise PermissionDenied,'you have no Permission access %s'%self.instance._meta.model_name 
