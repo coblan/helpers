@@ -9,18 +9,21 @@ var ajax_fields={
       }
     },
     mixins:[mix_fields_data,mix_nice_validator],
-    template:`<div>
+    template:`<div class="flex-v">
     <!--<div style="margin: 5px 1em;">-->
         <!--<button type="button" class="btn btn-default" title="保存" @click="save()"><i class="fa fa-save"></i><span>保存</span></button>-->
     <!--</div>-->
 
     <span class="oprations">
-            <component style="padding: 0.5em;" v-for="op in ops" :is="op.editor" :ref="'op_'+op.name" :head="op" @operation="on_operation(op.name)"></component>
+            <component style="padding: 0.5em;" v-for="op in ops" :is="op.editor" :ref="'op_'+op.name" :head="op" @operation="on_operation(op)"></component>
     </span>
 
-    <form class='field-panel msg-hide' id="form">
-		<field  v-for='head in heads' :key="head.name" :head="head" :row='row'></field>
-	</form></div>`,
+    <div style="overflow: auto;" class="flex-grow">
+        <div class='field-panel msg-hide' id="form" >
+            <field  v-for='head in heads' :key="head.name" :head="head" :row='row'></field>
+        </div>
+    </div>
+    </div>`,
 
     //created:function(){
     //    // find head from parent table
@@ -83,9 +86,9 @@ Vue.component('com_tab_fields',ajax_fields)
 var get_data={
     get_row:function(self,callback,kws){
         //kws={model_name ,relat_field}
-        var model_name = kws.model_name
+        var director_name = kws.director_name
         var relat_field = kws.relat_field
-        var dt = {fun:'get_row',model_name:model_name}
+        var dt = {fun:'get_row',director_name:director_name}
         dt[relat_field] = self.par_row[relat_field]
         var post_data=[dt]
         cfg.show_load()
@@ -93,12 +96,15 @@ var get_data={
             cfg.hide_load()
             callback(resp.get_row)
         })
+    },
+    table_row:function(self,callback,kws){
+        callback(self.par_row)
     }
 }
 
 var after_save={
     update_or_insert:function(self,new_row,kws){
         var old_row= self.row
-        self.$emit('tab-event',{name:'update-or-insert',new_row:new_row,old_row:old_row})
+        self.$emit('tab-event',{name:'update_or_insert',new_row:new_row,old_row:old_row})
     }
 }

@@ -1,41 +1,41 @@
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
-
+/******/
 /******/ 	// The require function
 /******/ 	function __webpack_require__(moduleId) {
-
+/******/
 /******/ 		// Check if module is in cache
 /******/ 		if(installedModules[moduleId])
 /******/ 			return installedModules[moduleId].exports;
-
+/******/
 /******/ 		// Create a new module (and put it into the cache)
 /******/ 		var module = installedModules[moduleId] = {
 /******/ 			i: moduleId,
 /******/ 			l: false,
 /******/ 			exports: {}
 /******/ 		};
-
+/******/
 /******/ 		// Execute the module function
 /******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
-
+/******/
 /******/ 		// Flag the module as loaded
 /******/ 		module.l = true;
-
+/******/
 /******/ 		// Return the exports of the module
 /******/ 		return module.exports;
 /******/ 	}
-
-
+/******/
+/******/
 /******/ 	// expose the modules object (__webpack_modules__)
 /******/ 	__webpack_require__.m = modules;
-
+/******/
 /******/ 	// expose the module cache
 /******/ 	__webpack_require__.c = installedModules;
-
+/******/
 /******/ 	// identity function for calling harmony imports with the correct context
 /******/ 	__webpack_require__.i = function(value) { return value; };
-
+/******/
 /******/ 	// define getter function for harmony exports
 /******/ 	__webpack_require__.d = function(exports, name, getter) {
 /******/ 		if(!__webpack_require__.o(exports, name)) {
@@ -46,7 +46,7 @@
 /******/ 			});
 /******/ 		}
 /******/ 	};
-
+/******/
 /******/ 	// getDefaultExport function for compatibility with non-harmony modules
 /******/ 	__webpack_require__.n = function(module) {
 /******/ 		var getter = module && module.__esModule ?
@@ -55,13 +55,13 @@
 /******/ 		__webpack_require__.d(getter, 'a', getter);
 /******/ 		return getter;
 /******/ 	};
-
+/******/
 /******/ 	// Object.prototype.hasOwnProperty.call
 /******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
-
+/******/
 /******/ 	// __webpack_public_path__
 /******/ 	__webpack_require__.p = "";
-
+/******/
 /******/ 	// Load entry module and return exports
 /******/ 	return __webpack_require__(__webpack_require__.s = 79);
 /******/ })
@@ -139,7 +139,7 @@ var stylesInDom = {},
 		};
 	},
 	isOldIE = memoize(function() {
-		return /msie [6-9]\b/.test(window.navigator.userAgent.toLowerCase());
+		return /msie [6-9]\b/.test(self.navigator.userAgent.toLowerCase());
 	}),
 	getHeadElement = memoize(function () {
 		return document.head || document.getElementsByTagName("head")[0];
@@ -384,6 +384,9 @@ function updateLink(linkElement, obj) {
 
 window.cfg = {
     showMsg: function showMsg(msg) {
+        alert(msg);
+    },
+    warning: function warning(msg) {
         alert(msg);
     },
     tr: {
@@ -746,8 +749,8 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!./../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!./../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./index.scss", function() {
-			var newContent = require("!!./../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!./../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./index.scss");
+		module.hot.accept("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./index.scss", function() {
+			var newContent = require("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./index.scss");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -772,8 +775,8 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!./../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!./../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./tab_group.scss", function() {
-			var newContent = require("!!./../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!./../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./tab_group.scss");
+		module.hot.accept("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./tab_group.scss", function() {
+			var newContent = require("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./tab_group.scss");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -970,9 +973,10 @@ var ck_complex = {
 	autoGrow_minHeight: 200,
 	autoGrow_onStartup: true,
 	autoGrow_bottomSpace: 50
+	//height:800,
 };
 
-Vue.component('ckeditor', {
+var ckeditor = {
 	template: '<div class=\'ckeditor\'>\n\t\t    \t<textarea class="form-control" name="ri" ></textarea>\n\t    \t</div>',
 	props: {
 		value: {},
@@ -983,12 +987,18 @@ Vue.component('ckeditor', {
 	},
 	created: function created() {
 		var self = this;
-		if (!window.bus) {
-			window.bus = new Vue();
-		}
-		bus.$on('sync_data', function () {
+		//if(!window.bus){
+		//	window.bus=new Vue()
+		//}
+		eventBus.$on('sync_data', function () {
 			self.$emit('input', self.editor.getData());
 		});
+	},
+	watch: {
+		value: function value(v) {
+			this.editor.setData(this.value);
+			this.editor.checkDirty();
+		}
 	},
 	mounted: function mounted() {
 		var self = this;
@@ -1003,30 +1013,41 @@ Vue.component('ckeditor', {
 		ex.assign(config, self.config);
 		// 4.5.10   4.6.2   ///static/lib/ckeditor4.6.2.js
 		//
-		ex.load_js('https://cdn.bootcss.com/ckeditor/4.6.2/ckeditor.js', function () {
-			//CKEDITOR.timestamp='GABCDFDGff'
-			//self.input.value=self.value
+		//ex.load_js('https://cdn.bootcss.com/ckeditor/4.6.2/ckeditor.js',function(){
+		//CKEDITOR.timestamp='GABCDFDGff'
+		//self.input.value=self.value
 
-			var editor = CKEDITOR.replace(self.input, config);
-			editor.setData(self.value);
-			editor.checkDirty();
-			self.editor = editor;
+		var editor = CKEDITOR.replace(self.input, config);
+		editor.setData(self.value);
+		editor.checkDirty();
+		self.editor = editor;
 
-			//var is_changed=false
-			//editor.on( 'change', function( evt ) {
-			//	// getData() returns CKEditor's HTML content.
-			//	is_changed=true
-			//	//self.$emit('input',editor.getData())
-			//});
-			//
-			//setInterval(function(){
-			//	if(is_changed){
-			//		self.$emit('input',editor.getData())
-			//		is_changed=false
-			//	}
-			//},3000)
-		});
+		//var is_changed=false
+		//editor.on( 'change', function( evt ) {
+		//	// getData() returns CKEditor's HTML content.
+		//	is_changed=true
+		//	//self.$emit('input',editor.getData())
+		//});
+		//
+		//setInterval(function(){
+		//	if(is_changed){
+		//		self.$emit('input',editor.getData())
+		//		is_changed=false
+		//	}
+		//},3000)
+		//})
 	}
+	//events:{
+	//	'sync_data':function () {
+	//		this.model=this.editor.getData()
+	//	}
+	//}
+};
+
+Vue.component('ckeditor', function (resolve, reject) {
+	ex.load_js('https://cdn.bootcss.com/ckeditor/4.6.2/ckeditor.js', function () {
+		resolve(ckeditor);
+	});
 });
 
 var edit_level = {
@@ -1062,6 +1083,7 @@ var edit_level = {
 	autoGrow_minHeight: 200,
 	autoGrow_onStartup: true,
 	autoGrow_bottomSpace: 50
+	//height:800,
 };
 
 /***/ }),
@@ -1240,6 +1262,9 @@ var field_base = exports.field_base = {
         row: {
             required: true
         }
+        //kw:{
+        //    required:true
+        //},
     },
     computed: {
         //row:function(){return this.kw.row},
@@ -1320,7 +1345,7 @@ var field_base = exports.field_base = {
             //        })
             //    }
             //},
-            template: '<div>\n            <span v-if=\'head.readonly\' v-text=\'row[head.name]\'></span>\n            <textarea v-else class="form-control input-sm" rows="3" :id="\'id_\'+head.name" v-model="row[head.name]" :placeholder="head.placeholder" :readonly=\'head.readonly\'></textarea>\n            </div>'
+            template: '<div>\n            <span v-if=\'head.readonly\' v-text=\'row[head.name]\'></span>\n            <textarea :style="head.style" v-else :maxlength="head.maxlength" class="form-control input-sm" rows="3" :id="\'id_\'+head.name" v-model="row[head.name]" :placeholder="head.placeholder" :readonly=\'head.readonly\'></textarea>\n            </div>'
         },
         color: {
             props: ['name', 'row', 'kw'],
@@ -1378,7 +1403,10 @@ var field_base = exports.field_base = {
         sim_select: {
             props: ['row', 'head'],
             data: function data() {
-                var inn_config = {};
+                var inn_config = {
+                    //orgin_order:true,
+                    order: false
+                };
                 if (this.head.config) {
                     ex.assign(inn_config, this.head.config);
                 }
@@ -1404,10 +1432,10 @@ var field_base = exports.field_base = {
                     }
                 },
                 orderBy: function orderBy(array, key) {
-                    if (this.head.orgin_order || this.cfg.orgin_order) {
-                        return array;
-                    } else {
+                    if (this.head.order || this.cfg.order) {
                         return order_by_key(array, key);
+                    } else {
+                        return array;
                     }
                 }
             }
@@ -1500,13 +1528,14 @@ var field_base = exports.field_base = {
             props: ['row', 'head'],
             template: '<div><span v-if=\'head.readonly\' v-text=\'row[head.name]\'></span>\n                                <date v-else v-model="row[head.name]" :id="\'id_\'+head.name"\n                                    :placeholder="head.placeholder"></date>\n                               </div>'
         },
+
         datetime: {
             props: ['row', 'head'],
             template: '<div><span v-if=\'head.readonly\' v-text=\'row[head.name]\'></span>\n            \t\t\t<datetime  v-model="row[head.name]" :id="\'id_\'+head.name"\n                        \t:placeholder="head.placeholder"></datetime>\n                       </div>'
         },
         richtext: {
             props: ['row', 'head'],
-            template: '<div><span v-if=\'head.readonly\' v-text=\'row[head.name]\'></span>\n            \t\t\t<ckeditor  v-model="row[head.name]" :id="\'id_\'+head.name"></ckeditor>\n                       </div>'
+            template: '<div style="position: relative"><span v-if=\'head.readonly\' v-text=\'row[head.name]\'></span>\n            \t\t\t<ckeditor :style="head.style" v-model="row[head.name]" :id="\'id_\'+head.name" :config="head.config"></ckeditor>\n                       </div>'
         }
 
     }
@@ -2690,7 +2719,6 @@ var date_config_set = {
         startView: "months",
         minViewMode: "months",
         autoclose: true
-
     }
 };
 
@@ -2745,8 +2773,14 @@ Vue.component('datetime', {
     //    }
     //},
     //template:'<input type="text" class="form-control">',
-    template: "<span class=\"datetime-picker\">\n                <span class=\"cross\" @click=\"$emit('input','')\">X</span>\n                <input type=\"text\" readonly/>\n                </span>",
-    props: ['value', 'config'],
+    //template:`<span class="datetime-picker">
+    //            <span class="cross" @click="$emit('input','')">X</span>
+    //            <input type="text" readonly/>
+    //            </span>`,
+    template: " <div class=\"input-group datetime-picker\" style=\"width: 12em;\">\n                <input type=\"text\" class=\"form-control input-sm\" readonly :placeholder=\"placeholder\"/>\n                <div class=\"input-group-addon\" >\n                    <i v-if=\"! value\" @click=\"click_input()\" class=\"fa fa-calendar\" aria-hidden=\"true\"></i>\n                    <i v-else @click=\"$emit('input','')\" class=\"fa fa-calendar-times-o\" aria-hidden=\"true\"></i>\n                </div>\n                </div>",
+
+    //props:['value','config'],
+    props: ['value', 'set', 'config', 'placeholder'],
     mounted: function mounted() {
         var self = this;
         var def_conf = {
@@ -2775,12 +2809,19 @@ Vue.component('datetime', {
             }
         });
     },
-
+    methods: {
+        click_input: function click_input() {
+            this.input.focus();
+        }
+    },
     watch: {
         value: function value(n) {
             this.input.val(n);
             this.input.val(n);
         }
+        //input_value:function(n){
+        //    this.$emit('input',n)
+        //}
     }
 });
 
@@ -2798,13 +2839,15 @@ __webpack_require__(68);
 
 /*
 * config={
-*    accept:""
+*    accept:"xx.jpg",
+*     multiple:true,
+*
 * }
 * */
 
 var field_file_uploader = exports.field_file_uploader = {
-    props: ['name', 'row', 'kw'],
-    template: '<div><com-file-uploader v-model="row[name]" :config="kw.config" :readonly="kw.readonly"></com-file-uploader></div>'
+    props: ['row', 'head'],
+    template: '<div><com-file-uploader v-model="row[head.name]" :config="head.config" :readonly="head.readonly"></com-file-uploader></div>'
 };
 
 var com_file_uploader = exports.com_file_uploader = {
@@ -3165,7 +3208,7 @@ var com_select = {
     template: '<select v-model=\'search_args[head.name]\' class="form-control input-sm" >\n        <option :value="undefined" v-text=\'head.label\'></option>\n        <option :value="null" disabled >---</option>\n        <option v-for=\'option in orderBy( head.options,"label")\' :value="option.value" v-text=\'option.label\'></option>\n    </select>\n    ',
     data: function data() {
         var inn_cfg = {
-            sort: true
+            order: false
         };
         ex.assign(inn_cfg, this.config);
         return {
@@ -3179,7 +3222,7 @@ var com_select = {
     },
     methods: {
         orderBy: function orderBy(array, key) {
-            if (!this.cfg.sort) {
+            if (!this.cfg.order) {
                 return array;
             } else {
                 return array.slice().sort(function (a, b) {
@@ -3337,30 +3380,29 @@ Vue.component('sort-mark', {
             }
             return ls.join(',');
         }
-    }
-    //methods:{
+        //methods:{
 
-    //	get_status:function () {
-    //		var sorted=this.sort_str.split(',')
-    //		for(var x=0;x<sorted.length;x++){
-    //			var org_name=sorted[x]
-    //			if(org_name.startsWith('-')){
-    //				var name=org_name.slice(1)
-    //				var minus='up'
-    //			}else{
-    //				var name=org_name
-    //				var minus='down'
-    //			}
-    //			if(name==this.name){
-    //				this.index=x+1
-    //				return minus
-    //			}
-    //		}
-    //		return 'no_sort'
-    //	}
-    //}
+        //	get_status:function () {
+        //		var sorted=this.sort_str.split(',')
+        //		for(var x=0;x<sorted.length;x++){
+        //			var org_name=sorted[x]
+        //			if(org_name.startsWith('-')){
+        //				var name=org_name.slice(1)
+        //				var minus='up'
+        //			}else{
+        //				var name=org_name
+        //				var minus='down'
+        //			}
+        //			if(name==this.name){
+        //				this.index=x+1
+        //				return minus
+        //			}
+        //		}
+        //		return 'no_sort'
+        //	}
+        //}
 
-});
+    } });
 
 /***/ }),
 /* 42 */
@@ -3802,13 +3844,12 @@ Vue.component('modal', {
 			}
 			return this.show;
 		}
-	}
-	//methods:{
-	//	hide_me:function () {
-	//		this.$dispatch('sd_hide')
-	//	}
-	//}@click='hide_me()'
-});
+		//methods:{
+		//	hide_me:function () {
+		//		this.$dispatch('sd_hide')
+		//	}
+		//}@click='hide_me()'
+	} });
 
 /***/ }),
 /* 47 */
@@ -3833,7 +3874,7 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, ".error {\n  color: red; }\n\n.field-panel {\n  background-color: #F5F5F5;\n  margin: 20px;\n  padding: 20px 30px;\n  position: relative;\n  border: 1px solid #D9D9D9; }\n  .field-panel:after {\n    content: '';\n    display: block;\n    position: absolute;\n    top: 0px;\n    left: 0px;\n    bottom: 0px;\n    width: 180px;\n    border-radius: 6px;\n    background-color: #fff;\n    z-index: 0; }\n  .field-panel .form-group.field {\n    display: flex;\n    align-items: flex-start;\n    margin-bottom: 0; }\n    .field-panel .form-group.field .field_input {\n      flex-grow: 0;\n      padding: 5px 20px;\n      width: 25em; }\n      .field-panel .form-group.field .field_input .ckeditor {\n        padding: 20px; }\n    .field-panel .form-group.field:first-child .control-label {\n      border-top: 5px solid #FFF; }\n    .field-panel .form-group.field .control-label {\n      width: 150px;\n      text-align: right;\n      padding: 5px 30px;\n      z-index: 100;\n      flex-shrink: 0;\n      border-top: 1px solid #EEE; }\n  .field-panel .form-group.field .field_input ._tow-col-sel {\n    /*width:750px;*/ }\n  .field-panel .form-group.field .help_text {\n    padding: 10px;\n    color: #999;\n    font-style: italic;\n    font-size: 0.9em; }\n  .field-panel .field {\n    position: relative; }\n\n._tow-col-sel select {\n  min-height: 7em; }\n\nimg.img-uploador {\n  max-width: 100px;\n  max-height: 100px; }\n\n.req_star {\n  color: red; }\n", ""]);
+exports.push([module.i, ".error {\n  color: red; }\n\n.field-panel {\n  background-color: #F5F5F5;\n  margin: 20px;\n  padding: 20px 30px;\n  position: relative;\n  border: 1px solid #D9D9D9; }\n  .field-panel:after {\n    content: '';\n    display: block;\n    position: absolute;\n    top: 0px;\n    left: 0px;\n    bottom: 0px;\n    width: 180px;\n    border-radius: 6px;\n    background-color: #fff;\n    z-index: 0; }\n  .field-panel .form-group.field {\n    display: flex;\n    align-items: flex-start;\n    margin-bottom: 0; }\n    .field-panel .form-group.field .field_input {\n      flex-grow: 0;\n      padding: 5px 20px; }\n      .field-panel .form-group.field .field_input input {\n        max-width: 25em; }\n      .field-panel .form-group.field .field_input .ckeditor {\n        padding: 20px; }\n    .field-panel .form-group.field:first-child .control-label {\n      border-top: 5px solid #FFF; }\n    .field-panel .form-group.field .control-label {\n      width: 150px;\n      text-align: right;\n      padding: 5px 30px;\n      z-index: 100;\n      flex-shrink: 0;\n      border-top: 1px solid #EEE; }\n  .field-panel .form-group.field .field_input ._tow-col-sel {\n    /*width:750px;*/ }\n  .field-panel .form-group.field .help_text {\n    padding: 10px;\n    color: #999;\n    font-style: italic;\n    font-size: 0.9em; }\n  .field-panel .field {\n    position: relative; }\n\n._tow-col-sel select {\n  min-height: 7em; }\n\nimg.img-uploador {\n  max-width: 100px;\n  max-height: 100px; }\n\n.req_star {\n  color: red; }\n", ""]);
 
 // exports
 
@@ -4065,8 +4106,8 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!./../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!./../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./fields.scss", function() {
-			var newContent = require("!!./../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!./../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./fields.scss");
+		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./fields.scss", function() {
+			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./fields.scss");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -4091,8 +4132,8 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!./../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!./../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./file.scss", function() {
-			var newContent = require("!!./../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!./../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./file.scss");
+		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./file.scss", function() {
+			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./file.scss");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -4117,8 +4158,8 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!./../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!./../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./link.scss", function() {
-			var newContent = require("!!./../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!./../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./link.scss");
+		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./link.scss", function() {
+			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./link.scss");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -4143,8 +4184,8 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!./../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!./../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./file_uploader.scss", function() {
-			var newContent = require("!!./../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!./../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./file_uploader.scss");
+		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./file_uploader.scss", function() {
+			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./file_uploader.scss");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -4169,8 +4210,8 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!./../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!./../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./multi_chosen.scss", function() {
-			var newContent = require("!!./../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!./../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./multi_chosen.scss");
+		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./multi_chosen.scss", function() {
+			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./multi_chosen.scss");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -4195,8 +4236,8 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!./../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!./../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./table.scss", function() {
-			var newContent = require("!!./../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!./../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./table.scss");
+		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./table.scss", function() {
+			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./table.scss");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -4221,8 +4262,8 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!./../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!./../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./table_btn_group.scss", function() {
-			var newContent = require("!!./../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!./../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./table_btn_group.scss");
+		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./table_btn_group.scss", function() {
+			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./table_btn_group.scss");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -4247,8 +4288,8 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!./../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!./../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./table_filter.scss", function() {
-			var newContent = require("!!./../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!./../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./table_filter.scss");
+		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./table_filter.scss", function() {
+			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./table_filter.scss");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -4273,8 +4314,8 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!./../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!./../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./adapt.scss", function() {
-			var newContent = require("!!./../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!./../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./adapt.scss");
+		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./adapt.scss", function() {
+			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./adapt.scss");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -4299,8 +4340,8 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!./../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!./../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./aliagn.scss", function() {
-			var newContent = require("!!./../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!./../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./aliagn.scss");
+		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./aliagn.scss", function() {
+			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./aliagn.scss");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -4325,8 +4366,8 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!./../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!./../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./button.scss", function() {
-			var newContent = require("!!./../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!./../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./button.scss");
+		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./button.scss", function() {
+			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./button.scss");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -4351,8 +4392,8 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!./../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!./../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./expand_menu.scss", function() {
-			var newContent = require("!!./../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!./../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./expand_menu.scss");
+		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./expand_menu.scss", function() {
+			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./expand_menu.scss");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -4377,8 +4418,8 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!./../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!./../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./flex.scss", function() {
-			var newContent = require("!!./../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!./../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./flex.scss");
+		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./flex.scss", function() {
+			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./flex.scss");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -4403,8 +4444,8 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!./../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!./../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./text.scss", function() {
-			var newContent = require("!!./../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!./../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./text.scss");
+		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./text.scss", function() {
+			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./text.scss");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});

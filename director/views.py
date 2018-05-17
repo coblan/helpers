@@ -10,7 +10,7 @@ from . import ajax
 import urllib
 from django.apps import apps
 from helpers.func.network.ajax_router import ajax_router
-
+from .recv_file import GeneralUpload
 """
 >5>helpers/port.rst>
 总的ajax view
@@ -39,6 +39,10 @@ def ajax_views(request,app=None):
     except KeyError as e:
         rt={'status':'error','msg':'key error '+str(e) +' \n may function name error'}
         return HttpResponse(json.dumps(rt),content_type="application/json")  
+
+def general_upload(request):
+    return GeneralUpload().asView(request)
+
     
 
     

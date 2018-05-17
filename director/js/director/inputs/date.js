@@ -50,8 +50,6 @@ var date_config_set={
         startView: "months",
         minViewMode: "months",
         autoclose: true,
-
-
     },
 }
 
@@ -114,11 +112,20 @@ Vue.component('datetime',{
     //    }
     //},
     //template:'<input type="text" class="form-control">',
-    template:`<span class="datetime-picker">
-                <span class="cross" @click="$emit('input','')">X</span>
-                <input type="text" readonly/>
-                </span>`,
-    props:['value','config'],
+    //template:`<span class="datetime-picker">
+    //            <span class="cross" @click="$emit('input','')">X</span>
+    //            <input type="text" readonly/>
+    //            </span>`,
+    template:` <div class="input-group datetime-picker" style="width: 12em;">
+                <input type="text" class="form-control input-sm" readonly :placeholder="placeholder"/>
+                <div class="input-group-addon" >
+                    <i v-if="! value" @click="click_input()" class="fa fa-calendar" aria-hidden="true"></i>
+                    <i v-else @click="$emit('input','')" class="fa fa-calendar-times-o" aria-hidden="true"></i>
+                </div>
+                </div>`,
+
+    //props:['value','config'],
+    props:['value','set','config','placeholder'],
     mounted:function () {
         var self=this
         var def_conf={
@@ -148,7 +155,11 @@ Vue.component('datetime',{
 
         })
     },
-
+    methods:{
+        click_input:function(){
+            this.input.focus()
+        }
+    },
     watch:{
         value:function (n) {
             this.input.val(n)

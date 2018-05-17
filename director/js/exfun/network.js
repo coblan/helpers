@@ -8,7 +8,7 @@ export var network ={
                 self.show_msg(resp.msg)
             }
             if (resp.status && typeof resp.status == 'string' && resp.status != 'success') {
-                hide_upload(300)
+                cfg.hide_load()
                 return
             } else {
                 callback(resp)
@@ -23,7 +23,7 @@ export var network ={
                 self.show_msg(resp.msg)
             }
             if (resp.status && typeof resp.status == 'string' && resp.status != 'success') {
-                hide_upload(300) // sometime
+                cfg.hide_load() // sometime
                 return
             } else {
                 callback(resp)

@@ -1,41 +1,41 @@
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
-
+/******/
 /******/ 	// The require function
 /******/ 	function __webpack_require__(moduleId) {
-
+/******/
 /******/ 		// Check if module is in cache
 /******/ 		if(installedModules[moduleId])
 /******/ 			return installedModules[moduleId].exports;
-
+/******/
 /******/ 		// Create a new module (and put it into the cache)
 /******/ 		var module = installedModules[moduleId] = {
 /******/ 			i: moduleId,
 /******/ 			l: false,
 /******/ 			exports: {}
 /******/ 		};
-
+/******/
 /******/ 		// Execute the module function
 /******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
-
+/******/
 /******/ 		// Flag the module as loaded
 /******/ 		module.l = true;
-
+/******/
 /******/ 		// Return the exports of the module
 /******/ 		return module.exports;
 /******/ 	}
-
-
+/******/
+/******/
 /******/ 	// expose the modules object (__webpack_modules__)
 /******/ 	__webpack_require__.m = modules;
-
+/******/
 /******/ 	// expose the module cache
 /******/ 	__webpack_require__.c = installedModules;
-
+/******/
 /******/ 	// identity function for calling harmony imports with the correct context
 /******/ 	__webpack_require__.i = function(value) { return value; };
-
+/******/
 /******/ 	// define getter function for harmony exports
 /******/ 	__webpack_require__.d = function(exports, name, getter) {
 /******/ 		if(!__webpack_require__.o(exports, name)) {
@@ -46,7 +46,7 @@
 /******/ 			});
 /******/ 		}
 /******/ 	};
-
+/******/
 /******/ 	// getDefaultExport function for compatibility with non-harmony modules
 /******/ 	__webpack_require__.n = function(module) {
 /******/ 		var getter = module && module.__esModule ?
@@ -55,13 +55,13 @@
 /******/ 		__webpack_require__.d(getter, 'a', getter);
 /******/ 		return getter;
 /******/ 	};
-
+/******/
 /******/ 	// Object.prototype.hasOwnProperty.call
 /******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
-
+/******/
 /******/ 	// __webpack_public_path__
 /******/ 	__webpack_require__.p = "";
-
+/******/
 /******/ 	// Load entry module and return exports
 /******/ 	return __webpack_require__(__webpack_require__.s = 80);
 /******/ })
@@ -127,7 +127,7 @@ var cookie = exports.cookie = {
 
 /***/ }),
 
-/***/ 12:
+/***/ 11:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -145,7 +145,7 @@ var network = exports.network = {
                 self.show_msg(resp.msg);
             }
             if (resp.status && typeof resp.status == 'string' && resp.status != 'success') {
-                hide_upload(300);
+                cfg.hide_load();
                 return;
             } else {
                 callback(resp);
@@ -160,7 +160,7 @@ var network = exports.network = {
                 self.show_msg(resp.msg);
             }
             if (resp.status && typeof resp.status == 'string' && resp.status != 'success') {
-                hide_upload(300); // sometime
+                cfg.hide_load(); // sometime
                 return;
             } else {
                 callback(resp);
@@ -212,7 +212,7 @@ var network = exports.network = {
 
 /***/ }),
 
-/***/ 13:
+/***/ 12:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -234,7 +234,7 @@ var obj_control = exports.obj_control = {
 
 /***/ }),
 
-/***/ 14:
+/***/ 13:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -464,43 +464,90 @@ var old = exports.old = {
         return out_list;
     }
 
+    //function parseSearch(queryString) {
+    //    var queryString = queryString || location.search
+    //    if(queryString.startsWith('?')){
+    //        var queryString=queryString.substring(1)
+    //    }
+    //    var params = {}
+    //    // Split into key/value pairs
+    //    var queries = queryString.split("&");
+    //    // Convert the array of strings into an object
+    //    for (var i = 0; i < queries.length; i++ ) {
+    //        var mt = /([^=]+?)=(.+)/.exec(queries[i])
+    //        params[mt[1]] = mt[2];
+    //    }
+    //    return params;
+    //}
+    //function searchfy(obj,pre){
+    //    var outstr=pre||''
+    //    for(x in obj){
+    //        if(obj[x]){
+    //            outstr+=x.toString()+'='+ obj[x].toString()+'&';
+    //        }
+    //
+    //    }
+    //    if(outstr.endsWith('&')){
+    //        return outstr.slice(0,-1)
+    //    }else{
+    //        return outstr
+    //    }
+    //
+    //}
+    //function update(dst_obj,src_obj) {
+    //    for(x in src_obj){
+    //        dst_obj[x]=src_obj[x]
+    //    }
+    //}
+
 };
 
-//function parseSearch(queryString) {
-//    var queryString = queryString || location.search
-//    if(queryString.startsWith('?')){
-//        var queryString=queryString.substring(1)
-//    }
-//    var params = {}
-//    // Split into key/value pairs
-//    var queries = queryString.split("&");
-//    // Convert the array of strings into an object
-//    for (var i = 0; i < queries.length; i++ ) {
-//        var mt = /([^=]+?)=(.+)/.exec(queries[i])
-//        params[mt[1]] = mt[2];
-//    }
-//    return params;
-//}
-//function searchfy(obj,pre){
-//    var outstr=pre||''
-//    for(x in obj){
-//        if(obj[x]){
-//            outstr+=x.toString()+'='+ obj[x].toString()+'&';
-//        }
-//
-//    }
-//    if(outstr.endsWith('&')){
-//        return outstr.slice(0,-1)
-//    }else{
-//        return outstr
-//    }
-//
-//}
-//function update(dst_obj,src_obj) {
-//    for(x in src_obj){
-//        dst_obj[x]=src_obj[x]
-//    }
-//}
+/***/ }),
+
+/***/ 14:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.sortOrder = sortOrder;
+function isChinese(temp) {
+    var re = /[^\u4E00-\u9FA5]/;
+    if (re.test(temp[0])) {
+        return false;
+    }
+    return true;
+}
+function compare(temp1, temp2) {
+    if (temp1 < temp2) {
+        return -1;
+    } else if (temp1 == temp2) {
+        return 0;
+    } else {
+        return 1;
+    }
+}
+
+function sortOrder(array, key) {
+
+    return array.slice().sort(function (a, b) {
+        if (key) {
+            var val_a = a[key];
+            var val_b = b[key];
+        } else {
+            var val_a = a;
+            var val_b = b;
+        }
+        if (isChinese(val_a) && isChinese(val_b)) {
+            return val_a.localeCompare(val_b, 'zh');
+        } else {
+            return compare(val_a, val_b);
+        }
+    });
+}
 
 /***/ }),
 
@@ -847,30 +894,49 @@ var code = exports.code = {
     //    return h;
     //}
 
-
-    hashCode: function hashCode(input) {
-        var I64BIT_TABLE = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-'.split('');
-        var hash = 5381;
-        var i = input.length - 1;
-
-        if (typeof input == 'string') {
-            for (; i > -1; i--) {
-                hash += (hash << 5) + input.charCodeAt(i);
+    hashDict: function hashDict(dc) {
+        var ls = [];
+        for (var k in dc) {
+            if (k.startsWith('_')) {
+                continue;
             }
-        } else {
-            for (; i > -1; i--) {
-                hash += (hash << 5) + input[i];
+            if ($.isFunction(dc[k])) {
+                continue;
             }
+            ls.push(k);
         }
-        var value = hash & 0x7FFFFFFF;
-
-        var retValue = '';
-        do {
-            retValue += I64BIT_TABLE[value & 0x3F];
-        } while (value >>= 6);
-
-        return retValue;
+        ls = ls.sort();
+        var lsl = [];
+        for (var i = 0; i < ls.length; i++) {
+            lsl.push(ls[i] + ':' + dc[ls[i]]);
+        }
+        var dc_str = lsl.join(';');
+        return md5(dc_str);
     }
+    //hashCode: function (input){
+    //    var I64BIT_TABLE =
+    //        'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-'.split('');
+    //    var hash = 5381;
+    //    var i = input.length - 1;
+    //
+    //    if(typeof input == 'string'){
+    //        for (; i > -1; i--)
+    //            hash += (hash << 5) + input.charCodeAt(i);
+    //    }
+    //    else{
+    //        for (; i > -1; i--)
+    //            hash += (hash << 5) + input[i];
+    //    }
+    //    var value = hash & 0x7FFFFFFF;
+    //
+    //    var retValue = '';
+    //    do{
+    //        retValue += I64BIT_TABLE[value & 0x3F];
+    //    }
+    //    while(value >>= 6);
+    //
+    //    return retValue;
+    //}
 };
 
 /***/ }),
@@ -881,9 +947,9 @@ var code = exports.code = {
 "use strict";
 
 
-var _old = __webpack_require__(14);
+var _old = __webpack_require__(13);
 
-var _network = __webpack_require__(12);
+var _network = __webpack_require__(11);
 
 var _urlparse = __webpack_require__(16);
 
@@ -895,11 +961,13 @@ var path = _interopRequireWildcard(_patch);
 
 var _cookie = __webpack_require__(10);
 
-var _obj = __webpack_require__(13);
+var _obj = __webpack_require__(12);
 
 var _vuetools = __webpack_require__(17);
 
 var _code = __webpack_require__(8);
+
+var _order = __webpack_require__(14);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -909,11 +977,10 @@ var ex = {
             dst[key] = src[key];
         }
     }
-};
 
-//import {md5} from  './md5.min'
+    //import {md5} from  './md5.min'
 
-ex.assign(ex, _old.old);
+};ex.assign(ex, _old.old);
 ex.assign(ex, _network.network);
 ex.assign(ex, _urlparse.urlparse);
 ex.assign(ex, _collection.collection);
@@ -921,6 +988,8 @@ ex.assign(ex, _cookie.cookie);
 ex.assign(ex, _obj.obj_control);
 ex.assign(ex, _vuetools.vuetool);
 ex.assign(ex, _code.code);
+ex.sortOrder = _order.sortOrder;
+
 //ex.md5=md5
 window.ex = ex;
 

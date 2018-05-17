@@ -1,0 +1,152 @@
+{% extends "jb_admin/table.html" %}
+{% load jsonify %}
+{% block extra_head %}
+
+<style>
+    .el-table  td div.cell{
+        white-space:nowrap;
+        overflow:hidden;
+        text-overflow:ellipsis;
+    }
+    .table  tr>th div.cell{
+        overflow-y:hidden;
+        max-height: 60px;
+    }
+    tr>th{
+
+    }
+   .table .el-table__row>td,.table  tr>th,table.el-table__footer tr>td{
+        padding: 2px 0;
+    }
+
+
+</style>
+
+<script>
+
+
+//    footer = ['-','tournamentzh','matchid','matchdate','matchscore','team_zh','statuscode','nums_stake',
+//        'nums_account','sum_betamount','sum_betoutcome','sum_profit']
+size={
+    height:window.innerHeight -80 -150
+}
+footer={{ footer |jsonify }}
+
+$(function(){
+    $(window).resize(function() {
+        size.height = window.innerHeight -80 -150
+    });
+})
+
+    this_logic = {
+        data:{
+            footer:footer,
+            size:size
+        },
+        methods:{
+            is_sort:function(head){
+                if(ex.isin(head.name,this.row_sort.sortable)) {
+                    return 'custom'
+                }else{
+                    return false
+                }
+            },
+            sortChange(params){
+                //{ column, prop, order }
+                var self=this
+//                this.$refs.e_table.clearSort()
+//                ex.each(this.row_sort.sortable,function(name){
+                    if(params.prop){
+                        if(params.order=='ascending'){
+                            self.search_args._sort=params.prop
+                        }else if(params.order=='descending'){
+                            self.search_args._sort='-'+params.prop
+                        }
+//                        return 'break'
+                        this.search()
+                    }
+//                })
+
+            },
+            getSum:function(param){
+                return this.footer
+            },
+            on_perpage_change:function(perpage){
+                this.search_args._perpage=perpage
+                this.search_args._page=1
+                this.getRows()
+            },
+        },
+        computed:{
+
+//            columns:function(){
+//                var self=this
+//                var cols=[]
+//                var converted_heads =ex.map(this.heads,function(head){
+//                    var col =ex.copy(head)
+//                    var dc = {
+//                        field:head.name,
+//                        title:head.label,
+//                        isResize:true,
+//                    }
+//                    if (head.editor){
+//                        dc.componentName=head.editor
+//                    }
+//                    if(ex.isin(head.name,self.row_sort.sortable)){
+//                        dc.orderBy=''
+//                    }
+//                    ex.assign(col,dc)
+//                    if(!col.width){
+//                        col.width=200
+//                    }
+//                    return col
+//                })
+//                cols = cols.concat(converted_heads)
+//                return cols
+//            }
+        },
+    }
+    table_logic.mixins = [mix_table_data,this_logic]
+</script>
+{% endblock %}
+
+{% block table_content %}
+<!--<v-table ref="vtable" is-horizontal-resize-->
+         <!--is-vertical-resize-->
+         <!--:vertical-resize-offset="80"-->
+         <!--:title-row-height="30"-->
+         <!--:row-height="24"-->
+         <!--odd-bg-color="#f0f6f8"-->
+         <!--column-width-drag-->
+         <!--@on-custom-comp="on_td_event($event)"-->
+         <!--style="width: 100%;"-->
+         <!--:columns="columns"-->
+         <!--:table-data="rows"-->
+         <!--@sort-change="sortChange"-->
+         <!--:select-group-change="on_select_group_change"-->
+         <!--:select-all="on_select_group_change"-->
+         <!--row-hover-color="#eee"-->
+         <!--:footer="footer"-->
+         <!--row-click-color="#edf7ff">-->
+<!--</v-table>-->
+
+<el-table class="table" ref="e_table"
+        :data="rows"
+        border
+        show-summary
+          :max-height="size.height"
+        :fit="false"
+          :stripe="true"
+          size="mini"
+          @sort-change="sortChange($event)"
+          :summary-method="getSum"
+        style="width: 100%">
+    <el-table-column v-for="head in heads"
+            :prop="head.name"
+            :label="head.label"
+             :sortable="is_sort(head)"
+            :width="head.width">
+    </el-table-column>
+ </el-table>
+
+{% endblock %}

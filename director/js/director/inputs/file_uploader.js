@@ -2,13 +2,15 @@ require('./scss/file_uploader.scss')
 
 /*
 * config={
-*    accept:""
+*    accept:"xx.jpg",
+*     multiple:true,
+*
 * }
 * */
 
 export var field_file_uploader={
-    props:['name','row','kw'],
-    template:`<div><com-file-uploader v-model="row[name]" :config="kw.config" :readonly="kw.readonly"></com-file-uploader></div>`
+    props:['row','head'],
+    template:`<div><com-file-uploader v-model="row[head.name]" :config="head.config" :readonly="head.readonly"></com-file-uploader></div>`
 }
 
 export var com_file_uploader = {
@@ -198,6 +200,8 @@ var plus_btn={
     </div>`,
 }
 Vue.component('file-uploader-btn-plus',plus_btn)
+
+
 
 Vue.component('com-file-uploader',com_file_uploader)
 Vue.component('field-file-uploader',field_file_uploader)

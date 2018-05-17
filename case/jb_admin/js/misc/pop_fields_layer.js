@@ -1,24 +1,31 @@
 /*
 * root 层面创建Vue组件，形成弹出框
 * */
+import {com_pop_field} from  './com_pop_fields'
 
-export  function pop_fields_layer (row,heads,ops,callback){
+export  function pop_fields_layer (row,fields_ctx,callback){
     // row,head ->//model_name,relat_field
 
+    var heads = fields_ctx.heads
+    var ops = fields_ctx.ops
+    var extra_mixins=fields_ctx.extra_mixins || []
 
-    //var relat_field = head.relat_field
-    //var model_name = head.model_name
-    //var ops = head.ops
-    //if(dc.head.use_table_row){
-    //    var lay_row = dc.row
-    //}else{
-    //    var lay_row ={}
-    //}
+    var com_id = md5(extra_mixins)
+    if(! window['_vue_com_'+com_id]){
+        extra_mixins = ex.map(extra_mixins,function(name){
+            return window[name]
+        })
+        var com_pop_field_real = $.extend({}, com_pop_field);
+        com_pop_field_real.mixins = com_pop_field.mixins.concat(extra_mixins)
+        Vue.component('com-pop-fields-'+com_id,com_pop_field_real)
+        window['_vue_com_'+com_id] = true
+    }
+
     var pop_id =new Date().getTime()
 
     self.opened_layer_indx = layer.open({
         type: 1,
-        area: ['700px', '400px'],
+        area: ['800px', '500px'],
         title: '详细',
         resize:true,
         resizing: function(layero){
@@ -27,9 +34,14 @@ export  function pop_fields_layer (row,heads,ops,callback){
         },
         shadeClose: true, //点击遮罩关闭
         content:`<div id="fields-pop-${pop_id}" style="height: 100%;">
-                    <com-pop-fields @del_success="on_del()" @sub_success="on_sub_success($event)"
-                    :row="row" :heads="fields_heads" :ops="ops"></com-pop-fields>
-                </div>`
+                    <component :is="'com-pop-fields-'+com_id" @del_success="on_del()" @sub_success="on_sub_success($event)"
+                    :row="row" :heads="fields_heads" :ops="ops"></component>
+                </div>`,
+        end: function () {
+
+            eventBus.$emit('openlayer_changed')
+
+        }
     });
 
 
@@ -38,7 +50,8 @@ export  function pop_fields_layer (row,heads,ops,callback){
         data:{
             row:row,
             fields_heads:heads,
-            ops:ops
+            ops:ops,
+            com_id:com_id,
         },
         mounted:function(){
             //if(! trigger.head.use_table_row){
@@ -77,6 +90,10 @@ export  function pop_fields_layer (row,heads,ops,callback){
             //},
         }
     })
+
+
+    eventBus.$emit('openlayer_changed')
+
 }
 
 window.pop_fields_layer = pop_fields_layer

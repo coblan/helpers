@@ -13,6 +13,7 @@ import base64
 from django.db import models
 from ..access.permit import ModelPermit
 from ..models import LogModel
+from helpers.director.base_data import director
 
 #def save_row(row,user,request):
     #for k in row: # convert model instance to pk for normal validation
@@ -30,16 +31,16 @@ from ..models import LogModel
     #else:
         #raise ValidationError(fields_obj.errors)
 
-def clean_dict(dc,model):
-    model_name = model_to_name(model)
-    for k,v in dc.items():
-        if not k.startswith('_'):
-            field_path = model_name+'.'+k
-            if field_map.get(field_path):
-                map_cls = field_map[field_path]
-                field = model._meta.get_fields()
-                dc[k]=map_cls().from_dict(v,model._meta.get_field(k)) 
-    return dc
+#def clean_dict(dc,model):
+    #model_name = model_to_name(model)
+    #for k,v in dc.items():
+        #if not k.startswith('_'):
+            #field_path = model_name+'.'+k
+            #if field_map.get(field_path):
+                #map_cls = field_map[field_path]
+                #field = model._meta.get_fields()
+                #dc[k]=map_cls().from_dict(v,model._meta.get_field(k)) 
+    #return dc
 
 class ModelFields(forms.ModelForm):
     """
@@ -52,6 +53,7 @@ class ModelFields(forms.ModelForm):
     """
     readonly=[]
     field_sort=[]
+    extra_mixins=[]
     @classmethod
     def parse_request(cls,request):
         """
@@ -75,6 +77,7 @@ class ModelFields(forms.ModelForm):
              当get 时，dc是前端传来的url参数，排除pk后的额外的字典
         """
         #dc = clean_dict(dc, self._meta.model)
+        dc = self._clean_dict(dc)
         dc = self.clean_dict(dc)
         if not crt_user:
             self.crt_user=dc.get('crt_user')
@@ -103,25 +106,53 @@ class ModelFields(forms.ModelForm):
 
         super(ModelFields,self).__init__(dc,*args,**form_kw)
         self.custom_permit()
+        
+        #all_fields = self._meta.model._meta.get_fields()
+        #if self._meta.exclude:
+            #all_fields = filter(lambda x : x.name not in self._meta.exclude,all_fields )
+        #all_fields = filter(lambda x : x.name not in self.fields,all_fields)
+        #for field in all_fields:
+            #self.fields[field.name]=field
+            
         self.pop_fields()
         self.init_value()
-    
-    def clean_dict(self,dc):
+        
+    def _clean_dict(self,dc):
         """利用field_map字典，查找前端传来的dc中，某个字段的转换方式"""
         model = self.Meta.model
         model_name = model_to_name(model)
         for k,v in dc.items():
             if not k.startswith('_'):
+                all_field_names =[f.name for f in model._meta.get_fields()]
+                if k in all_field_names:
+                    field = model._meta.get_field(k)
+                    if field_map.get(field.__class__):
+                        mapper_cls = field_map.get(field.__class__)
+                        if hasattr(mapper_cls,'clean_field'):
+                            dc[k] =  mapper_cls().clean_field(dc,k)
+                        
                 field_path = model_name+'.'+k
                 if field_map.get(field_path):
                     map_cls = field_map[field_path]
                     field = model._meta.get_fields()
-                    dc[k]=map_cls().from_dict(v,model._meta.get_field(k))         
+                    dc[k]=map_cls().clean_field(dc,k) 
+        return dc
+    
+    def clean_dict(self,dc):    
         return dc
     
     def custom_permit(self):
         self.permit=ModelPermit(self.Meta.model,self.crt_user,nolimit=self.nolimit)
-        
+    
+    @classmethod
+    def get_director_name(cls):
+        director_name = ''
+        for k,v in director.items():
+            if v==cls:
+                director_name=k
+                break
+        return director_name    
+    
     def get_context(self):
         """
         """
@@ -129,9 +160,18 @@ class ModelFields(forms.ModelForm):
             'heads':self.get_heads(),
             'row': self.get_row(),
             #'permit':self.get_permit(),
+            'director_name':self.get_director_name(),
             'ops':self.get_operations(),
-        }  
-
+        } 
+    
+    def get_head_context(self):
+        return {
+            'heads':self.get_heads(),
+            'ops':self.get_operations(),
+            'director_name':self.get_director_name(),
+            #'model_name':model_to_name(self._meta.model),
+            'extra_mixins':self.extra_mixins
+        }         
     
     def get_del_info(self):
         return {'%(model)s:%(inst)s <id=%(pk)s>'%{'model':self.instance.__class__.__name__,'inst':unicode(self.instance),'pk':self.instance.pk}:delete_related_query(self.instance)}
@@ -242,7 +282,19 @@ class ModelFields(forms.ModelForm):
             #include= self.fields
             
         # self.fields 是经过 权限 处理了的。可读写的字段
-        return to_dict(self.instance,filt_attr=self.dict_row,include=self.fields)
+        row = to_dict(self.instance,filt_attr=self.dict_row,include=self.fields)
+        
+        ls=[]
+        ls.extend(self.permit.readable_fields())
+        ls.extend(self.permit.changeable_fields())
+        
+        for field in self.instance._meta.get_fields():
+            if isinstance(field,(models.AutoField,models.BigAutoField)):
+                if field.name in ls and field.name not in self._meta.exclude and\
+                   field.name not in row:
+                    row[field.name]=getattr(self.instance,field.name)
+        row['_director_name']=self.get_director_name()
+        return row
 
     def dict_row(self,inst):
         return {}
@@ -254,9 +306,9 @@ class ModelFields(forms.ModelForm):
             if name in options.keys():
                 continue
             if isinstance(field,forms.models.ModelMultipleChoiceField):
-                options[name]=[{'value':x[0],'label':x[1]} for x in field.choices]
+                options[name]=[{'value':x[0],'label':unicode(x[1])} for x in field.choices]
             elif isinstance(field,forms.models.ModelChoiceField):
-                options[name]=[{'value':x[0],'label':x[1]} for x in list(field.choices)]
+                options[name]=[{'value':x[0],'label':unicode(x[1])} for x in list(field.choices)]
             #if options.get(name,None):
                 #options[name]=self.sort_option(options[name])
             
@@ -325,7 +377,7 @@ class ModelFields(forms.ModelForm):
  
     
     def del_form(self):
-        if self.permit.can_del():
+        if self.permit.can_del() and self.instance.pk:
             self.instance.delete()
         else:
             raise PermissionDenied('No permission to delete %s'%str(self.instance))

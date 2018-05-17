@@ -1,4 +1,9 @@
 
+/*
+options:{
+    key:value
+}
+* */
 var mapper = {
     props:['rowData','field','index'],
     template:`<span v-text="show_data"></span>`,

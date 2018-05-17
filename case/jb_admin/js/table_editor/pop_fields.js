@@ -34,20 +34,13 @@ var pop_fields={
         },
         open_layer:function(){
             var self=this
-            //var pop_id = new Date().getTime()
-            //eventBus.$on('pop-win-'+pop_id,function(kws){
-            //    if(kws.name =='after_save'){
-            //        var fun = after_save[self.head.after_save.fun]
-            //        fun(self,kws.new_row,kws.old_row)
-            //    }
-            //})
-
-            var ops = this.head.ops
 
             var fun= get_row[this.head.get_row.fun]
             var kws= this.head.get_row.kws
             fun(function(pop_row){
-                pop_fields_layer(pop_row,self.head.fields_heads,ops,function(kws){
+                //pop_fields_layer(pop_row,self.head.fields_heads,ops,self.head.extra_mixins,function(kws){
+                pop_fields_layer(pop_row,self.head.fields_ctx,function(kws){
+
                     if(kws.name =='after_save'){
                         var fun = after_save[self.head.after_save.fun]
                         fun(self,kws.new_row,kws.old_row)
@@ -77,10 +70,10 @@ var get_row={
         callback(cache_row)
     },
     get_with_relat_field:function(callback,row,kws){
-        var model_name=kws.model_name
+        var director_name=kws.director_name
         var relat_field = kws.relat_field
 
-        var dc ={fun:'get_row',model_name:model_name}
+        var dc ={fun:'get_row',director_name:director_name}
         dc[relat_field] = row[relat_field]
         var post_data=[dc]
         cfg.show_load()

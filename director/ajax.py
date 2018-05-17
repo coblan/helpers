@@ -12,6 +12,7 @@ from helpers.func.network.download_response import downloadfy_response
 from .model_func.wirtedb import permit_save_model
 from .model_func.dictfy import name_to_model,model_to_name,to_dict
 import io
+from helpers.director.base_data import director
 
 def get_global():
     return globals()
@@ -37,24 +38,35 @@ def get_new_row_ctx(model_name,user):
     fields_cls = model_dc[model].get('fields')
     return fields_cls(crt_user = user).get_context()
     
-def get_row(model_name,pk=None,user=None,**kws):
-    model = name_to_model(model_name)
-    fields_cls = model_dc[model].get('fields')
+def get_row(director_name,pk=None,user=None,**kws):
+    #model = name_to_model(model_name)
+    #fields_cls = model_dc[model].get('fields')
+    fields_cls = director.get(director_name)
     if pk:
-        instance = model.objects.get(pk =pk)
-        fields_obj = fields_cls(instance=instance,crt_user = user)
+        fields_obj = fields_cls(pk=pk,crt_user = user)
+        #instance = model.objects.get(pk =pk)
+        #fields_obj = fields_cls(instance=instance,crt_user = user)
     elif kws:
-        instance = model.objects.get(**kws)
+        instance = fields_cls._meta.model.objects.get(**kws)
         fields_obj = fields_cls(instance=instance,crt_user = user)
     else:
         fields_obj =fields_cls(crt_user = user)
     return fields_obj.get_row()
 
-def get_rows(model_name,search_args,user):
-    model = name_to_model(model_name)
-    table_cls = model_dc[model].get('table')
+
+
+def get_rows(director_name,search_args,user):
+    table_cls = director.get(director_name)
+    #model = name_to_model(model_name)
+    #table_cls = model_dc[model].get('table')
     table_obj = table_cls.gen_from_search_args(search_args,user)
     return table_obj.get_data_context()
+
+#def get_rows(model_name,search_args,user):
+    #model = name_to_model(model_name)
+    #table_cls = model_dc[model].get('table')
+    #table_obj = table_cls.gen_from_search_args(search_args,user)
+    #return table_obj.get_data_context()
 
 def save_rows(rows,user,request):
     kw=request.GET.dict()
@@ -68,8 +80,9 @@ def save_rows(rows,user,request):
 
 def del_rows(rows,user):
     for row in rows:
-        model = name_to_model(row.get('_class'))
-        fields_cls = model_dc.get(model).get('fields')
+        fields_cls = director.get(row.get('_director_name'))
+        #model = name_to_model(row.get('_class'))
+        #fields_cls = model_dc.get(model).get('fields')
         fields_obj = fields_cls(row,crt_user=user)
         fields_obj.del_form()
    

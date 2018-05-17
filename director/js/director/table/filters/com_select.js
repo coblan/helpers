@@ -8,7 +8,7 @@ var com_select = {
     `,
     data:function(){
         var inn_cfg = {
-            sort:true
+            order:false
         }
         ex.assign(inn_cfg,this.config)
         return {
@@ -22,7 +22,7 @@ var com_select = {
     },
     methods:{
         orderBy:function (array,key) {
-            if(! this.cfg.sort){
+            if(! this.cfg.order){
                 return array
             }else{
                 return  array.slice().sort(function (a,b) {

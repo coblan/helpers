@@ -13,29 +13,48 @@ export var code ={
     //    return h;
     //}
 
-
-    hashCode: function (input){
-        var I64BIT_TABLE =
-            'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-'.split('');
-        var hash = 5381;
-        var i = input.length - 1;
-
-        if(typeof input == 'string'){
-            for (; i > -1; i--)
-                hash += (hash << 5) + input.charCodeAt(i);
+    hashDict:function(dc){
+        var ls =[]
+        for(var k in dc){
+            if(k.startsWith('_')){
+                continue
+            }
+            if($.isFunction(dc[k])){
+                continue
+            }
+            ls.push(k)
         }
-        else{
-            for (; i > -1; i--)
-                hash += (hash << 5) + input[i];
+        ls = ls.sort()
+        var lsl = []
+        for(var i = 0 ;i<ls.length;i++){
+            lsl.push(ls[i]+':'+dc[ls[i]])
         }
-        var value = hash & 0x7FFFFFFF;
+        var dc_str = lsl.join(';')
+        return md5(dc_str)
 
-        var retValue = '';
-        do{
-            retValue += I64BIT_TABLE[value & 0x3F];
-        }
-        while(value >>= 6);
-
-        return retValue;
-    }
+    },
+    //hashCode: function (input){
+    //    var I64BIT_TABLE =
+    //        'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-'.split('');
+    //    var hash = 5381;
+    //    var i = input.length - 1;
+    //
+    //    if(typeof input == 'string'){
+    //        for (; i > -1; i--)
+    //            hash += (hash << 5) + input.charCodeAt(i);
+    //    }
+    //    else{
+    //        for (; i > -1; i--)
+    //            hash += (hash << 5) + input[i];
+    //    }
+    //    var value = hash & 0x7FFFFFFF;
+    //
+    //    var retValue = '';
+    //    do{
+    //        retValue += I64BIT_TABLE[value & 0x3F];
+    //    }
+    //    while(value >>= 6);
+    //
+    //    return retValue;
+    //}
 }

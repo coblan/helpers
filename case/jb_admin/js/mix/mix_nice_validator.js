@@ -3,9 +3,14 @@ var nice_validator={
         var self=this
         var validator={}
         ex.each(this.heads,function(head){
+            var ls=[]
             if(head.required){
-                validator[head.name]='required'
+               ls.push('required')
             }
+            if(head.fv_rule){
+                ls.push(head.fv_rule)
+            }
+            validator[head.name]=ls.join(';')
         })
         this.nice_validator =$(this.$el).find('.field-panel').validator({
             fields: validator,

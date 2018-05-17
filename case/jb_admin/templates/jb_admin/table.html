@@ -22,7 +22,7 @@
     extra_table_logic='{{ extra_table_logic }}'
 
     tabs={{ tabs | jsonify | default:'[]' }}
-
+    search_args={{ search_args | jsonify | default:'{}'  }}
     table_logic={
         el:'#there',
         data:{
@@ -32,8 +32,11 @@
             row_filters:row_filters,
             row_sort:row_sort,
             row_pages:row_pages,
+            director_name:director_name,
+
+//            model_name:model_name,
             selected:[],
-            search_args:{}, //ex.parseSearch(),
+            search_args:search_args, //ex.parseSearch(),
             ops:ops,
             crt_row:{},
             tabgroup:{
@@ -59,6 +62,12 @@
                         self.changed_rows.push(row)
                     }
                 },
+                row_changed_undo_act:function(kws){
+                    var md5= ex.hashDict(kws.row)
+                    if(md5 == kws.row._hash){
+                        ex.remove(self.changed_rows,{pk:kws.row.pk})
+                    }
+                },
                 switch_to_tab:function(kws){
                     self.show_tab(kws.tab_name)
                     self.crt_row= kws.row
@@ -74,9 +83,9 @@
         },
         methods:{
 
-            on_td_event:function(e){
-                this.op_funs[e.name](e)
-            },
+//            on_td_event:function(e){
+//                this.op_funs[e.name](e)
+//            },
             on_tab_event:function(e){
                 this.op_funs[e.name](e)
             },
@@ -90,9 +99,9 @@
                 this.tabgroup.crt = name
                 var self =this
 
-//                Vue.nextTick(function(){
-//                    self.$refs['_tab_'+name][0].on_show()
-//                })
+                Vue.nextTick(function(){
+                    self.$refs['_tab_'+name][0].on_show()
+                })
 
             },
             get_attr:function(name){
@@ -166,7 +175,7 @@
             <div class="flex-grow"></div>
         </div>
         <div class="box box-success">
-            <div class="table-wraper">
+            <div class="table-wraper" style="position: relative;">
                 {% block table_content %}
                 <v-table ref="vtable" is-horizontal-resize
                          is-vertical-resize

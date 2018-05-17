@@ -11,3 +11,9 @@ permit_list=[]
 js_tr_list=[]
 js_lib={
 }
+
+director={
+}
+
+field_map={
+}

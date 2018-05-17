@@ -7,11 +7,12 @@ import json
 from django.db.models import Q,fields
 from django.core.exceptions import PermissionDenied
 from ..access.permit import ModelPermit
-from ..model_func.dictfy import model_to_name,to_dict,model_to_head,model_to_name,model_dc
+from ..model_func.dictfy import model_to_name,to_dict,model_to_head,model_to_name,model_dc,field_map
 from django.db import models
 import math
 import time
 from django.conf import settings
+from helpers.director.base_data import director
 #import pinyin
 #from forms import MobilePageForm
 
@@ -152,68 +153,46 @@ class RowFilter(object):
                 end=kw.get('_end_%s'%k)
                 self.filter_args['%s__lte'%k]=end            
     
-    def get_context(self):
+    def get_proc_list(self):
         ls=[]
         for name in self.valid_name:
-            f = self.model._meta.get_field(name)
-            #mt = [x for x in self.range_fields if x.get('name')==name]
-            #if mt:
+            
+            # 先查找 proc
+            model_name = model_to_name(self.model)
+            model_field_name = '%s.%s'%(model_name,name)
+            proc_cls =field_map.get(model_field_name)
+            
+            if not proc_cls:
+                f = self.model._meta.get_field(name)
+                proc_cls  =field_map.get(f.__class__)            
+            ls.append(proc_cls)
+        return ls
+    
+    def get_context(self):
+        ls=[]
+        for proc_cls,name in zip(self.get_proc_list() ,self.valid_name):
+
             if name in self.range_fields:
-                if isinstance(f,fields.DateField):
-                    ls.append({'name':name,
-                               'label':_(f.verbose_name),
-                               'editor':'com-date-range-filter'
-                               })
-            elif isinstance(f,fields.BooleanField):
-                ls.append({'name':name,
-                           'label':_(f.verbose_name),
-                           'editor':'com-select-filter',
-                           'options':[
-                               {'value':'1','label':'Yes'},
-                               {'value':"0",'label':'No'}]})
+                
+                filter_head = proc_cls().filter_get_range_head(name,self.model)
+                ls.append(filter_head)
+  
             else:
-                ls.append({'name':name,
-                           'editor':'com-select-filter',
-                           'label':_(f.verbose_name),
-                           'options':self.get_options(name)})
+                filter_head = proc_cls().filter_get_head(name,self.model)
+                ls.append(filter_head)
+                
         return ls
       
     def get_query(self,query):
         self.query=query
+        dc = {}
+        for proc_cls,name in zip(self.get_proc_list() ,self.valid_name):
+            dc.update( proc_cls().filter_dict_query_args(self.filter_args, name ) )
+        self.filter_args.update(dc)
         query=query.filter(**self.filter_args)
         return query    
     
-    def get_options(self,name):
-        this_field= self.model._meta.get_field(name)
-        if this_field.choices:
-            return [{'value':x[0],'label':x[1]} for x in this_field.choices]
-        elif isinstance(this_field,models.ForeignKey):
-            ls=this_field.get_choices()
-            ls=ls[1:]
-            out= [{'value':x[0],'label':x[1]} for x in ls]
-            #out= self.sort_option(out) # 用pinyin排序 sorted(out,key=lambda x:x['label'].encode('gbk'))  # 尼玛，用GBK才能对常用的中国字进行拼音排序
-                                                                   # 不常用的字，以及unicode都是按照笔画排序的
-            return out
-        # 这里需要考虑下，过滤的选项是来自于model的所有记录，还是来自于table过滤后的query
-        # 这里暂时是使用model的所有记录
-        elif not hasattr(self,'query'):
-            self.query = self.model.objects.all()
-    
-        ls = list(set(self.query.values_list(name,flat=True)))
-        #ls.sort()
-        out=[{'value':x,'label':unicode(x)} for x in ls]
-        #out= self.sort_option(out) # 用pinyin排序 sorted(out,key=lambda x:x['label'].encode('gbk'))  
-        return out   
-    
-    # def sort_option(self,option):
-        # index=0
-        # for opt in option:
-            # if opt['value']:
-                # break
-            # else:
-                # index+=1
-        # option[index:]=sorted(option[index:],key=lambda x:pinyin.get_initial(x['label']))
-        # return option
+  
     
     
 class RowSort(object):
@@ -289,6 +268,8 @@ class ModelTable(object):
     fields_sort=[]
     pop_edit_field=""
     def __init__(self,_page=1,row_sort=[],row_filter={},row_search={},crt_user=None,perpage=None,**kw):
+        self.search_args = kw.get('search_args')
+        
         self.kw=kw
         self.crt_user=crt_user 
         self.page=_page
@@ -322,21 +303,12 @@ class ModelTable(object):
         """
         kw = request.GET.dict()
         return cls.gen_from_search_args(kw,request.user)
-        #page = kw.pop('_page','1')
-        #perpage = kw.pop('_perpage')
-        #row_sort = kw.pop('_sort','').split(',')
-        #row_sort=filter(lambda x: x!='',row_sort)
-        #q=kw.pop('_q',None)
-        #row_filter={}
-        #for k in cls.filters.names:
-            #arg = kw.pop(k,None)
-            #if arg:
-                #row_filter[k]=arg
-        #return cls(page,row_sort,row_filter,q,request.user,**kw)
-    
+
     @classmethod
     def gen_from_search_args(cls,search_args,user):
-        kw = search_args
+        args = cls.clean_search_args(search_args)
+        kw = dict(args)
+        kw['search_args'] = args
         page = kw.pop('_page','1')
         perpage = kw.pop('_perpage',None)
         row_sort = kw.pop('_sort','').split(',')
@@ -345,11 +317,59 @@ class ModelTable(object):
         row_filter={}
         for k in cls.filters.names:
             arg = kw.pop(k,None)
-            if arg:
+            if arg is not None:
                 row_filter[k]=arg
         return cls(page,row_sort,row_filter,q,user,perpage=perpage,**kw)
+    
+    @classmethod
+    def clean_search_args(cls,search_args):
+        """
+        重载该函数，用于调整search_args的默认值，修改值
+        返回的参数 (1,2) 1用于传入 filter ，2 用于传回前端去显示。
         
+        例如对于类型为datetime的filter，
+        _end_xxx = 2018-10-23  传到filter的值为 _end_xxx=2018-10-24 ,传到前端的值为 _end_xxx=2018-10-23
+        """
+        args=dict(search_args)
+        return args
+    
+    @classmethod
+    def get_director_name(cls):
+        director_name = ''
+        for k,v in director.items():
+            if v==cls: # self.__class__:
+                director_name=k
+                break
+        return director_name
+    
     def get_context(self):
+        ls=[]
+        search_head = self.row_search.get_context()
+        row_filters = self.row_filter.get_context()
+        # 合并search和rowfilter 为rowfilter
+        if search_head:
+            ls.append( search_head)
+        if row_filters:
+            ls.extend(row_filters)
+        
+        director_name =self.get_director_name()
+        return {
+            'heads':self.get_heads(),
+            'rows': self.get_rows(),
+            'row_pages' : self.pagenum.get_context(),
+            'row_sort':self.row_sort.get_context(),
+            'row_filters':ls,
+            #'search_tip':self.row_search.get_context(),
+            'director_name':director_name,
+            'model_name':model_to_name(self.model),
+            'ops' : self.get_operation(),
+            'search_args':self.search_args
+        }
+    
+    def get_head_context(self):
+        """
+        有些时候，最先不需要返回rows，而只返回filters，head等，等待用户选择后，才返回rows
+        """
         ls=[]
         search_head = self.row_search.get_context()
         row_filters = self.row_filter.get_context()
@@ -360,27 +380,12 @@ class ModelTable(object):
             ls.extend(row_filters)
         return {
             'heads':self.get_heads(),
-            'rows': self.get_rows(),
-            'row_pages' : self.pagenum.get_context(),
-            'row_sort':self.row_sort.get_context(),
-            'row_filters':ls,
-            #'search_tip':self.row_search.get_context(),
-            'model':model_to_name(self.model),
-            'ops' : self.get_operation()
-        }
-    
-    def get_head_context(self):
-        """
-        有些时候，最先不需要返回rows，而只返回filters，head等，等待用户选择后，才返回rows
-        """
-        return {
-            'heads':self.get_heads(),
             'rows': [], #self.get_rows(),
             'row_pages':{}, # self.pagenum.get_context(),
             'row_sort':self.row_sort.get_context(),
-            'row_filters':self.row_filter.get_context(),
-            'search_tip':self.row_search.get_context(),
-            'model':model_to_name(self.model),
+            'row_filters': ls , #self.row_filter.get_context(),
+            #'search_tip':self.row_search.get_context(),
+            'director_name': self.get_director_name(),#model_to_name(self.model),
             'ops' : self.get_operation()
         }        
     
@@ -388,7 +393,8 @@ class ModelTable(object):
     def get_data_context(self):
         return {
             'rows': self.get_rows(),
-            'row_pages' : self.pagenum.get_context(),            
+            'row_pages' : self.pagenum.get_context(),  
+            'search_args':self.search_args
         }
     
     def permited_fields(self):
@@ -405,27 +411,40 @@ class ModelTable(object):
             return [x for x in ls if x not in self.exclude]
         return ls
     
+    def getExtraHead(self):
+        return []
+    
     def get_heads(self):
         """
         return:[{"name": "name", "label": "\u59d3\u540d"}, {"sortable": true, "name": "age", "label": "\u5e74\u9f84"}]
         """
         ls = self.permited_fields()   
         heads = model_to_head(self.model,include=ls)
-        heads = self.fields_sort_heads(heads)
         heads=[self.fields_map_head(head) for head in heads]
+        
+        heads.extend(self.getExtraHead())
+        heads = self.fields_sort_heads(heads)   
+        
         heads= self.make_pop_edit_field(heads)
+              
         heads = [self.dict_head(head) for head in heads]
         
         return heads
     
     def make_pop_edit_field(self,heads):
+        """
+        确定弹出框 列
+        """
         if self.pop_edit_field:
             for head in heads:
                 if head['name']==self.pop_edit_field:
-                    model_form = model_dc[self.model].get('fields')
-                    head['name'] ==self.pop_edit_field
+                    director_name = self.get_director_name()
+                    #model_form = model_dc[self.model].get('fields')
+                    model_form = director.get(director_name+'.edit')
+                    form_obj = model_form(crt_user=self.crt_user)
+                    #head['name'] ==self.pop_edit_field
                     head['editor'] = 'com-table-pop-fields'
-                    head['fields_heads']=model_form(crt_user=self.crt_user).get_heads()
+                    head['fields_ctx']=form_obj.get_head_context()
                     head['get_row'] = {
                         #'fun':'use_table_row'
                         "fun":'get_table_row'
@@ -439,7 +458,8 @@ class ModelTable(object):
                         #'fun':'do_nothing'
                         'fun':'update_or_insert'
                     }
-                    head['ops']=model_form(crt_user=self.crt_user).get_operations()
+                    head['ops']=form_obj.get_operations()
+                    head['extra_mixins']=form_obj.extra_mixins
         return heads
     
     def dict_head(self,head):
@@ -450,6 +470,8 @@ class ModelTable(object):
         if field.choices:
             head['options']=dict(field.choices)
             head['editor']='com-table-mapper'
+        elif isinstance(field,models.BooleanField):
+            head['editor']='com-table-bool-shower'
         return head
 
     def fields_sort_heads(self,heads):
@@ -472,9 +494,14 @@ class ModelTable(object):
         """
         query=self.get_query()
         out=[]
+        director_name = self.get_director_name()
         for inst in query:
-
-            dc= to_dict(inst, include=self.permited_fields(),filt_attr=self.dict_row( inst))
+            # 遇到一种情况，聚合时，这里的queryset返回的item是dict。所以下面做一个判断
+            if isinstance(inst,models.Model):
+                dc= to_dict(inst, include=self.permited_fields(),filt_attr=self.dict_row( inst))
+            else:
+                dc = inst
+            dc['_director_name'] = director_name+'.edit'
             out.append(dc)
         return out
     
@@ -494,25 +521,38 @@ class ModelTable(object):
         query=self.row_filter.get_query(query)
     
         query=self.row_search.get_query(query)
+        query = self.statistics(query)
         query = self.row_sort.get_query(query)
         query = self.pagenum.get_query(query)  
         return query
- 
+    
+    def statistics(self,query):
+        return query
+    
+    
     def inn_filter(self,query):
         return query.order_by('-pk')
     
     def get_operation(self):
-        if not model_dc.get(self.model) or not model_dc.get(self.model).get('fields'):
+        director_name = self.get_director_name()
+        #model_form = model_dc[self.model].get('fields')
+        fieldCls = director.get(director_name+'.edit')     
+        if not fieldCls:
             return []
-        model_name =model_to_name(self.model)
-        fieldCls=model_dc[self.model].get('fields')
+        #if not model_dc.get(self.model) or not model_dc.get(self.model).get('fields'):
+            #return []
+        #model_name =model_to_name(self.model)
+           
+        #fieldCls=model_dc[self.model].get('fields')
         fieldobj=fieldCls(crt_user=self.crt_user)
         return [{'name':'add_new',
                  'editor':'com-op-a',
                  'label':'创建',
-                 'heads':fieldobj.get_heads(),
-                 'ops': fieldobj.get_operations(), # model_dc[self.model].get('fields'),
-                 'model_name':model_name,},
+                 'fields_ctx':fieldobj.get_head_context(),
+                 #'heads':fieldobj.get_heads(),
+                 #'ops': fieldobj.get_operations(), # model_dc[self.model].get('fields'),
+                 #'model_name':model_name,
+                 },
                 {'name':'save_changed_rows','editor':'com-op-a','label':'保存','hide':'!changed'},
                 {'name':'delete','editor':'com-op-a','label':'删除','disabled':'!has_select'},
                 ]      

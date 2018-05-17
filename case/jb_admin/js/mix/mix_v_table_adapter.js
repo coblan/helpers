@@ -2,6 +2,7 @@ var mix_v_table_adapter={
 
     mounted:function(){
         eventBus.$on('content_resize',this.resize)
+        eventBus.$on('openlayer_changed',this.refreshSize)
     },
     computed:{
         columns:function(){
@@ -10,7 +11,8 @@ var mix_v_table_adapter={
                 width: 60,
                 titleAlign: 'center',
                 columnAlign:'center',
-                type: 'selection'
+                type: 'selection',
+                isFrozen: true,
             }
             var cols=[first_col]
             var converted_heads =ex.map(this.heads,function(head){
@@ -37,6 +39,9 @@ var mix_v_table_adapter={
         }
     },
     methods:{
+        refreshSize:function(){
+            this.$refs.vtable.resize()
+        },
         resize:function(){
             var self=this
             $(self.$refs.vtable.$el).find('.v-table-rightview').css('width','100%')
@@ -55,7 +60,7 @@ var mix_v_table_adapter={
         on_perpage_change:function(perpage){
             this.search_args._perpage=perpage
             this.search_args._page=1
-            this.get_data()
+            this.getRows()
         },
         sortChange(params){
             var self=this

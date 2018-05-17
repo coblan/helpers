@@ -15,7 +15,8 @@ var mix_fields_data ={
     },
     methods:{
         on_operation:function(op){
-            this.op_funs[op.name](op.kws)
+            var fun_name = op.fun || op.name
+            this.op_funs[fun_name](op.kws)
         },
         get_data:function(){
             this.data_getter(this)
@@ -33,13 +34,16 @@ var mix_fields_data ={
         },
         dataSaver:function(callback){
             var post_data=[{fun:'save_row',row:this.row}]
-            //var url = ex.appendSearch('/d/ajax',this.search_args)
             ex.post('/d/ajax',JSON.stringify(post_data),function (resp) {
                 callback(resp.save_row)
             })
         },
         save:function () {
             var self =this;
+
+            this.setErrors({})
+            eventBus.$emit('sync_data')
+
             if(self.before_save() == 'break'){
                 return
             }
@@ -56,25 +60,8 @@ var mix_fields_data ={
                     self.setErrors({})
                 }
             })
-
-
-            //var post_data=[{fun:'save',row:this.row}]
-            //var url = ex.appendSearch('/d/ajax',self.search_args)
-            //ex.post(url,JSON.stringify(post_data),function (resp) {
-            //    if( resp.save.errors){
-            //        cfg.hide_load()
-            //        self.setErrors(resp.save.errors)
-            //        self.showErrors(resp.save.errors)
-            //    }else{
-            //        cfg.hide_load(2000)
-            //        self.after_save(resp.save.row)
-            //        self.setErrors({})
-            //    }
-            //})
         },
         before_save:function(){
-            this.setErrors({})
-            eventBus.$emit('sync_data')
             return 'continue'
         },
         afterSave:function(resp){
@@ -86,7 +73,8 @@ var mix_fields_data ={
         showErrors:function(errors){
             var str = ""
             for(var k in errors){
-                str += k + ':' + errors[k] +'<br>'
+                var head = ex.findone(this.heads,{name:k})
+                str += head.label + ':' + errors[k] +'<br>'
             }
             layer.confirm(str,{title:['错误','color:white;background-color:red']})
         },

@@ -2,6 +2,9 @@ window.cfg={
     showMsg:function(msg){
         alert(msg)
     },
+    warning:function(msg){
+        alert(msg)
+    },
     tr:{
         'picture_size_excceed':'图片尺寸不能超过{maxsize}'
     },

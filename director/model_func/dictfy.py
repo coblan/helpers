@@ -9,7 +9,11 @@ from django.apps import apps
 from django import forms
 from django.utils.timezone import localtime,datetime
 from django.utils.translation import ugettext as _
+#from md5 import md5
+from .field_proc import BaseFieldProc
 from .hash_dict import hash_dict
+from ..base_data import field_map
+
 
 
 def model_to_name(model):
@@ -36,6 +40,7 @@ def to_dict(instance,filt_attr=None,include=None,exclude=None,hash_keys=None,for
         out['_label']=unicode(instance)
     if '_hash' not in out.keys():
         out['_hash']=hash_dict(out,hash_keys)
+        #out['_md5']=md5(out).hexdigest() 
     return out
 
 
@@ -68,17 +73,18 @@ def sim_dict(instance,filt_attr=None,include=None,exclude=None):
            #isinstance(field,(models.ManyToManyRel,models.ManyToOneRel)):
             continue
         else:
-            proxy_cls=field_map.get('%s.%s'%(model_path,field.name))
-            if not proxy_cls:
-                proxy_cls = field_map.get(field.__class__)
-            if proxy_cls:
-                mapper = proxy_cls()
-                out[field.name] = mapper.to_dict(instance,field.name)
+            mapper_cls=field_map.get('%s.%s'%(model_path,field.name))
+            if not mapper_cls:
+                mapper_cls = field_map.get(field.__class__)
+                
+            if mapper_cls:
+                mapper = mapper_cls()
+                out.update( mapper.to_dict(instance,field.name) )
                 if '_%s_label'%field.name in out:
                     continue
-                if hasattr(mapper,'get_label'):
-                    out['_%s_label'%field.name]=mapper.get_label(instance,field.name)
-                if isinstance(out[field.name],list):
+                #if hasattr(mapper,'get_label'):
+                    #out['_%s_label'%field.name]=mapper.get_label(instance,field.name)
+                if isinstance(out.get(field.name),list):
                     # 如果遇到 manytomany的情况，是一个list
                     out['_%s_label'%field.name]=[unicode(x) for x in out[field.name]]
                 else:
@@ -95,75 +101,108 @@ def sim_dict(instance,filt_attr=None,include=None,exclude=None):
                     mt = [x for x in field.choices if x[0]==org_value]
                     if mt:
                         out[ '_%s_label'%field.name]=mt[0][1]
-    if 'id' in [x.name for x in instance._meta.get_fields()] and \
-       instance.id:
-        out['id']=instance.id
+                        
+
+    #if 'id' in [x.name for x in instance._meta.get_fields()] and \
+       #instance.id:
+        #out['id']=instance.id
     return out
     
 
-class DatetimeProc(object):
-    def to_dict(self,inst,name):
-        value = getattr(inst,name,None)
-        if value:
-            return localtime(value).strftime('%Y-%m-%d %H:%M:%S')
-        else:
-            return ''
-    
-    def from_dict(self,value,field):
-        """
-        该函数需要check
-        """
-        return datetime.strptime(value,'%Y-%m-%d %H:%M:%S')
+#class DatetimeProc(BaseFieldProc):
+    #def to_dict(self,inst,name):
+        #value = getattr(inst,name,None)
+        #if value:
+            #return {
+                #name:value.strftime('%Y-%m-%d %H:%M:%S')
+                #}
+        #else:
+            #return {}
         
-class ForeignProc(object):
-    def to_dict(self,inst,name):
-        foreign=getattr(inst,name,None)
-        if foreign:
-            return foreign.pk
+    #def clean_field(self, dc, name):
+        #if dc[name]:
+            #return datetime.strptime(dc[name],'%Y-%m-%d %H:%M:%S')
+        #else:
+            #return dc[name]
     
-    def get_label(self,inst,name):
-        foreign=getattr(inst,name,None)
-        if foreign:
-            return unicode(foreign)
+    #def from_dict(self,value,field):
+        #"""
+        #该函数需要check
+        #"""
+        #return datetime.strptime(value,'%Y-%m-%d %H:%M:%S')
+        
+#class ForeignProc(BaseFieldProc):
+    #def to_dict(self,inst,name):
+        #foreign=getattr(inst,name,None)
+        #if foreign:
+            #return {
+                #name:foreign.pk,
+                #'_%s_model'%name:model_to_name(foreign.__class__),
+                #'_%s_label'%name:unicode(foreign)
+            #}
+        #else:
+            #return {}
     
-    def from_dict(self,value,field):
-        if isinstance(value,models.Model):
-            return value
-        else:
-            model=field.rel.to
-            if not value:
-                return None
-            else:
-                return model.objects.get(pk=value)
+    #def clean_field(self,dc,name):
+        #model = name_to_model( dc.get('_%s_model'%name) )
+        #return model.objects.get(pk=dc.get(name))     
+    
+    ##def get_label(self,inst,name):
+        ##foreign=getattr(inst,name,None)
+        ##if foreign:
+            ##return unicode(foreign)
+    
+    ##def from_dict(self,value,field):
+        ##if isinstance(value,models.Model):
+            ##return value
+        ##else:
+            ##model=field.rel.to
+            ##if not value:
+                ##return None
+            ##else:
+                ##return model.objects.get(pk=value)
 
-class ManyProc(object):
-    def to_dict(self,inst,name):
-        if not inst.pk:
-            return []
-        else:
-            out =[]
-            for item in getattr(getattr(inst,name),'all')():
-                out.append(item.pk)
-            return out
-    
-    def from_dict(self,value,field):
-        """
-        TODO  think about : many_set
-        """
-        return value
+#class ManyProc(BaseFieldProc):
+    #def to_dict(self,inst,name):
+        #out =[]
+        #if inst.pk:
+            #for item in getattr(getattr(inst,name),'all')():
+                #out.append(item.pk)
+                
+        #return {
+            #name:out
+            #}
 
-class OneProc(object):
-    def to_dict(self,inst,name):
-        foreign=getattr(inst,name,None)
-        if foreign:
-            return foreign.pk 
-    def from_dict(self,value,field):
-        """may need test"""
-        if isinstance(value,models.Model):
-            return value
-        else:
-            model=field.rel.to
-            return model.objects.get(pk=value)    
+    
+    #def from_dict(self,value,field):
+        #"""
+        #TODO  think about : many_set
+        #"""
+        #return value
+
+#class OneProc(BaseFieldProc):
+    #def to_dict(self,inst,name):
+        #foreign=getattr(inst,name,None)
+        #if foreign:
+            #return {
+                #name: foreign.pk ,
+                #'_%s_model'%name:model_to_name(foreign.__class__)
+            #}
+        #else:
+            #return {}
+    
+    #def clean_field(self,dc,name):
+        #model = name_to_model( dc.get('_%s_model'%name) )
+        #return model.objects.get(pk=dc.get(name))  
+ 
+    
+    #def from_dict(self,value,field):
+        #"""may need test"""
+        #if isinstance(value,models.Model):
+            #return value
+        #else:
+            #model=field.rel.to
+            #return model.objects.get(pk=value)    
 
 #from helpers.base.jsonfield import JsonField
 #class JsonProc(object):
@@ -171,38 +210,42 @@ class OneProc(object):
         #return getattr(inst,name)
     #def from_dict(self,)
 
-class DateProc(object):
-    def to_dict(self,inst,name):
-        date=getattr(inst,name)
-        if date:
-            return date.isoformat()
-        else:
-            return ""
-    def from_dict(self,value,field):
-        """may need test"""
-        return value     
+#class DateProc(BaseFieldProc):
+    #def to_dict(self,inst,name):
+        #date=getattr(inst,name)
+        #if date:
+            #return {name:date.isoformat()}
+        #else:
+            #return {}
+        
+  
 
-class DecimalProc(object):
-    def to_dict(self,inst,name):
-        data = getattr(inst,name)
-        return unicode(data)
+#class DecimalProc(BaseFieldProc):
+    #def to_dict(self,inst,name):
+        #data = getattr(inst,name)
+        #return {name:unicode(data)}
     
-    def from_dict(self,value,field):
-        return float(value)
+    #def clean_field(self,dc,name):
+        #return float(dc.get(name))
 
-field_map={
-    models.DateTimeField:DatetimeProc,
-    models.ForeignKey : ForeignProc,
-    models.ManyToManyField:ManyProc,
-    models.OneToOneField:OneProc,
-    models.DateField:DateProc,
-    models.DecimalField:DecimalProc,
-}
+#class BoolProc(BaseFieldProc):
+    #pass
+
+
+#field_map.update({
+    ##models.DateTimeField:DatetimeProc,
+    ##models.ForeignKey : ForeignProc,
+    ##models.ManyToManyField:ManyProc,
+    ##models.OneToOneField:OneProc,
+    ##models.DateField:DateProc,
+    ##models.DecimalField:DecimalProc,
+#})
 
 
 def from_dict(dc,model=None,pre_proc=None):
     """
-
+    **该函数不应该再使用**
+    
     1. 半自动：
     processed_attr=pre_proc(dc,model) ; 返回处理过的字典processed，该processed用于剔除传入的dc参数
     
@@ -223,7 +266,7 @@ def from_dict(dc,model=None,pre_proc=None):
         if value!='__not_output':
             if not value is None:
                 if field_map.get(field.__class__):
-                    processed[field.name] = field_map.get(field.__class__)().from_dict(value,field) 
+                    processed[field.name] = field_map.get(field.__class__)().clean_field(dc,field.name) 
                 else:
                     # 由于有jsonfield这样的字段，不进行unicode处理，直接赋值python对象
                     #processed[field.name]=u(value)
@@ -262,13 +305,14 @@ def form_to_head(form,include=None):
         if isinstance(include,(tuple,list)) and k not in include:
             continue
         dc = {'name':k,'label':_(v.label),
-              'required':v.required,
               'help_text':unicode(v.help_text),
               'editor':'linetext'}
+        if hasattr(v,'required'):
+            dc['required'] = v.required
         
-        if isinstance(v.widget,forms.widgets.Select):
+        if hasattr(v,'widget') and isinstance(v.widget,forms.widgets.Select):
             dc['editor'] = 'sim_select' 
-            dc['options']=[{'value':val,'label':lab} for val,lab in v.widget.choices]
+            dc['options']=[{'value':val,'label':unicode(lab)} for val,lab in v.widget.choices]
         elif v.__class__==forms.fields.CharField:
             if v.max_length:
                 dc.update({'editor':'linetext','maxlength':v.max_length})
@@ -287,6 +331,11 @@ def form_to_head(form,include=None):
             #dc['editor']='tow_col'
         # elif v.__class__==forms.models.ModelChoiceField and \
         
+        model_field = form._meta.model._meta.get_field(k)
+        if model_field.__class__ in field_map:
+            mapper=field_map[model_field.__class__]
+            if hasattr(mapper,'dict_field_head'):
+                dc.update( mapper().dict_field_head(dc) )
         out.append(dc)
     return out
 
@@ -301,6 +350,14 @@ def model_to_head(model,include=[],exclude=[]):
                 #dc = {'name':field.name,'label':_(field._verbose_name),}
             #else:
             dc= {'name':field.name,'label':_(field.verbose_name)}
+            if isinstance(field,models.ForeignKey):
+                dc['editor']='com-table-label-shower'
+            
+            if field.__class__ in field_map:
+                mapper = field_map.get(field.__class__)
+                if hasattr(mapper,'dict_table_head'):
+                    dc.update(mapper().dict_table_head(dc))
+                
             out.append(dc)
     if include:
         out=[x for x in out if x.get('name') in include]
