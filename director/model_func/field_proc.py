@@ -10,16 +10,13 @@ class BaseFieldProc(object):
         # dc里面有的 字段，才会被调用
         return dc[name]
     
-    #def from_dict(self,value,field) :
-        #pass
-    
     def dict_table_head(self,head):
         return head
     
     def dict_field_head(self,head):
         return head
     
-    def get_range_filter_head(self):
+    def filter_get_range_head(self,name,model):
         """
         返回None，则会用默认的
         返回字典 {'name':name,
@@ -27,5 +24,15 @@ class BaseFieldProc(object):
                 'editor':'com-date-range-filter'
                 }
         """
-        return None
+        return {}
+    
+    def filter_get_head(self,name,model):
+        return {}
+    
+    
+    def filter_adapt_dict(self,dc,name):
+        return dc
+    
+    def filter_dict_query_args(self,dc,name):
+        return {}
     

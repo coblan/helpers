@@ -153,81 +153,46 @@ class RowFilter(object):
                 end=kw.get('_end_%s'%k)
                 self.filter_args['%s__lte'%k]=end            
     
-    def get_context(self):
+    def get_proc_list(self):
         ls=[]
         for name in self.valid_name:
             
-            if name in self.range_fields:
-                # 先查找 mapper
-                model_name = model_to_name(self.model)
-                model_field_name = '%s.%s'%(model_name,name)
-                mapper =field_map.get(model_field_name)
-                if mapper:
-                    filter_head = mapper().get_range_filter_head()
-                    if filter_head:
-                        ls.append(filter_head)
-                        break
-                    
-                # 如果没有mapper，或者mapper没有东西返回
+            # 先查找 proc
+            model_name = model_to_name(self.model)
+            model_field_name = '%s.%s'%(model_name,name)
+            proc_cls =field_map.get(model_field_name)
+            
+            if not proc_cls:
                 f = self.model._meta.get_field(name)
-                #if isinstance(f,fields.DateField):
-                ls.append({'name':name,
-                           'label':_(f.verbose_name),
-                           'editor':'com-date-range-filter'
-                           })
-                break
-            # TODO 需要 先查询 mapper
-            f = self.model._meta.get_field(name)
-            if isinstance(f,fields.BooleanField):
-                ls.append({'name':name,
-                           'label':_(f.verbose_name),
-                           'editor':'com-select-filter',
-                           'options':[
-                               {'value':'1','label':'Yes'},
-                               {'value':"0",'label':'No'}]})
+                proc_cls  =field_map.get(f.__class__)            
+            ls.append(proc_cls)
+        return ls
+    
+    def get_context(self):
+        ls=[]
+        for proc_cls,name in zip(self.get_proc_list() ,self.valid_name):
+
+            if name in self.range_fields:
+                
+                filter_head = proc_cls().filter_get_range_head(name,self.model)
+                ls.append(filter_head)
+  
             else:
-                ls.append({'name':name,
-                           'editor':'com-select-filter',
-                           'label':_(f.verbose_name),
-                           'options':self.get_options(name)})
+                filter_head = proc_cls().filter_get_head(name,self.model)
+                ls.append(filter_head)
+                
         return ls
       
     def get_query(self,query):
         self.query=query
+        dc = {}
+        for proc_cls,name in zip(self.get_proc_list() ,self.valid_name):
+            dc.update( proc_cls().filter_dict_query_args(self.filter_args, name ) )
+        self.filter_args.update(dc)
         query=query.filter(**self.filter_args)
         return query    
     
-    def get_options(self,name):
-        this_field= self.model._meta.get_field(name)
-        if this_field.choices:
-            return [{'value':x[0],'label':x[1]} for x in this_field.choices]
-        elif isinstance(this_field,models.ForeignKey):
-            ls=this_field.get_choices()
-            ls=ls[1:]
-            out= [{'value':x[0],'label':x[1]} for x in ls]
-            #out= self.sort_option(out) # 用pinyin排序 sorted(out,key=lambda x:x['label'].encode('gbk'))  # 尼玛，用GBK才能对常用的中国字进行拼音排序
-                                                                   # 不常用的字，以及unicode都是按照笔画排序的
-            return out
-        # 这里需要考虑下，过滤的选项是来自于model的所有记录，还是来自于table过滤后的query
-        # 这里暂时是使用model的所有记录
-        elif not hasattr(self,'query'):
-            self.query = self.model.objects.all()
-    
-        ls = list(set(self.query.values_list(name,flat=True)))
-        #ls.sort()
-        out=[{'value':x,'label':unicode(x)} for x in ls]
-        #out= self.sort_option(out) # 用pinyin排序 sorted(out,key=lambda x:x['label'].encode('gbk'))  
-        return out   
-    
-    # def sort_option(self,option):
-        # index=0
-        # for opt in option:
-            # if opt['value']:
-                # break
-            # else:
-                # index+=1
-        # option[index:]=sorted(option[index:],key=lambda x:pinyin.get_initial(x['label']))
-        # return option
+  
     
     
 class RowSort(object):
@@ -341,7 +306,8 @@ class ModelTable(object):
 
     @classmethod
     def gen_from_search_args(cls,search_args,user):
-        kw,args = cls.dict_search_args(search_args)
+        args = cls.clean_search_args(search_args)
+        kw = dict(args)
         kw['search_args'] = args
         page = kw.pop('_page','1')
         perpage = kw.pop('_perpage',None)
@@ -356,7 +322,7 @@ class ModelTable(object):
         return cls(page,row_sort,row_filter,q,user,perpage=perpage,**kw)
     
     @classmethod
-    def dict_search_args(cls,search_args):
+    def clean_search_args(cls,search_args):
         """
         重载该函数，用于调整search_args的默认值，修改值
         返回的参数 (1,2) 1用于传入 filter ，2 用于传回前端去显示。
@@ -364,8 +330,8 @@ class ModelTable(object):
         例如对于类型为datetime的filter，
         _end_xxx = 2018-10-23  传到filter的值为 _end_xxx=2018-10-24 ,传到前端的值为 _end_xxx=2018-10-23
         """
-        proc=dict(search_args)
-        return proc,search_args
+        args=dict(search_args)
+        return args
     
     @classmethod
     def get_director_name(cls):

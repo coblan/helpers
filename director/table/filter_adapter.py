@@ -10,7 +10,7 @@ def datetime_range_adapter(search_args,name,month=None):
     start_name = '_start_%s'%name
     end_name='_end_%s'%name
     show_dict={}
-    proc_dict={}
+    #proc_dict={}
     if month is not None:
         today = timezone.now()
         sp = timezone.timedelta(days=30*month)

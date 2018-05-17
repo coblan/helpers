@@ -12,6 +12,8 @@ from django.utils.translation import ugettext as _
 #from md5 import md5
 from .field_proc import BaseFieldProc
 from .hash_dict import hash_dict
+from ..base_data import field_map
+
 
 
 def model_to_name(model):
@@ -107,21 +109,21 @@ def sim_dict(instance,filt_attr=None,include=None,exclude=None):
     return out
     
 
-class DatetimeProc(BaseFieldProc):
-    def to_dict(self,inst,name):
-        value = getattr(inst,name,None)
-        if value:
-            return {
-                name:value.strftime('%Y-%m-%d %H:%M:%S')
-                }
-        else:
-            return {}
+#class DatetimeProc(BaseFieldProc):
+    #def to_dict(self,inst,name):
+        #value = getattr(inst,name,None)
+        #if value:
+            #return {
+                #name:value.strftime('%Y-%m-%d %H:%M:%S')
+                #}
+        #else:
+            #return {}
         
-    def clean_field(self, dc, name):
-        if dc[name]:
-            return datetime.strptime(dc[name],'%Y-%m-%d %H:%M:%S')
-        else:
-            return dc[name]
+    #def clean_field(self, dc, name):
+        #if dc[name]:
+            #return datetime.strptime(dc[name],'%Y-%m-%d %H:%M:%S')
+        #else:
+            #return dc[name]
     
     #def from_dict(self,value,field):
         #"""
@@ -129,47 +131,47 @@ class DatetimeProc(BaseFieldProc):
         #"""
         #return datetime.strptime(value,'%Y-%m-%d %H:%M:%S')
         
-class ForeignProc(BaseFieldProc):
-    def to_dict(self,inst,name):
-        foreign=getattr(inst,name,None)
-        if foreign:
-            return {
-                name:foreign.pk,
-                '_%s_model'%name:model_to_name(foreign.__class__),
-                '_%s_label'%name:unicode(foreign)
-            }
-        else:
-            return {}
-    
-    def clean_field(self,dc,name):
-        model = name_to_model( dc.get('_%s_model'%name) )
-        return model.objects.get(pk=dc.get(name))     
-    
-    #def get_label(self,inst,name):
+#class ForeignProc(BaseFieldProc):
+    #def to_dict(self,inst,name):
         #foreign=getattr(inst,name,None)
         #if foreign:
-            #return unicode(foreign)
-    
-    #def from_dict(self,value,field):
-        #if isinstance(value,models.Model):
-            #return value
+            #return {
+                #name:foreign.pk,
+                #'_%s_model'%name:model_to_name(foreign.__class__),
+                #'_%s_label'%name:unicode(foreign)
+            #}
         #else:
-            #model=field.rel.to
-            #if not value:
-                #return None
-            #else:
-                #return model.objects.get(pk=value)
+            #return {}
+    
+    #def clean_field(self,dc,name):
+        #model = name_to_model( dc.get('_%s_model'%name) )
+        #return model.objects.get(pk=dc.get(name))     
+    
+    ##def get_label(self,inst,name):
+        ##foreign=getattr(inst,name,None)
+        ##if foreign:
+            ##return unicode(foreign)
+    
+    ##def from_dict(self,value,field):
+        ##if isinstance(value,models.Model):
+            ##return value
+        ##else:
+            ##model=field.rel.to
+            ##if not value:
+                ##return None
+            ##else:
+                ##return model.objects.get(pk=value)
 
-class ManyProc(BaseFieldProc):
-    def to_dict(self,inst,name):
-        out =[]
-        if inst.pk:
-            for item in getattr(getattr(inst,name),'all')():
-                out.append(item.pk)
+#class ManyProc(BaseFieldProc):
+    #def to_dict(self,inst,name):
+        #out =[]
+        #if inst.pk:
+            #for item in getattr(getattr(inst,name),'all')():
+                #out.append(item.pk)
                 
-        return {
-            name:out
-            }
+        #return {
+            #name:out
+            #}
 
     
     #def from_dict(self,value,field):
@@ -178,20 +180,20 @@ class ManyProc(BaseFieldProc):
         #"""
         #return value
 
-class OneProc(BaseFieldProc):
-    def to_dict(self,inst,name):
-        foreign=getattr(inst,name,None)
-        if foreign:
-            return {
-                name: foreign.pk ,
-                '_%s_model'%name:model_to_name(foreign.__class__)
-            }
-        else:
-            return {}
+#class OneProc(BaseFieldProc):
+    #def to_dict(self,inst,name):
+        #foreign=getattr(inst,name,None)
+        #if foreign:
+            #return {
+                #name: foreign.pk ,
+                #'_%s_model'%name:model_to_name(foreign.__class__)
+            #}
+        #else:
+            #return {}
     
-    def clean_field(self,dc,name):
-        model = name_to_model( dc.get('_%s_model'%name) )
-        return model.objects.get(pk=dc.get(name))  
+    #def clean_field(self,dc,name):
+        #model = name_to_model( dc.get('_%s_model'%name) )
+        #return model.objects.get(pk=dc.get(name))  
  
     
     #def from_dict(self,value,field):
@@ -208,36 +210,36 @@ class OneProc(BaseFieldProc):
         #return getattr(inst,name)
     #def from_dict(self,)
 
-class DateProc(BaseFieldProc):
-    def to_dict(self,inst,name):
-        date=getattr(inst,name)
-        if date:
-            return {name:date.isoformat()}
-        else:
-            return {}
+#class DateProc(BaseFieldProc):
+    #def to_dict(self,inst,name):
+        #date=getattr(inst,name)
+        #if date:
+            #return {name:date.isoformat()}
+        #else:
+            #return {}
         
   
 
-class DecimalProc(BaseFieldProc):
-    def to_dict(self,inst,name):
-        data = getattr(inst,name)
-        return {name:unicode(data)}
+#class DecimalProc(BaseFieldProc):
+    #def to_dict(self,inst,name):
+        #data = getattr(inst,name)
+        #return {name:unicode(data)}
     
-    def clean_field(self,dc,name):
-        return float(dc.get(name))
+    #def clean_field(self,dc,name):
+        #return float(dc.get(name))
 
-class BoolProc(BaseFieldProc):
-    pass
+#class BoolProc(BaseFieldProc):
+    #pass
 
 
-field_map={
-    models.DateTimeField:DatetimeProc,
-    models.ForeignKey : ForeignProc,
-    models.ManyToManyField:ManyProc,
-    models.OneToOneField:OneProc,
-    models.DateField:DateProc,
-    models.DecimalField:DecimalProc,
-}
+#field_map.update({
+    ##models.DateTimeField:DatetimeProc,
+    ##models.ForeignKey : ForeignProc,
+    ##models.ManyToManyField:ManyProc,
+    ##models.OneToOneField:OneProc,
+    ##models.DateField:DateProc,
+    ##models.DecimalField:DecimalProc,
+#})
 
 
 def from_dict(dc,model=None,pre_proc=None):
