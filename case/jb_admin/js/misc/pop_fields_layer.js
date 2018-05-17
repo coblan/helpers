@@ -38,7 +38,9 @@ export  function pop_fields_layer (row,fields_ctx,callback){
                     :row="row" :heads="fields_heads" :ops="ops"></component>
                 </div>`,
         end: function () {
-            $(window).resize()
+
+            eventBus.$emit('openlayer_changed')
+
         }
     });
 
@@ -89,7 +91,9 @@ export  function pop_fields_layer (row,fields_ctx,callback){
         }
     })
 
-    $(window).resize()
+
+    eventBus.$emit('openlayer_changed')
+
 }
 
 window.pop_fields_layer = pop_fields_layer

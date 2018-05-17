@@ -22,7 +22,7 @@
     extra_table_logic='{{ extra_table_logic }}'
 
     tabs={{ tabs | jsonify | default:'[]' }}
-
+    search_args={{ search_args | jsonify | default:'{}'  }}
     table_logic={
         el:'#there',
         data:{
@@ -36,7 +36,7 @@
 
 //            model_name:model_name,
             selected:[],
-            search_args:{}, //ex.parseSearch(),
+            search_args:search_args, //ex.parseSearch(),
             ops:ops,
             crt_row:{},
             tabgroup:{
@@ -175,7 +175,7 @@
             <div class="flex-grow"></div>
         </div>
         <div class="box box-success">
-            <div class="table-wraper">
+            <div class="table-wraper" style="position: relative;">
                 {% block table_content %}
                 <v-table ref="vtable" is-horizontal-resize
                          is-vertical-resize

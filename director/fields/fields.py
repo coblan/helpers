@@ -31,16 +31,16 @@ from helpers.director.base_data import director
     #else:
         #raise ValidationError(fields_obj.errors)
 
-def clean_dict(dc,model):
-    model_name = model_to_name(model)
-    for k,v in dc.items():
-        if not k.startswith('_'):
-            field_path = model_name+'.'+k
-            if field_map.get(field_path):
-                map_cls = field_map[field_path]
-                field = model._meta.get_fields()
-                dc[k]=map_cls().from_dict(v,model._meta.get_field(k)) 
-    return dc
+#def clean_dict(dc,model):
+    #model_name = model_to_name(model)
+    #for k,v in dc.items():
+        #if not k.startswith('_'):
+            #field_path = model_name+'.'+k
+            #if field_map.get(field_path):
+                #map_cls = field_map[field_path]
+                #field = model._meta.get_fields()
+                #dc[k]=map_cls().from_dict(v,model._meta.get_field(k)) 
+    #return dc
 
 class ModelFields(forms.ModelForm):
     """

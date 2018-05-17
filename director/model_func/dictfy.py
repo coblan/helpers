@@ -10,6 +10,7 @@ from django import forms
 from django.utils.timezone import localtime,datetime
 from django.utils.translation import ugettext as _
 #from md5 import md5
+from .field_proc import BaseFieldProc
 from .hash_dict import hash_dict
 
 
@@ -106,77 +107,100 @@ def sim_dict(instance,filt_attr=None,include=None,exclude=None):
     return out
     
 
-class DatetimeProc(object):
+class DatetimeProc(BaseFieldProc):
     def to_dict(self,inst,name):
         value = getattr(inst,name,None)
         if value:
             return {
-                name:localtime(value).strftime('%Y-%m-%d %H:%M:%S')
+                name:value.strftime('%Y-%m-%d %H:%M:%S')
                 }
         else:
             return {}
-    
-    def from_dict(self,value,field):
-        """
-        该函数需要check
-        """
-        return datetime.strptime(value,'%Y-%m-%d %H:%M:%S')
         
-class ForeignProc(object):
+    def clean_field(self, dc, name):
+        if dc[name]:
+            return datetime.strptime(dc[name],'%Y-%m-%d %H:%M:%S')
+        else:
+            return dc[name]
+    
+    #def from_dict(self,value,field):
+        #"""
+        #该函数需要check
+        #"""
+        #return datetime.strptime(value,'%Y-%m-%d %H:%M:%S')
+        
+class ForeignProc(BaseFieldProc):
     def to_dict(self,inst,name):
         foreign=getattr(inst,name,None)
         if foreign:
-            return {name:foreign.pk}
+            return {
+                name:foreign.pk,
+                '_%s_model'%name:model_to_name(foreign.__class__),
+                '_%s_label'%name:unicode(foreign)
+            }
         else:
             return {}
     
-    def get_label(self,inst,name):
-        foreign=getattr(inst,name,None)
-        if foreign:
-            return unicode(foreign)
+    def clean_field(self,dc,name):
+        model = name_to_model( dc.get('_%s_model'%name) )
+        return model.objects.get(pk=dc.get(name))     
     
-    def from_dict(self,value,field):
-        if isinstance(value,models.Model):
-            return value
-        else:
-            model=field.rel.to
-            if not value:
-                return None
-            else:
-                return model.objects.get(pk=value)
+    #def get_label(self,inst,name):
+        #foreign=getattr(inst,name,None)
+        #if foreign:
+            #return unicode(foreign)
+    
+    #def from_dict(self,value,field):
+        #if isinstance(value,models.Model):
+            #return value
+        #else:
+            #model=field.rel.to
+            #if not value:
+                #return None
+            #else:
+                #return model.objects.get(pk=value)
 
-class ManyProc(object):
+class ManyProc(BaseFieldProc):
     def to_dict(self,inst,name):
         out =[]
         if inst.pk:
             for item in getattr(getattr(inst,name),'all')():
                 out.append(item.pk)
+                
         return {
             name:out
             }
 
     
-    def from_dict(self,value,field):
-        """
-        TODO  think about : many_set
-        """
-        return value
+    #def from_dict(self,value,field):
+        #"""
+        #TODO  think about : many_set
+        #"""
+        #return value
 
-class OneProc(object):
+class OneProc(BaseFieldProc):
     def to_dict(self,inst,name):
         foreign=getattr(inst,name,None)
         if foreign:
-            return {name: foreign.pk }
+            return {
+                name: foreign.pk ,
+                '_%s_model'%name:model_to_name(foreign.__class__)
+            }
         else:
             return {}
-        
-    def from_dict(self,value,field):
-        """may need test"""
-        if isinstance(value,models.Model):
-            return value
-        else:
-            model=field.rel.to
-            return model.objects.get(pk=value)    
+    
+    def clean_field(self,dc,name):
+        model = name_to_model( dc.get('_%s_model'%name) )
+        return model.objects.get(pk=dc.get(name))  
+ 
+    
+    #def from_dict(self,value,field):
+        #"""may need test"""
+        #if isinstance(value,models.Model):
+            #return value
+        #else:
+            #model=field.rel.to
+            #return model.objects.get(pk=value)    
 
 #from helpers.base.jsonfield import JsonField
 #class JsonProc(object):
@@ -184,26 +208,25 @@ class OneProc(object):
         #return getattr(inst,name)
     #def from_dict(self,)
 
-class DateProc(object):
+class DateProc(BaseFieldProc):
     def to_dict(self,inst,name):
         date=getattr(inst,name)
         if date:
             return {name:date.isoformat()}
         else:
             return {}
-    def from_dict(self,value,field):
-        """may need test"""
-        return value     
+        
+  
 
-class DecimalProc(object):
+class DecimalProc(BaseFieldProc):
     def to_dict(self,inst,name):
         data = getattr(inst,name)
         return {name:unicode(data)}
     
-    def from_dict(self,value,field):
-        return float(value)
+    def clean_field(self,dc,name):
+        return float(dc.get(name))
 
-class BoolProc(object):
+class BoolProc(BaseFieldProc):
     pass
 
 
@@ -219,7 +242,8 @@ field_map={
 
 def from_dict(dc,model=None,pre_proc=None):
     """
-
+    **该函数不应该再使用**
+    
     1. 半自动：
     processed_attr=pre_proc(dc,model) ; 返回处理过的字典processed，该processed用于剔除传入的dc参数
     
@@ -240,7 +264,7 @@ def from_dict(dc,model=None,pre_proc=None):
         if value!='__not_output':
             if not value is None:
                 if field_map.get(field.__class__):
-                    processed[field.name] = field_map.get(field.__class__)().from_dict(value,field) 
+                    processed[field.name] = field_map.get(field.__class__)().clean_field(dc,field.name) 
                 else:
                     # 由于有jsonfield这样的字段，不进行unicode处理，直接赋值python对象
                     #processed[field.name]=u(value)

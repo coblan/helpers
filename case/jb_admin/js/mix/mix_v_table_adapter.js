@@ -2,6 +2,7 @@ var mix_v_table_adapter={
 
     mounted:function(){
         eventBus.$on('content_resize',this.resize)
+        eventBus.$on('openlayer_changed',this.refreshSize)
     },
     computed:{
         columns:function(){
@@ -38,6 +39,9 @@ var mix_v_table_adapter={
         }
     },
     methods:{
+        refreshSize:function(){
+            this.$refs.vtable.resize()
+        },
         resize:function(){
             var self=this
             $(self.$refs.vtable.$el).find('.v-table-rightview').css('width','100%')

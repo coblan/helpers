@@ -7,7 +7,7 @@ import json
 from django.db.models import Q,fields
 from django.core.exceptions import PermissionDenied
 from ..access.permit import ModelPermit
-from ..model_func.dictfy import model_to_name,to_dict,model_to_head,model_to_name,model_dc
+from ..model_func.dictfy import model_to_name,to_dict,model_to_head,model_to_name,model_dc,field_map
 from django.db import models
 import math
 import time
@@ -156,16 +156,29 @@ class RowFilter(object):
     def get_context(self):
         ls=[]
         for name in self.valid_name:
-            f = self.model._meta.get_field(name)
-            #mt = [x for x in self.range_fields if x.get('name')==name]
-            #if mt:
+            
             if name in self.range_fields:
-                if isinstance(f,fields.DateField):
-                    ls.append({'name':name,
-                               'label':_(f.verbose_name),
-                               'editor':'com-date-range-filter'
-                               })
-            elif isinstance(f,fields.BooleanField):
+                # 先查找 mapper
+                model_name = model_to_name(self.model)
+                model_field_name = '%s.%s'%(model_name,name)
+                mapper =field_map.get(model_field_name)
+                if mapper:
+                    filter_head = mapper().get_range_filter_head()
+                    if filter_head:
+                        ls.append(filter_head)
+                        break
+                    
+                # 如果没有mapper，或者mapper没有东西返回
+                f = self.model._meta.get_field(name)
+                #if isinstance(f,fields.DateField):
+                ls.append({'name':name,
+                           'label':_(f.verbose_name),
+                           'editor':'com-date-range-filter'
+                           })
+                break
+            # TODO 需要 先查询 mapper
+            f = self.model._meta.get_field(name)
+            if isinstance(f,fields.BooleanField):
                 ls.append({'name':name,
                            'label':_(f.verbose_name),
                            'editor':'com-select-filter',
@@ -290,6 +303,8 @@ class ModelTable(object):
     fields_sort=[]
     pop_edit_field=""
     def __init__(self,_page=1,row_sort=[],row_filter={},row_search={},crt_user=None,perpage=None,**kw):
+        self.search_args = kw.get('search_args')
+        
         self.kw=kw
         self.crt_user=crt_user 
         self.page=_page
@@ -323,21 +338,11 @@ class ModelTable(object):
         """
         kw = request.GET.dict()
         return cls.gen_from_search_args(kw,request.user)
-        #page = kw.pop('_page','1')
-        #perpage = kw.pop('_perpage')
-        #row_sort = kw.pop('_sort','').split(',')
-        #row_sort=filter(lambda x: x!='',row_sort)
-        #q=kw.pop('_q',None)
-        #row_filter={}
-        #for k in cls.filters.names:
-            #arg = kw.pop(k,None)
-            #if arg:
-                #row_filter[k]=arg
-        #return cls(page,row_sort,row_filter,q,request.user,**kw)
-    
+
     @classmethod
     def gen_from_search_args(cls,search_args,user):
-        kw = search_args
+        kw,args = cls.dict_search_args(search_args)
+        kw['search_args'] = args
         page = kw.pop('_page','1')
         perpage = kw.pop('_perpage',None)
         row_sort = kw.pop('_sort','').split(',')
@@ -349,6 +354,18 @@ class ModelTable(object):
             if arg is not None:
                 row_filter[k]=arg
         return cls(page,row_sort,row_filter,q,user,perpage=perpage,**kw)
+    
+    @classmethod
+    def dict_search_args(cls,search_args):
+        """
+        重载该函数，用于调整search_args的默认值，修改值
+        返回的参数 (1,2) 1用于传入 filter ，2 用于传回前端去显示。
+        
+        例如对于类型为datetime的filter，
+        _end_xxx = 2018-10-23  传到filter的值为 _end_xxx=2018-10-24 ,传到前端的值为 _end_xxx=2018-10-23
+        """
+        proc=dict(search_args)
+        return proc,search_args
     
     @classmethod
     def get_director_name(cls):
@@ -370,7 +387,6 @@ class ModelTable(object):
             ls.extend(row_filters)
         
         director_name =self.get_director_name()
-        
         return {
             'heads':self.get_heads(),
             'rows': self.get_rows(),
@@ -380,7 +396,8 @@ class ModelTable(object):
             #'search_tip':self.row_search.get_context(),
             'director_name':director_name,
             'model_name':model_to_name(self.model),
-            'ops' : self.get_operation()
+            'ops' : self.get_operation(),
+            'search_args':self.search_args
         }
     
     def get_head_context(self):
@@ -410,7 +427,8 @@ class ModelTable(object):
     def get_data_context(self):
         return {
             'rows': self.get_rows(),
-            'row_pages' : self.pagenum.get_context(),            
+            'row_pages' : self.pagenum.get_context(),  
+            'search_args':self.search_args
         }
     
     def permited_fields(self):
@@ -512,8 +530,11 @@ class ModelTable(object):
         out=[]
         director_name = self.get_director_name()
         for inst in query:
-
-            dc= to_dict(inst, include=self.permited_fields(),filt_attr=self.dict_row( inst))
+            # 遇到一种情况，聚合时，这里的queryset返回的item是dict。所以下面做一个判断
+            if isinstance(inst,models.Model):
+                dc= to_dict(inst, include=self.permited_fields(),filt_attr=self.dict_row( inst))
+            else:
+                dc = inst
             dc['_director_name'] = director_name+'.edit'
             out.append(dc)
         return out
@@ -534,13 +555,14 @@ class ModelTable(object):
         query=self.row_filter.get_query(query)
     
         query=self.row_search.get_query(query)
+        query = self.statistics(query)
         query = self.row_sort.get_query(query)
-        self.statistics(query)
         query = self.pagenum.get_query(query)  
         return query
     
     def statistics(self,query):
-        pass
+        return query
+    
     
     def inn_filter(self,query):
         return query.order_by('-pk')

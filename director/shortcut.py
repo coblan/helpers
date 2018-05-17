@@ -9,7 +9,8 @@ from .fields.fieldspage import FieldsPage
 from .fields.fields import ModelFields
 
 from .access.permit import ModelPermit,has_permit
-from .model_func.dictfy import field_map,model_to_name,name_to_model
+from .model_func.dictfy import field_map,model_to_name,name_to_model,BaseFieldProc
+
 #
 #from .container import evalue_container
 #from .short_gen import regist_director
