@@ -11,7 +11,7 @@ class ForeignProc(BaseFieldProc):
             return {
                 name:foreign.pk,
                 '_%s_model'%name:model_to_name(foreign.__class__),
-                '_%s_label'%name:unicode(foreign)
+                '_%s_label'%name:str(foreign)
             }
         else:
             return {}

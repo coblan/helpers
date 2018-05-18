@@ -69,7 +69,7 @@ class ValidDepart(object):
         depart=None
         if self.depart_pk:
             for dep in allowed_depart:
-                if unicode(dep.pk) ==self.depart_pk:
+                if str(dep.pk) ==self.depart_pk:
                     depart=dep
         else:
             depart=allowed_depart[0]
@@ -92,7 +92,7 @@ class ValidDepart(object):
     def get_context(self,ctx=None):
         ctx = ctx or {}
         allowed_departs=self.get_allowed_depart()
-        ctx['depart_list']=[{'pk':x.pk,'label':unicode(x)} for x in allowed_departs]
+        ctx['depart_list']=[{'pk':x.pk,'label':str(x)} for x in allowed_departs]
         ctx['crt_depart']=to_dict( self.get_crt_depart())
         ctx['data_key']=self.data_key
         ctx['child_depart_list']=[to_dict(x) for x in self.get_query_depart()[:-1]]

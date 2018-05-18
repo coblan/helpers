@@ -38,7 +38,7 @@ class WorkList(ModelTable):
             })
         if inst.checker:
             dc.update({
-                'checker_name':unicode(inst.checker)
+                'checker_name':str(inst.checker)
             })
         dc.update({
             # 'emp':unicode(inst.emp),

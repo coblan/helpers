@@ -5,7 +5,7 @@ from datetime import datetime
 import json
 import hashlib
 import io
-import urlparse
+from urllib.parse import urljoin
 from django.views.decorators.csrf import csrf_exempt
 
 class Ckeditor(object):
@@ -53,7 +53,7 @@ class Ckeditor(object):
         return file_dir
     
     def getUrl(self):
-        file_url=urlparse.urljoin(settings.MEDIA_URL, 'ckeditor/{file_name}'.format(file_name=self.file_name))
+        file_url=urljoin(settings.MEDIA_URL, 'ckeditor/{file_name}'.format(file_name=self.file_name))
         return file_url
         
 

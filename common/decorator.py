@@ -31,7 +31,7 @@ def warn_free(fun):
         except (UserWarning,ObjectDoesNotExist) as e:
             dc= {
                 'status':'fail',
-                'msg':unicode(e)
+                'msg':str(e)
             }
         if isinstance(dc,HttpResponse):
             return dc

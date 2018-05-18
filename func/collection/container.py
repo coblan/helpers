@@ -52,7 +52,7 @@ def evalue_list(ls,**kw):
     for item in ls:
         # 如果不是 visible，就去掉该项，**连其他key对应的function都不要运行**
         tmp = copy.deepcopy(item)
-        if isinstance(tmp,dict) and tmp.has_key('visible'):
+        if isinstance(tmp,dict) and 'visible' in tmp:
             visible= tmp.get('visible')
             if inspect.isfunction(visible):
                 visible=run_func(visible,**kw)

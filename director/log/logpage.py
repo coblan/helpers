@@ -25,7 +25,7 @@ class LogPage(object):
                 for pk in ls[1:]:
                     querys =LogModel.objects.filter(key='%s.%s'%(_class,pk)).order_by('-id')
                     rows.extend(list(querys))
-        ctx = {'rows':[sim_dict(x,filt_attr=lambda y:{'user':unicode(y.user)}) for x in rows],
+        ctx = {'rows':[sim_dict(x,filt_attr=lambda y:{'user':str(y.user)}) for x in rows],
                'heads':model_to_head(LogModel)}
 
         ctx['can_add']=False

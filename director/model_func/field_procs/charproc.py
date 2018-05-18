@@ -21,7 +21,7 @@ class CharProc(BaseFieldProc):
         else:
             query = model.objects.all().values_list(name,flat=True)
             ls = list(set(query))
-            options = [{ 'value':x,'label':unicode(x)} for x in ls]
+            options = [{ 'value':x,'label':str(x)} for x in ls]
             
         return {
             'name':name,

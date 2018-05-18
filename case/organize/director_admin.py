@@ -42,7 +42,7 @@ class EmployeeFields(ModelFields):
             users.append(self.instance.user) 
         
         user_options=[{'value':None,'label':'---'}]
-        options=[{'value':user.pk,'label':unicode(user)}for user in users]
+        options=[{'value':user.pk,'label':str(user)}for user in users]
         options=sorted(options,cmp=lambda x,y: cmp(x['label'],y['label']) )
         user_options.extend(options)
         return {
@@ -161,10 +161,10 @@ class EmployeeTable(ModelTable):
     
     def dict_row(self, inst):
         dc={
-            'user':unicode(inst.user),
-            'baseinfo':unicode(inst.baseinfo),
+            'user':str(inst.user),
+            'baseinfo':str(inst.baseinfo),
             'head':inst.baseinfo.head if inst.baseinfo else '',
-            'depart':','.join([unicode(x) for x in inst.depart.all()]),
+            'depart':','.join([str(x) for x in inst.depart.all()]),
         }
         return dc 
 

@@ -135,7 +135,7 @@ class ModelPermit(object):
             if not isinstance(v,dict) and issubclass(v,models.Model):
 
                 ls.append({'name':model_to_name(v),
-                           'label': unicode(v._meta.verbose_name),
+                           'label': str(v._meta.verbose_name),
                            # 'label': v._meta.app_label+'.'+ unicode(v._meta.verbose_name), # 因为翻译的缘故，有时是 __proxy__函数，所以必须 unicode处理一下
                            'type':'model',
                            'fields':model_permit_info(v,self.user)})
@@ -224,7 +224,7 @@ def model_permit_info(model,user):
             fields_dc[field.name]=field.verbose_name  
     ls= [] #[{'name':'id','label':'ID'}]
     for k,v in fields_dc.items():
-        if isinstance(v,(str,unicode)):
+        if isinstance(v,(str,str)):
             label=v
         elif hasattr(v.label,'title') and callable(v.label.title):
             label=v.label.title()
@@ -262,7 +262,7 @@ def permit_to_text(permit):
     return out_dc
 
 def _get_model_permit_text(model,v):
-    key=unicode( model._meta.verbose_name )
+    key=str( model._meta.verbose_name )
     value=""
     value_list=[]
     if "can__log" in v:
@@ -280,7 +280,7 @@ def _get_model_permit_text(model,v):
             op.append("写")
         if op:
             op_str='/'.join(op)
-            value_list.append("%s(%s)"%( unicode(field.verbose_name),op_str))
+            value_list.append("%s(%s)"%( str(field.verbose_name),op_str))
     if value_list:
         value=','.join(value_list)
     return {key:value}

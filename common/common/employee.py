@@ -67,7 +67,7 @@ def get_admin( BasicInfo,
             if self.instance.user:
                 users.append(self.instance.user)            
             return {
-                'user':[{'value':user.pk,'label':unicode(user)}for user in users]
+                'user':[{'value':user.pk,'label':str(user)}for user in users]
             }
         
 
@@ -150,8 +150,8 @@ def get_admin( BasicInfo,
         
         def dict_row(self, inst):
             dc={
-                'user':unicode(inst.user),
-                'baseinfo':unicode(inst.baseinfo),
+                'user':str(inst.user),
+                'baseinfo':str(inst.baseinfo),
                 'head':inst.baseinfo.head if inst.baseinfo else ''
             }
             return dc        

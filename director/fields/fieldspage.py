@@ -37,5 +37,5 @@ class FieldsPage(object):
         return self.ctx
     
     def get_label(self):
-        return  unicode(self.fields.instance)  #'编辑表单'  
+        return  str(self.fields.instance)  #'编辑表单'  
     

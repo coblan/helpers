@@ -37,7 +37,7 @@ def to_dict(instance,filt_attr=None,include=None,exclude=None,hash_keys=None,for
     out['pk']=instance.pk
     out['_class']= instance._meta.app_label+'.'+instance._meta.model_name
     if '_label' not in out.keys():
-        out['_label']=unicode(instance)
+        out['_label']=str(instance)
     if '_hash' not in out.keys():
         out['_hash']=hash_dict(out,hash_keys)
         #out['_md5']=md5(out).hexdigest() 
@@ -86,9 +86,9 @@ def sim_dict(instance,filt_attr=None,include=None,exclude=None):
                     #out['_%s_label'%field.name]=mapper.get_label(instance,field.name)
                 if isinstance(out.get(field.name),list):
                     # 如果遇到 manytomany的情况，是一个list
-                    out['_%s_label'%field.name]=[unicode(x) for x in out[field.name]]
+                    out['_%s_label'%field.name]=[str(x) for x in out[field.name]]
                 else:
-                    out['_%s_label'%field.name]=unicode(getattr(instance,field.name,''))
+                    out['_%s_label'%field.name]=str(getattr(instance,field.name,''))
             else:
                 
                 # 考虑到使用到get_prep_value转换为str的field很少（大部分特殊的都在field_map类集中处理了。）
@@ -305,14 +305,14 @@ def form_to_head(form,include=None):
         if isinstance(include,(tuple,list)) and k not in include:
             continue
         dc = {'name':k,'label':_(v.label),
-              'help_text':unicode(v.help_text),
+              'help_text':str(v.help_text),
               'editor':'linetext'}
         if hasattr(v,'required'):
             dc['required'] = v.required
         
         if hasattr(v,'widget') and isinstance(v.widget,forms.widgets.Select):
             dc['editor'] = 'sim_select' 
-            dc['options']=[{'value':val,'label':unicode(lab)} for val,lab in v.widget.choices]
+            dc['options']=[{'value':val,'label':str(lab)} for val,lab in v.widget.choices]
         elif v.__class__==forms.fields.CharField:
             if v.max_length:
                 dc.update({'editor':'linetext','maxlength':v.max_length})
@@ -385,10 +385,10 @@ def delete_related_query(inst):
                 continue
             elif hasattr(obj,'all'):  # Foreign Key field
                 for sub_obj in obj.all():
-                    ls.append({'str':"{cls_name}:{content}".format(cls_name = sub_obj.__class__.__name__,content=unicode(sub_obj)),
+                    ls.append({'str':"{cls_name}:{content}".format(cls_name = sub_obj.__class__.__name__,content=str(sub_obj)),
                                'related':delete_related_query(sub_obj)})
             else:   # OneToOne related
-                ls.append({'str':"{cls_name}:{content}".format(cls_name = obj.__class__.__name__,content=unicode(obj)),
+                ls.append({'str':"{cls_name}:{content}".format(cls_name = obj.__class__.__name__,content=str(obj)),
                            'related':delete_related_query(obj)})   
                 
     for rel in inst._meta.get_all_related_many_to_many_objects():  # ManyToMany Related
@@ -396,7 +396,7 @@ def delete_related_query(inst):
         many_to_many_rels = getattr(inst,name)
         for obj in many_to_many_rels.all():
             ls.append({'str':'{obj_cls}({obj_content}) to {inst_cls}({inst_content}) relationship '.format(obj_cls=obj.__class__.__name__,\
-                                obj_content=unicode(obj),inst_cls=inst.__class__.__name__,inst_content=unicode(obj)),
+                                obj_content=str(obj),inst_cls=inst.__class__.__name__,inst_content=str(obj)),
                        'related':[]})
     for field in inst._meta.get_fields():    # manyToMany Field
         if isinstance(field,models.ManyToManyField):
@@ -405,7 +405,7 @@ def delete_related_query(inst):
                 continue
             for obj in getattr(inst,name).all():
                 ls.append({'str':'{obj_cls}({obj_content}) to {inst_cls}({inst_content}) relationship '.format(obj_cls=obj.__class__.__name__,\
-                                obj_content=unicode(obj),inst_cls=inst.__class__.__name__,inst_content=unicode(obj)),
+                                obj_content=str(obj),inst_cls=inst.__class__.__name__,inst_content=str(obj)),
                        'related':[]})
     
     return ls

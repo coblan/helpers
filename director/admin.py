@@ -105,7 +105,7 @@ class GroupFormPage(FieldsPage):
                 'name':'permit',
                 'editor':'tow_col',
                 'label':'权限选择',
-                'options':[{'value':x.pk,'label':unicode(x)} for x in PermitModel.objects.all()]
+                'options':[{'value':x.pk,'label':str(x)} for x in PermitModel.objects.all()]
             })
             return heads
         

@@ -102,7 +102,7 @@ class BaseEngine(object):
             ctx['menu']=self.get_menu(request)   
             ctx['page_name']=name
             ctx['engine_url']=reverse(self.url_name,args=('aa',))[:-3]
-            if isinstance(self.root_page,(str,unicode)):
+            if isinstance(self.root_page,(str,str)):
                 ctx['root_page']=self.root_page
             else:
                 ctx['root_page']=self.root_page(self.url_name)
@@ -173,7 +173,7 @@ def and_list(ls):
                 validator = ModelPermit(model, user)
                 if not validator.can_access():
                     return False
-            elif isinstance(model,(unicode,str)):
+            elif isinstance(model,(str,str)):
                 if not has_permit(user,model): # model是字符串，表示是验证特殊权限
                     return False
             elif inspect.isfunction(model):

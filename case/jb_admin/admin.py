@@ -93,7 +93,7 @@ class GroupForm(ModelFields):
     
     def get_heads(self):
         heads= super(self.__class__,self).get_heads()
-        options = [{'value':x.pk,'label':unicode(x)} for x in PermitModel.objects.all()]
+        options = [{'value':x.pk,'label':str(x)} for x in PermitModel.objects.all()]
         options = list2tree(options)
         heads.append({
             'name':'permit',

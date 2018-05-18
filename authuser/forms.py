@@ -52,7 +52,7 @@ class LoginForm(forms.ModelForm):
             for k,v in self.errors.items():
                 field = self.fields.get(k)
                 if field.error_messages.has_key('required'):
-                    self.errors[k]=['必须输入%s'%unicode(field.label),]
+                    self.errors[k]=['必须输入%s'%str(field.label),]
             return
         
         if user: 

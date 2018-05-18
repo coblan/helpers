@@ -174,7 +174,7 @@ class ModelFields(forms.ModelForm):
         }         
     
     def get_del_info(self):
-        return {'%(model)s:%(inst)s <id=%(pk)s>'%{'model':self.instance.__class__.__name__,'inst':unicode(self.instance),'pk':self.instance.pk}:delete_related_query(self.instance)}
+        return {'%(model)s:%(inst)s <id=%(pk)s>'%{'model':self.instance.__class__.__name__,'inst':str(self.instance),'pk':self.instance.pk}:delete_related_query(self.instance)}
     
     def get_operations(self):
         ls=[]
@@ -306,9 +306,9 @@ class ModelFields(forms.ModelForm):
             if name in options.keys():
                 continue
             if isinstance(field,forms.models.ModelMultipleChoiceField):
-                options[name]=[{'value':x[0],'label':unicode(x[1])} for x in field.choices]
+                options[name]=[{'value':x[0],'label':str(x[1])} for x in field.choices]
             elif isinstance(field,forms.models.ModelChoiceField):
-                options[name]=[{'value':x[0],'label':unicode(x[1])} for x in list(field.choices)]
+                options[name]=[{'value':x[0],'label':str(x[1])} for x in list(field.choices)]
             #if options.get(name,None):
                 #options[name]=self.sort_option(options[name])
             

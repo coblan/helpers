@@ -48,7 +48,7 @@ class EmployePermitTab(FieldsPage):
             return 'organize/employee_permit.html'
     
     def get_label(self):
-        return '%s的工作权限'% unicode(self.emp)
+        return '%s的工作权限'% str(self.emp)
  
     
 

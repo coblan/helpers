@@ -8,7 +8,7 @@ from .. .base_data import field_map
 class DecimalProc(BaseFieldProc):
     def to_dict(self,inst,name):
         data = getattr(inst,name)
-        return {name:unicode(data)}
+        return {name:str(data)}
     
     def clean_field(self,dc,name):
         return float(dc.get(name))

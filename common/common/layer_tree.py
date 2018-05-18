@@ -72,7 +72,7 @@ class LayerTree(object):
             
         find=False
         for par in parents:
-            if unicode(par.pk)==root.pk:
+            if str(par.pk)==root.pk:
                 find=True
             elif par.pk is None and root.pk is None:
                 find=True
