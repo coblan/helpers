@@ -19,7 +19,7 @@ class DateTimeProc(BaseFieldProc):
         
     def clean_field(self, dc, name):
         if dc[name]:
-            return datetime.strptime(dc[name],'%Y-%m-%d %H:%M:%S')
+            return timezone.datetime.strptime(dc[name],'%Y-%m-%d %H:%M:%S')
         else:
             return dc[name]
         
@@ -31,13 +31,14 @@ class DateTimeProc(BaseFieldProc):
                 }
     
     def filter_dict_query_args(self, dc, name):
-        end_name = '_end_%s'%name
-        if dc.get(end_name):
-            dd = timezone.datetime.strptime(dc[end_name],'%Y-%m-%d') 
+        #end_name = '_end_%s'%name
+        end_str = '%s__lte'%name
+        if dc.get(end_str):
+            dd = timezone.datetime.strptime(dc[end_str],'%Y-%m-%d') 
             sp_one_day = timezone.timedelta(days=1)
             real_end = dd+sp_one_day
             return {
-                end_name:real_end.strftime('%Y-%m-%d')
+                end_str:real_end.strftime('%Y-%m-%d')
             }
         else:
             return {}

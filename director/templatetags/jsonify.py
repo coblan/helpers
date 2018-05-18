@@ -3,7 +3,7 @@
 #from django.utils.safestring import mark_safe
 from django.template import Library
 from django.utils.safestring import mark_safe
-
+from ..data_format.json_format import DirectorEncoder
 import json
 
 register = Library()
@@ -12,7 +12,7 @@ def jsonify(obj):
     if obj is None:
         return ''
     else:
-        outstr=json.dumps(obj)
+        outstr=json.dumps(obj,cls=DirectorEncoder)
         return mark_safe( outstr )
 
     #if isinstance(object, ValuesListQuerySet):

@@ -21,7 +21,7 @@ class ForeignProc(BaseFieldProc):
         return model.objects.get(pk=dc.get(name))     
     
     def filter_get_head(self, name, model):
-        this_field= self.model._meta.get_field(name)
+        this_field= model._meta.get_field(name)
         ls=this_field.get_choices()
         ls=ls[1:]
         options= [{'value':x[0],'label':x[1]} for x in ls]       

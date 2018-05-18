@@ -85,8 +85,8 @@ def del_rows(rows,user):
         #fields_cls = model_dc.get(model).get('fields')
         fields_obj = fields_cls(row,crt_user=user)
         fields_obj.del_form()
-   
-    return rows
+    rows_only_pk=[{'pk':x['pk']} for x in rows]
+    return rows_only_pk
 
 def save_group_permit(row,user):
     field_obj = permit_save_model(user, row)

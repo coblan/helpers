@@ -3,6 +3,7 @@
 from django.db import models
 import json
 from django.forms import CharField
+from ..data_format.json_format import DirectorEncoder
 
 class JsonField(models.TextField):
     """
@@ -12,7 +13,7 @@ class JsonField(models.TextField):
         return json.loads(value)
     
     def get_prep_value(self,value):
-        return json.dumps(value)
+        return json.dumps(value,cls=DirectorEncoder)
     
     def to_python(self,value):
         # 当form.cleaned_data时，老是返回的是字符串。所以需要我转换一下，

@@ -1,4 +1,16 @@
+"""
+1.
+pip install django_debug_toolbar
 
+2. in settings.py 
+from helpers.maintenance.debug.debug_toolbar.debugtoolbar_setting import SET
+SET(globals()) 
+
+3. in urls.py
+from helpers.maintenance.debug.debug_toolbar.debugtoolbar_setting import AUTO_URL
+AUTO_URL(globals())
+
+"""
 def SET(scope):
     scope['DEBUG_TOOLBAR']=True
     scope['INSTALLED_APPS'].extend(['debug_toolbar',])
