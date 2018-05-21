@@ -264,6 +264,7 @@ class ModelTable(object):
     filters=RowFilter
     include=None
     exclude=[]
+    hide_fields = []
     pagenator=PageNum
     fields_sort=[]
     pop_edit_field=""
@@ -419,6 +420,7 @@ class ModelTable(object):
         return:[{"name": "name", "label": "\u59d3\u540d"}, {"sortable": true, "name": "age", "label": "\u5e74\u9f84"}]
         """
         ls = self.permited_fields()   
+        ls = [x for x in ls if x not in self.hide_fields]
         heads = model_to_head(self.model,include=ls)
         heads=[self.fields_map_head(head) for head in heads]
         

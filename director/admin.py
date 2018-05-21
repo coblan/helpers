@@ -28,7 +28,7 @@ from .fields.delpage import DelPage
 from .log.logpage import LogPage
 from .base_data import page_dc
 from . import  admin_kv
-from .model_func.field_procs import dateproc,datetimeproc,decimalproc,foreignproc,manyproc,oneproc,charproc,intproc
+from .model_func.field_procs import dateproc,datetimeproc,decimalproc,foreignproc,manyproc,oneproc,charproc,intproc,boolproc
 page_dc.update({
     'del_rows':DelPage,
         'log':LogPage,

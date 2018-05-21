@@ -54,6 +54,7 @@ class ModelFields(forms.ModelForm):
     readonly=[]
     field_sort=[]
     extra_mixins=[]
+    hide_fields = []
     @classmethod
     def parse_request(cls,request):
         """
@@ -220,6 +221,7 @@ class ModelFields(forms.ModelForm):
     
     def get_heads(self):
         heads = form_to_head(self)
+        heads = [head for head in heads if head['name'] not in self.hide_fields]
         for k,v in self.get_options().items():
             for head in heads:
                 if head['name']==k:
