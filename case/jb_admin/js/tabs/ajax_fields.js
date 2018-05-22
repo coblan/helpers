@@ -9,7 +9,7 @@ var ajax_fields={
       }
     },
     mixins:[mix_fields_data,mix_nice_validator],
-    template:`<div class="flex-v">
+    template:`<div class="flex-v" style="height: 100%;">
     <!--<div style="margin: 5px 1em;">-->
         <!--<button type="button" class="btn btn-default" title="保存" @click="save()"><i class="fa fa-save"></i><span>保存</span></button>-->
     <!--</div>-->

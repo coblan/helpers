@@ -6,7 +6,7 @@ from django.http import HttpResponse
 from django.contrib.auth.models import User
 from django.conf import settings
 from django.core.exceptions import PermissionDenied
-
+from ..data_format.json_format import DirectorEncoder
 """
 >->helpers/port.rst>
 ===========
@@ -56,7 +56,7 @@ def ajax_view(request):
     if isinstance(rt,HttpResponse):
         return rt
     else:
-        return HttpResponse(json.dumps(rt ), content_type="application/json") 
+        return HttpResponse(json.dumps(rt, cls= DirectorEncoder), content_type="application/json") 
 
 
 class RouterAjax(object):
@@ -181,4 +181,3 @@ class Naked(RouterAjax):
             func = self.scope[fun_name]
             return self.inject_and_run(func,**func_dic)
 
-    

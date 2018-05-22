@@ -70,7 +70,7 @@ var ajax_table={
                 this.fetched = true
             }
         },
-        data_getter:function(){
+        getRows:function(){
         // 这里clear，数据被清空，造成table的pagenator上下抖动
 //                       com.clear()
 

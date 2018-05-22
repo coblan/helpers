@@ -116,14 +116,20 @@
                     name= name.trim()
                     return this[name]
                 }
+            },
+            handleClick(tab, event) {
+                this.show_tab(tab.name)
+
             }
         }
 
     }
     $(function () {
         $('#there').height(window.innerHeight -80)
+//        $('.main-tab-content').height(window.innerHeight -230)
         $(window).resize(function() {
             $('#there').height(window.innerHeight -80)
+//            $('.main-tab-content').height(window.innerHeight -230)
         });
 
         if(extra_table_logic){
@@ -207,23 +213,49 @@
             </div>
         </div>
     </div>
-    <div id="tab-wrap" v-if="tabgroup.crt!='main'" class="flex-grow flex-v">
-        <div class="flex" v-if="tabgroup.tabs.length >1">
-            <ul class="nav nav-tabs tabs flex-grow">
-                <li v-for="tab in tabgroup.tabs"
-                    :class="{'active':tabgroup.crt==tab.name}"
-                    @click="show_tab(tab.name)"
-                    style="cursor: pointer;">
-                    <a  v-text="tab.label" ></a>
-                </li>
-            </ul>
-        </div>
+    <div id="tab-wrap" v-if="tabgroup.crt!='main'" class="flex-grow" style="position: relative">
+        <!--<div >-->
+            <!--<ul class="nav nav-tabs tabs flex-grow">  -->
+                <!--<li v-for="tab in tabgroup.tabs"-->
+                    <!--:class="{'active':tabgroup.crt==tab.name}"-->
+                    <!--@click="show_tab(tab.name)"-->
+                    <!--style="cursor: pointer;">-->
+                    <!--<a  v-text="tab.label" ></a>-->
+                <!--</li>-->
+            <!--</ul>-->
+            <!--<div >-->
+        <div  style="position: absolute;bottom: 0;top: 0;left: 0;right: 0;">
+                <el-tabs v-if="tabgroup.tabs.length >1" type="border-card"
+                         @tab-click="handleClick"
+                         style="width: 100%;"
+                         :value="tabgroup.crt" >
+                    <el-tab-pane v-for="tab in tabgroup.tabs" :name="tab.name">
+                        <span slot="label" v-text="tab.label"></span>
 
-        <component v-for="tab in tabgroup.tabs"
-                   v-show="tabgroup.crt==tab.name"
-                   :is="tab.com" :tab_head="tab"
-                   :par_row="crt_row"
-                   :ref="'_tab_'+tab.name" @tab-event="on_tab_event($event)"></component>
+                        <component :is="tab.com" :tab_head="tab"
+                                   :par_row="crt_row"
+                                   :ref="'_tab_'+tab.name" @tab-event="on_tab_event($event)"></component>
+
+
+                    </el-tab-pane>
+                </el-tabs>
+
+
+                    <component v-else v-for="tab in tabgroup.tabs"  :is="tab.com" :tab_head="tab"
+                               :par_row="crt_row"
+                               :ref="'_tab_'+tab.name" @tab-event="on_tab_event($event)"></component>
+        </div>
+            <!--</div>-->
+
+
+
+        <!--</div>-->
+
+        <!--<component v-for="tab in tabgroup.tabs"-->
+                   <!--v-show="tabgroup.crt==tab.name"-->
+                   <!--:is="tab.com" :tab_head="tab"-->
+                   <!--:par_row="crt_row"-->
+                   <!--:ref="'_tab_'+tab.name" @tab-event="on_tab_event($event)"></component>-->
 
     </div>
 
@@ -231,6 +263,10 @@
 
 </div>
 <style>
+    .main-tab-content{
+
+    }
+
     .fake-suit th{
         white-space: nowrap;
     }

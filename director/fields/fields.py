@@ -181,7 +181,7 @@ class ModelFields(forms.ModelForm):
         ls=[]
         if self.permit.changeable_fields():
             ls.append({
-                'name':'save','editor':'com-field-op-btn','label':'保存'
+                'name':'save','editor':'com-field-op-btn','label':'保存', 'icon': 'fa-save',
             })
         return ls
     
