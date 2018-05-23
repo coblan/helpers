@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 
 from django.contrib import admin
 from django.contrib.auth.models import Group,User
-from helpers.director.shortcut import TablePage,ModelTable,page_dc,model_dc,ModelFields
+from helpers.director.shortcut import TablePage,ModelTable,page_dc,model_dc,ModelFields, director
 from helpers.director.models import PermitModel 
 import re
 from . import  js_cfg
@@ -13,34 +13,47 @@ class UserPage(TablePage):
     class tableCls(ModelTable):
         model = User
         exclude=['password']
+        pop_edit_field = 'username'
         
-        def dict_head(self, head):
+        #def dict_head(self, head):
             
-            if head['name']=='username':
-                UserForm = model_dc[User].get('fields')
-                userform = UserForm(crt_user=self.crt_user)
-                head['editor']='com-table-pop-fields'
-                head['get_row']={
-                    "fun":'use_table_row'
-                }
-                head['fields_heads']=userform.get_heads()
-                head['after_save']={
-                    'fun':'do_nothing'
-                    #'fun':'update_or_insert'
-                }     
-                head['ops']=userform.get_operations()
-            return head
+            #if head['name']=='username':
+                #UserForm = model_dc[User].get('fields')
+                #userform = UserForm(crt_user=self.crt_user)
+                #head['editor']='com-table-pop-fields'
+                #head['get_row']={
+                    #"fun":'use_table_row'
+                #}
+                #head['fields_heads']=userform.get_heads()
+                #head['after_save']={
+                    #'fun':'do_nothing'
+                    ##'fun':'update_or_insert'
+                #}     
+                #head['ops']=userform.get_operations()
+            #return head
         
-
+        
+class UserFields(ModelFields):
+    class Meta:
+        model=User
+        fields=['username','first_name','is_active','is_staff','is_superuser','email','groups']
+        
+    def dict_head(self, head):
+        if head['name']=='groups':
+            head['editor']='field_multi_chosen'
+        return head
 
 
 class GroupPage(TablePage):
     template='jb_admin/table.html'
-   
+    
+    def get_label(self): 
+        return '用户角色组'
+    
     class tableCls(ModelTable):
         model=Group
         exclude=['permissions']
-    
+        #pop_edit_field = 'name'
     
         def dict_head(self, head):
             
@@ -50,12 +63,12 @@ class GroupPage(TablePage):
                 head['get_row']={
                     "fun":'use_table_row'
                 }
-                head['fields_heads']=groupform.get_heads()
+                head['fields_ctx']=groupform.get_head_context()
                 head['after_save']={
                     'fun':'do_nothing'
                     #'fun':'update_or_insert'
                 }     
-                head['ops']=groupform.get_operations()
+                #head['ops']=groupform.get_operations()
 
             #if head['name']=='permissions':
                 #head['editor'] = 'com-field-ele-tree-name-layer'
@@ -70,21 +83,24 @@ class GroupPage(TablePage):
                 dc['permit']=[]
             return dc
         
-        def get_operation(self):
-            opt = ModelTable.get_operation(self)
-            for k in opt:
-                if k['name'] == 'add_new':
-                    fieldobj= GroupForm(crt_user=self.crt_user)
-                    k['heads']=fieldobj.get_heads()
-                    k['ops']= fieldobj.get_operations()     
-            return opt        
+        #def get_operation(self):
+            #opt = ModelTable.get_operation(self)
+            #for k in opt:
+                #if k['name'] == 'add_new':
+                    #fieldobj= GroupForm(crt_user=self.crt_user)
+                    #k['heads']=fieldobj.get_heads()
+                    #k['ops']= fieldobj.get_operations()     
+            #return opt        
         
 
 
 class GroupForm(ModelFields):
+    field_sort = ['name']
     class Meta:
         model=Group
-        fields=['name']
+        exclude = []
+       
+        #fields=['name']
     
     #def dict_head(self, head):
         #if head['name']=='permissions':
@@ -109,7 +125,15 @@ class GroupForm(ModelFields):
             row['permit']=[x.pk for x in self.instance.permitmodel_set.all()]
         else:
             row['permit']=[]
-        return row    
+        return row   
+    
+    def save_form(self):
+        super(self.__class__,self).save_form()
+        if self.kw.get('permit',None):
+            permits=PermitModel.objects.filter(pk__in=self.kw.get('permit'))
+            self.instance.permitmodel_set.add(*list(permits))
+        else:
+            self.instance.permitmodel_set.clear()    
 
 def list2tree(ls):
     clsfy = {}
@@ -136,6 +160,13 @@ def list2tree(ls):
         outer.append(dc)
     return outer
                 
+
+director.update({
+    'jb_user': UserPage.tableCls,
+    'jb_user.edit': UserFields,
+    'jb_group': GroupPage.tableCls,
+    'jb_group.edit': GroupForm,
+})
 
 page_dc.update({
     'jb_user':UserPage,

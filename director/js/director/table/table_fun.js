@@ -124,13 +124,13 @@ export var table_fun={
             }
             var del_obj={}
             for(var j=0;j<this.selected.length;j++){
-                var pk = this.selected[j]
+                var pk = this.selected[j].pk
                 for(var i=0;i<this.rows.length;i++){
                     if(this.rows[i].pk.toString()==pk){
-                        if(!del_obj[this.rows[i]._class]){
-                            del_obj[this.rows[i]._class]=[]
+                        if(!del_obj[this.rows[i]._director_name]){
+                            del_obj[this.rows[i]._director_name]=[]
                         }
-                        del_obj[this.rows[i]._class].push(pk)
+                        del_obj[this.rows[i]._director_name].push(pk)
                     }
                 }
             }

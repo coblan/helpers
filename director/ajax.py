@@ -21,7 +21,7 @@ def save(row,user,request):
     """
     为了兼顾老的调用
     """
-    save_row(row, user, request)
+    return save_row(row, user, request)
     
 
 def save_row(row,user,request):

@@ -377,7 +377,16 @@ def delete_related_query(inst):
         return []  
     
     ls = []
-    for rel in inst._meta.get_all_related_objects():
+    all_related_objects =  [
+        f for f in inst._meta.get_fields()
+        if (f.one_to_many or f.one_to_one)
+        and f.auto_created and not f.concrete
+    ]
+    all_related_many_to_many_objects =  [
+        f for f in inst._meta.get_fields(include_hidden=True)
+        if f.many_to_many and f.auto_created
+    ]
+    for rel in all_related_objects :   #inst._meta.get_all_related_objects(): django 1.10 has changed
         if rel.on_delete.__name__=='CASCADE':
             name = rel.get_accessor_name()
             obj = getattr(inst,name,None)
@@ -391,7 +400,7 @@ def delete_related_query(inst):
                 ls.append({'str':"{cls_name}:{content}".format(cls_name = obj.__class__.__name__,content=str(obj)),
                            'related':delete_related_query(obj)})   
                 
-    for rel in inst._meta.get_all_related_many_to_many_objects():  # ManyToMany Related
+    for rel in all_related_many_to_many_objects:  #inst._meta.get_all_related_many_to_many_objects():  # ManyToMany Related
         name = rel.get_accessor_name()
         many_to_many_rels = getattr(inst,name)
         for obj in many_to_many_rels.all():

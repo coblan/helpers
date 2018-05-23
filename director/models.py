@@ -27,7 +27,7 @@ class PermitModel(models.Model):
     permit = JsonField(verbose_name=_('user permit'),default={})
     desp=models.TextField(verbose_name="描述",blank=True)
     
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
 

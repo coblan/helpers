@@ -28,7 +28,7 @@ export var network ={
                 }
             }
             for(var k in resp){
-                if(resp[k].msg){
+                if(resp[k] && resp[k].msg){
                     if(typeof resp[k].msg == 'string'){
                         msg.push(resp[k].msg)
                     }else {

@@ -1,6 +1,8 @@
 # encoding:utf-8
 from __future__ import unicode_literals
-
+from ..base_data import director
+from django.apps import apps
+from ..model_func.dictfy import to_dict
 class DelPage(object):
     template=''
     ajax_scope={}
@@ -29,15 +31,19 @@ class DelPage(object):
         rows=[]
         for row in rows_stream:
             ls = row.split(':')
-            _class=ls[0]
-            model = apps.get_model(_class)
-            model_util= model_dc.get(model)
-            fields_cls = model_util.get('fields') 
+            _director=ls[0]
+            #model = apps.get_model(_class)
+            #model_util= model_dc.get(model)
+            #fields_cls = model_util.get('fields') 
+            fields_cls = director.get(_director)
             for pk in ls[1:]:
                 dc={'pk':pk,'crt_user':self.request.user}
                 fields_obj= fields_cls(**dc)
                 infos.update(fields_obj.get_del_info())
-                rows.append(to_dict(fields_obj.instance,include=fields_obj.permit.readable_fields()))
+                dc =  to_dict(fields_obj.instance,include=fields_obj.permit.readable_fields())
+                dc['_director_name'] =  _director
+                rows.append(dc)
+                
         ctx['infos']=infos
         ctx['rows']=rows  
         # ctx['page_label']=self.get_label()

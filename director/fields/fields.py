@@ -292,7 +292,7 @@ class ModelFields(forms.ModelForm):
         
         for field in self.instance._meta.get_fields():
             if isinstance(field,(models.AutoField,models.BigAutoField)):
-                if field.name in ls and field.name not in self._meta.exclude and\
+                if field.name in ls and ( not self._meta.exclude or field.name not in self._meta.exclude) and\
                    field.name not in row:
                     row[field.name]=getattr(self.instance,field.name)
         row['_director_name']=self.get_director_name()

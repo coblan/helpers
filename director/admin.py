@@ -26,7 +26,7 @@ from .access.permit import permit_to_text
 from . import  ajax
 from .fields.delpage import DelPage
 from .log.logpage import LogPage
-from .base_data import page_dc
+from .base_data import page_dc, director
 from . import  admin_kv
 from .model_func.field_procs import dateproc,datetimeproc,decimalproc,foreignproc,manyproc,oneproc,charproc,intproc,boolproc
 page_dc.update({
@@ -279,6 +279,10 @@ model_dc[Group]={'fields':GroupFormPage.GroupForm}
 model_dc[User]={'fields':UserFields}
 model_dc[PermitModel]={'fields':PermitFormPage.PermitForm}
 
+director.update({
+    'permit.programer': PermitPage.PermitTable,
+    'permit.programer.edit': PermitFormPage.PermitForm,
+})
 
 page_dc.update({'user':UserTablePage,
                 'user.edit':UserFormPage,
