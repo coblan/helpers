@@ -227,7 +227,7 @@
 
                             <el-table-column v-else
                                              :show-overflow-tooltip="is_show_tooltip(head) "
-                                             :prop="head.name"
+                                             :prop="head.name.toString()"
                                              :label="head.label"
                                              :sortable="is_sort(head)"
                                              :width="head.width">

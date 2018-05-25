@@ -468,6 +468,9 @@ class ModelTable(object):
         return head
     
     def fields_map_head(self,head):
+        """
+        fieldproc 处理
+        """
         field = self.model._meta.get_field(head['name'])
         if field.choices:
             head['options']=dict(field.choices)
