@@ -25,8 +25,9 @@ Vue.component('com-filter',{
                 <div v-for="filter in heads" :id="'filter-'+filter.name" class="filter-item">
                     <component @submit="m_submit()" :is="filter.editor" :head="filter" :search_args='search_args' > </component>
                 </div>
-                <button name="go" type="button" class="btn btn-info btn-sm" @click='m_submit()' >
-          <i class="fa fa-search"></i>
+                <button name="go" type="button" class="btn btn-success btn-sm" @click='m_submit()' >
+                  <i class="fa fa-search"></i>
+                  <span v-text="search_lable"></span>
           </button>
         </div>
     `,
@@ -43,6 +44,11 @@ Vue.component('com-filter',{
 
             }
         })
+    },
+    computed:{
+        search_lable:function(){
+            return cfg.tr.search
+        }
     },
     methods:{
         m_submit:function () {

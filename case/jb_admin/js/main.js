@@ -1,5 +1,6 @@
 require('./scss/fields.scss')
 require('./table_editor/scss/table_editor_base.scss')
+require('./scss/tab.scss')
 
 
 //table mix
@@ -7,6 +8,7 @@ import * as mix_table_data from  './mix/mix_table_data.js'
 import * as mix_v_table_adapter from './mix/mix_v_table_adapter.js'
 import * as mix_nice_validator from './mix/mix_nice_validator.js'
 import * as mix_fields_data from './mix/mix_fields_data.js'
+import * as mix_ele_table_adapter from './mix/mix_ele_table_adapter.js'
 
 import * as ajax_fields from './tabs/ajax_fields.js'
 import * as ajax_table from './tabs/ajax_table.js'
@@ -42,6 +44,7 @@ import * as plain_file from  './field_editor/plain_file.js'
 // table operator
 import * as op_a from  './table_operator/operator_a.js'
 import * as delete_op from  './table_operator/delete_op.js'
+import * as operator_btn from  './table_operator/operator_btn.js'
 
 //fields operator
 import * as btn from  './field_operator/btn.js'

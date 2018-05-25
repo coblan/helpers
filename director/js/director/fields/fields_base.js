@@ -146,7 +146,7 @@ export var field_base={
             props:['name','row','kw'],
             template:`<logo-input :up_url="kw.up_url" :web_url.sync="row[name]" :id="'id_'+name"></logo-input>`
         },
-        picture:{
+        'com-field-picture':{
             props:['row','head'],
             template:`<div class="picture">
             <input class="virtual_input" style="position:absolute;height: 0;width: 0;" type="text"  :name="head.name" v-model="row[head.name]">

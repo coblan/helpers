@@ -20,7 +20,7 @@
     //	search_args=ex.parseSearch()
     //	search字段从 search_args._q 来取值
     extra_table_logic='{{ extra_table_logic }}'
-    footer={{ footer |jsonify }}
+
     tabs={{ tabs | jsonify | default:'[]' }}
     search_args={{ search_args | jsonify | default:'{}'  }}
     table_logic={
@@ -33,7 +33,7 @@
             row_sort:row_sort,
             row_pages:row_pages,
             director_name:director_name,
-            footer:footer,
+
 //            model_name:model_name,
             selected:[],
             search_args:search_args, //ex.parseSearch(),
@@ -47,7 +47,7 @@
 
 
         },
-        mixins:[mix_table_data,mix_ele_table_adapter],
+        mixins:[mix_table_data,mix_v_table_adapter],
         computed:{
             has_select:function(){
                 return this.selected !=0
@@ -89,9 +89,9 @@
             on_tab_event:function(e){
                 this.op_funs[e.name](e)
             },
-//            on_select_group_change:function(sel,v){
-//                this.selected= sel
-//            },
+            on_select_group_change:function(sel,v){
+                this.selected= sel
+            },
             back_to_main_page:function(){
                 this.tabgroup.crt='main'
             },
@@ -152,7 +152,7 @@
 <div id='there' class="flex-v">
 
     {% block flag %}
-    <div v-if="page_label" style="border-left: 3px solid #3e8ebd;padding-left: 1em;margin-bottom: 5px;">
+    <div v-if="page_label" style="border-left: 3px solid #3e8ebd;padding-left: 1em;margin-bottom: 1em;">
         <b v-text="page_label"></b>
         <span style="display: inline-block;width: 2em;"></span>
         <button type="button"
@@ -166,7 +166,7 @@
     {% endblock %}
 
     {% block tab-content %}
-    <div id="main-page" class="rows-block flex-v flex-grow" v-show="tabgroup.crt =='main'">
+    <div id="main-page" class="rows-block" v-show="tabgroup.crt =='main'">
 
 
         <div v-if="row_filters.length > 0" style="background-color: #fbfbf8;padding: 8px 1em;border-radius: 4px;margin-top: 8px">
@@ -187,125 +187,82 @@
         </div>
 
 
-        <div class="box box-success flex-v flex-grow">
-            <div class="table-wraper flex-grow" style="position: relative;">
+        <div class="box box-success">
+            <div class="table-wraper" style="position: relative;">
                 {% block table_content %}
-                <div style="position: absolute;top:0;left:0;bottom: 0;right:0;">
-                    <el-table class="table" ref="e_table"
-                              :data="rows"
-                              border
-                              show-summary
-                              :fit="false"
-                              :stripe="true"
-                              size="mini"
-                              @sort-change="sortChange($event)"
-                              @selection-change="handleSelectionChange"
-                              :summary-method="getSum"
-                              height="100%"
-                              style="width: 100%">
-                        <el-table-column
-                                type="selection"
-                                width="55">
-                        </el-table-column>
-
-                        <template  v-for="head in heads">
-
-                            <el-table-column v-if="head.editor"
-                                             :show-overflow-tooltip="is_show_tooltip(head) "
-                                             :label="head.label"
-                                             :sortable="is_sort(head)"
-                                             :width="head.width">
-                                <template slot-scope="scope">
-                                    <component :is="head.editor"
-                                               @on-custom-comp="on_td_event($event)"
-                                               :row-data="scope.row" :field="head.name" :index="scope.$index">
-                                    </component>
-
-                                </template>
-
-                            </el-table-column>
-
-                            <el-table-column v-else
-                                             :show-overflow-tooltip="is_show_tooltip(head) "
-                                             :prop="head.name"
-                                             :label="head.label"
-                                             :sortable="is_sort(head)"
-                                             :width="head.width">
-                            </el-table-column>
-
-                        </template>
-
-                    </el-table>
-
-                </div>
-
+                <v-table ref="vtable" is-horizontal-resize
+                         is-vertical-resize
+                         :vertical-resize-offset="80"
+                         :title-row-height="30"
+                         :row-height="24"
+                         odd-bg-color="#f0f6f8"
+                         column-width-drag
+                         @on-custom-comp="on_td_event($event)"
+                         style="width: 100%;"
+                         :columns="columns"
+                         :table-data="rows"
+                         @sort-change="sortChange"
+                         :select-group-change="on_select_group_change"
+                         :select-all="on_select_group_change"
+                         row-hover-color="#eee"
+                         row-click-color="#edf7ff">
+                </v-table>
                 {% endblock %}
             </div>
-            <div>
-                <!--<v-pagination @page-change="get_page($event)"-->
-                              <!--:total="row_pages.total"-->
-                              <!--size="small"-->
-                              <!--:page-size="row_pages.perpage"-->
-                              <!--@page-size-change="on_perpage_change($event)"-->
-                              <!--:layout="['total', 'prev', 'pager', 'next', 'sizer', 'jumper']">-->
-                <!--</v-pagination>-->
-
-                <el-pagination
-                        @size-change="on_perpage_change"
-                        @current-change="get_page"
-                        :current-page="row_pages.crt_page"
-                        :page-sizes="[20, 50, 100, 500]"
-                        :page-size="row_pages.perpage"
-                        layout="total, sizes, prev, pager, next, jumper"
-                        :total="row_pages.total">
-                </el-pagination>
-
+            <div style="margin-top: 10px;">
+                <v-pagination @page-change="get_page($event)"
+                              :total="row_pages.total"
+                              size="small"
+                              :page-size="row_pages.perpage"
+                              @page-size-change="on_perpage_change($event)"
+                              :layout="['total', 'prev', 'pager', 'next', 'sizer', 'jumper']">
+                </v-pagination>
             </div>
         </div>
     </div>
     <div id="tab-wrap" v-if="tabgroup.crt!='main'" class="flex-grow" style="position: relative">
         <!--<div >-->
-            <!--<ul class="nav nav-tabs tabs flex-grow">  -->
-                <!--<li v-for="tab in tabgroup.tabs"-->
-                    <!--:class="{'active':tabgroup.crt==tab.name}"-->
-                    <!--@click="show_tab(tab.name)"-->
-                    <!--style="cursor: pointer;">-->
-                    <!--<a  v-text="tab.label" ></a>-->
-                <!--</li>-->
-            <!--</ul>-->
-            <!--<div >-->
+        <!--<ul class="nav nav-tabs tabs flex-grow">  -->
+        <!--<li v-for="tab in tabgroup.tabs"-->
+        <!--:class="{'active':tabgroup.crt==tab.name}"-->
+        <!--@click="show_tab(tab.name)"-->
+        <!--style="cursor: pointer;">-->
+        <!--<a  v-text="tab.label" ></a>-->
+        <!--</li>-->
+        <!--</ul>-->
+        <!--<div >-->
         <div  style="position: absolute;bottom: 0;top: 0;left: 0;right: 0;">
-                <el-tabs v-if="tabgroup.tabs.length >1" type="border-card"
-                         @tab-click="handleClick"
-                         style="width: 100%;"
-                         :value="tabgroup.crt" >
-                    <el-tab-pane v-for="tab in tabgroup.tabs" :name="tab.name">
-                        <span slot="label" v-text="tab.label"></span>
+            <el-tabs v-if="tabgroup.tabs.length >1" type="border-card"
+                     @tab-click="handleClick"
+                     style="width: 100%;"
+                     :value="tabgroup.crt" >
+                <el-tab-pane v-for="tab in tabgroup.tabs" :name="tab.name">
+                    <span slot="label" v-text="tab.label"></span>
 
-                        <component :is="tab.com" :tab_head="tab"
-                                   :par_row="crt_row"
-                                   :ref="'_tab_'+tab.name" @tab-event="on_tab_event($event)"></component>
-
-
-                    </el-tab-pane>
-                </el-tabs>
-
-
-                    <component v-else v-for="tab in tabgroup.tabs"  :is="tab.com" :tab_head="tab"
+                    <component :is="tab.com" :tab_head="tab"
                                :par_row="crt_row"
                                :ref="'_tab_'+tab.name" @tab-event="on_tab_event($event)"></component>
+
+
+                </el-tab-pane>
+            </el-tabs>
+
+
+            <component v-else v-for="tab in tabgroup.tabs"  :is="tab.com" :tab_head="tab"
+                       :par_row="crt_row"
+                       :ref="'_tab_'+tab.name" @tab-event="on_tab_event($event)"></component>
         </div>
-            <!--</div>-->
+        <!--</div>-->
 
 
 
         <!--</div>-->
 
         <!--<component v-for="tab in tabgroup.tabs"-->
-                   <!--v-show="tabgroup.crt==tab.name"-->
-                   <!--:is="tab.com" :tab_head="tab"-->
-                   <!--:par_row="crt_row"-->
-                   <!--:ref="'_tab_'+tab.name" @tab-event="on_tab_event($event)"></component>-->
+        <!--v-show="tabgroup.crt==tab.name"-->
+        <!--:is="tab.com" :tab_head="tab"-->
+        <!--:par_row="crt_row"-->
+        <!--:ref="'_tab_'+tab.name" @tab-event="on_tab_event($event)"></component>-->
 
     </div>
 

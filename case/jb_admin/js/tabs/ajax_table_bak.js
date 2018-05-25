@@ -8,7 +8,7 @@ var ajax_table={
             row_filters:heads_ctx.row_filters,
             row_sort:heads_ctx.row_sort,
             director_name:heads_ctx.director_name,
-            footer:[],
+
             rows:[],
             row_pages:{},
             //search_tip:this.kw.search_tip,
@@ -19,7 +19,7 @@ var ajax_table={
             search_args: {}
         }
     },
-    mixins:[mix_table_data,mix_ele_table_adapter],
+    mixins:[mix_table_data,mix_v_table_adapter],
     //watch:{
     //    // 排序变换，获取数据
     //    'row_sort.sort_str':function(v){
@@ -27,73 +27,40 @@ var ajax_table={
     //        this.get_data()
     //    }
     //},
-    template:`<div class="rows-block flex-v" style="position: absolute;top:0;left:0;bottom: 0;right:0;overflow: auto;padding-bottom: 3em;" >
+    template:`<div class="rows-block">
         <div class='flex' style="min-height: 3em;" v-if="row_filters.length > 0">
             <com-filter class="flex" :heads="row_filters" :search_args="search_args"
                         @submit="search()"></com-filter>
             <div class="flex-grow"></div>
         </div>
-        <div class="box box-success flex-grow">
-            <div class="table-wraper" style="position: absolute;top:0;left:0;bottom: 0;right:0;">
-               <el-table class="table" ref="e_table"
-                              :data="rows"
-                              border
-                              show-summary
-                              :fit="false"
-                              :stripe="true"
-                              size="mini"
-                              @sort-change="sortChange($event)"
-                              @selection-change="handleSelectionChange"
-                              :summary-method="getSum"
-                              height="100%"
-                              style="width: 100%">
-                        <el-table-column
-                                type="selection"
-                                width="55">
-                        </el-table-column>
-
-                        <template  v-for="head in heads">
-
-                            <el-table-column v-if="head.editor"
-                                             :show-overflow-tooltip="is_show_tooltip(head) "
-                                             :label="head.label"
-                                             :sortable="is_sort(head)"
-                                             :width="head.width">
-                                <template slot-scope="scope">
-                                    <component :is="head.editor"
-                                               @on-custom-comp="on_td_event($event)"
-                                               :row-data="scope.row" :field="head.name" :index="scope.$index">
-                                    </component>
-
-                                </template>
-
-                            </el-table-column>
-
-                            <el-table-column v-else
-                                             :show-overflow-tooltip="is_show_tooltip(head) "
-                                             :prop="head.name"
-                                             :label="head.label"
-                                             :sortable="is_sort(head)"
-                                             :width="head.width">
-                            </el-table-column>
-
-                        </template>
-
-                    </el-table>
+        <div class="box box-success">
+            <div class="table-wraper">
+                <v-table ref="vtable"
+                         is-horizontal-resize
+                         is-vertical-resize
+                         :title-row-height="30"
+                         :vertical-resize-offset="80"
+                         :row-height="24"
+                         odd-bg-color="#f0f6f8"
+                         column-width-drag
+                         style="width: 100%;"
+                         :columns="columns"
+                         :table-data="rows"
+                         @sort-change="sortChange"
+                         row-hover-color="#eee"
+                         row-click-color="#edf7ff">
+                </v-table>
             </div>
-
+            <div style="margin-top: 10px;">
+                <v-pagination @page-change="get_page($event)"
+                              :total="row_pages.total"
+                              size="small"
+                              :page-size="row_pages.perpage"
+                              @page-size-change="on_perpage_change($event)"
+                              :layout="['total', 'prev', 'pager', 'next', 'sizer', 'jumper']">
+                </v-pagination>
+            </div>
         </div>
-          <div>
-                    <el-pagination
-                        @size-change="on_perpage_change"
-                        @current-change="get_page"
-                        :current-page="row_pages.crt_page"
-                        :page-sizes="[20, 50, 100, 500]"
-                        :page-size="row_pages.perpage"
-                        layout="total, sizes, prev, pager, next, jumper"
-                        :total="row_pages.total">
-                </el-pagination>
-            </div>
     </div>`,
 
     methods:{
@@ -104,7 +71,7 @@ var ajax_table={
             }
         },
         getRows:function(){
-        // 这里clear，数据被清空，造成table的pagenator上下抖动
+            // 这里clear，数据被清空，造成table的pagenator上下抖动
 //                       com.clear()
 
 //                        var getter_name = 'get_'+tab.name
@@ -126,7 +93,7 @@ var ajax_table={
 //            self.rows = resp.get_rows.rows
 //            self.row_pages =resp.get_rows.row_pages
 //        })
-    },
+        },
         del_item:function () {
             if (this.selected.length==0){
                 return

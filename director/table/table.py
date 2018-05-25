@@ -548,15 +548,13 @@ class ModelTable(object):
         #fieldCls=model_dc[self.model].get('fields')
         fieldobj=fieldCls(crt_user=self.crt_user)
         return [{'name':'add_new',
-                 'editor':'com-op-a',
+                 'editor':'com-op-btn',
+                 'icon': 'fa-plus',
                  'label':'创建',
                  'fields_ctx':fieldobj.get_head_context(),
-                 #'heads':fieldobj.get_heads(),
-                 #'ops': fieldobj.get_operations(), # model_dc[self.model].get('fields'),
-                 #'model_name':model_name,
                  },
-                {'name':'save_changed_rows','editor':'com-op-a','label':'保存','hide':'!changed'},
-                {'name':'delete','editor':'com-op-a','label':'删除','disabled':'!has_select'},
+                {'name':'save_changed_rows','editor':'com-op-btn','label':'保存','hide':'!changed'},
+                {'name':'delete','editor':'com-op-btn','label':'删除','style': 'color:red','icon': 'fa-times','disabled':'!has_select'},
                 ]      
     
     #def search_filter(self,query):
