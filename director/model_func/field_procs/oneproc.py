@@ -2,6 +2,7 @@
 from ..field_proc  import BaseFieldProc
 from django.db.models import OneToOneField
 from .. .base_data import field_map
+from ..dictfy import model_to_name
 
 
 class OneProc(BaseFieldProc):
