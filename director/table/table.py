@@ -556,7 +556,7 @@ class ModelTable(object):
                  'label':'创建',
                  'fields_ctx':fieldobj.get_head_context(),
                  },
-                {'name':'save_changed_rows','editor':'com-op-btn','label':'保存','hide':'!changed'},
+                {'name':'save_changed_rows','editor':'com-op-btn','label':'保存','hide':'!changed','icon':'fa-save'},
                 {'name':'delete','editor':'com-op-btn','label':'删除','style': 'color:red','icon': 'fa-times','disabled':'!has_select'},
                 ]      
     
