@@ -21,7 +21,10 @@ class CusDecimalProc(BaseFieldProc):
             return {name: ''}
     
     def clean_field(self,dc,name):
-        return Decimal(dc.get(name))
+        if dc.get(name):
+            return Decimal(dc.get(name))
+        else:
+            return dc.get(name)
     
 field_map.update({
     CusDecimalField:CusDecimalProc
