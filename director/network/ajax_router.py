@@ -80,7 +80,7 @@ class RouterAjax(object):
                     count+=2
                 self.commands.append(dc)            
         elif self.request.method=='POST':
-            self.commands = json.loads(self.request.body)
+            self.commands = json.loads(self.request.body.decode('utf-8'))
         else:
             raise UserWarning('port can not parse request url and body')
                     

@@ -127,6 +127,8 @@ desired effect
 -->
 
 {% include 'director/reverse.html' %}
+
+{% include 'jb_admin/cus_base.html' %}
 <script>
     Vue.config.devtools = true
     menu= {{menu| jsonify}}
@@ -227,26 +229,26 @@ desired effect
                     <!-- /.messages-menu -->
 
                     <!-- Notifications Menu -->
-                    <li style="display: none;" class="dropdown notifications-menu">
+                    <li v-if="user_msg.length>0"  class="dropdown notifications-menu">
                         <!-- Menu toggle button -->
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                             <i class="fa fa-bell-o"></i>
-                            <span class="label label-warning">10</span>
+                            <span class="label label-warning" v-text="user_msg.length"></span>
                         </a>
                         <ul class="dropdown-menu">
-                            <li class="header">You have 10 notifications</li>
+                            <!--<li class="header">You have 10 notifications</li>-->
                             <li>
                                 <!-- Inner Menu: contains the notifications -->
                                 <ul class="menu">
-                                    <li><!-- start notification -->
-                                        <a href="#">
-                                            <i class="fa fa-users text-aqua"></i> 5 new members joined today
+                                    <li v-for="msg in user_msg"><!-- start notification -->
+                                        <a :href="msg.url">
+                                            <i class="fa fa-users text-aqua"></i><span v-text="msg.title"></span>
                                         </a>
                                     </li>
                                     <!-- end notification -->
                                 </ul>
                             </li>
-                            <li class="footer"><a href="#">View all</a></li>
+                            <!--<li class="footer"><a href="#">View all</a></li>-->
                         </ul>
                     </li>
 
@@ -592,7 +594,8 @@ desired effect
             user:head_bar_data.user,
             mini_brand:head_bar_data.mini_brand,
             brand:head_bar_data.brand,
-            tr:cfg.tr
+            tr:cfg.tr,
+            user_msg:user_msg,
         },
         mounted:function(){
             $('.sidebar-toggle').click(function(){
