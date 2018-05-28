@@ -42,6 +42,12 @@ class UserFields(ModelFields):
         if head['name']=='groups':
             head['editor']='field_multi_chosen'
         return head
+    
+    def get_heads(self): 
+        heads = ModelFields.get_heads(self)
+        heads.append({
+            'name': 'user_password',
+        })
 
 
 class GroupPage(TablePage):

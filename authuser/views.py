@@ -5,7 +5,7 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import ensure_csrf_cookie
 from helpers.func.network.ajax_router import ajax_router
-import urllib
+from urllib.parse import unquote
 from django.contrib import auth
 from django.shortcuts import redirect
 # Create your views here.
@@ -43,7 +43,7 @@ def regist_user(request):
 
 def logout(request):
     next = request.GET.get('next','/')
-    next=urllib.unquote(next)
+    next=unquote(next)
     auth.logout(request)
     return redirect(next) 
 
