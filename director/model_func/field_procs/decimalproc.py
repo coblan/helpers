@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 from ..field_proc  import BaseFieldProc
 from django.db.models import DecimalField
 from .. .base_data import field_map
+from decimal import Decimal
 
 class DecimalProc(BaseFieldProc):
     def to_dict(self,inst,name):
@@ -11,7 +12,7 @@ class DecimalProc(BaseFieldProc):
         return {name:str(data)}
     
     def clean_field(self,dc,name):
-        return float(dc.get(name))
+        return Decimal(dc.get(name))
     
 field_map.update({
     DecimalField:DecimalProc

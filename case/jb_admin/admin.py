@@ -46,9 +46,19 @@ class UserFields(ModelFields):
     def get_heads(self): 
         heads = ModelFields.get_heads(self)
         heads.append({
-            'name': 'user_password',
+            'name': 'user_password', 'label': '用户密码', 'editor': 'password',
         })
-
+        return heads
+    
+    def save_form(self): 
+        ModelFields.save_form(self)
+        if self.kw.get('user_password'):
+            pswd =  self.kw.get('user_password')
+            target_user = self.instance
+            target_user.set_password(pswd)
+            target_user.save()            
+            
+        
 
 class GroupPage(TablePage):
     template='jb_admin/table.html'
