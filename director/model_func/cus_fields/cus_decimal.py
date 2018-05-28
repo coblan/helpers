@@ -15,7 +15,10 @@ class CusDecimalProc(BaseFieldProc):
     def to_dict(self,inst,name):
         data = getattr(inst,name)
         field = inst.__class__._meta.get_field(name)
-        return {name: str(round(data, field.digits) )}
+        if data:
+            return {name: str(round(data, field.digits) )}
+        else:
+            return {name: ''}
     
     def clean_field(self,dc,name):
         return Decimal(dc.get(name))

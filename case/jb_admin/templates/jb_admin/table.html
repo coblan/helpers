@@ -126,13 +126,16 @@
     }
 
     function update_cnt_size(){
-        var cnt_ht =  Math.max( $(document).height(),window.innerHeight)
+//        var cnt_ht =  Math.max( $(document).height(),window.innerHeight)
+        var cnt_ht =  window.innerHeight
         $('#there').height(cnt_ht -80)
     }
     $(function () {
         update_cnt_size()
 //        $('.main-tab-content').height(window.innerHeight -230)
-        $(window).resize(update_cnt_size);
+        $(window).resize(function(){
+            update_cnt_size()
+        });
 //        $(document).resize(update_cnt_size)
 
         if(extra_table_logic){

@@ -23,49 +23,77 @@ export  function pop_table_layer (row,table_ctx,callback){
         shadeClose: true, //点击遮罩关闭
         content:`<div id="pop-table-${pop_id}" style="height: 100%;">
 
-        <div class="rows-block">
-        <div class='flex' style="min-height: 3em;" v-if="row_filters.length > 0">
-            <com-filter class="flex" :heads="row_filters" :search_args="search_args"
-                        @submit="search()"></com-filter>
-            <div class="flex-grow"></div>
+            <div class="rows-block flex-v" style="height: 100%">
+                <div class='flex' style="min-height: 3em;" v-if="row_filters.length > 0">
+                    <com-filter class="flex" :heads="row_filters" :search_args="search_args"
+                                @submit="search()"></com-filter>
+                    <div class="flex-grow"></div>
+                </div>
+                <div class="box box-success flex-grow flex-v" >
+                    <div class="table-wraper flex-grow" style="position: relative">
+                    <div style="position: absolute;top:0;right:0;left:0;bottom: 0">
+                     <el-table class="table" ref="e_table"
+                                      :data="rows"
+                                      border
+                                      show-summary
+                                      :fit="false"
+                                      :stripe="true"
+                                      size="mini"
+                                      @sort-change="sortChange($event)"
+                                      @selection-change="handleSelectionChange"
+                                      :summary-method="getSum"
+                                      height="100%"
+                                      style="width: 100%">
+                                <el-table-column
+                                        type="selection"
+                                        width="55">
+                                </el-table-column>
+
+                                <template  v-for="head in heads">
+
+                                    <el-table-column v-if="head.editor"
+                                                     :show-overflow-tooltip="is_show_tooltip(head) "
+                                                     :label="head.label"
+                                                     :sortable="is_sort(head)"
+                                                     :width="head.width">
+                                        <template slot-scope="scope">
+                                            <component :is="head.editor"
+                                                       @on-custom-comp="on_td_event($event)"
+                                                       :row-data="scope.row" :field="head.name" :index="scope.$index">
+                                            </component>
+
+                                        </template>
+
+                                    </el-table-column>
+
+                                    <el-table-column v-else
+                                                     :show-overflow-tooltip="is_show_tooltip(head) "
+                                                     :prop="head.name.toString()"
+                                                     :label="head.label"
+                                                     :sortable="is_sort(head)"
+                                                     :width="head.width">
+                                    </el-table-column>
+
+                                </template>
+
+                            </el-table>
+                     </div>
+
+                    </div>
+                    <div style="margin-top: 10px;">
+                         <el-pagination
+                                @size-change="on_perpage_change"
+                                @current-change="get_page"
+                                :current-page="row_pages.crt_page"
+                                :page-sizes="[20, 50, 100, 500]"
+                                :page-size="row_pages.perpage"
+                                layout="total, sizes, prev, pager, next, jumper"
+                                :total="row_pages.total">
+                        </el-pagination>
+                    </div>
+                </div>
         </div>
-        <div class="box box-success">
-            <div class="table-wraper">
-                <v-table ref="vtable"
-                         is-horizontal-resize
-                         is-vertical-resize
-                         :title-row-height="30"
-                         :vertical-resize-offset="80"
-                         :row-height="24"
-                         odd-bg-color="#f0f6f8"
-                         column-width-drag
-                         style="width: 100%;"
-                         :height=height
-                         :columns="columns"
-                         :table-data="rows"
-                         @sort-change="sortChange"
-                         @on-custom-comp="on_td_event($event)"
-                         row-hover-color="#eee"
-                         row-click-color="#edf7ff">
-                </v-table>
-            </div>
-            <div style="margin-top: 10px;">
-                <v-pagination @page-change="get_page($event)"
-                              :total="row_pages.total"
-                              size="small"
-                              :page-size="row_pages.perpage"
-                              @page-size-change="on_perpage_change($event)"
-                              :layout="['total', 'prev', 'pager', 'next', 'sizer', 'jumper']">
-                </v-pagination>
-            </div>
-        </div>
-    </div>
-                    <!--<com-v-table ref="com_table"-->
-                        <!--@del_success="on_del()"-->
-                        <!--@sub_success="on_sub_success($event)"-->
-                        <!--:par_row="par_row" :table_ctx="table_ctx">-->
-                    <!--</com-v-table>-->
-                </div>`
+    </div>`
     });
 
 
@@ -81,13 +109,14 @@ export  function pop_table_layer (row,table_ctx,callback){
             director_name:table_ctx.director_name,
             row_pages:{},
             rows:[],
+            footer:[],
             selected:[],
             del_info:[],
             search_args: {},
 
             height:350,
         },
-        mixins:[mix_table_data,mix_v_table_adapter],
+        mixins:[mix_table_data,mix_ele_table_adapter],
         mounted:function(){
             this.getRows()
             //this.$refs.com_table.getRows()
