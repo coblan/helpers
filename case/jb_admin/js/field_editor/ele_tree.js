@@ -1,3 +1,4 @@
+require('./scss/ele_tree_name_layer.scss')
 var label_shower =  {
     props:['row','head'],
     methods:{
@@ -16,6 +17,7 @@ var label_shower =  {
     data:function(){
         return {
             selected:[1,2],
+            // demon 数据
             data: [{
                 label: '一级 1',
                 children: [{
@@ -60,7 +62,7 @@ var label_shower =  {
             }
         }
     },
-    template:`<div>
+    template:`<div class="com-field-ele-tree-name-layer">
         <el-tree ref="et" :data="head.options" :props="defaultProps"
              @node-click="handleNodeClick"
              show-checkbox
@@ -78,7 +80,7 @@ var label_shower =  {
     }
 }
 
-Vue.component('com-field-ele-tree-name-layer',label_shower)
+Vue.component('com-field-ele-tree',label_shower)
 //Vue.component('com-field-ele-tree-name-layer',function(resolve,reject){
     //ex.load_css('https://unpkg.com/element-ui/lib/theme-chalk/index.css')
     //ex.load_js('https://unpkg.com/element-ui/lib/index.js',function(){

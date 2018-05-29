@@ -85,6 +85,7 @@ class BaseEngine(object):
             return True
     
     def view(self,request,name):    
+        self.request = request
         page_cls = self.get_page_cls(name)
 
         # if getattr(page_cls,'need_login',True):
@@ -182,11 +183,11 @@ def and_list(ls):
         return True
     return _func   
 
-def can_touch(model):
-    def _func(user):
-        validator = ModelPermit(model, user)
-        return validator.can_access()
-    return _func
+def can_touch(model, user):
+    #def _func(user):
+    validator = ModelPermit(model, user)
+    return validator.can_access()
+    #return _func
 
 def can_list(ls):
     def _func(user):

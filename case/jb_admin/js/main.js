@@ -14,7 +14,7 @@ import * as ajax_fields from './tabs/ajax_fields.js'
 import * as ajax_table from './tabs/ajax_table.js'
 //import * as com_pop_fields from './com_pop_fields.js'
 
-import * as ele_tree from  './field_editor/ele_tree_name_layer'
+import * as ele_tree from  './field_editor/ele_tree.js'
 
 
 // table editor

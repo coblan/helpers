@@ -37,14 +37,6 @@ from django.apps import apps
 import json
 from django.db import models
 from ..base_data import model_dc,permit_list, director
-from ..access.permit_data import get_model_permit
-
-
-def can_touch(model, user):
-    #def _func(user):
-    validator = ModelPermit(model, user)
-    return validator.can_access()
-
 
 def has_permit(user,name):
     """
@@ -57,7 +49,7 @@ def has_permit(user,name):
         else:
             return True  
         
-    for permit_dc in user_permit_names(user):
+    for permit_dc in user_permit_dc(user):
         sp_permit_list= permit_dc.get(cls,[])
         if perm in sp_permit_list:
             return True        
@@ -70,15 +62,14 @@ def has_permit(user,name):
     return False
 
 
-def user_permit_names(user):
+def user_permit_dc(user):
     for group in user.groups.all():
         for permit_dc in group_permit(group):
             yield permit_dc
 
 def group_permit(group):
-    if hasattr(group, 'permitmodel'):
-        for permit in group.permitmodel.names.split(';'):
-            yield permit
+    for permit in group.permitmodel_set.all():
+        yield permit.permit
 
 def group_has_permit(group,name):
     """
@@ -103,8 +94,6 @@ class ModelPermit(object):
     
     @nolimit ,有时需要跨越 权限，操作某个数据表，就加上 nolimit=True
     """
-    include = []
-    exclude = []
     def __init__(self,model,user=None,nolimit=False):
         self.user=user
         if isinstance(model,str):
@@ -118,25 +107,23 @@ class ModelPermit(object):
         self._read_perm_from_db()
     
     def _read_perm_from_db(self):
-        #model_name = model_to_name(self.model)
+        model_name = model_to_name(self.model)
 
         if not self.user:
             self.permit_list=[]
             return
-        # 每次请求，大概率上，会获取permit_dc很多次，所以这里缓存在user上，减少读取数据库 // 变了，以后来分析
+        # 每次请求，大概率上，会获取permit_dc很多次，所以这里缓存在user上，减少读取数据库
         if not hasattr(self.user,'permit_dc_list'):
-            self.user.permit_dc_list=list(user_permit_names(self.user))
-        permits_names = list(set(self.user.permit_dc_list))
-        self.permit_list = list(get_model_permit(permits_names, self.model))
-        #for permit_dc in self.user.permit_dc_list:
-            #permit= permit_dc.get(model_name,[])
-            #self.permit_list.extend(permit)            
+            self.user.permit_dc_list=list(user_permit_dc(self.user))
+        for permit_dc in self.user.permit_dc_list:
+            permit= permit_dc.get(model_name,[])
+            self.permit_list.extend(permit)            
         #for group in self.user.groups.all():
             #if hasattr(group,'permitmodel'):
                 #permits = json.loads( group.permitmodel.permit )
                 #permit= permits.get(model_name,[])
                 #self.permit_list.extend(permit)
-        #self.permit_list=list(set(self.permit_list))
+        self.permit_list=list(set(self.permit_list))
             #setattr(self.user,'_permit_list.%s'%model_name,self.permit_list)
     
     def get_heads(self):
@@ -205,9 +192,8 @@ class ModelPermit(object):
         else:
             ls=[]
             for perm in self.permit_list:
-                ls.extend(perm.get('read', []))
-                #if perm.endswith('__read'):
-                    #ls.append(perm[0:-6])
+                if perm.endswith('__read'):
+                    ls.append(perm[0:-6])
             return list(set(ls))  
     
     def changeable_fields(self):
@@ -217,17 +203,14 @@ class ModelPermit(object):
         else:
             ls = []
             for perm in self.permit_list:
-                ls.extend(perm.get('write', []))
-                #if perm.endswith('__write'):
-                    #ls.append(perm[0:-7])
+                if perm.endswith('__write'):
+                    ls.append(perm[0:-7])
             return list(set(ls))
 
 
 
 def model_permit_info(model,user):
     """
-    // 现在 权限直接写在代码里面，不需要拼凑了。
-    
     返回model权限字段，现在应该是用来拼凑前端页面。该页面用于编辑用户的权限。
     
     [{u'name': u'task', u'label': u'\u6240\u5c5e\u4efb\u52a1'},]

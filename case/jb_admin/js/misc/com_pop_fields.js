@@ -22,10 +22,12 @@ export var  com_pop_field= {
 
 },
     template:`<div class="flex-v" style="margin: 0;height: 100%;">
-    <div class = "flex-grow" style="overflow: auto;margin: 0;padding-bottom: 15em;">
+    <div class = "flex-grow" style="overflow: auto;margin: 0;">
         <div class="field-panel msg-hide" >
             <field  v-for="head in heads" :key="head.name" :head="head" :row="row"></field>
         </div>
+      <div style="height: 15em;">
+      </div>
     </div>
      <div style="text-align: right;padding: 8px 3em;">
         <component v-for="op in ops" :is="op.editor" @operation="on_operation(op)" :head="op"></component>
