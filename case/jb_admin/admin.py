@@ -5,13 +5,17 @@ from django.contrib import admin
 from django.contrib.auth.models import Group,User
 from helpers.director.shortcut import TablePage,ModelTable,page_dc,model_dc,ModelFields, director
 from helpers.director.models import PermitModel 
-from helpers.director.base_data import permit_dc
+from helpers.director.base_data import site_cfg
 import re
 from . import  js_cfg
+from django.utils.translation import ugettext as _
 from helpers.director.shortcut import model_to_name, model_full_permit, add_permits, model_read_permit
 # Register your models here.
 class UserPage(TablePage):
     template='jb_admin/table.html'
+    def get_label(self): 
+        return _('User')
+    
     class tableCls(ModelTable):
         model = User
         exclude=['password']
@@ -128,7 +132,8 @@ class GroupForm(ModelFields):
     
     def get_heads(self):
         heads= super(self.__class__,self).get_heads()
-        options = permit_dc.get('__root__')
+        options = site_cfg.get('permit.options')()
+        #options = permit_dc.get('__root__')
         #options = [{'value':x.pk,'label':str(x)} for x in PermitModel.objects.all()]
         #options = list2tree(options)
         heads.append({

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-28 11:36+0800\n"
+"POT-Creation-Date: 2018-05-30 10:51+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -40,13 +40,11 @@ msgstr "种类"
 msgid "detail"
 msgstr "详细"
 
-#: .\helpers\director\models.py:24
-msgid "user group"
-msgstr "用户组"
+#~ msgid "user group"
+#~ msgstr "用户组"
 
-#: .\helpers\director\models.py:27
-msgid "user permit"
-msgstr "用户权限"
+#~ msgid "user permit"
+#~ msgstr "用户权限"
 
 #~ msgid "second password"
 #~ msgstr "确认密码"

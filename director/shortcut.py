@@ -1,6 +1,6 @@
 from __future__ import absolute_import
 
-from .base_data import model_dc,page_dc,permit_list,director
+from .base_data import model_dc,page_dc,director, site_cfg
 from .table.tablepage import TablePage,TablePage
 from .table.table import ModelTable,PageNum,TrivalPageNum,RowFilter,RowSearch,RowSort
 from .table.tabpage import TabPage
