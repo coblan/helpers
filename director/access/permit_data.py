@@ -1,3 +1,4 @@
+# encoding:utf-8
 import sqlite3
 import json
 from ..model_func.dictfy import model_to_name

@@ -9,8 +9,8 @@ model_dc={
 permit_list=[]
 
 js_tr_list=[]
-js_lib={
-}
+
+js_lib_list= []
 
 director={
 }

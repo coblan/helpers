@@ -14,14 +14,17 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 
-    <script src="{% static 'lib/jquery3.2.1.min.js' %}"></script>
-    <link rel="stylesheet" href="{% static 'lib/font-awesome4.7/font-awesome4.7.min.css' %}">
-    <!--<script src="{% static 'lib/vue2.3.2.js' %}"></script>-->
-    <script src="https://cdn.bootcss.com/vue/2.5.16/vue.js"></script>
 
-    <link rel="stylesheet" href="{% static 'lib/bootstrap.min.css' %}">
-    <script src="{% static 'lib/bootstrap.min.js' %}"></script>
-    <script src='{% static "js/i18n.js" %}?t={{ js_stamp.i18n_js }}'></script>
+    <script src="{{ js_config.js_lib.jquery }}"></script>
+    <link rel="stylesheet" href="{{ js_config.js_lib.font_awesome }}">
+    <!--<script src="{% static 'lib/jquery3.2.1.min.js' %}"></script>-->
+    <!--<link rel="stylesheet" href="{% static 'lib/font-awesome4.7/font-awesome4.7.min.css' %}">-->
+    <!--<script src="{% static 'lib/vue2.3.2.js' %}"></script>-->
+    <script src="{{ js_config.js_lib.vuejs }}"></script>
+
+    <link rel="stylesheet" href="{{ js_config.js_lib.bootstrap_css }}">
+    <script src="{{ js_config.js_lib.bootstrap }}"></script>
+
     <script src="https://cdn.bootcss.com/nice-validator/1.1.3/jquery.validator.min.js?local=zh-CN"></script>
     <link href="https://cdn.bootcss.com/nice-validator/1.1.3/jquery.validator.min.css" rel="stylesheet">
 
@@ -133,22 +136,22 @@ desired effect
     Vue.config.devtools = true
     menu= {{menu| jsonify}}
     head_bar_data ={{head_bar_data | jsonify}}
-    site_settings = {{js_config | jsonify}}
-    ex.assign(cfg.tr,site_settings.tr)
-    cfg.js_lib = site_settings.js_lib
+    js_config = {{js_config | jsonify}}
+    ex.assign(cfg.tr,js_config.tr)
+    cfg.js_lib = js_config.js_lib
 
     $(function(){
         if(!document.title){
             document.title = page_label + '| {{brand}}'
         }
 
-        var crt_lan=ex.getCookie('django_language') || site_settings.lans[0].value
+//        var crt_lan=ex.getCookie('django_language') || js_config.lans[0].value
         new Vue({
             el:'#control-sidebar-settings-tab',
             data:{
-                lans:site_settings.lans,
+                lans:js_config.lans,
                 cfg:cfg,
-                crt_lan:crt_lan
+                crt_lan:js_config.crt_lan
             },
             watch:{
                 crt_lan:function(v){

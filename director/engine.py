@@ -49,7 +49,7 @@ import json
 from django.views.decorators.cache import patch_cache_control
 import time
 from django.shortcuts import redirect
-from .base_data import js_tr_list,js_lib
+from .base_data import js_tr_list,js_lib_list
 
 class BaseEngine(object):
     _pages=None
@@ -147,25 +147,36 @@ class BaseEngine(object):
                     return dc[name]
 
     def get_menu(self,request):
-        return evalue_container( self.menu,request=request,user=request.user,url_name=self.url_name)
+        menu = evalue_container( self.menu,request=request,user=request.user,url_name=self.url_name)
+        ls = []
+        for act in menu:
+            if 'submenu' in act:
+                if not act['submenu']:
+                    continue
+            ls.append(act)
+        return ls
     
     def getJsConfig(self):
         lans = []
         for k,v in settings.LANGUAGES:
             lans.append({'value':k,'label':v})
+        def_lan = settings.LANGUAGE_CODE
+        crt_lan = self.request.COOKIES.get('django_language', def_lan)
         
         tr_dc = {}
         for fun in js_tr_list:
             tr_dc.update(fun())
+        
+        lib_dc = {}
+        for fun in js_lib_list:
+            lib_dc.update(fun(self.request))
         return {
             'lans':lans,
+            'crt_lan': crt_lan,
             'tr':tr_dc ,
-            'js_lib':js_lib
+            'js_lib':lib_dc
         }
     
-    #def get_ctx(self,ctx):
-        #"""ctx的hook"""
-        #return ctx
 
 def and_list(ls):
     def _func(user):
@@ -210,6 +221,7 @@ def page(name,append=''):
 
 def fa(name):
     return '<i class="fa %s" aria-hidden="true"></i>'%name
+
 
 
 
