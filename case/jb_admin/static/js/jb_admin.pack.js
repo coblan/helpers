@@ -2718,6 +2718,10 @@ var _array_option_mapper = __webpack_require__(17);
 
 var array_option_mapper = _interopRequireWildcard(_array_option_mapper);
 
+var _html_shower = __webpack_require__(58);
+
+var html_shower = _interopRequireWildcard(_html_shower);
+
 var _label_shower2 = __webpack_require__(6);
 
 var field_label_shower = _interopRequireWildcard(_label_shower2);
@@ -3018,6 +3022,21 @@ Vue.component('com-field-ele-tree', label_shower);
 //resolve(label_shower)
 //})
 //})
+
+/***/ }),
+/* 58 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var bool_shower = {
+    props: ['rowData', 'field', 'index'],
+    template: '<span v-html="rowData[field]"></span>'
+
+};
+
+Vue.component('com-table-html-shower', bool_shower);
 
 /***/ })
 /******/ ]);
