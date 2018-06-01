@@ -2722,6 +2722,10 @@ var _html_shower = __webpack_require__(58);
 
 var html_shower = _interopRequireWildcard(_html_shower);
 
+var _bool_editor = __webpack_require__(59);
+
+var bool_editor = _interopRequireWildcard(_bool_editor);
+
 var _label_shower2 = __webpack_require__(6);
 
 var field_label_shower = _interopRequireWildcard(_label_shower2);
@@ -3037,6 +3041,42 @@ var bool_shower = {
 };
 
 Vue.component('com-table-html-shower', bool_shower);
+
+/***/ }),
+/* 59 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var bool_shower = {
+    props: ['rowData', 'field', 'index'],
+    template: '<span>\n       <el-switch\n              v-model="is_true"\n              active-color="#13ce66"\n              inactive-color="#ff4949">\n        </el-switch>\n    </span>',
+
+    computed: {
+        is_true: {
+            get: function get() {
+                var value = this.rowData[this.field];
+                if (value == 1) {
+                    return true;
+                } else {
+                    return value;
+                }
+            },
+            set: function set(newValue) {
+                var crt_value = this.rowData[this.field];
+                if (crt_value == 0 || crt_value == 1) {
+                    this.rowData[this.field] = newValue ? 1 : 0;
+                } else {
+                    this.rowData[this.field] = newValue;
+                }
+            }
+        }
+    }
+
+};
+
+Vue.component('com-table-bool-editor', bool_shower);
 
 /***/ })
 /******/ ]);
