@@ -268,7 +268,7 @@ class ModelTable(object):
     pagenator=PageNum
     fields_sort=[]
     pop_edit_field=""
-    def __init__(self,_page=1,row_sort=[],row_filter={},row_search={},crt_user=None,perpage=None,**kw):
+    def __init__(self,_page=1,row_sort=[],row_filter={},row_search= '',crt_user=None,perpage=None,**kw):
         self.search_args = kw.get('search_args')
         
         self.kw=kw
