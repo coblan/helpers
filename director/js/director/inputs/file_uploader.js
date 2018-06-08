@@ -70,7 +70,7 @@ export var com_file_uploader = {
     },
     computed:{
         res_url:function(){
-            return this.to ? this.to: "/_face/upload"
+            return this.to ? this.to: "/d/upload"
         },
         cfg:function(){
             var def_config = {

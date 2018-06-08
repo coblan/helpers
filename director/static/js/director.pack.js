@@ -2874,7 +2874,7 @@ var com_file_uploader = exports.com_file_uploader = {
     },
     computed: {
         res_url: function res_url() {
-            return this.to ? this.to : "/_face/upload";
+            return this.to ? this.to : "/d/upload";
         },
         cfg: function cfg() {
             var def_config = {
