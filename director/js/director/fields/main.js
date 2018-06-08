@@ -83,8 +83,8 @@ var field={
                         :row='row'
                         :head='head'>
                     </component>
-
                 </div>
+                <slot></slot>
                  <div class="msg" style="position: absolute;right: 5px;top: 1px;">
                         <i v-if="head.help_text" @click="show_msg(head.help_text,$event)" class="fa fa-shield" ></i>
 
