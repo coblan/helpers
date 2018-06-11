@@ -1,4 +1,4 @@
-var pop_fields={
+export  var pop_fields={
     template:'<span v-text="show_text" @click="edit_me()" class="clickable"></span>',
     props:['rowData','field','index'],
     created:function(){
@@ -58,6 +58,9 @@ var show_label={
     use_other_field:function(row,kws){
         var other_field=kws.other_field
         return row[other_field]
+    },
+    text_label:function(row,show_label){
+        return show_label.text
     }
 }
 
