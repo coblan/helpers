@@ -2,6 +2,7 @@
 额外的点击列，例如“详情”
 * */
 
+
 var extra_click={
     props:['rowData','field','index'],
     template:`<span class="clickable" v-text="head.extra_label" @click="on_click()"></span>`,
@@ -20,9 +21,10 @@ var extra_click={
         this.table_par = table_par
         this. head  = ex.findone(this.table_par.heads,{name:this.field})
     },
+
     methods:{
         on_click:function(){
-            this.$emit('on-custom-comp',{name:this.head.extra_fun,row:this.rowData})
+            this.$emit('on-custom-comp',{name:this.head.extra_fun,row:this.rowData,head:this.head})
         }
 
     }

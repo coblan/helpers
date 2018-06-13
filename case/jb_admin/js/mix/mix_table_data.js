@@ -82,7 +82,11 @@ var mix_table_data={
                 })
             })
         },
+        editRow:function(kws){
+            var row=kws.row
+            var fields_ctx = kws.fields_ctx
 
+        },
         update_or_insert:function(new_row,old_row){
             if(old_row && ! old_row.pk) {
                 this.rows.splice(0, 0, new_row)
