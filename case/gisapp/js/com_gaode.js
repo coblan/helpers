@@ -4,20 +4,21 @@ require('./scss/com_gaode.scss')
 var com_gaode={
     // 高德地图封装
 
-    template:`<div id="container"></div>`,
+    template:`<div id="container" style="width: 100%;height: 100%;"></div>`,
     mounted:function(){
         this.onInit()
     },
     methods:{
         onInit:function(){
-            this.editorTool,this.map = new AMap.Map(this.$el, {
+            this.map = new AMap.Map(this.$el, {
                 resizeEnable: true,
                 center: [116.403322, 39.900255],//地图中心点
                 zoom: 13 //地图显示的缩放级别
             });
+            this.$emit('init',this)
         },
         addMark:function(marker){
-            marker.setMap(map_com.map)
+            marker.setMap(this.map)
         }
     }
 }
@@ -26,9 +27,12 @@ Vue.component('com-gaode',function(resolve,reject){
     ex.load_css(cfg.js_lib.gaode_css)
 
     ex.load_js(cfg.js_lib.gaode_js,function(){
-        ex.load_js(cfg.js_lib.gaode_addtoolbar_js,function(){
-            resolve(com_gaode)
-        })
+        resolve(com_gaode)
+            //ex.load_js(cfg.js_lib.gaode_addtoolbar_js,function(){
+            //
+            //})
+
+
     })
 })
 

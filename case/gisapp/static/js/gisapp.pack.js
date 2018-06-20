@@ -6,9 +6,9 @@
 /******/ 	function __webpack_require__(moduleId) {
 /******/
 /******/ 		// Check if module is in cache
-/******/ 		if(installedModules[moduleId]) {
+/******/ 		if(installedModules[moduleId])
 /******/ 			return installedModules[moduleId].exports;
-/******/ 		}
+/******/
 /******/ 		// Create a new module (and put it into the cache)
 /******/ 		var module = installedModules[moduleId] = {
 /******/ 			i: moduleId,
@@ -32,6 +32,9 @@
 /******/
 /******/ 	// expose the module cache
 /******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// identity function for calling harmony imports with the correct context
+/******/ 	__webpack_require__.i = function(value) { return value; };
 /******/
 /******/ 	// define getter function for harmony exports
 /******/ 	__webpack_require__.d = function(exports, name, getter) {
@@ -60,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 0);
+/******/ 	return __webpack_require__(__webpack_require__.s = 5);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -70,38 +73,26 @@
 "use strict";
 
 
-var _com_gaode = __webpack_require__(1);
-
-var case_cmp = _interopRequireWildcard(_com_gaode);
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-/***/ }),
-/* 1 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-__webpack_require__(2);
+__webpack_require__(4);
 
 var com_gaode = {
     // 高德地图封装
 
-    template: '<div id="container"></div>',
+    template: '<div id="container" style="width: 100%;height: 100%;"></div>',
     mounted: function mounted() {
         this.onInit();
     },
     methods: {
         onInit: function onInit() {
-            this.editorTool, this.map = new AMap.Map(this.$el, {
+            this.map = new AMap.Map(this.$el, {
                 resizeEnable: true,
                 center: [116.403322, 39.900255], //地图中心点
                 zoom: 13 //地图显示的缩放级别
             });
+            this.$emit('init', this);
         },
         addMark: function addMark(marker) {
-            marker.setMap(map_com.map);
+            marker.setMap(this.map);
         }
     }
 };
@@ -110,9 +101,11 @@ Vue.component('com-gaode', function (resolve, reject) {
     ex.load_css(cfg.js_lib.gaode_css);
 
     ex.load_js(cfg.js_lib.gaode_js, function () {
-        ex.load_js(cfg.js_lib.gaode_addtoolbar_js, function () {
-            resolve(com_gaode);
-        });
+        resolve(com_gaode);
+        //ex.load_js(cfg.js_lib.gaode_addtoolbar_js,function(){
+        //
+        //})
+
     });
 });
 
@@ -147,36 +140,10 @@ AMap.event.addListener(marker, 'click', function() {
  */
 
 /***/ }),
-/* 2 */
+/* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(3);
-if(typeof content === 'string') content = [[module.i, content, '']];
-// add the styles to the DOM
-var update = __webpack_require__(5)(content, {});
-if(content.locals) module.exports = content.locals;
-// Hot Module Replacement
-if(false) {
-	// When the styles change, update the <style> tags
-	if(!content.locals) {
-		module.hot.accept("!!./../../../../../../../../coblan/webcode/node_modules/.0.26.1@css-loader/index.js!./../../../../../../../../coblan/webcode/node_modules/.6.0.0@sass-loader/lib/loader.js!./com_gaode.scss", function() {
-			var newContent = require("!!./../../../../../../../../coblan/webcode/node_modules/.0.26.1@css-loader/index.js!./../../../../../../../../coblan/webcode/node_modules/.6.0.0@sass-loader/lib/loader.js!./com_gaode.scss");
-			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-			update(newContent);
-		});
-	}
-	// When the module is disposed, remove the <style> tags
-	module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 3 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(4)();
+exports = module.exports = __webpack_require__(2)();
 // imports
 
 
@@ -187,7 +154,7 @@ exports.push([module.i, ".red.circle {\n  background-color: red;\n  width: 20px;
 
 
 /***/ }),
-/* 4 */
+/* 2 */
 /***/ (function(module, exports) {
 
 /*
@@ -243,7 +210,7 @@ module.exports = function() {
 
 
 /***/ }),
-/* 5 */
+/* 3 */
 /***/ (function(module, exports) {
 
 /*
@@ -259,7 +226,7 @@ var stylesInDom = {},
 		};
 	},
 	isOldIE = memoize(function() {
-		return /msie [6-9]\b/.test(window.navigator.userAgent.toLowerCase());
+		return /msie [6-9]\b/.test(self.navigator.userAgent.toLowerCase());
 	}),
 	getHeadElement = memoize(function () {
 		return document.head || document.getElementsByTagName("head")[0];
@@ -493,6 +460,45 @@ function updateLink(linkElement, obj) {
 		URL.revokeObjectURL(oldSrc);
 }
 
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(1);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// add the styles to the DOM
+var update = __webpack_require__(3)(content, {});
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./com_gaode.scss", function() {
+			var newContent = require("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./com_gaode.scss");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _com_gaode = __webpack_require__(0);
+
+var case_cmp = _interopRequireWildcard(_com_gaode);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 /***/ })
 /******/ ]);
