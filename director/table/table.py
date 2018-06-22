@@ -168,10 +168,29 @@ class RowFilter(object):
             ls.append(proc_cls)
         return ls
     
+    def dict_head(self, head): 
+        return head
+    
+    def getExtraHead(self): 
+        return []
+    
     def get_context(self):
-        ls=[]
-        for proc_cls,name in zip(self.get_proc_list() ,self.valid_name):
+        """
+        返回：
+        heads=[
+           
+        ]
+        """
+        ls = []
+        extraHead= self.getExtraHead()
+        dc = {x['name']: x  for x in extraHead }
 
+        for proc_cls,name in zip(self.get_proc_list() ,self.valid_name):
+            if name in dc:
+                # 为了性能考虑，如果有head了，就不进行自动生成head了。
+                ls.append(dc[name])
+                continue
+            
             if name in self.range_fields:
                 
                 filter_head = proc_cls().filter_get_range_head(name,self.model)
@@ -180,7 +199,7 @@ class RowFilter(object):
             else:
                 filter_head = proc_cls().filter_get_head(name,self.model)
                 ls.append(filter_head)
-                
+        ls = [self.dict_head(head) for head in ls]
         return ls
       
     def get_query(self,query):
@@ -470,6 +489,7 @@ class ModelTable(object):
     def fields_map_head(self,head):
         """
         fieldproc 处理
+        [2018/6/22] 现在 field_proc 在 model_to_head 里面，这个函数可以没什么用了。
         """
         field = self.model._meta.get_field(head['name'])
         if field.choices:

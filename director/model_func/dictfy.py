@@ -307,35 +307,38 @@ def form_to_head(form,include=None):
         dc = {'name':k,'label':_(v.label),
               'help_text':str(v.help_text),
               'editor':'linetext'}
+        model_field = form._meta.model._meta.get_field(k)
+        fieldName = model_to_name(form._meta.model) + '.' + k
+        if fieldName in field_map:
+            mapper=field_map[fieldName]
+            mapper().dict_field_head(dc)
+        elif model_field.__class__ in field_map:
+            mapper=field_map[model_field.__class__]
+            #if hasattr(mapper,'dict_field_head'):
+            mapper().dict_field_head(dc) 
+                
         if hasattr(v,'required'):
             dc['required'] = v.required
         
-        if hasattr(v,'widget') and isinstance(v.widget,forms.widgets.Select):
-            dc['editor'] = 'sim_select' 
-            dc['options']=[{'value':val,'label':str(lab)} for val,lab in v.widget.choices]
-        elif v.__class__==forms.fields.CharField:
-            if v.max_length:
-                dc.update({'editor':'linetext','maxlength':v.max_length})
-            else:
-                dc.update({'editor':'blocktext'})
-        elif v.__class__==forms.fields.BooleanField:
-            dc['editor']='bool'
-            #dc['no_auto_label']=True
-        elif v.__class__ in [forms.fields.IntegerField,forms.fields.FloatField]:
-            dc['editor']='number'
-        elif v.__class__  == forms.fields.DateField:
-            dc['editor']='date'
-        if v.__class__ ==forms.models.ModelMultipleChoiceField and \
-            isinstance(v.widget,forms.widgets.SelectMultiple):
-            dc['editor']='field_multi_chosen'
-            #dc['editor']='tow_col'
-        # elif v.__class__==forms.models.ModelChoiceField and \
-        
-        model_field = form._meta.model._meta.get_field(k)
-        if model_field.__class__ in field_map:
-            mapper=field_map[model_field.__class__]
-            if hasattr(mapper,'dict_field_head'):
-                dc.update( mapper().dict_field_head(dc) )
+        #if hasattr(v,'widget') and isinstance(v.widget,forms.widgets.Select):
+            #dc['editor'] = 'sim_select' 
+            #dc['options']=[{'value':val,'label':str(lab)} for val,lab in v.widget.choices]
+        #elif v.__class__==forms.fields.CharField:
+            #if v.max_length:
+                #dc.update({'editor':'linetext','maxlength':v.max_length})
+            #else:
+                #dc.update({'editor':'blocktext'})
+        #elif v.__class__==forms.fields.BooleanField:
+            #dc['editor']='bool'
+            ##dc['no_auto_label']=True
+        #elif v.__class__ in [forms.fields.IntegerField,forms.fields.FloatField]:
+            #dc['editor']='number'
+        #elif v.__class__  == forms.fields.DateField:
+            #dc['editor']='date'
+        #if v.__class__ ==forms.models.ModelMultipleChoiceField and \
+            #isinstance(v.widget,forms.widgets.SelectMultiple):
+            #dc['editor']='field_multi_chosen'
+            
         out.append(dc)
     return out
 
@@ -344,19 +347,23 @@ ID_tr=_('ID')
 
 def model_to_head(model,include=[],exclude=[]):
     out = []
+    model_name = model_to_name(model)
     for field in model._meta.get_fields():
         if isinstance(field,models.Field):
             #if isinstance(field._verbose_name, (str,unicode)):
                 #dc = {'name':field.name,'label':_(field._verbose_name),}
             #else:
             dc= {'name':field.name,'label':_(field.verbose_name)}
-            if isinstance(field,models.ForeignKey):
-                dc['editor']='com-table-label-shower'
-            
-            if field.__class__ in field_map:
+            fieldName = model_name + '.' + field.name
+            if fieldName in field_map:
+                mapper = field_map.get(fieldName)
+                mapper().dict_table_head(dc)
+            elif field.__class__ in field_map:
                 mapper = field_map.get(field.__class__)
                 if hasattr(mapper,'dict_table_head'):
-                    dc.update(mapper().dict_table_head(dc))
+                    mapper().dict_table_head(dc)
+            elif isinstance(field,models.ForeignKey):
+                dc['editor']='com-table-label-shower'            
                 
             out.append(dc)
     if include:
