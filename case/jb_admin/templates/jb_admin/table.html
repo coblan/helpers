@@ -219,6 +219,7 @@
                             <el-table-column v-if="head.editor"
                                              :show-overflow-tooltip="is_show_tooltip(head) "
                                              :label="head.label"
+                                             :prop="head.name.toString()"
                                              :sortable="is_sort(head)"
                                              :width="head.width">
                                 <template slot-scope="scope">

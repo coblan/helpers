@@ -7,22 +7,36 @@ var com_select = {
     </select>
     `,
     data:function(){
-        //var inn_cfg = {
-        //    order: this.head.order || false  // 默认false
-        //}
-        //ex.assign(inn_cfg,this.config)
         return {
-            order:this.head.order || false
+        }
+    },
+    computed:{
+        watchedValue:function(){
+            return this.search_args[this.head.related]
         }
     },
     watch:{
         myvalue:function(v){
             this.$emit('input',v)
+        },
+        watchedValue:function(nv){
+            var self=this
+            if(nv){
+                var post_data=[{fun:"director_call",director_name:this.head.director_name,kws:{related:nv}}]
+                ex.post('/d/ajax',JSON.stringify(post_data),function(resp){
+                    self.head.options=resp.director_call
+                })
+            }else{
+                self.head.options=[]
+            }
+            self.search_args[self.head.name]=null
+
         }
     },
     methods:{
+
         orderBy:function (array,key) {
-            if(! this.order){
+            if(! this.head.order){
                 return array
             }else{
                 return  array.slice().sort(function (a,b) {
@@ -37,7 +51,7 @@ var com_select = {
         },
     }
 }
-Vue.component('com-select-filter',com_select)
+Vue.component('com-related-select-filter',com_select)
 
 function isChinese(temp){
     var re=/[^\u4E00-\u9FA5]/;

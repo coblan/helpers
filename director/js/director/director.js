@@ -1,5 +1,6 @@
 require('./scss/tab_group.scss')
 require('./scss/index.scss')
+require('./scss/vue.scss')
 
 
 import * as inputs from './inputs/main.js'
