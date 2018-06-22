@@ -35,7 +35,7 @@ def get_lib(request):
         'nprogress': 'https://cdn.bootcss.com/nprogress/0.2.0/nprogress.min.js',
         'nprogress_css': 'https://cdn.bootcss.com/nprogress/0.2.0/nprogress.min.css',
         'layer': 'https://cdn.bootcss.com/layer/3.1.0/layer.js',
-        
+        'layer_css':'https://cdn.bootcss.com/layer/3.1.0/theme/default/layer.css',
         'element': 'https://unpkg.com/element-ui/lib/index.js',
         'element_css': 'https://unpkg.com/element-ui/lib/theme-chalk/index.css',
         'md5': 'https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.min.js',
