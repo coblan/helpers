@@ -13,7 +13,7 @@ class BaseFieldProc(object):
     def dict_table_head(self,head):
         return head
     
-    def dict_field_head(self,head):
+    def dict_field_head(self,head):     
         return head
     
     def filter_get_range_head(self,name,model):

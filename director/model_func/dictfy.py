@@ -307,6 +307,29 @@ def form_to_head(form,include=None):
         dc = {'name':k,'label':_(v.label),
               'help_text':str(v.help_text),
               'editor':'linetext'}
+              
+        if hasattr(v,'required'):
+            dc['required'] = v.required   
+                 
+        if hasattr(v,'widget') and isinstance(v.widget,forms.widgets.Select):
+            dc['editor'] = 'sim_select' 
+            dc['options']=[{'value':val,'label':str(lab)} for val,lab in v.widget.choices]
+        elif v.__class__==forms.fields.CharField:
+            if v.max_length:
+                dc.update({'editor':'linetext','maxlength':v.max_length})
+            else:
+                dc.update({'editor':'blocktext'})
+        elif v.__class__==forms.fields.BooleanField:
+            dc['editor']='bool'
+            #dc['no_auto_label']=True
+        elif v.__class__ in [forms.fields.IntegerField,forms.fields.FloatField]:
+            dc['editor']='number'
+        elif v.__class__  == forms.fields.DateField:
+            dc['editor']='date'
+        if v.__class__ ==forms.models.ModelMultipleChoiceField and \
+            isinstance(v.widget,forms.widgets.SelectMultiple):
+            dc['editor']='field_multi_chosen'
+            
         model_field = form._meta.model._meta.get_field(k)
         fieldName = model_to_name(form._meta.model) + '.' + k
         if fieldName in field_map:
@@ -314,30 +337,7 @@ def form_to_head(form,include=None):
             mapper().dict_field_head(dc)
         elif model_field.__class__ in field_map:
             mapper=field_map[model_field.__class__]
-            #if hasattr(mapper,'dict_field_head'):
-            mapper().dict_field_head(dc) 
-                
-        if hasattr(v,'required'):
-            dc['required'] = v.required
-        
-        #if hasattr(v,'widget') and isinstance(v.widget,forms.widgets.Select):
-            #dc['editor'] = 'sim_select' 
-            #dc['options']=[{'value':val,'label':str(lab)} for val,lab in v.widget.choices]
-        #elif v.__class__==forms.fields.CharField:
-            #if v.max_length:
-                #dc.update({'editor':'linetext','maxlength':v.max_length})
-            #else:
-                #dc.update({'editor':'blocktext'})
-        #elif v.__class__==forms.fields.BooleanField:
-            #dc['editor']='bool'
-            ##dc['no_auto_label']=True
-        #elif v.__class__ in [forms.fields.IntegerField,forms.fields.FloatField]:
-            #dc['editor']='number'
-        #elif v.__class__  == forms.fields.DateField:
-            #dc['editor']='date'
-        #if v.__class__ ==forms.models.ModelMultipleChoiceField and \
-            #isinstance(v.widget,forms.widgets.SelectMultiple):
-            #dc['editor']='field_multi_chosen'
+            mapper().dict_field_head(dc)   
             
         out.append(dc)
     return out
