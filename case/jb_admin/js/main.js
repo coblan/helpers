@@ -34,6 +34,7 @@ import * as foreign_click_select from  './table_editor/foreign_click_select.js'
 import * as array_option_mapper from  './table_editor/array_option_mapper.js'
 import * as html_shower from  './table_editor/html_shower.js'
 import * as bool_editor from  './table_editor/bool_editor.js'
+import * as jump_link from  './table_editor/jump_link.js'
 
 
 // field editor
