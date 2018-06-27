@@ -85,8 +85,14 @@ var field={
                     </component>
                 </div>
                 <slot></slot>
+                <!--<i class="help-text" v-if="head.help_text" v-text="head.help_text"></i>-->
+                <span class="help-text clickable">
+                    <i style="color: #3780af;position: relative;top:10px;"  v-if="head.help_text" @click="show_msg(head.help_text,$event)" class="fa fa-question-circle" ></i>
+                </span>
+
                  <div class="msg" style="position: absolute;right: 5px;top: 1px;">
-                        <i v-if="head.help_text" @click="show_msg(head.help_text,$event)" class="fa fa-shield" ></i>
+
+                        <!--<i v-if="head.help_text" @click="show_msg(head.help_text,$event)" class="fa fa-shield" ></i>-->
 
                         <span class="fa-stack error" v-if="head.error" @click="show_msg(head.error,$event)" style="font-size: 0.5em;">
                               <i class="fa fa-cloud fa-stack-2x" style="color: black"></i>
