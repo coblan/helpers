@@ -17,7 +17,9 @@ class CusPointProc(BaseFieldProc):
     def clean_field(self,dc,name):
         if dc.get(name):
             ls=dc.get(name)
-            return Point(x=float(ls[0]),y=float(ls[1]))
+            pp = Point(x=float(ls[0]),y=float(ls[1]))
+            pp.srid=4326
+            return pp
         else:
             return dc.get(name)
     

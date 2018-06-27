@@ -8,15 +8,16 @@ class FieldsPage(object):
     ex_js=[]
     ex_css=[]
     def __init__(self,request):
-        if not self.fieldsCls:
-            for k,v in self.__class__.__dict__.items():
-                if inspect.isclass(v) and issubclass(v,ModelFields):
-                    self.fieldsCls = v
-                    break            
+        #if not self.fieldsCls:
+            #for k,v in self.__class__.__dict__.items():
+                #if inspect.isclass(v) and issubclass(v,ModelFields):
+                    #self.fieldsCls = v
+                    #break            
         
         self.request=request
         #self.pk=request.GET.get('pk')
-        self.fields = self.fieldsCls.parse_request(request) # (pk=self.pk,crt_user=request.user,request=request)
+        if self.fieldsCls:
+            self.fields = self.fieldsCls.parse_request(request) # (pk=self.pk,crt_user=request.user,request=request)
 
         
     
@@ -29,13 +30,18 @@ class FieldsPage(object):
             return 'director/fields.html'
     
     def get_context(self):
-        self.ctx=self.fields.get_context()
+        if self.fieldsCls:
+            self.ctx=self.fields.get_context()
+            self.ctx['app']=self.fieldsCls._meta.model._meta.app_label
+        else:
+            self.ctx={}
         self.ctx['ex_js']=self.ex_js
         self.ctx['ex_css'] = self.ex_css        
-        self.ctx['app']=self.fieldsCls._meta.model._meta.app_label
+        
         # self.ctx['page_label'] =self.get_label()
         return self.ctx
     
     def get_label(self):
-        return  str(self.fields.instance)  #'编辑表单'  
+        
+        return  '' #str(self.fields.instance)  #'编辑表单'  
     
