@@ -87,8 +87,8 @@ def sim_dict(instance,filt_attr=None,include=None,exclude=None):
                 if isinstance(out.get(field.name),list):
                     # 如果遇到 manytomany的情况，是一个list
                     out['_%s_label'%field.name]=[str(x) for x in out[field.name]]
-                else:
-                    out['_%s_label'%field.name]=str(getattr(instance,field.name,''))
+                #else:
+                    #out['_%s_label'%field.name]=str(getattr(instance,field.name,''))
             else:
                 
                 # 考虑到使用到get_prep_value转换为str的field很少（大部分特殊的都在field_map类集中处理了。）
