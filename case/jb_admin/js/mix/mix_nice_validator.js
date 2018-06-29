@@ -1,14 +1,23 @@
+/*
+用在fields表单里面的mixins
+
+增加nicevalidator功能
+* */
+
 var nice_validator={
     mounted:function(){
         var self=this
         var validator={}
         ex.each(this.heads,function(head){
             var ls=[]
-            if(head.required){
-               ls.push('required')
-            }
+
             if(head.fv_rule){
                 ls.push(head.fv_rule)
+            }
+            if( head.required){
+                if(!head.fv_rule || head.fv_rule.search('required')==-1){// 规则不包含 required的时候，再添加上去
+                    ls.push('required')
+                }
             }
             validator[head.name]=ls.join(';')
         })

@@ -8,7 +8,7 @@ module.exports =
 {
     //context:__dirname,
     entry: {
-        inputs_uis:'./uis/input_uis.js',
+        //uis:'./uis/input_uis.js',
         director:'./director/director.js',
         exfun:'./exfun/main.js'
     },

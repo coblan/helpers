@@ -12,6 +12,7 @@ from django.apps import apps
 #from helpers.func.network.ajax_router import ajax_router
 from .network.ajax_router import ajax_router
 from .recv_file import GeneralUpload
+from django.views.decorators.csrf import csrf_exempt
 """
 >5>helpers/port.rst>
 总的ajax view
@@ -27,7 +28,7 @@ from .recv_file import GeneralUpload
     url(r'^_ajax/?$',director_views.ajax_views), 
 <-<
 """
-
+@csrf_exempt
 def ajax_views(request,app=None):
     if not app:
         ajax_module = ajax

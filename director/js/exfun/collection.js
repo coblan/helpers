@@ -10,6 +10,9 @@ export var collection={
                 var obj=obj_or_func
                 var match=true
                 for(var key in obj){
+                    if(key.startsWith('_')){
+                        continue
+                    }
                     if (obj[key] !=now_obj[key]){
                         match =false
                         break

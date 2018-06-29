@@ -39,6 +39,7 @@ def get_lib(request):
         'element': 'https://unpkg.com/element-ui/lib/index.js',
         'element_css': 'https://unpkg.com/element-ui/lib/theme-chalk/index.css',
         'md5': 'https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.min.js',
+        'jb_admin_pack_js': '/static/js/jb_admin.pack.js',
     }
     return dc
 

@@ -3,10 +3,16 @@
   color: red;
 }
 
-.field-panel{
+@mixin horizontal {
+  margin-left: auto; margin-right: auto;
+}
+
+
+
+.field-panel.suit{
   background-color: #F5F5F5;
   //max-width:80%;
-  margin: 20px;
+  margin: auto;
   padding: 20px 30px;
   //border-radius:6px;
   position: relative;
@@ -54,20 +60,56 @@
     }
   }
 
-  .form-group.field .field_input ._tow-col-sel{
-    /*width:750px;*/
-  }
-  .form-group.field .help_text{
-    padding: 10px;
-    color: #999;
-    font-style: italic;
-    font-size: 0.9em;
-  }
-  .field{
-    position: relative;
-  }
+
+  //.form-group.field .help_text{
+  //  padding: 10px;
+  //  color: #999;
+  //  font-style: italic;
+  //  font-size: 0.9em;
+  //}
 
 }
+
+.field-panel.plain{
+  background-color: white;
+  margin: auto;
+  padding: 20px 30px;
+  position: relative;
+
+  .form-group.field {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 10px;
+  }
+    .field_input {
+      flex-grow: 0;
+      padding: 5px 10px;
+      width: 20em;
+    }
+  .control-label{
+    width:150px;
+    text-align: right;
+    padding:5px 10px;
+    padding-top: 8px;
+    flex-shrink:0;
+    font-weight:400;
+  }
+}
+.field-panel.msg-bottom{
+
+    .msg-box.n-right{
+      position: absolute;
+      left: 1em;
+      bottom: 0;
+    }
+
+}
+.field_input{
+  position: relative;
+}
+
+
+
 
 ._tow-col-sel select{
   min-height: 7em;
@@ -80,5 +122,4 @@ img.img-uploador{
 
 .req_star{
   color: red;
-
 }
