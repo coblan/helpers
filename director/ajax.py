@@ -17,6 +17,10 @@ from helpers.director.base_data import director
 def get_global():
     return globals()
 
+def director_call(director_name, kws): 
+    directorEnt= director.get(director_name)
+    return directorEnt(kws)
+
 def save(row,user,request):
     """
     为了兼顾老的调用

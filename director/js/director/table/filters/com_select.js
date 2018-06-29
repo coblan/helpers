@@ -7,12 +7,12 @@ var com_select = {
     </select>
     `,
     data:function(){
-        var inn_cfg = {
-            order:false
-        }
-        ex.assign(inn_cfg,this.config)
+        //var inn_cfg = {
+        //    order: this.head.order || false  // 默认false
+        //}
+        //ex.assign(inn_cfg,this.config)
         return {
-            cfg:inn_cfg
+            order:this.head.order || false
         }
     },
     watch:{
@@ -22,7 +22,7 @@ var com_select = {
     },
     methods:{
         orderBy:function (array,key) {
-            if(! this.cfg.order){
+            if(! this.order){
                 return array
             }else{
                 return  array.slice().sort(function (a,b) {

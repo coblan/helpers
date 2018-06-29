@@ -160,9 +160,9 @@ class GroupForm(ModelFields):
             self.instance.permitmodel.names = ';'.join( self.kw.get('permit') )
             #permits=PermitModel.objects.filter(pk__in=self.kw.get('permit'))
             #self.instance.permitmodel_set.add(*list(permits))
-        else:
-            self.instance.permitmodel = ''  
-        self.instance.permitmodel.save()
+        #else:
+            #self.instance.permitmodel = ''  
+            self.instance.permitmodel.save()
 
 def list2tree(ls):
     clsfy = {}

@@ -51,7 +51,7 @@ class LoginForm(forms.ModelForm):
         if not username or not password:
             for k,v in self.errors.items():
                 field = self.fields.get(k)
-                if field.error_messages.has_key('required'):
+                if 'required' in field.error_messages:
                     self.errors[k]=['必须输入%s'%str(field.label),]
             return
         
@@ -64,7 +64,7 @@ class LoginForm(forms.ModelForm):
         else:
             try:
                 user=User.objects.get(username=username)
-                self.add_error('username',_('user exist,but password not match'))
+                self.add_error('password',_('user exist,but password not match'))
             except User.DoesNotExist:
                 self.add_error('username',_('user not exist'))
         

@@ -45,9 +45,15 @@
 }
 
 .logoImg{
-  max-height: 100px !important;
-  vertical-align: middle;
-  margin-top: 5px;
+  max-height: 100% !important;
+  max-width: 100% !important;
+  /*margin-top: 5px;*/
+  position:absolute;
+
+  left:50%;
+  top:50%;
+  transform: translate(-50%,-50%);
+  
 }
 
 

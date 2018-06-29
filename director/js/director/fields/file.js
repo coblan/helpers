@@ -290,7 +290,7 @@ var img_uploader={
                 <a class='choose'>Choose</a>
             </div>
             <div v-if='url' class="closeDiv">
-            <div class="close" @click='clear()'><i class="fa fa-times" aria-hidden="true" style="padding: 5px;"></i></div>
+            <div class="close" @click='clear()'><i class="fa fa-times-circle" aria-hidden="true" style="color:red;position:relative;left:30px;"></i></div>
             <img :src="url" alt="" class="logoImg">
             </div>
             </div>
