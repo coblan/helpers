@@ -6,7 +6,24 @@ var com_gaode={
 
     template:`<div id="container" style="width: 100%;height: 100%;"></div>`,
     mounted:function(){
-        this.onInit()
+        if(window.AMap){
+            this.onInit()
+        }else{
+            var self=this
+            var count=0
+            var timerIndex =setInterval(function(){
+                if(window.AMap){
+                    self.onInit()
+                    count+=1
+                    clearInterval(timerIndex)
+                }
+                if(count > 100){
+                    clearInterval(timerIndex)
+                    cfg.showMsg('加载高德出现问题，请刷新页面重试!')
+                }
+            },200)
+        }
+
     },
     methods:{
         onInit:function(){
