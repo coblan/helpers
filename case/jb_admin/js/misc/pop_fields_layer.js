@@ -9,14 +9,14 @@ export  function pop_fields_layer (row,fields_ctx,callback){
     var heads = fields_ctx.heads
     var ops = fields_ctx.ops
     var extra_mixins=fields_ctx.extra_mixins || []
-
+    var com_fields = window[fields_ctx.fieldsPanel] || com_pop_field
     var com_id = md5(extra_mixins)
     if(! window['_vue_com_'+com_id]){
         extra_mixins = ex.map(extra_mixins,function(name){
             return window[name]
         })
-        var com_pop_field_real = $.extend({}, com_pop_field);
-        com_pop_field_real.mixins = com_pop_field.mixins.concat(extra_mixins)
+        var com_pop_field_real = $.extend({}, com_fields);
+        com_pop_field_real.mixins = com_fields.mixins.concat(extra_mixins)
         Vue.component('com-pop-fields-'+com_id,com_pop_field_real)
         window['_vue_com_'+com_id] = true
     }
