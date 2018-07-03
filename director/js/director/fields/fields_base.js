@@ -53,12 +53,30 @@ export var field_base={
 
             template: `<div><span v-if='head.readonly' v-text='row[head.name]'></span>
             		<input v-else type="number" class="form-control input-sm" v-model="row[head.name]" :id="'id_'+head.name"
-            		    :name="head.name"
+            		    :name="head.name" :step="head.step"
                         :placeholder="head.placeholder" :autofocus="head.autofocus"></div>`
+        },
+        fields_ele_number:{
+            props:['row','head'],
+            template: `<div><span v-if='head.readonly' v-text='row[head.name]'></span>
+            		<el-input-number v-else  v-model="inn_value" :id="'id_'+head.name"
+            		    :name="head.name" :step="head.step"
+                        :placeholder="head.placeholder" :autofocus="head.autofocus"></el-input-number> </div>`,
+            data:function(){
+                return {
+                    inn_value:this.row[this.head.name]
+                }
+            },
+            watch:{
+                inn_value:function(nv){
+                    this.row[this.head.name]=nv
+                }
+            }
         },
         password: {
             props:['row','head'],
-            template: `<input type="password" :id="'id_'+head.name" class="form-control input-sm" v-model="row[head.name]" :placeholder="head.placeholder" :readonly='head.readonly'>`
+            template: `<input type="password" :id="'id_'+head.name" class="form-control input-sm" v-model="row[head.name]"
+                :name="head.name" :placeholder="head.placeholder" :readonly='head.readonly'>`
         },
         blocktext: {
             props:['row','head'],
@@ -176,6 +194,7 @@ export var field_base={
             template:`<div>
             <span v-if='head.readonly' v-text='get_label(head.options,row[head.name])'></span>
             <select v-else v-model='row[head.name]'  :id="'id_'+head.name"  class="form-control input-sm">
+                <option v-if="head.placeholder" :value="undefined" disabled selected style='display:none;' class="placeholder" v-text="head.placeholder"></option>
             	<option v-for='opt in orderBy(head.options,"label")' :value='opt.value' v-text='opt.label'></option>
             </select>
             </div>`,

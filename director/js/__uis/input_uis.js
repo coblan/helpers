@@ -3,7 +3,7 @@
 // com_file_uploader 包含了图片上传的所有功能，已经移到了director/inputs目录下
 // 自己项目里面，其实可以把uis这个目录删除了。因为uis应该移到direcor(PC)或者f7(手机)目录下去
 
-
+require('./scss/text.scss')
 
 import {com_multi_picture} from './inputs/multi_picture.js'
 import {com_file_uploader,field_file_uploader}  from './inputs/file_uploader.js'
