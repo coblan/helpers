@@ -1149,17 +1149,27 @@ window.mix_fields_data = mix_fields_data;
 "use strict";
 
 
+/*
+用在fields表单里面的mixins
+
+增加nicevalidator功能
+* */
+
 var nice_validator = {
     mounted: function mounted() {
         var self = this;
         var validator = {};
         ex.each(this.heads, function (head) {
             var ls = [];
-            if (head.required) {
-                ls.push('required');
-            }
+
             if (head.fv_rule) {
                 ls.push(head.fv_rule);
+            }
+            if (head.required) {
+                if (!head.fv_rule || head.fv_rule.search('required') == -1) {
+                    // 规则不包含 required的时候，再添加上去
+                    ls.push('required');
+                }
             }
             validator[head.name] = ls.join(';');
         });
@@ -2743,7 +2753,7 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, ".el-tabs__item.is-top.is-active {\n  color: #3e8ebd; }\n\n.el-tabs__item.is-top.is-active:after {\n  content: '';\n  display: block;\n  position: absolute;\n  top: 0;\n  left: 0;\n  right: 0;\n  width: 100%;\n  height: 3px;\n  background-color: #3e8ebd; }\n\n.el-tabs {\n  display: flex;\n  flex-direction: column;\n  height: 100%; }\n  .el-tabs .el-tabs__content {\n    flex-grow: 10;\n    position: relative; }\n\nbody {\n  height: 100%; }\n", ""]);
+exports.push([module.i, ".el-tabs__item.is-top.is-active {\n  color: #3e8ebd; }\n\n.el-tabs__item.is-top.is-active:after {\n  content: '';\n  display: block;\n  position: absolute;\n  top: 0;\n  left: 0;\n  right: 0;\n  width: 100%;\n  height: 3px;\n  background-color: #3e8ebd; }\n\n.tab001 .el-tabs {\n  display: flex;\n  flex-direction: column;\n  height: 100%; }\n  .tab001 .el-tabs .el-tabs__content {\n    flex-grow: 10;\n    position: relative; }\n\nbody {\n  height: 100%; }\n", ""]);
 
 // exports
 
