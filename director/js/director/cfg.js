@@ -3,7 +3,7 @@ window.cfg={
         alert(msg)
     },
     warning:function(msg){
-        alert(msg)
+        layer.confirm(msg,{title:['警告','color:white;background-color:red']})
     },
     tr:{
         'picture_size_excceed':'图片尺寸不能超过{maxsize}'

@@ -120,6 +120,11 @@ class ModelFields(forms.ModelForm):
         
     def _clean_dict(self,dc):
         """利用field_map字典，查找前端传来的dc中，某个字段的转换方式"""
+
+        ls = [x for x in dc.keys() if x.startswith('_')]
+        for k in ls:
+            dc.pop(k)
+            
         model = self.Meta.model
         model_name = model_to_name(model)
         for k,v in dc.items():
