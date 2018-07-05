@@ -1,4 +1,15 @@
 
+/*
+class的用法：
+================
+field-panel  用于nice validator 捕捉
+
+suit 模仿django-suit的样式，例如有线条
+plain 普通模式，没有线条
+
+msg-bottom  nice validator的位置在下面，默认在右侧
+
+*/
 .error{
   color: red;
 }
@@ -6,8 +17,6 @@
 @mixin horizontal {
   margin-left: auto; margin-right: auto;
 }
-
-
 
 .field-panel.suit{
   background-color: #F5F5F5;
@@ -90,7 +99,8 @@
       width: 20em;
     }
   .control-label{
-    width:150px;
+    //width:150px;
+    min-width: 8em;
     text-align: right;
     padding:5px 10px;
     padding-top: 8px;
@@ -107,7 +117,7 @@
     }
 
 }
-.field_input{
+.field_input,.field-input{
   position: relative;
 }
 

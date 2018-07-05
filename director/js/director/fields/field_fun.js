@@ -1,3 +1,7 @@
+/*
+* field_fun 应该会被 mix_table_data 取代,以后不会使用了。
+* */
+
 export var field_fun={
     data:function(){
         return {
