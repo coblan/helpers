@@ -653,7 +653,8 @@ var baseInput = exports.baseInput = {
 
 window.cfg = {
     showMsg: function showMsg(msg) {
-        alert(msg);
+        //alert(msg)
+        layer.msg(msg);
     },
     warning: function warning(msg) {
         layer.confirm(msg, { title: ['警告', 'color:white;background-color:red'] });

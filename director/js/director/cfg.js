@@ -1,6 +1,7 @@
 window.cfg={
     showMsg:function(msg){
-        alert(msg)
+        //alert(msg)
+        layer.msg(msg);
     },
     warning:function(msg){
         layer.confirm(msg,{title:['警告','color:white;background-color:red']})
