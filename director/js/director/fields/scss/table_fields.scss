@@ -1,0 +1,13 @@
+.table-fields{
+  td{
+    &.field-label{
+      padding-bottom: 1em;
+      padding-right: 1em;
+      text-align: right;
+    }
+  }
+  .field-input{
+    margin-bottom: 1em;
+  }
+
+}

@@ -21,16 +21,40 @@ var nice_validator={
             }
             validator[head.name]=ls.join(';')
         })
-        this.nice_validator =$(this.$el).find('.field-panel').validator({
-            fields: validator,
-        });
+        if($(this.$el).hasClass('field-panel')){
+            this.nice_validator =$(this.$el).validator({
+                fields: validator,
+            });
+        }else{
+            this.nice_validator =$(this.$el).find('.field-panel').validator({
+                fields: validator,
+            });
+        }
+
     },
     methods:{
+        isValid:function(){
+            var nice_rt = this.nice_validator.isValid()
+            //var totalValid=[nice_rt]
+            var totalValid=ex.vueBroadCall(this,'isValid')
+            totalValid.push(nice_rt)
+
+            //ex.each(this.$children,function(child){
+            //    if(child.isValid){
+            //        totalValid.push(child.isValid())
+            //    }
+            //})
+
+            var valid =true
+            ex.each(totalValid,function(item){
+                valid = valid && item
+            })
+            return valid
+        },
         before_save:function(){
             ex.vueSuper(this,{mixin:nice_validator,fun:'before_save'})
-            //this.setErrors({})
-            //eventBus.$emit('sync_data')
-            if(this.nice_validator.isValid()){
+
+            if(this.isValid()){
                 return 'continue'
             }else{
                 return 'break'

@@ -14,5 +14,20 @@ export var  vuetool = {
                 return mix.apply(self,args)
             }
         }
+    },
+    vueBroadCall:function(self,fun,kws){
+        var rt =[]
+        cusBroadCall(self,fun,kws,rt)
+        return rt
+    }
+}
+
+function cusBroadCall(self,fun,kws,rt){
+    for(var i =0;i<self.$children.length;i++){
+        var child =self.$children[i]
+        if(child[fun]){
+            rt.push(child[fun](kws))
+        }
+        cusBroadCall(child,fun,kws,rt)
     }
 }

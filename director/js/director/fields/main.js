@@ -60,6 +60,8 @@ import  {field_base} from  './fields_base.js'
 import  {field_fun} from './field_fun.js'
 import  {order_by_key} from './order.js'
 require('./scss/fields.scss')
+import  table_fields from  './table_fields.js'
+
 
 hook_ajax_msg()
 hook_ajax_csrf()
@@ -113,117 +115,6 @@ var field={
 Vue.component('field',field)
 
 
-//function update_vue_obj(vue_obj,obj) {
-//    for(let x in vue_obj){
-//        Vue.delete(vue_obj,x)
-//    }
-//    for(let x in obj){
-//        Vue.set(vue_obj,x,obj[x])
-//    }
-//}
-
-//export function merge(mains,subs) {
-//    mains.each(function (first) {
-//        subs.each(function (second) {
-//            if(first.name==second.name){
-//                for(var x in second){
-//                    first[x]=second[x]
-//                }
-//            }
-//        })
-//    })
-//}
-
-
-
-
-
-//var fieldset_fun={
-//    data:function(){
-//        return {
-//            fieldset:fieldset,
-//            namelist:namelist,
-//            menu:menu,
-//            search_args:ex.parseSearch(),
-//            can_add:can_add,
-//            can_del:can_del,
-//            can_log:can_log,
-//        }
-//    },
-//
-//    methods:{
-//        submit:function () {
-//            var self =this;
-//            show_upload()
-//            var search =ex.parseSearch()
-//            var fieldset_row={}
-//            for(var k in this.fieldset){
-//                fieldset_row[k]=this.fieldset[k].row
-//            }
-//
-//            var post_data=[{fun:'save_fieldset',fieldset:fieldset_row,save_step:save_step}]
-//            ex.post('',JSON.stringify(post_data),function (resp) {
-//                if( resp.save_fieldset.errors ){
-//                    var error_path =resp.save_fieldset.path
-//                    ex.set(self.fieldset,error_path,resp.save_fieldset.errors)
-//                    hide_upload(200)
-//                }else if(search._pop==1){
-//                    window.ln.rtWin({row:resp.save_fieldset.fieldset})
-//                }else if(search.next){
-//
-//                    location=decodeURIComponent(search.next)
-//                }else{
-//                    hide_upload(200)
-//
-//                }
-//            })
-//        },
-//        cancel:function () {
-//            var search =ex.parseSearch() //parseSearch(location.search)
-//            if(search._pop){
-//                window.close()
-//            }else{
-//                history.back()
-//            }
-//        },
-//        del_row:function (path) {
-//            var self=this
-//            var search_args=ex.parseSearch()
-//            var rows=[]
-//            ex.each(delset,function(name){
-//                var row = self.fieldset[name].row
-//                if (row.pk){
-//                    rows.push(row._class+':'+row.pk)
-//                }
-//            })
-//            if(rows.length>1){
-//                return ex.template('{engine_url}/del_rows?rows={rows}&next={next}&_pop={pop}',
-//                    {engine_url:engine_url,
-//                        rows:rows,
-//                        next:search_args.next,
-//                        pop:search_args._pop,
-//                    })
-//            }else{
-//                return null
-//            }
-//
-//        },
-//        log_url:function(){
-//            var rows=[]
-//            for(var k in this.fieldset){
-//                var kw=this.fieldset[k]
-//                rows.push(kw.row._class+':'+kw.row.pk)
-//            }
-//            var obj={
-//                rows:rows.join(','),
-//                engine_url:engine_url,
-//                //page_name:page_name,
-//            }
-//            return ex.template('{engine_url}/log?rows={rows}',obj)
-//        },
-//    }
-//}
-//window.fieldset_fun=fieldset_fun
 
 window.field_fun=field_fun
 window.hook_ajax_msg=hook_ajax_msg
