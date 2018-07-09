@@ -71,12 +71,19 @@ var mix_fields_data ={
             ex.assign(this.row,new_row)
         },
         showErrors:function(errors){
-            var str = ""
             for(var k in errors){
-                var head = ex.findone(this.heads,{name:k})
-                str += head.label + ':' + errors[k] +'<br>'
+                //var head = ex.findone(this.heads,{name:k})
+                $(this.$el).find('#id_'+k).trigger("showmsg", ["error", errors[k].join(';')]);
+                //str += head.label + ':' + errors[k] +'<br>'
             }
-            layer.confirm(str,{title:['错误','color:white;background-color:red']})
+
+            //var str = ""
+            //for(var k in errors){
+            //    var head = ex.findone(this.heads,{name:k})
+            //    str += head.label + ':' + errors[k] +'<br>'
+            //}
+            //
+            //layer.confirm(str,{title:['错误','color:white;background-color:red']})
         },
         clear:function(){
             this.row={}

@@ -92,19 +92,19 @@ var field={
                     <i style="color: #3780af;position: relative;top:10px;"  v-if="head.help_text" @click="show_msg(head.help_text,$event)" class="fa fa-question-circle" ></i>
                 </span>
 
-                 <div class="msg" style="position: absolute;right: 5px;top: 1px;">
+                 <!--<div class="msg" style="position: absolute;right: 5px;top: 1px;">-->
 
-                        <!--<i v-if="head.help_text" @click="show_msg(head.help_text,$event)" class="fa fa-shield" ></i>-->
+                        <!--&lt;!&ndash;<i v-if="head.help_text" @click="show_msg(head.help_text,$event)" class="fa fa-shield" ></i>&ndash;&gt;-->
 
-                        <span class="fa-stack error" v-if="head.error" @click="show_msg(head.error,$event)" style="font-size: 0.5em;">
-                              <i class="fa fa-cloud fa-stack-2x" style="color: black"></i>
-                              <i class="fa fa-close fa-stack-1x" style="color: red"></i>
-                        </span>
+                        <!--<span class="fa-stack error" v-if="head.error" @click="show_msg(head.error,$event)" style="font-size: 0.5em;">-->
+                              <!--<i class="fa fa-cloud fa-stack-2x" style="color: black"></i>-->
+                              <!--<i class="fa fa-close fa-stack-1x" style="color: red"></i>-->
+                        <!--</span>-->
 
-                        <!--<i v-if="head.error" @click="show_msg(head.error,$event)" class="fa fa-shield  error" ></i>-->
-                        <!--<span class="help_text" v-text="head.help_text"></span>-->
-                        <!--<span v-if="head.error_msg" class="error_msg error"  v-text='head.error_msg'></span>-->
-                 </div>
+                        <!--&lt;!&ndash;<i v-if="head.error" @click="show_msg(head.error,$event)" class="fa fa-shield  error" ></i>&ndash;&gt;-->
+                        <!--&lt;!&ndash;<span class="help_text" v-text="head.help_text"></span>&ndash;&gt;-->
+                        <!--&lt;!&ndash;<span v-if="head.error_msg" class="error_msg error"  v-text='head.error_msg'></span>&ndash;&gt;-->
+                 <!--</div>-->
 		</div>
 
 

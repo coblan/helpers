@@ -53,7 +53,6 @@ var nice_validator={
         },
         before_save:function(){
             ex.vueSuper(this,{mixin:nice_validator,fun:'before_save'})
-
             if(this.isValid()){
                 return 'continue'
             }else{
