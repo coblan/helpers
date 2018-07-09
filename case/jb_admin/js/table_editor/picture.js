@@ -1,8 +1,8 @@
-
+//
 var picture = {
         props:['rowData','field','index'],
         template:`<span>
-        <img @load='loaded=true' v-show='loaded' @click="open()" :src="src" alt="" height="96px" style="cursor: pointer;">
+        <img @load='loaded=true' :style="cusStyle"  @click="open()" :src="src" alt="" height="96px" style="cursor: pointer;">
         </span>`,
     data:function(){
         return {
@@ -17,6 +17,17 @@ var picture = {
     computed:{
         src:function(){
             return this.rowData[this.field]
+        },
+        cusStyle:function(){
+            if(!this.loaded){
+                return {
+                    visibility:'hidden'
+                }
+            }else{
+                return {
+                    visibility:'visible'
+                }
+            }
         }
     },
     methods:{
