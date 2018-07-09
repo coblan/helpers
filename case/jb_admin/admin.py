@@ -90,7 +90,8 @@ class GroupPage(TablePage):
                 head['after_save']={
                     'fun':'do_nothing'
                     #'fun':'update_or_insert'
-                }     
+                }  
+                head['width'] = 200
                 #head['ops']=groupform.get_operations()
 
             #if head['name']=='permissions':
