@@ -13,7 +13,7 @@ export var collection={
                     if(key.startsWith('_')){
                         continue
                     }
-                    if (obj[key] !=now_obj[key]){
+                    if (obj[key] !== now_obj[key]){
                         match =false
                         break
                     }
@@ -34,7 +34,7 @@ export var collection={
             var now_obj=collection[i]
             var match=true
             for(var key in obj){
-                if (obj[key] !=now_obj[key]){
+                if (obj[key] !== now_obj[key]){
                     match =false
                     break
                 }
@@ -84,7 +84,7 @@ export var collection={
             ex.each(array,function(doc){
                 var match=true
                 for(var key in obj){
-                    if(doc[key]!=obj[key]){
+                    if(doc[key]!== obj[key]){
                         match=false
                         break
                     }
@@ -110,7 +110,7 @@ export var collection={
             ex.each(array,function(doc){
                 var match=true
                 for(var key in obj){
-                    if(doc[key]!=obj[key]){
+                    if(doc[key]!== obj[key]){
                         match=false
                         break
                     }
@@ -149,7 +149,7 @@ export var collection={
             for(var i=0;i<array.length;i++){
                 var match=true
                 for(var key in obj){
-                    if(obj[key]!=array[i][key]){
+                    if(obj[key]!== array[i][key]){
                         match=false
                     }
                 }
