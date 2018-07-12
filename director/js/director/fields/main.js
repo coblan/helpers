@@ -47,6 +47,8 @@
 
 //import {use_color} from '../dosome/color.js'
 //import {load_js,load_css} from '../dosome/pkg.js'
+require('./scss/fields_panel.scss')
+
 import {hook_ajax_msg,hook_ajax_csrf,show_upload,hide_upload} from './ajax_fun.js'
 import * as f from './file.js'
 import * as ck from './ckeditor.js'
@@ -59,7 +61,7 @@ import * as form_btn from './com_form_btn.js'
 import  {field_base} from  './fields_base.js'
 import  {field_fun} from './field_fun.js'
 import  {order_by_key} from './order.js'
-require('./scss/fields.scss')
+
 import  table_fields from  './table_fields.js'
 
 
