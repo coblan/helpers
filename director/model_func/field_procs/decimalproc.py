@@ -14,6 +14,10 @@ class DecimalProc(BaseFieldProc):
     def clean_field(self,dc,name):
         return Decimal(dc.get(name))
     
+    def dict_field_head(self,head):   
+        head['editor'] = 'number'
+        return head    
+    
 field_map.update({
     DecimalField:DecimalProc
 })
