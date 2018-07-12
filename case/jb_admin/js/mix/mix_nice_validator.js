@@ -59,6 +59,17 @@ var nice_validator={
                 return 'break'
             }
         },
+        showErrors:function(errors){
+            for(var k in errors){
+                //var head = ex.findone(this.heads,{name:k})
+                var real_input = $(this.$el).find('.real-input')
+                if(real_input.length !=0){
+                    real_input.trigger("showmsg", ["error", errors[k].join(';')]);
+                }else{
+                    $(this.$el).find('#id_'+k).trigger("showmsg", ["error", errors[k].join(';')]);
+                }
+            }
+        }
     }
 }
 

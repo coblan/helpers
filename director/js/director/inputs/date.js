@@ -56,7 +56,9 @@ var date_config_set={
 Vue.component('date',{
     //template:'<input type="text" class="form-control">',
     template:` <div class="input-group datetime-picker" style="width: 12em;">
-                <input type="text" class="form-control input-sm" readonly :placeholder="placeholder"/>
+                <input type="text" class="form-control input-sm real-input"
+                readonly :placeholder="placeholder"/>
+
                 <div class="input-group-addon" >
                     <i v-if="! value" @click="click_input()" class="fa fa-calendar" aria-hidden="true"></i>
                     <i v-else @click="$emit('input','')" class="fa fa-calendar-times-o" aria-hidden="true"></i>

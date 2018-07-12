@@ -71,11 +71,7 @@ var mix_fields_data ={
             ex.assign(this.row,new_row)
         },
         showErrors:function(errors){
-            for(var k in errors){
-                //var head = ex.findone(this.heads,{name:k})
-                $(this.$el).find('#id_'+k).trigger("showmsg", ["error", errors[k].join(';')]);
-                //str += head.label + ':' + errors[k] +'<br>'
-            }
+            // 落到 nice validator去
 
             //var str = ""
             //for(var k in errors){
