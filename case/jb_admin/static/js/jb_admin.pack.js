@@ -2416,7 +2416,7 @@ var ajax_fields = {
         };
     },
     mixins: [mix_fields_data, mix_nice_validator],
-    template: '<div class="flex-v"  style="position: absolute;top:0;left:0;bottom: 0;right:0;overflow: auto;padding-bottom: 3em;">\n\n    <div>\n        <div class=\'field-panel msg-hide\' id="form" >\n            <field  v-for=\'head in heads\' :key="head.name" :head="head" :row=\'row\'></field>\n        </div>\n    </div>\n\n    <div class="oprations" style="margin-left: 16em;">\n        <component style="padding: 0.5em;" v-for="op in ops" :is="op.editor" :ref="\'op_\'+op.name" :head="op" @operation="on_operation(op)"></component>\n    </div>\n    </div>\n    </div>',
+    template: '<div class="flex-v"  style="position: absolute;top:0;left:0;bottom: 0;right:0;overflow: auto;padding-bottom: 3em;">\n\n    <div>\n        <div class=\'field-panel suit\' id="form" >\n            <field  v-for=\'head in heads\' :key="head.name" :head="head" :row=\'row\'></field>\n        </div>\n    </div>\n\n    <div class="oprations" style="margin-left: 3em;margin-top: 2em;">\n        <component v-for="op in ops" :is="op.editor" :ref="\'op_\'+op.name" :head="op" @operation="on_operation(op)"></component>\n    </div>\n    </div>\n    </div>',
 
     //created:function(){
     //    // find head from parent table
@@ -2838,7 +2838,7 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, ".el-tabs__item.is-top.is-active {\n  color: #3e8ebd; }\n\n.el-tabs__item.is-top.is-active:after {\n  content: '';\n  display: block;\n  position: absolute;\n  top: 0;\n  left: 0;\n  right: 0;\n  width: 100%;\n  height: 3px;\n  background-color: #3e8ebd; }\n\n.tab001 .el-tabs {\n  /*display: flex;*/\n  /*flex-direction: column;*/\n  /*height: 100%;*/ }\n  .tab001 .el-tabs .el-tabs__content {\n    /*flex-grow:10;*/\n    /*position: relative;*/ }\n\nbody {\n  height: 100%; }\n", ""]);
+exports.push([module.i, ".el-tabs__item.is-top.is-active {\n  color: #3e8ebd; }\n\n.el-tabs__item.is-top.is-active:after {\n  content: '';\n  display: block;\n  position: absolute;\n  top: 0;\n  left: 0;\n  right: 0;\n  width: 100%;\n  height: 3px;\n  background-color: #3e8ebd; }\n\n.tab-full .el-tabs {\n  display: flex;\n  flex-direction: column;\n  height: 100%; }\n  .tab-full .el-tabs .el-tabs__content {\n    flex-grow: 10;\n    position: relative; }\n\nbody {\n  height: 100%; }\n", ""]);
 
 // exports
 

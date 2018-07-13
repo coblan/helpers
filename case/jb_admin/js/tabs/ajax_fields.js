@@ -12,13 +12,13 @@ var ajax_fields={
     template:`<div class="flex-v"  style="position: absolute;top:0;left:0;bottom: 0;right:0;overflow: auto;padding-bottom: 3em;">
 
     <div>
-        <div class='field-panel msg-hide' id="form" >
+        <div class='field-panel suit' id="form" >
             <field  v-for='head in heads' :key="head.name" :head="head" :row='row'></field>
         </div>
     </div>
 
-    <div class="oprations" style="margin-left: 16em;">
-        <component style="padding: 0.5em;" v-for="op in ops" :is="op.editor" :ref="'op_'+op.name" :head="op" @operation="on_operation(op)"></component>
+    <div class="oprations" style="margin-left: 3em;margin-top: 2em;">
+        <component v-for="op in ops" :is="op.editor" :ref="'op_'+op.name" :head="op" @operation="on_operation(op)"></component>
     </div>
     </div>
     </div>`,

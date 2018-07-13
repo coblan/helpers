@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 84);
+/******/ 	return __webpack_require__(__webpack_require__.s = 86);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -768,7 +768,7 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 
 //import {use_color} from '../dosome/color.js'
 //import {load_js,load_css} from '../dosome/pkg.js'
-__webpack_require__(87);
+__webpack_require__(69);
 //import * as fb from './field_base.js'
 //import * as js from './adapt.js'
 
@@ -858,8 +858,8 @@ var first_col = _interopRequireWildcard(_first_col);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
+__webpack_require__(76);
 __webpack_require__(75);
-__webpack_require__(74);
 
 /***/ }),
 /* 7 */
@@ -878,13 +878,13 @@ var page = _interopRequireWildcard(_page_tab);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
-__webpack_require__(81);
+__webpack_require__(82);
 //import * as a from './modal.js'
 
-__webpack_require__(79);
-__webpack_require__(77);
+__webpack_require__(80);
 __webpack_require__(78);
-__webpack_require__(82);
+__webpack_require__(79);
+__webpack_require__(83);
 
 /***/ }),
 /* 8 */,
@@ -1601,7 +1601,7 @@ img-uploador
 <<<<
 */
 
-__webpack_require__(69);
+__webpack_require__(70);
 
 var fl = {
     read: function read(file, callback) {
@@ -2270,7 +2270,7 @@ popUrlListen:
 <-<
  */
 
-__webpack_require__(70);
+__webpack_require__(71);
 
 var ln = {
     history_handle: function history_handle(obj) {
@@ -2625,7 +2625,7 @@ function order_by_key(array, key) {
 
 var _basic = __webpack_require__(2);
 
-__webpack_require__(71);
+__webpack_require__(72);
 
 var table_fields = {
     props: ['heads', 'row', 'inputWidth', 'labelWidth'],
@@ -2807,7 +2807,7 @@ Vue.component('datetime', {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-__webpack_require__(72);
+__webpack_require__(73);
 
 /*
 * config={
@@ -2985,7 +2985,7 @@ Vue.component('field-file-uploader', field_file_uploader);
 "use strict";
 
 
-__webpack_require__(73);
+__webpack_require__(74);
 
 var multi_chosen = {
     props: ['value', 'options'],
@@ -3507,7 +3507,7 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 
  <-<
  */
-__webpack_require__(76);
+__webpack_require__(77);
 
 Vue.component('com-filter', {
     props: ['heads', 'search_args'],
@@ -3755,7 +3755,7 @@ window.table_fun = table_fun;
 "use strict";
 
 
-__webpack_require__(80);
+__webpack_require__(81);
 var template_str = '\n<div class=\'_expand_menu\'>\n\t<ul>\n\t\t<li v-for=\'act in normed_menu\'>\n\t\t\t<a :class=\'["menu_item",{"selected":act.selected,"opened_submenu":opened_submenu==act.submenu}]\'\n\t\t\t\t:href=\'act.submenu?"javascript:void(0)":act.url\'\n\t\t\t\t@click=\'main_act_click(act)\'>\n\t\t\t\t<span v-html=\'act.icon\' class=\'_icon\'></span><span v-text=\'act.label\'></span>\n\t\t\t\t<span v-show="act.submenu">\n\t\t\t\t\t<span v-if="opened_submenu==act.submenu ||act.selected" style="float: right;margin-right: 1em;">\n\t\t\t\t\t\t<i class="fa fa-chevron-down"></i>\n\t\t\t\t\t</span>\n\t\t\t\t\t<span v-else style="float: right;margin-right: 1em;"><i class="fa fa-chevron-left"></i></span>\n\t\t\t\t</span>\n\t\t\t\t<!--<span class=\'left-arrow\' v-if=\'act.selected\'></span>-->\n\t\t\t</a>\n\n\t\t\t<ul class=\'submenu\' v-show=\'opened_submenu==act.submenu ||act.selected\' transition="expand">\n\t\t\t\t<li v-for=\'sub_act in act.submenu\' :class=\'{"active":sub_act.active}\'>\n\t\t\t\t\t<a :href=\'sub_act.url\' class=\'sub_item\'>\n\t\t\t\t\t\t<span v-text=\'sub_act.label\'></span>\n\t\t\t\t\t</a>\n\n\t\t\t\t</li>\n\t\t\t</ul>\n\t\t</li>\n\t</ul>\n</div>\n';
 
 Vue.component('expand_menu', {
@@ -3867,7 +3867,20 @@ Vue.component('page-tab', {
 document.write('\n <style type="text/css" media="screen" id="test">\n.inst-menu{\n\t\tmargin: 30px auto;\n\t\tborder-bottom: 1px solid #DADCDE;\n\t}\n.inst-menu li{\n\tdisplay: inline-block;\n\tpadding: 10px 20px;\n\tfont-size: 16px;\n}\n.inst-menu li:hover{\n\tcursor: pointer;\n}\n.inst-menu .active{\n\tborder-bottom: 5px solid #0092F2;\n\tcolor: #0092F2;\n}\n</style>\n');
 
 /***/ }),
-/* 49 */,
+/* 49 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(0)();
+// imports
+
+
+// module
+exports.push([module.i, "@charset \"UTF-8\";\n/*\r\nclass的用法：\r\n================\r\nfield-panel  用于nice validator 捕捉\r\n\r\nsuit 模仿django-suit的样式，例如有线条\r\nplain 普通模式，没有线条\r\n\r\nmsg-bottom  nice validator的位置在下面，默认在右侧\r\n\r\n*/\n.error {\n  color: red; }\n\n.field_input {\n  position: relative; }\n\n.field-panel.suit {\n  background-color: #F5F5F5;\n  margin: auto;\n  padding: 20px 30px;\n  position: relative;\n  border: 1px solid #D9D9D9; }\n  .field-panel.suit:after {\n    content: '';\n    display: block;\n    position: absolute;\n    top: 0px;\n    left: 0px;\n    bottom: 0px;\n    width: 180px;\n    border-radius: 6px;\n    background-color: #fff;\n    z-index: 0; }\n  .field-panel.suit .form-group.field {\n    display: flex;\n    align-items: flex-start;\n    margin-bottom: 0; }\n    .field-panel.suit .form-group.field .field_input {\n      flex-grow: 0;\n      padding: 5px 20px; }\n      .field-panel.suit .form-group.field .field_input input {\n        max-width: 25em; }\n      .field-panel.suit .form-group.field .field_input .ckeditor {\n        padding: 20px; }\n      .field-panel.suit .form-group.field .field_input .multi-chosen {\n        width: 30em; }\n    .field-panel.suit .form-group.field:first-child .control-label {\n      border-top: 5px solid #FFF; }\n    .field-panel.suit .form-group.field .control-label {\n      width: 150px;\n      text-align: right;\n      padding: 5px 30px;\n      z-index: 100;\n      flex-shrink: 0;\n      border-top: 1px solid #EEE; }\n\n.field-panel.plain {\n  background-color: white;\n  margin: auto;\n  padding: 20px 30px;\n  position: relative; }\n  .field-panel.plain .form-group.field {\n    display: flex;\n    align-items: flex-start;\n    margin-bottom: 10px; }\n  .field-panel.plain .field_input {\n    flex-grow: 0;\n    padding: 5px 10px;\n    width: 20em; }\n  .field-panel.plain .control-label {\n    min-width: 8em;\n    text-align: right;\n    padding: 5px 10px;\n    padding-top: 8px;\n    flex-shrink: 0;\n    font-weight: 400; }\n\n.field-panel .msg-box.n-right {\n  position: absolute;\n  right: -1em; }\n\n.field-panel.msg-bottom .msg-box.n-right {\n  position: absolute;\n  left: 1em;\n  bottom: 0; }\n\n.field_input, .field-input {\n  position: relative; }\n\n._tow-col-sel select {\n  min-height: 7em; }\n\nimg.img-uploador {\n  max-width: 100px;\n  max-height: 100px; }\n\n.req_star {\n  color: red; }\n", ""]);
+
+// exports
+
+
+/***/ }),
 /* 50 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -4114,6 +4127,32 @@ exports.push([module.i, ".ellipsis {\n  white-space: nowrap;\n  text-overflow: e
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
+var content = __webpack_require__(49);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// add the styles to the DOM
+var update = __webpack_require__(1)(content, {});
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./fields_panel.scss", function() {
+			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./fields_panel.scss");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 70 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
 var content = __webpack_require__(50);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
@@ -4134,7 +4173,7 @@ if(false) {
 }
 
 /***/ }),
-/* 70 */
+/* 71 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
@@ -4160,7 +4199,7 @@ if(false) {
 }
 
 /***/ }),
-/* 71 */
+/* 72 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
@@ -4186,7 +4225,7 @@ if(false) {
 }
 
 /***/ }),
-/* 72 */
+/* 73 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
@@ -4212,7 +4251,7 @@ if(false) {
 }
 
 /***/ }),
-/* 73 */
+/* 74 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
@@ -4238,7 +4277,7 @@ if(false) {
 }
 
 /***/ }),
-/* 74 */
+/* 75 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
@@ -4264,7 +4303,7 @@ if(false) {
 }
 
 /***/ }),
-/* 75 */
+/* 76 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
@@ -4290,7 +4329,7 @@ if(false) {
 }
 
 /***/ }),
-/* 76 */
+/* 77 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
@@ -4316,7 +4355,7 @@ if(false) {
 }
 
 /***/ }),
-/* 77 */
+/* 78 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
@@ -4342,7 +4381,7 @@ if(false) {
 }
 
 /***/ }),
-/* 78 */
+/* 79 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
@@ -4368,7 +4407,7 @@ if(false) {
 }
 
 /***/ }),
-/* 79 */
+/* 80 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
@@ -4394,7 +4433,7 @@ if(false) {
 }
 
 /***/ }),
-/* 80 */
+/* 81 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
@@ -4420,7 +4459,7 @@ if(false) {
 }
 
 /***/ }),
-/* 81 */
+/* 82 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
@@ -4446,7 +4485,7 @@ if(false) {
 }
 
 /***/ }),
-/* 82 */
+/* 83 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
@@ -4472,8 +4511,9 @@ if(false) {
 }
 
 /***/ }),
-/* 83 */,
-/* 84 */
+/* 84 */,
+/* 85 */,
+/* 86 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4504,47 +4544,6 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 __webpack_require__(20);
 __webpack_require__(19);
 __webpack_require__(21);
-
-/***/ }),
-/* 85 */,
-/* 86 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(0)();
-// imports
-
-
-// module
-exports.push([module.i, "@charset \"UTF-8\";\n/*\r\nclass的用法：\r\n================\r\nfield-panel  用于nice validator 捕捉\r\n\r\nsuit 模仿django-suit的样式，例如有线条\r\nplain 普通模式，没有线条\r\n\r\nmsg-bottom  nice validator的位置在下面，默认在右侧\r\n\r\n*/\n.error {\n  color: red; }\n\n.field_input {\n  position: relative; }\n\n.field-panel.suit {\n  background-color: #F5F5F5;\n  margin: auto;\n  padding: 20px 30px;\n  position: relative;\n  border: 1px solid #D9D9D9; }\n  .field-panel.suit:after {\n    content: '';\n    display: block;\n    position: absolute;\n    top: 0px;\n    left: 0px;\n    bottom: 0px;\n    width: 180px;\n    border-radius: 6px;\n    background-color: #fff;\n    z-index: 0; }\n  .field-panel.suit .form-group.field {\n    display: flex;\n    align-items: flex-start;\n    margin-bottom: 0; }\n    .field-panel.suit .form-group.field .field_input {\n      flex-grow: 0;\n      padding: 5px 20px; }\n      .field-panel.suit .form-group.field .field_input input {\n        max-width: 25em; }\n      .field-panel.suit .form-group.field .field_input .ckeditor {\n        padding: 20px; }\n      .field-panel.suit .form-group.field .field_input .multi-chosen {\n        width: 30em; }\n    .field-panel.suit .form-group.field:first-child .control-label {\n      border-top: 5px solid #FFF; }\n    .field-panel.suit .form-group.field .control-label {\n      width: 150px;\n      text-align: right;\n      padding: 5px 30px;\n      z-index: 100;\n      flex-shrink: 0;\n      border-top: 1px solid #EEE; }\n\n.field-panel.plain {\n  background-color: white;\n  margin: auto;\n  padding: 20px 30px;\n  position: relative; }\n  .field-panel.plain .form-group.field {\n    display: flex;\n    align-items: flex-start;\n    margin-bottom: 10px; }\n  .field-panel.plain .field_input {\n    flex-grow: 0;\n    padding: 5px 10px;\n    width: 20em; }\n  .field-panel.plain .control-label {\n    min-width: 8em;\n    text-align: right;\n    padding: 5px 10px;\n    padding-top: 8px;\n    flex-shrink: 0;\n    font-weight: 400; }\n\n.field-panel .msg-box.n-right {\n  position: absolute;\n  right: -1em; }\n\n.field-panel.msg-bottom .msg-box.n-right {\n  position: absolute;\n  left: 1em;\n  bottom: 0; }\n\n.field_input, .field-input {\n  position: relative; }\n\n._tow-col-sel select {\n  min-height: 7em; }\n\nimg.img-uploador {\n  max-width: 100px;\n  max-height: 100px; }\n\n.req_star {\n  color: red; }\n", ""]);
-
-// exports
-
-
-/***/ }),
-/* 87 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(86);
-if(typeof content === 'string') content = [[module.i, content, '']];
-// add the styles to the DOM
-var update = __webpack_require__(1)(content, {});
-if(content.locals) module.exports = content.locals;
-// Hot Module Replacement
-if(false) {
-	// When the styles change, update the <style> tags
-	if(!content.locals) {
-		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./fields_panel.scss", function() {
-			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./fields_panel.scss");
-			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-			update(newContent);
-		});
-	}
-	// When the module is disposed, remove the <style> tags
-	module.hot.dispose(function() { update(); });
-}
 
 /***/ })
 /******/ ]);
