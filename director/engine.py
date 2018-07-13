@@ -57,9 +57,11 @@ class BaseEngine(object):
     url_name='baseengine'
     brand = 'Admin System'
     mini_brand = 'AdSys'
+    title = 'Admin'
     prefer='pc'
     login_url=settings.LOGIN_URL
-    root_page='/'
+    need_login = True
+    root_page='/'  # 当前engine的主页，没有目的的时候，可以往这里跳
     
     @classmethod
     def as_view(cls):
@@ -91,7 +93,7 @@ class BaseEngine(object):
         # if getattr(page_cls,'need_login',True):
             # if request.user.is_anonymous() or not request.user.is_active:
                 # return redirect(self.login_url+'?next='+request.get_full_path())
-        if not self.login_authorized(request):
+        if self.need_login and not self.login_authorized(request):
             return redirect(self.login_url+'?next='+request.get_full_path())
         
         page=page_cls(request)
@@ -100,6 +102,7 @@ class BaseEngine(object):
             resp= HttpResponse(json.dumps(ctx),content_type="application/json")
         else:
             ctx['brand'] = self.brand
+            ctx['title'] = self.title
             ctx['menu']=self.get_menu(request)   
             ctx['page_name']=name
             ctx['engine_url']=reverse(self.url_name,args=('aa',))[:-3]

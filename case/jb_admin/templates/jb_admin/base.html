@@ -51,7 +51,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!--<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>-->
     <![endif]-->
 
-    <title></title>
+    <title>Admin</title>
     <!-- Google Font -->
     <!--<link rel="stylesheet"-->
           <!--href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">-->
@@ -141,11 +141,9 @@ desired effect
     cfg.js_lib = js_config.js_lib
 
     $(function(){
-        if(!document.title){
-            document.title = page_label + '| {{brand}}'
-        }
 
-//        var crt_lan=ex.getCookie('django_language') || js_config.lans[0].value
+        document.title = page_label + '| {{title}}'
+
         new Vue({
             el:'#control-sidebar-settings-tab',
             data:{
