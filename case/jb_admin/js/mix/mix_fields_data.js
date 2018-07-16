@@ -42,7 +42,8 @@ var mix_fields_data ={
             var self =this;
 
             this.setErrors({})
-            eventBus.$emit('sync_data')
+            //eventBus.$emit('sync_data')
+            ex.vueBroadCall('commit')
 
             if(self.before_save() == 'break'){
                 return

@@ -1,5 +1,5 @@
 from helpers.director.engine import BaseEngine,page,fa,can_list,can_touch
-from . page import auth_page
+from . base_data import auth_page_dc
 
 class AuthEngine(BaseEngine):
     url_name = 'authengine'
@@ -7,4 +7,4 @@ class AuthEngine(BaseEngine):
     
 
 
-AuthEngine.add_pages(auth_page)
+AuthEngine.add_pages(auth_page_dc)

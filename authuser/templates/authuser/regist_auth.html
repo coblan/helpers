@@ -1,6 +1,10 @@
-{% extends "jb_admin/base.html" %}
+{% extends "jb_admin/naked_base.html" %}
 {% load static %}
 {% load jsonify %}
+
+{% block cus_head %}
+<title>用户注册</title>
+{% endblock %}
 
 {% block page_content %}
 <script src='{% static "js/jb_admin.pack.js" %}?t={{ js_stamp.jb_admin_pack_js }}'></script>
@@ -17,8 +21,8 @@
 
             ops:ops,
 
-            tr:cfg.tr
-
+            tr:cfg.tr,
+            step:'on-rigist'
 
         },
         mixins:[mix_fields_data,mix_nice_validator],
@@ -56,24 +60,36 @@
 
         },
         methods:{
+            after_save:function(new_row){
+                this.step='on-success'
+                setTimeout(function(){
+                    var next=ex.parseSearch().next
+                    if(next){
+                        location=decodeURIComponent(next) ;
+                    }else{
+                        location='/'
+                    }
+                },4000)
 
 
-            on_tab_event:function(e){
-                this.op_funs[e.name](e)
             },
 
-            back_to_main_page:function(){
-                this.tabgroup.crt='main'
-            },
-            show_tab:function(name){
-                this.tabgroup.crt = name
-                var self =this
-
-                Vue.nextTick(function(){
-                    self.$refs['_tab_'+name][0].on_show()
-                })
-
-            },
+//            on_tab_event:function(e){
+//                this.op_funs[e.name](e)
+//            },
+//
+//            back_to_main_page:function(){
+//                this.tabgroup.crt='main'
+//            },
+//            show_tab:function(name){
+//                this.tabgroup.crt = name
+//                var self =this
+//
+//                Vue.nextTick(function(){
+//                    self.$refs['_tab_'+name][0].on_show()
+//                })
+//
+//            },
             get_attr:function(name){
                 if(name == undefined){
                     return false
@@ -103,11 +119,27 @@
     })
 
  </script>
-
+<style>
+    #there{
+        padding: 2em;
+    }
+    [v-cloak]{
+        display: none;
+    }
+</style>
 <div id="there">
-    <div class='field-panel suit' style="margin:1em;padding-bottom:3em ">
-        <field  v-for='head in heads' :key="head.name" :head="head" :row='row'></field>
+    <div v-show="step=='on-rigist'">
+        <div style="text-align: center;padding: 2em;">
+            <h3>欢迎注册</h3>
+        </div>
+
+
+        <com-sim-fields  :heads="heads" :row="row" ok-btn="注册" @submit="save"></com-sim-fields>
     </div>
+    <div v-cloak v-show="step=='on-success'" style="text-align: center">
+        <h2>注册成功，现在跳转！</h2>
+    </div>
+
 </div>
 
 
