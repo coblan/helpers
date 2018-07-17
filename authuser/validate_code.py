@@ -59,14 +59,29 @@ def tort(img):
     img = img.filter(ImageFilter.EDGE_ENHANCE_MORE) # 滤镜，边界加强（阈值更大）
     return img
 
-img = draw('A42k')
-img=create_lines(img)
-img=create_points(img)
-img=tort(img)
-#img=rotate(img)
-img.show()
-print('here')
+#img = draw('A42k')
+#img=create_lines(img)
+#img=create_points(img)
+#img=tort(img)
+##img=rotate(img)
+#img.show()
+#print('here')
 
+import base64
+from io import BytesIO
+from .models import ValidatorCode
+
+def faseGetDataUrl(): 
+    image, code = create_validate_code()
+    ValidatorCode.objects.create(code = code)
+    
+    buffered = BytesIO()
+    image.save(buffered, format="JPEG")
+    img_str = base64.b64encode(buffered.getvalue())  
+    
+    img_data_url = "data:image/jpeg;base64,%s" % img_str.decode('utf-8')
+    return img_data_url
+    
 
 import random
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
@@ -81,7 +96,7 @@ def create_validate_code(size=(120, 30),
                          bg_color=(255, 255, 255),
                          fg_color=(0, 0, 255),
                          font_size=18,
-                         font_type="kk.TTF",
+                         font_type = 'arial.ttf',  # 原来的参数为： font_type="kk.TTF",
                          length=4,
                          draw_lines=True,
                          n_line=(1, 2),
@@ -96,7 +111,7 @@ def create_validate_code(size=(120, 30),
     @param bg_color: 背景颜色，默认为白色
     @param fg_color: 前景色，验证码字符颜色，默认为蓝色#0000FF
     @param font_size: 验证码字体大小
-    @param font_type: 验证码字体，默认为 ae_AlArabiya.ttf
+    @param font_type: 验证码字体，默认为 ae_AlArabiya.ttf 
     @param length: 验证码字符个数
     @param draw_lines: 是否划干扰线
     @param n_lines: 干扰线的条数范围，格式元组，默认为(1, 2)，只有draw_lines为True时有效

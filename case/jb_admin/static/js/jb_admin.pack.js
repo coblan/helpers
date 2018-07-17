@@ -823,7 +823,7 @@ Vue.component('com-sim-fields', {
         }
     },
     mixins: [mix_fields_data, mix_nice_validator],
-    template: ' <div class="field-panel" style="text-align:center;">\n                <com-table-fields :heads="heads" :row="row"\n                    input-width="23em" label-width="5em"\n                    style="width: 30em;text-align: left;display: inline-block;">\n                    <slot>\n                    <tr>\n                    <td></td>\n                    <td>\n                    <button @click="submit"\n                        style="width: 27em;position: relative;" type="btn"\n                            class="btn btn-primary btn-sm"><span v-text="okBtn"></span></button></td>\n                    </tr>\n                    </slot>\n           </com-table-fields>\n        </div>',
+    template: ' <div class="field-panel" style="text-align:center;">\n                <com-table-fields :heads="heads" :row="row"\n                    input-width="23em" label-width="8em"\n                    style="width: 30em;text-align: left;display: inline-block;">\n                    <slot>\n                    <tr>\n                    <td></td>\n                    <td>\n                    <button @click="submit"\n                        style="width: 100%;position: relative;" type="btn"\n                            class="btn btn-primary btn-sm"><span v-text="okBtn"></span></button></td>\n                    </tr>\n                    </slot>\n           </com-table-fields>\n        </div>',
     methods: {
         submit: function submit() {
             if (this.isValid()) {
@@ -1135,7 +1135,8 @@ var mix_fields_data = {
             var self = this;
 
             this.setErrors({});
-            eventBus.$emit('sync_data');
+            //eventBus.$emit('sync_data')
+            ex.vueBroadCall('commit');
 
             if (self.before_save() == 'break') {
                 return;
@@ -2416,7 +2417,7 @@ var ajax_fields = {
         };
     },
     mixins: [mix_fields_data, mix_nice_validator],
-    template: '<div class="flex-v"  style="position: absolute;top:0;left:0;bottom: 0;right:0;overflow: auto;padding-bottom: 3em;">\n\n    <div>\n        <div class=\'field-panel msg-hide\' id="form" >\n            <field  v-for=\'head in heads\' :key="head.name" :head="head" :row=\'row\'></field>\n        </div>\n    </div>\n\n    <div class="oprations" style="margin-left: 16em;">\n        <component style="padding: 0.5em;" v-for="op in ops" :is="op.editor" :ref="\'op_\'+op.name" :head="op" @operation="on_operation(op)"></component>\n    </div>\n    </div>\n    </div>',
+    template: '<div class="flex-v"  style="position: absolute;top:0;left:0;bottom: 0;right:0;overflow: auto;padding-bottom: 3em;">\n\n    <div>\n        <div class=\'field-panel suit\' id="form" >\n            <field  v-for=\'head in heads\' :key="head.name" :head="head" :row=\'row\'></field>\n        </div>\n    </div>\n\n    <div class="oprations" style="margin-left: 3em;margin-top: 2em;">\n        <component v-for="op in ops" :is="op.editor" :ref="\'op_\'+op.name" :head="op" @operation="on_operation(op)"></component>\n    </div>\n    </div>\n    </div>',
 
     //created:function(){
     //    // find head from parent table
@@ -2838,7 +2839,7 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, ".el-tabs__item.is-top.is-active {\n  color: #3e8ebd; }\n\n.el-tabs__item.is-top.is-active:after {\n  content: '';\n  display: block;\n  position: absolute;\n  top: 0;\n  left: 0;\n  right: 0;\n  width: 100%;\n  height: 3px;\n  background-color: #3e8ebd; }\n\n.tab001 .el-tabs {\n  /*display: flex;*/\n  /*flex-direction: column;*/\n  /*height: 100%;*/ }\n  .tab001 .el-tabs .el-tabs__content {\n    /*flex-grow:10;*/\n    /*position: relative;*/ }\n\nbody {\n  height: 100%; }\n", ""]);
+exports.push([module.i, ".el-tabs__item.is-top.is-active {\n  color: #3e8ebd; }\n\n.el-tabs__item.is-top.is-active:after {\n  content: '';\n  display: block;\n  position: absolute;\n  top: 0;\n  left: 0;\n  right: 0;\n  width: 100%;\n  height: 3px;\n  background-color: #3e8ebd; }\n\n.tab-full .el-tabs {\n  display: flex;\n  flex-direction: column;\n  height: 100%; }\n  .tab-full .el-tabs .el-tabs__content {\n    flex-grow: 10;\n    position: relative; }\n\nbody {\n  height: 100%; }\n", ""]);
 
 // exports
 
@@ -3182,6 +3183,10 @@ var _plain_file = __webpack_require__(7);
 
 var plain_file = _interopRequireWildcard(_plain_file);
 
+var _validate_code = __webpack_require__(61);
+
+var validate_code = _interopRequireWildcard(_validate_code);
+
 var _operator_a = __webpack_require__(36);
 
 var op_a = _interopRequireWildcard(_operator_a);
@@ -3242,6 +3247,32 @@ __webpack_require__(42);
 
 
 //fields_panels
+
+/***/ }),
+/* 61 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var validate_code = {
+    props: ['row', 'head'],
+    template: '<div style="position: relative;">\n    <input type="text" class="form-control input-sm" v-model="row[head.name]" :id="\'id_\'+head.name" :name="head.name">\n    <div>\n    <div style="display: inline-block;border: 1px solid #9e9e9e;">\n        <img  :src="head.code_img" alt="">\n    </div>\n    <span class="clickable" @click="change_code" style="white-space:nowrap;">\u770B\u4E0D\u6E05\uFF0C\u6362\u4E00\u5F20</span>\n    </div>\n    </div>',
+    methods: {
+        change_code: function change_code() {
+            var self = this;
+            var post_data = [{ fun: 'new_validate_code' }];
+            cfg.show_load();
+            ex.post('/d/ajax/authuser', JSON.stringify(post_data), function (resp) {
+                self.head.code_img = resp.new_validate_code;
+                cfg.hide_load();
+            });
+        }
+    }
+
+};
+
+Vue.component('com-field-validate-code', validate_code);
 
 /***/ })
 /******/ ]);

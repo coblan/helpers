@@ -8,6 +8,9 @@ from helpers.func.network.ajax_router import ajax_router
 from urllib.parse import unquote
 from django.contrib import auth
 from django.shortcuts import redirect
+from .forms import AuthForm
+import json
+from helpers.director.engine import BaseEngine
 # Create your views here.
 
 @ensure_csrf_cookie
@@ -27,15 +30,18 @@ def login(request):
 @ensure_csrf_cookie
 def regist_user(request):
     if request.method=='GET':
-        
-        heads= form_to_head(AuthForm())
+        baseEngine = BaseEngine()
+        baseEngine.request = request
+        heads= AuthForm(crt_user= request.user, nolimit= True).get_heads()
         for head in heads:
             if head.get('name') in ['password','pas2']:
                 head['type']='password'
         dc={
             'login_url':reverse('login'),
-            'heads':json.dumps( heads )
+            'heads':json.dumps( heads ), 
+            'js_config': baseEngine.getJsConfig(),
         }
+
         return render(request,'authuser/regist.html',context=dc)
     elif request.method=='POST':
         return ajax_router(request,auth_ajax.get_globe()) 

@@ -5,12 +5,17 @@ from django.contrib.auth.models import User
 #from helpers.director.model_func.dictfy import get_or_none
 from django.contrib import auth 
 from django.utils.translation import ugettext as _
+from helpers.director.shortcut import ModelFields
 
-class AuthForm(forms.ModelForm):
-    pas2= forms.CharField(max_length=100,label=_('second password'))
+class AuthForm(ModelFields):
+    """
+    老的注册页面，现在大概不会要了。新的页面在page.py里面
+    """
+    #pas2= forms.CharField(max_length=100,label=_('second password'))
     class Meta:
         model = User
         fields = ['username', 'password']
+    
     
     def clean_password(self):
         password = self.cleaned_data.get('password')

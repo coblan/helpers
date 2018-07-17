@@ -14,6 +14,10 @@ from django.db import models
 from ..access.permit import ModelPermit
 from ..models import LogModel
 from helpers.director.base_data import director
+from helpers.director.data_format.json_format import DirectorEncoder
+
+import logging
+sql_log = logging.getLogger('director.sql_op')
 
 #def save_row(row,user,request):
     #for k in row: # convert model instance to pk for normal validation
@@ -118,6 +122,10 @@ class ModelFields(forms.ModelForm):
         self.pop_fields()
         self.init_value()
         
+        self.before = {}
+        for k in self.changed_data:
+            self.before[k] = getattr(self.instance, k, None)
+        
     def _clean_dict(self,dc):
         """利用field_map字典，查找前端传来的dc中，某个字段的转换方式"""
 
@@ -191,6 +199,9 @@ class ModelFields(forms.ModelForm):
         return ls
     
     def get_permit(self):
+        """
+        现在转换为控制按钮组，这个函数应该是没有用了。
+        """
         permit_dc = {
             'can_add':self.permit.can_add(),
             'can_del':self.permit.can_del() ,
@@ -224,8 +235,12 @@ class ModelFields(forms.ModelForm):
                         value=value.all()
                     self.fields[f].initial= value
     
+    def getExtraHeads(self): 
+        return []
+    
     def get_heads(self):
         heads = form_to_head(self)
+        heads.extend(self.getExtraHeads())
         heads = [head for head in heads if head['name'] not in self.hide_fields]
         for k,v in self.get_options().items():
             for head in heads:
@@ -336,23 +351,12 @@ class ModelFields(forms.ModelForm):
         call by model render engin
         """
         if not (self.nolimit or self.crt_user.is_superuser):
-            #if self.instance.pk:
-                #if not self.permit.changeable_fields():
-                    #raise PermissionDenied,'you have no Permission changed %s'%self.instance._meta.model_name 
-            #else:
+
             if not self.can_access():
                 raise PermissionDenied('you have no Permission access %s'%self.instance._meta.model_name  )
-            # table_perm = self.instance._meta.app_label+'.%s_'%op+self.instance._meta.model_name
-            # if not self.crt_user.has_perm(table_perm):
-                # raise PermissionDenied,'you have no Permission access %s'%self.instance._meta.model_name 
-            # if not self.can_access_instance():
-                # raise PermissionDenied,'you have no Permission access %s'%self.instance._meta.model_name  
-            
-            #model_str= unicode(self.instance)
+ 
             for data in self.changed_data:
                 if data in self.get_readonly_fields():
-                    #self.cleaned_data.pop(data)
-                    #print("Can't change {data} of {model},I pop it".format(data=data,model=model_str))
                     raise PermissionDenied("Can't change {data}".format(data=data))
         
         op=None
@@ -365,20 +369,29 @@ class ModelFields(forms.ModelForm):
             detail=''
             self.instance.save() # if instance is a new row , need save first then manytomany_relationship can create   
         
+ 
+        after = {}
         for k,v in [(k,v) for (k,v) in self.cleaned_data.items() if k in self.changed_data]:
-            #print((k,v))
-            #if isinstance(v,unicode):
-                #v=v.encode('utf-8')
-                #print(('sss',v))
+            # 测试时看到self.instance已经赋值了，下面这行代码可能没用
             setattr(self.instance,k,v)
-        # print(repr(self.instance.name))
-        # print('--------------')
+            after[k] = v
+            
         self.instance.save()
-        # print('oooooooooooo')
-        
         if op:
-            log =LogModel(key='{model_label}.{pk}'.format(model_label=model_to_name(self.instance),pk=self.instance.pk),kind=op,user=self.crt_user,detail=detail)
+            if self.crt_user.is_authenticated:
+                log =LogModel(key='{model_label}.{pk}'.format(model_label=model_to_name(self.instance),pk=self.instance.pk),kind=op,user=self.crt_user,detail=detail)
+            else:
+                log =LogModel(key='{model_label}.{pk}'.format(model_label=model_to_name(self.instance),pk=self.instance.pk),kind=op,detail=detail)                
             log.save()
+            
+            dc = {
+                'key': '{model_label}.{pk}'.format(model_label=model_to_name(self.instance),pk=self.instance.pk), 
+                'kind': op,
+                'user': self.crt_user.username if self.crt_user.is_authenticated else 'anonymous',
+                'before': self.before,
+                'after': after,
+            }
+            sql_log.info(json.dumps(dc,cls=DirectorEncoder)) 
             
         return self.instance
  

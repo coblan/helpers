@@ -22,14 +22,14 @@ Vue.component('com-sim-fields',{
     mixins:[mix_fields_data,mix_nice_validator],
     template:` <div class="field-panel" style="text-align:center;">
                 <com-table-fields :heads="heads" :row="row"
-                    input-width="23em" label-width="5em"
+                    input-width="23em" label-width="8em"
                     style="width: 30em;text-align: left;display: inline-block;">
                     <slot>
                     <tr>
                     <td></td>
                     <td>
                     <button @click="submit"
-                        style="width: 27em;position: relative;" type="btn"
+                        style="width: 100%;position: relative;" type="btn"
                             class="btn btn-primary btn-sm"><span v-text="okBtn"></span></button></td>
                     </tr>
                     </slot>
