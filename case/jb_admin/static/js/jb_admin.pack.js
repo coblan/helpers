@@ -823,7 +823,7 @@ Vue.component('com-sim-fields', {
         }
     },
     mixins: [mix_fields_data, mix_nice_validator],
-    template: ' <div class="field-panel" style="text-align:center;">\n                <com-table-fields :heads="heads" :row="row"\n                    input-width="23em" label-width="5em"\n                    style="width: 30em;text-align: left;display: inline-block;">\n                    <slot>\n                    <tr>\n                    <td></td>\n                    <td>\n                    <button @click="submit"\n                        style="width: 27em;position: relative;" type="btn"\n                            class="btn btn-primary btn-sm"><span v-text="okBtn"></span></button></td>\n                    </tr>\n                    </slot>\n           </com-table-fields>\n        </div>',
+    template: ' <div class="field-panel" style="text-align:center;">\n                <com-table-fields :heads="heads" :row="row"\n                    input-width="23em" label-width="8em"\n                    style="width: 30em;text-align: left;display: inline-block;">\n                    <slot>\n                    <tr>\n                    <td></td>\n                    <td>\n                    <button @click="submit"\n                        style="width: 100%;position: relative;" type="btn"\n                            class="btn btn-primary btn-sm"><span v-text="okBtn"></span></button></td>\n                    </tr>\n                    </slot>\n           </com-table-fields>\n        </div>',
     methods: {
         submit: function submit() {
             if (this.isValid()) {
@@ -1135,7 +1135,8 @@ var mix_fields_data = {
             var self = this;
 
             this.setErrors({});
-            eventBus.$emit('sync_data');
+            //eventBus.$emit('sync_data')
+            ex.vueBroadCall('commit');
 
             if (self.before_save() == 'break') {
                 return;
@@ -3182,6 +3183,10 @@ var _plain_file = __webpack_require__(7);
 
 var plain_file = _interopRequireWildcard(_plain_file);
 
+var _validate_code = __webpack_require__(61);
+
+var validate_code = _interopRequireWildcard(_validate_code);
+
 var _operator_a = __webpack_require__(36);
 
 var op_a = _interopRequireWildcard(_operator_a);
@@ -3242,6 +3247,32 @@ __webpack_require__(42);
 
 
 //fields_panels
+
+/***/ }),
+/* 61 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var validate_code = {
+    props: ['row', 'head'],
+    template: '<div style="position: relative;">\n    <input type="text" class="form-control input-sm" v-model="row[head.name]" :id="\'id_\'+head.name" :name="head.name">\n    <div>\n    <div style="display: inline-block;border: 1px solid #9e9e9e;">\n        <img  :src="head.code_img" alt="">\n    </div>\n    <span class="clickable" @click="change_code" style="white-space:nowrap;">\u770B\u4E0D\u6E05\uFF0C\u6362\u4E00\u5F20</span>\n    </div>\n    </div>',
+    methods: {
+        change_code: function change_code() {
+            var self = this;
+            var post_data = [{ fun: 'new_validate_code' }];
+            cfg.show_load();
+            ex.post('/d/ajax/authuser', JSON.stringify(post_data), function (resp) {
+                self.head.code_img = resp.new_validate_code;
+                cfg.hide_load();
+            });
+        }
+    }
+
+};
+
+Vue.component('com-field-validate-code', validate_code);
 
 /***/ })
 /******/ ]);

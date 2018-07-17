@@ -23,6 +23,7 @@ export var  vuetool = {
 }
 
 function cusBroadCall(self,fun,kws,rt){
+    if(! self.$children){return}
     for(var i =0;i<self.$children.length;i++){
         var child =self.$children[i]
         if(child[fun]){

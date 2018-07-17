@@ -1081,11 +1081,7 @@ function hide_upload(second) {
     }
 }
 
-ex.load_css('/static/lib/font-awesome4.7/font-awesome4.7.min.css');
-//if(!window.__font_awesome){
-//	window.__font_awesome=true
-//	document.write(`<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">`)
-//}
+//ex.load_css( '/static/lib/font-awesome4.7/font-awesome4.7.min.css')
 
 if (!window.__uploading_mark) {
     window.__uploading_mark = true;
@@ -2629,7 +2625,12 @@ __webpack_require__(72);
 
 var table_fields = {
     props: ['heads', 'row', 'inputWidth', 'labelWidth'],
-    template: '<table class="table-fields">\n        <tr v-for="head in heads">\n            <td class="field-label" :style="{width:labelWidth}" valign="top">\n            <div style="position: relative">\n                <span v-text="head.label"></span>\n                <span class="req_star" style="position: absolute;right: -0.5em;top:0" v-if=\'head.required\'>*</span>\n            </div>\n\n            </td>\n            <td  :style="{width:inputWidth}">\n            <div class="field-input">\n                <component v-if="head.editor" :is="head.editor" :head="head" :row="row"></component>\n                <span v-else v-text="row[head.name]"></span>\n            </div>\n\n\n\n            </td>\n        </tr>\n        <slot></slot>\n    </table>',
+    template: '<table class="table-fields">\n        <tr v-for="head in heads">\n            <td class="field-label" :style="{width:labelWidth}" valign="top">\n            <div style="position: relative">\n                <span v-text="head.label"></span>\n                <span class="req_star" style="position: absolute;right: -0.5em;top:0" v-if=\'head.required\'>*</span>\n            </div>\n\n            </td>\n            <td  :style="{width:inputWidth}">\n            <div class="field-input">\n                <component v-if="head.editor" :is="head.editor" :head="head" :row="row"></component>\n                <span v-else v-text="row[head.name]"></span>\n                <span class="help-text clickable">\n                    <i style="color: #3780af;position: relative;top:10px;"  v-if="head.help_text" @click="show_msg(head.help_text,$event)" class="fa fa-question-circle" ></i>\n                </span>\n            </div>\n\n            </td>\n        </tr>\n        <slot></slot>\n    </table>',
+    methods: {
+        show_msg: function show_msg(msg, event) {
+            layer.tips(msg, event.target);
+        }
+    },
     components: _basic.baseInput
 };
 Vue.component('com-table-fields', table_fields);
@@ -3917,7 +3918,7 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, ".table-fields td.field-label {\n  padding-bottom: 1em;\n  padding-right: 1em;\n  text-align: right; }\n\n.table-fields .field-input {\n  margin-bottom: 1em; }\n", ""]);
+exports.push([module.i, ".table-fields td.field-label {\n  padding-bottom: 1em;\n  padding-right: 1em;\n  text-align: right; }\n\n.table-fields .field-input {\n  margin-bottom: 1em; }\n\n.table-fields .help-text {\n  position: absolute;\n  right: -1.2em;\n  top: -0.2em; }\n", ""]);
 
 // exports
 

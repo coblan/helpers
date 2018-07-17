@@ -137,7 +137,8 @@ class BaseEngine(object):
     def get_head_bar_data(self,request):
         user = request.user
         return {
-            'user':{'first_name':user.first_name,
+            'user':{
+                'first_name':user.first_name if user.is_authenticated else 'AnonymousUser',
                     'username':user.username,
                     },
             'brand':self.brand,

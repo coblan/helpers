@@ -235,8 +235,12 @@ class ModelFields(forms.ModelForm):
                         value=value.all()
                     self.fields[f].initial= value
     
+    def getExtraHeads(self): 
+        return []
+    
     def get_heads(self):
         heads = form_to_head(self)
+        heads.extend(self.getExtraHeads())
         heads = [head for head in heads if head['name'] not in self.hide_fields]
         for k,v in self.get_options().items():
             for head in heads:
@@ -374,12 +378,16 @@ class ModelFields(forms.ModelForm):
             
         self.instance.save()
         if op:
-            log =LogModel(key='{model_label}.{pk}'.format(model_label=model_to_name(self.instance),pk=self.instance.pk),kind=op,user=self.crt_user,detail=detail)
+            if self.crt_user.is_authenticated:
+                log =LogModel(key='{model_label}.{pk}'.format(model_label=model_to_name(self.instance),pk=self.instance.pk),kind=op,user=self.crt_user,detail=detail)
+            else:
+                log =LogModel(key='{model_label}.{pk}'.format(model_label=model_to_name(self.instance),pk=self.instance.pk),kind=op,detail=detail)                
             log.save()
+            
             dc = {
                 'key': '{model_label}.{pk}'.format(model_label=model_to_name(self.instance),pk=self.instance.pk), 
                 'kind': op,
-                'user': self.crt_user.username,
+                'user': self.crt_user.username if self.crt_user.is_authenticated else 'anonymous',
                 'before': self.before,
                 'after': after,
             }

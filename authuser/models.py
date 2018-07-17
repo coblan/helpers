@@ -14,5 +14,12 @@ class UserInfo(models.Model):
     addr = models.CharField('地址', max_length = 300, blank = True)
     id_code = models.CharField('身份证号码', max_length = 30, blank = True)
     gender = models.IntegerField('性别', default= 0, choices= GEN_CHOICE, blank = True)
+
+
+class ValidatorCode(models.Model):
+    code = models.CharField('验证码', max_length = 30)
+    valid = models.BooleanField('是否有效', default = True)
+    create_time = models.DateTimeField(auto_now_add= True)
     
+
     

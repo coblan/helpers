@@ -4,8 +4,11 @@ from __future__ import unicode_literals
 from django.contrib.auth.models import User
 from django.contrib import auth 
 from helpers.director.model_func.dictfy import from_dict
-from .forms import AuthForm,LoginForm
+from .forms import LoginForm  #, AuthForm
 from helpers.director.access.permit import has_permit
+from django.conf import settings
+from .page import RegistFormPage
+from .validate_code import faseGetDataUrl
 
 def get_global():
     return globals()
@@ -57,13 +60,14 @@ def do_login_old(username,password,request):
     #raise UserWarning,'[do_login] user or password not match'  
 
 def registe(info):
+    AuthForm = getattr(settings, 'REGISTE_DIRECTOR', RegistFormPage.fieldsCls)
     form = AuthForm(info)
-    if form.is_valid(): 
-        user=from_dict(form.cleaned_data,User)
-        user.set_password(user.password)
-        #user=User.objects.create_user(username=username,password=password)
-        user.is_active=True
-        user.save()
+    if form.is_valid():
+        user = form.save_form()
+        #user=from_dict(form.cleaned_data,User)
+        #user.set_password(user.password)
+        #user.is_active=True
+        #user.save()
         return {'status':'success'}  
     else:
         return {'errors':form.errors}
@@ -101,5 +105,10 @@ def changepswd(user,row):
         dc={'errors':{'old_pswd':['old password not match']}}
 
     return dc
+
+
+def new_validate_code(): 
+    return faseGetDataUrl()
+
     
 
