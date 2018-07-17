@@ -96,7 +96,7 @@ class BaseEngine(object):
         if self.need_login and not self.login_authorized(request):
             return redirect(self.login_url+'?next='+request.get_full_path())
         
-        page=page_cls(request)
+        page=page_cls(request, par_url = self.url_name)
         ctx=page.get_context()
         if  request.is_ajax() and not request.GET.get('_ajax_html') : #and not getattr(page,'ajax_html',False):
             resp= HttpResponse(json.dumps(ctx),content_type="application/json")

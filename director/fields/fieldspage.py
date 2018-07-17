@@ -7,7 +7,8 @@ class FieldsPage(object):
     ajax_scope={}
     ex_js=[]
     ex_css=[]
-    def __init__(self,request):
+    def __init__(self,request, par_url):
+        self.par_url = par_url
         #if not self.fieldsCls:
             #for k,v in self.__class__.__dict__.items():
                 #if inspect.isclass(v) and issubclass(v,ModelFields):

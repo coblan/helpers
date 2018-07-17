@@ -7,7 +7,7 @@ from helpers.director.model_func.dictfy import from_dict
 from .forms import LoginForm  #, AuthForm
 from helpers.director.access.permit import has_permit
 from django.conf import settings
-from .page import RegistFormPage
+from .admin_regist import RegistFormPage
 from .validate_code import faseGetDataUrl
 
 def get_global():
@@ -60,7 +60,8 @@ def do_login_old(username,password,request):
     #raise UserWarning,'[do_login] user or password not match'  
 
 def registe(info):
-    AuthForm = getattr(settings, 'REGISTE_DIRECTOR', RegistFormPage.fieldsCls)
+    authPage = getattr(settings, 'REGISTE_DIRECTOR', RegistFormPage)
+    AuthForm = authPage.fieldsCls
     form = AuthForm(info)
     if form.is_valid():
         user = form.save_form()
