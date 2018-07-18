@@ -70,13 +70,13 @@ def tort(img):
 import base64
 from io import BytesIO
 from .models import ValidatorCode
-import platform
+#import platform
 
 def faseGetDataUrl(): 
-    if platform.platform().find('Windows') != -1:
-        image, code = create_validate_code()
-    else:
-        image, code = create_validate_code(font_type="ae_AlArabiya.ttf")
+    #if platform.platform().find('Windows') != -1:
+        #image, code = create_validate_code()
+    #else:
+    image, code = create_validate_code()
     ValidatorCode.objects.create(code = code)
     
     buffered = BytesIO()
@@ -100,7 +100,7 @@ def create_validate_code(size=(120, 30),
                          bg_color=(255, 255, 255),
                          fg_color=(0, 0, 255),
                          font_size=18,
-                         font_type = 'arial.ttf',  # 原来的参数为： font_type="kk.TTF",
+                         font_type = 'Arial.ttf',  # 原来的参数为： font_type="kk.TTF",
                          length=4,
                          draw_lines=True,
                          n_line=(1, 2),
