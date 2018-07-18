@@ -16,13 +16,13 @@ def get_lib(request):
         #'adminlte_css': 'https://cdn.bootcss.com/admin-lte/2.4.3/css/AdminLTE.min.css',
         #'adminlte_blue_css': 'https://cdn.bootcss.com/admin-lte/2.4.3/css/skins/skin-blue.min.css',
         
-        #'nprogress': 'https://cdn.bootcss.com/nprogress/0.2.0/nprogress.min.js',
-        #'nprogress_css': 'https://cdn.bootcss.com/nprogress/0.2.0/nprogress.min.css',
+        'nprogress': '/static/lib/nprogress/nprogress.min.js',
+        'nprogress_css': '/static/lib/nprogress/nprogress.min.css',
         #'layer': 'https://cdn.bootcss.com/layer/3.1.0/layer.js',
         
-        #'element': 'https://unpkg.com/element-ui/lib/index.js',
-        #'element_css': 'https://unpkg.com/element-ui/lib/theme-chalk/index.css',
-        #'md5': 'https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.min.js',
+        'element': '/static/lib/element/index.js',
+        'element_css': '/static/lib/element/index.css',
+        'md5_js': '/static/lib/md5.min.js',
     }
     return dc
 

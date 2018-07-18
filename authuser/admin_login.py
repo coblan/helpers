@@ -4,6 +4,9 @@ from django.utils.translation import ugettext as _
 from .validate_code import faseGetDataUrl
 from .models import  ValidatorCode
 from .base_data import  auth_page_dc
+from urllib.parse import unquote
+from django.contrib import auth
+from django.shortcuts import redirect
 
 class LoginFormPage(FieldsPage):
     template = 'authuser/login.html'
@@ -11,9 +14,11 @@ class LoginFormPage(FieldsPage):
         ctx = super().get_context()
         next_url= self.request.GET.get('next','/')
         dc={
-            'next':next_url,
-            'regist_url': '/%s/regist' % self.par_url,
-            
+            'page_cfg': {     
+                'next':next_url,
+                'regist_url': '%s/regist' % self.engin.engin_url,
+                'copyright': 'Copyright @2018  All Right Reserve',
+                },
         } 
         
         ctx.update(dc)
@@ -85,7 +90,20 @@ class LoginFormPage(FieldsPage):
     #'authuser.login': RegistFormPage.fieldsCls,
 #})
         
+class LogOutPage(object):
+    def __init__(self, request, engin): 
+        self.request = request
+        self.engin = engin
+
+    
+    def get_context(self): 
+        next = self.request.GET.get('next', self.engin.home)
+        next=unquote(next)
+        auth.logout(self.request)
+        return redirect(next) 
+
 
 auth_page_dc .update({
     'login': LoginFormPage,
+    'logout': LogOutPage,
 })
