@@ -76,7 +76,7 @@ def faseGetDataUrl():
     if platform.platform().find('Windows') != -1:
         image, code = create_validate_code()
     else:
-        image, code = create_validate_code(font_type="kk.TTF")
+        image, code = create_validate_code(font_type="ae_AlArabiya.ttf")
     ValidatorCode.objects.create(code = code)
     
     buffered = BytesIO()
