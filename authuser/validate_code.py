@@ -70,9 +70,13 @@ def tort(img):
 import base64
 from io import BytesIO
 from .models import ValidatorCode
+import platform
 
 def faseGetDataUrl(): 
-    image, code = create_validate_code()
+    if platform.platform().find('Windows') != -1:
+        image, code = create_validate_code()
+    else:
+        image, code = create_validate_code(font_type="kk.TTF")
     ValidatorCode.objects.create(code = code)
     
     buffered = BytesIO()
@@ -150,6 +154,8 @@ def create_validate_code(size=(120, 30),
         strs = ' %s ' % ' '.join(c_chars) # 每个字符前后以空格隔开
 
         font = ImageFont.truetype(font_type, font_size)
+        #font = ImageFont.truetype(None, font_size)
+        
         font_width, font_height = font.getsize(strs)
         draw.text(((width - font_width) / 3, (height - font_height) / 3),
                   strs, font=font, fill=fg_color)
