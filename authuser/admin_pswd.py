@@ -11,7 +11,7 @@ class AuthPwsd(FieldsPage):
         ctx = super().get_context()
         name= self.request.user.username
         dc={
-            'login_url':'/%s/login' % self.par_url,
+            'login_url':'/%s/login' % self.engin.engin_url,
             'username':name,
             'uid':self.request.user.pk
         }   
