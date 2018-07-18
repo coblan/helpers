@@ -2,6 +2,7 @@
 # encoding:utf-8
 from PIL import Image,ImageDraw,ImageFont,ImageFilter
 import random
+import os
 
 def draw(code,tl=(15,2),font_size=23,img_size=(100,30),bg=(255,255,255),fg=(0,0,255),mode='RGB'):
     img =Image.new(mode=mode,size=img_size,color=bg)
@@ -76,8 +77,9 @@ def faseGetDataUrl():
     #if platform.platform().find('Windows') != -1:
         #image, code = create_validate_code()
     #else:
-    font=ImageFont.load_default().font
-    image, code = create_validate_code(font_type = font)
+    #font=ImageFont.load_default().font
+    font = os.path.join( os.path.dirname(__file__), 'fonts', 'arial.ttf')
+    image, code = create_validate_code(font_type= font)
     ValidatorCode.objects.create(code = code)
     
     buffered = BytesIO()
@@ -154,6 +156,7 @@ def create_validate_code(size=(120, 30),
         c_chars = get_chars()
         strs = ' %s ' % ' '.join(c_chars) # 每个字符前后以空格隔开
 
+        #font=ImageFont.load_default().font
         font = ImageFont.truetype(font_type, font_size)
         #font = ImageFont.truetype(None, font_size)
         
