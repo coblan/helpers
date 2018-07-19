@@ -1,5 +1,6 @@
 
 /*
+映射一个
  options:{
  key:value
  }
