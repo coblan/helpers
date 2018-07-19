@@ -16,8 +16,6 @@ class TabPage(object):
         tab_page_cls= tab_dict.get('page_cls')
         self.tab_page = tab_page_cls(request)
         
-        
-    
     def get_template(self,prefer=None):
         if self.tab_page.template:
             return self.tab_page.template
