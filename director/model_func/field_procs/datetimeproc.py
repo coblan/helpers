@@ -31,14 +31,19 @@ class DateTimeProc(BaseFieldProc):
                 }
     
     def filter_dict_query_args(self, dc, name):
+        """
+        普通情况下，都是按照天对时间进行筛选，所以尽管是datetime字段，但是
+        datetime  按照天选择
+        """
         #end_name = '_end_%s'%name
         end_str = '%s__lte'%name
         if dc.get(end_str):
             dd = timezone.datetime.strptime(dc[end_str],'%Y-%m-%d') 
             sp_one_day = timezone.timedelta(days=1)
-            real_end = dd+sp_one_day
+            sp_1_s = timezone.timedelta(seconds = 1)
+            real_end = dd+sp_one_day - sp_1_s
             return {
-                end_str:real_end.strftime('%Y-%m-%d')
+                end_str:real_end  #.strftime('%Y-%m-%d')
             }
         else:
             return {}
