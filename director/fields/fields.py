@@ -1,7 +1,7 @@
 # encoding:utf-8
 from __future__ import unicode_literals
 from django import forms
-from ..model_func.dictfy import form_to_head,to_dict,delete_related_query,model_to_name,from_dict,name_to_model,field_map
+from ..model_func.dictfy import form_to_head,to_dict, sim_dict,delete_related_query,model_to_name,from_dict,name_to_model,field_map
 from django.http import Http404
 import json
 from django.db import models
@@ -122,9 +122,10 @@ class ModelFields(forms.ModelForm):
         self.pop_fields()
         self.init_value()
         
-        self.before = {}
+        before_include = []
         for k in self.changed_data:
-            self.before[k] = getattr(self.instance, k, None)
+            before_include.append(k)
+        self.before = sim_dict(self.instance, include= before_include)
         
     def _clean_dict(self,dc):
         """利用field_map字典，查找前端传来的dc中，某个字段的转换方式"""
@@ -370,12 +371,14 @@ class ModelFields(forms.ModelForm):
             self.instance.save() # if instance is a new row , need save first then manytomany_relationship can create   
         
  
-        after = {}
+        
+        after_include = []
         for k,v in [(k,v) for (k,v) in self.cleaned_data.items() if k in self.changed_data]:
             # 测试时看到self.instance已经赋值了，下面这行代码可能没用
             setattr(self.instance,k,v)
-            after[k] = v
-            
+            after_include.append(k)
+        after = sim_dict(self.instance, include= after_include)
+    
         self.instance.save()
         if op:
             if self.crt_user.is_authenticated:
