@@ -255,6 +255,8 @@ class RowSort(object):
                         query= query.extra(select={'converted_%s'%norm_name: 'CONVERT(%s USING gbk)'%norm_name},order_by=['%sconverted_%s'%(direction,norm_name)])                        
                 else:
                     query= query.order_by(name)
+        #else:
+            #query = query.order_by('-pk')
 
         return query
 
@@ -553,11 +555,15 @@ class ModelTable(object):
         return query
     
     def statistics(self,query):
-        return query
+        """
+        因为统计会破坏pk的存在，所以把排序放在统计函数里面
+        """
+        return query.order_by('-pk')
     
     
     def inn_filter(self,query):
-        return query.order_by('-pk')
+        #return query.order_by('-pk')
+        return query
     
     def get_operation(self):
         director_name = self.get_director_name()
