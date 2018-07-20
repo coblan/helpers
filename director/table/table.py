@@ -33,15 +33,16 @@ class PageNum(object):
         #totalpage = int( math.ceil( float( count )/self.perPage) )
         #self.totalpage = max(totalpage,1)
         
-        #self.query = query  
-        #crt_page=min(self.totalpage,abs(int( self.pageNumber)))
-        #start = (crt_page -1)*self.perPage
-        #end = min(crt_page*self.perPage,count)
-        #return query[start:end]
-        self.pagenator = Paginator(query,self.perPage)
-        self.pageNumber = min(self.pagenator.num_pages,abs(int( self.pageNumber)))
-        return self.pagenator.page(self.pageNumber)
+        self.count =  len(query) #query.count()
+        
+        crt_page=max(1,int( self.pageNumber))
+        start = (crt_page -1)*self.perPage
+        end = min(crt_page*self.perPage, self.count)
+        return query[start:end]
+        #self.pagenator = Paginator(query,self.perPage)
+        #self.pageNumber = min(self.pagenator.num_pages,abs(int( self.pageNumber)))
         #return self.pagenator.page(self.pageNumber)
+ 
         
         
     
@@ -68,7 +69,7 @@ class PageNum(object):
 
         #return {'options':page_nums,'crt_page':self.pageNumber}    
         return {'crt_page':self.pageNumber,
-                'total':self.pagenator.count,
+                'total':self.count,
                 'perpage':self.perPage}
 
 class TrivalPageNum(object):
