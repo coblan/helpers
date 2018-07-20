@@ -33,15 +33,17 @@ class PageNum(object):
         #totalpage = int( math.ceil( float( count )/self.perPage) )
         #self.totalpage = max(totalpage,1)
         
-        self.count =  len(query) #query.count()
+        # 需要研究下，为什么有时 len(query) != query.count()  ，例如 jb.maindb.ticket_admin.TicketparlayTable
+        #self.count =  len(query) #query.count()
         
-        crt_page=max(1,int( self.pageNumber))
-        start = (crt_page -1)*self.perPage
-        end = min(crt_page*self.perPage, self.count)
-        return query[start:end]
-        #self.pagenator = Paginator(query,self.perPage)
-        #self.pageNumber = min(self.pagenator.num_pages,abs(int( self.pageNumber)))
-        #return self.pagenator.page(self.pageNumber)
+        #crt_page=max(1,int( self.pageNumber))
+        #start = (crt_page -1)*self.perPage
+        #end = min(crt_page*self.perPage, self.count)
+        #return query[start:end]
+        self.pagenator = Paginator(query,self.perPage)
+        self.pageNumber = min(self.pagenator.num_pages,abs(int( self.pageNumber)))
+        self.count = self.pagenator.count
+        return self.pagenator.page(self.pageNumber)
  
         
         
