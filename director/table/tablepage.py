@@ -7,7 +7,8 @@ class TablePage(object):
     tableCls=''
     #ajax_scope={}
     extra_js=[]
-    def __init__(self,request):
+    def __init__(self,request, engin):
+        self.engin = engin
         if not self.tableCls:
             for k,v in self.__class__.__dict__.items():
                 if inspect.isclass(v) and issubclass(v,ModelTable):

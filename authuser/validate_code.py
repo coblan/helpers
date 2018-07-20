@@ -2,6 +2,7 @@
 # encoding:utf-8
 from PIL import Image,ImageDraw,ImageFont,ImageFilter
 import random
+import os
 
 def draw(code,tl=(15,2),font_size=23,img_size=(100,30),bg=(255,255,255),fg=(0,0,255),mode='RGB'):
     img =Image.new(mode=mode,size=img_size,color=bg)
@@ -70,9 +71,15 @@ def tort(img):
 import base64
 from io import BytesIO
 from .models import ValidatorCode
+#import platform
 
 def faseGetDataUrl(): 
-    image, code = create_validate_code()
+    #if platform.platform().find('Windows') != -1:
+        #image, code = create_validate_code()
+    #else:
+    #font=ImageFont.load_default().font
+    font = os.path.join( os.path.dirname(__file__), 'fonts', 'arial.ttf')
+    image, code = create_validate_code(font_type= font)
     ValidatorCode.objects.create(code = code)
     
     buffered = BytesIO()
@@ -96,7 +103,7 @@ def create_validate_code(size=(120, 30),
                          bg_color=(255, 255, 255),
                          fg_color=(0, 0, 255),
                          font_size=18,
-                         font_type = 'arial.ttf',  # 原来的参数为： font_type="kk.TTF",
+                         font_type = 'Arial.ttf',  # 原来的参数为： font_type="kk.TTF",
                          length=4,
                          draw_lines=True,
                          n_line=(1, 2),
@@ -149,7 +156,10 @@ def create_validate_code(size=(120, 30),
         c_chars = get_chars()
         strs = ' %s ' % ' '.join(c_chars) # 每个字符前后以空格隔开
 
+        #font=ImageFont.load_default().font
         font = ImageFont.truetype(font_type, font_size)
+        #font = ImageFont.truetype(None, font_size)
+        
         font_width, font_height = font.getsize(strs)
         draw.text(((width - font_width) / 3, (height - font_height) / 3),
                   strs, font=font, fill=fg_color)

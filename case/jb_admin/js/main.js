@@ -65,3 +65,5 @@ import * as pop_fields_layer from  './misc/pop_fields_layer.js'
 //fields_panels
 import * as sim_fields from  './fields_panels/sim_fields.js'
 
+
+import * as user_info from  './page_com/header_bar/user_info.js'

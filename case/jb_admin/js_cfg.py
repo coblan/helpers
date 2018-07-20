@@ -1,5 +1,6 @@
 from helpers.director.base_data import js_tr_list, js_lib_list
 from django.utils.translation import ugettext as _
+from helpers.maintenance.update_static_timestamp import js_stamp_dc
 
 def get_tr():
     return {
@@ -25,8 +26,8 @@ def get_lib(request):
         'nice_validator': 'https://cdn.bootcss.com/nice-validator/1.1.3/jquery.validator.min.js?local=zh-CN',
         'nice_validator_css': 'https://cdn.bootcss.com/nice-validator/1.1.3/jquery.validator.min.css',
         
-        'exfun': '/static/js/exfun.pack.js',
-        'director': '/static/js/director.pack.js',
+        #'exfun': '/static/js/exfun.pack.js',
+        #'director': '/static/js/director.pack.js',
         
         'adminlte': 'https://cdn.bootcss.com/admin-lte/2.4.3/js/adminlte.min.js',
         'adminlte_css': 'https://cdn.bootcss.com/admin-lte/2.4.3/css/AdminLTE.min.css',
@@ -36,10 +37,10 @@ def get_lib(request):
         'nprogress_css': 'https://cdn.bootcss.com/nprogress/0.2.0/nprogress.min.css',
         'layer': 'https://cdn.bootcss.com/layer/3.1.0/layer.js',
         'layer_css':'https://cdn.bootcss.com/layer/3.1.0/theme/default/layer.css',
-        'element': 'https://unpkg.com/element-ui/lib/index.js',
-        'element_css': 'https://unpkg.com/element-ui/lib/theme-chalk/index.css',
+        'element': 'https://cdn.bootcss.com/element-ui/2.4.0/index.js',  #'https://unpkg.com/element-ui/lib/index.js',
+        'element_css':'https://cdn.bootcss.com/element-ui/2.4.0/theme-chalk/index.css',  # 'https://unpkg.com/element-ui/lib/theme-chalk/index.css',
         'md5': 'https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.min.js',
-        'jb_admin_pack_js': '/static/js/jb_admin.pack.js',
+        'jb_admin_pack_js': '/static/js/jb_admin.pack.js?t=%s'%js_stamp_dc.get('jb_admin_pack_js'),
     }
     return dc
 

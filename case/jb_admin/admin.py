@@ -20,7 +20,15 @@ class UserPage(TablePage):
         model = User
         exclude=['password']
         pop_edit_field = 'username'
+        #fields_sort = ['username']
         
+        def dict_head(self, head): 
+            if head['name'] == 'groups':
+                
+                head['editor'] = 'com-table-array-mapper'
+                head['options'] = [{'value': group.pk, 'label': str(group),} for group in Group.objects.all()]
+                #head['parse_method'] = 'dotSplit'
+            return head
         #def dict_head(self, head):
             
             #if head['name']=='username':

@@ -1,5 +1,6 @@
 
 /*
+映射[一个]
  options:{
  key:value
  }
