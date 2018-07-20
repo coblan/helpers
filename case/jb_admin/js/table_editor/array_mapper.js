@@ -24,11 +24,14 @@ var array_mapper = {
     computed:{
         show_data:function(){
             var self=this
+            var values = self.rowData[self.field]
+            if(!values){
+                return values
+            }
+
             if(this.table_par){
-                if(this.head.parse_value){
-                    var values=parse_value[this.head.parse_value](self.rowData[self.field])
-                }else{
-                    var values = self.rowData[self.field]
+                if(this.head.parse_input){
+                    var values=parse_input[this.head.parse_input](values)
                 }
                 var value_labels=ex.map(values,function(value){
                     var item = ex.findone(self.head.options,{value:value})
@@ -55,7 +58,7 @@ var array_mapper = {
     }
 }
 
-var parse_method={
+var parse_input={
     dotSplit:function(str){
         return str.split(',')
     },

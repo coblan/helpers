@@ -1624,11 +1624,14 @@ var array_mapper = {
     computed: {
         show_data: function show_data() {
             var self = this;
+            var values = self.rowData[self.field];
+            if (!values) {
+                return values;
+            }
+
             if (this.table_par) {
-                if (this.head.parse_value) {
-                    var values = parse_value[this.head.parse_value](self.rowData[self.field]);
-                } else {
-                    var values = self.rowData[self.field];
+                if (this.head.parse_input) {
+                    var values = parse_input[this.head.parse_input](values);
                 }
                 var value_labels = ex.map(values, function (value) {
                     var item = ex.findone(self.head.options, { value: value });
@@ -1655,7 +1658,7 @@ var array_mapper = {
     }
 };
 
-var parse_method = {
+var parse_input = {
     dotSplit: function dotSplit(str) {
         return str.split(',');
     }
@@ -1671,7 +1674,7 @@ Vue.component('com-table-array-mapper', array_mapper);
 
 
 /*
-映射一个
+映射[一个]
  options:{
  key:value
  }
@@ -2170,7 +2173,13 @@ var pop_fields = exports.pop_fields = {
             var self = this;
 
             var fun = get_row[this.head.get_row.fun];
-            var kws = this.head.get_row.kws;
+            if (this.head.get_row.kws) {
+                //  这个是兼顾老的调用，新的调用，参数直接写在get_row里面，与fun平级
+                var kws = this.head.get_row.kws;
+            } else {
+                var kws = this.head.get_row;
+            }
+
             fun(function (pop_row) {
                 //pop_fields_layer(pop_row,self.head.fields_heads,ops,self.head.extra_mixins,function(kws){
                 pop_fields_layer(pop_row, self.head.fields_ctx, function (kws) {

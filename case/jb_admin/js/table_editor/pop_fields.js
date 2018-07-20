@@ -36,7 +36,13 @@ export  var pop_fields={
             var self=this
 
             var fun= get_row[this.head.get_row.fun]
-            var kws= this.head.get_row.kws
+            if(this.head.get_row.kws){
+                    //  这个是兼顾老的调用，新的调用，参数直接写在get_row里面，与fun平级
+                var kws= this.head.get_row.kws
+            }else{
+                var kws= this.head.get_row
+            }
+
             fun(function(pop_row){
                 //pop_fields_layer(pop_row,self.head.fields_heads,ops,self.head.extra_mixins,function(kws){
                 pop_fields_layer(pop_row,self.head.fields_ctx,function(kws){
