@@ -13,6 +13,8 @@ class DotStrArrayProc(BaseFieldProc):
     
     def clean_field(self, dc, name): 
         value =  dc[name]
+        if not value:
+            return ''
         outstr =  ','.join(value)
         return outstr
     
