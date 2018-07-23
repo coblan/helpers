@@ -313,7 +313,7 @@ def form_to_head(form,include=None):
                  
         if hasattr(v,'widget') and isinstance(v.widget,forms.widgets.Select):
             dc['editor'] = 'sim_select' 
-            dc['options']=[{'value':val,'label':str(lab)} for val,lab in v.widget.choices]
+            #dc['options']=[{'value':val,'label':str(lab)} for val,lab in v.widget.choices]
         elif v.__class__==forms.fields.CharField:
             if v.max_length:
                 dc.update({'editor':'linetext','maxlength':v.max_length})

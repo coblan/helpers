@@ -378,16 +378,22 @@ class ModelTable(object):
             ls.extend(row_filters)
         
         director_name =self.get_director_name()
+        heads = self.get_heads()
+        rows = self.get_rows()
+        row_pages = self.pagenum.get_context()
+        row_sort = self.row_sort.get_context()
+        model_name = model_to_name(self.model)
+        ops = self.get_operation()
         return {
-            'heads':self.get_heads(),
-            'rows': self.get_rows(),
-            'row_pages' : self.pagenum.get_context(),
-            'row_sort':self.row_sort.get_context(),
+            'heads':heads,
+            'rows': rows,
+            'row_pages' : row_pages,
+            'row_sort':row_sort,
             'row_filters':ls,
             #'search_tip':self.row_search.get_context(),
             'director_name':director_name,
-            'model_name':model_to_name(self.model),
-            'ops' : self.get_operation(),
+            'model_name':model_name,
+            'ops' : ops,
             'search_args':self.search_args
         }
     
@@ -525,10 +531,11 @@ class ModelTable(object):
         query=self.get_query()
         out=[]
         director_name = self.get_director_name()
+        permit_fields =  self.permited_fields()
         for inst in query:
             # 遇到一种情况，聚合时，这里的queryset返回的item是dict。所以下面做一个判断
             if isinstance(inst,models.Model):
-                dc= to_dict(inst, include=self.permited_fields(),filt_attr=self.dict_row( inst))
+                dc= to_dict(inst, include=permit_fields,filt_attr=self.dict_row( inst))
             else:
                 dc = inst
             dc['_director_name'] = director_name+'.edit'
