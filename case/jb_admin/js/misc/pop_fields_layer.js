@@ -15,8 +15,9 @@ export  function pop_fields_layer (row,fields_ctx,callback){
         extra_mixins = ex.map(extra_mixins,function(name){
             return window[name]
         })
-        var com_pop_field_real = $.extend({}, com_fields);
-        com_pop_field_real.mixins = com_fields.mixins.concat(extra_mixins)
+        //var com_pop_field_real = $.extend({}, com_fields);
+        //com_pop_field_real.mixins = com_fields.mixins.concat(extra_mixins)
+        var com_pop_field_real =ex.vueExtend(com_fields,extra_mixins)
         Vue.component('com-pop-fields-'+com_id,com_pop_field_real)
         window['_vue_com_'+com_id] = true
     }

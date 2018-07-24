@@ -38,8 +38,6 @@ export var  com_pop_field= {
     </div>
      <div style="text-align: right;padding: 8px 3em;">
         <component v-for="op in ops" :is="op.editor" @operation="on_operation(op)" :head="op"></component>
-        <!--<button @click="save()">保存</button>-->
-        <!--<button @click="del_row()" v-if="row.pk">删除</button>-->
     </div>
      </div>`,
         data:function(){
