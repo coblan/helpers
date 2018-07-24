@@ -1,4 +1,5 @@
 from helpers.director.base_data import js_tr_list, js_lib_list
+from helpers.maintenance.update_static_timestamp import js_stamp_dc
 def get_lib(request): 
     dc = {
         #'vuejs': 'https://cdn.bootcss.com/vue/2.5.16/vue.js',
@@ -9,8 +10,8 @@ def get_lib(request):
         #'nice_validator': 'https://cdn.bootcss.com/nice-validator/1.1.3/jquery.validator.min.js?local=zh-CN',
         #'nice_validator_css': 'https://cdn.bootcss.com/nice-validator/1.1.3/jquery.validator.min.css',
         
-        'exfun': '/static/js/exfun.pack.js',
-        'director': '/static/js/director.pack.js',
+        'exfun': '/static/js/exfun.pack.js?t=%s'%js_stamp_dc.get('exfun_pack_js'),
+        'director': '/static/js/director.pack.js?t=%s'%js_stamp_dc.get('director_pack_js'),
         
         #'adminlte': 'https://cdn.bootcss.com/admin-lte/2.4.3/js/adminlte.min.js',
         #'adminlte_css': 'https://cdn.bootcss.com/admin-lte/2.4.3/css/AdminLTE.min.css',
