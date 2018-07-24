@@ -12,7 +12,10 @@ class DecimalProc(BaseFieldProc):
         return {name:str(data)}
     
     def clean_field(self,dc,name):
-        return Decimal(dc.get(name))
+        if dc.get(name): 
+            return Decimal(dc.get(name))
+        else:
+            return Decimal(0)
     
     def dict_field_head(self,head):   
         head['editor'] = 'number'

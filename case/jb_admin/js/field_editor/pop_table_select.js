@@ -13,9 +13,10 @@ var pop_table_select =  {
         open_win:function(){
             var self=this
             pop_table_layer(this.row,this.head.table_ctx,function(foreign_row){
-
-                self.row[self.head.name]=foreign_row.pk
-                self.row['_'+self.head.name+'_label'] = foreign_row._label
+                Vue.set(self.row,self.head.name,foreign_row.pk)
+                Vue.set(self.row,'_'+self.head.name+'_label',foreign_row._label)
+                //self.row[self.head.name]=foreign_row.pk
+                //self.row['_'+self.head.name+'_label'] = foreign_row._label
             })
         }
     }
