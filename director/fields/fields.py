@@ -181,9 +181,11 @@ class ModelFields(forms.ModelForm):
         } 
     
     def get_head_context(self):
+        heads = self.get_heads()
+        ops =  self.get_operations()
         return {
-            'heads':self.get_heads(),
-            'ops':self.get_operations(),
+            'heads':heads,
+            'ops':ops,
             'director_name':self.get_director_name(),
             #'model_name':model_to_name(self._meta.model),
             'extra_mixins':self.extra_mixins
@@ -241,23 +243,34 @@ class ModelFields(forms.ModelForm):
         return []
     
     def get_heads(self):
+        
         heads = form_to_head(self)
+        self.heads = heads
+        
         heads.extend(self.getExtraHeads())
         heads = [head for head in heads if head['name'] not in self.hide_fields]
+        
+        for head in heads:
+            self.dict_head(head)        
+        
         for k,v in self.get_options().items():
             for head in heads:
                 if head['name']==k:
                     head['options']=v
-        #for k,v in self.get_input_type().items():
-            #for head in heads:
-                #if head['name']==k:
-                    #head['type']=v
+                    
         for name in self.get_readonly_fields():
             for head in heads:
                 if head['name']==name:
                     head['readonly']=True 
+       
+        
         for head in heads:
-            self.dict_head(head)
+            if head.get('editor') == 'sim_select' and not head.get('options'):
+                v = self.fields.get(head['name'])
+                head['options']=[{'value':val,'label':str(lab)} for val,lab in v.widget.choices]
+                if len(head['options']) > 300:
+                    print('%s 选择项数目大于 300，请使用分页选择框' % head['name'])
+        
         if self.field_sort:
             tmp_heads = []
             for k in self.field_sort:
@@ -326,15 +339,14 @@ class ModelFields(forms.ModelForm):
     def get_options(self):
         options=self.dict_options()
         
-        for name,field in self.fields.items():
-            if name in options.keys():
-                continue
-            if isinstance(field,forms.models.ModelMultipleChoiceField):
-                options[name]=[{'value':x[0],'label':str(x[1])} for x in field.choices]
-            elif isinstance(field,forms.models.ModelChoiceField):
-                options[name]=[{'value':x[0],'label':str(x[1])} for x in list(field.choices)]
-            #if options.get(name,None):
-                #options[name]=self.sort_option(options[name])
+        #for name,field in self.fields.items():
+            #if name in options.keys():
+                #continue
+            #if isinstance(field,forms.models.ModelMultipleChoiceField):
+                #options[name]=[{'value':x[0],'label':str(x[1])} for x in field.choices]
+            #elif isinstance(field,forms.models.ModelChoiceField):
+                #options[name]=[{'value':x[0],'label':str(x[1])} for x in list(field.choices)]
+     
             
         return options
 

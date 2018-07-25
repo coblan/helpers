@@ -15,8 +15,9 @@ export  function pop_fields_layer (row,fields_ctx,callback){
         extra_mixins = ex.map(extra_mixins,function(name){
             return window[name]
         })
-        var com_pop_field_real = $.extend({}, com_fields);
-        com_pop_field_real.mixins = com_fields.mixins.concat(extra_mixins)
+        //var com_pop_field_real = $.extend({}, com_fields);
+        //com_pop_field_real.mixins = com_fields.mixins.concat(extra_mixins)
+        var com_pop_field_real =ex.vueExtend(com_fields,extra_mixins)
         Vue.component('com-pop-fields-'+com_id,com_pop_field_real)
         window['_vue_com_'+com_id] = true
     }
@@ -44,15 +45,26 @@ export  function pop_fields_layer (row,fields_ctx,callback){
         }
     });
 
+Vue.nextTick(function(){
 
     new Vue({
         el:'#fields-pop-'+pop_id,
         data:{
+            has_heads_adaptor:false,
             row:row,
             fields_heads:heads,
             ops:ops,
             com_id:com_id,
         },
+        //computed:{
+        //    fields_heads:function(){
+        //        if(this.has_heads_adaptor){
+        //            return this.heads_adaptor(this.heads)
+        //        } else{
+        //            return this.heads
+        //        }
+        //    }
+        //},
         mounted:function(){
             //if(! trigger.head.use_table_row){
             //    var self=this
@@ -93,6 +105,10 @@ export  function pop_fields_layer (row,fields_ctx,callback){
 
 
     eventBus.$emit('openlayer_changed')
+
+
+})
+
 
 }
 
