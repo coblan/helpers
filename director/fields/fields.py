@@ -15,6 +15,7 @@ from ..access.permit import ModelPermit
 from ..models import LogModel
 from helpers.director.base_data import director
 from helpers.director.data_format.json_format import DirectorEncoder
+from django.conf import settings
 
 import logging
 sql_log = logging.getLogger('director.sql_op')
@@ -180,9 +181,11 @@ class ModelFields(forms.ModelForm):
         } 
     
     def get_head_context(self):
+        heads = self.get_heads()
+        ops =  self.get_operations()
         return {
-            'heads':self.get_heads(),
-            'ops':self.get_operations(),
+            'heads':heads,
+            'ops':ops,
             'director_name':self.get_director_name(),
             #'model_name':model_to_name(self._meta.model),
             'extra_mixins':self.extra_mixins
@@ -240,23 +243,34 @@ class ModelFields(forms.ModelForm):
         return []
     
     def get_heads(self):
+        
         heads = form_to_head(self)
+        self.heads = heads
+        
         heads.extend(self.getExtraHeads())
         heads = [head for head in heads if head['name'] not in self.hide_fields]
+        
+        for head in heads:
+            self.dict_head(head)        
+        
         for k,v in self.get_options().items():
             for head in heads:
                 if head['name']==k:
                     head['options']=v
-        #for k,v in self.get_input_type().items():
-            #for head in heads:
-                #if head['name']==k:
-                    #head['type']=v
+                    
         for name in self.get_readonly_fields():
             for head in heads:
                 if head['name']==name:
                     head['readonly']=True 
+       
+        
         for head in heads:
-            self.dict_head(head)
+            if head.get('editor') == 'sim_select' and not head.get('options'):
+                v = self.fields.get(head['name'])
+                head['options']=[{'value':val,'label':str(lab)} for val,lab in v.widget.choices]
+                if len(head['options']) > 300:
+                    print('%s 选择项数目大于 300，请使用分页选择框' % head['name'])
+        
         if self.field_sort:
             tmp_heads = []
             for k in self.field_sort:
@@ -325,15 +339,14 @@ class ModelFields(forms.ModelForm):
     def get_options(self):
         options=self.dict_options()
         
-        for name,field in self.fields.items():
-            if name in options.keys():
-                continue
-            if isinstance(field,forms.models.ModelMultipleChoiceField):
-                options[name]=[{'value':x[0],'label':str(x[1])} for x in field.choices]
-            elif isinstance(field,forms.models.ModelChoiceField):
-                options[name]=[{'value':x[0],'label':str(x[1])} for x in list(field.choices)]
-            #if options.get(name,None):
-                #options[name]=self.sort_option(options[name])
+        #for name,field in self.fields.items():
+            #if name in options.keys():
+                #continue
+            #if isinstance(field,forms.models.ModelMultipleChoiceField):
+                #options[name]=[{'value':x[0],'label':str(x[1])} for x in field.choices]
+            #elif isinstance(field,forms.models.ModelChoiceField):
+                #options[name]=[{'value':x[0],'label':str(x[1])} for x in list(field.choices)]
+     
             
         return options
 
@@ -387,14 +400,16 @@ class ModelFields(forms.ModelForm):
                 log =LogModel(key='{model_label}.{pk}'.format(model_label=model_to_name(self.instance),pk=self.instance.pk),kind=op,detail=detail)                
             log.save()
             
-            dc = {
-                'key': '{model_label}.{pk}'.format(model_label=model_to_name(self.instance),pk=self.instance.pk), 
-                'kind': op,
-                'user': self.crt_user.username if self.crt_user.is_authenticated else 'anonymous',
-                'before': self.before,
-                'after': after,
-            }
-            sql_log.info(json.dumps(dc,cls=DirectorEncoder)) 
+            # 加个控制开关，只收极少数情况，才需要详细的日志
+            if getattr(settings, 'SQL_DETAIL_LOG', None):
+                dc = {
+                    'key': '{model_label}.{pk}'.format(model_label=model_to_name(self.instance),pk=self.instance.pk), 
+                    'kind': op,
+                    'user': self.crt_user.username if self.crt_user.is_authenticated else 'anonymous',
+                    'before': self.before,
+                    'after': after,
+                }
+                sql_log.info(json.dumps(dc,cls=DirectorEncoder)) 
             
         return self.instance
  

@@ -7,14 +7,14 @@ class TabPage(object):
     tabs=[]
     template=''
     page_label=''
-    def __init__(self, request):
+    def __init__(self, request, engin):
         self.request=request
         tab_name=request.GET.get('_tab')
         self.acture_tabs=self.get_tabs()
         self.tab_name = tab_name or self.acture_tabs[0].get('name')
         tab_dict=findone(self.acture_tabs,{'name':tab_name}) or self.acture_tabs[0]
         tab_page_cls= tab_dict.get('page_cls')
-        self.tab_page = tab_page_cls(request)
+        self.tab_page = tab_page_cls(request, engin)
         
     def get_template(self,prefer=None):
         if self.tab_page.template:

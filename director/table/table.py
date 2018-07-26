@@ -33,15 +33,18 @@ class PageNum(object):
         #totalpage = int( math.ceil( float( count )/self.perPage) )
         #self.totalpage = max(totalpage,1)
         
-        #self.query = query  
-        #crt_page=min(self.totalpage,abs(int( self.pageNumber)))
+        # 需要研究下，为什么有时 len(query) != query.count()  ，例如 jb.maindb.ticket_admin.TicketparlayTable
+        #self.count =  len(query) #query.count()
+        
+        #crt_page=max(1,int( self.pageNumber))
         #start = (crt_page -1)*self.perPage
-        #end = min(crt_page*self.perPage,count)
+        #end = min(crt_page*self.perPage, self.count)
         #return query[start:end]
         self.pagenator = Paginator(query,self.perPage)
         self.pageNumber = min(self.pagenator.num_pages,abs(int( self.pageNumber)))
+        self.count = self.pagenator.count
         return self.pagenator.page(self.pageNumber)
-        #return self.pagenator.page(self.pageNumber)
+ 
         
         
     
@@ -68,7 +71,7 @@ class PageNum(object):
 
         #return {'options':page_nums,'crt_page':self.pageNumber}    
         return {'crt_page':self.pageNumber,
-                'total':self.pagenator.count,
+                'total':self.count,
                 'perpage':self.perPage}
 
 class TrivalPageNum(object):
@@ -254,6 +257,8 @@ class RowSort(object):
                         query= query.extra(select={'converted_%s'%norm_name: 'CONVERT(%s USING gbk)'%norm_name},order_by=['%sconverted_%s'%(direction,norm_name)])                        
                 else:
                     query= query.order_by(name)
+        #else:
+            #query = query.order_by('-pk')
 
         return query
 
@@ -373,16 +378,22 @@ class ModelTable(object):
             ls.extend(row_filters)
         
         director_name =self.get_director_name()
+        heads = self.get_heads()
+        rows = self.get_rows()
+        row_pages = self.pagenum.get_context()
+        row_sort = self.row_sort.get_context()
+        model_name = model_to_name(self.model)
+        ops = self.get_operation()
         return {
-            'heads':self.get_heads(),
-            'rows': self.get_rows(),
-            'row_pages' : self.pagenum.get_context(),
-            'row_sort':self.row_sort.get_context(),
+            'heads':heads,
+            'rows': rows,
+            'row_pages' : row_pages,
+            'row_sort':row_sort,
             'row_filters':ls,
             #'search_tip':self.row_search.get_context(),
             'director_name':director_name,
-            'model_name':model_to_name(self.model),
-            'ops' : self.get_operation(),
+            'model_name':model_name,
+            'ops' : ops,
             'search_args':self.search_args
         }
     
@@ -520,10 +531,11 @@ class ModelTable(object):
         query=self.get_query()
         out=[]
         director_name = self.get_director_name()
+        permit_fields =  self.permited_fields()
         for inst in query:
             # 遇到一种情况，聚合时，这里的queryset返回的item是dict。所以下面做一个判断
             if isinstance(inst,models.Model):
-                dc= to_dict(inst, include=self.permited_fields(),filt_attr=self.dict_row( inst))
+                dc= to_dict(inst, include=permit_fields,filt_attr=self.dict_row( inst))
             else:
                 dc = inst
             dc['_director_name'] = director_name+'.edit'
@@ -552,11 +564,15 @@ class ModelTable(object):
         return query
     
     def statistics(self,query):
-        return query
+        """
+        因为统计会破坏pk的存在，所以把排序放在统计函数里面
+        """
+        return query.order_by('-pk')
     
     
     def inn_filter(self,query):
-        return query.order_by('-pk')
+        #return query.order_by('-pk')
+        return query
     
     def get_operation(self):
         director_name = self.get_director_name()

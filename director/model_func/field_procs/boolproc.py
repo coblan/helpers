@@ -14,6 +14,23 @@ class BoolProc(BaseFieldProc):
                 #'label':_(f.verbose_name),
                 #'editor':'com-date-range-filter'
                 #}
+    
+    #def to_dict(self, inst, name): 
+        #value = getattr(inst,name)
+        #if not value:
+            #return False
+        #return bool(value)
+    
+    def dict_table_head(self, head): 
+        head['editor'] = 'com-table-bool-shower'
+        return head
+    
+    def dict_field_head(self, head): 
+        head['editor'] = 'bool'
+        return head
+    
+    
+    
     def filter_get_head(self, name, model):
         this_field= model._meta.get_field(name)
         if this_field.choices:        

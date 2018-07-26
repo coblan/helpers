@@ -3,14 +3,20 @@ from __future__ import unicode_literals
 
 class BaseFieldProc(object):
     def to_dict(self,inst,name):
-        """返回字典"""
+        """返回字典
+        to_dict 函数会调用这个方法
+        """
         return { name :getattr(inst,name)}
     
     def clean_field(self,dc,name):
-        # dc里面有的 字段，才会被调用
+        """ 
+        fields类里，从前端穿过来的row dict数据进行清洗， dc里面有的 字段，才会被调用
+        """
         return dc[name]
     
     def dict_table_head(self,head):
+        """
+        """
         return head
     
     def dict_field_head(self,head):     
