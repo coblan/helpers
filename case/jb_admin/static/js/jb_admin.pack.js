@@ -842,7 +842,7 @@ Vue.component('com-field-op-btn', {
 "use strict";
 
 
-Vue.component('com-sim-fields', {
+var com_sim_fields = {
     props: {
         heads: '',
         row: '',
@@ -870,7 +870,11 @@ Vue.component('com-sim-fields', {
             }
         }
     }
-});
+};
+
+window.com_sim_fields = com_sim_fields;
+
+Vue.component('com-sim-fields', com_sim_fields);
 
 /***/ }),
 /* 12 */
@@ -1163,6 +1167,10 @@ var mix_fields_data = {
         on_operation: function on_operation(op) {
             var fun_name = op.fun || op.name;
             this.op_funs[fun_name](op.kws);
+        },
+        on_field_event: function on_field_event(kws) {
+            var fun_name = kws.fun || kws.name;
+            this.op_funs[fun_name](kws);
         },
         get_data: function get_data() {
             this.data_getter(this);

@@ -1,5 +1,5 @@
 
-Vue.component('com-sim-fields',{
+var com_sim_fields = {
     props:{
         heads:'',
         row:'',
@@ -42,4 +42,8 @@ Vue.component('com-sim-fields',{
             }
         }
     }
-})
+}
+
+window.com_sim_fields = com_sim_fields
+
+Vue.component('com-sim-fields',com_sim_fields)

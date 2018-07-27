@@ -1210,6 +1210,11 @@ var vuetool = exports.vuetool = {
         cusBroadCall(self, fun, kws, rt);
         return rt;
     },
+    vueParCall: function vueParCall(self, fun, kws) {
+        var rt = [];
+        cusParCall(self, fun, kws, rt);
+        return rt;
+    },
     vueExtend: function vueExtend(par, mixins) {
         var real_par = $.extend({}, par);
         var orgin_mixins = real_par.mixins;
@@ -1238,6 +1243,24 @@ function cusBroadCall(self, fun, kws, rt) {
         }
         cusBroadCall(child, fun, kws, rt);
     }
+}
+function cusParCall(self, fun, kws, rt) {
+    if (!self.$parent) {
+        return;
+    }
+    var par = self.$parent;
+    if (par[fun]) {
+        rt.push(par[fun](kws));
+    }
+    cusParCall(par, fun, kws, rt);
+
+    //for(var i =0;i<self.$parent.length;i++){
+    //    var par =self.$parent[i]
+    //    if(par[fun]){
+    //        rt.push(par[fun](kws))
+    //    }
+    //    cusParCall(par,fun,kws,rt)
+    //}
 }
 
 /***/ }),
