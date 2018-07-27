@@ -15,6 +15,7 @@ from ..access.permit import ModelPermit
 from ..models import LogModel
 from helpers.director.base_data import director
 from helpers.director.data_format.json_format import DirectorEncoder
+from django.conf import settings
 
 import logging
 sql_log = logging.getLogger('director.sql_op')
@@ -399,14 +400,16 @@ class ModelFields(forms.ModelForm):
                 log =LogModel(key='{model_label}.{pk}'.format(model_label=model_to_name(self.instance),pk=self.instance.pk),kind=op,detail=detail)                
             log.save()
             
-            dc = {
-                'key': '{model_label}.{pk}'.format(model_label=model_to_name(self.instance),pk=self.instance.pk), 
-                'kind': op,
-                'user': self.crt_user.username if self.crt_user.is_authenticated else 'anonymous',
-                'before': self.before,
-                'after': after,
-            }
-            sql_log.info(json.dumps(dc,cls=DirectorEncoder)) 
+            # 加个控制开关，只收极少数情况，才需要详细的日志
+            if getattr(settings, 'SQL_DETAIL_LOG', None):
+                dc = {
+                    'key': '{model_label}.{pk}'.format(model_label=model_to_name(self.instance),pk=self.instance.pk), 
+                    'kind': op,
+                    'user': self.crt_user.username if self.crt_user.is_authenticated else 'anonymous',
+                    'before': self.before,
+                    'after': after,
+                }
+                sql_log.info(json.dumps(dc,cls=DirectorEncoder)) 
             
         return self.instance
  
