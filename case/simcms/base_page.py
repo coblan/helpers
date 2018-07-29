@@ -31,10 +31,15 @@ class BasePage(object):
     
     
     def getContext(self): 
+        """
+        这个函数逻辑，用于显示
+        """
         return {}
     
-    @classmethod
-    def get_operations(cls):
+    def get_operations(self):
+        """
+        这个函数逻辑用于编辑
+        """
         ls=[]
         #if self.permit.changeable_fields():
         ls.append({
@@ -42,24 +47,24 @@ class BasePage(object):
         })
         return ls        
     
-    @classmethod
-    def get_heads(cls): 
+    def get_heads(self): 
         return []
     
-    @classmethod
-    def get_head_context(cls): 
+    def get_head_context(self): 
         return {
-            'heads':cls.get_heads(),
-            'ops':cls.get_operations(),
-            'director_name':cls.get_director_name(),
+            'heads':self.get_heads(),
+            'ops':self.get_operations(),
+            'director_name':self.get_director_name(),
             'extra_mixins':[]  #self.extra_mixins
         }  
     
-    @classmethod
-    def get_director_name(cls):
+    def get_tabs(self):
+        return []
+    
+    def get_director_name(self):
         director_name = ''
         for k,v in director.items():
-            if v==cls:
+            if v==self.__class__:
                 director_name=k
                 break
         return director_name     
