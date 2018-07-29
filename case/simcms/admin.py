@@ -9,7 +9,7 @@ class CmsTablePage(TablePage):
     template = 'jb_admin/table.html'
     extra_js=['/static/js/simcms.pack.js?t=%s'%js_stamp_dc.get('simcms_pack_js','')]
     def get_label(self): 
-        return 'sss'
+        return '页面编辑'
     
     class tableCls(ModelTable):
         model = CmsPageModel
