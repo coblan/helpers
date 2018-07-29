@@ -184,26 +184,30 @@ class RowFilter(object):
            
         ]
         """
-        ls = []
+        
         extraHead= self.getExtraHead()
+        normal_heads = []
         dc = {x['name']: x  for x in extraHead }
 
         for proc_cls,name in zip(self.get_proc_list() ,self.valid_name):
             if name in dc:
                 # 为了性能考虑，如果有head了，就不进行自动生成head了。
-                ls.append(dc[name])
+                #normal_heads.append(dc[name])
                 continue
             
             if name in self.range_fields:
                 
                 filter_head = proc_cls().filter_get_range_head(name,self.model)
-                ls.append(filter_head)
+                normal_heads.append(filter_head)
   
             else:
                 filter_head = proc_cls().filter_get_head(name,self.model)
-                ls.append(filter_head)
-        ls = [self.dict_head(head) for head in ls]
-        return ls
+                normal_heads.append(filter_head)
+        
+        out_list = extraHead
+        out_list.extend(normal_heads)
+        out_list = [self.dict_head(head) for head in out_list]
+        return out_list
       
     def get_query(self,query):
         self.query=query
