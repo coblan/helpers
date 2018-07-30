@@ -69,5 +69,54 @@ class BasePage(object):
                 break
         return director_name     
     
+
+class BaseTabFields(object):
     
+    def __init__(self, *args, **kws): 
+        self.row = kws.get('dc')
+        self._par_pk = kws.get('pk')
+        self.crt_user = kws.get('crt_user')
+    
+    @classmethod
+    def get_director_name(cls): 
+        director_name = ''
+        for k,v in director.items():
+            if v==cls:
+                director_name=k
+                break
+        return director_name
+    def is_valid(self): 
+        return True
+    def save_form(self): 
+        self._par_pk = self.row['_par_pk']
+        page = CmsPageModel.objects.get(pk = self._par_pk)
+        dc = {}
+        for k, v in self.row.items():
+            if k.startswith('_'):
+                continue
+            dc[k] = v
+        
+        page.content = json.dumps(dc)
+        page.save()
+        
+        
+
+    def get_heads(self): 
+        return []
+    
+    def get_operations(self): 
+        return [
+            { 'name':'save','editor':'com-field-op-btn','label':'保存', 'icon': 'fa-save',}            
+        ]
+    
+    def get_row(self): 
+        page = CmsPageModel.objects.get(pk = self._par_pk)
+        dc = {
+            '_director_name': self.get_director_name(),
+            '_par_pk': self._par_pk,
+        }
+        if page.content:
+            dc.update(json.loads(page.content))
+
+        return dc
     

@@ -6,9 +6,9 @@
 /******/ 	function __webpack_require__(moduleId) {
 /******/
 /******/ 		// Check if module is in cache
-/******/ 		if(installedModules[moduleId]) {
+/******/ 		if(installedModules[moduleId])
 /******/ 			return installedModules[moduleId].exports;
-/******/ 		}
+/******/
 /******/ 		// Create a new module (and put it into the cache)
 /******/ 		var module = installedModules[moduleId] = {
 /******/ 			i: moduleId,
@@ -32,6 +32,9 @@
 /******/
 /******/ 	// expose the module cache
 /******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// identity function for calling harmony imports with the correct context
+/******/ 	__webpack_require__.i = function(value) { return value; };
 /******/
 /******/ 	// define getter function for harmony exports
 /******/ 	__webpack_require__.d = function(exports, name, getter) {
@@ -60,24 +63,11 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 0);
+/******/ 	return __webpack_require__(__webpack_require__.s = 1);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _simcms_table_logic = __webpack_require__(1);
-
-var simcms_table_logic = _interopRequireWildcard(_simcms_table_logic);
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-/***/ }),
-/* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -97,7 +87,11 @@ var simcms_table_logic = {
                     }
 
                     var cms_resp_content = resp.get_cms_content_fields_ctx;
-                    if (cms_resp_content.tabs) {} else {
+                    if (cms_resp_content.tabs) {
+                        self.tabgroup.tabs = cms_resp_content.tabs;
+                        self.crt_row = kws.row;
+                        self.show_tab(self.tabgroup.tabs[0].name);
+                    } else {
                         var cms_content_fields_ctx = cms_resp_content.fields_ctx;
                         content_row._director_name = cms_content_fields_ctx.director_name;
                         content_row._page = kws.row.pk;
@@ -115,6 +109,19 @@ var simcms_table_logic = {
 
 };
 window.simcms_table_logic = simcms_table_logic;
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _simcms_table_logic = __webpack_require__(0);
+
+var simcms_table_logic = _interopRequireWildcard(_simcms_table_logic);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 /***/ })
 /******/ ]);

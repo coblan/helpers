@@ -104,5 +104,8 @@ var after_save={
     update_or_insert:function(self,new_row,kws){
         var old_row= self.row
         self.$emit('tab-event',{name:'update_or_insert',new_row:new_row,old_row:old_row})
+    },
+    do_nothing:function(self,new_row,kws){
+
     }
 }

@@ -13,7 +13,9 @@ var simcms_table_logic={
 
                     var cms_resp_content=resp.get_cms_content_fields_ctx
                     if(cms_resp_content.tabs){
-
+                        self.tabgroup.tabs=cms_resp_content.tabs
+                        self.crt_row=kws.row
+                        self.show_tab(self.tabgroup.tabs[0].name)
                     }else{
                         var cms_content_fields_ctx = cms_resp_content.fields_ctx
                         content_row._director_name=cms_content_fields_ctx.director_name
