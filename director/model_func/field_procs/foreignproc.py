@@ -23,6 +23,10 @@ class ForeignProc(BaseFieldProc):
         #model = name_to_model( dc.get('_%s_model'%name) )
         #return model.objects.get(pk=dc.get(name))     
     
+    def dict_table_head(self, head): 
+        head['editor'] = 'com-table-label-shower'
+        return head
+    
     def filter_get_head(self, name, model):
         this_field= model._meta.get_field(name)
         ls=this_field.get_choices()

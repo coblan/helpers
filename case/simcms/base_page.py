@@ -2,11 +2,17 @@ from django.shortcuts import render
 from helpers.director.shortcut import director
 from .models import CmsPageModel
 import json
+from django.conf import settings
+from helpers.director.base_data import js_tr_list,js_lib_list
 
 class BasePage(object):
+    
     def __init__(self, request = None,dc = {},crt_user= None , *args, **kwargs): 
         self.request = request
         self.row = dict(dc)
+        
+    def getName(self): 
+        return '基本页面'    
     
     def is_valid(self): 
         return True
@@ -20,11 +26,17 @@ class BasePage(object):
         page.content = json.dumps(self.pure_row)
         page.save()
     
-    def render(self, par_ctx): 
+    def render(self, par_ctx, page_data): 
         template = self.getTemplate()
         ctx = dict(par_ctx)
+        ctx.update({
+            'js_config': self.getJsConfig(), 
+            'page_data': page_data,
+            }
+        )
         ctx.update(self.getContext())
-        return render(self.request, template, context= ctx)
+        
+        return render(self.request, template, context=  ctx )
     
     def getTemplate(self): 
         return ''
@@ -34,7 +46,29 @@ class BasePage(object):
         """
         这个函数逻辑，用于显示
         """
-        return {}
+        return {
+        }
+    
+    def getJsConfig(self):
+        lans = []
+        for k,v in settings.LANGUAGES:
+            lans.append({'value':k,'label':v})
+        def_lan = settings.LANGUAGE_CODE
+        crt_lan = self.request.COOKIES.get('django_language', def_lan)
+        
+        tr_dc = {}
+        for fun in js_tr_list:
+            tr_dc.update(fun())
+        
+        lib_dc = {}
+        for fun in js_lib_list:
+            lib_dc.update(fun(self.request))
+        return {
+            'lans':lans,
+            'crt_lan': crt_lan,
+            'tr':tr_dc ,
+            'js_lib':lib_dc
+        }    
     
     def get_operations(self):
         """
@@ -71,7 +105,7 @@ class BasePage(object):
     
 
 class BaseTabFields(object):
-    
+    """标签页form"""
     def __init__(self, *args, **kws): 
         self.row = kws.get('dc')
         self._par_pk = kws.get('pk')

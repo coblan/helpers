@@ -18,6 +18,12 @@ class CmsTablePage(TablePage):
         pop_edit_field = 'name'
         
         def dict_head(self, head): 
+            dc = {
+                'update_time': 140,
+            }
+            if dc.get(head['name']):
+                head['width'] = dc.get(head['name'])
+                
             if head['name'] == 'content':
                 head['editor'] = 'com-table-extraclick'
                 head['extra_label'] = '编辑'
@@ -34,7 +40,9 @@ class CmsTablePage(TablePage):
                 #head['get_row']={
                     #"fun":'use_table_row', 
                 #}                  
-                
+            if head['name'] == 'temp_cls':
+                head['editor'] = 'com-table-label-shower'
+            
             return head
         
         def get_context(self): 
@@ -42,6 +50,10 @@ class CmsTablePage(TablePage):
             ctx['extra_table_logic'] = 'simcms_table_logic'
             return ctx
         
+        def dict_row(self, inst): 
+            return {
+                '_temp_cls_label': cms_page[inst.temp_cls](crt_user = self.crt_user).getName(),
+            }
         #def dict_row(self, inst): 
             #return {
                 #'_fields_ctx' : {
@@ -60,11 +72,19 @@ class CmsForm(ModelFields):
     def dict_head(self, head): 
         if head['name'] == 'temp_cls':
             head['editor'] = 'sim_select'
+        if head['name'] == 'par':
+            head['hide_related'] = 'pk'
         return head
     
     def dict_options(self): 
+
         return {
-            'temp_cls': [{'value': k, 'label': k,}for k, v in cms_page.items()],
+            'temp_cls': [{'value': k, 'label': v( crt_user = self.crt_user).getName(),}for k, v in cms_page.items()],
+        }
+    
+    def dict_row(self, inst): 
+        return {
+            'update_time': str( inst.update_time ),
         }
 
     
