@@ -22,6 +22,7 @@ import * as table_picture from  './table_editor/picture.js'
 import * as table_label_shower from  './table_editor/label_shower.js'
 import * as table_mapper from  './table_editor/mapper.js'
 import * as table_pop_fields from  './table_editor/pop_fields.js'
+import * as pop_fields_local from  './table_editor/pop_fields_local.js'
 import * as table_linetext from  './table_editor/linetext.js'
 import * as table_checkbox from  './table_editor/check_box.js'
 import * as switch_to_tab from  './table_editor/switch_to_tab.js'
@@ -44,6 +45,7 @@ import * as datetime from  './field_editor/datetime.js'
 import * as pop_table_select from  './field_editor/pop_table_select.js'
 import * as plain_file from  './field_editor/plain_file.js'
 import * as validate_code from  './field_editor/validate_code.js'
+import * as order_list_table from  './field_editor/order_list_table.js'
 
 
 // table operator
@@ -64,6 +66,7 @@ import * as pop_fields_layer from  './misc/pop_fields_layer.js'
 
 //fields_panels
 import * as sim_fields from  './fields_panels/sim_fields.js'
+import * as pop_edit_local from  './fields_panels/pop_edit_local.js'
 
 
 import * as user_info from  './page_com/header_bar/user_info.js'
