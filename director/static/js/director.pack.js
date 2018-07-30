@@ -519,7 +519,7 @@ var baseInput = exports.baseInput = {
                 cfg: inn_config
             };
         },
-        template: '<div>\n            <span v-if=\'head.readonly\' v-text=\'get_label(head.options,row[head.name])\'></span>\n            <select v-else v-model=\'row[head.name]\'  :id="\'id_\'+head.name"  class="form-control input-sm">\n                <option v-if="head.placeholder" :value="undefined" disabled selected style=\'display:none;\' class="placeholder" v-text="head.placeholder"></option>\n            \t<option v-for=\'opt in orderBy(head.options,"label")\' :value=\'opt.value\' v-text=\'opt.label\'></option>\n            </select>\n            </div>',
+        template: '<div>\n            <span v-if=\'head.readonly\' v-text=\'get_label(head.options,row[head.name])\'></span>\n            <select v-else v-model=\'row[head.name]\'  :id="\'id_\'+head.name" :name="head.name"  class="form-control input-sm">\n                <option v-if="head.placeholder" :value="undefined" disabled selected style=\'display:none;\' class="placeholder" v-text="head.placeholder"></option>\n            \t<option v-for=\'opt in orderBy(head.options,"label")\' :value=\'opt.value\' v-text=\'opt.label\'></option>\n            </select>\n            </div>',
         mounted: function mounted() {
             if (this.head.default && !this.row[this.head.name]) {
                 Vue.set(this.row, this.head.name, this.head.default);
@@ -3918,7 +3918,7 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, ".table-fields td.field-label {\n  padding-bottom: 1em;\n  padding-right: 1em;\n  text-align: right; }\n\n.table-fields .field-input {\n  margin-bottom: 1em; }\n\n.table-fields .help-text {\n  position: absolute;\n  right: -1.2em;\n  top: -0.2em; }\n", ""]);
+exports.push([module.i, ".table-fields td.field-label {\n  padding-bottom: 1em;\n  padding-right: 1em;\n  text-align: right; }\n\n.table-fields .field-input {\n  margin-bottom: 1em;\n  position: relative; }\n\n.table-fields .help-text {\n  position: absolute;\n  right: -1.2em;\n  top: -0.2em; }\n", ""]);
 
 // exports
 
