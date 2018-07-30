@@ -27,11 +27,12 @@ class DateTimeProc(BaseFieldProc):
         f = model._meta.get_field(name)
         return {'name':name,
                 'label':_(f.verbose_name),
-                'editor':'com-date-range-filter'
+                'editor': 'com-date-datetimefield-range-filter'#'com-date-range-filter'
                 }
     
-    def filter_dict_query_args(self, dc, name):
+    def _filter_dict_query_args(self, dc, name):
         """
+        * 这个函数无用了，现在用date 筛选datetime的 23:59:59问题，交由前端控件去补齐去了。*
         普通情况下，都是按照天对时间进行筛选，所以尽管是datetime字段，但是
         datetime  按照天选择
         """

@@ -17,6 +17,8 @@ import * as com_search from './filters/com_search.js'
 import * as com_select from './filters/com_select.js'
 import * as com_date_range from './filters/com_date_range.js'
 import * as related_select from './filters/related_select.js'
+import * as date_datetimefield_range from './filters/date_datetimefield_range'
+
 
 require('./scss/table_filter.scss')
 
