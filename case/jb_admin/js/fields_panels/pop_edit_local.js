@@ -4,9 +4,9 @@ var no_sub_to_server={
             this.$emit('sub_success',this.row)
         },
         save:function(){
-            cfg.show_load()
+            //cfg.show_load()
             this.$emit('sub_success',{new_row:this.row})
-            cfg.hide_load(2000)
+            //cfg.hide_load(2000)
         }
     }
 }

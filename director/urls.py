@@ -27,5 +27,6 @@ from .network import rec_file
 urlpatterns = [
     url(r'^ajax/(?P<app>\w+)?/?$',views.ajax_views,name='ajax_url'),
     url(r'^ajax/?$',views.ajax_views), 
-    url(r'^upload/?$',views.general_upload,name='general_upload')#,rec_file.general)
+    url(r'^upload/?$',views.general_upload,name='general_upload'), #,rec_file.general)
+    url(r'^ckeditor_image', views.ckeditor, name= 'ckeditor_upload_image')
 ]

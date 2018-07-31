@@ -17,6 +17,11 @@ class BasePage(object):
     def is_valid(self): 
         return True
     
+    def mergeCtx(self, par, ctx): 
+        dc = dict(par)
+        dc.update(ctx)
+        return dc
+    
     def get_row(self): 
         return self.pure_row
     
@@ -26,14 +31,12 @@ class BasePage(object):
         page.content = json.dumps(self.pure_row)
         page.save()
     
-    def render(self, par_ctx, page_data): 
+    def render(self, page_data): 
         template = self.getTemplate()
-        ctx = dict(par_ctx)
-        ctx.update({
+        ctx = {
             'js_config': self.getJsConfig(), 
             'page_data': page_data,
             }
-        )
         ctx.update(self.getContext())
         
         return render(self.request, template, context=  ctx )

@@ -68,12 +68,18 @@ class CmsForm(ModelFields):
     class Meta:
         model = CmsPageModel
         exclude = []
+        
+    def clean_dict(self, dc): 
+        if 'update_time' in dc:
+            dc.pop('update_time')
+        dc = super().clean_dict(dc)
+        return dc
     
     def dict_head(self, head): 
         if head['name'] == 'temp_cls':
             head['editor'] = 'sim_select'
         if head['name'] == 'par':
-            head['hide_related'] = 'pk'
+            head['hide_related_field'] = 'pk'
         return head
     
     def dict_options(self): 
@@ -83,8 +89,14 @@ class CmsForm(ModelFields):
         }
     
     def dict_row(self, inst): 
+        if inst.temp_cls:
+            temp_cls_label = cms_page[inst.temp_cls](crt_user = self.crt_user).getName()
+        else:
+            temp_cls_label = ''
         return {
             'update_time': str( inst.update_time ),
+            '_temp_cls_label': temp_cls_label,
+            
         }
 
     

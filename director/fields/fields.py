@@ -83,7 +83,7 @@ class ModelFields(forms.ModelForm):
              当get 时，dc是前端传来的url参数，排除pk后的额外的字典
         """
         #dc = clean_dict(dc, self._meta.model)
-        dc = self._clean_dict(dc)
+        #dc = self._clean_dict(dc)
         dc = self.clean_dict(dc)
         if not crt_user:
             self.crt_user=dc.get('crt_user')
@@ -154,7 +154,8 @@ class ModelFields(forms.ModelForm):
                     dc[k]=map_cls().clean_field(dc,k) 
         return dc
     
-    def clean_dict(self,dc):    
+    def clean_dict(self,dc):   
+        dc = self._clean_dict(dc)
         return dc
     
     def custom_permit(self):
@@ -257,11 +258,13 @@ class ModelFields(forms.ModelForm):
             for head in heads:
                 if head['name']==k:
                     head['options']=v
+                    break
                     
         for name in self.get_readonly_fields():
             for head in heads:
                 if head['name']==name:
                     head['readonly']=True 
+                    break
        
         
         for head in heads:
@@ -270,6 +273,7 @@ class ModelFields(forms.ModelForm):
                 head['options']=[{'value':val,'label':str(lab)} for val,lab in v.widget.choices]
                 if len(head['options']) > 300:
                     print('%s 选择项数目大于 300，请使用分页选择框' % head['name'])
+                    break
         
         if self.field_sort:
             tmp_heads = []

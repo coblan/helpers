@@ -1,15 +1,15 @@
 var order_list =  {
     props:['row','head'],
     template:`<div>
-    <button @click="add_new()">+</button><button>-</button>
-                    <el-table class="table" ref="e_table"
+    <button @click="add_new()">+</button>
+    <button @click="delete_rows()">-</button>
+                    <el-table ref="core_table" class="table"
                               :data="rows"
                               border
                               :stripe="true"
                               size="mini"
-
                               :summary-method="getSum"
-
+                               @selection-change="handleSelectionChange"
                               style="width: 100%">
                         <el-table-column
                                 type="selection"
@@ -57,18 +57,20 @@ var order_list =  {
         return {
             rows:rows,
             row_sort:{},
-            heads:this.head.table_heads
+            heads:this.head.table_heads,
+            selected:[],
         }
 
     },
     mounted:function(){
-        var self=this
-        ex.assign(this.op_funs, {
-                edit_over: function () {
-                    self.row[self.head.name] = JSON.stringify(self.rows)
-                },
-            }
-        )
+        //var self=this
+        //ex.assign(this.op_funs, {
+        //        edit_over: function () {
+        //            self.row[self.head.name] = JSON.stringify(self.rows)
+        //        },
+        //    }
+        //)
+        //this.$on('commit',this.on_commit)
     },
     computed:{
        out_row_this_field:function(){
@@ -85,6 +87,10 @@ var order_list =  {
         }
     },
     methods:{
+        commit:function(){
+            var self=this
+            self.row[self.head.name] = JSON.stringify(self.rows)
+        },
         add_new:function(){
             var self = this
             self.crt_row = {}
@@ -105,6 +111,18 @@ var order_list =  {
             })
 
             //this.row[this.head].append({})
+        },
+        delete_rows:function(){
+            var self=this
+            layer.confirm('真的删除吗?', {icon: 3, title:'提示'}, function(index){
+                //do something
+                ex.remove(self.rows,function(row){
+                    return self.selected.indexOf(row )!=-1
+                })
+
+                layer.close(index);
+            });
+            //alert(this.selected.length)
         },
         norm_head:function(head,row){
             if(row._editing){

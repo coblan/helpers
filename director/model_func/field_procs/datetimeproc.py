@@ -15,11 +15,14 @@ class DateTimeProc(BaseFieldProc):
                 name:value.strftime('%Y-%m-%d %H:%M:%S')
                 }
         else:
-            return {}
+            return {
+                name: '',
+            }
         
     def clean_field(self, dc, name):
         if dc[name]:
-            return timezone.datetime.strptime(dc[name],'%Y-%m-%d %H:%M:%S')
+            value = dc[name][0:19]
+            return timezone.datetime.strptime(value,'%Y-%m-%d %H:%M:%S')
         else:
             return dc[name]
         

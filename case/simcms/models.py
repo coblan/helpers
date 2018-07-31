@@ -9,7 +9,7 @@ class CmsPageModel(models.Model):
     detail = models.TextField('描述', blank = True)
     par = models.ForeignKey('CmsPageModel', verbose_name = '继承', blank = True, null = True)
     content = models.TextField('内容', blank= True)
-    update_time = models.DateTimeField('更新时间', auto_now= True, editable = True)
+    update_time = models.DateTimeField('更新时间', auto_now= True)
     
     def __str__(self): 
         return self.label

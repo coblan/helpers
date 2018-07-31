@@ -167,9 +167,9 @@ export var baseInput={
         computed:{
             normed_options:function(){
                 var self=this
-                if(this.head.hide_related){
+                if(this.head.hide_related_field){
                     var array = ex.filter(this.head.options,function(item){
-                        return item.value != self.row[self.head.hide_related]
+                        return item.value != self.row[self.head.hide_related_field]
                     })
                 }else{
                     var array=self.head.options
@@ -319,8 +319,13 @@ export var baseInput={
     richtext:{
         props:['row','head'],
         template:`<div style="position: relative"><span v-if='head.readonly' v-text='row[head.name]'></span>
-            			<ckeditor :style="head.style" v-model="row[head.name]" :id="'id_'+head.name" :config="head.config"></ckeditor>
+            			<ckeditor ref="ck" :style="head.style" v-model="row[head.name]" :id="'id_'+head.name" :config="head.config"></ckeditor>
                        </div>`,
+        methods:{
+            commit:function(){
+                this.row[this.head.name]=this.$refs.ck.editor.getData()
+            }
+        }
     },
 
 }
