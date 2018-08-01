@@ -18,6 +18,10 @@ var mix_fields_data ={
             var fun_name = op.fun || op.name
             this.op_funs[fun_name](op.kws)
         },
+        on_field_event:function(kws){
+            var fun_name = kws.fun || kws.name
+            this.op_funs[fun_name](kws)
+        },
         get_data:function(){
             this.data_getter(this)
         },
@@ -43,7 +47,7 @@ var mix_fields_data ={
 
             this.setErrors({})
             //eventBus.$emit('sync_data')
-            ex.vueBroadCall('commit')
+            ex.vueBroadCall(self,'commit')
 
             if(self.before_save() == 'break'){
                 return
@@ -56,7 +60,7 @@ var mix_fields_data ={
                     self.setErrors(rt.errors)
                     self.showErrors(rt.errors)
                 }else{
-                    cfg.hide_load(2000)
+                    cfg.hide_load(1000)
                     self.after_save(rt.row)
                     self.setErrors({})
                 }

@@ -153,15 +153,29 @@ export var baseInput={
         },
         template:`<div>
             <span v-if='head.readonly' v-text='get_label(head.options,row[head.name])'></span>
-            <select v-else v-model='row[head.name]'  :id="'id_'+head.name"  class="form-control input-sm">
+            <select v-else v-model='row[head.name]'  :id="'id_'+head.name" :name="head.name"  class="form-control input-sm">
                 <option v-if="head.placeholder" :value="undefined" disabled selected style='display:none;' class="placeholder" v-text="head.placeholder"></option>
-            	<option v-for='opt in orderBy(head.options,"label")' :value='opt.value' v-text='opt.label'></option>
+            	<option v-for='opt in normed_options' :value='opt.value' v-text='opt.label'></option>
             </select>
             </div>`,
         mounted:function(){
             if(this.head.default && !this.row[this.head.name]){
                 Vue.set(this.row,this.head.name,this.head.default)
                 //this.row[this.name]=this.kw.default
+            }
+        },
+        computed:{
+            normed_options:function(){
+                var self=this
+                if(this.head.hide_related_field){
+                    var array = ex.filter(this.head.options,function(item){
+                        return item.value != self.row[self.head.hide_related_field]
+                    })
+                }else{
+                    var array=self.head.options
+                }
+                return self.orderBy(array,'label')
+
             }
         },
         methods:{
@@ -305,8 +319,13 @@ export var baseInput={
     richtext:{
         props:['row','head'],
         template:`<div style="position: relative"><span v-if='head.readonly' v-text='row[head.name]'></span>
-            			<ckeditor :style="head.style" v-model="row[head.name]" :id="'id_'+head.name" :config="head.config"></ckeditor>
+            			<ckeditor ref="ck" :style="head.style" v-model="row[head.name]" :id="'id_'+head.name" :config="head.config"></ckeditor>
                        </div>`,
+        methods:{
+            commit:function(){
+                this.row[this.head.name]=this.$refs.ck.editor.getData()
+            }
+        }
     },
 
 }

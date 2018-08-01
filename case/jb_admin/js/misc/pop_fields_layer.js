@@ -3,6 +3,8 @@
 * */
 import {com_pop_field} from  './com_pop_fields'
 
+var gb={}
+
 export  function pop_fields_layer (row,fields_ctx,callback){
     // row,head ->//model_name,relat_field
 
@@ -24,7 +26,7 @@ export  function pop_fields_layer (row,fields_ctx,callback){
 
     var pop_id =new Date().getTime()
 
-    self.opened_layer_indx = layer.open({
+    gb.opened_layer_indx = layer.open({
         type: 1,
         area: ['800px', '500px'],
         title: '详细',
@@ -94,7 +96,7 @@ Vue.nextTick(function(){
                 //}
                 callback({name:'after_save',new_row:event.new_row,old_row:event.old_row})
                 //eventBus.$emit('pop-win-'+pop_id,{name:'after_save',new_row:event.new_row,old_row:event.old_row})
-
+                layer.close(gb.opened_layer_indx)
             },
             //on_del:function(){
             //    ex.remove(self.rows,row)

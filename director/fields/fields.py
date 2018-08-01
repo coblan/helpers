@@ -15,6 +15,7 @@ from ..access.permit import ModelPermit
 from ..models import LogModel
 from helpers.director.base_data import director
 from helpers.director.data_format.json_format import DirectorEncoder
+from django.conf import settings
 
 import logging
 sql_log = logging.getLogger('director.sql_op')
@@ -82,7 +83,7 @@ class ModelFields(forms.ModelForm):
              当get 时，dc是前端传来的url参数，排除pk后的额外的字典
         """
         #dc = clean_dict(dc, self._meta.model)
-        dc = self._clean_dict(dc)
+        #dc = self._clean_dict(dc)
         dc = self.clean_dict(dc)
         if not crt_user:
             self.crt_user=dc.get('crt_user')
@@ -153,7 +154,8 @@ class ModelFields(forms.ModelForm):
                     dc[k]=map_cls().clean_field(dc,k) 
         return dc
     
-    def clean_dict(self,dc):    
+    def clean_dict(self,dc):   
+        dc = self._clean_dict(dc)
         return dc
     
     def custom_permit(self):
@@ -256,11 +258,13 @@ class ModelFields(forms.ModelForm):
             for head in heads:
                 if head['name']==k:
                     head['options']=v
+                    break
                     
         for name in self.get_readonly_fields():
             for head in heads:
                 if head['name']==name:
                     head['readonly']=True 
+                    break
        
         
         for head in heads:
@@ -269,6 +273,7 @@ class ModelFields(forms.ModelForm):
                 head['options']=[{'value':val,'label':str(lab)} for val,lab in v.widget.choices]
                 if len(head['options']) > 300:
                     print('%s 选择项数目大于 300，请使用分页选择框' % head['name'])
+                    break
         
         if self.field_sort:
             tmp_heads = []
@@ -399,14 +404,16 @@ class ModelFields(forms.ModelForm):
                 log =LogModel(key='{model_label}.{pk}'.format(model_label=model_to_name(self.instance),pk=self.instance.pk),kind=op,detail=detail)                
             log.save()
             
-            dc = {
-                'key': '{model_label}.{pk}'.format(model_label=model_to_name(self.instance),pk=self.instance.pk), 
-                'kind': op,
-                'user': self.crt_user.username if self.crt_user.is_authenticated else 'anonymous',
-                'before': self.before,
-                'after': after,
-            }
-            sql_log.info(json.dumps(dc,cls=DirectorEncoder)) 
+            # 加个控制开关，只收极少数情况，才需要详细的日志
+            if getattr(settings, 'SQL_DETAIL_LOG', None):
+                dc = {
+                    'key': '{model_label}.{pk}'.format(model_label=model_to_name(self.instance),pk=self.instance.pk), 
+                    'kind': op,
+                    'user': self.crt_user.username if self.crt_user.is_authenticated else 'anonymous',
+                    'before': self.before,
+                    'after': after,
+                }
+                sql_log.info(json.dumps(dc,cls=DirectorEncoder)) 
             
         return self.instance
  

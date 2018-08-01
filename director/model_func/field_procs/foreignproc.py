@@ -15,13 +15,20 @@ class ForeignProc(BaseFieldProc):
                 '_%s_label'%name:str(foreign)
             }
         else:
-            return {}
+            return {
+                name: foreign,
+                '_%s_label'%name:''                
+            }
     
     # 外键不能转换为对象，直接用pk值就行。
     #def clean_field(self,dc,name):
     
         #model = name_to_model( dc.get('_%s_model'%name) )
         #return model.objects.get(pk=dc.get(name))     
+    
+    def dict_table_head(self, head): 
+        head['editor'] = 'com-table-label-shower'
+        return head
     
     def filter_get_head(self, name, model):
         this_field= model._meta.get_field(name)

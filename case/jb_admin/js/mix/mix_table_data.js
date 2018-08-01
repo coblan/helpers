@@ -38,6 +38,34 @@ var mix_table_data={
             },
             emitEvent:function(e){
                 self.$emit(e)
+            },
+            // 为了刷新界面，付出了清空的代价，这两个函数小心使用，
+            row_up:function(kws){
+                var row=kws.row
+                var index =self.rows.indexOf(row)
+                if(index >=1 ){
+                    var ss = swap(self.rows,index-1,index)
+                    self.rows=[]
+                    Vue.nextTick(function(){
+                        self.rows=ss
+                    })
+
+                }
+                //self.$refs.core_table.sort()
+            },
+            row_down:function(kws){
+                var row=kws.row
+                var index =self.rows.indexOf(row)
+                if(index < self.rows.length-1 ){
+                    //Vue.set(self,'rows',swap(self.rows,index+1,index))
+                    //self.rows =
+                    var ss = swap(self.rows,index+1,index)
+                    self.rows=[]
+                    Vue.nextTick(function(){
+                        self.rows=ss
+                    })
+                }
+                //self.$refs.core_table.sort()
             }
 
         })
@@ -170,6 +198,15 @@ var mix_table_data={
         },
 
     }
+}
+
+
+function swap(arr,k,j) {
+    var c = arr[k];
+
+    arr[k] = arr[j];
+    arr[j] = c;
+    return arr
 }
 
 window.mix_table_data = mix_table_data

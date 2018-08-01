@@ -68,8 +68,8 @@ var ck_complex = {
 	// Simplify the dialog windows.
 	removeDialogTabs : 'image:advanced;link:advanced',
 	image_previewText:'image preview',
-	imageUploadUrl:'/_face/ckeditor_upload_image',
-	filebrowserImageUploadUrl: '/_face/ckeditor_upload_image', // Will be replace by imageUploadUrl when upload_image
+	imageUploadUrl: '/d/ckeditor_image',// '/_face/ckeditor_upload_image',
+	filebrowserImageUploadUrl: '/d/ckeditor_image',// '/_face/ckeditor_upload_image', // Will be replace by imageUploadUrl when upload_image
 	extraPlugins : 'justify,codesnippet,lineutils,mathjax,colorbutton,uploadimage,font,autogrow', //autogrow,
 	mathJaxLib : 'https://cdn.mathjax.org/mathjax/2.6-latest/MathJax.js?config=TeX-AMS_HTML',
 	extraAllowedContent :'img[class]',
@@ -198,8 +198,8 @@ var edit_level = {
 	// Simplify the dialog windows.
 	removeDialogTabs : 'image:advanced;link:advanced',
 	image_previewText:'image preview',
-	imageUploadUrl:'/_face/ckeditor_upload_image',
-	filebrowserImageUploadUrl: '/_face/ckeditor_upload_image', // Will be replace by imageUploadUrl when upload_image
+	imageUploadUrl:'/d/ckeditor_image', // '/_face/ckeditor_upload_image',
+	filebrowserImageUploadUrl:'/d/ckeditor_image',// '/_face/ckeditor_upload_image', // Will be replace by imageUploadUrl when upload_image
 	extraPlugins : 'justify,lineutils,colorbutton,uploadimage,font,autogrow', //,mathjax,codesnippet
 	//mathJaxLib : '//cdn.mathjax.org/mathjax/2.6-latest/MathJax.js?config=TeX-AMS_HTML',
 	extraAllowedContent :'img[class]',

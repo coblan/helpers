@@ -84,6 +84,7 @@ var field={
                 </label>
                 <div class="field_input">
                     <component :is='head.editor'
+                        @field-event="$emit('field-event',$event)"
                         :row='row'
                         :head='head'>
                     </component>

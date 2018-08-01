@@ -22,6 +22,14 @@ msg-bottom  nice validator的位置在下面，默认在右侧
   position: relative;
 }
 
+.field-panel {
+  &.no-label {
+    label {
+      display: none;
+    }
+  }
+}
+
 .field-panel.suit{
   background-color: #F5F5F5;
   //max-width:80%;
@@ -116,7 +124,7 @@ msg-bottom  nice validator的位置在下面，默认在右侧
 .field-panel {
     .msg-box.n-right{
       position: absolute;
-      right: -1em;
+      left: 100%;
     }
 }
 
@@ -129,7 +137,7 @@ msg-bottom  nice validator的位置在下面，默认在右侧
 }
 
 
-.field_input,.field-input{
+.field_input{
   position: relative;
 }
 

@@ -13,6 +13,7 @@ from django.apps import apps
 from .network.ajax_router import ajax_router
 from .recv_file import GeneralUpload
 from django.views.decorators.csrf import csrf_exempt
+from .network.ckeditor import Ckeditor
 """
 >5>helpers/port.rst>
 总的ajax view
@@ -44,6 +45,10 @@ def ajax_views(request,app=None):
 
 def general_upload(request):
     return GeneralUpload().asView(request)
+
+@csrf_exempt
+def ckeditor(request): 
+    return Ckeditor().RecieveView(request)
 
     
 
