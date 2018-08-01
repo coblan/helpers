@@ -3,7 +3,7 @@ from ..field_proc  import BaseFieldProc
 from .. .base_data import field_map
 
 class DotStrArrayProc(BaseFieldProc):
-    
+    "逗号分隔的数组"
     def to_dict(self, inst, name): 
         value =  getattr(inst,name)
         if value:
@@ -31,7 +31,6 @@ class DotStrArrayProc(BaseFieldProc):
         options 在 modelfields类的dict_head方法里面去设置
         """
         head['editor'] = 'field_multi_chosen'
-        head['options'] = []
         return head
     
     

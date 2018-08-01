@@ -78,15 +78,17 @@ class CmsForm(ModelFields):
     def dict_head(self, head): 
         if head['name'] == 'temp_cls':
             head['editor'] = 'sim_select'
+            head['options'] = [{'value': k, 'label': v( crt_user = self.crt_user).getName(),}for k, v in cms_page.items()]
         if head['name'] == 'par':
             head['hide_related_field'] = 'pk'
+            
         return head
     
-    def dict_options(self): 
+    #def dict_options(self): 
 
-        return {
-            'temp_cls': [{'value': k, 'label': v( crt_user = self.crt_user).getName(),}for k, v in cms_page.items()],
-        }
+        #return {
+            #'temp_cls': [{'value': k, 'label': v( crt_user = self.crt_user).getName(),}for k, v in cms_page.items()],
+        #}
     
     def dict_row(self, inst): 
         if inst.temp_cls:
