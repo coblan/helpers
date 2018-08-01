@@ -98,15 +98,15 @@ var mix_table_data={
             cfg.show_load()
             ex.post('/d/ajax',JSON.stringify(post_data),function(resp){
                 cfg.hide_load()
-                var new_row = resp.get_row
+                var crt_row = resp.get_row
                 //var pop_id= new Date().getTime()
                 // e = {name:'after_save',new_row:event.new_row,old_row:event.old_row}
                 //eventBus.$on('pop-win-'+pop_id,function(e){
                 //    self.update_or_insert(e.new_row, e.old_row)
                 //})
                 //pop_fields_layer(new_row,kws.heads,kws.ops,pop_id)
-                pop_fields_layer(new_row,fields_ctx,function(e){
-                    self.update_or_insert(e.new_row, e.old_row)
+                pop_fields_layer(crt_row,fields_ctx,function(new_row){
+                    self.update_or_insert(new_row, crt_row)
                 })
             })
         },

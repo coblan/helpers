@@ -43,8 +43,8 @@ export  var pop_fields={
                 extra_mixin:[]
             }
 
-                pop_edit_local(self.rowData,fields_ctx,function(resp) {
-                   ex.assign(self.rowData,resp.new_row)
+                pop_edit_local(self.rowData,fields_ctx,function(new_row) {
+                   ex.assign(self.rowData,new_row)
                     //self.$emit('on-custom-comp',{fun:'edit_over'} )
                 })
 

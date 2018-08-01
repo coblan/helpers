@@ -26,8 +26,8 @@ class CmsTablePage(TablePage):
                 
             if head['name'] == 'content':
                 head['editor'] = 'com-table-extraclick'
-                head['extra_label'] = '编辑'
-                head['extra_fun'] = 'edit_page_content'
+                head['label'] = '编辑'
+                head['fun'] = 'edit_page_content'
                 #head['editor'] = 'com-table-pop-fields'
                 #head['show_label'] = {
                     #'fun': 'text_label',

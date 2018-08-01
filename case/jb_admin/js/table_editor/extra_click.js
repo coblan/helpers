@@ -1,13 +1,13 @@
 /*
 额外的点击列，例如“详情”
-head['extra_label']=
-head['extra_fun']
+head['label']=
+head['fun']
 * */
 
 
 var extra_click={
     props:['rowData','field','index'],
-    template:`<span class="clickable" v-text="head.extra_label" @click="on_click()"></span>`,
+    template:`<span class="clickable" v-text="head.label" @click="on_click()"></span>`,
     created:function(){
         // find head from parent table
         var table_par = this.$parent
@@ -26,7 +26,7 @@ var extra_click={
 
     methods:{
         on_click:function(){
-            this.$emit('on-custom-comp',{name:this.head.extra_fun,row:this.rowData,head:this.head})
+            this.$emit('on-custom-comp',{name:this.head.fun,row:this.rowData,head:this.head})
         }
 
     }

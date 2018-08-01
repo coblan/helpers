@@ -73,6 +73,11 @@
 "use strict";
 
 
+/*
+* simcms列表页面逻辑
+*
+* edit_page_content 函数针对【编辑】按钮，优先使用tabs，其次再使用 fields_ctx的数据
+* */
 var simcms_table_logic = {
     mounted: function mounted() {
         var self = this;
@@ -95,8 +100,8 @@ var simcms_table_logic = {
                         var cms_content_fields_ctx = cms_resp_content.fields_ctx;
                         content_row._director_name = cms_content_fields_ctx.director_name;
                         content_row._page = kws.row.pk;
-                        pop_fields_layer(content_row, cms_content_fields_ctx, function (resp) {
-                            var new_row = resp.new_row;
+                        pop_fields_layer(content_row, cms_content_fields_ctx, function (new_row) {
+                            //var new_row=resp.new_row
                             kws.row.content = JSON.stringify(new_row);
                             //var crt_row=ex.findone(self.rows,{pk:kws.row.pk})
                             //crt_row.content=JSON.stringify(new_row)

@@ -940,9 +940,6 @@ Vue.component('com-field-op-btn', {
 
 var no_sub_to_server = {
     methods: {
-        submit: function submit() {
-            this.$emit('sub_success', this.row);
-        },
         save: function save() {
             //cfg.show_load()
             this.$emit('sub_success', { new_row: this.row });
@@ -1020,6 +1017,17 @@ var _com_pop_fields = __webpack_require__(50);
 
 var gb = {}; /*
              * root 层面创建Vue组件，形成弹出框
+             
+              fields_ctx:{
+                      'heads':[{'name':'matchid','label':'比赛','editor':'com-field-label-shower','readonly':True},
+                              {'name':'home_score','label':'主队分数','editor':'linetext'},
+                         ],
+                      'ops':[{"fun":'produce_match_outcome','label':'保存','editor':'com-field-op-btn'},],
+                      'extra_mixins':['produce_match_outcome'],
+                      'fieldsPanel': 'produceMatchOutcomePanel',
+                      // 使用extra_mixins与fieldsPanel的区别是，设置fieldPanel可以防止引入com_pop_field对象，如果只设置extra_mixin的话，会默认引入com_pop_field
+              }
+             
              * */
 function pop_fields_layer(row, fields_ctx, callback) {
     // row,head ->//model_name,relat_field
@@ -1052,10 +1060,11 @@ function pop_fields_layer(row, fields_ctx, callback) {
             $('#fields-pop-' + pop_id).parents('.layui-layer-content').height(total_height - 42);
         },
         shadeClose: true, //点击遮罩关闭
-        content: '<div id="fields-pop-' + pop_id + '" style="height: 100%;">\n                    <component :is="\'com-pop-fields-\'+com_id" @del_success="on_del()" @sub_success="on_sub_success($event)"\n                    :row="row" :heads="fields_heads" :ops="ops"></component>\n                </div>',
+        content: '<div id="fields-pop-' + pop_id + '" style="height: 100%;">\n                    <component :is="\'com-pop-fields-\'+com_id" @del_success="on_del()" @submit-success="on_sub_success($event)"\n                    :row="row" :heads="fields_heads" :ops="ops"></component>\n                </div>',
         end: function end() {
 
-            eventBus.$emit('openlayer_changed');
+            //eventBus.$emit('openlayer_changed')
+
         }
     });
 
@@ -1070,54 +1079,21 @@ function pop_fields_layer(row, fields_ctx, callback) {
                 ops: ops,
                 com_id: com_id
             },
-            //computed:{
-            //    fields_heads:function(){
-            //        if(this.has_heads_adaptor){
-            //            return this.heads_adaptor(this.heads)
-            //        } else{
-            //            return this.heads
-            //        }
-            //    }
-            //},
-            mounted: function mounted() {
-                //if(! trigger.head.use_table_row){
-                //    var self=this
-                //    cfg.show_load()
-                //    var dc ={fun:'get_row',model_name:model_name}
-                //    dc[relat_field] = trigger.rowData[relat_field]
-                //    var post_data=[dc]
-                //    ex.post('/d/ajax',JSON.stringify(post_data),function(resp){
-                //        self.row = resp.get_row
-                //        cfg.hide_load()
-                //    })
-                //}
 
-            },
             methods: {
-                on_sub_success: function on_sub_success(event) {
-                    // 将新建的row 插入到表格中
-                    //if(! old_row.pk) {
-                    //    self.rows.splice(0, 0, new_row)
-                    //}
-                    //if(this.head.use_table_row){
-                    //    var old_row = event.old_row
-                    //    var new_row=event.new_row
-                    //    ex.assign(self.row,new_row)
-                    //}else{
-                    //    trigger.update_row()
-                    //}
-                    callback({ name: 'after_save', new_row: event.new_row, old_row: event.old_row });
-                    //eventBus.$emit('pop-win-'+pop_id,{name:'after_save',new_row:event.new_row,old_row:event.old_row})
-                    layer.close(gb.opened_layer_indx);
+                on_sub_success: function on_sub_success(new_row) {
+                    callback(new_row);
+                    //callback({name:'after_save',new_row:event.new_row,old_row:event.old_row})
+
+                    setTimeout(function () {
+                        layer.close(gb.opened_layer_indx);
+                    }, 1000);
                 }
-                //on_del:function(){
-                //    ex.remove(self.rows,row)
-                //    layer.close(self.opened_layer_indx)
-                //},
             }
         });
 
-        eventBus.$emit('openlayer_changed');
+        //eventBus.$emit('openlayer_changed')
+
     });
 }
 
@@ -1572,15 +1548,15 @@ var mix_table_data = {
             cfg.show_load();
             ex.post('/d/ajax', JSON.stringify(post_data), function (resp) {
                 cfg.hide_load();
-                var new_row = resp.get_row;
+                var crt_row = resp.get_row;
                 //var pop_id= new Date().getTime()
                 // e = {name:'after_save',new_row:event.new_row,old_row:event.old_row}
                 //eventBus.$on('pop-win-'+pop_id,function(e){
                 //    self.update_or_insert(e.new_row, e.old_row)
                 //})
                 //pop_fields_layer(new_row,kws.heads,kws.ops,pop_id)
-                pop_fields_layer(new_row, fields_ctx, function (e) {
-                    self.update_or_insert(e.new_row, e.old_row);
+                pop_fields_layer(crt_row, fields_ctx, function (new_row) {
+                    self.update_or_insert(new_row, crt_row);
                 });
             });
         },
@@ -2013,11 +1989,13 @@ Vue.component('com-table-checkbox', check_box);
 
 /*
 额外的点击列，例如“详情”
+head['label']=
+head['fun']
 * */
 
 var extra_click = {
     props: ['rowData', 'field', 'index'],
-    template: '<span class="clickable" v-text="head.extra_label" @click="on_click()"></span>',
+    template: '<span class="clickable" v-text="head.label" @click="on_click()"></span>',
     created: function created() {
         // find head from parent table
         var table_par = this.$parent;
@@ -2036,7 +2014,7 @@ var extra_click = {
 
     methods: {
         on_click: function on_click() {
-            this.$emit('on-custom-comp', { name: this.head.extra_fun, row: this.rowData, head: this.head });
+            this.$emit('on-custom-comp', { name: this.head.fun, row: this.rowData, head: this.head });
         }
 
     }
@@ -2405,12 +2383,15 @@ var pop_fields = exports.pop_fields = {
 
             fun(function (pop_row) {
                 //pop_fields_layer(pop_row,self.head.fields_heads,ops,self.head.extra_mixins,function(kws){
-                pop_fields_layer(pop_row, self.head.fields_ctx, function (kws) {
+                pop_fields_layer(pop_row, self.head.fields_ctx, function (new_row) {
 
-                    if (kws.name == 'after_save') {
-                        var fun = after_save[self.head.after_save.fun];
-                        fun(self, kws.new_row, kws.old_row);
-                    }
+                    var fun = after_save[self.head.after_save.fun];
+                    fun(self, new_row, pop_row);
+
+                    //if(kws.name =='after_save'){
+                    //    var fun = after_save[self.head.after_save.fun]
+                    //    fun(self,kws.new_row,kws.old_row)
+                    //}
                 });
             }, this.rowData, kws);
         }
@@ -2519,8 +2500,8 @@ var pop_fields = exports.pop_fields = {
                 extra_mixin: []
             };
 
-            pop_edit_local(self.rowData, fields_ctx, function (resp) {
-                ex.assign(self.rowData, resp.new_row);
+            pop_edit_local(self.rowData, fields_ctx, function (new_row) {
+                ex.assign(self.rowData, new_row);
                 //self.$emit('on-custom-comp',{fun:'edit_over'} )
             });
         }
@@ -3169,7 +3150,8 @@ var com_pop_field = exports.com_pop_field = {
     },
     methods: {
         after_save: function after_save(new_row) {
-            this.$emit('sub_success', { new_row: new_row, old_row: this.row });
+            //this.$emit('sub_success',{new_row:new_row,old_row:this.row})
+            this.$emit('submit-success', new_row);
             ex.assign(this.row, new_row);
         },
         del_row: function del_row() {

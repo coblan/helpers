@@ -12,7 +12,8 @@ export var  com_pop_field= {
     },
     methods:{
         after_save:function(new_row){
-            this.$emit('sub_success',{new_row:new_row,old_row:this.row})
+            //this.$emit('sub_success',{new_row:new_row,old_row:this.row})
+            this.$emit('submit-success',new_row)
             ex.assign(this.row,new_row)
         },
         del_row:function(){

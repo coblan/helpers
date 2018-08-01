@@ -1,8 +1,5 @@
 var no_sub_to_server={
     methods:{
-        submit:function(){
-            this.$emit('sub_success',this.row)
-        },
         save:function(){
             //cfg.show_load()
             this.$emit('sub_success',{new_row:this.row})

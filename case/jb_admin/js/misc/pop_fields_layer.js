@@ -1,5 +1,16 @@
 /*
 * root 层面创建Vue组件，形成弹出框
+
+ fields_ctx:{
+         'heads':[{'name':'matchid','label':'比赛','editor':'com-field-label-shower','readonly':True},
+                 {'name':'home_score','label':'主队分数','editor':'linetext'},
+            ],
+         'ops':[{"fun":'produce_match_outcome','label':'保存','editor':'com-field-op-btn'},],
+         'extra_mixins':['produce_match_outcome'],
+         'fieldsPanel': 'produceMatchOutcomePanel',
+         // 使用extra_mixins与fieldsPanel的区别是，设置fieldPanel可以防止引入com_pop_field对象，如果只设置extra_mixin的话，会默认引入com_pop_field
+ }
+
 * */
 import {com_pop_field} from  './com_pop_fields'
 
@@ -37,12 +48,12 @@ export  function pop_fields_layer (row,fields_ctx,callback){
         },
         shadeClose: true, //点击遮罩关闭
         content:`<div id="fields-pop-${pop_id}" style="height: 100%;">
-                    <component :is="'com-pop-fields-'+com_id" @del_success="on_del()" @sub_success="on_sub_success($event)"
+                    <component :is="'com-pop-fields-'+com_id" @del_success="on_del()" @submit-success="on_sub_success($event)"
                     :row="row" :heads="fields_heads" :ops="ops"></component>
                 </div>`,
         end: function () {
 
-            eventBus.$emit('openlayer_changed')
+            //eventBus.$emit('openlayer_changed')
 
         }
     });
@@ -58,55 +69,22 @@ Vue.nextTick(function(){
             ops:ops,
             com_id:com_id,
         },
-        //computed:{
-        //    fields_heads:function(){
-        //        if(this.has_heads_adaptor){
-        //            return this.heads_adaptor(this.heads)
-        //        } else{
-        //            return this.heads
-        //        }
-        //    }
-        //},
-        mounted:function(){
-            //if(! trigger.head.use_table_row){
-            //    var self=this
-            //    cfg.show_load()
-            //    var dc ={fun:'get_row',model_name:model_name}
-            //    dc[relat_field] = trigger.rowData[relat_field]
-            //    var post_data=[dc]
-            //    ex.post('/d/ajax',JSON.stringify(post_data),function(resp){
-            //        self.row = resp.get_row
-            //        cfg.hide_load()
-            //    })
-            //}
 
-        },
         methods:{
-            on_sub_success:function(event){
-                // 将新建的row 插入到表格中
-                //if(! old_row.pk) {
-                //    self.rows.splice(0, 0, new_row)
-                //}
-                //if(this.head.use_table_row){
-                //    var old_row = event.old_row
-                //    var new_row=event.new_row
-                //    ex.assign(self.row,new_row)
-                //}else{
-                //    trigger.update_row()
-                //}
-                callback({name:'after_save',new_row:event.new_row,old_row:event.old_row})
-                //eventBus.$emit('pop-win-'+pop_id,{name:'after_save',new_row:event.new_row,old_row:event.old_row})
-                layer.close(gb.opened_layer_indx)
-            },
-            //on_del:function(){
-            //    ex.remove(self.rows,row)
-            //    layer.close(self.opened_layer_indx)
-            //},
+            on_sub_success:function(new_row){
+                callback(new_row)
+                //callback({name:'after_save',new_row:event.new_row,old_row:event.old_row})
+
+                setTimeout(function(){
+                    layer.close(gb.opened_layer_indx)
+                },1000)
+
+            }
         }
     })
 
 
-    eventBus.$emit('openlayer_changed')
+    //eventBus.$emit('openlayer_changed')
 
 
 })
