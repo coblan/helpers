@@ -43,13 +43,17 @@ class DepartManageForm(ModelFields):
     def dict_head(self, head):
         if head['name']=='recv_event':
             head['type']='check_select'
+            head['options'] = [
+                {'value':'normal_work','label':'普通工作'},
+                {'value':'importent_work','label':'重要工作'}
+            ]
         return head
     
-    def dict_options(self):
-        return {'recv_event':[
-        {'value':'normal_work','label':'普通工作'},
-        {'value':'importent_work','label':'重要工作'}
-        ]}
+    #def dict_options(self):
+        #return {'recv_event':[
+        #{'value':'normal_work','label':'普通工作'},
+        #{'value':'importent_work','label':'重要工作'}
+        #]}
     #def clean_recv_event(self):
         #data = self.cleaned_data['recv_event']
         #return data

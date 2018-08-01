@@ -12,6 +12,11 @@ class ManyProc(BaseFieldProc):
         return {
             name:out
             }
+    
+    def dict_field_head(self,head):  
+        head['editor'] = 'field_multi_chosen'
+        #head['options'] = 
+        return head    
 
 field_map.update({
     ManyToManyField:ManyProc

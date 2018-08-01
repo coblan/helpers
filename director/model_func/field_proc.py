@@ -2,6 +2,9 @@
 from __future__ import unicode_literals
 
 class BaseFieldProc(object):
+    def __init__(self, instance = None): 
+        self.instance = instance
+        
     def to_dict(self,inst,name):
         """返回字典
         to_dict 函数会调用这个方法

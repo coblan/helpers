@@ -34,21 +34,31 @@ class EmployeeFields(ModelFields):
     def dict_head(self, head):
         if head['name']=='eid':
             head['readonly']=True
+        if head['name'] == 'user':
+            users =list(User.objects.filter(employee=None))
+            if self.instance.user:
+                users.append(self.instance.user) 
+            
+            user_options=[{'value':None,'label':'---'}]
+            options=[{'value':user.pk,'label':str(user)}for user in users]
+            options=sorted(options,cmp=lambda x,y: cmp(x['label'],y['label']) )
+            user_options.extend(options)
+            head['options'] = user_options
         return head
     
-    def dict_options(self):
-        users =list(User.objects.filter(employee=None))
-        if self.instance.user:
-            users.append(self.instance.user) 
+    #def dict_options(self):
+        #users =list(User.objects.filter(employee=None))
+        #if self.instance.user:
+            #users.append(self.instance.user) 
         
-        user_options=[{'value':None,'label':'---'}]
-        options=[{'value':user.pk,'label':str(user)}for user in users]
-        options=sorted(options,cmp=lambda x,y: cmp(x['label'],y['label']) )
-        user_options.extend(options)
-        return {
-            'user':user_options,
-            #'depart':[],
-        }
+        #user_options=[{'value':None,'label':'---'}]
+        #options=[{'value':user.pk,'label':str(user)}for user in users]
+        #options=sorted(options,cmp=lambda x,y: cmp(x['label'],y['label']) )
+        #user_options.extend(options)
+        #return {
+            #'user':user_options,
+            ##'depart':[],
+        #}
     
 class EmployeeItem(FieldsPage):
     template=''

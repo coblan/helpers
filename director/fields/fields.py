@@ -16,36 +16,10 @@ from ..models import LogModel
 from helpers.director.base_data import director
 from helpers.director.data_format.json_format import DirectorEncoder
 from django.conf import settings
-
+from django.utils.translation import ugettext as _
 import logging
 sql_log = logging.getLogger('director.sql_op')
 
-#def save_row(row,user,request):
-    #for k in row: # convert model instance to pk for normal validation
-        #if isinstance(row[k],models.Model):
-            #row[k]=row[k].pk
-    
-    #model= name_to_model(row['_class'])
-    #fields_cls = model_dc.get(model).get('fields')
-    
-    #kw=request.GET.dict()
-    #fields_obj=fields_cls(row,crt_user=user,**kw)
-    #if fields_obj.is_valid():
-        #fields_obj.save_form()
-        #return fields_obj.get_row()
-    #else:
-        #raise ValidationError(fields_obj.errors)
-
-#def clean_dict(dc,model):
-    #model_name = model_to_name(model)
-    #for k,v in dc.items():
-        #if not k.startswith('_'):
-            #field_path = model_name+'.'+k
-            #if field_map.get(field_path):
-                #map_cls = field_map[field_path]
-                #field = model._meta.get_fields()
-                #dc[k]=map_cls().from_dict(v,model._meta.get_field(k)) 
-    #return dc
 
 class ModelFields(forms.ModelForm):
     """
@@ -243,37 +217,97 @@ class ModelFields(forms.ModelForm):
     def getExtraHeads(self): 
         return []
     
+    def _base_dict_fieldmap_heads(self): 
+        out = []
+        for k,v in self.fields.items():
+            #if isinstance(include,(tuple,list)) and k not in include:
+                #continue
+            if k in self.hide_fields:
+                continue
+            
+            dc = {'name':k,'label':_(v.label),
+                  'help_text':str(v.help_text),
+                  'editor':'linetext'}
+                  
+            if hasattr(v,'required'):
+                dc['required'] = v.required   
+                     
+            if hasattr(v,'widget') and isinstance(v.widget,forms.widgets.Select):
+                dc['editor'] = 'sim_select' 
+                #dc['options']=[{'value':val,'label':str(lab)} for val,lab in v.widget.choices]
+            elif v.__class__==forms.fields.CharField:
+                if v.max_length:
+                    dc.update({'editor':'linetext','maxlength':v.max_length})
+                else:
+                    dc.update({'editor':'blocktext'})
+            elif v.__class__==forms.fields.BooleanField:
+                dc['editor']='bool'
+                #dc['no_auto_label']=True
+            elif v.__class__ in [forms.fields.IntegerField,forms.fields.FloatField]:
+                dc['editor']='number'
+            elif v.__class__  == forms.fields.DateField:
+                dc['editor']='date'
+            if v.__class__ ==forms.models.ModelMultipleChoiceField and \
+                isinstance(v.widget,forms.widgets.SelectMultiple):
+                dc['editor']='field_multi_chosen'
+            
+            dc = self.dict_head(dc)
+            
+            model_field = self._meta.model._meta.get_field(k)
+            fieldName = model_to_name(self._meta.model) + '.' + k
+            if fieldName in field_map:
+                mapper=field_map[fieldName]
+                mapper(self.instance).dict_field_head(dc)
+            elif model_field.__class__ in field_map:
+                mapper=field_map[model_field.__class__]
+                mapper(self.instance).dict_field_head(dc)                 
+            
+            if hasattr(v, 'choices') and 'opitons' not in dc:
+                dc['options'] = [{'value':val,'label':str(lab)} for val,lab in v.choices]
+            
+            out.append(dc)
+        return out
+    
+     
     def get_heads(self):
         
-        heads = form_to_head(self)
-        self.heads = heads
-        
+        #heads = form_to_head(self)
+        heads = self._base_dict_fieldmap_heads()
         heads.extend(self.getExtraHeads())
-        heads = [head for head in heads if head['name'] not in self.hide_fields]
         
-        for head in heads:
-            self.dict_head(head)        
-        
-        for k,v in self.get_options().items():
-            for head in heads:
-                if head['name']==k:
-                    head['options']=v
-                    break
-                    
+        self.heads = heads
         for name in self.get_readonly_fields():
             for head in heads:
                 if head['name']==name:
                     head['readonly']=True 
                     break
-       
-        
+                
         for head in heads:
             if head.get('editor') == 'sim_select' and not head.get('options'):
                 v = self.fields.get(head['name'])
                 head['options']=[{'value':val,'label':str(lab)} for val,lab in v.widget.choices]
                 if len(head['options']) > 300:
                     print('%s 选择项数目大于 300，请使用分页选择框' % head['name'])
-                    break
+                    break        
+                
+        
+        #heads = [head for head in heads if head['name'] not in self.hide_fields]
+        
+              
+        
+        #for k,v in self.get_options().items():
+            #for head in heads:
+                #if head['name']==k:
+                    #head['options']=v
+                    #break
+                    
+    
+                
+        #for head in heads:
+            #self.dict_head(head)         
+       
+       
+
         
         if self.field_sort:
             tmp_heads = []
@@ -317,11 +351,7 @@ class ModelFields(forms.ModelForm):
         """
         if not self.can_access():
             raise PermissionDenied('you have no Permission access %s'%self.instance._meta.model_name)
-        #if self._meta.fields:
-            #include = [x for x in self._meta.fields if x in self.fields]
-        #else:
-            #include= self.fields
-            
+
         # self.fields 是经过 权限 处理了的。可读写的字段
         row = to_dict(self.instance,filt_attr=self.dict_row,include=self.fields)
         
@@ -340,8 +370,8 @@ class ModelFields(forms.ModelForm):
     def dict_row(self,inst):
         return {}
     
-    def get_options(self):
-        options=self.dict_options()
+    #def get_options(self):
+        #options=self.dict_options()
         
         #for name,field in self.fields.items():
             #if name in options.keys():
@@ -352,10 +382,10 @@ class ModelFields(forms.ModelForm):
                 #options[name]=[{'value':x[0],'label':str(x[1])} for x in list(field.choices)]
      
             
-        return options
+        #return options
 
-    def dict_options(self):
-        return {}
+    #def dict_options(self):
+        #return {}
     
     def dict_head(self,head):
         return head      

@@ -298,7 +298,10 @@ def get_model_label(ins_or_model):
 
 def form_to_head(form,include=None):
     """
+    这个函数功能挪到 modelfields 里面去了，这个函数应该是没有用了 [2018-8-1]
     convert form to head dict.一般接下来，会json.dumps()处理一下，然后传到到前端页面
+    
+    
     """
     out = []
     for k,v in form.fields.items():
@@ -334,10 +337,10 @@ def form_to_head(form,include=None):
         fieldName = model_to_name(form._meta.model) + '.' + k
         if fieldName in field_map:
             mapper=field_map[fieldName]
-            mapper().dict_field_head(dc)
+            mapper(form.instance).dict_field_head(dc)
         elif model_field.__class__ in field_map:
             mapper=field_map[model_field.__class__]
-            mapper().dict_field_head(dc)   
+            mapper(form.instance).dict_field_head(dc)   
             
         out.append(dc)
     return out
