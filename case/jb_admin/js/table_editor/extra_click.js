@@ -1,5 +1,7 @@
 /*
 额外的点击列，例如“详情”
+head['extra_label']=
+head['extra_fun']
 * */
 
 
