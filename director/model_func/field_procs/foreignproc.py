@@ -1,13 +1,18 @@
 # encoding:utf-8
 from ..field_proc  import BaseFieldProc
 from django.db.models import ForeignKey
+from django.core.exceptions import ObjectDoesNotExist
 from .. .base_data import field_map
 from django.utils.translation import ugettext as _
 from ..dictfy  import model_to_name,name_to_model
 
 class ForeignProc(BaseFieldProc):
     def to_dict(self,inst,name):
-        foreign=getattr(inst,name,None)
+        try:
+            foreign=getattr(inst,name,None)
+        except ObjectDoesNotExist:
+            foreign = None
+            
         if foreign:
             return {
                 name:  getattr(inst,name + '_id', '') , #foreign.pk,
