@@ -2,7 +2,9 @@ var no_sub_to_server={
     methods:{
         save:function(){
             //cfg.show_load()
-            this.$emit('sub_success',{new_row:this.row})
+            if(this.isValid()){
+                this.$emit('submit-success',{new_row:this.row})
+            }
             //cfg.hide_load(2000)
         }
     }
