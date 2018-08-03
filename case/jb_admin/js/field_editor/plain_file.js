@@ -58,7 +58,7 @@ export var com_file_uploader = {
             var def_config = {
                 upload_url:'/d/upload',
                 accept:'image/*',
-                multiple:true,
+                multiple:false,
                 sortable:true,
                 on_click:function(url){
                     window.open(
