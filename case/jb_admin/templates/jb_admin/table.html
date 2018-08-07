@@ -76,6 +76,7 @@
                     var new_row = kws.new_row
                     var old_row= kws.old_row
                     self.update_or_insert(new_row,old_row)
+
                 },
 
             })
@@ -94,6 +95,11 @@
 //            },
             back_to_main_page:function(){
                 this.tabgroup.crt='main'
+                var self=this
+                Vue.nextTick(function(){
+                    self.$refs.e_table.doLayout()
+                })
+
             },
             show_tab:function(name){
                 this.tabgroup.crt = name

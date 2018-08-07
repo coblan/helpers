@@ -251,7 +251,7 @@ class ModelFields(forms.ModelForm):
                 isinstance(v.widget,forms.widgets.SelectMultiple):
                 dc['editor']='field_multi_chosen'
             
-            dc = self.dict_head(dc)
+            
             
             model_field = self._meta.model._meta.get_field(k)
             fieldName = model_to_name(self._meta.model) + '.' + k
@@ -260,8 +260,9 @@ class ModelFields(forms.ModelForm):
                 mapper(self.instance).dict_field_head(dc)
             elif model_field.__class__ in field_map:
                 mapper=field_map[model_field.__class__]
-                mapper(self.instance).dict_field_head(dc)                 
-            
+                mapper(self.instance).dict_field_head(dc)    
+                
+            dc = self.dict_head(dc)
             if hasattr(v, 'choices') and 'opitons' not in dc:
                 dc['options'] = [{'value':val,'label':str(lab)} for val,lab in v.choices]
             

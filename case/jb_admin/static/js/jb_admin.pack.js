@@ -717,7 +717,7 @@ var com_file_uploader = exports.com_file_uploader = {
             var def_config = {
                 upload_url: '/d/upload',
                 accept: 'image/*',
-                multiple: true,
+                multiple: false,
                 sortable: true,
                 on_click: function on_click(url) {
                     window.open(url, '_blank' // <- This is what makes it open in a new window.
@@ -1597,9 +1597,18 @@ var mix_table_data = {
                 //    self.update_or_insert(e.new_row, e.old_row)
                 //})
                 //pop_fields_layer(new_row,kws.heads,kws.ops,pop_id)
-                pop_fields_layer(crt_row, fields_ctx, function (new_row) {
-                    self.update_or_insert(new_row, crt_row);
-                });
+
+                if (kws.tab_name) {
+                    self.show_tab(kws.tab_name);
+                    self.crt_row = crt_row;
+
+                    //self.$emit('operation',{fun:'switch_to_tab',tab_name:kws.tab_editor,row:crt_row})
+                    //self.switch_to_tab(kws.tab_editor)
+                } else {
+                    pop_fields_layer(crt_row, fields_ctx, function (new_row) {
+                        self.update_or_insert(new_row, crt_row);
+                    });
+                }
             });
         },
         editRow: function editRow(kws) {
@@ -1608,7 +1617,10 @@ var mix_table_data = {
         },
         update_or_insert: function update_or_insert(new_row, old_row) {
             if (old_row && !old_row.pk) {
-                this.rows.splice(0, 0, new_row);
+
+                //var rows = this.rows.splice(0, 0, new_row)
+
+                this.rows = [new_row].concat(this.rows);
             } else {
                 var table_row = ex.findone(this.rows, { pk: new_row.pk });
                 ex.assign(table_row, new_row);

@@ -6,14 +6,14 @@ from helpers.func.dot_dict import DotObj
 
 def get_static_obj(path):
     if not os.path.exists(path):
-        return {}
-    
-    dc={}
-    for name in os.listdir(path):
-        abs_path=os.path.join(path,name)
-        if os.path.isfile(abs_path):
-            key=name.replace('.','_')
-            dc[key]=int(os.path.getmtime(abs_path))
+        dc= {}
+    else:
+        dc={}
+        for name in os.listdir(path):
+            abs_path=os.path.join(path,name)
+            if os.path.isfile(abs_path):
+                key=name.replace('.','_')
+                dc[key]=int(os.path.getmtime(abs_path))
     
     return DotObj(dc)
 
