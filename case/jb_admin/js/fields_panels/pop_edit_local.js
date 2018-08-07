@@ -1,25 +1,29 @@
-var no_sub_to_server={
-    methods:{
-        save:function(){
-            //cfg.show_load()
-            if(this.isValid()){
-                this.$emit('submit-success',{new_row:this.row})
+
+
+
+
+function pop_edit_local(row,fields_ctx,callback,layerConfig){
+
+    var no_sub_to_server={
+        methods:{
+            save:function(){
+                //cfg.show_load()
+                if(this.isValid()){
+                    this.$emit('submit-success',this.row)
+                }
+                //cfg.hide_load(2000)
             }
-            //cfg.hide_load(2000)
         }
     }
-}
 
-
-function pop_edit_local(row,fields_ctx,callback){
     if(!fields_ctx.extra_mixins){
-        fields_ctx.extra_mixins =['no_sub_to_server']
+        fields_ctx.extra_mixins =[no_sub_to_server]
     }else{
-        fields_ctx.extra_mixins= ['no_sub_to_server'] .concat(fields_ctx.extra_mixins)
+        fields_ctx.extra_mixins= [no_sub_to_server] .concat(fields_ctx.extra_mixins)
     }
-
-    pop_fields_layer(row,fields_ctx,callback)
+   var openfields_layer_index =  pop_fields_layer(row,fields_ctx,callback,layerConfig)
+    return openfields_layer_index
 
 }
-window.no_sub_to_server=no_sub_to_server
+//window.no_sub_to_server=no_sub_to_server
 window.pop_edit_local = pop_edit_local

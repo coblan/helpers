@@ -75,3 +75,4 @@ import * as ele_table from  './table_panels/ele_table.js'
 
 
 import * as user_info from  './page_com/header_bar/user_info.js'
+import * as nice_validator_rule from  './nice_validator_rule.js'

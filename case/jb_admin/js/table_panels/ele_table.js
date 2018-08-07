@@ -194,6 +194,7 @@ var ele_page={
                 </el-pagination>`
 }
 
+Vue.component('com-table-bus',ele_table)
 Vue.component('com-table-bus-ops',ele_operations)
 Vue.component('com-table-bus-filter',ele_filter)
 Vue.component('com-table-bus-page',ele_page)

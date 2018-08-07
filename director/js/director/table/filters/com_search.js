@@ -1,5 +1,13 @@
 var com_search = {
     props:['head','search_args'],
+    data:function(){
+        if(! this.search_args._q){
+            Vue.set(this.search_args,'_q','')
+        }
+        return {
+
+        }
+    },
     template:`<div>
     <input style="max-width: 20em;min-width: 10em;"
              type="text"
