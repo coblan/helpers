@@ -8,6 +8,11 @@ function init_table_ctx(ctx){
 
     ctx.row_filters=ctx.row_filters || []
     ctx.director_name =ctx.director_name || ''
+
+    if(ctx.selectable == undefined){
+        ctx.selectable =true
+    }
+
     return ctx
 }
 
@@ -32,7 +37,7 @@ var ele_table={
     data:function(){
         return {
             heads:this.bus.heads,
-            rows:this.bus.rows,
+            //rows:this.bus.rows,
             search_args:this.bus.search_args,
             row_sort:this.bus.row_sort,
             footer:this.bus.footer
@@ -60,14 +65,14 @@ var ele_table={
         //bus_serarch_count:function(){
         //    return this.bus.search_count
         //},
-        //rows:{
-        //    get:function(){
-        //        return this.bus.rows
-        //    },
-        //    set:function(v){
-        //        this.bus.rows=v
-        //    }
-        //},
+        rows:{
+            get:function(){
+                return this.bus.rows
+            },
+            set:function(v){
+                this.bus.rows=v
+            }
+        },
         //search_args:{
         //    get:function(){
         //        return this.bus.search_args
@@ -90,7 +95,7 @@ var ele_table={
                               @sort-change="sortChange($event)"
                               @selection-change="handleSelectionChange"
                               :summary-method="getSum">
-                        <el-table-column
+                        <el-table-column v-if="bus.selectable"
                                 type="selection"
                                 width="55">
                         </el-table-column>

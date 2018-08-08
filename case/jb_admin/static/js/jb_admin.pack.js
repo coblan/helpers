@@ -2966,6 +2966,11 @@ function init_table_ctx(ctx) {
 
     ctx.row_filters = ctx.row_filters || [];
     ctx.director_name = ctx.director_name || '';
+
+    if (ctx.selectable == undefined) {
+        ctx.selectable = true;
+    }
+
     return ctx;
 }
 
@@ -2989,7 +2994,7 @@ var ele_table = {
     data: function data() {
         return {
             heads: this.bus.heads,
-            rows: this.bus.rows,
+            //rows:this.bus.rows,
             search_args: this.bus.search_args,
             row_sort: this.bus.row_sort,
             footer: this.bus.footer
@@ -3016,14 +3021,14 @@ var ele_table = {
         //bus_serarch_count:function(){
         //    return this.bus.search_count
         //},
-        //rows:{
-        //    get:function(){
-        //        return this.bus.rows
-        //    },
-        //    set:function(v){
-        //        this.bus.rows=v
-        //    }
-        //},
+        rows: {
+            get: function get() {
+                return this.bus.rows;
+            },
+            set: function set(v) {
+                this.bus.rows = v;
+            }
+        }
         //search_args:{
         //    get:function(){
         //        return this.bus.search_args
@@ -3036,7 +3041,7 @@ var ele_table = {
     // height="100%"
     //style="width: 100%"
     mixins: [mix_table_data, mix_ele_table_adapter],
-    template: '  <el-table class="table" ref="e_table"\n                              :data="rows"\n                              border\n                              show-summary\n                              :fit="false"\n                              :stripe="true"\n                              size="mini"\n                              @sort-change="sortChange($event)"\n                              @selection-change="handleSelectionChange"\n                              :summary-method="getSum">\n                        <el-table-column\n                                type="selection"\n                                width="55">\n                        </el-table-column>\n\n                        <template  v-for="head in heads">\n\n                            <el-table-column v-if="head.editor"\n                                             :show-overflow-tooltip="is_show_tooltip(head) "\n                                             :label="head.label"\n                                             :prop="head.name.toString()"\n                                             :sortable="is_sort(head)"\n                                             :width="head.width">\n                                <template slot-scope="scope">\n                                    <component :is="head.editor"\n                                               @on-custom-comp="on_td_event($event)"\n                                               :row-data="scope.row" :field="head.name" :index="scope.$index">\n                                    </component>\n\n                                </template>\n\n                            </el-table-column>\n\n                            <el-table-column v-else\n                                             :show-overflow-tooltip="is_show_tooltip(head) "\n                                             :prop="head.name.toString()"\n                                             :label="head.label"\n                                             :sortable="is_sort(head)"\n                                             :width="head.width">\n                            </el-table-column>\n\n                        </template>\n\n                    </el-table>\n'
+    template: '  <el-table class="table" ref="e_table"\n                              :data="rows"\n                              border\n                              show-summary\n                              :fit="false"\n                              :stripe="true"\n                              size="mini"\n                              @sort-change="sortChange($event)"\n                              @selection-change="handleSelectionChange"\n                              :summary-method="getSum">\n                        <el-table-column v-if="bus.selectable"\n                                type="selection"\n                                width="55">\n                        </el-table-column>\n\n                        <template  v-for="head in heads">\n\n                            <el-table-column v-if="head.editor"\n                                             :show-overflow-tooltip="is_show_tooltip(head) "\n                                             :label="head.label"\n                                             :prop="head.name.toString()"\n                                             :sortable="is_sort(head)"\n                                             :width="head.width">\n                                <template slot-scope="scope">\n                                    <component :is="head.editor"\n                                               @on-custom-comp="on_td_event($event)"\n                                               :row-data="scope.row" :field="head.name" :index="scope.$index">\n                                    </component>\n\n                                </template>\n\n                            </el-table-column>\n\n                            <el-table-column v-else\n                                             :show-overflow-tooltip="is_show_tooltip(head) "\n                                             :prop="head.name.toString()"\n                                             :label="head.label"\n                                             :sortable="is_sort(head)"\n                                             :width="head.width">\n                            </el-table-column>\n\n                        </template>\n\n                    </el-table>\n'
 };
 var ele_operations = {
     props: ['bus'],
