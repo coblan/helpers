@@ -683,10 +683,11 @@ window.cfg = {
     show_load: function show_load() {
         this._loader_index = layer.load(1);
     },
-    hide_load: function hide_load(delay) {
+    hide_load: function hide_load(delay, msg) {
         layer.close(this._loader_index);
         if (delay) {
-            layer.msg('操作成功', { time: delay });
+            var realMsg = msg || '操作成功';
+            layer.msg(realMsg, { time: delay });
         }
     }
 };
