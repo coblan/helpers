@@ -1,6 +1,7 @@
 require('./scss/fields.scss')
 require('./table_editor/scss/table_editor_base.scss')
 require('./scss/tab.scss')
+require('./scss/table.scss')
 
 
 //table mix

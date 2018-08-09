@@ -85,7 +85,7 @@ var ele_table={
     // height="100%"
     //style="width: 100%"
     mixins:[mix_table_data,mix_ele_table_adapter],
-    template:`  <el-table class="table" ref="e_table"
+    template:`  <el-table class="table flat-head" ref="e_table"
                               :data="rows"
                               border
                               show-summary
