@@ -2903,7 +2903,7 @@ Vue.component('com-op-delete', delete_op);
 
 var op_a = {
     props: ['head'],
-    template: ' <a class="clickable" @click="operation_call()"  v-text="head.label" ></a>',
+    template: ' <a class="clickable" @click="operation_call()"  :style="head.style">\n    <i v-if="head.icon" :class=\'["fa",head.icon]\'></i> <span  v-text="head.label"></span></a>',
     data: function data() {
         return {
             enable: true
