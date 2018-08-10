@@ -263,7 +263,7 @@ class ModelFields(forms.ModelForm):
                 mapper(self.instance).dict_field_head(dc)    
                 
             dc = self.dict_head(dc)
-            if hasattr(v, 'choices') and 'opitons' not in dc:
+            if hasattr(v, 'choices') and 'options' not in dc :
                 dc['options'] = [{'value':val,'label':str(lab)} for val,lab in v.choices]
             
             out.append(dc)
