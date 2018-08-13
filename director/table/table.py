@@ -456,7 +456,7 @@ class ModelTable(object):
         ls = self.permited_fields()   
         ls = [x for x in ls if x not in self.hide_fields]
         heads = model_to_head(self.model,include=ls)
-        heads=[self.fields_map_head(head) for head in heads]
+        #heads=[self.fields_map_head(head) for head in heads]
         
         heads.extend(self.getExtraHead())
         heads = self.fields_sort_heads(heads)   
