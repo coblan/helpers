@@ -40,6 +40,7 @@ import * as html_shower from  './table_editor/html_shower.js'
 import * as bool_editor from  './table_editor/bool_editor.js'
 import * as jump_link from  './table_editor/jump_link.js'
 import * as change_order from  './table_editor/change_order.js'
+import * as digit from  './table_editor/digit.js'
 
 
 // field editor

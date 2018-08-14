@@ -36,6 +36,27 @@ var mix_table_data={
                     }
                 })
             },
+            selected_set_and_save:function(kws){
+                if(self.selected.length==0){
+                    cfg.showMsg('请选择一些行')
+                    return
+                }
+                //var rows =[]
+                ex.each(self.selected,function(row){
+                    row[kws.field]=kws.value
+
+                    //rows.push({pk:row.pk,
+                    //    _director_name:row._director_name,
+                    //    kws.field:kws.value}
+                    //)
+                })
+                var post_data=[{fun:'save_rows',rows:self.selected}]
+                cfg.show_load()
+                ex.post('/d/ajax',JSON.stringify(post_data),function(resp){
+                    cfg.hide_load(2000)
+                })
+
+            },
             emitEvent:function(e){
                 self.$emit(e)
             },

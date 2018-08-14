@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 
 from ..field_proc  import BaseFieldProc
-from django.db.models import IntegerField
+from django.db.models import IntegerField, SmallIntegerField
 from .. .base_data import field_map
 from django.utils.translation import ugettext as _
 
@@ -14,6 +14,15 @@ class IntProc(BaseFieldProc):
                 'label':_(f.verbose_name),
                 'editor':'com-date-range-filter'
                 }
+
+    def dict_table_head(self,head):
+        """
+        """
+        if self.field.choices:
+            head['editor'] = 'com-table-mapper'
+            head['options'] =  [{'value':x[0],'label':x[1]} for x in self.field.choices]
+        return head 
+    
     def filter_get_head(self, name, model):
         this_field= model._meta.get_field(name)
         if this_field.choices:        
@@ -32,5 +41,6 @@ class IntProc(BaseFieldProc):
 
 
 field_map.update({
-    IntegerField:IntProc
+    IntegerField:IntProc, 
+    SmallIntegerField: IntProc,
 })
