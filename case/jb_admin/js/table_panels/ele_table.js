@@ -40,7 +40,7 @@ var ele_table={
             //rows:this.bus.rows,
             search_args:this.bus.search_args,
             row_sort:this.bus.row_sort,
-            footer:this.bus.footer
+            //footer:this.bus.footer
         }
     },
     mounted:function(){
@@ -73,6 +73,14 @@ var ele_table={
                 this.bus.rows=v
             }
         },
+        footer:{
+            get:function(){
+                return this.bus.footer
+            },
+            set:function(v){
+                this.bus.footer=v
+            }
+        }
         //search_args:{
         //    get:function(){
         //        return this.bus.search_args
@@ -206,5 +214,8 @@ Vue.component('com-table-bus-page',ele_page)
 
 window.init_table_ctx=init_table_ctx
 window.init_table_bus=init_table_bus
+
+window.bus_ele_table_logic=ele_table
+
 window.ele_table_logic=ele_table
 window.ele_table_page_logic=ele_page
