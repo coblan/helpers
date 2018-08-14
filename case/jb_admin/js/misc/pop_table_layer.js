@@ -131,7 +131,7 @@ export  function pop_table_layer (row,table_ctx,callback){
             footer:[],
             selected:[],
             del_info:[],
-            search_args: {},
+            search_args: table_ctx.search_args || {},
 
             height:350,
         },

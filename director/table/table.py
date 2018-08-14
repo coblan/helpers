@@ -86,7 +86,7 @@ class TrivalPageNum(object):
 class RowSearch(object):
     names=[]
     model=''
-    def __init__(self,q,user,allowed_names,kw={}):
+    def __init__(self,q,user = None,allowed_names = [],kw={}):
         self.valid_name=[x for x in self.names if x in allowed_names]
         self.crt_user=user
         self._names=[x for x in self.names if x in allowed_names]        
@@ -297,6 +297,12 @@ class ModelTable(object):
     fields_sort=[]
     pop_edit_field=""
     def __init__(self,_page=1,row_sort=[],row_filter={},row_search= '',crt_user=None,perpage=None,**kw):
+        """
+        kw['search_args']只是一个记录，在获取到rows时，一并返回前端页面，便于显示。
+        而真正的查询参数已经被路由到各个查询组件中，具体参见 cls.parse_request / gen_from_search_args 函数
+        如果需要设置查询的默认参数，需要到 cls.clean_search_args中去设置
+        
+        """
         self.search_args = kw.get('search_args')
         
         self.kw=kw
@@ -419,6 +425,7 @@ class ModelTable(object):
             'row_pages':{}, # self.pagenum.get_context(),
             'row_sort':self.row_sort.get_context(),
             'row_filters': ls , #self.row_filter.get_context(),
+            'search_args': {},
             #'search_tip':self.row_search.get_context(),
             'director_name': self.get_director_name(),#model_to_name(self.model),
             'ops' : self.get_operation()
