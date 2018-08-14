@@ -360,11 +360,11 @@ def model_to_head(model,include=[],exclude=[]):
             fieldName = model_name + '.' + field.name
             if fieldName in field_map:
                 mapper = field_map.get(fieldName)
-                mapper().dict_table_head(dc)
+                mapper(field = field).dict_table_head(dc)
             elif field.__class__ in field_map:
                 mapper = field_map.get(field.__class__)
                 if hasattr(mapper,'dict_table_head'):
-                    mapper().dict_table_head(dc)
+                    mapper(field = field).dict_table_head(dc)
             elif isinstance(field,models.ForeignKey):
                 dc['editor']='com-table-label-shower'            
                 
