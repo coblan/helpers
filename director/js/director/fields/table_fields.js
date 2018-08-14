@@ -4,7 +4,7 @@ import {baseInput} from  '../inputs/basic'
 var table_fields={
     props:['heads','row','inputWidth','labelWidth'],
     template:`<table class="table-fields">
-        <tr v-for="head in heads">
+        <tr v-for="(head,index) in heads" :class="{'last-input':index==heads.length-1}">
             <td class="field-label" :style="{width:labelWidth}" valign="top">
             <div style="position: relative">
                 <span v-text="head.label"></span>
@@ -12,7 +12,7 @@ var table_fields={
             </div>
 
             </td>
-            <td  :style="{width:inputWidth}">
+            <td class="field-input"  :style="{width:inputWidth}">
             <div class="field-input">
                 <component v-if="head.editor" :is="head.editor"
                      @field-event="$emit('field-event',$event)"

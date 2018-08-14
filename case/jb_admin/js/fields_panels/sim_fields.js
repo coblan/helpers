@@ -26,11 +26,13 @@ var com_sim_fields = {
                     style="width: 30em;text-align: left;display: inline-block;">
                     <slot>
                     <tr>
-                    <td></td>
-                    <td>
-                    <button @click="submit"
-                        style="width: 100%;position: relative;" type="btn"
-                            class="btn btn-primary btn-sm"><span v-text="okBtn"></span></button></td>
+                    <td colspan="2">
+                        <div class="submit-block">
+                            <button @click="submit"
+                            style="width: 100%;position: relative;" type="btn"
+                                class="btn btn-primary btn-sm"><span v-text="okBtn"></span></button>
+                        </div>
+                     </td>
                     </tr>
                     </slot>
            </com-table-fields>
