@@ -13,7 +13,7 @@ var table_fields={
 
             </td>
             <td class="field-input"  :style="{width:inputWidth}">
-            <div class="field-input">
+            <div>
                 <component v-if="head.editor" :is="head.editor"
                      @field-event="$emit('field-event',$event)"
                      :head="head" :row="row"></component>
