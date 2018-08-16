@@ -1,0 +1,63 @@
+
+.sim-fields{
+
+  .table-fields{
+    margin: auto;
+  }
+  .field-label{
+    min-width: 5em;
+    text-align: left;
+  }
+
+  .field-input{
+    width: 23em;
+    text-align: left;
+  }
+
+  .submit-block{
+      margin-top: 1em;
+      text-align: center;
+
+    button{
+        width: 100%;
+    }
+  }
+
+}
+
+.sim-fields.field-panel.pop{
+    padding-top: 8px;
+
+    .field-input{
+        width: 20em;
+    }
+
+  .submit-block{
+    margin-top: 10px;
+    button{
+        width: 100%;
+    }
+  }
+}
+
+.sim-fields.field-panel.mb{
+  padding:1em;
+
+  .field-label{
+    min-width: 5em;
+    text-align: right;
+  }
+
+  .field-input{
+    width: auto;
+  }
+
+  .submit-block{
+    margin-top: 10px;
+    button{
+      width: 100%;
+    }
+  }
+}
+
+

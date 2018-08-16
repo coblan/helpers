@@ -8,7 +8,7 @@ var table_fields={
             <td class="field-label-td" :style="{width:labelWidth}" valign="top">
             <div class="field-label" style="position: relative">
                 <span v-text="head.label"></span>
-                <span class="req_star" style="position: absolute;right: -0.5em;top:0" v-if='head.required'>*</span>
+                <span class="req_star" v-if='head.required'>*</span>
             </div>
 
             </td>

@@ -1,3 +1,4 @@
+require('./scss/sim_fields.scss')
 
 var com_sim_fields = {
     props:{
@@ -8,7 +9,11 @@ var com_sim_fields = {
                 return '确定'
             }
             },
-        exClass:''
+        btnCls:{
+            default:function(){
+                return 'btn-primary btn-sm'
+            }
+        }
         },
     data:function (){
         return {
@@ -20,17 +25,14 @@ var com_sim_fields = {
         }
     },
     mixins:[mix_fields_data,mix_nice_validator],
-    template:` <div class="field-panel" style="text-align:center;">
-                <com-table-fields :heads="heads" :row="row"
-                    input-width="23em" label-width="8em"
-                    style="width: 30em;text-align: left;display: inline-block;">
+    template:` <div class="field-panel sim-fields" style="text-align:center;">
+                <com-table-fields :heads="heads" :row="row">
                     <slot>
                     <tr>
                     <td colspan="2">
                         <div class="submit-block">
-                            <button @click="submit"
-                            style="width: 100%;position: relative;" type="btn"
-                                class="btn btn-primary btn-sm"><span v-text="okBtn"></span></button>
+                            <button @click="submit" type="btn"
+                                :class="['btn',btnCls]"><span v-text="okBtn"></span></button>
                         </div>
                      </td>
                     </tr>
