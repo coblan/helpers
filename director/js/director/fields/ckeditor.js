@@ -83,7 +83,7 @@ var ck_complex = {
 
 var ckeditor = {
 	template:`<div class='ckeditor'>
-		    	<textarea class="form-control" name="ri" ></textarea>
+		    	<textarea class="form-control" ></textarea>
 	    	</div>`,
 	props:{
 		value:{},

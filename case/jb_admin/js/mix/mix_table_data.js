@@ -153,6 +153,7 @@ var mix_table_data={
                 //var rows = this.rows.splice(0, 0, new_row)
 
                 this.rows=[new_row].concat(this.rows)
+                this.row_pages.total+=1
 
             }else{
                 var table_row = ex.findone(this.rows,{pk:new_row.pk})
@@ -224,9 +225,11 @@ var mix_table_data={
                 var post_data = [{fun: 'del_rows', rows: self.selected}]
                 $.post('/d/ajax', JSON.stringify(post_data), function (resp) {
                     //layer.close(ss)
+                    self.row_pages.total -= self.selected.length
                     ex.each(self.selected,function(item){
                         ex.remove(self.rows,{pk:item.pk} )
                     })
+
                     self.selected=[]
                     cfg.hide_load(200)
                     //layer.msg('删除成功',{time:2000})

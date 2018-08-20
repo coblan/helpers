@@ -319,7 +319,9 @@ export var baseInput={
     richtext:{
         props:['row','head'],
         template:`<div style="position: relative"><span v-if='head.readonly' v-text='row[head.name]'></span>
+        <input type="text" :name='head.name' style="display:none">
             			<ckeditor ref="ck" :style="head.style" v-model="row[head.name]" :id="'id_'+head.name" :config="head.config"></ckeditor>
+
                        </div>`,
         methods:{
             commit:function(){

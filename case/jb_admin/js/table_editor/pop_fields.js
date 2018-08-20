@@ -45,10 +45,12 @@ export  var pop_fields={
 
             fun(function(pop_row){
                 //pop_fields_layer(pop_row,self.head.fields_heads,ops,self.head.extra_mixins,function(kws){
-                pop_fields_layer(pop_row,self.head.fields_ctx,function(new_row){
+               var win_index =  pop_fields_layer(pop_row,self.head.fields_ctx,function(new_row){
 
                         var fun = after_save[self.head.after_save.fun]
                         fun(self,new_row,pop_row)
+
+                   layer.close(win_index)
 
                     //if(kws.name =='after_save'){
                     //    var fun = after_save[self.head.after_save.fun]
