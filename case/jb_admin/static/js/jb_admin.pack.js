@@ -1067,7 +1067,7 @@ function pop_fields_layer(row, fields_ctx, callback, layerConfig) {
             var total_height = $('#fields-pop-' + pop_id).parents('.layui-layer').height();
             $('#fields-pop-' + pop_id).parents('.layui-layer-content').height(total_height - 42);
         },
-        shadeClose: true, //点击遮罩关闭
+        //shadeClose: true, //点击遮罩关闭
         content: '<div id="fields-pop-' + pop_id + '" style="height: 100%;">\n                    <component :is="\'com-pop-fields-\'+com_id" @del_success="on_del()" @submit-success="on_sub_success($event)"\n                    :row="row" :heads="fields_heads" :ops="ops"></component>\n                </div>',
         end: function end() {
 
@@ -1666,8 +1666,11 @@ var mix_table_data = {
             var self = this;
 
             cfg.show_load();
+            self.rows = [];
+
             var post_data = [{ fun: 'get_rows', director_name: self.director_name, search_args: self.search_args }];
             $.post('/d/ajax', JSON.stringify(post_data), function (resp) {
+
                 self.rows = resp.get_rows.rows;
                 self.row_pages = resp.get_rows.row_pages;
                 self.search_args = resp.get_rows.search_args;

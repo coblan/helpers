@@ -60,7 +60,7 @@ export  function pop_fields_layer (row,fields_ctx,callback,layerConfig){
             var total_height= $('#fields-pop-'+pop_id).parents('.layui-layer').height()
             $('#fields-pop-'+pop_id).parents('.layui-layer-content').height(total_height-42)
         },
-        shadeClose: true, //点击遮罩关闭
+        //shadeClose: true, //点击遮罩关闭
         content:`<div id="fields-pop-${pop_id}" style="height: 100%;">
                     <component :is="'com-pop-fields-'+com_id" @del_success="on_del()" @submit-success="on_sub_success($event)"
                     :row="row" :heads="fields_heads" :ops="ops"></component>

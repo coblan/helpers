@@ -168,8 +168,11 @@ var mix_table_data={
             var self=this
 
             cfg.show_load()
+            self.rows=[]
+
             var post_data=[{fun:'get_rows',director_name:self.director_name,search_args:self.search_args}]
             $.post('/d/ajax',JSON.stringify(post_data),function(resp){
+
                 self.rows = resp.get_rows.rows
                 self.row_pages = resp.get_rows.row_pages
                 self.search_args=resp.get_rows.search_args
