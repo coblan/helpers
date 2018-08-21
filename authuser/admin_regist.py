@@ -4,6 +4,7 @@ from django.utils.translation import ugettext as _
 from .validate_code import faseGetDataUrl
 from .models import  ValidatorCode
 from .base_data import  auth_page_dc
+from django import forms
 
 class RegistFormPage(FieldsPage):
     template = 'authuser/regist_auth.html'
@@ -39,6 +40,9 @@ class RegistFormPage(FieldsPage):
         def dict_head(self, head): 
             if head['name'] == 'password':
                 head['editor'] = 'password'
+                head['fv_rule'] = '密码:'
+            if head['name']=='email':
+                head['label'] ='电子邮件'
             return head
     
         
@@ -60,7 +64,7 @@ class RegistFormPage(FieldsPage):
         def clean_username(self):
             username = self.cleaned_data.get('username')
             if User.objects.filter(username=username).exists():
-                raise forms.ValidationError(_('username has been exist'))
+                raise forms.ValidationError(_('username already exist'))
             return username
 
         def clean(self):
