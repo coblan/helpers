@@ -1561,6 +1561,19 @@ var mix_table_data = {
                     cfg.hide_load(2000);
                 });
             },
+            ajax_row: function ajax_row(kws) {
+                // kws 是head : {app:'maindb',ajax_fun:"get_money'}
+                if (self.selected.length == 0) {
+                    cfg.showMsg('请选择一行数据');
+                    return;
+                }
+                var row = self.selected[0];
+                var post_data = [{ fun: kws.ajax_fun, row: row }];
+                cfg.show_load();
+                ex.post('/d/ajax/' + kws.app, JSON.stringify(post_data), function (resp) {
+                    cfg.hide_load(2000);
+                });
+            },
             emitEvent: function emitEvent(e) {
                 self.$emit(e);
             },
