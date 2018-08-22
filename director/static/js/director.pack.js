@@ -652,7 +652,7 @@ var baseInput = exports.baseInput = {
     },
     richtext: {
         props: ['row', 'head'],
-        template: '<div style="position: relative"><span v-if=\'head.readonly\' v-text=\'row[head.name]\'></span>\n            \t\t\t<ckeditor ref="ck" :style="head.style" v-model="row[head.name]" :id="\'id_\'+head.name" :config="head.config"></ckeditor>\n                       </div>',
+        template: '<div style="position: relative"><span v-if=\'head.readonly\' v-text=\'row[head.name]\'></span>\n        <input type="text" :name=\'head.name\' style="display:none">\n            \t\t\t<ckeditor ref="ck" :style="head.style" v-model="row[head.name]" :id="\'id_\'+head.name" :config="head.config"></ckeditor>\n\n                       </div>',
         methods: {
             commit: function commit() {
                 this.row[this.head.name] = this.$refs.ck.editor.getData();
@@ -683,10 +683,11 @@ window.cfg = {
     show_load: function show_load() {
         this._loader_index = layer.load(1);
     },
-    hide_load: function hide_load(delay) {
+    hide_load: function hide_load(delay, msg) {
         layer.close(this._loader_index);
         if (delay) {
-            layer.msg('操作成功', { time: delay });
+            var realMsg = msg || '操作成功';
+            layer.msg(realMsg, { time: delay });
         }
     }
 };
@@ -1181,7 +1182,7 @@ var ck_complex = {
 };
 
 var ckeditor = {
-	template: '<div class=\'ckeditor\'>\n\t\t    \t<textarea class="form-control" name="ri" ></textarea>\n\t    \t</div>',
+	template: '<div class=\'ckeditor\'>\n\t\t    \t<textarea class="form-control" ></textarea>\n\t    \t</div>',
 	props: {
 		value: {},
 		config: {},
@@ -2643,7 +2644,7 @@ __webpack_require__(73);
 
 var table_fields = {
     props: ['heads', 'row', 'inputWidth', 'labelWidth'],
-    template: '<table class="table-fields">\n        <tr v-for="head in heads">\n            <td class="field-label" :style="{width:labelWidth}" valign="top">\n            <div style="position: relative">\n                <span v-text="head.label"></span>\n                <span class="req_star" style="position: absolute;right: -0.5em;top:0" v-if=\'head.required\'>*</span>\n            </div>\n\n            </td>\n            <td  :style="{width:inputWidth}">\n            <div class="field-input">\n                <component v-if="head.editor" :is="head.editor"\n                     @field-event="$emit(\'field-event\',$event)"\n                     :head="head" :row="row"></component>\n                <span v-else v-text="row[head.name]"></span>\n                <span class="help-text clickable">\n                    <i style="color: #3780af;position: relative;top:10px;"  v-if="head.help_text" @click="show_msg(head.help_text,$event)" class="fa fa-question-circle" ></i>\n                </span>\n            </div>\n\n            </td>\n        </tr>\n        <slot></slot>\n    </table>',
+    template: '<table class="table-fields">\n        <tr v-for="(head,index) in heads" :class="{\'last-input\':index==heads.length-1}">\n            <td class="field-label-td" :style="{width:labelWidth}" valign="top">\n            <div class="field-label" style="position: relative">\n                <span v-text="head.label"></span>\n                <span class="req_star" v-if=\'head.required\'>*</span>\n            </div>\n\n            </td>\n            <td class="field-input-td"  :style="{width:inputWidth}">\n            <div class="field-input">\n                <component v-if="head.editor" :is="head.editor"\n                     @field-event="$emit(\'field-event\',$event)"\n                     :head="head" :row="row"></component>\n                <span v-else v-text="row[head.name]"></span>\n                <span class="help-text clickable">\n                    <i style="color: #3780af;position: relative;top:10px;"  v-if="head.help_text" @click="show_msg(head.help_text,$event)" class="fa fa-question-circle" ></i>\n                </span>\n            </div>\n\n            </td>\n        </tr>\n        <slot></slot>\n    </table>',
     methods: {
         show_msg: function show_msg(msg, event) {
             layer.tips(msg, event.target);
@@ -3182,8 +3183,14 @@ Vue.component('com-date-range-filter', com_date_range);
 
 
 var com_search = {
-         props: ['head', 'search_args'],
-         template: '<div>\n    <input style="max-width: 20em;min-width: 10em;"\n             type="text"\n             name="_q"\n             v-model=\'search_args._q\'\n             :placeholder=\'head.search_tip\'\n             @keyup.13="$emit(\'submit\')"\n             class=\'form-control input-sm\'/>\n    </div> '
+    props: ['head', 'search_args'],
+    data: function data() {
+        if (!this.search_args._q) {
+            Vue.set(this.search_args, '_q', '');
+        }
+        return {};
+    },
+    template: '<div>\n    <input style="max-width: 20em;min-width: 10em;"\n             type="text"\n             name="_q"\n             v-model=\'search_args._q\'\n             :placeholder=\'head.search_tip\'\n             @keyup.13="$emit(\'submit\')"\n             class=\'form-control input-sm\'/>\n    </div> '
 };
 Vue.component('com-search-filter', com_search);
 
@@ -3947,7 +3954,7 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, "@charset \"UTF-8\";\n/*\r\nclass的用法：\r\n================\r\nfield-panel  用于nice validator 捕捉\r\n\r\nsuit 模仿django-suit的样式，例如有线条\r\nplain 普通模式，没有线条\r\n\r\nmsg-bottom  nice validator的位置在下面，默认在右侧\r\n\r\n*/\n.error {\n  color: red; }\n\n.field_input {\n  position: relative; }\n\n.field-panel.no-label label {\n  display: none; }\n\n.field-panel.suit {\n  background-color: #F5F5F5;\n  margin: auto;\n  padding: 20px 30px;\n  position: relative;\n  border: 1px solid #D9D9D9; }\n  .field-panel.suit:after {\n    content: '';\n    display: block;\n    position: absolute;\n    top: 0px;\n    left: 0px;\n    bottom: 0px;\n    width: 180px;\n    border-radius: 6px;\n    background-color: #fff;\n    z-index: 0; }\n  .field-panel.suit .form-group.field {\n    display: flex;\n    align-items: flex-start;\n    margin-bottom: 0; }\n    .field-panel.suit .form-group.field .field_input {\n      flex-grow: 0;\n      padding: 5px 20px; }\n      .field-panel.suit .form-group.field .field_input input {\n        max-width: 25em; }\n      .field-panel.suit .form-group.field .field_input .ckeditor {\n        padding: 20px; }\n      .field-panel.suit .form-group.field .field_input .multi-chosen {\n        width: 30em; }\n    .field-panel.suit .form-group.field:first-child .control-label {\n      border-top: 5px solid #FFF; }\n    .field-panel.suit .form-group.field .control-label {\n      width: 150px;\n      text-align: right;\n      padding: 5px 30px;\n      z-index: 100;\n      flex-shrink: 0;\n      border-top: 1px solid #EEE; }\n\n.field-panel.plain {\n  background-color: white;\n  margin: auto;\n  padding: 20px 30px;\n  position: relative; }\n  .field-panel.plain .form-group.field {\n    display: flex;\n    align-items: flex-start;\n    margin-bottom: 10px; }\n  .field-panel.plain .field_input {\n    flex-grow: 0;\n    padding: 5px 10px;\n    width: 20em; }\n  .field-panel.plain .control-label {\n    min-width: 8em;\n    text-align: right;\n    padding: 5px 10px;\n    padding-top: 8px;\n    flex-shrink: 0;\n    font-weight: 400; }\n\n.field-panel .msg-box.n-right {\n  position: absolute;\n  left: 100%; }\n\n.field-panel.msg-bottom .msg-box.n-right {\n  position: absolute;\n  left: 1em;\n  bottom: 0; }\n\n.field_input {\n  position: relative; }\n\n._tow-col-sel select {\n  min-height: 7em; }\n\nimg.img-uploador {\n  max-width: 100px;\n  max-height: 100px; }\n\n.req_star {\n  color: red; }\n", ""]);
+exports.push([module.i, "@charset \"UTF-8\";\n/*\r\nclass的用法：\r\n================\r\nfield-panel  用于nice validator 捕捉\r\n\r\nsuit 模仿django-suit的样式，例如有线条\r\nplain 普通模式，没有线条\r\n\r\nmsg-bottom  nice validator的位置在下面，默认在右侧\r\n\r\n*/\n.error {\n  color: red; }\n\n.field_input {\n  position: relative; }\n\n.field-panel.no-label label {\n  display: none; }\n\n.field-panel.suit {\n  background-color: #F5F5F5;\n  margin: auto;\n  padding: 20px 30px;\n  position: relative;\n  border: 1px solid #D9D9D9; }\n  .field-panel.suit:after {\n    content: '';\n    display: block;\n    position: absolute;\n    top: 0px;\n    left: 0px;\n    bottom: 0px;\n    width: 180px;\n    border-radius: 6px;\n    background-color: #fff;\n    z-index: 0; }\n  .field-panel.suit .form-group.field {\n    display: flex;\n    align-items: flex-start;\n    margin-bottom: 0; }\n    .field-panel.suit .form-group.field .field_input {\n      flex-grow: 0;\n      padding: 5px 20px; }\n      .field-panel.suit .form-group.field .field_input input {\n        max-width: 25em; }\n      .field-panel.suit .form-group.field .field_input .ckeditor {\n        padding: 20px; }\n      .field-panel.suit .form-group.field .field_input .multi-chosen {\n        width: 30em; }\n    .field-panel.suit .form-group.field:first-child .control-label {\n      border-top: 5px solid #FFF; }\n    .field-panel.suit .form-group.field .control-label {\n      width: 150px;\n      text-align: right;\n      padding: 5px 30px;\n      z-index: 100;\n      flex-shrink: 0;\n      border-top: 1px solid #EEE; }\n\n.field-panel.plain {\n  background-color: white;\n  margin: auto;\n  padding: 20px 30px;\n  position: relative; }\n  .field-panel.plain .form-group.field {\n    display: flex;\n    align-items: flex-start;\n    margin-bottom: 10px; }\n  .field-panel.plain .field_input {\n    flex-grow: 0;\n    padding: 5px 10px;\n    width: 20em; }\n  .field-panel.plain .control-label {\n    min-width: 8em;\n    text-align: right;\n    padding: 5px 10px;\n    padding-top: 8px;\n    flex-shrink: 0;\n    font-weight: 400; }\n\n.field-panel .msg-box.n-right {\n  position: absolute;\n  left: 100%; }\n\n.field-panel.msg-bottom .msg-box.n-right {\n  position: absolute;\n  left: 1em;\n  bottom: 0; }\n\n.field_input {\n  position: relative; }\n\n.field-input {\n  position: relative;\n  margin-bottom: 1em; }\n\n._tow-col-sel select {\n  min-height: 7em; }\n\nimg.img-uploador {\n  max-width: 100px;\n  max-height: 100px; }\n\n.req_star {\n  color: red; }\n", ""]);
 
 // exports
 

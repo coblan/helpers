@@ -24,6 +24,7 @@ def get_lib(request):
         'element': '/static/lib/element/index.js',
         'element_css': '/static/lib/element/index.css',
         'md5_js': '/static/lib/md5.min.js',
+        'moment': '/static/lib/moment2.17.1.min.js',
     }
     return dc
 

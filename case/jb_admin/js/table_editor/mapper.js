@@ -20,14 +20,16 @@ var mapper = {
             }
         }
         this.table_par = table_par
+        this.head= ex.findone(this.table_par.heads,{name:this.field})
     },
     computed:{
         show_data:function(){
             if(this.table_par){
                 var value = this.rowData[this.field]
-                var head  = ex.findone(this.table_par.heads,{name:this.field})
-                var options = head.options
-                return options[value]
+                var options = this.head.options
+                var opt = ex.findone(options,{value:value})
+                return opt['label']
+                //return options[value]
             }
 
         }

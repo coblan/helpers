@@ -12,10 +12,11 @@ window.cfg={
     show_load:function(){
         this._loader_index = layer.load(1)
     },
-    hide_load:function(delay){
+    hide_load:function(delay,msg){
         layer.close(this._loader_index)
         if(delay){
-            layer.msg('操作成功',{time:delay})
+            var realMsg = msg || '操作成功'
+            layer.msg(realMsg,{time:delay})
         }
     }
 }

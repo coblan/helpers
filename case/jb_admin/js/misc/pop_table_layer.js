@@ -45,6 +45,7 @@ export  function pop_table_layer (row,table_ctx,callback){
                                       height="100%"
                                       style="width: 100%">
                                 <el-table-column
+                                        v-if="selectable"
                                         type="selection"
                                         width="55">
                                 </el-table-column>
@@ -96,14 +97,32 @@ export  function pop_table_layer (row,table_ctx,callback){
     </div>`
     });
 
+    if(table_ctx.extra_mixins){
+        var real_extra_mixins = ex.map(table_ctx.extra_mixins,function(item){
+            if(typeof (item)=='string'){
+                return window[item]
+            }else{
+                return item
+            }
+        })
+        var mixins= [mix_table_data,mix_ele_table_adapter] .concat(real_extra_mixins)
+    }else{
+        var mixins= [mix_table_data,mix_ele_table_adapter]
+    }
+    if(table_ctx.selectable ==undefined ){
+        table_ctx.selectable =true
+    }
 
     var layer_vue = new Vue({
         el:'#pop-table-'+pop_id,
+
         data:{
             par_row:row,
             //table_ctx:table_ctx,
-
+            table_ctx:table_ctx,
             heads:table_ctx.heads,
+            selectable:table_ctx.selectable,
+
             row_filters:table_ctx.row_filters,
             row_sort:table_ctx.row_sort,
             director_name:table_ctx.director_name,
@@ -112,11 +131,11 @@ export  function pop_table_layer (row,table_ctx,callback){
             footer:[],
             selected:[],
             del_info:[],
-            search_args: {},
+            search_args: table_ctx.search_args || {},
 
             height:350,
         },
-        mixins:[mix_table_data,mix_ele_table_adapter],
+        mixins:mixins,
         mounted:function(){
             this.getRows()
             //this.$refs.com_table.getRows()
@@ -128,7 +147,7 @@ export  function pop_table_layer (row,table_ctx,callback){
             var self=this
             ex.assign(this.op_funs, {
                 send_select: function (kws) {
-                    //callback({name:'selected',row:kws.row})
+                    // 用作选择框时，(只选择一个) 会用到该函数
                     callback(kws.row)
                     layer.close(opened_layer_indx)
 

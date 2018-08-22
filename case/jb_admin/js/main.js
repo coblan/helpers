@@ -1,6 +1,7 @@
 require('./scss/fields.scss')
 require('./table_editor/scss/table_editor_base.scss')
 require('./scss/tab.scss')
+require('./scss/table.scss')
 
 
 //table mix
@@ -21,6 +22,7 @@ import * as ele_tree from  './field_editor/ele_tree.js'
 import * as table_picture from  './table_editor/picture.js'
 import * as table_label_shower from  './table_editor/label_shower.js'
 import * as table_mapper from  './table_editor/mapper.js'
+import * as call_fun from  './table_editor/call_fun.js'
 import * as table_pop_fields from  './table_editor/pop_fields.js'
 import * as pop_fields_local from  './table_editor/pop_fields_local.js'
 import * as table_linetext from  './table_editor/linetext.js'
@@ -28,6 +30,7 @@ import * as table_checkbox from  './table_editor/check_box.js'
 import * as switch_to_tab from  './table_editor/switch_to_tab.js'
 import * as select from  './table_editor/select.js'
 import * as extra_click from  './table_editor/extra_click.js'
+import * as extra_click_plus from  './table_editor/extra_click_plus.js'
 import * as array_mapper from  './table_editor/array_mapper.js'
 import * as operations from  './table_editor/operations.js'
 import * as bool_shower from  './table_editor/bool_shower.js'
@@ -37,6 +40,7 @@ import * as html_shower from  './table_editor/html_shower.js'
 import * as bool_editor from  './table_editor/bool_editor.js'
 import * as jump_link from  './table_editor/jump_link.js'
 import * as change_order from  './table_editor/change_order.js'
+import * as digit from  './table_editor/digit.js'
 
 
 // field editor
@@ -69,5 +73,8 @@ import * as pop_fields_layer from  './misc/pop_fields_layer.js'
 import * as sim_fields from  './fields_panels/sim_fields.js'
 import * as pop_edit_local from  './fields_panels/pop_edit_local.js'
 
+import * as ele_table from  './table_panels/ele_table.js'
+
 
 import * as user_info from  './page_com/header_bar/user_info.js'
+import * as nice_validator_rule from  './nice_validator_rule.js'

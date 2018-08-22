@@ -8,11 +8,11 @@ require('./scss/file_uploader.scss')
 
 export var field_file_uploader={
     props:['row','head'],
-    template:`<div><com-file-uploader-tmp v-model="row[head.name]" :config="head.config" :readonly="head.readonly"></com-file-uploader-tmp></div>`
+    template:`<div><com-file-uploader-tmp :name="head.name" v-model="row[head.name]" :config="head.config" :readonly="head.readonly"></com-file-uploader-tmp></div>`
 }
 
 export var com_file_uploader = {
-    props:['value','readonly','config'],
+    props:['value','readonly','config','name'],
     data:function(){
 
         return {
@@ -24,8 +24,8 @@ export var com_file_uploader = {
 
     template:`<div class="file-uploader">
     <div v-if="!readonly">
-        <input v-if="cfg.multiple" v-show="!cfg.com_btn" class="pic-input" type="file" @change="upload_pictures($event)" :accept="cfg.accept" multiple="multiple">
-        <input v-else v-show="!cfg.com_btn" class="pic-input" type="file" @change="upload_pictures($event)" :accept="cfg.accept">
+        <input v-if="cfg.multiple" :name="name"  v-show="!cfg.com_btn" class="pic-input" type="file" @change="upload_pictures($event)" :accept="cfg.accept" multiple="multiple">
+        <input v-else v-show="!cfg.com_btn" :name="name" class="pic-input" type="file" @change="upload_pictures($event)" :accept="cfg.accept">
     </div>
 
     <div class="wrap">
@@ -58,7 +58,7 @@ export var com_file_uploader = {
             var def_config = {
                 upload_url:'/d/upload',
                 accept:'image/*',
-                multiple:true,
+                multiple:false,
                 sortable:true,
                 on_click:function(url){
                     window.open(

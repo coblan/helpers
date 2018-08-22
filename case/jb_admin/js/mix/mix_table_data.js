@@ -36,6 +36,27 @@ var mix_table_data={
                     }
                 })
             },
+            selected_set_and_save:function(kws){
+                if(self.selected.length==0){
+                    cfg.showMsg('请选择一些行')
+                    return
+                }
+                //var rows =[]
+                ex.each(self.selected,function(row){
+                    row[kws.field]=kws.value
+
+                    //rows.push({pk:row.pk,
+                    //    _director_name:row._director_name,
+                    //    kws.field:kws.value}
+                    //)
+                })
+                var post_data=[{fun:'save_rows',rows:self.selected}]
+                cfg.show_load()
+                ex.post('/d/ajax',JSON.stringify(post_data),function(resp){
+                    cfg.hide_load(2000)
+                })
+
+            },
             emitEvent:function(e){
                 self.$emit(e)
             },
@@ -105,9 +126,20 @@ var mix_table_data={
                 //    self.update_or_insert(e.new_row, e.old_row)
                 //})
                 //pop_fields_layer(new_row,kws.heads,kws.ops,pop_id)
-                pop_fields_layer(crt_row,fields_ctx,function(new_row){
-                    self.update_or_insert(new_row, crt_row)
-                })
+
+                if(kws.tab_name){
+                    self.show_tab(kws.tab_name)
+                    self.crt_row= crt_row
+
+                    //self.$emit('operation',{fun:'switch_to_tab',tab_name:kws.tab_editor,row:crt_row})
+                    //self.switch_to_tab(kws.tab_editor)
+
+                }else{
+                    pop_fields_layer(crt_row,fields_ctx,function(new_row){
+                        self.update_or_insert(new_row, crt_row)
+                    })
+                }
+
             })
         },
         editRow:function(kws){
@@ -117,11 +149,17 @@ var mix_table_data={
         },
         update_or_insert:function(new_row,old_row){
             if(old_row && ! old_row.pk) {
-                this.rows.splice(0, 0, new_row)
+
+                //var rows = this.rows.splice(0, 0, new_row)
+
+                this.rows=[new_row].concat(this.rows)
+                this.row_pages.total+=1
+
             }else{
                 var table_row = ex.findone(this.rows,{pk:new_row.pk})
                 ex.assign(table_row,new_row)
             }
+
         },
         getRows:function(){
             /*
@@ -130,8 +168,11 @@ var mix_table_data={
             var self=this
 
             cfg.show_load()
+            self.rows=[]
+
             var post_data=[{fun:'get_rows',director_name:self.director_name,search_args:self.search_args}]
             $.post('/d/ajax',JSON.stringify(post_data),function(resp){
+
                 self.rows = resp.get_rows.rows
                 self.row_pages = resp.get_rows.row_pages
                 self.search_args=resp.get_rows.search_args
@@ -187,9 +228,11 @@ var mix_table_data={
                 var post_data = [{fun: 'del_rows', rows: self.selected}]
                 $.post('/d/ajax', JSON.stringify(post_data), function (resp) {
                     //layer.close(ss)
+                    self.row_pages.total -= self.selected.length
                     ex.each(self.selected,function(item){
                         ex.remove(self.rows,{pk:item.pk} )
                     })
+
                     self.selected=[]
                     cfg.hide_load(200)
                     //layer.msg('删除成功',{time:2000})

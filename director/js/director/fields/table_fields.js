@@ -4,15 +4,15 @@ import {baseInput} from  '../inputs/basic'
 var table_fields={
     props:['heads','row','inputWidth','labelWidth'],
     template:`<table class="table-fields">
-        <tr v-for="head in heads">
-            <td class="field-label" :style="{width:labelWidth}" valign="top">
-            <div style="position: relative">
+        <tr v-for="(head,index) in heads" :class="{'last-input':index==heads.length-1}">
+            <td class="field-label-td" :style="{width:labelWidth}" valign="top">
+            <div class="field-label" style="position: relative">
                 <span v-text="head.label"></span>
-                <span class="req_star" style="position: absolute;right: -0.5em;top:0" v-if='head.required'>*</span>
+                <span class="req_star" v-if='head.required'>*</span>
             </div>
 
             </td>
-            <td  :style="{width:inputWidth}">
+            <td class="field-input-td"  :style="{width:inputWidth}">
             <div class="field-input">
                 <component v-if="head.editor" :is="head.editor"
                      @field-event="$emit('field-event',$event)"

@@ -14,19 +14,33 @@
 * */
 import {com_pop_field} from  './com_pop_fields'
 
-var gb={}
 
-export  function pop_fields_layer (row,fields_ctx,callback){
+
+export  function pop_fields_layer (row,fields_ctx,callback,layerConfig){
     // row,head ->//model_name,relat_field
+
 
     var heads = fields_ctx.heads
     var ops = fields_ctx.ops
     var extra_mixins=fields_ctx.extra_mixins || []
-    var com_fields = window[fields_ctx.fieldsPanel] || com_pop_field
-    var com_id = md5(extra_mixins)
+
+    if(typeof(fields_ctx.fieldsPanel)=='string' ){
+        var com_fields = window[fields_ctx.fieldsPanel] || com_pop_field
+    }else{
+        var com_fields = fields_ctx.fieldsPanel || com_pop_field
+    }
+
+    var id_string = JSON.stringify(com_fields) + JSON.stringify(extra_mixins)
+    var com_id = md5(id_string)
+
     if(! window['_vue_com_'+com_id]){
-        extra_mixins = ex.map(extra_mixins,function(name){
-            return window[name]
+        extra_mixins = ex.map(extra_mixins,function(mix){
+            if(typeof(mix)=='string'){
+                return window[mix]
+            }else {
+                return mix
+            }
+
         })
         //var com_pop_field_real = $.extend({}, com_fields);
         //com_pop_field_real.mixins = com_fields.mixins.concat(extra_mixins)
@@ -37,16 +51,16 @@ export  function pop_fields_layer (row,fields_ctx,callback){
 
     var pop_id =new Date().getTime()
 
-    gb.opened_layer_indx = layer.open({
+    var layer_config = {
         type: 1,
         area: ['800px', '500px'],
         title: '详细',
         resize:true,
         resizing: function(layero){
             var total_height= $('#fields-pop-'+pop_id).parents('.layui-layer').height()
-             $('#fields-pop-'+pop_id).parents('.layui-layer-content').height(total_height-42)
+            $('#fields-pop-'+pop_id).parents('.layui-layer-content').height(total_height-42)
         },
-        shadeClose: true, //点击遮罩关闭
+        //shadeClose: true, //点击遮罩关闭
         content:`<div id="fields-pop-${pop_id}" style="height: 100%;">
                     <component :is="'com-pop-fields-'+com_id" @del_success="on_del()" @submit-success="on_sub_success($event)"
                     :row="row" :heads="fields_heads" :ops="ops"></component>
@@ -56,39 +70,50 @@ export  function pop_fields_layer (row,fields_ctx,callback){
             //eventBus.$emit('openlayer_changed')
 
         }
-    });
+    }
+    if(layerConfig){
+        ex.assign(layer_config,layerConfig)
+    }
+    var openfields_layer_index = layer.open(layer_config);
 
-Vue.nextTick(function(){
+    (function(pop_id,row,heads,ops,com_id,openfields_layer_index){
 
-    new Vue({
-        el:'#fields-pop-'+pop_id,
-        data:{
-            has_heads_adaptor:false,
-            row:row,
-            fields_heads:heads,
-            ops:ops,
-            com_id:com_id,
-        },
+        //Vue.nextTick(function(){
 
-        methods:{
-            on_sub_success:function(new_row){
-                callback(new_row)
-                //callback({name:'after_save',new_row:event.new_row,old_row:event.old_row})
+            new Vue({
+                el:'#fields-pop-'+pop_id,
+                data:{
+                    has_heads_adaptor:false,
+                    row:row,
+                    fields_heads:heads,
+                    ops:ops,
+                    com_id:com_id,
+                },
 
-                setTimeout(function(){
-                    layer.close(gb.opened_layer_indx)
-                },1000)
-
-            }
-        }
-    })
+                methods:{
+                    on_sub_success:function(new_row){
+                      callback(new_row,openfields_layer_index)
+                        //callback({name:'after_save',new_row:event.new_row,old_row:event.old_row})
 
 
-    //eventBus.$emit('openlayer_changed')
+                        //if(success){
+                        //    setTimeout(function(){
+                        //        layer.close(openfields_layer_index)
+                        //    },1000)
+                        //}
 
 
-})
+                    }
+                }
+            })
 
+            //eventBus.$emit('openlayer_changed')
+
+        //})
+    })(pop_id,row,heads,ops,com_id,openfields_layer_index)
+
+
+    return openfields_layer_index
 
 }
 
