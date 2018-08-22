@@ -37,10 +37,18 @@ var mix_table_data={
                 })
             },
             selected_set_and_save:function(kws){
-                if(self.selected.length==0){
-                    cfg.showMsg('请选择一些行')
-                    return
+                if(kws.one_row){
+                    if(self.selected.length !=1){
+                        cfg.showMsg('请选择一行数据！')
+                        return
+                    }
+                }else{
+                    if(self.selected.length==0){
+                        cfg.showMsg('请至少选择一行数据！')
+                        return
+                    }
                 }
+
                 //var rows =[]
                 ex.each(self.selected,function(row){
                     row[kws.field]=kws.value
@@ -55,6 +63,22 @@ var mix_table_data={
                 ex.post('/d/ajax',JSON.stringify(post_data),function(resp){
                     cfg.hide_load(2000)
                 })
+
+            },
+            selected_pop_set_and_save:function(kws){
+                if(self.selected.length !=1 ){
+                    cfg.showMsg('请选择一行数据！')
+                    return
+                }
+                var crt_row=self.selected[0]
+                var cache_director_name = crt_row._director_name
+                crt_row._director_name = kws.fields_ctx.director_name
+                var win_index = pop_fields_layer(crt_row,kws.fields_ctx,function(new_row){
+                        ex.assign(crt_row,new_row)
+                        crt_row._director_name=cache_director_name
+                    layer.close(win_index)
+                })
+
 
             },
             ajax_row:function(kws){
