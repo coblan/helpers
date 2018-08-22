@@ -43,6 +43,7 @@ class ForeignProc(BaseFieldProc):
         return {
             'name':name,
             'label':_(this_field.verbose_name),
+            'editor': 'com-select-filter',
             'options':options
         }        
 
