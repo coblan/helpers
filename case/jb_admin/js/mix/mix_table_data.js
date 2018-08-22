@@ -50,17 +50,18 @@ var mix_table_data={
                 }
 
                 //var rows =[]
-                ex.each(self.selected,function(row){
+                var cache_rows = ex.copy(self.selected)
+                ex.each(cache_rows ,function(row){
                     row[kws.field]=kws.value
-
-                    //rows.push({pk:row.pk,
-                    //    _director_name:row._director_name,
-                    //    kws.field:kws.value}
-                    //)
                 })
-                var post_data=[{fun:'save_rows',rows:self.selected}]
+                var post_data=[{fun:'save_rows',rows:cache_rows}]
                 cfg.show_load()
                 ex.post('/d/ajax',JSON.stringify(post_data),function(resp){
+
+                    ex.each(self.selected ,function(row){
+                        row[kws.field]=kws.value
+                    })
+
                     cfg.hide_load(2000)
                 })
 
@@ -70,7 +71,7 @@ var mix_table_data={
                     cfg.showMsg('请选择一行数据！')
                     return
                 }
-                var crt_row=self.selected[0]
+                var crt_row =  self.selected[0]
                 var cache_director_name = crt_row._director_name
                 crt_row._director_name = kws.fields_ctx.director_name
                 var win_index = pop_fields_layer(crt_row,kws.fields_ctx,function(new_row){
