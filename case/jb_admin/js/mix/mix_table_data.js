@@ -82,13 +82,14 @@ var mix_table_data={
 
             },
             ajax_row:function(kws){
-                // kws 是head : {app:'maindb',ajax_fun:"get_money'}
+                // kws 是head : {'fun': 'ajax_row', 'app': 'maindb', 'ajax_fun': 'modify_money_pswd', 'editor': 'com-op-btn', 'label': '重置资金密码', },
                 if(self.selected.length==0){
                     cfg.showMsg('请选择一行数据')
                     return
                 }
                 var row = self.selected[0]
                 var post_data=[{fun:kws.ajax_fun,row:row  }]
+
                 cfg.show_load()
                 ex.post('/d/ajax/'+kws.app,JSON.stringify(post_data),function(resp){
                     cfg.hide_load(2000)
