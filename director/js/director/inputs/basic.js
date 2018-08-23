@@ -154,7 +154,7 @@ export var baseInput={
         template:`<div>
             <span v-if='head.readonly' v-text='get_label(head.options,row[head.name])'></span>
             <select v-else v-model='row[head.name]'  :id="'id_'+head.name" :name="head.name"  class="form-control input-sm">
-                <option v-if="head.placeholder" :value="undefined" disabled selected style='display:none;' class="placeholder" v-text="head.placeholder"></option>
+                <option v-if="head.placeholder" :value="place_value" disabled selected style='display:none;' class="placeholder" v-text="head.placeholder"></option>
             	<option v-for='opt in normed_options' :value='opt.value' v-text='opt.label'></option>
             </select>
             </div>`,
@@ -165,6 +165,16 @@ export var baseInput={
             }
         },
         computed:{
+            place_value:function(){
+                var v = this.row[this.head.name]
+                if(v === undefined){
+                    return undefined
+                }else  if(v === null){
+                    return null
+                }else{
+                    return ''
+                }
+            },
             normed_options:function(){
                 var self=this
                 if(this.head.hide_related_field){

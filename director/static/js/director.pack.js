@@ -519,7 +519,7 @@ var baseInput = exports.baseInput = {
                 cfg: inn_config
             };
         },
-        template: '<div>\n            <span v-if=\'head.readonly\' v-text=\'get_label(head.options,row[head.name])\'></span>\n            <select v-else v-model=\'row[head.name]\'  :id="\'id_\'+head.name" :name="head.name"  class="form-control input-sm">\n                <option v-if="head.placeholder" :value="undefined" disabled selected style=\'display:none;\' class="placeholder" v-text="head.placeholder"></option>\n            \t<option v-for=\'opt in normed_options\' :value=\'opt.value\' v-text=\'opt.label\'></option>\n            </select>\n            </div>',
+        template: '<div>\n            <span v-if=\'head.readonly\' v-text=\'get_label(head.options,row[head.name])\'></span>\n            <select v-else v-model=\'row[head.name]\'  :id="\'id_\'+head.name" :name="head.name"  class="form-control input-sm">\n                <option v-if="head.placeholder" :value="place_value" disabled selected style=\'display:none;\' class="placeholder" v-text="head.placeholder"></option>\n            \t<option v-for=\'opt in normed_options\' :value=\'opt.value\' v-text=\'opt.label\'></option>\n            </select>\n            </div>',
         mounted: function mounted() {
             if (this.head.default && !this.row[this.head.name]) {
                 Vue.set(this.row, this.head.name, this.head.default);
@@ -527,6 +527,16 @@ var baseInput = exports.baseInput = {
             }
         },
         computed: {
+            place_value: function place_value() {
+                var v = this.row[this.head.name];
+                if (v === undefined) {
+                    return undefined;
+                } else if (v === null) {
+                    return null;
+                } else {
+                    return '';
+                }
+            },
             normed_options: function normed_options() {
                 var self = this;
                 if (this.head.hide_related_field) {
