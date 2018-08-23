@@ -7,7 +7,7 @@ from .table.sim_table import SimTable
 from .table.tabpage import TabPage
 
 from .fields.fieldspage import FieldsPage 
-from .fields.fields import ModelFields
+from .fields.fields import ModelFields, Fields
 
 from .access.permit import ModelPermit,has_permit
 from .model_func.dictfy import field_map,model_to_name,name_to_model,BaseFieldProc

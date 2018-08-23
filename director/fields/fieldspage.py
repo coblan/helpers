@@ -5,7 +5,7 @@ class FieldsPage(object):
     template=''
     fieldsCls=''
     ajax_scope={}
-    ex_js=[]
+    extra_js=[]
     ex_css=[]
     def __init__(self,request, engin):
         self.engin = engin
@@ -33,10 +33,10 @@ class FieldsPage(object):
     def get_context(self):
         if self.fieldsCls:
             self.ctx=self.fields.get_context()
-            self.ctx['app']=self.fieldsCls._meta.model._meta.app_label
+            #self.ctx['app']=self.fieldsCls._meta.model._meta.app_label
         else:
             self.ctx={}
-        self.ctx['ex_js']=self.ex_js
+        self.ctx['extra_js']=self.extra_js
         self.ctx['ex_css'] = self.ex_css        
         
         # self.ctx['page_label'] =self.get_label()

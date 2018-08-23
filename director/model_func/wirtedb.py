@@ -10,9 +10,6 @@ def permit_save_model(user,row,**kw):
             row[k]=row[k].pk
     
     fields_cls = director.get(row['_director_name'])
-    #model= name_to_model(row['_class'])
-    #fields_cls = model_dc.get(model).get('fields')
-
     fields_obj = fields_cls(dc = row,crt_user=user,**kw)
     if fields_obj.is_valid():
         fields_obj.save_form()

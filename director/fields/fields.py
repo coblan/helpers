@@ -21,6 +21,7 @@ import logging
 sql_log = logging.getLogger('director.sql_op')
 
 
+
 class ModelFields(forms.ModelForm):
     """
     __init__函数，参数组合
@@ -459,8 +460,27 @@ class ModelFields(forms.ModelForm):
             # self.instance.delete()
     
 
+class Fields(ModelFields):
+    def __init__(self, dc={}, pk=None, crt_user=None, nolimit=False, *args, **kw): 
+        self.front_dc = dc
+    
+    def is_valid(self): 
+        return True
+    
+    def save_form(self): 
+        "overwrite this method"
+        print('here')
     
     
+    def clean_dict(self, dc): 
+        return dc
+    
+    def get_operations(self):
+        ls=[]
+        ls.append({
+            'name':'save','editor':'com-field-op-btn','label':'保存', 'icon': 'fa-save',
+        })
+        return ls    
 
 class FieldsSet(object):
     template=''
