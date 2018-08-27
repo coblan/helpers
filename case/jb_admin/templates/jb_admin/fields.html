@@ -20,6 +20,8 @@
     //	search字段从 search_args._q 来取值
     extra_fields_logic='{{ extra_fields_logic }}'
 
+    extra_mixins = {{ extra_mixins | jsonify |default:'null' }}
+
     tabs={{ tabs | jsonify | default:'[]' }}
 
     main_com={{ main_com | jsonify | default:'null'  }}
@@ -129,9 +131,15 @@
         });
 //        $(document).resize(update_cnt_size)
 
+        if(extra_mixins){
+            fields_logic =ex.vueExtend(fields_logic,extra_mixins)
+        }
+        // 可能不会要下面的extra_fields_logic了
         if(extra_fields_logic){
             fields_logic.mixins.push(window[extra_fields_logic])
         }
+
+
         fields=new Vue(fields_logic)
 
     })

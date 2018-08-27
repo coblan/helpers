@@ -154,6 +154,7 @@ class ModelFields(forms.ModelForm):
             #'permit':self.get_permit(),
             'director_name':self.get_director_name(),
             'ops':self.get_operations(),
+            'extra_mixins':self.extra_mixins
         } 
     
     def get_head_context(self):
