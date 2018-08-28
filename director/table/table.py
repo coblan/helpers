@@ -14,9 +14,7 @@ import time
 from django.conf import settings
 from helpers.director.base_data import director
 from django.core.exceptions import FieldDoesNotExist
-#import pinyin
-#from forms import MobilePageForm
-
+from helpers.director.middleware.request_cache import get_request_cache
 
 from django.core.paginator import Paginator
 
@@ -477,7 +475,11 @@ class ModelTable(object):
             try:
                 field = self.model._meta.get_field(head['name'])            
                 if hasattr(field, 'choices') and 'options' not in head :
-                    head['options'] = [{'value':val,'label':str(lab)} for val,lab in field.choices]    
+                    catch = get_request_cache()
+                    options_name = '%s_field_options'% head['name']
+                    if not catch.get(options_name):
+                        catch[options_name]=[{'value':val,'label':str(lab)} for val,lab in field.choices]    
+                    head['options']=catch.get(options_name)
             except FieldDoesNotExist:
                 pass
                 

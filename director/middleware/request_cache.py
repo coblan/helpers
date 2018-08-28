@@ -33,7 +33,7 @@ def request_cache(fun):
         #params = dict()
         #super(RequestCache, self).__init__(name, params)
 
-class GlobalCacheMiddleware(object):
+class RequestCacheMiddleware(object):
     def __init__(self):
         global _installed_middleware
         _installed_middleware = True
@@ -50,7 +50,8 @@ class GlobalCacheMiddleware(object):
         """
         Delete user info
         """
-        _request_cache.pop( currentThread() )
+        if currentThread() in _request_cache:
+            _request_cache.pop( currentThread() )
 
         return response
 
@@ -58,7 +59,8 @@ class GlobalCacheMiddleware(object):
         """
         Delete user info
         """
-        _request_cache.pop( currentThread() )
+        if currentThread() in _request_cache:
+            _request_cache.pop( currentThread() )
         
         
 """
