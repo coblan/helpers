@@ -15,13 +15,7 @@ class IntProc(BaseFieldProc):
                 'editor':'com-date-range-filter'
                 }
 
-    def dict_table_head(self,head):
-        """
-        """
-        if self.field.choices:
-            head['editor'] = 'com-table-mapper'
-            head['options'] =  [{'value':x[0],'label':x[1]} for x in self.field.choices]
-        return head 
+
     
     def dict_field_head(self, head): 
         if hasattr(self.field, 'choices'): 
