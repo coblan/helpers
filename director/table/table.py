@@ -320,6 +320,7 @@ class ModelTable(object):
         if not self.row_search.model:
             self.row_search.model=self.model
         self.pagenum = self.pagenator(pageNumber=self.page,perpage=perpage)
+        self.footer = []
         
         
         
@@ -436,7 +437,8 @@ class ModelTable(object):
         return {
             'rows': self.get_rows(),
             'row_pages' : self.pagenum.get_context(),  
-            'search_args':self.search_args
+            'search_args':self.search_args, 
+            'footer': self.footer,
         }
     
     def permited_fields(self):

@@ -221,12 +221,9 @@ var mix_table_data={
                 self.rows = resp.get_rows.rows
                 self.row_pages = resp.get_rows.row_pages
                 self.search_args=resp.get_rows.search_args
+                self.footer=resp.get_rows.footer
                 cfg.hide_load()
             })
-        },
-        get_data: function () {
-            this.getRows()
-            //this.data_getter(this)
         },
         get_page: function (page_number) {
             this.search_args._page = page_number
