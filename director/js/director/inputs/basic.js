@@ -40,44 +40,12 @@ export var baseInput={
     },
     blocktext: {
         props:['row','head'],
-        //data:function(){
-        //    return {
-        //        org_height:0,
-        //    }
-        //},
-        //mounted:function(){
-        //    var self=this
-        //    Vue.nextTick(function(){
-        //        self.on_input()
-        //    })
-        //
-        //},
-        //methods:{
-        //    on_input:function(){
-        //        if(this.kw.readonly) return
-        //        var textarea = $(this.$el).find('textarea')[0]
-        //        if(this.org_height!=textarea.scrollHeight){
-        //            $(textarea).height(textarea.scrollHeight-12)
-        //            this.org_height=textarea.scrollHeight
-        //        }
-        //    }
-        //},
-        //computed:{
-        //    value:function(){
-        //        return this.row[this.name]
-        //    }
-        //},
-        //watch:{
-        //    value:function(v){
-        //        var self=this
-        //        Vue.nextTick(function(){
-        //            self.on_input()
-        //        })
-        //    }
-        //},
         template: `<div>
             <span v-if='head.readonly' v-text='row[head.name]'></span>
-            <textarea :style="head.style" v-else :maxlength="head.maxlength" class="form-control input-sm" rows="3" :id="'id_'+head.name" v-model="row[head.name]" :placeholder="head.placeholder" :readonly='head.readonly'></textarea>
+            <textarea :style="head.style" v-else :maxlength="head.maxlength" class="form-control input-sm"
+                :name="head.name"
+                :id="'id_'+head.name" v-model="row[head.name]" :placeholder="head.placeholder"
+                :readonly='head.readonly'></textarea>
             </div>`
     },
     color:{
