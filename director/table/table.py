@@ -226,10 +226,10 @@ class RowSort(object):
     """
     names=[]
     chinese_words=[]
-    extra_allowd_names = []
     def __init__(self,row_sort=[],user=None,allowed_names=[],kw={}):
-        final_allowd_names = allowed_names + self.extra_allowd_names
-        self.valid_name=[x for x in self.names if x in final_allowd_names]
+        #final_allowd_names = allowed_names + self.extra_allowd_names
+        #self.valid_name=[x for x in self.names if x in final_allowd_names]
+        self.valid_name=[x for x in self.names]
         ls=[]
         for x in row_sort:
             if x.lstrip('-') in self.valid_name:
