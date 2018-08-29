@@ -13,9 +13,8 @@ import math
 import time
 from django.conf import settings
 from helpers.director.base_data import director
-#import pinyin
-#from forms import MobilePageForm
-
+from django.core.exceptions import FieldDoesNotExist
+from helpers.director.middleware.request_cache import get_request_cache
 
 from django.core.paginator import Paginator
 
@@ -465,15 +464,25 @@ class ModelTable(object):
         ls = self.permited_fields()   
         ls = [x for x in ls if x not in self.hide_fields]
         heads = model_to_head(self.model,include=ls)
-        #heads=[self.fields_map_head(head) for head in heads]
-        
+
         heads.extend(self.getExtraHead())
         heads = self.fields_sort_heads(heads)   
         
         heads= self.make_pop_edit_field(heads)
-              
-        heads = [self.dict_head(head) for head in heads]
         
+        for head in heads:
+            head = self.dict_head(head)
+            try:
+                field = self.model._meta.get_field(head['name'])            
+                if hasattr(field, 'choices') and 'options' not in head :
+                    catch = get_request_cache()
+                    options_name = '%s_field_options'% head['name']
+                    if not catch.get(options_name):
+                        catch[options_name]=[{'value':val,'label':str(lab)} for val,lab in field.choices]    
+                    head['options']=catch.get(options_name)
+            except FieldDoesNotExist:
+                pass
+                
         return heads
     
     def make_pop_edit_field(self,heads):

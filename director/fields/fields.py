@@ -17,6 +17,8 @@ from helpers.director.base_data import director
 from helpers.director.data_format.json_format import DirectorEncoder
 from django.conf import settings
 from django.utils.translation import ugettext as _
+from helpers.director.middleware.request_cache import get_request_cache
+
 import logging
 sql_log = logging.getLogger('director.sql_op')
 
@@ -265,8 +267,13 @@ class ModelFields(forms.ModelForm):
                 mapper(self.instance, field = v).dict_field_head(dc)    
                 
             dc = self.dict_head(dc)
+            
             if hasattr(v, 'choices') and 'options' not in dc :
-                dc['options'] = [{'value':val,'label':str(lab)} for val,lab in v.choices]
+                options_name = '%s_field_options'% k
+                catch = get_request_cache()
+                if not catch.get(options_name):
+                    catch[options_name]=[{'value':val,'label':str(lab)} for val,lab in v.choices]                
+                dc['options'] = catch[options_name]
             
             out.append(dc)
         return out
