@@ -1594,17 +1594,20 @@ var mix_table_data = {
                 }
             },
             selected_pop_set_and_save: function selected_pop_set_and_save(kws) {
-                if (self.selected.length != 1) {
-                    cfg.showMsg('请选择一行数据！');
+                var row_match_fun = kws.row_match || 'one_row';
+                if (!row_match[row_match_fun](self, kws)) {
                     return;
                 }
+
                 var crt_row = self.selected[0];
                 var cache_director_name = crt_row._director_name;
                 crt_row._director_name = kws.fields_ctx.director_name;
                 var win_index = pop_fields_layer(crt_row, kws.fields_ctx, function (new_row) {
                     ex.assign(crt_row, new_row);
                     crt_row._director_name = cache_director_name;
-                    layer.close(win_index);
+                    setTimeout(function () {
+                        layer.close(win_index);
+                    }, 2000);
                 });
             },
             ajax_row: function ajax_row(kws) {
