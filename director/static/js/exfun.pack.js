@@ -6,9 +6,9 @@
 /******/ 	function __webpack_require__(moduleId) {
 /******/
 /******/ 		// Check if module is in cache
-/******/ 		if(installedModules[moduleId])
+/******/ 		if(installedModules[moduleId]) {
 /******/ 			return installedModules[moduleId].exports;
-/******/
+/******/ 		}
 /******/ 		// Create a new module (and put it into the cache)
 /******/ 		var module = installedModules[moduleId] = {
 /******/ 			i: moduleId,
@@ -32,9 +32,6 @@
 /******/
 /******/ 	// expose the module cache
 /******/ 	__webpack_require__.c = installedModules;
-/******/
-/******/ 	// identity function for calling harmony imports with the correct context
-/******/ 	__webpack_require__.i = function(value) { return value; };
 /******/
 /******/ 	// define getter function for harmony exports
 /******/ 	__webpack_require__.d = function(exports, name, getter) {
@@ -63,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 88);
+/******/ 	return __webpack_require__(__webpack_require__.s = 81);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -141,7 +138,7 @@ var stylesInDom = {},
 		};
 	},
 	isOldIE = memoize(function() {
-		return /msie [6-9]\b/.test(self.navigator.userAgent.toLowerCase());
+		return /msie [6-9]\b/.test(window.navigator.userAgent.toLowerCase());
 	}),
 	getHeadElement = memoize(function () {
 		return document.head || document.getElementsByTagName("head")[0];
@@ -378,191 +375,66 @@ function updateLink(linkElement, obj) {
 
 /***/ }),
 
-/***/ 10:
+/***/ 81:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-/*
-setCookie('name', 1111, 5);
-setCookie('name1', 22222, 5);
+var _old = __webpack_require__(82);
 
-console.log(getCookie('name'));
-console.log(getAllCookie());
+var _network = __webpack_require__(83);
 
-delCookie('name1');
-clearCookie('undefined')    //清除未定义的名的cookie
-*/
-/*set cookie*/
-var cookie = exports.cookie = {
-    setCookie: function setCookie(name, value, Days) {
-        if (Days == null || Days == '') {
-            Days = 300;
+var _urlparse = __webpack_require__(84);
+
+var _collection = __webpack_require__(85);
+
+var _patch = __webpack_require__(86);
+
+var path = _interopRequireWildcard(_patch);
+
+var _cookie = __webpack_require__(87);
+
+var _obj = __webpack_require__(88);
+
+var _vuetools = __webpack_require__(89);
+
+var _code = __webpack_require__(90);
+
+var _order = __webpack_require__(91);
+
+var _main = __webpack_require__(92);
+
+var uis = _interopRequireWildcard(_main);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+var ex = {
+    assign: function assign(dst, src) {
+        for (var key in src) {
+            dst[key] = src[key];
         }
-        var exp = new Date();
-        exp.setTime(exp.getTime() + Days * 24 * 60 * 60 * 1000);
-        document.cookie = name + "=" + escape(value) + "; path=/;expires=" + exp.toGMTString();
-        //document.cookie = name + "="+ escape (value) + ";expires=" + exp.toGMTString();
-    },
-
-    /*get cookie*/
-    getCookie: function getCookie(name) {
-        var arr,
-            reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
-        if (arr = document.cookie.match(reg)) return unescape(arr[2]);else return null;
-    },
-
-    /*get all cookie*/
-    getAllCookie: function getAllCookie() {
-        return document.cookie;
-    },
-
-    /* clear cookie*/
-    clearCookie: function clearCookie(name) {
-        this.setCookie(name, '', -1);
-    },
-
-    /* del cookie*/
-    delCookie: function delCookie(name) {
-        var exp = new Date();
-        exp.setTime(exp.getTime() - 1);
-        var cval = this.getCookie(name);
-        if (cval != null) document.cookie = name + "=" + cval + "; path=/;expires=" + exp.toGMTString();
     }
 };
 
-/***/ }),
+//import {md5} from  './md5.min'
 
-/***/ 11:
-/***/ (function(module, exports, __webpack_require__) {
+ex.assign(ex, _old.old);
+ex.assign(ex, _network.network);
+ex.assign(ex, _urlparse.urlparse);
+ex.assign(ex, _collection.collection);
+ex.assign(ex, _cookie.cookie);
+ex.assign(ex, _obj.obj_control);
+ex.assign(ex, _vuetools.vuetool);
+ex.assign(ex, _code.code);
+ex.sortOrder = _order.sortOrder;
 
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-var network = exports.network = {
-    get: function get(url, callback) {
-        //replace $.get
-        var self = this;
-        var wrap_callback = function wrap_callback(resp) {
-            if (resp.msg) {
-                self.show_msg(resp.msg);
-            }
-            if (resp.status && typeof resp.status == 'string' && resp.status != 'success') {
-                cfg.hide_load();
-                return;
-            } else {
-                callback(resp);
-            }
-        };
-        return $.get(url, wrap_callback);
-    },
-    post: function post(url, data, callback) {
-        var self = this;
-        var wrap_callback = function wrap_callback(resp) {
-            var msg = [];
-            if (resp.msg) {
-                if (typeof resp.msg == 'string') {
-                    msg.push(resp.msg);
-                } else {
-                    msg = msg.concat(resp.msg);
-                }
-            }
-            for (var k in resp) {
-                if (resp[k] && resp[k].msg) {
-                    if (typeof resp[k].msg == 'string') {
-                        msg.push(resp[k].msg);
-                    } else {
-                        msg = msg.concat(resp[k].msg);
-                    }
-                }
-            }
-            if (msg.length != 0) {
-                cfg.warning(msg.join('\n'));
-            }
-            //if (resp.status && typeof resp.status == 'string' && resp.status != 'success') {
-            if (resp.success === false) {
-                cfg.hide_load(); // sometime
-                return;
-            } else {
-                callback(resp);
-            }
-        };
-        return $.post(url, data, wrap_callback);
-    },
-    load_js: function load_js(src, success) {
-        success = success || function () {};
-        var name = src; //btoa(src)
-        if (!window['__js_hook_' + name]) {
-            window['__js_hook_' + name] = [];
-        }
-        window['__js_hook_' + name].push(success);
-        var hooks = window['__js_hook_' + name];
-        if (window['__js_loaded_' + name]) {
-            while (hooks.length > 0) {
-                hooks.pop()();
-            }
-        }
-        if (!window['__js_' + name]) {
-            window['__js_' + name] = true;
-            var domScript = document.createElement('script');
-            domScript.src = src;
-
-            domScript.onload = domScript.onreadystatechange = function () {
-                if (!this.readyState || 'loaded' === this.readyState || 'complete' === this.readyState) {
-                    window['__js_loaded_' + name] = true;
-                    while (hooks.length > 0) {
-                        hooks.pop()();
-                    }
-                    this.onload = this.onreadystatechange = null;
-                    // 让script元素显示出来
-                    //this.parentNode.removeChild(this);
-                }
-            };
-            document.getElementsByTagName('head')[0].appendChild(domScript);
-        }
-    },
-    load_css: function load_css(src) {
-        var name = btoa(src);
-        if (window['__src_' + name]) {
-            return;
-        }
-        window['__src_' + name] = true;
-        $('head').append('<link rel="stylesheet" href="' + src + '" type="text/css" />');
-    }
-};
+//ex.md5=md5
+window.ex = ex;
 
 /***/ }),
 
-/***/ 12:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-var obj_control = exports.obj_control = {
-    isEmpty: function isEmpty(obj) {
-        for (var k in obj) {
-            if (/^[^_]/.exec(k)) {
-                return false;
-            }
-        }
-        return true;
-    }
-};
-
-/***/ }),
-
-/***/ 13:
+/***/ 82:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -792,47 +664,47 @@ var old = exports.old = {
         return out_list;
     }
 
-    //function parseSearch(queryString) {
-    //    var queryString = queryString || location.search
-    //    if(queryString.startsWith('?')){
-    //        var queryString=queryString.substring(1)
-    //    }
-    //    var params = {}
-    //    // Split into key/value pairs
-    //    var queries = queryString.split("&");
-    //    // Convert the array of strings into an object
-    //    for (var i = 0; i < queries.length; i++ ) {
-    //        var mt = /([^=]+?)=(.+)/.exec(queries[i])
-    //        params[mt[1]] = mt[2];
-    //    }
-    //    return params;
-    //}
-    //function searchfy(obj,pre){
-    //    var outstr=pre||''
-    //    for(x in obj){
-    //        if(obj[x]){
-    //            outstr+=x.toString()+'='+ obj[x].toString()+'&';
-    //        }
-    //
-    //    }
-    //    if(outstr.endsWith('&')){
-    //        return outstr.slice(0,-1)
-    //    }else{
-    //        return outstr
-    //    }
-    //
-    //}
-    //function update(dst_obj,src_obj) {
-    //    for(x in src_obj){
-    //        dst_obj[x]=src_obj[x]
-    //    }
-    //}
-
 };
+
+//function parseSearch(queryString) {
+//    var queryString = queryString || location.search
+//    if(queryString.startsWith('?')){
+//        var queryString=queryString.substring(1)
+//    }
+//    var params = {}
+//    // Split into key/value pairs
+//    var queries = queryString.split("&");
+//    // Convert the array of strings into an object
+//    for (var i = 0; i < queries.length; i++ ) {
+//        var mt = /([^=]+?)=(.+)/.exec(queries[i])
+//        params[mt[1]] = mt[2];
+//    }
+//    return params;
+//}
+//function searchfy(obj,pre){
+//    var outstr=pre||''
+//    for(x in obj){
+//        if(obj[x]){
+//            outstr+=x.toString()+'='+ obj[x].toString()+'&';
+//        }
+//
+//    }
+//    if(outstr.endsWith('&')){
+//        return outstr.slice(0,-1)
+//    }else{
+//        return outstr
+//    }
+//
+//}
+//function update(dst_obj,src_obj) {
+//    for(x in src_obj){
+//        dst_obj[x]=src_obj[x]
+//    }
+//}
 
 /***/ }),
 
-/***/ 14:
+/***/ 83:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -841,241 +713,101 @@ var old = exports.old = {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.sortOrder = sortOrder;
-function isChinese(temp) {
-    var re = /[^\u4E00-\u9FA5]/;
-    if (re.test(temp[0])) {
-        return false;
-    }
-    return true;
-}
-function compare(temp1, temp2) {
-    if (temp1 < temp2) {
-        return -1;
-    } else if (temp1 == temp2) {
-        return 0;
-    } else {
-        return 1;
-    }
-}
-
-function sortOrder(array, key) {
-
-    return array.slice().sort(function (a, b) {
-        if (key) {
-            var val_a = a[key];
-            var val_b = b[key];
-        } else {
-            var val_a = a;
-            var val_b = b;
-        }
-        if (isChinese(val_a) && isChinese(val_b)) {
-            return val_a.localeCompare(val_b, 'zh');
-        } else {
-            return compare(val_a, val_b);
-        }
-    });
-}
-
-/***/ }),
-
-/***/ 15:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-/*
-* 以打补丁的方式，区域那些不兼容的部分
-* */
-//  startsWith
-if (!String.prototype.startsWith) {
-    String.prototype.startsWith = function (searchString, position) {
-        position = position || 0;
-        return this.substr(position, searchString.length) === searchString;
-    };
-    String.prototype.endsWith = function (str) {
-        return this.match(str + "$") == str;
-    };
-}
-
-Array.prototype.each = function (fn) {
-    return this.length ? [fn(this.slice(0, 1))].concat(this.slice(1).each(fn)) : [];
-};
-
-/*两种调用方式
- var template1="我是{0}，今年{1}了";
- var template2="我是{name}，今年{age}了";
- var result1=template1.format("loogn",22);
- var result2=template2.format({name:"loogn",age:22});
- 两个结果都是"我是loogn，今年22了"
- */
-String.prototype.format = function (args) {
-    var result = this;
-    if (arguments.length > 0) {
-        if (arguments.length == 1 && (typeof args === "undefined" ? "undefined" : _typeof(args)) == "object") {
-            for (var key in args) {
-                if (args[key] != undefined) {
-                    var reg = new RegExp("({" + key + "})", "g");
-                    result = result.replace(reg, args[key]);
+var network = exports.network = {
+    get: function get(url, callback) {
+        //replace $.get
+        var self = this;
+        var wrap_callback = function wrap_callback(resp) {
+            if (resp.msg) {
+                self.show_msg(resp.msg);
+            }
+            if (resp.status && typeof resp.status == 'string' && resp.status != 'success') {
+                cfg.hide_load();
+                return;
+            } else {
+                callback(resp);
+            }
+        };
+        return $.get(url, wrap_callback);
+    },
+    post: function post(url, data, callback) {
+        var self = this;
+        var wrap_callback = function wrap_callback(resp) {
+            var msg = [];
+            if (resp.msg) {
+                if (typeof resp.msg == 'string') {
+                    msg.push(resp.msg);
+                } else {
+                    msg = msg.concat(resp.msg);
                 }
             }
-        } else {
-            for (var i = 0; i < arguments.length; i++) {
-                if (arguments[i] != undefined) {
-                    //var reg = new RegExp("({[" + i + "]})", "g");//这个在索引大于9时会有问题，谢谢何以笙箫的指出
-                    var reg = new RegExp("({)" + i + "(})", "g");
-                    result = result.replace(reg, arguments[i]);
+            for (var k in resp) {
+                if (resp[k] && resp[k].msg) {
+                    if (typeof resp[k].msg == 'string') {
+                        msg.push(resp[k].msg);
+                    } else {
+                        msg = msg.concat(resp[k].msg);
+                    }
                 }
             }
-        }
-    }
-    return result;
-};
-
-var Base64 = {
-    // private property
-    _keyStr: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",
-
-    // public method for encoding
-    encode: function encode(input) {
-        var output = "";
-        var chr1, chr2, chr3, enc1, enc2, enc3, enc4;
-        var i = 0;
-
-        input = Base64._utf8_encode(input);
-
-        while (i < input.length) {
-
-            chr1 = input.charCodeAt(i++);
-            chr2 = input.charCodeAt(i++);
-            chr3 = input.charCodeAt(i++);
-
-            enc1 = chr1 >> 2;
-            enc2 = (chr1 & 3) << 4 | chr2 >> 4;
-            enc3 = (chr2 & 15) << 2 | chr3 >> 6;
-            enc4 = chr3 & 63;
-
-            if (isNaN(chr2)) {
-                enc3 = enc4 = 64;
-            } else if (isNaN(chr3)) {
-                enc4 = 64;
+            if (msg.length != 0) {
+                cfg.warning(msg.join('\n'));
             }
-
-            output = output + Base64._keyStr.charAt(enc1) + Base64._keyStr.charAt(enc2) + Base64._keyStr.charAt(enc3) + Base64._keyStr.charAt(enc4);
-        }
-
-        return output;
-    },
-
-    // public method for decoding
-    decode: function decode(input) {
-        var output = "";
-        var chr1, chr2, chr3;
-        var enc1, enc2, enc3, enc4;
-        var i = 0;
-
-        input = input.replace(/[^A-Za-z0-9\+\/\=]/g, "");
-
-        while (i < input.length) {
-
-            enc1 = Base64._keyStr.indexOf(input.charAt(i++));
-            enc2 = Base64._keyStr.indexOf(input.charAt(i++));
-            enc3 = Base64._keyStr.indexOf(input.charAt(i++));
-            enc4 = Base64._keyStr.indexOf(input.charAt(i++));
-
-            chr1 = enc1 << 2 | enc2 >> 4;
-            chr2 = (enc2 & 15) << 4 | enc3 >> 2;
-            chr3 = (enc3 & 3) << 6 | enc4;
-
-            output = output + String.fromCharCode(chr1);
-
-            if (enc3 != 64) {
-                output = output + String.fromCharCode(chr2);
-            }
-            if (enc4 != 64) {
-                output = output + String.fromCharCode(chr3);
-            }
-        }
-
-        output = Base64._utf8_decode(output);
-
-        return output;
-    },
-
-    // private method for UTF-8 encoding
-    _utf8_encode: function _utf8_encode(string) {
-        string = string.replace(/\r\n/g, "\n");
-        var utftext = "";
-
-        for (var n = 0; n < string.length; n++) {
-
-            var c = string.charCodeAt(n);
-
-            if (c < 128) {
-                utftext += String.fromCharCode(c);
-            } else if (c > 127 && c < 2048) {
-                utftext += String.fromCharCode(c >> 6 | 192);
-                utftext += String.fromCharCode(c & 63 | 128);
+            //if (resp.status && typeof resp.status == 'string' && resp.status != 'success') {
+            if (resp.success === false) {
+                cfg.hide_load(); // sometime
+                return;
             } else {
-                utftext += String.fromCharCode(c >> 12 | 224);
-                utftext += String.fromCharCode(c >> 6 & 63 | 128);
-                utftext += String.fromCharCode(c & 63 | 128);
+                callback(resp);
             }
-        }
-
-        return utftext;
+        };
+        return $.post(url, data, wrap_callback);
     },
-
-    // private method for UTF-8 decoding
-    _utf8_decode: function _utf8_decode(utftext) {
-        var string = "";
-        var i = 0;
-        var c = c1 = c2 = 0;
-
-        while (i < utftext.length) {
-
-            c = utftext.charCodeAt(i);
-
-            if (c < 128) {
-                string += String.fromCharCode(c);
-                i++;
-            } else if (c > 191 && c < 224) {
-                c2 = utftext.charCodeAt(i + 1);
-                string += String.fromCharCode((c & 31) << 6 | c2 & 63);
-                i += 2;
-            } else {
-                c2 = utftext.charCodeAt(i + 1);
-                c3 = utftext.charCodeAt(i + 2);
-                string += String.fromCharCode((c & 15) << 12 | (c2 & 63) << 6 | c3 & 63);
-                i += 3;
+    load_js: function load_js(src, success) {
+        success = success || function () {};
+        var name = src; //btoa(src)
+        if (!window['__js_hook_' + name]) {
+            window['__js_hook_' + name] = [];
+        }
+        window['__js_hook_' + name].push(success);
+        var hooks = window['__js_hook_' + name];
+        if (window['__js_loaded_' + name]) {
+            while (hooks.length > 0) {
+                hooks.pop()();
             }
         }
-        return string;
+        if (!window['__js_' + name]) {
+            window['__js_' + name] = true;
+            var domScript = document.createElement('script');
+            domScript.src = src;
+
+            domScript.onload = domScript.onreadystatechange = function () {
+                if (!this.readyState || 'loaded' === this.readyState || 'complete' === this.readyState) {
+                    window['__js_loaded_' + name] = true;
+                    while (hooks.length > 0) {
+                        hooks.pop()();
+                    }
+                    this.onload = this.onreadystatechange = null;
+                    // 让script元素显示出来
+                    //this.parentNode.removeChild(this);
+                }
+            };
+            document.getElementsByTagName('head')[0].appendChild(domScript);
+        }
+    },
+    load_css: function load_css(src) {
+        var name = btoa(src);
+        if (window['__src_' + name]) {
+            return;
+        }
+        window['__src_' + name] = true;
+        $('head').append('<link rel="stylesheet" href="' + src + '" type="text/css" />');
     }
 };
 
-if (!window.atob) {
-    window.atob = Base64.decode;
-    window.btoa = Base64.encode;
-}
-
 /***/ }),
 
-/***/ 16:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-__webpack_require__(86);
-__webpack_require__(85);
-
-/***/ }),
-
-/***/ 17:
+/***/ 84:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1179,315 +911,7 @@ function para_encode(para_str) {
 
 /***/ }),
 
-/***/ 18:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-var vuetool = exports.vuetool = {
-    vueSuper: function vueSuper(self, kws) {
-        var mixin = kws.mixin;
-        var name = kws.fun;
-        var args = kws.args || [];
-        if (mixin) {
-            var index = self.$options.mixins.indexOf(mixin);
-        } else {
-            var index = self.$options.mixins.length;
-        }
-        for (var i = index - 1; i > -1; i--) {
-            var mix = self.$options.mixins[i];
-            var methods = mix.methods[name];
-            if (methods) {
-                return methods.apply(self, args);
-            }
-        }
-    },
-    vueBroadCall: function vueBroadCall(self, fun, kws) {
-        var rt = [];
-        cusBroadCall(self, fun, kws, rt);
-        return rt;
-    },
-    vueParCall: function vueParCall(self, fun, kws) {
-        var rt = [];
-        cusParCall(self, fun, kws, rt);
-        return rt;
-    },
-    vueExtend: function vueExtend(par, mixins) {
-        var mixins = ex.map(mixins, function (item) {
-            if (typeof item == 'string') {
-                return window[item];
-            } else {
-                return item;
-            }
-        });
-
-        var real_par = $.extend({}, par);
-        var orgin_mixins = real_par.mixins;
-        delete real_par.mixins;
-        if (orgin_mixins) {
-            var list = orgin_mixins;
-        } else {
-            var list = [];
-        }
-        list.push(real_par);
-        list = list.concat(mixins);
-        var final_obj = list[list.length - 1];
-        final_obj.mixins = list.slice(0, list.length - 1);
-        return final_obj;
-    }
-};
-
-function cusBroadCall(self, fun, kws, rt) {
-    if (!self.$children) {
-        return;
-    }
-    for (var i = 0; i < self.$children.length; i++) {
-        var child = self.$children[i];
-        if (child[fun]) {
-            rt.push(child[fun](kws));
-        }
-        cusBroadCall(child, fun, kws, rt);
-    }
-}
-function cusParCall(self, fun, kws, rt) {
-    if (!self.$parent) {
-        return;
-    }
-    var par = self.$parent;
-    if (par[fun]) {
-        rt.push(par[fun](kws));
-    }
-    cusParCall(par, fun, kws, rt);
-
-    //for(var i =0;i<self.$parent.length;i++){
-    //    var par =self.$parent[i]
-    //    if(par[fun]){
-    //        rt.push(par[fun](kws))
-    //    }
-    //    cusParCall(par,fun,kws,rt)
-    //}
-}
-
-/***/ }),
-
-/***/ 68:
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(0)();
-// imports
-
-
-// module
-exports.push([module.i, ".abs-full {\n  position: absolute;\n  bottom: 0;\n  top: 0;\n  left: 0;\n  right: 0; }\n\n.abs-middle {\n  position: absolute;\n  left: 50%;\n  top: 50%;\n  transform: translate(-50%, -50%); }\n", ""]);
-
-// exports
-
-
-/***/ }),
-
-/***/ 69:
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(0)();
-// imports
-
-
-// module
-exports.push([module.i, ".clickable {\n  cursor: pointer;\n  color: #4da8cd; }\n", ""]);
-
-// exports
-
-
-/***/ }),
-
-/***/ 8:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-var code = exports.code = {
-    //hashCode:function (str){
-    //    var str =btoa(str)
-    //    var h = 0, off = 0;
-    //    var len = str.length;
-    //    for(var i = 0; i < len; i++){
-    //        h = 31 * h + str.charCodeAt(off++);
-    //    }
-    //    var t=-2147483648*2;
-    //    while(h>2147483647){
-    //        h+=t
-    //    }
-    //    return h;
-    //}
-
-    hashDict: function hashDict(dc) {
-        var ls = [];
-        for (var k in dc) {
-            if (k.startsWith('_')) {
-                continue;
-            }
-            if ($.isFunction(dc[k])) {
-                continue;
-            }
-            ls.push(k);
-        }
-        ls = ls.sort();
-        var lsl = [];
-        for (var i = 0; i < ls.length; i++) {
-            lsl.push(ls[i] + ':' + dc[ls[i]]);
-        }
-        var dc_str = lsl.join(';');
-        return md5(dc_str);
-    }
-    //hashCode: function (input){
-    //    var I64BIT_TABLE =
-    //        'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-'.split('');
-    //    var hash = 5381;
-    //    var i = input.length - 1;
-    //
-    //    if(typeof input == 'string'){
-    //        for (; i > -1; i--)
-    //            hash += (hash << 5) + input.charCodeAt(i);
-    //    }
-    //    else{
-    //        for (; i > -1; i--)
-    //            hash += (hash << 5) + input[i];
-    //    }
-    //    var value = hash & 0x7FFFFFFF;
-    //
-    //    var retValue = '';
-    //    do{
-    //        retValue += I64BIT_TABLE[value & 0x3F];
-    //    }
-    //    while(value >>= 6);
-    //
-    //    return retValue;
-    //}
-};
-
-/***/ }),
-
 /***/ 85:
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(68);
-if(typeof content === 'string') content = [[module.i, content, '']];
-// add the styles to the DOM
-var update = __webpack_require__(1)(content, {});
-if(content.locals) module.exports = content.locals;
-// Hot Module Replacement
-if(false) {
-	// When the styles change, update the <style> tags
-	if(!content.locals) {
-		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./pos_size.scss", function() {
-			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./pos_size.scss");
-			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-			update(newContent);
-		});
-	}
-	// When the module is disposed, remove the <style> tags
-	module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-
-/***/ 86:
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(69);
-if(typeof content === 'string') content = [[module.i, content, '']];
-// add the styles to the DOM
-var update = __webpack_require__(1)(content, {});
-if(content.locals) module.exports = content.locals;
-// Hot Module Replacement
-if(false) {
-	// When the styles change, update the <style> tags
-	if(!content.locals) {
-		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./text.scss", function() {
-			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./text.scss");
-			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-			update(newContent);
-		});
-	}
-	// When the module is disposed, remove the <style> tags
-	module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-
-/***/ 88:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _old = __webpack_require__(13);
-
-var _network = __webpack_require__(11);
-
-var _urlparse = __webpack_require__(17);
-
-var _collection = __webpack_require__(9);
-
-var _patch = __webpack_require__(15);
-
-var path = _interopRequireWildcard(_patch);
-
-var _cookie = __webpack_require__(10);
-
-var _obj = __webpack_require__(12);
-
-var _vuetools = __webpack_require__(18);
-
-var _code = __webpack_require__(8);
-
-var _order = __webpack_require__(14);
-
-var _main = __webpack_require__(16);
-
-var uis = _interopRequireWildcard(_main);
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-var ex = {
-    assign: function assign(dst, src) {
-        for (var key in src) {
-            dst[key] = src[key];
-        }
-    }
-
-    //import {md5} from  './md5.min'
-
-};ex.assign(ex, _old.old);
-ex.assign(ex, _network.network);
-ex.assign(ex, _urlparse.urlparse);
-ex.assign(ex, _collection.collection);
-ex.assign(ex, _cookie.cookie);
-ex.assign(ex, _obj.obj_control);
-ex.assign(ex, _vuetools.vuetool);
-ex.assign(ex, _code.code);
-ex.sortOrder = _order.sortOrder;
-
-//ex.md5=md5
-window.ex = ex;
-
-/***/ }),
-
-/***/ 9:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1688,6 +1112,556 @@ var collection = exports.collection = {
     }
 
 };
+
+/***/ }),
+
+/***/ 86:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+/*
+* 以打补丁的方式，区域那些不兼容的部分
+* */
+//  startsWith
+if (!String.prototype.startsWith) {
+    String.prototype.startsWith = function (searchString, position) {
+        position = position || 0;
+        return this.substr(position, searchString.length) === searchString;
+    };
+    String.prototype.endsWith = function (str) {
+        return this.match(str + "$") == str;
+    };
+}
+
+Array.prototype.each = function (fn) {
+    return this.length ? [fn(this.slice(0, 1))].concat(this.slice(1).each(fn)) : [];
+};
+
+/*两种调用方式
+ var template1="我是{0}，今年{1}了";
+ var template2="我是{name}，今年{age}了";
+ var result1=template1.format("loogn",22);
+ var result2=template2.format({name:"loogn",age:22});
+ 两个结果都是"我是loogn，今年22了"
+ */
+String.prototype.format = function (args) {
+    var result = this;
+    if (arguments.length > 0) {
+        if (arguments.length == 1 && (typeof args === "undefined" ? "undefined" : _typeof(args)) == "object") {
+            for (var key in args) {
+                if (args[key] != undefined) {
+                    var reg = new RegExp("({" + key + "})", "g");
+                    result = result.replace(reg, args[key]);
+                }
+            }
+        } else {
+            for (var i = 0; i < arguments.length; i++) {
+                if (arguments[i] != undefined) {
+                    //var reg = new RegExp("({[" + i + "]})", "g");//这个在索引大于9时会有问题，谢谢何以笙箫的指出
+                    var reg = new RegExp("({)" + i + "(})", "g");
+                    result = result.replace(reg, arguments[i]);
+                }
+            }
+        }
+    }
+    return result;
+};
+
+var Base64 = {
+    // private property
+    _keyStr: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",
+
+    // public method for encoding
+    encode: function encode(input) {
+        var output = "";
+        var chr1, chr2, chr3, enc1, enc2, enc3, enc4;
+        var i = 0;
+
+        input = Base64._utf8_encode(input);
+
+        while (i < input.length) {
+
+            chr1 = input.charCodeAt(i++);
+            chr2 = input.charCodeAt(i++);
+            chr3 = input.charCodeAt(i++);
+
+            enc1 = chr1 >> 2;
+            enc2 = (chr1 & 3) << 4 | chr2 >> 4;
+            enc3 = (chr2 & 15) << 2 | chr3 >> 6;
+            enc4 = chr3 & 63;
+
+            if (isNaN(chr2)) {
+                enc3 = enc4 = 64;
+            } else if (isNaN(chr3)) {
+                enc4 = 64;
+            }
+
+            output = output + Base64._keyStr.charAt(enc1) + Base64._keyStr.charAt(enc2) + Base64._keyStr.charAt(enc3) + Base64._keyStr.charAt(enc4);
+        }
+
+        return output;
+    },
+
+    // public method for decoding
+    decode: function decode(input) {
+        var output = "";
+        var chr1, chr2, chr3;
+        var enc1, enc2, enc3, enc4;
+        var i = 0;
+
+        input = input.replace(/[^A-Za-z0-9\+\/\=]/g, "");
+
+        while (i < input.length) {
+
+            enc1 = Base64._keyStr.indexOf(input.charAt(i++));
+            enc2 = Base64._keyStr.indexOf(input.charAt(i++));
+            enc3 = Base64._keyStr.indexOf(input.charAt(i++));
+            enc4 = Base64._keyStr.indexOf(input.charAt(i++));
+
+            chr1 = enc1 << 2 | enc2 >> 4;
+            chr2 = (enc2 & 15) << 4 | enc3 >> 2;
+            chr3 = (enc3 & 3) << 6 | enc4;
+
+            output = output + String.fromCharCode(chr1);
+
+            if (enc3 != 64) {
+                output = output + String.fromCharCode(chr2);
+            }
+            if (enc4 != 64) {
+                output = output + String.fromCharCode(chr3);
+            }
+        }
+
+        output = Base64._utf8_decode(output);
+
+        return output;
+    },
+
+    // private method for UTF-8 encoding
+    _utf8_encode: function _utf8_encode(string) {
+        string = string.replace(/\r\n/g, "\n");
+        var utftext = "";
+
+        for (var n = 0; n < string.length; n++) {
+
+            var c = string.charCodeAt(n);
+
+            if (c < 128) {
+                utftext += String.fromCharCode(c);
+            } else if (c > 127 && c < 2048) {
+                utftext += String.fromCharCode(c >> 6 | 192);
+                utftext += String.fromCharCode(c & 63 | 128);
+            } else {
+                utftext += String.fromCharCode(c >> 12 | 224);
+                utftext += String.fromCharCode(c >> 6 & 63 | 128);
+                utftext += String.fromCharCode(c & 63 | 128);
+            }
+        }
+
+        return utftext;
+    },
+
+    // private method for UTF-8 decoding
+    _utf8_decode: function _utf8_decode(utftext) {
+        var string = "";
+        var i = 0;
+        var c = c1 = c2 = 0;
+
+        while (i < utftext.length) {
+
+            c = utftext.charCodeAt(i);
+
+            if (c < 128) {
+                string += String.fromCharCode(c);
+                i++;
+            } else if (c > 191 && c < 224) {
+                c2 = utftext.charCodeAt(i + 1);
+                string += String.fromCharCode((c & 31) << 6 | c2 & 63);
+                i += 2;
+            } else {
+                c2 = utftext.charCodeAt(i + 1);
+                c3 = utftext.charCodeAt(i + 2);
+                string += String.fromCharCode((c & 15) << 12 | (c2 & 63) << 6 | c3 & 63);
+                i += 3;
+            }
+        }
+        return string;
+    }
+};
+
+if (!window.atob) {
+    window.atob = Base64.decode;
+    window.btoa = Base64.encode;
+}
+
+/***/ }),
+
+/***/ 87:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+/*
+setCookie('name', 1111, 5);
+setCookie('name1', 22222, 5);
+
+console.log(getCookie('name'));
+console.log(getAllCookie());
+
+delCookie('name1');
+clearCookie('undefined')    //清除未定义的名的cookie
+*/
+/*set cookie*/
+var cookie = exports.cookie = {
+    setCookie: function setCookie(name, value, Days) {
+        if (Days == null || Days == '') {
+            Days = 300;
+        }
+        var exp = new Date();
+        exp.setTime(exp.getTime() + Days * 24 * 60 * 60 * 1000);
+        document.cookie = name + "=" + escape(value) + "; path=/;expires=" + exp.toGMTString();
+        //document.cookie = name + "="+ escape (value) + ";expires=" + exp.toGMTString();
+    },
+
+    /*get cookie*/
+    getCookie: function getCookie(name) {
+        var arr,
+            reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+        if (arr = document.cookie.match(reg)) return unescape(arr[2]);else return null;
+    },
+
+    /*get all cookie*/
+    getAllCookie: function getAllCookie() {
+        return document.cookie;
+    },
+
+    /* clear cookie*/
+    clearCookie: function clearCookie(name) {
+        this.setCookie(name, '', -1);
+    },
+
+    /* del cookie*/
+    delCookie: function delCookie(name) {
+        var exp = new Date();
+        exp.setTime(exp.getTime() - 1);
+        var cval = this.getCookie(name);
+        if (cval != null) document.cookie = name + "=" + cval + "; path=/;expires=" + exp.toGMTString();
+    }
+};
+
+/***/ }),
+
+/***/ 88:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+var obj_control = exports.obj_control = {
+    isEmpty: function isEmpty(obj) {
+        for (var k in obj) {
+            if (/^[^_]/.exec(k)) {
+                return false;
+            }
+        }
+        return true;
+    }
+};
+
+/***/ }),
+
+/***/ 89:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+var vuetool = exports.vuetool = {
+    vueSuper: function vueSuper(self, kws) {
+        var mixin = kws.mixin;
+        var name = kws.fun;
+        var args = kws.args || [];
+        if (mixin) {
+            var index = self.$options.mixins.indexOf(mixin);
+        } else {
+            var index = self.$options.mixins.length;
+        }
+        for (var i = index - 1; i > -1; i--) {
+            var mix = self.$options.mixins[i];
+            var methods = mix.methods[name];
+            if (methods) {
+                return methods.apply(self, args);
+            }
+        }
+    },
+    vueBroadCall: function vueBroadCall(self, fun, kws) {
+        var rt = [];
+        cusBroadCall(self, fun, kws, rt);
+        return rt;
+    },
+    vueParCall: function vueParCall(self, fun, kws) {
+        var rt = [];
+        cusParCall(self, fun, kws, rt);
+        return rt;
+    },
+    vueExtend: function vueExtend(par, mixins) {
+        var mixins = ex.map(mixins, function (item) {
+            if (typeof item == 'string') {
+                return window[item];
+            } else {
+                return item;
+            }
+        });
+
+        var real_par = $.extend({}, par);
+        var orgin_mixins = real_par.mixins;
+        delete real_par.mixins;
+        if (orgin_mixins) {
+            var list = orgin_mixins;
+        } else {
+            var list = [];
+        }
+        list.push(real_par);
+        list = list.concat(mixins);
+        var final_obj = list[list.length - 1];
+        final_obj.mixins = list.slice(0, list.length - 1);
+        return final_obj;
+    }
+};
+
+function cusBroadCall(self, fun, kws, rt) {
+    if (!self.$children) {
+        return;
+    }
+    for (var i = 0; i < self.$children.length; i++) {
+        var child = self.$children[i];
+        if (child[fun]) {
+            rt.push(child[fun](kws));
+        }
+        cusBroadCall(child, fun, kws, rt);
+    }
+}
+function cusParCall(self, fun, kws, rt) {
+    if (!self.$parent) {
+        return;
+    }
+    var par = self.$parent;
+    if (par[fun]) {
+        rt.push(par[fun](kws));
+    }
+    cusParCall(par, fun, kws, rt);
+
+    //for(var i =0;i<self.$parent.length;i++){
+    //    var par =self.$parent[i]
+    //    if(par[fun]){
+    //        rt.push(par[fun](kws))
+    //    }
+    //    cusParCall(par,fun,kws,rt)
+    //}
+}
+
+/***/ }),
+
+/***/ 90:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+var code = exports.code = {
+    //hashCode:function (str){
+    //    var str =btoa(str)
+    //    var h = 0, off = 0;
+    //    var len = str.length;
+    //    for(var i = 0; i < len; i++){
+    //        h = 31 * h + str.charCodeAt(off++);
+    //    }
+    //    var t=-2147483648*2;
+    //    while(h>2147483647){
+    //        h+=t
+    //    }
+    //    return h;
+    //}
+
+    hashDict: function hashDict(dc) {
+        var ls = [];
+        for (var k in dc) {
+            if (k.startsWith('_')) {
+                continue;
+            }
+            if ($.isFunction(dc[k])) {
+                continue;
+            }
+            ls.push(k);
+        }
+        ls = ls.sort();
+        var lsl = [];
+        for (var i = 0; i < ls.length; i++) {
+            lsl.push(ls[i] + ':' + dc[ls[i]]);
+        }
+        var dc_str = lsl.join(';');
+        return md5(dc_str);
+    }
+};
+
+/***/ }),
+
+/***/ 91:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.sortOrder = sortOrder;
+function isChinese(temp) {
+    var re = /[^\u4E00-\u9FA5]/;
+    if (re.test(temp[0])) {
+        return false;
+    }
+    return true;
+}
+function compare(temp1, temp2) {
+    if (temp1 < temp2) {
+        return -1;
+    } else if (temp1 == temp2) {
+        return 0;
+    } else {
+        return 1;
+    }
+}
+
+function sortOrder(array, key) {
+
+    return array.slice().sort(function (a, b) {
+        if (key) {
+            var val_a = a[key];
+            var val_b = b[key];
+        } else {
+            var val_a = a;
+            var val_b = b;
+        }
+        if (isChinese(val_a) && isChinese(val_b)) {
+            return val_a.localeCompare(val_b, 'zh');
+        } else {
+            return compare(val_a, val_b);
+        }
+    });
+}
+
+/***/ }),
+
+/***/ 92:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+__webpack_require__(93);
+__webpack_require__(95);
+
+/***/ }),
+
+/***/ 93:
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(94);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// add the styles to the DOM
+var update = __webpack_require__(1)(content, {});
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!./../../../../../../../../../coblan/webcode/node_modules/.0.26.1@css-loader/index.js!./../../../../../../../../../coblan/webcode/node_modules/.6.0.0@sass-loader/lib/loader.js!./text.scss", function() {
+			var newContent = require("!!./../../../../../../../../../coblan/webcode/node_modules/.0.26.1@css-loader/index.js!./../../../../../../../../../coblan/webcode/node_modules/.6.0.0@sass-loader/lib/loader.js!./text.scss");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+
+/***/ 94:
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(0)();
+// imports
+
+
+// module
+exports.push([module.i, ".clickable {\n  cursor: pointer;\n  color: #4da8cd; }\n", ""]);
+
+// exports
+
+
+/***/ }),
+
+/***/ 95:
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(96);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// add the styles to the DOM
+var update = __webpack_require__(1)(content, {});
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!./../../../../../../../../../coblan/webcode/node_modules/.0.26.1@css-loader/index.js!./../../../../../../../../../coblan/webcode/node_modules/.6.0.0@sass-loader/lib/loader.js!./pos_size.scss", function() {
+			var newContent = require("!!./../../../../../../../../../coblan/webcode/node_modules/.0.26.1@css-loader/index.js!./../../../../../../../../../coblan/webcode/node_modules/.6.0.0@sass-loader/lib/loader.js!./pos_size.scss");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+
+/***/ 96:
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(0)();
+// imports
+
+
+// module
+exports.push([module.i, ".abs-full {\n  position: absolute;\n  bottom: 0;\n  top: 0;\n  left: 0;\n  right: 0; }\n\n.abs-middle {\n  position: absolute;\n  left: 50%;\n  top: 50%;\n  transform: translate(-50%, -50%); }\n", ""]);
+
+// exports
+
 
 /***/ })
 
