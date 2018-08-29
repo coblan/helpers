@@ -43,7 +43,7 @@ var mix_table_data={
                    return
                }
 
-                function  bb(all_set_dict){
+                function  bb(all_set_dict,after_save_callback){
                     var cache_rows = ex.copy(self.selected)
 
                     ex.each(cache_rows ,function(row){
@@ -60,6 +60,9 @@ var mix_table_data={
                         })
 
                         cfg.hide_load(2000)
+                        if(after_save_callback){
+                            after_save_callback()
+                        }
                     })
                 }
 
@@ -67,8 +70,12 @@ var mix_table_data={
                     layer.confirm(kws.confirm_msg, {icon: 3, title:'提示'}, function(index){
                         layer.close(index);
                         if(kws.fields_ctx){
-                            pop_edit_local({},kws.fields_ctx,function(new_row){
-                                bb(new_row)
+                           var win_index = pop_edit_local({},kws.fields_ctx,function(new_row){
+                                bb(new_row,function(){
+                                    setTimeout(function(){
+                                        layer.close(win_index)
+                                    },2000)
+                                })
                             })
                         }else{
                             bb({})
