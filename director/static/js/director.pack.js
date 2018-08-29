@@ -837,6 +837,10 @@ var _field_blocktext = __webpack_require__(92);
 
 var field_blocktext = _interopRequireWildcard(_field_blocktext);
 
+var _field_search_select = __webpack_require__(97);
+
+var field_search_select = _interopRequireWildcard(_field_search_select);
+
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 /***/ }),
@@ -3568,24 +3572,28 @@ var _date_datetimefield_range = __webpack_require__(40);
 
 var date_datetimefield_range = _interopRequireWildcard(_date_datetimefield_range);
 
+var _filter_search_select = __webpack_require__(95);
+
+var filter_search_select = _interopRequireWildcard(_filter_search_select);
+
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
-__webpack_require__(78); /**
-                                      >5>front/table.rst>
-                                     
-                                      table的过滤器
-                                      ============
-                                      ::
-                                     
-                                      class SalaryFilter(RowFilter):
-                                      names=['is_checked']
-                                      range_fields=[{'name':'month','type':'month'}]
-                                      model=SalaryRecords
-                                     
-                                     
-                                      <-<
-                                      */
+/**
+ >5>front/table.rst>
 
+ table的过滤器
+ ============
+ ::
+
+ class SalaryFilter(RowFilter):
+ names=['is_checked']
+ range_fields=[{'name':'month','type':'month'}]
+ model=SalaryRecords
+
+
+ <-<
+ */
+__webpack_require__(78);
 
 Vue.component('com-filter', {
     props: ['heads', 'search_args'],
@@ -4743,6 +4751,63 @@ if(false) {
 	// When the module is disposed, remove the <style> tags
 	module.hot.dispose(function() { update(); });
 }
+
+/***/ }),
+/* 95 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var com_select = {
+    props: ['head', 'search_args'],
+    template: '<div class="form-control input-sm" >\n            <com-field-search-select :head="head" :row="search_args"></com-field-search-select>\n    </div>'
+};
+
+Vue.component('com-filter-search-select', com_select);
+
+/***/ }),
+/* 96 */,
+/* 97 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var search_select = {
+    props: ['row', 'head'],
+    data: function data() {
+        return {
+            model: this.row[this.head.name]
+        };
+    },
+    template: '<div>\n                <span v-if=\'head.readonly\' v-text=\'get_label(head.options,row[head.name])\'></span>\n                <select v-else v-model=\'row[head.name]\'  :id="\'id_\'+head.name"  class="selectpicker form-control" data-live-search="true">\n                    <option v-for=\'opt in orderBy(head.options,"label")\' :value=\'opt.value\'\n                     :data-tokens="opt.label" v-text=\'opt.label\'></option>\n                </select>\n                </div>',
+    mounted: function mounted() {
+        var self = this;
+        if (this.head.default && !this.row[this.head.name]) {
+            Vue.set(this.row, this.head.name, this.head.default);
+        }
+        ex.load_css("/static/lib/bootstrap-select.min.css");
+        ex.load_js("/static/lib/bootstrap-select.min.js", function () {
+            $(self.$el).find('.selectpicker').selectpicker();
+        });
+    },
+    methods: {
+        get_label: function get_label(options, value) {
+            var option = ex.findone(options, { value: value });
+            if (!option) {
+                return '---';
+            } else {
+                return option.label;
+            }
+        },
+        orderBy: function orderBy(array, key) {
+            return order_by_key(array, key);
+        }
+    }
+};
+
+Vue.component('com-field-search-select', search_select);
 
 /***/ })
 /******/ ]);

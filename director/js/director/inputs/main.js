@@ -8,3 +8,4 @@ import * as int_bool from './int_bool.js'
 import * as number from './number.js'
 
 import * as field_blocktext from './field_blocktext'
+import * as field_search_select from './field_search_select'
