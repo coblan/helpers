@@ -37,9 +37,10 @@ export var network ={
                 }
             }
             if(msg.length!=0){
-                cfg.showMsg(msg.join('\n'))
+                cfg.warning(msg.join('\n'))
             }
-            if (resp.status && typeof resp.status == 'string' && resp.status != 'success') {
+            //if (resp.status && typeof resp.status == 'string' && resp.status != 'success') {
+            if (resp.success === false) {
                 cfg.hide_load() // sometime
                 return
             } else {

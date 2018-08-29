@@ -35,7 +35,8 @@ def save_row(row,user,request):
         dc = field_obj.get_row()
         return {'status':'success','row':dc}
     except ValidationError as e:
-        return {'errors':dict(e)}    
+        return {'errors':dict(e)}
+
 
 def get_new_row_ctx(model_name,user):
     model = name_to_model(model_name)
