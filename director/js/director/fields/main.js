@@ -92,7 +92,7 @@ var field={
                 <slot></slot>
                 <!--<i class="help-text" v-if="head.help_text" v-text="head.help_text"></i>-->
                 <span class="help-text clickable">
-                    <i style="color: #3780af;position: relative;top:10px;"  v-if="head.help_text" @click="show_msg(head.help_text,$event)" class="fa fa-question-circle" ></i>
+                    <i style="color: #3780af;position: relative;"  v-if="head.help_text" @click="show_msg(head.help_text,$event)" class="fa fa-question-circle" ></i>
                 </span>
 
                  <!--<div class="msg" style="position: absolute;right: 5px;top: 1px;">-->

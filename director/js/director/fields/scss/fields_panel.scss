@@ -47,7 +47,7 @@ msg-bottom  nice validator的位置在下面，默认在右侧
     top:0px;
     left:0px;
     bottom:0px;
-    width:180px;
+    width:190px;
     border-radius:6px;
     background-color: #fff;
     z-index:0;
@@ -55,7 +55,8 @@ msg-bottom  nice validator的位置在下面，默认在右侧
 
   .form-group.field{
     display: flex;
-    align-items:flex-start;
+    align-items:center;
+
 
     margin-bottom: 0;
     .field_input{
@@ -75,7 +76,7 @@ msg-bottom  nice validator的位置在下面，默认在右侧
         border-top: 5px solid #FFF;
     }
     .control-label{
-        width:150px;
+        width:160px;
         text-align: right;
         padding:5px 30px;
         z-index:100;
@@ -161,4 +162,6 @@ img.img-uploador{
 
 .req_star{
   color: red;
+  position: absolute;
+  top:0;
 }
