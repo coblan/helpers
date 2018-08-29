@@ -1582,7 +1582,7 @@ var mix_table_data = {
                                 bb(new_row, function () {
                                     setTimeout(function () {
                                         layer.close(win_index);
-                                    }, 2000);
+                                    }, 1500);
                                 });
                             });
                         } else {
@@ -1607,7 +1607,7 @@ var mix_table_data = {
                     crt_row._director_name = cache_director_name;
                     setTimeout(function () {
                         layer.close(win_index);
-                    }, 2000);
+                    }, 1500);
                 });
             },
             ajax_row: function ajax_row(kws) {
@@ -1818,7 +1818,25 @@ var row_match = {
             return true;
         }
     },
-    one_row_match: function one_row_match(self, head) {},
+    one_row_match: function one_row_match(self, head) {
+        if (self.selected.length != 1) {
+            cfg.showMsg('请选择一行数据！');
+            return false;
+        } else {
+            var field = head.match_field;
+            var values = head.match_values;
+            var msg = head.match_msg;
+
+            var row = self.selected[0];
+
+            if (!ex.isin(row[field], values)) {
+                cfg.showMsg(msg);
+                return false;
+            } else {
+                return true;
+            }
+        }
+    },
     many_row_match: function many_row_match(self, head) {
         // head : @match_field , @match_values ,@match_msg
         if (self.selected.length == 0) {
