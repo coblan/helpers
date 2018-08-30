@@ -3,4 +3,14 @@
         padding-left: 1px;
         padding-right: 4px;
     }
+
+    width: 200px;
+
+    input{
+        height: 30px;
+    }
+}
+
+.el-dropdown-menu .active-search-item{
+    color: blue;
 }

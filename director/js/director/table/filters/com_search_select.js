@@ -6,12 +6,11 @@ var com_search = {
         if(! this.search_args._q){
             Vue.set(this.search_args,'_q','')
         }
-        return {
-
+        if(!this.search_args._qf){
+            Vue.set(this.search_args,'_qf',this.head.options[0].value)
         }
-    },
-    mounted:function(){
-        Vue.set(this.search_args,'qf',1)
+        return {
+        }
     },
     template:`<div class="search-select">
     <!--<input style="max-width: 20em;min-width: 10em;"-->
@@ -22,8 +21,9 @@ var com_search = {
              <!--@keyup.13="$emit('submit')"-->
              <!--class='form-control input-sm'/>-->
              <el-input class="input-with-select"
-                placeholder="请输入内容"
+                :placeholder="normed_placeholder"
                 prefix-icon="el-icon-search"
+                @keyup.native.13="$emit('submit')"
                 size="small"
                 v-model="search_args._q">
                  <!--<el-select v-model="search_args.qf" slot="append" placeholder="请选择">-->
@@ -37,18 +37,28 @@ var com_search = {
                         <i class="el-icon-arrow-down el-icon--right"></i>
                       </span>
                       <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item @click="set_value(1)" :class="{'active':search_args._qf==1}">黄金糕</el-dropdown-item>
-                        <el-dropdown-item>狮子头</el-dropdown-item>
-                        <el-dropdown-item>螺蛳粉</el-dropdown-item>
-                        <el-dropdown-item>双皮奶</el-dropdown-item>
-                        <el-dropdown-item>蚵仔煎</el-dropdown-item>
+                        <!--<el-dropdown-item command="1"><span :class="{'active-search-item':isActive(1)}">黄金糕</span></el-dropdown-item>-->
+                        <el-dropdown-item v-for="opt in head.options" :command="opt.value"><span :class="{'active-search-item':isActive(opt.value)}" v-text="opt.label"></span></el-dropdown-item>
+
                       </el-dropdown-menu>
                     </el-dropdown>
               </el-input>
     </div> `,
+    computed:{
+        normed_placeholder:function(){
+            var crt = ex.findone(this.head.options,{value:this.search_args._qf})
+            return crt.label
+        }
+    },
     methods:{
-        set_value:function(v){
-            this.search_args._qf=v
+        handleCommand:function(cmd){
+            Vue.set(this.search_args,'_qf',cmd)
+        },
+        //set_value:function(v){
+        //    this.search_args._qf=v
+        //},
+        isActive:function(v){
+            return this.search_args._qf==v
         }
     }
 }

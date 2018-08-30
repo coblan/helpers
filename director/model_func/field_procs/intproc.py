@@ -1,6 +1,6 @@
 # encoding:utf-8
 from __future__ import unicode_literals
-
+import re
 from ..field_proc  import BaseFieldProc
 from django.db.models import IntegerField, SmallIntegerField
 from .. .base_data import field_map
@@ -42,6 +42,12 @@ class IntProc(BaseFieldProc):
             'editor':'com-select-filter',
             'options':options
         }
+    
+    def filter_clean_search(self, q_str): 
+        if re.search('^\d+$', q_str):
+            return q_str  
+        else:
+            return None
 
 
 field_map.update({

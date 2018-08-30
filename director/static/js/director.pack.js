@@ -4938,15 +4938,27 @@ var com_search = {
         if (!this.search_args._q) {
             Vue.set(this.search_args, '_q', '');
         }
+        if (!this.search_args._qf) {
+            Vue.set(this.search_args, '_qf', this.head.options[0].value);
+        }
         return {};
     },
-    mounted: function mounted() {
-        Vue.set(this.search_args, 'qf', 1);
+    template: '<div class="search-select">\n    <!--<input style="max-width: 20em;min-width: 10em;"-->\n             <!--type="text"-->\n             <!--name="_q"-->\n             <!--v-model=\'search_args._q\'-->\n             <!--:placeholder=\'head.search_tip\'-->\n             <!--@keyup.13="$emit(\'submit\')"-->\n             <!--class=\'form-control input-sm\'/>-->\n             <el-input class="input-with-select"\n                :placeholder="normed_placeholder"\n                prefix-icon="el-icon-search"\n                @keyup.native.13="$emit(\'submit\')"\n                size="small"\n                v-model="search_args._q">\n                 <!--<el-select v-model="search_args.qf" slot="append" placeholder="\u8BF7\u9009\u62E9">-->\n                      <!--<el-option label="\u9910\u5385\u540D" value="1"></el-option>-->\n                      <!--<el-option label="\u8BA2\u5355\u53F7" value="2"></el-option>-->\n                      <!--<el-option label="\u7528\u6237\u7535\u8BDD" value="3"></el-option>-->\n                <!--</el-select>-->\n\n                   <el-dropdown trigger="click" slot="append" @command="handleCommand">\n                      <span class="el-dropdown-link">\n                        <i class="el-icon-arrow-down el-icon--right"></i>\n                      </span>\n                      <el-dropdown-menu slot="dropdown">\n                        <!--<el-dropdown-item command="1"><span :class="{\'active-search-item\':isActive(1)}">\u9EC4\u91D1\u7CD5</span></el-dropdown-item>-->\n                        <el-dropdown-item v-for="opt in head.options" :command="opt.value"><span :class="{\'active-search-item\':isActive(opt.value)}" v-text="opt.label"></span></el-dropdown-item>\n\n                      </el-dropdown-menu>\n                    </el-dropdown>\n              </el-input>\n    </div> ',
+    computed: {
+        normed_placeholder: function normed_placeholder() {
+            var crt = ex.findone(this.head.options, { value: this.search_args._qf });
+            return crt.label;
+        }
     },
-    template: '<div class="search-select">\n    <!--<input style="max-width: 20em;min-width: 10em;"-->\n             <!--type="text"-->\n             <!--name="_q"-->\n             <!--v-model=\'search_args._q\'-->\n             <!--:placeholder=\'head.search_tip\'-->\n             <!--@keyup.13="$emit(\'submit\')"-->\n             <!--class=\'form-control input-sm\'/>-->\n             <el-input class="input-with-select"\n                placeholder="\u8BF7\u8F93\u5165\u5185\u5BB9"\n                prefix-icon="el-icon-search"\n                size="small"\n                v-model="search_args._q">\n                 <!--<el-select v-model="search_args.qf" slot="append" placeholder="\u8BF7\u9009\u62E9">-->\n                      <!--<el-option label="\u9910\u5385\u540D" value="1"></el-option>-->\n                      <!--<el-option label="\u8BA2\u5355\u53F7" value="2"></el-option>-->\n                      <!--<el-option label="\u7528\u6237\u7535\u8BDD" value="3"></el-option>-->\n                <!--</el-select>-->\n\n                   <el-dropdown trigger="click" slot="append" @command="handleCommand">\n                      <span class="el-dropdown-link">\n                        <i class="el-icon-arrow-down el-icon--right"></i>\n                      </span>\n                      <el-dropdown-menu slot="dropdown">\n                        <el-dropdown-item @click="set_value(1)" :class="{\'active\':search_args._qf==1}">\u9EC4\u91D1\u7CD5</el-dropdown-item>\n                        <el-dropdown-item>\u72EE\u5B50\u5934</el-dropdown-item>\n                        <el-dropdown-item>\u87BA\u86F3\u7C89</el-dropdown-item>\n                        <el-dropdown-item>\u53CC\u76AE\u5976</el-dropdown-item>\n                        <el-dropdown-item>\u86B5\u4ED4\u714E</el-dropdown-item>\n                      </el-dropdown-menu>\n                    </el-dropdown>\n              </el-input>\n    </div> ',
     methods: {
-        set_value: function set_value(v) {
-            this.search_args._qf = v;
+        handleCommand: function handleCommand(cmd) {
+            Vue.set(this.search_args, '_qf', cmd);
+        },
+        //set_value:function(v){
+        //    this.search_args._qf=v
+        //},
+        isActive: function isActive(v) {
+            return this.search_args._qf == v;
         }
     }
 };
@@ -4961,7 +4973,7 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, ".search-select .el-input-group__append {\n  padding-left: 1px;\n  padding-right: 4px; }\n", ""]);
+exports.push([module.i, ".search-select {\n  width: 200px; }\n  .search-select .el-input-group__append {\n    padding-left: 1px;\n    padding-right: 4px; }\n  .search-select input {\n    height: 30px; }\n\n.el-dropdown-menu .active-search-item {\n  color: blue; }\n", ""]);
 
 // exports
 
