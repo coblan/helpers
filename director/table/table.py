@@ -214,11 +214,10 @@ class RowFilter(object):
         for proc_cls,name in zip(self.get_proc_list() ,self.valid_name):
             dc.update( proc_cls().filter_dict_query_args(self.filter_args, name ) )
         self.filter_args.update(dc)
+        arg_dc = {k: v for k, v in self.filter_args.items() if v}
+        
         query=query.filter(**self.filter_args)
         return query    
-    
-  
-    
     
 class RowSort(object):
     """
