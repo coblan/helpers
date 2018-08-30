@@ -1,6 +1,7 @@
 from threading import currentThread
 #from django.core.cache.backends.locmem import LocMemCache
 import json
+from django.utils.deprecation import MiddlewareMixin
 
 _request_cache = {}
 _installed_middleware = False
@@ -33,10 +34,11 @@ def request_cache(fun):
         #params = dict()
         #super(RequestCache, self).__init__(name, params)
 
-class RequestCacheMiddleware(object):
-    def __init__(self):
+class RequestCacheMiddleware(MiddlewareMixin):
+    def __init__(self,*args,**kws):
         global _installed_middleware
         _installed_middleware = True
+        super().__init__(*args,**kws)
 
     def process_request(self, request):
         cache = {

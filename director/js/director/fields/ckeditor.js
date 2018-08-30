@@ -103,8 +103,17 @@ var ckeditor = {
 	},
 	watch:{
 		value:function(v){
-			this.editor.setData(this.value)
-			this.editor.checkDirty()
+			var self=this
+			if(! self.ckeditor_loaded){
+				self.ckeditor_setvalue_queue=function(){
+					self.editor.setData(v)
+					self.editor.resetDirty()
+				}
+			}else{
+				self.editor.setData(v)
+				self.editor.resetDirty()
+			}
+
 		}
 	},
 	mounted:function () {
@@ -125,10 +134,18 @@ var ckeditor = {
 			//self.input.value=self.value
 
 			var editor = CKEDITOR.replace(self.input,config)
-			editor.setData(self.value)
-			editor.checkDirty()
+			if(self.value){
+				editor.setData(self.value)
+				editor.resetDirty()
+			}
 			self.editor = editor
 
+			editor.on('instanceReady',function(evt){
+				self.ckeditor_loaded=true
+				if(self.ckeditor_setvalue_queue){
+					self.ckeditor_setvalue_queue()
+				}
+			})
 
 			//var is_changed=false
 			//editor.on( 'change', function( evt ) {
