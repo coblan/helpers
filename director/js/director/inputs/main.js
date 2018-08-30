@@ -9,3 +9,5 @@ import * as number from './number.js'
 
 import * as field_blocktext from './field_blocktext'
 import * as field_search_select from './field_search_select'
+
+import * as field_single_chosen from './field_single_chosen'
