@@ -135,7 +135,7 @@ class RowFilter(object):
     model=''
     def __init__(self,dc,user,allowed_names,kw={}):
         self.names = self.names + self.range_fields #+ [x.get('name') for x in self.range_fields]
-        self.valid_name=[x for x in self.names if x in allowed_names]
+        self.valid_name= self.names  #[x for x in self.names if x in allowed_names]
         self.crt_user=user
         #self._names=[x for x in self.names if x in allowed_names]        
         self.filter_args={}
@@ -393,14 +393,14 @@ class ModelTable(object):
         director_name =self.get_director_name()
         heads = self.get_heads()
         rows = self.get_rows()
-        row_pages = self.pagenum.get_context()
+        #row_pages = self.pagenum.get_context()
         row_sort = self.row_sort.get_context()
         model_name = model_to_name(self.model)
         ops = self.get_operation()
         return {
             'heads':heads,
             'rows': rows,
-            'row_pages' : row_pages,
+            'row_pages' : self.getRowPages(),
             'row_sort':row_sort,
             'row_filters':ls,
             #'search_tip':self.row_search.get_context(),
@@ -438,10 +438,13 @@ class ModelTable(object):
     def get_data_context(self):
         return {
             'rows': self.get_rows(),
-            'row_pages' : self.pagenum.get_context(),  
+            'row_pages' : self.getRowPages(), #self.pagenum.get_context(),  
             'search_args':self.search_args, 
             'footer': self.footer,
         }
+    
+    def getRowPages(self): 
+        return self.pagenum.get_context()
     
     def permited_fields(self):
         ls = self.permit.readable_fields()
