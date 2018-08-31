@@ -15,6 +15,7 @@ from django.conf import settings
 from helpers.director.base_data import director
 from django.core.exceptions import FieldDoesNotExist
 from helpers.director.middleware.request_cache import get_request_cache
+from helpers.director.model_func.field_proc import BaseFieldProc
 
 from django.core.paginator import Paginator
 
@@ -162,7 +163,7 @@ class RowFilter(object):
             # 先查找 proc
             model_name = model_to_name(self.model)
             model_field_name = '%s.%s'%(model_name,name)
-            proc_cls =field_map.get(model_field_name)
+            proc_cls =field_map.get(model_field_name, BaseFieldProc)
             
             if not proc_cls:
                 f = self.model._meta.get_field(name)
@@ -381,14 +382,14 @@ class ModelTable(object):
         return director_name
     
     def get_context(self):
-        ls=[]
-        search_head = self.row_search.get_context()
-        row_filters = self.row_filter.get_context()
-        # 合并search和rowfilter 为rowfilter
-        if search_head:
-            ls.append( search_head)
-        if row_filters:
-            ls.extend(row_filters)
+        #ls=[]
+        #search_head = self.row_search.get_context()
+        #row_filters = self.row_filter.get_context()
+        ## 合并search和rowfilter 为rowfilter
+        #if search_head:
+            #ls.append( search_head)
+        #if row_filters:
+            #ls.extend(row_filters)
         
         director_name =self.get_director_name()
         heads = self.get_heads()
@@ -402,7 +403,7 @@ class ModelTable(object):
             'rows': rows,
             'row_pages' : self.getRowPages(),
             'row_sort':row_sort,
-            'row_filters':ls,
+            'row_filters':  self.getRowFilters(), #ls,
             #'search_tip':self.row_search.get_context(),
             'director_name':director_name,
             'model_name':model_name,
@@ -410,10 +411,7 @@ class ModelTable(object):
             'search_args':self.search_args
         }
     
-    def get_head_context(self):
-        """
-        有些时候，最先不需要返回rows，而只返回filters，head等，等待用户选择后，才返回rows
-        """
+    def getRowFilters(self): 
         ls=[]
         search_head = self.row_search.get_context()
         row_filters = self.row_filter.get_context()
@@ -422,12 +420,26 @@ class ModelTable(object):
             ls.append( search_head)
         if row_filters:
             ls.extend(row_filters)
+        return ls
+    
+    def get_head_context(self):
+        """
+        有些时候，最先不需要返回rows，而只返回filters，head等，等待用户选择后，才返回rows
+        """
+        #ls=[]
+        #search_head = self.row_search.get_context()
+        #row_filters = self.row_filter.get_context()
+        ## 合并search和rowfilter 为rowfilter
+        #if search_head:
+            #ls.append( search_head)
+        #if row_filters:
+            #ls.extend(row_filters)
         return {
             'heads':self.get_heads(),
             'rows': [], #self.get_rows(),
             'row_pages':{}, # self.pagenum.get_context(),
             'row_sort':self.row_sort.get_context(),
-            'row_filters': ls , #self.row_filter.get_context(),
+            'row_filters': self.getRowFilters() , #self.row_filter.get_context(),
             'search_args': {},
             #'search_tip':self.row_search.get_context(),
             'director_name': self.get_director_name(),#model_to_name(self.model),
