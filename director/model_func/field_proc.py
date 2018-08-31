@@ -46,9 +46,15 @@ class BaseFieldProc(object):
     def filter_adapt_dict(self,dc,name):
         return dc
     
-    def filter_dict_query_args(self,dc,name):
-        return {}
+    def filter_clean_filter_arg(self, f_str):
+        if f_str == '':
+            return  None
+        else:
+            return f_str
+
     
-    def filter_clean_search(self, q_str): 
+    def filter_clean_search(self, q_str):
+        if q_str == '':
+            return None
         return q_str
     
