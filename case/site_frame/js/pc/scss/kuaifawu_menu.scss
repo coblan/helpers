@@ -1,0 +1,48 @@
+
+$action_width : 200px;
+
+.kuaifawu-menu{
+    position: relative;
+    z-index: 100;
+
+    .menu-button{
+        padding:0.6em 0;
+        width: $action_width;
+        display: inline-block;
+        color: white;
+        background-color: #02c9ff;
+    }
+    .actions{
+        position: absolute;
+        top:100%;
+        background-color: rgba(20,20,20,0.8);
+        left: 0;
+        width: $action_width;
+        color: white;
+
+
+        .menu-item {
+          border-bottom: 1px solid grey;
+          padding: 1em;
+
+
+          &.active{
+            background-color: white;
+            color: black;
+          }
+        }
+
+    }
+
+    .menu-links{
+        position: absolute;
+        top:100%;
+        background-color: white;
+        left: $action_width;
+        min-height: 200px;
+
+        padding: 1em;
+
+    }
+
+}
