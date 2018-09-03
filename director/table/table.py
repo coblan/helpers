@@ -415,7 +415,9 @@ class ModelTable(object):
             'director_name':director_name,
             'model_name':model_name,
             'ops' : ops,
-            'search_args':self.search_args
+            'search_args':self.search_args, 
+            'parents': self.getParents(),
+            'footer': self.footer,
         }
     
     def getRowFilters(self): 
@@ -453,13 +455,16 @@ class ModelTable(object):
             'ops' : self.get_operation()
         }        
     
-
+    def getParents(self): 
+        return []
+    
     def get_data_context(self):
         return {
             'rows': self.get_rows(),
             'row_pages' : self.getRowPages(), #self.pagenum.get_context(),  
             'search_args':self.search_args, 
             'footer': self.footer,
+            'parents': self.getParents(),
         }
     
     def getRowPages(self): 
@@ -509,6 +514,20 @@ class ModelTable(object):
                 pass
                 
         return heads
+    
+    def footer_by_dict(self, dc): 
+        ls = self.permited_fields()   
+        ls = [x for x in ls if x not in self.hide_fields]
+        heads = model_to_head(self.model,include=ls)
+
+        heads.extend(self.getExtraHead())
+        heads = self.fields_sort_heads(heads)   
+        
+        heads= self.make_pop_edit_field(heads)
+        footer = []
+        for head in heads:
+            footer.append(dc.get(head['name'], ''))
+        return footer
     
     def make_pop_edit_field(self,heads):
         """

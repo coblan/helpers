@@ -242,6 +242,7 @@ var mix_table_data={
                 self.row_pages = resp.get_rows.row_pages
                 self.search_args=resp.get_rows.search_args
                 self.footer=resp.get_rows.footer
+                self.parents=resp.get_rows.parents
                 cfg.hide_load()
             })
         },

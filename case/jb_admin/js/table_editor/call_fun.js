@@ -1,5 +1,6 @@
 
 var call_fun = {
+    // head: {fun:'xxx'}
     props:['rowData','field','index'],
     template:`<span v-text="rowData[field]" class="clickable" @click="on_click()"></span>`,
     created:function(){
