@@ -38,7 +38,7 @@ class BaseFieldProc(object):
                 }
         """
         return {
-            'name': 'name',
+            'name': name,
             'editor':'com-date-range-filter'
         }
     
