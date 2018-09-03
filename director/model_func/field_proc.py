@@ -37,7 +37,11 @@ class BaseFieldProc(object):
                 'editor':'com-date-range-filter'
                 }
         """
-        return {}
+        return {
+            'name': 'name',
+            'editor':'com-date-range-filter'
+        }
+    
     
     def filter_get_head(self,name,model):
         return {}

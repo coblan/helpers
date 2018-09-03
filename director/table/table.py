@@ -87,7 +87,7 @@ class RowSearch(object):
     names=[]
     model=''
     def __init__(self,q,user = None,allowed_names = [],kw={}):
-        self.valid_name=[x for x in self.names if x in allowed_names]
+        self.valid_name= self.names  # [x for x in self.names if x in allowed_names]
         self.crt_user=user
         self._names=[x for x in self.names if x in allowed_names]        
         self.q=q
@@ -101,8 +101,12 @@ class RowSearch(object):
         """
         if self.valid_name:
             ls=[]
+            field_names = [f.name for f in self.model._meta.get_fields()]
             for name in self.valid_name:
-                ls.append(_(self.model._meta.get_field(name).verbose_name) )
+                if name in field_names:
+                    ls.append(_(self.model._meta.get_field(name).verbose_name) )
+                else:
+                    ls.append(name)
             dc = {
                 'search_tip':','.join(ls),
                 'editor':'com-search-filter',
@@ -158,16 +162,19 @@ class RowFilter(object):
     
     def get_proc_list(self):
         ls=[]
+        field_names = [f.name for f in self.model._meta.get_fields()]
         for name in self.valid_name:
-            
             # 先查找 proc
             model_name = model_to_name(self.model)
             model_field_name = '%s.%s'%(model_name,name)
-            proc_cls =field_map.get(model_field_name, BaseFieldProc)
+            proc_cls =field_map.get(model_field_name, None)
             
-            if not proc_cls:
+            # 如果不是数据库的字段，就不用去查询了
+            if not proc_cls and name in field_names:
                 f = self.model._meta.get_field(name)
-                proc_cls  =field_map.get(f.__class__)            
+                proc_cls  =field_map.get(f.__class__)   
+            if not proc_cls:
+                proc_cls =  BaseFieldProc
             ls.append(proc_cls)
         return ls
     
