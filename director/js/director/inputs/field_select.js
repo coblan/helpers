@@ -25,8 +25,24 @@ var sim_select= {
         if (this.head.default && !this.row[this.head.name]) {
             Vue.set(this.row, this.head.name, this.head.default)
         }
+
     },
+
+    watch:{
+        my_value:function(){
+            if(this.head.remote_options){
+                var self=this
+                ex.director_call(this.head.remote_options,{row:self.row},function(data){
+                    Vue.set(self.head,'options' ,data)
+                })
+            }
+        }
+    },
+
     computed:{
+        my_value:function(){
+            return this.row[this.head.name]
+        },
         place_value:function(){
             var v = this.row[this.head.name]
             if(v === undefined){
@@ -38,6 +54,10 @@ var sim_select= {
             }
         },
         normed_options:function(){
+            /*
+             head.hide_related_field设置 隐藏与 row.hide_related_field 相等的选项
+
+            * */
             var self=this
             if(this.head.hide_related_field){
                 var array = ex.filter(this.head.options,function(item){
@@ -46,6 +66,7 @@ var sim_select= {
             }else{
                 var array=self.head.options
             }
+
             return self.orderBy(array,'label')
 
         }

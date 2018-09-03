@@ -19,7 +19,7 @@ def get_global():
 
 def director_call(director_name, kws): 
     directorEnt= director.get(director_name)
-    return directorEnt(kws)
+    return directorEnt(**kws)
 
 def save(row,user,request):
     """

@@ -15,8 +15,14 @@ class ManyProc(BaseFieldProc):
     
     def dict_field_head(self,head):  
         head['editor'] = 'field_multi_chosen'
-        #head['options'] = 
-        return head    
+        return head  
+    
+    def dict_table_head(self,head):
+        """
+        """
+        head['editor'] = 'com-table-array-mapper'
+        return head
+       
 
 field_map.update({
     ManyToManyField:ManyProc

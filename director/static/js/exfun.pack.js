@@ -6,9 +6,9 @@
 /******/ 	function __webpack_require__(moduleId) {
 /******/
 /******/ 		// Check if module is in cache
-/******/ 		if(installedModules[moduleId])
+/******/ 		if(installedModules[moduleId]) {
 /******/ 			return installedModules[moduleId].exports;
-/******/
+/******/ 		}
 /******/ 		// Create a new module (and put it into the cache)
 /******/ 		var module = installedModules[moduleId] = {
 /******/ 			i: moduleId,
@@ -32,9 +32,6 @@
 /******/
 /******/ 	// expose the module cache
 /******/ 	__webpack_require__.c = installedModules;
-/******/
-/******/ 	// identity function for calling harmony imports with the correct context
-/******/ 	__webpack_require__.i = function(value) { return value; };
 /******/
 /******/ 	// define getter function for harmony exports
 /******/ 	__webpack_require__.d = function(exports, name, getter) {
@@ -63,12 +60,11 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 99);
+/******/ 	return __webpack_require__(__webpack_require__.s = 72);
 /******/ })
 /************************************************************************/
-/******/ ({
-
-/***/ 0:
+/******/ ([
+/* 0 */
 /***/ (function(module, exports) {
 
 /*
@@ -124,8 +120,7 @@ module.exports = function() {
 
 
 /***/ }),
-
-/***/ 1:
+/* 1 */
 /***/ (function(module, exports) {
 
 /*
@@ -141,7 +136,7 @@ var stylesInDom = {},
 		};
 	},
 	isOldIE = memoize(function() {
-		return /msie [6-9]\b/.test(self.navigator.userAgent.toLowerCase());
+		return /msie [6-9]\b/.test(window.navigator.userAgent.toLowerCase());
 	}),
 	getHeadElement = memoize(function () {
 		return document.head || document.getElementsByTagName("head")[0];
@@ -377,192 +372,139 @@ function updateLink(linkElement, obj) {
 
 
 /***/ }),
-
-/***/ 10:
+/* 2 */,
+/* 3 */,
+/* 4 */,
+/* 5 */,
+/* 6 */,
+/* 7 */,
+/* 8 */,
+/* 9 */,
+/* 10 */,
+/* 11 */,
+/* 12 */,
+/* 13 */,
+/* 14 */,
+/* 15 */,
+/* 16 */,
+/* 17 */,
+/* 18 */,
+/* 19 */,
+/* 20 */,
+/* 21 */,
+/* 22 */,
+/* 23 */,
+/* 24 */,
+/* 25 */,
+/* 26 */,
+/* 27 */,
+/* 28 */,
+/* 29 */,
+/* 30 */,
+/* 31 */,
+/* 32 */,
+/* 33 */,
+/* 34 */,
+/* 35 */,
+/* 36 */,
+/* 37 */,
+/* 38 */,
+/* 39 */,
+/* 40 */,
+/* 41 */,
+/* 42 */,
+/* 43 */,
+/* 44 */,
+/* 45 */,
+/* 46 */,
+/* 47 */,
+/* 48 */,
+/* 49 */,
+/* 50 */,
+/* 51 */,
+/* 52 */,
+/* 53 */,
+/* 54 */,
+/* 55 */,
+/* 56 */,
+/* 57 */,
+/* 58 */,
+/* 59 */,
+/* 60 */,
+/* 61 */,
+/* 62 */,
+/* 63 */,
+/* 64 */,
+/* 65 */,
+/* 66 */,
+/* 67 */,
+/* 68 */,
+/* 69 */,
+/* 70 */,
+/* 71 */,
+/* 72 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-/*
-setCookie('name', 1111, 5);
-setCookie('name1', 22222, 5);
+var _old = __webpack_require__(73);
 
-console.log(getCookie('name'));
-console.log(getAllCookie());
+var _network = __webpack_require__(74);
 
-delCookie('name1');
-clearCookie('undefined')    //清除未定义的名的cookie
-*/
-/*set cookie*/
-var cookie = exports.cookie = {
-    setCookie: function setCookie(name, value, Days) {
-        if (Days == null || Days == '') {
-            Days = 300;
+var _urlparse = __webpack_require__(75);
+
+var _collection = __webpack_require__(76);
+
+var _patch = __webpack_require__(77);
+
+var path = _interopRequireWildcard(_patch);
+
+var _cookie = __webpack_require__(78);
+
+var _obj = __webpack_require__(79);
+
+var _vuetools = __webpack_require__(80);
+
+var _code = __webpack_require__(81);
+
+var _order = __webpack_require__(82);
+
+var _cfg = __webpack_require__(83);
+
+var cfg = _interopRequireWildcard(_cfg);
+
+var _main = __webpack_require__(84);
+
+var uis = _interopRequireWildcard(_main);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+var ex = {
+    assign: function assign(dst, src) {
+        for (var key in src) {
+            dst[key] = src[key];
         }
-        var exp = new Date();
-        exp.setTime(exp.getTime() + Days * 24 * 60 * 60 * 1000);
-        document.cookie = name + "=" + escape(value) + "; path=/;expires=" + exp.toGMTString();
-        //document.cookie = name + "="+ escape (value) + ";expires=" + exp.toGMTString();
-    },
-
-    /*get cookie*/
-    getCookie: function getCookie(name) {
-        var arr,
-            reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
-        if (arr = document.cookie.match(reg)) return unescape(arr[2]);else return null;
-    },
-
-    /*get all cookie*/
-    getAllCookie: function getAllCookie() {
-        return document.cookie;
-    },
-
-    /* clear cookie*/
-    clearCookie: function clearCookie(name) {
-        this.setCookie(name, '', -1);
-    },
-
-    /* del cookie*/
-    delCookie: function delCookie(name) {
-        var exp = new Date();
-        exp.setTime(exp.getTime() - 1);
-        var cval = this.getCookie(name);
-        if (cval != null) document.cookie = name + "=" + cval + "; path=/;expires=" + exp.toGMTString();
     }
 };
 
-/***/ }),
+//import {md5} from  './md5.min'
 
-/***/ 11:
-/***/ (function(module, exports, __webpack_require__) {
+ex.assign(ex, _old.old);
+ex.assign(ex, _network.network);
+ex.assign(ex, _urlparse.urlparse);
+ex.assign(ex, _collection.collection);
+ex.assign(ex, _cookie.cookie);
+ex.assign(ex, _obj.obj_control);
+ex.assign(ex, _vuetools.vuetool);
+ex.assign(ex, _code.code);
+ex.sortOrder = _order.sortOrder;
 
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-var network = exports.network = {
-    get: function get(url, callback) {
-        //replace $.get
-        var self = this;
-        var wrap_callback = function wrap_callback(resp) {
-            if (resp.msg) {
-                self.show_msg(resp.msg);
-            }
-            if (resp.status && typeof resp.status == 'string' && resp.status != 'success') {
-                cfg.hide_load();
-                return;
-            } else {
-                callback(resp);
-            }
-        };
-        return $.get(url, wrap_callback);
-    },
-    post: function post(url, data, callback) {
-        var self = this;
-        var wrap_callback = function wrap_callback(resp) {
-            var msg = [];
-            if (resp.msg) {
-                if (typeof resp.msg == 'string') {
-                    msg.push(resp.msg);
-                } else {
-                    msg = msg.concat(resp.msg);
-                }
-            }
-            for (var k in resp) {
-                if (resp[k] && resp[k].msg) {
-                    if (typeof resp[k].msg == 'string') {
-                        msg.push(resp[k].msg);
-                    } else {
-                        msg = msg.concat(resp[k].msg);
-                    }
-                }
-            }
-            if (msg.length != 0) {
-                cfg.warning(msg.join('\n'));
-            }
-            //if (resp.status && typeof resp.status == 'string' && resp.status != 'success') {
-            if (resp.success === false) {
-                cfg.hide_load(); // sometime
-                return;
-            } else {
-                callback(resp);
-            }
-        };
-        return $.post(url, data, wrap_callback);
-    },
-    load_js: function load_js(src, success) {
-        success = success || function () {};
-        var name = src; //btoa(src)
-        if (!window['__js_hook_' + name]) {
-            window['__js_hook_' + name] = [];
-        }
-        window['__js_hook_' + name].push(success);
-        var hooks = window['__js_hook_' + name];
-        if (window['__js_loaded_' + name]) {
-            while (hooks.length > 0) {
-                hooks.pop()();
-            }
-        }
-        if (!window['__js_' + name]) {
-            window['__js_' + name] = true;
-            var domScript = document.createElement('script');
-            domScript.src = src;
-
-            domScript.onload = domScript.onreadystatechange = function () {
-                if (!this.readyState || 'loaded' === this.readyState || 'complete' === this.readyState) {
-                    window['__js_loaded_' + name] = true;
-                    while (hooks.length > 0) {
-                        hooks.pop()();
-                    }
-                    this.onload = this.onreadystatechange = null;
-                    // 让script元素显示出来
-                    //this.parentNode.removeChild(this);
-                }
-            };
-            document.getElementsByTagName('head')[0].appendChild(domScript);
-        }
-    },
-    load_css: function load_css(src) {
-        var name = btoa(src);
-        if (window['__src_' + name]) {
-            return;
-        }
-        window['__src_' + name] = true;
-        $('head').append('<link rel="stylesheet" href="' + src + '" type="text/css" />');
-    }
-};
+//ex.md5=md5
+window.ex = ex;
 
 /***/ }),
-
-/***/ 12:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-var obj_control = exports.obj_control = {
-    isEmpty: function isEmpty(obj) {
-        for (var k in obj) {
-            if (/^[^_]/.exec(k)) {
-                return false;
-            }
-        }
-        return true;
-    }
-};
-
-/***/ }),
-
-/***/ 13:
+/* 73 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -792,47 +734,46 @@ var old = exports.old = {
         return out_list;
     }
 
-    //function parseSearch(queryString) {
-    //    var queryString = queryString || location.search
-    //    if(queryString.startsWith('?')){
-    //        var queryString=queryString.substring(1)
-    //    }
-    //    var params = {}
-    //    // Split into key/value pairs
-    //    var queries = queryString.split("&");
-    //    // Convert the array of strings into an object
-    //    for (var i = 0; i < queries.length; i++ ) {
-    //        var mt = /([^=]+?)=(.+)/.exec(queries[i])
-    //        params[mt[1]] = mt[2];
-    //    }
-    //    return params;
-    //}
-    //function searchfy(obj,pre){
-    //    var outstr=pre||''
-    //    for(x in obj){
-    //        if(obj[x]){
-    //            outstr+=x.toString()+'='+ obj[x].toString()+'&';
-    //        }
-    //
-    //    }
-    //    if(outstr.endsWith('&')){
-    //        return outstr.slice(0,-1)
-    //    }else{
-    //        return outstr
-    //    }
-    //
-    //}
-    //function update(dst_obj,src_obj) {
-    //    for(x in src_obj){
-    //        dst_obj[x]=src_obj[x]
-    //    }
-    //}
-
 };
 
-/***/ }),
+//function parseSearch(queryString) {
+//    var queryString = queryString || location.search
+//    if(queryString.startsWith('?')){
+//        var queryString=queryString.substring(1)
+//    }
+//    var params = {}
+//    // Split into key/value pairs
+//    var queries = queryString.split("&");
+//    // Convert the array of strings into an object
+//    for (var i = 0; i < queries.length; i++ ) {
+//        var mt = /([^=]+?)=(.+)/.exec(queries[i])
+//        params[mt[1]] = mt[2];
+//    }
+//    return params;
+//}
+//function searchfy(obj,pre){
+//    var outstr=pre||''
+//    for(x in obj){
+//        if(obj[x]){
+//            outstr+=x.toString()+'='+ obj[x].toString()+'&';
+//        }
+//
+//    }
+//    if(outstr.endsWith('&')){
+//        return outstr.slice(0,-1)
+//    }else{
+//        return outstr
+//    }
+//
+//}
+//function update(dst_obj,src_obj) {
+//    for(x in src_obj){
+//        dst_obj[x]=src_obj[x]
+//    }
+//}
 
-/***/ 14:
+/***/ }),
+/* 74 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -841,241 +782,106 @@ var old = exports.old = {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.sortOrder = sortOrder;
-function isChinese(temp) {
-    var re = /[^\u4E00-\u9FA5]/;
-    if (re.test(temp[0])) {
-        return false;
-    }
-    return true;
-}
-function compare(temp1, temp2) {
-    if (temp1 < temp2) {
-        return -1;
-    } else if (temp1 == temp2) {
-        return 0;
-    } else {
-        return 1;
-    }
-}
-
-function sortOrder(array, key) {
-
-    return array.slice().sort(function (a, b) {
-        if (key) {
-            var val_a = a[key];
-            var val_b = b[key];
-        } else {
-            var val_a = a;
-            var val_b = b;
-        }
-        if (isChinese(val_a) && isChinese(val_b)) {
-            return val_a.localeCompare(val_b, 'zh');
-        } else {
-            return compare(val_a, val_b);
-        }
-    });
-}
-
-/***/ }),
-
-/***/ 15:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-/*
-* 以打补丁的方式，区域那些不兼容的部分
-* */
-//  startsWith
-if (!String.prototype.startsWith) {
-    String.prototype.startsWith = function (searchString, position) {
-        position = position || 0;
-        return this.substr(position, searchString.length) === searchString;
-    };
-    String.prototype.endsWith = function (str) {
-        return this.match(str + "$") == str;
-    };
-}
-
-Array.prototype.each = function (fn) {
-    return this.length ? [fn(this.slice(0, 1))].concat(this.slice(1).each(fn)) : [];
-};
-
-/*两种调用方式
- var template1="我是{0}，今年{1}了";
- var template2="我是{name}，今年{age}了";
- var result1=template1.format("loogn",22);
- var result2=template2.format({name:"loogn",age:22});
- 两个结果都是"我是loogn，今年22了"
- */
-String.prototype.format = function (args) {
-    var result = this;
-    if (arguments.length > 0) {
-        if (arguments.length == 1 && (typeof args === "undefined" ? "undefined" : _typeof(args)) == "object") {
-            for (var key in args) {
-                if (args[key] != undefined) {
-                    var reg = new RegExp("({" + key + "})", "g");
-                    result = result.replace(reg, args[key]);
+var network = exports.network = {
+    get: function get(url, callback) {
+        //replace $.get
+        var self = this;
+        var wrap_callback = function wrap_callback(resp) {
+            if (resp.msg) {
+                self.show_msg(resp.msg);
+            }
+            if (resp.status && typeof resp.status == 'string' && resp.status != 'success') {
+                cfg.hide_load();
+                return;
+            } else {
+                callback(resp);
+            }
+        };
+        return $.get(url, wrap_callback);
+    },
+    post: function post(url, data, callback) {
+        var self = this;
+        var wrap_callback = function wrap_callback(resp) {
+            var msg = [];
+            if (resp.msg) {
+                if (typeof resp.msg == 'string') {
+                    msg.push(resp.msg);
+                } else {
+                    msg = msg.concat(resp.msg);
                 }
             }
-        } else {
-            for (var i = 0; i < arguments.length; i++) {
-                if (arguments[i] != undefined) {
-                    //var reg = new RegExp("({[" + i + "]})", "g");//这个在索引大于9时会有问题，谢谢何以笙箫的指出
-                    var reg = new RegExp("({)" + i + "(})", "g");
-                    result = result.replace(reg, arguments[i]);
+            for (var k in resp) {
+                if (resp[k] && resp[k].msg) {
+                    if (typeof resp[k].msg == 'string') {
+                        msg.push(resp[k].msg);
+                    } else {
+                        msg = msg.concat(resp[k].msg);
+                    }
                 }
             }
-        }
-    }
-    return result;
-};
-
-var Base64 = {
-    // private property
-    _keyStr: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",
-
-    // public method for encoding
-    encode: function encode(input) {
-        var output = "";
-        var chr1, chr2, chr3, enc1, enc2, enc3, enc4;
-        var i = 0;
-
-        input = Base64._utf8_encode(input);
-
-        while (i < input.length) {
-
-            chr1 = input.charCodeAt(i++);
-            chr2 = input.charCodeAt(i++);
-            chr3 = input.charCodeAt(i++);
-
-            enc1 = chr1 >> 2;
-            enc2 = (chr1 & 3) << 4 | chr2 >> 4;
-            enc3 = (chr2 & 15) << 2 | chr3 >> 6;
-            enc4 = chr3 & 63;
-
-            if (isNaN(chr2)) {
-                enc3 = enc4 = 64;
-            } else if (isNaN(chr3)) {
-                enc4 = 64;
+            if (msg.length != 0) {
+                cfg.warning(msg.join('\n'));
             }
-
-            output = output + Base64._keyStr.charAt(enc1) + Base64._keyStr.charAt(enc2) + Base64._keyStr.charAt(enc3) + Base64._keyStr.charAt(enc4);
-        }
-
-        return output;
-    },
-
-    // public method for decoding
-    decode: function decode(input) {
-        var output = "";
-        var chr1, chr2, chr3;
-        var enc1, enc2, enc3, enc4;
-        var i = 0;
-
-        input = input.replace(/[^A-Za-z0-9\+\/\=]/g, "");
-
-        while (i < input.length) {
-
-            enc1 = Base64._keyStr.indexOf(input.charAt(i++));
-            enc2 = Base64._keyStr.indexOf(input.charAt(i++));
-            enc3 = Base64._keyStr.indexOf(input.charAt(i++));
-            enc4 = Base64._keyStr.indexOf(input.charAt(i++));
-
-            chr1 = enc1 << 2 | enc2 >> 4;
-            chr2 = (enc2 & 15) << 4 | enc3 >> 2;
-            chr3 = (enc3 & 3) << 6 | enc4;
-
-            output = output + String.fromCharCode(chr1);
-
-            if (enc3 != 64) {
-                output = output + String.fromCharCode(chr2);
-            }
-            if (enc4 != 64) {
-                output = output + String.fromCharCode(chr3);
-            }
-        }
-
-        output = Base64._utf8_decode(output);
-
-        return output;
-    },
-
-    // private method for UTF-8 encoding
-    _utf8_encode: function _utf8_encode(string) {
-        string = string.replace(/\r\n/g, "\n");
-        var utftext = "";
-
-        for (var n = 0; n < string.length; n++) {
-
-            var c = string.charCodeAt(n);
-
-            if (c < 128) {
-                utftext += String.fromCharCode(c);
-            } else if (c > 127 && c < 2048) {
-                utftext += String.fromCharCode(c >> 6 | 192);
-                utftext += String.fromCharCode(c & 63 | 128);
+            //if (resp.status && typeof resp.status == 'string' && resp.status != 'success') {
+            if (resp.success === false) {
+                cfg.hide_load(); // sometime
+                return;
             } else {
-                utftext += String.fromCharCode(c >> 12 | 224);
-                utftext += String.fromCharCode(c >> 6 & 63 | 128);
-                utftext += String.fromCharCode(c & 63 | 128);
+                callback(resp);
             }
-        }
-
-        return utftext;
+        };
+        return $.post(url, data, wrap_callback);
     },
-
-    // private method for UTF-8 decoding
-    _utf8_decode: function _utf8_decode(utftext) {
-        var string = "";
-        var i = 0;
-        var c = c1 = c2 = 0;
-
-        while (i < utftext.length) {
-
-            c = utftext.charCodeAt(i);
-
-            if (c < 128) {
-                string += String.fromCharCode(c);
-                i++;
-            } else if (c > 191 && c < 224) {
-                c2 = utftext.charCodeAt(i + 1);
-                string += String.fromCharCode((c & 31) << 6 | c2 & 63);
-                i += 2;
-            } else {
-                c2 = utftext.charCodeAt(i + 1);
-                c3 = utftext.charCodeAt(i + 2);
-                string += String.fromCharCode((c & 15) << 12 | (c2 & 63) << 6 | c3 & 63);
-                i += 3;
+    load_js: function load_js(src, success) {
+        success = success || function () {};
+        var name = src; //btoa(src)
+        if (!window['__js_hook_' + name]) {
+            window['__js_hook_' + name] = [];
+        }
+        window['__js_hook_' + name].push(success);
+        var hooks = window['__js_hook_' + name];
+        if (window['__js_loaded_' + name]) {
+            while (hooks.length > 0) {
+                hooks.pop()();
             }
         }
-        return string;
+        if (!window['__js_' + name]) {
+            window['__js_' + name] = true;
+            var domScript = document.createElement('script');
+            domScript.src = src;
+
+            domScript.onload = domScript.onreadystatechange = function () {
+                if (!this.readyState || 'loaded' === this.readyState || 'complete' === this.readyState) {
+                    window['__js_loaded_' + name] = true;
+                    while (hooks.length > 0) {
+                        hooks.pop()();
+                    }
+                    this.onload = this.onreadystatechange = null;
+                    // 让script元素显示出来
+                    //this.parentNode.removeChild(this);
+                }
+            };
+            document.getElementsByTagName('head')[0].appendChild(domScript);
+        }
+    },
+    load_css: function load_css(src) {
+        var name = btoa(src);
+        if (window['__src_' + name]) {
+            return;
+        }
+        window['__src_' + name] = true;
+        $('head').append('<link rel="stylesheet" href="' + src + '" type="text/css" />');
+    },
+    director_call: function director_call(director_name, kws, callback) {
+        var post_data = [{ fun: "director_call", director_name: director_name, kws: kws }];
+        ex.post('/d/ajax', JSON.stringify(post_data), function (resp) {
+            callback(resp.director_call);
+        });
     }
 };
 
-if (!window.atob) {
-    window.atob = Base64.decode;
-    window.btoa = Base64.encode;
-}
-
 /***/ }),
-
-/***/ 16:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-__webpack_require__(97);
-__webpack_require__(96);
-
-/***/ }),
-
-/***/ 17:
+/* 75 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1178,204 +984,7 @@ function para_encode(para_str) {
 }
 
 /***/ }),
-
-/***/ 18:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-var vuetool = exports.vuetool = {
-    vueSuper: function vueSuper(self, kws) {
-        var mixin = kws.mixin;
-        var name = kws.fun;
-        var args = kws.args || [];
-        if (mixin) {
-            var index = self.$options.mixins.indexOf(mixin);
-        } else {
-            var index = self.$options.mixins.length;
-        }
-        for (var i = index - 1; i > -1; i--) {
-            var mix = self.$options.mixins[i];
-            var methods = mix.methods[name];
-            if (methods) {
-                return methods.apply(self, args);
-            }
-        }
-    },
-    vueBroadCall: function vueBroadCall(self, fun, kws) {
-        var rt = [];
-        cusBroadCall(self, fun, kws, rt);
-        return rt;
-    },
-    vueParCall: function vueParCall(self, fun, kws) {
-        var rt = [];
-        cusParCall(self, fun, kws, rt);
-        return rt;
-    },
-    vueExtend: function vueExtend(par, mixins) {
-        var mixins = ex.map(mixins, function (item) {
-            if (typeof item == 'string') {
-                return window[item];
-            } else {
-                return item;
-            }
-        });
-
-        var real_par = $.extend({}, par);
-        var orgin_mixins = real_par.mixins;
-        delete real_par.mixins;
-        if (orgin_mixins) {
-            var list = orgin_mixins;
-        } else {
-            var list = [];
-        }
-        list.push(real_par);
-        list = list.concat(mixins);
-        var final_obj = list[list.length - 1];
-        final_obj.mixins = list.slice(0, list.length - 1);
-        return final_obj;
-    }
-};
-
-function cusBroadCall(self, fun, kws, rt) {
-    if (!self.$children) {
-        return;
-    }
-    for (var i = 0; i < self.$children.length; i++) {
-        var child = self.$children[i];
-        if (child[fun]) {
-            rt.push(child[fun](kws));
-        }
-        cusBroadCall(child, fun, kws, rt);
-    }
-}
-function cusParCall(self, fun, kws, rt) {
-    if (!self.$parent) {
-        return;
-    }
-    var par = self.$parent;
-    if (par[fun]) {
-        rt.push(par[fun](kws));
-    }
-    cusParCall(par, fun, kws, rt);
-
-    //for(var i =0;i<self.$parent.length;i++){
-    //    var par =self.$parent[i]
-    //    if(par[fun]){
-    //        rt.push(par[fun](kws))
-    //    }
-    //    cusParCall(par,fun,kws,rt)
-    //}
-}
-
-/***/ }),
-
-/***/ 77:
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(0)();
-// imports
-
-
-// module
-exports.push([module.i, ".abs-full {\n  position: absolute;\n  bottom: 0;\n  top: 0;\n  left: 0;\n  right: 0; }\n\n.abs-middle {\n  position: absolute;\n  left: 50%;\n  top: 50%;\n  transform: translate(-50%, -50%); }\n", ""]);
-
-// exports
-
-
-/***/ }),
-
-/***/ 78:
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(0)();
-// imports
-
-
-// module
-exports.push([module.i, ".clickable {\n  cursor: pointer;\n  color: #4da8cd; }\n", ""]);
-
-// exports
-
-
-/***/ }),
-
-/***/ 8:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-var code = exports.code = {
-    //hashCode:function (str){
-    //    var str =btoa(str)
-    //    var h = 0, off = 0;
-    //    var len = str.length;
-    //    for(var i = 0; i < len; i++){
-    //        h = 31 * h + str.charCodeAt(off++);
-    //    }
-    //    var t=-2147483648*2;
-    //    while(h>2147483647){
-    //        h+=t
-    //    }
-    //    return h;
-    //}
-
-    hashDict: function hashDict(dc) {
-        var ls = [];
-        for (var k in dc) {
-            if (k.startsWith('_')) {
-                continue;
-            }
-            if ($.isFunction(dc[k])) {
-                continue;
-            }
-            ls.push(k);
-        }
-        ls = ls.sort();
-        var lsl = [];
-        for (var i = 0; i < ls.length; i++) {
-            lsl.push(ls[i] + ':' + dc[ls[i]]);
-        }
-        var dc_str = lsl.join(';');
-        return md5(dc_str);
-    }
-    //hashCode: function (input){
-    //    var I64BIT_TABLE =
-    //        'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-'.split('');
-    //    var hash = 5381;
-    //    var i = input.length - 1;
-    //
-    //    if(typeof input == 'string'){
-    //        for (; i > -1; i--)
-    //            hash += (hash << 5) + input.charCodeAt(i);
-    //    }
-    //    else{
-    //        for (; i > -1; i--)
-    //            hash += (hash << 5) + input[i];
-    //    }
-    //    var value = hash & 0x7FFFFFFF;
-    //
-    //    var retValue = '';
-    //    do{
-    //        retValue += I64BIT_TABLE[value & 0x3F];
-    //    }
-    //    while(value >>= 6);
-    //
-    //    return retValue;
-    //}
-};
-
-/***/ }),
-
-/***/ 9:
+/* 76 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1578,117 +1187,906 @@ var collection = exports.collection = {
 };
 
 /***/ }),
-
-/***/ 96:
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(77);
-if(typeof content === 'string') content = [[module.i, content, '']];
-// add the styles to the DOM
-var update = __webpack_require__(1)(content, {});
-if(content.locals) module.exports = content.locals;
-// Hot Module Replacement
-if(false) {
-	// When the styles change, update the <style> tags
-	if(!content.locals) {
-		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./pos_size.scss", function() {
-			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./pos_size.scss");
-			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-			update(newContent);
-		});
-	}
-	// When the module is disposed, remove the <style> tags
-	module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-
-/***/ 97:
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(78);
-if(typeof content === 'string') content = [[module.i, content, '']];
-// add the styles to the DOM
-var update = __webpack_require__(1)(content, {});
-if(content.locals) module.exports = content.locals;
-// Hot Module Replacement
-if(false) {
-	// When the styles change, update the <style> tags
-	if(!content.locals) {
-		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./text.scss", function() {
-			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./text.scss");
-			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-			update(newContent);
-		});
-	}
-	// When the module is disposed, remove the <style> tags
-	module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-
-/***/ 99:
+/* 77 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _old = __webpack_require__(13);
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-var _network = __webpack_require__(11);
+/*
+* 以打补丁的方式，区域那些不兼容的部分
+* */
+//  startsWith
+if (!String.prototype.startsWith) {
+    String.prototype.startsWith = function (searchString, position) {
+        position = position || 0;
+        return this.substr(position, searchString.length) === searchString;
+    };
+    String.prototype.endsWith = function (str) {
+        return this.match(str + "$") == str;
+    };
+}
 
-var _urlparse = __webpack_require__(17);
+Array.prototype.each = function (fn) {
+    return this.length ? [fn(this.slice(0, 1))].concat(this.slice(1).each(fn)) : [];
+};
 
-var _collection = __webpack_require__(9);
+/*两种调用方式
+ var template1="我是{0}，今年{1}了";
+ var template2="我是{name}，今年{age}了";
+ var result1=template1.format("loogn",22);
+ var result2=template2.format({name:"loogn",age:22});
+ 两个结果都是"我是loogn，今年22了"
+ */
+String.prototype.format = function (args) {
+    var result = this;
+    if (arguments.length > 0) {
+        if (arguments.length == 1 && (typeof args === "undefined" ? "undefined" : _typeof(args)) == "object") {
+            for (var key in args) {
+                if (args[key] != undefined) {
+                    var reg = new RegExp("({" + key + "})", "g");
+                    result = result.replace(reg, args[key]);
+                }
+            }
+        } else {
+            for (var i = 0; i < arguments.length; i++) {
+                if (arguments[i] != undefined) {
+                    //var reg = new RegExp("({[" + i + "]})", "g");//这个在索引大于9时会有问题，谢谢何以笙箫的指出
+                    var reg = new RegExp("({)" + i + "(})", "g");
+                    result = result.replace(reg, arguments[i]);
+                }
+            }
+        }
+    }
+    return result;
+};
 
-var _patch = __webpack_require__(15);
+var Base64 = {
+    // private property
+    _keyStr: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",
 
-var path = _interopRequireWildcard(_patch);
+    // public method for encoding
+    encode: function encode(input) {
+        var output = "";
+        var chr1, chr2, chr3, enc1, enc2, enc3, enc4;
+        var i = 0;
 
-var _cookie = __webpack_require__(10);
+        input = Base64._utf8_encode(input);
 
-var _obj = __webpack_require__(12);
+        while (i < input.length) {
 
-var _vuetools = __webpack_require__(18);
+            chr1 = input.charCodeAt(i++);
+            chr2 = input.charCodeAt(i++);
+            chr3 = input.charCodeAt(i++);
 
-var _code = __webpack_require__(8);
+            enc1 = chr1 >> 2;
+            enc2 = (chr1 & 3) << 4 | chr2 >> 4;
+            enc3 = (chr2 & 15) << 2 | chr3 >> 6;
+            enc4 = chr3 & 63;
 
-var _order = __webpack_require__(14);
+            if (isNaN(chr2)) {
+                enc3 = enc4 = 64;
+            } else if (isNaN(chr3)) {
+                enc4 = 64;
+            }
 
-var _main = __webpack_require__(16);
+            output = output + Base64._keyStr.charAt(enc1) + Base64._keyStr.charAt(enc2) + Base64._keyStr.charAt(enc3) + Base64._keyStr.charAt(enc4);
+        }
 
-var uis = _interopRequireWildcard(_main);
+        return output;
+    },
+
+    // public method for decoding
+    decode: function decode(input) {
+        var output = "";
+        var chr1, chr2, chr3;
+        var enc1, enc2, enc3, enc4;
+        var i = 0;
+
+        input = input.replace(/[^A-Za-z0-9\+\/\=]/g, "");
+
+        while (i < input.length) {
+
+            enc1 = Base64._keyStr.indexOf(input.charAt(i++));
+            enc2 = Base64._keyStr.indexOf(input.charAt(i++));
+            enc3 = Base64._keyStr.indexOf(input.charAt(i++));
+            enc4 = Base64._keyStr.indexOf(input.charAt(i++));
+
+            chr1 = enc1 << 2 | enc2 >> 4;
+            chr2 = (enc2 & 15) << 4 | enc3 >> 2;
+            chr3 = (enc3 & 3) << 6 | enc4;
+
+            output = output + String.fromCharCode(chr1);
+
+            if (enc3 != 64) {
+                output = output + String.fromCharCode(chr2);
+            }
+            if (enc4 != 64) {
+                output = output + String.fromCharCode(chr3);
+            }
+        }
+
+        output = Base64._utf8_decode(output);
+
+        return output;
+    },
+
+    // private method for UTF-8 encoding
+    _utf8_encode: function _utf8_encode(string) {
+        string = string.replace(/\r\n/g, "\n");
+        var utftext = "";
+
+        for (var n = 0; n < string.length; n++) {
+
+            var c = string.charCodeAt(n);
+
+            if (c < 128) {
+                utftext += String.fromCharCode(c);
+            } else if (c > 127 && c < 2048) {
+                utftext += String.fromCharCode(c >> 6 | 192);
+                utftext += String.fromCharCode(c & 63 | 128);
+            } else {
+                utftext += String.fromCharCode(c >> 12 | 224);
+                utftext += String.fromCharCode(c >> 6 & 63 | 128);
+                utftext += String.fromCharCode(c & 63 | 128);
+            }
+        }
+
+        return utftext;
+    },
+
+    // private method for UTF-8 decoding
+    _utf8_decode: function _utf8_decode(utftext) {
+        var string = "";
+        var i = 0;
+        var c = c1 = c2 = 0;
+
+        while (i < utftext.length) {
+
+            c = utftext.charCodeAt(i);
+
+            if (c < 128) {
+                string += String.fromCharCode(c);
+                i++;
+            } else if (c > 191 && c < 224) {
+                c2 = utftext.charCodeAt(i + 1);
+                string += String.fromCharCode((c & 31) << 6 | c2 & 63);
+                i += 2;
+            } else {
+                c2 = utftext.charCodeAt(i + 1);
+                c3 = utftext.charCodeAt(i + 2);
+                string += String.fromCharCode((c & 15) << 12 | (c2 & 63) << 6 | c3 & 63);
+                i += 3;
+            }
+        }
+        return string;
+    }
+};
+
+if (!window.atob) {
+    window.atob = Base64.decode;
+    window.btoa = Base64.encode;
+}
+
+/***/ }),
+/* 78 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+/*
+setCookie('name', 1111, 5);
+setCookie('name1', 22222, 5);
+
+console.log(getCookie('name'));
+console.log(getAllCookie());
+
+delCookie('name1');
+clearCookie('undefined')    //清除未定义的名的cookie
+*/
+/*set cookie*/
+var cookie = exports.cookie = {
+    setCookie: function setCookie(name, value, Days) {
+        if (Days == null || Days == '') {
+            Days = 300;
+        }
+        var exp = new Date();
+        exp.setTime(exp.getTime() + Days * 24 * 60 * 60 * 1000);
+        document.cookie = name + "=" + escape(value) + "; path=/;expires=" + exp.toGMTString();
+        //document.cookie = name + "="+ escape (value) + ";expires=" + exp.toGMTString();
+    },
+
+    /*get cookie*/
+    getCookie: function getCookie(name) {
+        var arr,
+            reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+        if (arr = document.cookie.match(reg)) return unescape(arr[2]);else return null;
+    },
+
+    /*get all cookie*/
+    getAllCookie: function getAllCookie() {
+        return document.cookie;
+    },
+
+    /* clear cookie*/
+    clearCookie: function clearCookie(name) {
+        this.setCookie(name, '', -1);
+    },
+
+    /* del cookie*/
+    delCookie: function delCookie(name) {
+        var exp = new Date();
+        exp.setTime(exp.getTime() - 1);
+        var cval = this.getCookie(name);
+        if (cval != null) document.cookie = name + "=" + cval + "; path=/;expires=" + exp.toGMTString();
+    }
+};
+
+/***/ }),
+/* 79 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+var obj_control = exports.obj_control = {
+    isEmpty: function isEmpty(obj) {
+        for (var k in obj) {
+            if (/^[^_]/.exec(k)) {
+                return false;
+            }
+        }
+        return true;
+    }
+};
+
+/***/ }),
+/* 80 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+var vuetool = exports.vuetool = {
+    vueSuper: function vueSuper(self, kws) {
+        var mixin = kws.mixin;
+        var name = kws.fun;
+        var args = kws.args || [];
+        if (mixin) {
+            var index = self.$options.mixins.indexOf(mixin);
+        } else {
+            var index = self.$options.mixins.length;
+        }
+        for (var i = index - 1; i > -1; i--) {
+            var mix = self.$options.mixins[i];
+            var methods = mix.methods[name];
+            if (methods) {
+                return methods.apply(self, args);
+            }
+        }
+    },
+    vueBroadCall: function vueBroadCall(self, fun, kws) {
+        var rt = [];
+        cusBroadCall(self, fun, kws, rt);
+        return rt;
+    },
+    vueParCall: function vueParCall(self, fun, kws) {
+        var rt = [];
+        cusParCall(self, fun, kws, rt);
+        return rt;
+    },
+    vueExtend: function vueExtend(par, mixins) {
+        var mixins = ex.map(mixins, function (item) {
+            if (typeof item == 'string') {
+                return window[item];
+            } else {
+                return item;
+            }
+        });
+
+        var real_par = $.extend({}, par);
+        var orgin_mixins = real_par.mixins;
+        delete real_par.mixins;
+        if (orgin_mixins) {
+            var list = orgin_mixins;
+        } else {
+            var list = [];
+        }
+        list.push(real_par);
+        list = list.concat(mixins);
+        var final_obj = list[list.length - 1];
+        final_obj.mixins = list.slice(0, list.length - 1);
+        return final_obj;
+    }
+};
+
+function cusBroadCall(self, fun, kws, rt) {
+    if (!self.$children) {
+        return;
+    }
+    for (var i = 0; i < self.$children.length; i++) {
+        var child = self.$children[i];
+        if (child[fun]) {
+            rt.push(child[fun](kws));
+        }
+        cusBroadCall(child, fun, kws, rt);
+    }
+}
+function cusParCall(self, fun, kws, rt) {
+    if (!self.$parent) {
+        return;
+    }
+    var par = self.$parent;
+    if (par[fun]) {
+        rt.push(par[fun](kws));
+    }
+    cusParCall(par, fun, kws, rt);
+
+    //for(var i =0;i<self.$parent.length;i++){
+    //    var par =self.$parent[i]
+    //    if(par[fun]){
+    //        rt.push(par[fun](kws))
+    //    }
+    //    cusParCall(par,fun,kws,rt)
+    //}
+}
+
+/***/ }),
+/* 81 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+var code = exports.code = {
+    //hashCode:function (str){
+    //    var str =btoa(str)
+    //    var h = 0, off = 0;
+    //    var len = str.length;
+    //    for(var i = 0; i < len; i++){
+    //        h = 31 * h + str.charCodeAt(off++);
+    //    }
+    //    var t=-2147483648*2;
+    //    while(h>2147483647){
+    //        h+=t
+    //    }
+    //    return h;
+    //}
+
+    hashDict: function hashDict(dc) {
+        var ls = [];
+        for (var k in dc) {
+            if (k.startsWith('_')) {
+                continue;
+            }
+            if ($.isFunction(dc[k])) {
+                continue;
+            }
+            ls.push(k);
+        }
+        ls = ls.sort();
+        var lsl = [];
+        for (var i = 0; i < ls.length; i++) {
+            lsl.push(ls[i] + ':' + dc[ls[i]]);
+        }
+        var dc_str = lsl.join(';');
+        return md5(dc_str);
+    }
+};
+
+/***/ }),
+/* 82 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.sortOrder = sortOrder;
+function isChinese(temp) {
+    var re = /[^\u4E00-\u9FA5]/;
+    if (re.test(temp[0])) {
+        return false;
+    }
+    return true;
+}
+function compare(temp1, temp2) {
+    if (temp1 < temp2) {
+        return -1;
+    } else if (temp1 == temp2) {
+        return 0;
+    } else {
+        return 1;
+    }
+}
+
+function sortOrder(array, key) {
+
+    return array.slice().sort(function (a, b) {
+        if (key) {
+            var val_a = a[key];
+            var val_b = b[key];
+        } else {
+            var val_a = a;
+            var val_b = b;
+        }
+        if (isChinese(val_a) && isChinese(val_b)) {
+            return val_a.localeCompare(val_b, 'zh');
+        } else {
+            return compare(val_a, val_b);
+        }
+    });
+}
+
+/***/ }),
+/* 83 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+window.cfg = {
+    showMsg: function showMsg(msg) {
+        layer.alert(msg);
+    },
+    warning: function warning(msg) {
+        layer.alert(msg, { title: ['提示', 'color:white;background-color:#f0ad4e'], icon: 5 });
+    },
+    tr: {
+        'picture_size_excceed': '图片尺寸不能超过{maxsize}'
+    },
+    show_load: function show_load() {
+        this._loader_index = layer.load(1);
+    },
+    hide_load: function hide_load(delay, msg) {
+        layer.close(this._loader_index);
+        if (delay) {
+            var realMsg = msg || '操作成功';
+            layer.msg(realMsg, { time: delay });
+        }
+    }
+};
+
+/***/ }),
+/* 84 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _expand_menu = __webpack_require__(85);
+
+var f = _interopRequireWildcard(_expand_menu);
+
+var _page_tab = __webpack_require__(88);
+
+var page = _interopRequireWildcard(_page_tab);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
-var ex = {
-    assign: function assign(dst, src) {
-        for (var key in src) {
-            dst[key] = src[key];
-        }
-    }
+__webpack_require__(89);
+//import * as a from './modal.js'
 
-    //import {md5} from  './md5.min'
+__webpack_require__(91);
+__webpack_require__(93);
+__webpack_require__(95);
+__webpack_require__(97);
+__webpack_require__(99);
 
-};ex.assign(ex, _old.old);
-ex.assign(ex, _network.network);
-ex.assign(ex, _urlparse.urlparse);
-ex.assign(ex, _collection.collection);
-ex.assign(ex, _cookie.cookie);
-ex.assign(ex, _obj.obj_control);
-ex.assign(ex, _vuetools.vuetool);
-ex.assign(ex, _code.code);
-ex.sortOrder = _order.sortOrder;
+/***/ }),
+/* 85 */
+/***/ (function(module, exports, __webpack_require__) {
 
-//ex.md5=md5
-window.ex = ex;
+"use strict";
+
+
+__webpack_require__(86);
+var template_str = '\n<div class=\'_expand_menu\'>\n\t<ul>\n\t\t<li v-for=\'act in normed_menu\'>\n\t\t\t<a :class=\'["menu_item",{"selected":act.selected,"opened_submenu":opened_submenu==act.submenu}]\'\n\t\t\t\t:href=\'act.submenu?"javascript:void(0)":act.url\'\n\t\t\t\t@click=\'main_act_click(act)\'>\n\t\t\t\t<span v-html=\'act.icon\' class=\'_icon\'></span><span v-text=\'act.label\'></span>\n\t\t\t\t<span v-show="act.submenu">\n\t\t\t\t\t<span v-if="opened_submenu==act.submenu ||act.selected" style="float: right;margin-right: 1em;">\n\t\t\t\t\t\t<i class="fa fa-chevron-down"></i>\n\t\t\t\t\t</span>\n\t\t\t\t\t<span v-else style="float: right;margin-right: 1em;"><i class="fa fa-chevron-left"></i></span>\n\t\t\t\t</span>\n\t\t\t\t<!--<span class=\'left-arrow\' v-if=\'act.selected\'></span>-->\n\t\t\t</a>\n\n\t\t\t<ul class=\'submenu\' v-show=\'opened_submenu==act.submenu ||act.selected\' transition="expand">\n\t\t\t\t<li v-for=\'sub_act in act.submenu\' :class=\'{"active":sub_act.active}\'>\n\t\t\t\t\t<a :href=\'sub_act.url\' class=\'sub_item\'>\n\t\t\t\t\t\t<span v-text=\'sub_act.label\'></span>\n\t\t\t\t\t</a>\n\n\t\t\t\t</li>\n\t\t\t</ul>\n\t\t</li>\n\t</ul>\n</div>\n';
+
+Vue.component('expand_menu', {
+	template: template_str,
+	props: ['menu'],
+	computed: {
+		normed_menu: function normed_menu() {
+			var path = location.pathname;
+
+			var matched_menu = null;
+			var matched_submenu = null;
+
+			ex.each(this.menu, function (menu) {
+				if (menu.submenu) {
+					ex.each(menu.submenu, function (submenu) {
+						if (path.startsWith(submenu.url)) {
+							if (!matched_submenu || matched_submenu.url.length < submenu.url.length) {
+								matched_menu = menu;
+								matched_submenu = submenu;
+							}
+							//menu.selected=true
+							//submenu.active=true
+							//return 'break'
+						}
+					});
+				} else if (menu.url && path.startsWith(menu.url)) {
+					if (matched_submenu) {} else if (!matched_menu || matched_menu.url.length < menu.url.length) {
+						matched_menu = menu;
+					}
+					//menu.selected=true
+					//return 'break'
+				}
+			});
+
+			if (matched_menu) {
+				matched_menu.selected = true;
+			}
+			if (matched_submenu) {
+				matched_submenu.active = true;
+			}
+
+			//for (var x=0;x<this.menu.length;x++){
+			//	var url = this.menu[x].url
+			//	if(path.startsWith(url)&&url.length>matched.url.length){
+			//		matched=this.menu[x]
+			//		matched_menu=this.menu[x]
+			//		matched_submenu={url:''}
+			//	}
+			//	var submenu=this.menu[x].submenu || []
+			//	for(var y=0;y<submenu.length;y++){
+			//		var url = submenu[y].url
+			//		if(path.startsWith(url)&&url.length>=matched.url.length){
+			//			matched=submenu[y]
+			//			matched_menu=this.menu[x]
+			//			matched_submenu=submenu[y]
+			//		}
+			//	}
+			//}
+			//if(matched_menu.label){
+			//	matched_menu.selected=true
+			//	matched_submenu.active=true
+			//}
+			//if(matched_submenu){
+			//	matched_submenu.active=true
+			//}
+			return this.menu;
+		}
+	},
+
+	data: function data() {
+		return {
+			opened_submenu: ''
+		};
+	},
+	methods: {
+		main_act_click: function main_act_click(act) {
+			if (!act.submenu) return;
+			if (this.opened_submenu == act.submenu) {
+				this.opened_submenu = '';
+			} else {
+				this.opened_submenu = act.submenu;
+			}
+		}
+	}
+});
+//Vue.transition('expand', {
+//  beforeEnter: function (el) {
+//    $(el).slideDown(300)
+//  },
+
+//  leave: function (el) {
+//    $(el).slideUp(300)
+//  },
+
+//})
+
+/***/ }),
+/* 86 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(87);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// add the styles to the DOM
+var update = __webpack_require__(1)(content, {});
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!./../../../../../../../../../coblan/webcode/node_modules/.0.26.1@css-loader/index.js!./../../../../../../../../../coblan/webcode/node_modules/.6.0.0@sass-loader/lib/loader.js!./expand_menu.scss", function() {
+			var newContent = require("!!./../../../../../../../../../coblan/webcode/node_modules/.0.26.1@css-loader/index.js!./../../../../../../../../../coblan/webcode/node_modules/.6.0.0@sass-loader/lib/loader.js!./expand_menu.scss");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 87 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(0)();
+// imports
+
+
+// module
+exports.push([module.i, "._expand_menu {\n  background-color: #364150; }\n  ._expand_menu a {\n    color: #8f97a3; }\n    ._expand_menu a:hover {\n      text-decoration: none; }\n  ._expand_menu ul {\n    padding: 0px; }\n    ._expand_menu ul li {\n      list-style-type: none;\n      cursor: pointer;\n      position: relative;\n      padding: 0px; }\n    ._expand_menu ul.submenu li {\n      padding: 5px 0px;\n      padding-left: 20px;\n      color: #B4BCC8; }\n      ._expand_menu ul.submenu li:hover, ._expand_menu ul.submenu li.active {\n        background-color: #3E4B5C; }\n        ._expand_menu ul.submenu li:hover a, ._expand_menu ul.submenu li.active a {\n          color: white; }\n  ._expand_menu ._icon {\n    padding: 0px 10px; }\n  ._expand_menu .menu_item {\n    border-top: 1px solid #475563;\n    padding: 5px 0px;\n    display: block; }\n  ._expand_menu .sub_item {\n    display: block; }\n\n._expand_menu ul.submenu {\n  padding: 0px; }\n\n._expand_menu .menu_item:hover {\n  background-color: #2C3542;\n  color: #A7BCAE; }\n\n._expand_menu .menu_item.selected {\n  background-color: #1CAF9A;\n  color: white; }\n\n._expand_menu .left-arrow {\n  position: absolute;\n  right: 0px;\n  border-top: 12px solid transparent;\n  border-bottom: 12px solid transparent;\n  border-right: 12px solid white; }\n\n.expand-transition {\n  transition: max-height .3s ease; }\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 88 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Vue.component('page-tab', {
+	template: '<ul class=\'inst-menu\'>\n    <li v-for=\'tab in tabs\' :class=\'{"active":value==tab}\' @click=\'$emit("input",tab)\' v-text=\'tab\'></li>\n    </ul>',
+	props: ['value', 'tabs']
+});
+
+document.write('\n <style type="text/css" media="screen" id="test">\n.inst-menu{\n\t\tmargin: 30px auto;\n\t\tborder-bottom: 1px solid #DADCDE;\n\t}\n.inst-menu li{\n\tdisplay: inline-block;\n\tpadding: 10px 20px;\n\tfont-size: 16px;\n}\n.inst-menu li:hover{\n\tcursor: pointer;\n}\n.inst-menu .active{\n\tborder-bottom: 5px solid #0092F2;\n\tcolor: #0092F2;\n}\n</style>\n');
+
+/***/ }),
+/* 89 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(90);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// add the styles to the DOM
+var update = __webpack_require__(1)(content, {});
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!./../../../../../../../../../coblan/webcode/node_modules/.0.26.1@css-loader/index.js!./../../../../../../../../../coblan/webcode/node_modules/.6.0.0@sass-loader/lib/loader.js!./flex.scss", function() {
+			var newContent = require("!!./../../../../../../../../../coblan/webcode/node_modules/.0.26.1@css-loader/index.js!./../../../../../../../../../coblan/webcode/node_modules/.6.0.0@sass-loader/lib/loader.js!./flex.scss");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 90 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(0)();
+// imports
+
+
+// module
+exports.push([module.i, ".flex {\n  display: flex; }\n\n.flex-v {\n  display: flex;\n  flex-direction: column; }\n\n.flex-grow {\n  flex-grow: 10; }\n\n.flex-jc {\n  justify-content: center; }\n\n.flex-ac {\n  align-items: center; }\n\n.flex-sb {\n  justify-content: space-between; }\n\n.flex-vh-center {\n  justify-content: center;\n  align-items: center; }\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 91 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(92);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// add the styles to the DOM
+var update = __webpack_require__(1)(content, {});
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!./../../../../../../../../../coblan/webcode/node_modules/.0.26.1@css-loader/index.js!./../../../../../../../../../coblan/webcode/node_modules/.6.0.0@sass-loader/lib/loader.js!./button.scss", function() {
+			var newContent = require("!!./../../../../../../../../../coblan/webcode/node_modules/.0.26.1@css-loader/index.js!./../../../../../../../../../coblan/webcode/node_modules/.6.0.0@sass-loader/lib/loader.js!./button.scss");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 92 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(0)();
+// imports
+
+
+// module
+exports.push([module.i, ".checkbox {\n  padding-left: 20px; }\n\n.checkbox label {\n  display: inline-block;\n  vertical-align: middle;\n  position: relative;\n  padding-left: 5px; }\n\n.checkbox label::before {\n  content: \"\";\n  display: inline-block;\n  position: absolute;\n  width: 17px;\n  height: 17px;\n  left: 0;\n  margin-left: -20px;\n  border: 1px solid #cccccc;\n  border-radius: 3px;\n  background-color: #fff;\n  -webkit-transition: border 0.15s ease-in-out, color 0.15s ease-in-out;\n  -o-transition: border 0.15s ease-in-out, color 0.15s ease-in-out;\n  transition: border 0.15s ease-in-out, color 0.15s ease-in-out; }\n\n.checkbox label::after {\n  display: inline-block;\n  position: absolute;\n  width: 16px;\n  height: 16px;\n  left: 0;\n  top: 0;\n  margin-left: -20px;\n  padding-left: 3px;\n  padding-top: 1px;\n  font-size: 11px;\n  color: #555555; }\n\n.checkbox input[type=\"checkbox\"],\n.checkbox input[type=\"radio\"] {\n  opacity: 0;\n  z-index: 1; }\n\n.checkbox input[type=\"checkbox\"]:focus + label::before,\n.checkbox input[type=\"radio\"]:focus + label::before {\n  outline: thin dotted;\n  outline: 5px auto -webkit-focus-ring-color;\n  outline-offset: -2px; }\n\n.checkbox input[type=\"checkbox\"]:checked + label::after,\n.checkbox input[type=\"radio\"]:checked + label::after {\n  font-family: \"FontAwesome\";\n  content: \"\\F00C\"; }\n\n.checkbox input[type=\"checkbox\"]:indeterminate + label::after,\n.checkbox input[type=\"radio\"]:indeterminate + label::after {\n  display: block;\n  content: \"\";\n  width: 10px;\n  height: 3px;\n  background-color: #555555;\n  border-radius: 2px;\n  margin-left: -16.5px;\n  margin-top: 7px; }\n\n.checkbox input[type=\"checkbox\"]:disabled + label,\n.checkbox input[type=\"radio\"]:disabled + label {\n  opacity: 0.65; }\n\n.checkbox input[type=\"checkbox\"]:disabled + label::before,\n.checkbox input[type=\"radio\"]:disabled + label::before {\n  background-color: #eeeeee;\n  cursor: not-allowed; }\n\n.checkbox.checkbox-circle label::before {\n  border-radius: 50%; }\n\n.checkbox.checkbox-inline {\n  margin-top: 0; }\n\n.checkbox-primary input[type=\"checkbox\"]:checked + label::before,\n.checkbox-primary input[type=\"radio\"]:checked + label::before {\n  background-color: #337ab7;\n  border-color: #337ab7; }\n\n.checkbox-primary input[type=\"checkbox\"]:checked + label::after,\n.checkbox-primary input[type=\"radio\"]:checked + label::after {\n  color: #fff; }\n\n.checkbox-danger input[type=\"checkbox\"]:checked + label::before,\n.checkbox-danger input[type=\"radio\"]:checked + label::before {\n  background-color: #d9534f;\n  border-color: #d9534f; }\n\n.checkbox-danger input[type=\"checkbox\"]:checked + label::after,\n.checkbox-danger input[type=\"radio\"]:checked + label::after {\n  color: #fff; }\n\n.checkbox-info input[type=\"checkbox\"]:checked + label::before,\n.checkbox-info input[type=\"radio\"]:checked + label::before {\n  background-color: #5bc0de;\n  border-color: #5bc0de; }\n\n.checkbox-info input[type=\"checkbox\"]:checked + label::after,\n.checkbox-info input[type=\"radio\"]:checked + label::after {\n  color: #fff; }\n\n.checkbox-warning input[type=\"checkbox\"]:checked + label::before,\n.checkbox-warning input[type=\"radio\"]:checked + label::before {\n  background-color: #f0ad4e;\n  border-color: #f0ad4e; }\n\n.checkbox-warning input[type=\"checkbox\"]:checked + label::after,\n.checkbox-warning input[type=\"radio\"]:checked + label::after {\n  color: #fff; }\n\n.checkbox-success input[type=\"checkbox\"]:checked + label::before,\n.checkbox-success input[type=\"radio\"]:checked + label::before {\n  background-color: #5cb85c;\n  border-color: #5cb85c; }\n\n.checkbox-success input[type=\"checkbox\"]:checked + label::after,\n.checkbox-success input[type=\"radio\"]:checked + label::after {\n  color: #fff; }\n\n.checkbox-primary input[type=\"checkbox\"]:indeterminate + label::before,\n.checkbox-primary input[type=\"radio\"]:indeterminate + label::before {\n  background-color: #337ab7;\n  border-color: #337ab7; }\n\n.checkbox-primary input[type=\"checkbox\"]:indeterminate + label::after,\n.checkbox-primary input[type=\"radio\"]:indeterminate + label::after {\n  background-color: #fff; }\n\n.checkbox-danger input[type=\"checkbox\"]:indeterminate + label::before,\n.checkbox-danger input[type=\"radio\"]:indeterminate + label::before {\n  background-color: #d9534f;\n  border-color: #d9534f; }\n\n.checkbox-danger input[type=\"checkbox\"]:indeterminate + label::after,\n.checkbox-danger input[type=\"radio\"]:indeterminate + label::after {\n  background-color: #fff; }\n\n.checkbox-info input[type=\"checkbox\"]:indeterminate + label::before,\n.checkbox-info input[type=\"radio\"]:indeterminate + label::before {\n  background-color: #5bc0de;\n  border-color: #5bc0de; }\n\n.checkbox-info input[type=\"checkbox\"]:indeterminate + label::after,\n.checkbox-info input[type=\"radio\"]:indeterminate + label::after {\n  background-color: #fff; }\n\n.checkbox-warning input[type=\"checkbox\"]:indeterminate + label::before,\n.checkbox-warning input[type=\"radio\"]:indeterminate + label::before {\n  background-color: #f0ad4e;\n  border-color: #f0ad4e; }\n\n.checkbox-warning input[type=\"checkbox\"]:indeterminate + label::after,\n.checkbox-warning input[type=\"radio\"]:indeterminate + label::after {\n  background-color: #fff; }\n\n.checkbox-success input[type=\"checkbox\"]:indeterminate + label::before,\n.checkbox-success input[type=\"radio\"]:indeterminate + label::before {\n  background-color: #5cb85c;\n  border-color: #5cb85c; }\n\n.checkbox-success input[type=\"checkbox\"]:indeterminate + label::after,\n.checkbox-success input[type=\"radio\"]:indeterminate + label::after {\n  background-color: #fff; }\n\n.radio {\n  padding-left: 20px; }\n\n.radio label {\n  display: inline-block;\n  vertical-align: middle;\n  position: relative;\n  padding-left: 5px; }\n\n.radio label::before {\n  content: \"\";\n  display: inline-block;\n  position: absolute;\n  width: 17px;\n  height: 17px;\n  left: 0;\n  margin-left: -20px;\n  border: 1px solid #cccccc;\n  border-radius: 50%;\n  background-color: #fff;\n  -webkit-transition: border 0.15s ease-in-out;\n  -o-transition: border 0.15s ease-in-out;\n  transition: border 0.15s ease-in-out; }\n\n.radio label::after {\n  display: inline-block;\n  position: absolute;\n  content: \" \";\n  width: 11px;\n  height: 11px;\n  left: 3px;\n  top: 3px;\n  margin-left: -20px;\n  border-radius: 50%;\n  background-color: #555555;\n  -webkit-transform: scale(0, 0);\n  -ms-transform: scale(0, 0);\n  -o-transform: scale(0, 0);\n  transform: scale(0, 0);\n  -webkit-transition: -webkit-transform 0.1s cubic-bezier(0.8, -0.33, 0.2, 1.33);\n  -moz-transition: -moz-transform 0.1s cubic-bezier(0.8, -0.33, 0.2, 1.33);\n  -o-transition: -o-transform 0.1s cubic-bezier(0.8, -0.33, 0.2, 1.33);\n  transition: transform 0.1s cubic-bezier(0.8, -0.33, 0.2, 1.33); }\n\n.radio input[type=\"radio\"] {\n  opacity: 0;\n  z-index: 1; }\n\n.radio input[type=\"radio\"]:focus + label::before {\n  outline: thin dotted;\n  outline: 5px auto -webkit-focus-ring-color;\n  outline-offset: -2px; }\n\n.radio input[type=\"radio\"]:checked + label::after {\n  -webkit-transform: scale(1, 1);\n  -ms-transform: scale(1, 1);\n  -o-transform: scale(1, 1);\n  transform: scale(1, 1); }\n\n.radio input[type=\"radio\"]:disabled + label {\n  opacity: 0.65; }\n\n.radio input[type=\"radio\"]:disabled + label::before {\n  cursor: not-allowed; }\n\n.radio.radio-inline {\n  margin-top: 0; }\n\n.radio-primary input[type=\"radio\"] + label::after {\n  background-color: #337ab7; }\n\n.radio-primary input[type=\"radio\"]:checked + label::before {\n  border-color: #337ab7; }\n\n.radio-primary input[type=\"radio\"]:checked + label::after {\n  background-color: #337ab7; }\n\n.radio-danger input[type=\"radio\"] + label::after {\n  background-color: #d9534f; }\n\n.radio-danger input[type=\"radio\"]:checked + label::before {\n  border-color: #d9534f; }\n\n.radio-danger input[type=\"radio\"]:checked + label::after {\n  background-color: #d9534f; }\n\n.radio-info input[type=\"radio\"] + label::after {\n  background-color: #5bc0de; }\n\n.radio-info input[type=\"radio\"]:checked + label::before {\n  border-color: #5bc0de; }\n\n.radio-info input[type=\"radio\"]:checked + label::after {\n  background-color: #5bc0de; }\n\n.radio-warning input[type=\"radio\"] + label::after {\n  background-color: #f0ad4e; }\n\n.radio-warning input[type=\"radio\"]:checked + label::before {\n  border-color: #f0ad4e; }\n\n.radio-warning input[type=\"radio\"]:checked + label::after {\n  background-color: #f0ad4e; }\n\n.radio-success input[type=\"radio\"] + label::after {\n  background-color: #5cb85c; }\n\n.radio-success input[type=\"radio\"]:checked + label::before {\n  border-color: #5cb85c; }\n\n.radio-success input[type=\"radio\"]:checked + label::after {\n  background-color: #5cb85c; }\n\ninput[type=\"checkbox\"].styled:checked + label:after,\ninput[type=\"radio\"].styled:checked + label:after {\n  font-family: 'FontAwesome';\n  content: \"\\F00C\"; }\n\ninput[type=\"checkbox\"] .styled:checked + label::before,\ninput[type=\"radio\"] .styled:checked + label::before {\n  color: #fff; }\n\ninput[type=\"checkbox\"] .styled:checked + label::after,\ninput[type=\"radio\"] .styled:checked + label::after {\n  color: #fff; }\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 93 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(94);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// add the styles to the DOM
+var update = __webpack_require__(1)(content, {});
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!./../../../../../../../../../coblan/webcode/node_modules/.0.26.1@css-loader/index.js!./../../../../../../../../../coblan/webcode/node_modules/.6.0.0@sass-loader/lib/loader.js!./adapt.scss", function() {
+			var newContent = require("!!./../../../../../../../../../coblan/webcode/node_modules/.0.26.1@css-loader/index.js!./../../../../../../../../../coblan/webcode/node_modules/.6.0.0@sass-loader/lib/loader.js!./adapt.scss");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 94 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(0)();
+// imports
+
+
+// module
+exports.push([module.i, "template {\n  display: none; }\n\nhtml, body {\n  height: 100%;\n  margin: 0;\n  padding: 0; }\n\nbody.modal-show {\n  position: fixed;\n  width: 100%;\n  height: 100%; }\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 95 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(96);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// add the styles to the DOM
+var update = __webpack_require__(1)(content, {});
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!./../../../../../../../../../coblan/webcode/node_modules/.0.26.1@css-loader/index.js!./../../../../../../../../../coblan/webcode/node_modules/.6.0.0@sass-loader/lib/loader.js!./aliagn.scss", function() {
+			var newContent = require("!!./../../../../../../../../../coblan/webcode/node_modules/.0.26.1@css-loader/index.js!./../../../../../../../../../coblan/webcode/node_modules/.6.0.0@sass-loader/lib/loader.js!./aliagn.scss");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 96 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(0)();
+// imports
+
+
+// module
+exports.push([module.i, "@charset \"UTF-8\";\n.center-vh {\n  position: absolute;\n  top: 50%;\n  left: 50%;\n  transform: translate(-50%, -50%);\n  -ms-transform: translate(-50%, -50%);\n  /* IE 9 */\n  -moz-transform: translate(-50%, -50%);\n  /* Firefox */\n  -webkit-transform: translate(-50%, -50%);\n  /* Safari 和 Chrome */\n  -o-transform: translate(-50%, -50%);\n  /*text-align: center;*/\n  /*z-index: 1000;*/ }\n\n.center-v {\n  position: absolute;\n  top: 50%;\n  transform: translateY(-50%);\n  /*text-align: center;*/\n  /*z-index: 1000;*/ }\n\n.center-h {\n  position: absolute;\n  left: 50%;\n  transform: translateX(-50%);\n  /*text-align: center;*/\n  /*z-index: 1000;*/ }\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 97 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(98);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// add the styles to the DOM
+var update = __webpack_require__(1)(content, {});
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!./../../../../../../../../../coblan/webcode/node_modules/.0.26.1@css-loader/index.js!./../../../../../../../../../coblan/webcode/node_modules/.6.0.0@sass-loader/lib/loader.js!./text.scss", function() {
+			var newContent = require("!!./../../../../../../../../../coblan/webcode/node_modules/.0.26.1@css-loader/index.js!./../../../../../../../../../coblan/webcode/node_modules/.6.0.0@sass-loader/lib/loader.js!./text.scss");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 98 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(0)();
+// imports
+
+
+// module
+exports.push([module.i, ".ellipsis {\n  white-space: nowrap;\n  text-overflow: ellipsis;\n  /* for internet explorer */\n  overflow: hidden;\n  width: 190px;\n  display: block; }\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 99 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(100);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// add the styles to the DOM
+var update = __webpack_require__(1)(content, {});
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!./../../../../../../../../../coblan/webcode/node_modules/.0.26.1@css-loader/index.js!./../../../../../../../../../coblan/webcode/node_modules/.6.0.0@sass-loader/lib/loader.js!./link.scss", function() {
+			var newContent = require("!!./../../../../../../../../../coblan/webcode/node_modules/.0.26.1@css-loader/index.js!./../../../../../../../../../coblan/webcode/node_modules/.6.0.0@sass-loader/lib/loader.js!./link.scss");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 100 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(0)();
+// imports
+
+
+// module
+exports.push([module.i, ".clickable {\n  cursor: pointer;\n  color: #4da8cd; }\n", ""]);
+
+// exports
+
 
 /***/ })
-
-/******/ });
+/******/ ]);

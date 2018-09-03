@@ -90,4 +90,10 @@ export var network ={
         window['__src_'+name]=true
         $('head').append('<link rel="stylesheet" href="'+src+'" type="text/css" />')
     },
+    director_call:function(director_name,kws,callback){
+        var post_data=[{fun:"director_call",director_name:director_name,kws:kws}]
+        ex.post('/d/ajax',JSON.stringify(post_data),function(resp){
+            callback( resp.director_call )
+        })
+    }
 }

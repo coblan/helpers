@@ -8,7 +8,7 @@ import {obj_control} from  './obj'
 import {vuetool} from  './vuetools'
 import {code} from  './code'
 import {sortOrder} from  './order'
-import * as uis from  './uis/main'
+
 var ex={
     assign:function (dst,src) {
         for(var key in src){
@@ -31,3 +31,8 @@ ex.sortOrder=sortOrder
 
 //ex.md5=md5
 window.ex = ex
+
+
+
+import * as cfg from './cfg.js'
+import * as uis from  './uis/main.js'
