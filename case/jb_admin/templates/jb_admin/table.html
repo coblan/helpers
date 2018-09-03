@@ -212,7 +212,7 @@
             </div>
         </div>
 
-        <ol v-if="parents" class="breadcrumb jb-table-parent">
+        <ol v-if="parents.length>0" class="breadcrumb jb-table-parent">
             <li v-for="par in parents"><a href="#" @click="get_childs(par)"  v-text="par.label"></a></li>
         </ol>
 

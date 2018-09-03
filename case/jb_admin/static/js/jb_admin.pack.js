@@ -1624,9 +1624,44 @@ var mix_table_data = {
                     cfg.hide_load(2000);
                 });
             },
+            director_rows: function director_rows(kws) {
+                // kws: {after_fun:'update_or_insert_rows'}
+                var row_match_fun = kws.row_match || 'one_row';
+                if (!row_match[row_match_fun](self, kws)) {
+                    return;
+                }
+
+                function bb() {
+                    cfg.show_load();
+                    ex.director_call(kws.director_name, { rows: self.selected }, function (resp) {
+                        cfg.hide_load(2000);
+                        if (kws.after_fun) {
+                            self.op_funs[kws.after_fun](resp);
+                            if (resp.msg) {
+                                cfg.showMsg(resp.msg);
+                            }
+                        }
+                    });
+                }
+
+                if (kws.confirm_msg) {
+                    layer.confirm(kws.confirm_msg, { icon: 3, title: '提示' }, function (index) {
+                        bb();
+                    });
+                } else {
+                    bb();
+                }
+            },
             emitEvent: function emitEvent(e) {
                 self.$emit(e);
             },
+            update_or_insert_rows: function update_or_insert_rows(kws) {
+                var rows = kws.rows;
+                ex.each(rows, function (row) {
+                    self.update_or_insert(row);
+                });
+            },
+
             // 为了刷新界面，付出了清空的代价，这两个函数小心使用，
             row_up: function row_up(kws) {
                 var row = kws.row;
@@ -1711,6 +1746,7 @@ var mix_table_data = {
             var fields_ctx = kws.fields_ctx;
         },
         update_or_insert: function update_or_insert(new_row, old_row) {
+            // 如果是更新，不用输入old_row，old_row只是用来判断是否是创建的行为
             if (old_row && !old_row.pk) {
 
                 //var rows = this.rows.splice(0, 0, new_row)
