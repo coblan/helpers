@@ -18,6 +18,8 @@ class SimTable(ModelTable):
         self.row_search = self.search( row_search,crt_user,allowed_names,kw)
         self.pagenum = self.pagenator(pageNumber=self.page,perpage=perpage)
     
+    def get_heads(self): 
+        return []
 
     #def get_data_context(self): 
         #return {
@@ -25,6 +27,26 @@ class SimTable(ModelTable):
             #'row_pages' : self.pagenum.get_context(),  
             #'search_args':self.search_args
         #} 
+    
+    def get_context(self):
+        director_name =self.get_director_name()
+        heads = self.get_heads()
+        rows = self.get_rows()
+        row_sort = self.row_sort.get_context()
+        ops = self.get_operation()
+        return {
+            'heads':heads,
+            'rows': rows,
+            'row_pages' : self.getRowPages(),
+            'row_sort':row_sort,
+            'row_filters':  self.getRowFilters(), #ls,
+            #'search_tip':self.row_search.get_context(),
+            'director_name':director_name,
+            'ops' : ops,
+            'search_args':self.search_args, 
+            'parents': self.getParents(),
+            'footer': self.footer,
+        }    
     
     def get_operation(self): 
         return []

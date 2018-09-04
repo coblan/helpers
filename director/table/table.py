@@ -162,12 +162,18 @@ class RowFilter(object):
     
     def get_proc_list(self):
         ls=[]
-        field_names = [f.name for f in self.model._meta.get_fields()]
+        has_model = getattr(self, 'model')
+        if has_model:
+            field_names = [f.name for f in self.model._meta.get_fields()]
+        else:
+            field_names = []
         for name in self.valid_name:
             # 先查找 proc
-            model_name = model_to_name(self.model)
-            model_field_name = '%s.%s'%(model_name,name)
-            proc_cls =field_map.get(model_field_name, None)
+            proc_cls = None
+            if has_model:
+                model_name = model_to_name(self.model)
+                model_field_name = '%s.%s'%(model_name,name)
+                proc_cls =field_map.get(model_field_name, None)
             
             # 如果不是数据库的字段，就不用去查询了
             if not proc_cls and name in field_names:
@@ -313,7 +319,7 @@ class ModelTable(object):
         如果需要设置查询的默认参数，需要到 cls.clean_search_args中去设置
         
         """
-        self.search_args = kw.get('search_args')
+        self.search_args = kw.get('search_args', {})
         
         self.kw=kw
         self.crt_user=crt_user 

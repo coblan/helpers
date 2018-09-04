@@ -1625,7 +1625,7 @@ var mix_table_data = {
                 });
             },
             director_rows: function director_rows(kws) {
-                // kws: {after_fun:'update_or_insert_rows'}
+                // kws: {after_call:'update_or_insert_rows'}
                 var row_match_fun = kws.row_match || 'one_row';
                 if (!row_match[row_match_fun](self, kws)) {
                     return;
@@ -1634,9 +1634,13 @@ var mix_table_data = {
                 function bb() {
                     cfg.show_load();
                     ex.director_call(kws.director_name, { rows: self.selected }, function (resp) {
-                        cfg.hide_load(2000);
-                        if (kws.after_fun) {
-                            self.op_funs[kws.after_fun](resp);
+                        if (!resp.msg) {
+                            cfg.hide_load(2000);
+                        } else {
+                            cfg.hide_load();
+                        }
+                        if (kws.after_call) {
+                            self.op_funs[kws.after_call](resp);
                             if (resp.msg) {
                                 cfg.showMsg(resp.msg);
                             }

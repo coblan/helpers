@@ -18,7 +18,7 @@ class TablePage(object):
         self.request=request
         self.table = self.tableCls.parse_request(request)
         self.crt_user=request.user
-        self.permit=self.table.permit #ModelPermit(self.table.model,self.crt_user)
+        #self.permit=self.table.permit #ModelPermit(self.table.model,self.crt_user)
     
     def get_template(self,prefer=None):
         if self.template:
@@ -38,11 +38,11 @@ class TablePage(object):
         else:
             ctx = self.table.get_context()
 
-        ctx['can_add']=self.permit.can_add()
-        ctx['can_del']=self.permit.can_del()
-        if self.permit.changeable_fields:
-            ctx['can_edit']=True
-        ctx['app']=self.tableCls.model._meta.app_label
+        #ctx['can_add']=self.permit.can_add()
+        #ctx['can_del']=self.permit.can_del()
+        #if self.permit.changeable_fields:
+            #ctx['can_edit']=True
+        #ctx['app']=self.tableCls.model._meta.app_label
         # ctx['page_label'] =self.get_label()
         ctx['extra_js'] = self.extra_js
         return ctx
