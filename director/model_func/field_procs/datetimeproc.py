@@ -25,13 +25,14 @@ class DateTimeProc(BaseFieldProc):
             return timezone.datetime.strptime(value,'%Y-%m-%d %H:%M:%S')
         else:
             return dc[name]
-        
-    def filter_get_range_head(self,name,model):
-        f = model._meta.get_field(name)
-        return {'name':name,
-                'label':_(f.verbose_name),
-                'editor': 'com-date-datetimefield-range-filter'#'com-date-range-filter'
-                }
+    
+    # 暂时不去管这个
+    #def filter_get_range_head(self,name,model):
+        #f = model._meta.get_field(name)
+        #return {'name':name,
+                #'label':_(f.verbose_name),
+                #'editor': 'com-date-datetimefield-range-filter'#'com-date-range-filter'
+                #}
     
     def _filter_dict_query_args(self, dc, name):
         """
