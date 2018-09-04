@@ -1252,6 +1252,18 @@ window.pop_table_layer = pop_table_layer;
 __webpack_require__(74);
 
 var mix_ele_table_adapter = {
+    mounted: function mounted() {
+        if (!this.search_args._sort) {
+            Vue.set(this.search_args, '_sort', '');
+        }
+    },
+    watch: {
+        'search_args._sort': function search_args_sort(v) {
+            if (!v) {
+                this.$refs.e_table.clearSort();
+            }
+        }
+    },
     methods: {
         is_sort: function is_sort(head) {
             if (ex.isin(head.name, this.row_sort.sortable)) {

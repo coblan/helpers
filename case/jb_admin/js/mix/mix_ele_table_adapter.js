@@ -1,6 +1,18 @@
 require('./scss/mix_ele_table_adapter.scss')
 
 var mix_ele_table_adapter = {
+    mounted:function(){
+        if(!this.search_args._sort){
+            Vue.set(this.search_args,'_sort','')
+        }
+    },
+    watch:{
+        'search_args._sort':function(v){
+            if(!v){
+                this.$refs.e_table.clearSort()
+            }
+        }
+    },
     methods:{
         is_sort:function(head){
             if(ex.isin(head.name,this.row_sort.sortable)) {
