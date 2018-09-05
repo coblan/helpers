@@ -26,13 +26,13 @@ class DateTimeProc(BaseFieldProc):
         else:
             return dc[name]
     
-    # 暂时使用鸡肋的
-    #def filter_get_range_head(self,name,model):
-        #f = model._meta.get_field(name)
-        #return {'name':name,
-                #'label':_(f.verbose_name),
-                #'editor': 'com-date-datetimefield-range-filter'#'com-date-range-filter'
-                #}
+
+    def filter_get_range_head(self,name,model):
+        f = model._meta.get_field(name)
+        return {'name':name,
+                'label':_(f.verbose_name),
+                'editor': 'com-date-datetimefield-range-filter'#'com-date-range-filter'
+                }
     
     def _filter_dict_query_args(self, dc, name):
         """
