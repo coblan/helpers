@@ -486,12 +486,13 @@ class ModelTable(object):
         """
         return:[{"name": "name", "label": "\u59d3\u540d"}, {"sortable": true, "name": "age", "label": "\u5e74\u9f84"}]
         """
-        ls = self.permited_fields()   
-        ls = [x for x in ls if x not in self.hide_fields]
-        heads = model_to_head(self.model,include=ls)
+        #ls = self.permited_fields()   
+        #ls = [x for x in ls if x not in self.hide_fields]
+        #heads = model_to_head(self.model,include=ls)
 
-        heads.extend(self.getExtraHead())
-        heads = self.fields_sort_heads(heads)   
+        #heads.extend(self.getExtraHead())
+        #heads = self.fields_sort_heads(heads)   
+        heads = self.get_base_heads()
         
         heads= self.make_pop_edit_field(heads)
         
@@ -510,15 +511,17 @@ class ModelTable(object):
                 
         return heads
     
-    def footer_by_dict(self, dc): 
+    def get_base_heads(self): 
         ls = self.permited_fields()   
         ls = [x for x in ls if x not in self.hide_fields]
         heads = model_to_head(self.model,include=ls)
-
+    
         heads.extend(self.getExtraHead())
         heads = self.fields_sort_heads(heads)   
-        
-        heads= self.make_pop_edit_field(heads)
+        return heads
+    
+    def footer_by_dict(self, dc): 
+        heads= self.get_base_heads()
         footer = []
         for head in heads:
             footer.append(dc.get(head['name'], ''))
@@ -614,8 +617,13 @@ class ModelTable(object):
     def get_query(self):
         if not self.crt_user.is_superuser and not self.permit.readable_fields():
             raise PermissionDenied('no permission to browse %s'%self.model._meta.model_name)
+        query =  self.model.objects.all()
+        head_nams = [x['name'] for x in self.get_base_heads()]
+        for f in self.model._meta.get_fields():
+            if f.name in head_nams and isinstance(f, models.ForeignKey):
+                query = query.select_related(f.name)
         
-        query = self.inn_filter(self.model.objects.all())
+        query = self.inn_filter(query)
         query=self.row_filter.get_query(query)
     
         query=self.row_search.get_query(query)

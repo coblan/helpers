@@ -14,7 +14,7 @@ from .model_func.dictfy import name_to_model,model_to_name,to_dict
 import io
 from helpers.director.base_data import director
 from django.http import HttpResponse
-
+from django.utils.timezone import datetime
 try:
     os.makedirs(os.path.join(settings.MEDIA_ROOT, 'gen_files'))
 except:
@@ -78,8 +78,11 @@ def get_excel(director_name,search_args,user):
     table_obj = table_cls.gen_from_search_args(search_args,user)
     wb = table_obj.get_excel()
     fl_name = director_name.replace('.', '_')
-    wb.save(filename = os.path.join(settings.MEDIA_ROOT, 'gen_files', '%s.xlsx' % fl_name))
-    return {'file_url': '/media/gen_files/%s.xlsx' % fl_name,}
+    now = datetime.now().strftime('%Y_%m_%d_%H_%M_%S')
+    fl_name =  '%s_%s.xlsx' % (fl_name, now)
+    
+    wb.save(filename = os.path.join(settings.MEDIA_ROOT, 'gen_files', fl_name))
+    return {'file_url': '/media/gen_files/%s' % fl_name,}
     #response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
     #response['Content-Disposition'] = 'attachment; filename=%s.xlsx' % fl_name
     #wb.save(response)
