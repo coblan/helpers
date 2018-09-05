@@ -201,7 +201,7 @@ class RowFilter(object):
         extraHead= self.getExtraHead()
         normal_heads = []
         dc = {x['name']: x  for x in extraHead }
-
+        total_names = self.names + [x['name'] for x in extraHead]
         for proc_cls,name in zip(self.get_proc_list() ,self.valid_name):
             if name in dc:
                 # 为了性能考虑，如果有head了，就不进行自动生成head了。
@@ -220,6 +220,7 @@ class RowFilter(object):
         out_list = extraHead
         out_list.extend(normal_heads)
         out_list = [self.dict_head(head) for head in out_list]
+        out_list = sorted(out_list, key= lambda x: total_names.index(x['name']))
         return out_list
       
     def get_query(self,query):
@@ -338,8 +339,6 @@ class ModelTable(object):
         self.pagenum = self.pagenator(pageNumber=self.page,perpage=perpage)
         self.footer = []
         
-        
-        
     
     def custom_permit(self):
         self.permit=ModelPermit(model=self.model, user=self.crt_user)
@@ -395,19 +394,9 @@ class ModelTable(object):
         return director_name
     
     def get_context(self):
-        #ls=[]
-        #search_head = self.row_search.get_context()
-        #row_filters = self.row_filter.get_context()
-        ## 合并search和rowfilter 为rowfilter
-        #if search_head:
-            #ls.append( search_head)
-        #if row_filters:
-            #ls.extend(row_filters)
-        
         director_name =self.get_director_name()
         heads = self.get_heads()
         rows = self.get_rows()
-        #row_pages = self.pagenum.get_context()
         row_sort = self.row_sort.get_context()
         model_name = model_to_name(self.model)
         ops = self.get_operation()
@@ -668,79 +657,20 @@ class ModelTable(object):
                 {'name':'delete','editor':'com-op-btn','label':'删除','style': 'color:red','icon': 'fa-times','disabled':'!has_select'},
                 ]      
     
-    #def search_filter(self,query):
-        #return self.row_search.get_query(query)
-        #for field in self.search_fields:
-            #kw ={}
-            #kw['%s__icontains'%field] =self.row_search            
-        #return query
-    
-    #def sort_filter(self,query):
+    def get_excel(self): 
+        self.search_args['_perpage'] = 5000
+        ctx = self.get_context()
+        heads = ctx['heads']
+        rows = ctx['rows']
+        out_rows = []
+        for head in heads:
+            excel_row = []
+            excel_row.append(head['label'])
+        out_rows.append(excel_row)
+        for row in rows:
+            for head in heads:
+                excel_row = []
+                excel_row.append( row.get(head['name']) )
+            out_rows.append(excel_row)
         
-        #return query
-    
-    #def out_filter(self,query):
-        #if self.search_fields and self.row_search:
-            #exp = None
-            #for field in self.search_fields:
-                #if isinstance(field,SearchQuery):
-                    #query=field.get_query(query,self.row_search,self.crt_user)
-                #else:
-                    #kw ={}
-                    #kw['%s__icontains'%field] =self.row_search
-                    #if exp is None:
-                        #exp = Q(**kw)
-                    #else:
-                        #exp = exp | Q(**kw)
-            #if exp:
-                #query= query.filter(exp)
-        #if self.row_sort:
-            #return query.filter(**self.row_filter).order_by(*self.row_sort)
-        #else:
-            #return query.filter(**self.row_filter)
-    
-    #def get_options(self):
-        #query = self.inn_filter(self.model.objects.all())
-        #options=[]
-        #for name in self.filters:
-            #tmp = []
-            #option =[]
-            #field = self.model._meta.get_field(name)
-            #label = field._verbose_name
-            #value = self.row_filter.get(name,'')
-            #for x in query: # get rid of duplicated row
-                #if getattr(x,name) not in tmp:
-                    #tmp.append(getattr(x,name))
-                    #if value == getattr(x,name):
-                        #option.append({'label': '%s:%s'%(name,getattr(x,name)),'name':getattr(x,name)})
-                    #else:
-                        #option.append({'label': getattr(x,name),'name':getattr(x,name)})
-            #options.append({
-                #'name':name,
-                #'label':label,
-                #'value': value,
-                #'options':option,
-            #})
-        #return options    
-    
-    #def get_placeholder(self):
-        #ls=[]
-        #for field in self.search_fields:
-            #if isinstance(field,SearchQuery):
-                #ls.append(field.get_placeholder())
-            #else:
-                #ls.append(self.model._meta.get_field(field).verbose_name)
-        #return ','.join(ls)
-        # return ','.join([self.model._meta.get_field(name).verbose_name for name in self.search_fields])
-
-
-
-# from models import MobilePage
-# class PageTable(ModelTable):
-    # model = MobilePage
-    # sortable=['name','label']
-    # filters = ['name','label']
-    # include= ['name','label']
-    # search_fields=['name']
-    # per_page=2
-  
+        

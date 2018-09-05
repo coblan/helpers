@@ -67,11 +67,10 @@ def get_rows(director_name,search_args,user):
     table_obj = table_cls.gen_from_search_args(search_args,user)
     return table_obj.get_data_context()
 
-#def get_rows(model_name,search_args,user):
-    #model = name_to_model(model_name)
-    #table_cls = model_dc[model].get('table')
-    #table_obj = table_cls.gen_from_search_args(search_args,user)
-    #return table_obj.get_data_context()
+def get_excel(director_name,search_args,user): 
+    table_cls = director.get(director_name)
+    table_obj = table_cls.gen_from_search_args(search_args,user)
+    return 
 
 def save_rows(rows,user,request):
     kw=request.GET.dict()
