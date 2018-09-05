@@ -95,5 +95,25 @@ export var network ={
         ex.post('/d/ajax',JSON.stringify(post_data),function(resp){
             callback( resp.director_call )
         })
+    },
+
+    download:function(strPath){
+            var varExt = strPath.split('.');
+            //alert(varExt.length);
+            if (varExt[varExt.length - 1] == "txt") {
+                window.open(strPath);
+            }
+            else {
+                var iframe;
+                iframe = document.getElementById("hiddenDownloader");
+                if (iframe == null) {
+                    iframe = document.createElement('iframe');
+                    iframe.id = "hiddenDownloader";
+                    iframe.style.visibility = 'hidden';
+                    document.body.appendChild(iframe);
+                }
+                iframe.src = strPath;
+            }
+            return false;
     }
 }

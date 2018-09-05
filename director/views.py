@@ -14,6 +14,8 @@ from .network.ajax_router import ajax_router
 from .recv_file import GeneralUpload
 from django.views.decorators.csrf import csrf_exempt
 from .network.ckeditor import Ckeditor
+from .base_data import director
+
 """
 >5>helpers/port.rst>
 总的ajax view
@@ -43,7 +45,10 @@ def ajax_views(request,app=None):
         rt={'success':False,'msg':'key error '+str(e) +' \n may function name error'}
     except UserWarning as e:
         rt = {'success': False, 'msg': str(e)}
-    return HttpResponse(json.dumps(rt),content_type="application/json")  
+    if isinstance(rt, HttpResponse):
+        return rt
+    else:
+        return HttpResponse(json.dumps(rt),content_type="application/json")  
 
 def general_upload(request):
     return GeneralUpload().asView(request)
@@ -52,9 +57,19 @@ def general_upload(request):
 def ckeditor(request): 
     return Ckeditor().RecieveView(request)
 
+
+def export_excel(request): 
+    director_name = request.GET.get('director_name')
+    search_args = dict( request.GET )
     
+    table_cls = director.get(director_name)
+    table_obj = table_cls.parse_request(request)  #table_cls.gen_from_search_args(search_args,request.user)
+    wb = table_obj.get_excel()
+    fl_name = director_name.replace('.', '_')
+    response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    response['Content-Disposition'] = 'attachment; filename=%s.xlsx' % fl_name
+    wb.save(response)
+    return response 
 
     
 
-
-    

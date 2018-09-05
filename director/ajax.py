@@ -4,15 +4,21 @@ from .models import PermitModel
 from .base_data import model_dc
 from django.contrib.auth.models import Group
 from django.core.exceptions import ValidationError
-
+from django.conf import settings
 import json
-
+import os
 from helpers.func.network.download_response import downloadfy_response
 
 from .model_func.wirtedb import permit_save_model
 from .model_func.dictfy import name_to_model,model_to_name,to_dict
 import io
 from helpers.director.base_data import director
+from django.http import HttpResponse
+
+try:
+    os.makedirs(os.path.join(settings.MEDIA_ROOT, 'gen_files'))
+except:
+    pass
 
 def get_global():
     return globals()
@@ -70,7 +76,14 @@ def get_rows(director_name,search_args,user):
 def get_excel(director_name,search_args,user): 
     table_cls = director.get(director_name)
     table_obj = table_cls.gen_from_search_args(search_args,user)
-    return 
+    wb = table_obj.get_excel()
+    fl_name = director_name.replace('.', '_')
+    wb.save(filename = os.path.join(settings.MEDIA_ROOT, 'gen_files', '%s.xlsx' % fl_name))
+    return {'file_url': '/media/gen_files/%s.xlsx' % fl_name,}
+    #response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    #response['Content-Disposition'] = 'attachment; filename=%s.xlsx' % fl_name
+    #wb.save(response)
+    #return response    
 
 def save_rows(rows,user,request):
     kw=request.GET.dict()

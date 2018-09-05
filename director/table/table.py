@@ -658,19 +658,30 @@ class ModelTable(object):
                 ]      
     
     def get_excel(self): 
-        self.search_args['_perpage'] = 5000
+        from openpyxl import Workbook
+        
+        #self.search_args['_perpage'] = 5000
         ctx = self.get_context()
         heads = ctx['heads']
         rows = ctx['rows']
         out_rows = []
+        
+        excel_row = []
         for head in heads:
-            excel_row = []
             excel_row.append(head['label'])
         out_rows.append(excel_row)
+        
         for row in rows:
+            excel_row = []
             for head in heads:
-                excel_row = []
                 excel_row.append( row.get(head['name']) )
             out_rows.append(excel_row)
+        
+        wb = Workbook()
+        ws = wb.active
+        for row in out_rows:
+            ws.append(row)        
+        
+        return wb
         
         
