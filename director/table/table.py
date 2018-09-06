@@ -682,7 +682,11 @@ class ModelTable(object):
         for row in rows:
             excel_row = []
             for head in heads:
-                excel_row.append( row.get(head['name']) )
+                label = '_%s_label' % head['name']
+                if label in row:
+                    excel_row.append( row.get(label) )
+                else:
+                    excel_row.append( row.get(head['name']) )
             out_rows.append(excel_row)
         
         wb = Workbook()
