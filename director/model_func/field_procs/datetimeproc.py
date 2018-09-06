@@ -26,7 +26,7 @@ class DateTimeProc(BaseFieldProc):
         else:
             return dc[name]
     
-
+        
     def filter_get_range_head(self,name,model):
         f = model._meta.get_field(name)
         return {'name':name,
