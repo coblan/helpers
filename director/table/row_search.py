@@ -32,24 +32,25 @@ class SelectSearch(object):
     def get_option(self, name): 
         return {'value': name, 'label': _(self.model._meta.get_field(name).verbose_name) }
     
-    def get_query(self,query):
-        if self.q and self.qf:
+    def clean_search(self): 
+        try:
             f = self.model._meta.get_field(self.qf)
             mapperCls = field_map.get(f.__class__)
             mapper = mapperCls(field = f)
             q_str = mapper.filter_clean_search(self.q)
+        except :
+            q_str = self.q
+        return q_str
+    
+    def get_query(self,query):
+        if self.q and self.qf:
+            q_str = self.clean_search()
             if q_str == None:
                 # 相当于 清空查询集
                 return query.filter(pk = None)
             exp = self.get_express(q_str)
             if exp:
                 return query.filter( exp)
-            #if self.qf in self.names:
-                #exp = {'%s__icontains'%self.qf: q_str,}
-                #return query.filter( **exp)
-            #elif self.qf in self.exact_names:
-                #exp = {self.qf : q_str}
-                #return query.filter( **exp)
         return query
     
     def get_express(self, q_str): 

@@ -677,6 +677,10 @@ class ModelTable(object):
         excel_row = []
         for head in heads:
             excel_row.append(head['label'])
+            if 'options' in head and head['options']:
+                head['options_dict'] = {}
+                for opt in head['options']:
+                    head['options_dict'][opt['value']] = opt['label']
         out_rows.append(excel_row)
         
         for row in rows:
@@ -685,6 +689,10 @@ class ModelTable(object):
                 label = '_%s_label' % head['name']
                 if label in row:
                     excel_row.append( row.get(label) )
+                elif 'options_dict' in head:
+                    value = row.get(head['name'])
+                    find_label = head['options_dict'].get(value, '')
+                    excel_row.append( find_label )
                 else:
                     excel_row.append( row.get(head['name']) )
             out_rows.append(excel_row)
