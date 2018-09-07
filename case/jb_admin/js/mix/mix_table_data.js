@@ -37,6 +37,9 @@ var mix_table_data={
                 })
             },
             selected_set_and_save:function(kws){
+                /*
+                这个是主力函数
+                * */
                 // head: row_match:many_row ,
               var row_match_fun = kws.row_match || 'many_row'
                if(! row_match[row_match_fun](self,kws)){
@@ -54,10 +57,11 @@ var mix_table_data={
                     cfg.show_load()
                     ex.post('/d/ajax',JSON.stringify(post_data),function(resp){
 
-                        ex.each(self.selected ,function(row){
-                            ex.assign(row,all_set_dict)
-                            row[kws.field]=kws.value
-                        })
+                        self.op_funs.update_or_insert_rows({rows:resp.save_rows} )
+                        //ex.each(self.selected ,function(row){
+                        //    ex.assign(row,all_set_dict)
+                        //    row[kws.field]=kws.value
+                        //})
                         cfg.hide_load(2000)
                         if(after_save_callback){
                             after_save_callback()
@@ -105,6 +109,7 @@ var mix_table_data={
                 }
             },
             selected_pop_set_and_save:function(kws){
+                // 这个函数应该是没用了。注意剔除掉
                 var row_match_fun = kws.row_match || 'one_row'
                 if(! row_match[row_match_fun](self,kws)){
                     return
