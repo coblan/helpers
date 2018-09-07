@@ -1784,8 +1784,9 @@ var mix_table_data = {
                     //self.$emit('operation',{fun:'switch_to_tab',tab_name:kws.tab_editor,row:crt_row})
                     //self.switch_to_tab(kws.tab_editor)
                 } else {
-                    pop_fields_layer(crt_row, fields_ctx, function (new_row) {
+                    var win = pop_fields_layer(crt_row, fields_ctx, function (new_row) {
                         self.update_or_insert(new_row, crt_row);
+                        layer.close(win);
                     });
                 }
             });

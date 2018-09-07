@@ -272,8 +272,9 @@ var mix_table_data={
                     //self.switch_to_tab(kws.tab_editor)
 
                 }else{
-                    pop_fields_layer(crt_row,fields_ctx,function(new_row){
+                    var win=pop_fields_layer(crt_row,fields_ctx,function(new_row){
                         self.update_or_insert(new_row, crt_row)
+                        layer.close(win)
                     })
                 }
 
