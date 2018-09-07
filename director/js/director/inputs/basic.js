@@ -243,7 +243,11 @@ export var baseInput={
         props:['row','head'],
         template:`<div>
 	        	<ul v-if='head.readonly'><li v-for='value in row[head.name]' v-text='get_label(value)'></li></ul>
-	        	<multi-chosen v-else v-model='row[head.name]' :id="'id_'+head.name" :options='head.options'></multi-chosen>
+	        	<div v-else>
+	        	<input type="text" style="display: none" v-model='row[head.name]' :name="head.name">
+	        	<multi-chosen  v-model='row[head.name]' :id="'id_'+head.name" :options='head.options'></multi-chosen>
+	        	</div>
+
 	        	</div>`,
         methods:{
             get_label:function (value) {

@@ -25,6 +25,12 @@ var sim_select= {
         if (this.head.default && !this.row[this.head.name]) {
             Vue.set(this.row, this.head.name, this.head.default)
         }
+        var self=this
+        if(this.head.remote_options){
+            ex.director_call(this.head.remote_options,{crt_value:this.row[this.head.name]},function(resp){
+                self.head.options=resp
+            })
+        }
 
     },
 

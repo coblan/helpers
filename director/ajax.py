@@ -53,15 +53,14 @@ def get_row(director_name,pk=None,user=None,**kws):
     #model = name_to_model(model_name)
     #fields_cls = model_dc[model].get('fields')
     fields_cls = director.get(director_name)
-    if pk:
-        fields_obj = fields_cls(pk=pk,crt_user = user)
-        #instance = model.objects.get(pk =pk)
+    fields_obj = fields_cls(pk=pk,crt_user = user, **kws)
+    #if pk:
+        #fields_obj = fields_cls(pk=pk,crt_user = user)
+    #elif kws:
+        #instance = fields_cls._meta.model.objects.get(**kws)
         #fields_obj = fields_cls(instance=instance,crt_user = user)
-    elif kws:
-        instance = fields_cls._meta.model.objects.get(**kws)
-        fields_obj = fields_cls(instance=instance,crt_user = user)
-    else:
-        fields_obj =fields_cls(crt_user = user)
+    #else:
+        #fields_obj =fields_cls(crt_user = user)
     return fields_obj.get_row()
 
 

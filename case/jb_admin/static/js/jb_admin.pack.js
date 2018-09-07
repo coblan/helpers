@@ -2154,6 +2154,9 @@ Vue.component('com-table-array-mapper', array_mapper);
 
 
 /*
+
+** 这个文件应该是不用了。。
+
 映射[一个]
  options:{
  key:value
@@ -2774,7 +2777,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 var pop_fields = exports.pop_fields = {
-    template: '<span v-text="show_text" @click="edit_me()" class="clickable"></span>',
+    template: '<span @click="edit_me()" class="clickable">\n        <component v-if="head.inn_editor" :is="head.inn_editor" :rowData="rowData" :field="field" :index="index"></component>\n        <span v-else v-text="show_text"  ></span>\n    </span>',
     props: ['rowData', 'field', 'index'],
     created: function created() {
         // find head from parent table
@@ -2816,6 +2819,7 @@ var pop_fields = exports.pop_fields = {
             } else {
                 var kws = this.head.get_row;
             }
+            kws.director_name = this.head.fields_ctx.director_name;
 
             fun(function (pop_row) {
                 //pop_fields_layer(pop_row,self.head.fields_heads,ops,self.head.extra_mixins,function(kws){

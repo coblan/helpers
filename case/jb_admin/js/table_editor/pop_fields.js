@@ -1,5 +1,8 @@
 export  var pop_fields={
-    template:'<span v-text="show_text" @click="edit_me()" class="clickable"></span>',
+    template:`<span @click="edit_me()" class="clickable">
+        <component v-if="head.inn_editor" :is="head.inn_editor" :rowData="rowData" :field="field" :index="index"></component>
+        <span v-else v-text="show_text"  ></span>
+    </span>`,
     props:['rowData','field','index'],
     created:function(){
         // find head from parent table
@@ -42,6 +45,7 @@ export  var pop_fields={
             }else{
                 var kws= this.head.get_row
             }
+            kws.director_name = this.head.fields_ctx.director_name
 
             fun(function(pop_row){
                 //pop_fields_layer(pop_row,self.head.fields_heads,ops,self.head.extra_mixins,function(kws){
@@ -84,7 +88,7 @@ var get_row={
         callback(cache_row)
     },
     get_with_relat_field:function(callback,row,kws){
-        var director_name=kws.director_name
+        var director_name=  kws.director_name
         var relat_field = kws.relat_field
 
         var dc ={fun:'get_row',director_name:director_name}
