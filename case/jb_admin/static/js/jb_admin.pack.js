@@ -1799,7 +1799,10 @@ var mix_table_data = {
                 this.row_pages.total += 1;
             } else {
                 var table_row = ex.findone(this.rows, { pk: new_row.pk });
-                ex.assign(table_row, new_row);
+                //ex.assign(table_row,new_row)
+                for (var key in new_row) {
+                    Vue.set(table_row, key, new_row[key]);
+                }
             }
         },
         getRows: function getRows() {
