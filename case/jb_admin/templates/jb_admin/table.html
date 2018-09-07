@@ -28,6 +28,7 @@
     table_logic={
         el:'#there',
         data:{
+            table_cfg:table_cfg,
             parents:parents,
             page_label:page_label,
             heads:heads,
@@ -171,7 +172,7 @@
         color: gray;
         pointer-events: none;
     }
-    .table th .cell{
+   .one-row-head.table th .cell{
         white-space:nowrap;
     }
 </style>
@@ -220,7 +221,7 @@
             <div class="table-wraper flex-grow" style="position: relative;">
                 {% block table_content %}
                 <div style="position: absolute;top:0;left:0;bottom: 0;right:0;">
-                    <el-table class="table" ref="e_table"
+                    <el-table class="table one-row-head" ref="e_table"
                               :data="rows"
                               border
                               show-summary
