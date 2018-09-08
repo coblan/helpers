@@ -28,7 +28,6 @@
     table_logic={
         el:'#there',
         data:{
-            table_cfg:table_cfg,
             parents:parents,
             page_label:page_label,
             heads:heads,
@@ -172,8 +171,11 @@
         color: gray;
         pointer-events: none;
     }
-   .one-row-head.table th .cell{
+   .table th .cell{
         white-space:nowrap;
+    }
+     .el-table .has-gutter th>.cell{
+        width: auto;
     }
 </style>
 <div id='there' class="flex-v">
