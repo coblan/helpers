@@ -293,6 +293,7 @@ export var baseInput={
         }
     },
     date: {
+        // 被 com-field-date 替代
         props:['row','head'],
         template:`<div><span v-if='head.readonly' v-text='row[head.name]'></span>
                                 <date v-else v-model="row[head.name]" :id="'id_'+head.name"
