@@ -54,14 +54,14 @@ var nice_validator={
             })
             return valid
         },
-        before_save:function(){
-            ex.vueSuper(this,{mixin:nice_validator,fun:'before_save'})
-            if(this.isValid()){
-                return 'continue'
-            }else{
-                return 'break'
-            }
-        },
+        //before_save:function(){
+        //    ex.vueSuper(this,{mixin:nice_validator,fun:'before_save'})
+        //    if(this.isValid()){
+        //        return 'continue'
+        //    }else{
+        //        return 'break'
+        //    }
+        //},
         showErrors:function(errors){
             for(var k in errors){
                 //var head = ex.findone(this.heads,{name:k})

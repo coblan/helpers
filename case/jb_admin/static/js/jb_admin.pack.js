@@ -1330,7 +1330,8 @@ var mix_fields_data = {
         var self = this;
         ex.assign(this.op_funs, {
             save: function save() {
-                self.save();
+                //self.save()
+                self.submit();
             }
         });
     },
@@ -1363,17 +1364,29 @@ var mix_fields_data = {
                 callback(resp.save_row);
             });
         },
-        save: function save() {
+        submit: function submit() {
             var self = this;
-
             this.setErrors({});
-            //eventBus.$emit('sync_data')
             ex.vueBroadCall(self, 'commit');
-
-            if (self.before_save() == 'break') {
-                return;
-            }
+            Vue.nextTick(function () {
+                if (!self.isValid()) {
+                    return;
+                }
+                self.save();
+            });
+        },
+        save: function save() {
+            //var self =this;
+            //this.setErrors({})
+            //ex.vueBroadCall(self,'commit')
+            //if(!this.isValid()){
+            //    return
+            //}
+            //if(self.before_save() == 'break'){
+            //    return
+            //}
             //var loader = layer.load(2)
+            var self = this;
             cfg.show_load();
             self.dataSaver(function (rt) {
                 if (rt.errors) {
@@ -1387,9 +1400,9 @@ var mix_fields_data = {
                 }
             });
         },
-        before_save: function before_save() {
-            return 'continue';
-        },
+        //before_save:function(){
+        //    return 'continue'
+        //},
         afterSave: function afterSave(resp) {},
         after_save: function after_save(new_row) {
             ex.assign(this.row, new_row);
@@ -1478,14 +1491,14 @@ var nice_validator = {
             });
             return valid;
         },
-        before_save: function before_save() {
-            ex.vueSuper(this, { mixin: nice_validator, fun: 'before_save' });
-            if (this.isValid()) {
-                return 'continue';
-            } else {
-                return 'break';
-            }
-        },
+        //before_save:function(){
+        //    ex.vueSuper(this,{mixin:nice_validator,fun:'before_save'})
+        //    if(this.isValid()){
+        //        return 'continue'
+        //    }else{
+        //        return 'break'
+        //    }
+        //},
         showErrors: function showErrors(errors) {
             for (var k in errors) {
                 //var head = ex.findone(this.heads,{name:k})

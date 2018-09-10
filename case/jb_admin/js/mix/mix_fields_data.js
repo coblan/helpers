@@ -9,7 +9,8 @@ var mix_fields_data ={
         var self=this
         ex.assign(this.op_funs,{
             save:function(){
-                self.save()
+                //self.save()
+                self.submit()
             }
         })
     },
@@ -42,17 +43,30 @@ var mix_fields_data ={
                 callback(resp.save_row)
             })
         },
-        save:function () {
+        submit:function(){
             var self =this;
-
             this.setErrors({})
-            //eventBus.$emit('sync_data')
             ex.vueBroadCall(self,'commit')
+            Vue.nextTick(function(){
+                if(!self.isValid()){
+                    return
+                }
+                self.save()
+            })
 
-            if(self.before_save() == 'break'){
-                return
-            }
+        },
+        save:function () {
+            //var self =this;
+            //this.setErrors({})
+            //ex.vueBroadCall(self,'commit')
+            //if(!this.isValid()){
+            //    return
+            //}
+            //if(self.before_save() == 'break'){
+            //    return
+            //}
             //var loader = layer.load(2)
+            var self=this
             cfg.show_load()
             self.dataSaver(function(rt){
                 if( rt.errors){
@@ -66,9 +80,9 @@ var mix_fields_data ={
                 }
             })
         },
-        before_save:function(){
-            return 'continue'
-        },
+        //before_save:function(){
+        //    return 'continue'
+        //},
         afterSave:function(resp){
 
         },
