@@ -9,6 +9,7 @@ var ajax_table={
             row_sort:heads_ctx.row_sort,
             director_name:heads_ctx.director_name,
             footer:heads_ctx.footer || [],
+            ops:heads_ctx.ops || [],
             rows:[],
             row_pages:{},
             //search_tip:this.kw.search_tip,
@@ -33,6 +34,19 @@ var ajax_table={
                         @submit="search()"></com-filter>
             <div class="flex-grow"></div>
         </div>
+
+        <div  v-if="ops.length>0">
+            <div class="oprations" style="padding: 5px">
+                <component v-for="op in ops"
+                           :is="op.editor"
+                           :ref="'op_'+op.name"
+                           :head="op"
+                           :disabled="get_attr(op.disabled)"
+                           v-show="! get_attr(op.hide)"
+                           @operation="on_operation(op)"></component>
+            </div>
+        </div>
+
         <div class="box box-success flex-grow">
             <div class="table-wraper" style="position: absolute;top:0;left:0;bottom: 0;right:0;">
                <el-table class="table" ref="e_table"

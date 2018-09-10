@@ -379,6 +379,19 @@ var mix_table_data={
                 })
             })
         },
+        get_attr:function(name){
+            if(name == undefined){
+                return false
+            }
+            if(name.startsWith('!')){
+                name=name.slice(1)
+                name= name.trim()
+                return !this[name]
+            }else{
+                name= name.trim()
+                return this[name]
+            }
+        },
 
     }
 }
