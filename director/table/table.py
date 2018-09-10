@@ -485,43 +485,37 @@ class ModelTable(object):
     def get_heads(self):
         """
         return:[{"name": "name", "label": "\u59d3\u540d"}, {"sortable": true, "name": "age", "label": "\u5e74\u9f84"}]
-        """
-        #ls = self.permited_fields()   
-        #ls = [x for x in ls if x not in self.hide_fields]
-        #heads = model_to_head(self.model,include=ls)
-
-        #heads.extend(self.getExtraHead())
-        #heads = self.fields_sort_heads(heads)   
-        heads = self.get_base_heads()
-        
-        heads= self.make_pop_edit_field(heads)
-        
+        """ 
+        heads = self.get_model_heads()
         for head in heads:
             head = self.dict_head(head)
-            try:
-                field = self.model._meta.get_field(head['name'])            
-                if hasattr(field, 'choices') and 'options' not in head :
-                    catch = get_request_cache()
-                    options_name = '%s_field_options'% head['name']
-                    if not catch.get(options_name):
-                        catch[options_name]=[{'value':val,'label':str(lab)} for val,lab in field.choices]    
-                    head['options']=catch.get(options_name)
-            except FieldDoesNotExist:
-                pass
+            field = self.model._meta.get_field(head['name'])            
+            if hasattr(field, 'choices') and 'options' not in head :
+                catch = get_request_cache()
+                options_name = '%s_field_options'% ( model_to_name(self.model) + head['name'])
+                if not catch.get(options_name):
+                    catch[options_name]=[{'value':val,'label':str(lab)} for val,lab in field.choices]    
+                head['options']=catch.get(options_name)
                 
+        heads.extend(self.getExtraHead())
+        heads = self.fields_sort_heads(heads)          
+        heads= self.make_pop_edit_field(heads)        
         return heads
     
-    def get_base_heads(self): 
+    def get_model_heads(self): 
         ls = self.permited_fields()   
         ls = [x for x in ls if x not in self.hide_fields]
         heads = model_to_head(self.model,include=ls)
-    
-        heads.extend(self.getExtraHead())
-        heads = self.fields_sort_heads(heads)   
         return heads
     
+    def get_light_heads(self): 
+        heads = self.get_model_heads()
+        heads.extend(self.getExtraHead())
+        heads = self.fields_sort_heads(heads)   
+        return heads        
+    
     def footer_by_dict(self, dc): 
-        heads= self.get_base_heads()
+        heads= self.get_light_heads()
         footer = []
         for head in heads:
             footer.append(dc.get(head['name'], ''))
@@ -618,7 +612,7 @@ class ModelTable(object):
         if not self.crt_user.is_superuser and not self.permit.readable_fields():
             raise PermissionDenied('no permission to browse %s'%self.model._meta.model_name)
         query =  self.model.objects.all()
-        head_nams = [x['name'] for x in self.get_base_heads()]
+        head_nams = [x['name'] for x in self.get_light_heads()]
         for f in self.model._meta.get_fields():
             if f.name in head_nams and isinstance(f, models.ForeignKey):
                 query = query.select_related(f.name)
