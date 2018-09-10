@@ -54,22 +54,6 @@ class PageNum(object):
              'crt_page':2
             }
         """
-        #choice_len = len(self.pagenator.page_range)
-        #k=3
-        #a=-1
-        #while a < 1:
-            #a=self.pageNumber-k
-            #k-=1
-        #page_nums = range(a,min(choice_len,self.pageNumber+(5-k))+1)
-        #if page_nums[0] != 1:
-            #page_nums=[1,'...']+ page_nums
-        #if page_nums[-1] != choice_len:
-            #page_nums = page_nums +['...',choice_len]
-        #for i in range(len(page_nums)):
-            #num = page_nums[i]
-        #page_nums=[str(x) for x in page_nums]
-
-        #return {'options':page_nums,'crt_page':self.pageNumber}    
         return {'crt_page':self.pageNumber,
                 'total':self.count,
                 'perpage':self.perPage}
@@ -485,10 +469,14 @@ class ModelTable(object):
     def get_heads(self):
         """
         return:[{"name": "name", "label": "\u59d3\u540d"}, {"sortable": true, "name": "age", "label": "\u5e74\u9f84"}]
-        """ 
-        heads = self.get_model_heads()
-        for head in heads:
-            head = self.dict_head(head)
+        """
+        model_heads = self.get_model_heads()
+        heads = self.getExtraHead() + model_heads
+        heads = self.fields_sort_heads(heads)   
+        heads= self.make_pop_edit_field(heads)  
+        heads = [self.dict_head(head) for head in heads]
+        
+        for head in model_heads:
             field = self.model._meta.get_field(head['name'])            
             if hasattr(field, 'choices') and 'options' not in head :
                 catch = get_request_cache()
@@ -496,10 +484,6 @@ class ModelTable(object):
                 if not catch.get(options_name):
                     catch[options_name]=[{'value':val,'label':str(lab)} for val,lab in field.choices]    
                 head['options']=catch.get(options_name)
-                
-        heads.extend(self.getExtraHead())
-        heads = self.fields_sort_heads(heads)          
-        heads= self.make_pop_edit_field(heads)        
         return heads
     
     def get_model_heads(self): 
@@ -512,7 +496,7 @@ class ModelTable(object):
         heads = self.get_model_heads()
         heads.extend(self.getExtraHead())
         heads = self.fields_sort_heads(heads)   
-        return heads        
+        return heads 
     
     def footer_by_dict(self, dc): 
         heads= self.get_light_heads()
@@ -548,8 +532,8 @@ class ModelTable(object):
                         #'fun':'do_nothing'
                         'fun':'update_or_insert'
                     }
-                    head['ops']=form_obj.get_operations()
-                    head['extra_mixins']=form_obj.extra_mixins
+                    #head['ops']=form_obj.get_operations()
+                    #head['extra_mixins']=form_obj.extra_mixins
         return heads
     
     def dict_head(self,head):

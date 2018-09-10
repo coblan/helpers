@@ -1,3 +1,17 @@
+/*
+* head={
+*   inn_editor: com-table-mapper  //【可选】 传入一个 table_editor ，除了具备该editor的显示方式外，还具备点击功能
+*   get_row:{
+*       fun:'get_table_row',
+*   },
+*   fields_ctx={},
+*   after_save:{
+*       fun:'update_or_insert'
+*   }
+* }
+*
+* */
+
 export  var pop_fields={
     template:`<span @click="edit_me()" class="clickable">
         <component v-if="head.inn_editor" :is="head.inn_editor" :rowData="rowData" :field="field" :index="index"></component>

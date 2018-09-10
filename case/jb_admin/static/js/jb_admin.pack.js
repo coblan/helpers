@@ -2798,6 +2798,20 @@ Vue.component('com-table-picture', picture);
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+/*
+* head={
+*   inn_editor: com-table-mapper  //【可选】 传入一个 table_editor ，除了具备该editor的显示方式外，还具备点击功能
+*   get_row:{
+*       fun:'get_table_row',
+*   },
+*   fields_ctx={},
+*   after_save:{
+*       fun:'update_or_insert'
+*   }
+* }
+*
+* */
+
 var pop_fields = exports.pop_fields = {
     template: '<span @click="edit_me()" class="clickable">\n        <component v-if="head.inn_editor" :is="head.inn_editor" :rowData="rowData" :field="field" :index="index"></component>\n        <span v-else v-text="show_text"  ></span>\n    </span>',
     props: ['rowData', 'field', 'index'],
