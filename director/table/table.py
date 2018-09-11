@@ -573,11 +573,12 @@ class ModelTable(object):
         query=self.get_query()
         out=[]
         director_name = self.get_director_name()
-        permit_fields =  self.permited_fields()
+        #permit_fields =  self.permited_fields()
+        used_head_names= [x['name'] for x in self.get_light_heads()]
         for inst in query:
             # 遇到一种情况，聚合时，这里的queryset返回的item是dict。所以下面做一个判断
             if isinstance(inst,models.Model):
-                dc= to_dict(inst, include=permit_fields,filt_attr=self.dict_row( inst))
+                dc= to_dict(inst, include=used_head_names,filt_attr=self.dict_row( inst))
             else:
                 dc = inst
             dc['_director_name'] = director_name+'.edit'
@@ -596,10 +597,10 @@ class ModelTable(object):
         if not self.crt_user.is_superuser and not self.permit.readable_fields():
             raise PermissionDenied('no permission to browse %s'%self.model._meta.model_name)
         query =  self.model.objects.all()
-        head_nams = [x['name'] for x in self.get_light_heads()]
-        for f in self.model._meta.get_fields():
-            if f.name in head_nams and isinstance(f, models.ForeignKey):
-                query = query.select_related(f.name)
+        
+        # 优化速度
+        if self.exclude:
+            query = query.defer(*self.exclude)
         
         query = self.inn_filter(query)
         query=self.row_filter.get_query(query)
@@ -607,6 +608,12 @@ class ModelTable(object):
         query=self.row_search.get_query(query)
         query = self.statistics(query)
         query = self.row_sort.get_query(query)
+        
+        head_nams = [x['name'] for x in self.get_light_heads()]
+        for f in self.model._meta.get_fields():
+            if f.name in head_nams and isinstance(f, models.ForeignKey):
+                query = query.select_related(f.name)        
+        
         query = self.pagenum.get_query(query)  
         return query
     
