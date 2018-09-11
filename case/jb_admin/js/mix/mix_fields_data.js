@@ -27,15 +27,24 @@ var mix_fields_data ={
             this.data_getter(this)
         },
         setErrors:function(errors){
+            // errors:{field:['xxx','bbb']}
             ex.each(this.heads,function(head){
                 if(errors[head.name]){
                     Vue.set(head,'error',errors[head.name].join(';'))
+                    delete errors[head.name]
                 }else if(head.error){
                     //delete head.error
                     Vue.delete(head,'error')
                     //Vue.set(head,'error',null)
                 }
             })
+
+            if(!ex.isEmpty(errors)){
+                layer.alert(
+                    JSON.stringify(errors)
+                )
+            }
+
         },
         dataSaver:function(callback){
             var post_data=[{fun:'save_row',row:this.row}]
@@ -68,17 +77,35 @@ var mix_fields_data ={
             //var loader = layer.load(2)
             var self=this
             cfg.show_load()
-            self.dataSaver(function(rt){
-                if( rt.errors){
+
+
+            var post_data=[{fun:'save_row',row:this.row}]
+            ex.post('/d/ajax',JSON.stringify(post_data),function (resp) {
+                var rt = resp.save_row
+                if(rt.errors){
                     cfg.hide_load()
                     self.setErrors(rt.errors)
-                    self.showErrors(rt.errors)
+                    //self.showErrors(rt.errors)
                 }else{
-                    cfg.hide_load(1000)
+                    cfg.hide_load(2000)
                     self.after_save(rt.row)
                     self.setErrors({})
                 }
             })
+
+
+            //self.dataSaver(function(rt){
+            //    if( rt.errors){
+            //        cfg.hide_load()
+            //        self.setErrors(rt.errors)
+            //        self.showErrors(rt.errors)
+            //    }else{
+            //        cfg.hide_load(1000)
+            //        self.after_save(rt.row)
+            //        self.setErrors({})
+            //    }
+            //})
+
         },
         //before_save:function(){
         //    return 'continue'

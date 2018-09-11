@@ -573,12 +573,13 @@ class ModelTable(object):
         query=self.get_query()
         out=[]
         director_name = self.get_director_name()
-        #permit_fields =  self.permited_fields()
-        used_head_names= [x['name'] for x in self.get_light_heads()]
+        permit_fields =  self.permited_fields()
+        #used_head_names= self.hide_fields +  [x['name'] for x in self.get_light_heads()] 
+        
         for inst in query:
             # 遇到一种情况，聚合时，这里的queryset返回的item是dict。所以下面做一个判断
             if isinstance(inst,models.Model):
-                dc= to_dict(inst, include=used_head_names,filt_attr=self.dict_row( inst))
+                dc= to_dict(inst, include=permit_fields,filt_attr=self.dict_row( inst))
             else:
                 dc = inst
             dc['_director_name'] = director_name+'.edit'
