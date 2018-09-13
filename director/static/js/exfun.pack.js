@@ -1553,6 +1553,9 @@ var vuetool = exports.vuetool = {
         return rt;
     },
     vueExtend: function vueExtend(par, mixins) {
+        if (!$.isArray(mixins)) {
+            mixins = [mixins];
+        }
         var mixins = ex.map(mixins, function (item) {
             if (typeof item == 'string') {
                 return window[item];
