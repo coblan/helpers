@@ -13,6 +13,7 @@ var mix_fields_data ={
                 self.submit()
             }
         })
+        self.setErrors({})
     },
     methods:{
         on_operation:function(op){
@@ -28,6 +29,7 @@ var mix_fields_data ={
         },
         setErrors:function(errors){
             // errors:{field:['xxx','bbb']}
+            var errors=ex.copy(errors)
             ex.each(this.heads,function(head){
                 if(errors[head.name]){
                     Vue.set(head,'error',errors[head.name].join(';'))
@@ -85,7 +87,7 @@ var mix_fields_data ={
                 if(rt.errors){
                     cfg.hide_load()
                     self.setErrors(rt.errors)
-                    //self.showErrors(rt.errors)
+                    self.showErrors(rt.errors)
                 }else{
                     cfg.hide_load(2000)
                     self.after_save(rt.row)
@@ -119,13 +121,6 @@ var mix_fields_data ={
         showErrors:function(errors){
             // 落到 nice validator去
 
-            //var str = ""
-            //for(var k in errors){
-            //    var head = ex.findone(this.heads,{name:k})
-            //    str += head.label + ':' + errors[k] +'<br>'
-            //}
-            //
-            //layer.confirm(str,{title:['错误','color:white;background-color:red']})
         },
         clear:function(){
             this.row={}

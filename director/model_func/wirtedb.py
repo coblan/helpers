@@ -15,5 +15,5 @@ def permit_save_model(user,row,**kw):
         fields_obj.save_form()
         return fields_obj
     else:
-        raise ValidationError(fields_obj.errors)
+        raise ValidationError(fields_obj.get_errors() )
     

@@ -19,7 +19,7 @@ import {com_pop_field} from  './com_pop_fields'
 export  function pop_fields_layer (row,fields_ctx,callback,layerConfig){
     // row,head ->//model_name,relat_field
 
-
+    var row=ex.copy(row)
     var heads = fields_ctx.heads
     var ops = fields_ctx.ops
     var extra_mixins=fields_ctx.extra_mixins || []
