@@ -611,9 +611,11 @@ class ModelTable(object):
         query = self.row_sort.get_query(query)
         
         head_nams = [x['name'] for x in self.get_light_heads()]
-        for f in self.model._meta.get_fields():
-            if f.name in head_nams and isinstance(f, models.ForeignKey):
-                query = query.select_related(f.name)        
+        
+        if not query._fields:  # 如果这个属性部位空，证明已经调用了.values() or .values_list()
+            for f in self.model._meta.get_fields():
+                if f.name in head_nams and isinstance(f, models.ForeignKey):
+                    query = query.select_related(f.name)        
         
         query = self.pagenum.get_query(query)  
         return query
