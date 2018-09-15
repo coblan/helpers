@@ -135,6 +135,27 @@ class ModelFields(forms.ModelForm):
         dc = self._clean_dict(dc)
         return dc
     
+    def is_valid(self): 
+        rt = super().is_valid()
+        cus_errors = self.custom_valid()
+        self._cus_errors =  cus_errors
+        return rt and not cus_errors
+    
+    def custom_valid(self): 
+        return {}
+        
+    def get_errors(self): 
+        cus_errors = getattr(self, '_cus_errors', {})
+        
+        errors = dict(self.errors)
+        
+        for k, v in cus_errors.items():
+            if k in errors:
+                errors[k].append(v)
+            else:
+                errors[k] = [v]
+        return errors
+    
     def custom_permit(self):
         self.permit=ModelPermit(self.Meta.model,self.crt_user,nolimit=self.nolimit)
     

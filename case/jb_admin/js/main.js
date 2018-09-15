@@ -69,6 +69,7 @@ import * as validate from  './validator'
 //misc
 import * as pop_table_layer from  './misc/pop_table_layer.js'
 import * as pop_fields_layer from  './misc/pop_fields_layer.js'
+import * as pop_layer from  './misc/pop_layer'
 
 //fields_panels
 import * as sim_fields from  './fields_panels/sim_fields.js'

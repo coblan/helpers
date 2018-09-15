@@ -54,22 +54,6 @@ class PageNum(object):
              'crt_page':2
             }
         """
-        #choice_len = len(self.pagenator.page_range)
-        #k=3
-        #a=-1
-        #while a < 1:
-            #a=self.pageNumber-k
-            #k-=1
-        #page_nums = range(a,min(choice_len,self.pageNumber+(5-k))+1)
-        #if page_nums[0] != 1:
-            #page_nums=[1,'...']+ page_nums
-        #if page_nums[-1] != choice_len:
-            #page_nums = page_nums +['...',choice_len]
-        #for i in range(len(page_nums)):
-            #num = page_nums[i]
-        #page_nums=[str(x) for x in page_nums]
-
-        #return {'options':page_nums,'crt_page':self.pageNumber}    
         return {'crt_page':self.pageNumber,
                 'total':self.count,
                 'perpage':self.perPage}
@@ -486,42 +470,36 @@ class ModelTable(object):
         """
         return:[{"name": "name", "label": "\u59d3\u540d"}, {"sortable": true, "name": "age", "label": "\u5e74\u9f84"}]
         """
-        #ls = self.permited_fields()   
-        #ls = [x for x in ls if x not in self.hide_fields]
-        #heads = model_to_head(self.model,include=ls)
-
-        #heads.extend(self.getExtraHead())
-        #heads = self.fields_sort_heads(heads)   
-        heads = self.get_base_heads()
+        model_heads = self.get_model_heads()
+        heads = self.getExtraHead() + model_heads
+        heads = self.fields_sort_heads(heads)   
+        heads= self.make_pop_edit_field(heads)  
+        heads = [self.dict_head(head) for head in heads]
         
-        heads= self.make_pop_edit_field(heads)
-        
-        for head in heads:
-            head = self.dict_head(head)
-            try:
-                field = self.model._meta.get_field(head['name'])            
-                if hasattr(field, 'choices') and 'options' not in head :
-                    catch = get_request_cache()
-                    options_name = '%s_field_options'% head['name']
-                    if not catch.get(options_name):
-                        catch[options_name]=[{'value':val,'label':str(lab)} for val,lab in field.choices]    
-                    head['options']=catch.get(options_name)
-            except FieldDoesNotExist:
-                pass
-                
+        for head in model_heads:
+            field = self.model._meta.get_field(head['name'])            
+            if hasattr(field, 'choices') and 'options' not in head :
+                catch = get_request_cache()
+                options_name = '%s_field_options'% ( model_to_name(self.model) + head['name'])
+                if not catch.get(options_name):
+                    catch[options_name]=[{'value':val,'label':str(lab)} for val,lab in field.choices]    
+                head['options']=catch.get(options_name)
         return heads
     
-    def get_base_heads(self): 
+    def get_model_heads(self): 
         ls = self.permited_fields()   
         ls = [x for x in ls if x not in self.hide_fields]
         heads = model_to_head(self.model,include=ls)
-    
-        heads.extend(self.getExtraHead())
-        heads = self.fields_sort_heads(heads)   
         return heads
     
+    def get_light_heads(self): 
+        heads = self.get_model_heads()
+        heads.extend(self.getExtraHead())
+        heads = self.fields_sort_heads(heads)   
+        return heads 
+    
     def footer_by_dict(self, dc): 
-        heads= self.get_base_heads()
+        heads= self.get_light_heads()
         footer = []
         for head in heads:
             footer.append(dc.get(head['name'], ''))
@@ -554,8 +532,8 @@ class ModelTable(object):
                         #'fun':'do_nothing'
                         'fun':'update_or_insert'
                     }
-                    head['ops']=form_obj.get_operations()
-                    head['extra_mixins']=form_obj.extra_mixins
+                    #head['ops']=form_obj.get_operations()
+                    #head['extra_mixins']=form_obj.extra_mixins
         return heads
     
     def dict_head(self,head):
@@ -596,6 +574,8 @@ class ModelTable(object):
         out=[]
         director_name = self.get_director_name()
         permit_fields =  self.permited_fields()
+        #used_head_names= self.hide_fields +  [x['name'] for x in self.get_light_heads()] 
+        
         for inst in query:
             # 遇到一种情况，聚合时，这里的queryset返回的item是dict。所以下面做一个判断
             if isinstance(inst,models.Model):
@@ -618,10 +598,10 @@ class ModelTable(object):
         if not self.crt_user.is_superuser and not self.permit.readable_fields():
             raise PermissionDenied('no permission to browse %s'%self.model._meta.model_name)
         query =  self.model.objects.all()
-        head_nams = [x['name'] for x in self.get_base_heads()]
-        for f in self.model._meta.get_fields():
-            if f.name in head_nams and isinstance(f, models.ForeignKey):
-                query = query.select_related(f.name)
+        
+        # 优化速度
+        if self.exclude:
+            query = query.defer(*self.exclude)
         
         query = self.inn_filter(query)
         query=self.row_filter.get_query(query)
@@ -629,6 +609,12 @@ class ModelTable(object):
         query=self.row_search.get_query(query)
         query = self.statistics(query)
         query = self.row_sort.get_query(query)
+        
+        head_nams = [x['name'] for x in self.get_light_heads()]
+        for f in self.model._meta.get_fields():
+            if f.name in head_nams and isinstance(f, models.ForeignKey):
+                query = query.select_related(f.name)        
+        
         query = self.pagenum.get_query(query)  
         return query
     

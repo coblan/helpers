@@ -27,6 +27,9 @@ export var  vuetool = {
         return rt
     },
     vueExtend:function(par,mixins){
+        if(! $.isArray(mixins) ){
+            mixins=[mixins]
+        }
         var mixins = ex.map(mixins,function(item){
             if(typeof item =='string'){
                 return window[item]
@@ -36,7 +39,12 @@ export var  vuetool = {
         })
 
         var real_par = $.extend({}, par);
-        var orgin_mixins = real_par.mixins
+        if(real_par.mixins){
+            var orgin_mixins = [].concat(real_par.mixins)
+        }else{
+            var orgin_mixins =[]
+        }
+
         delete real_par.mixins
         if (orgin_mixins){
             var list = orgin_mixins
