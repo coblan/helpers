@@ -204,7 +204,7 @@ class RowFilter(object):
         total_names = self.names + [x['name'] for x in extraHead]
         for proc_cls,name in zip(self.get_proc_list() ,self.valid_name):
             if name in dc:
-                # 为了性能考虑，如果有head了，就不进行自动生成head了。
+                # 为了性能考虑，如果有head了，就不进行自动生成head了，并且排除掉那些不在model里面的字段
                 #normal_heads.append(dc[name])
                 continue
             
