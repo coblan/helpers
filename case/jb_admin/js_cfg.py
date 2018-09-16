@@ -7,7 +7,7 @@ def get_tr():
         'base_setting':_('Basic Setting'),
         'language':_('Language'),
         'back':_('back'),
-        'search':_('Search'),
+        'search': _('Refresh'),
         'change_password':_('Change Password'),
         'logout':_('LogOut'),
         'login':_('LogIn'), 

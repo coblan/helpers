@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-30 10:51+0800\n"
+"POT-Creation-Date: 2018-09-16 12:14+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,30 +22,33 @@ msgstr ""
 msgid "User"
 msgstr ""
 
-#: .\helpers\case\jb_admin\js_cfg.py:6
+#: .\helpers\case\jb_admin\js_cfg.py:7
 msgid "Basic Setting"
 msgstr "基本设置"
 
-#: .\helpers\case\jb_admin\js_cfg.py:7
+#: .\helpers\case\jb_admin\js_cfg.py:8
 msgid "Language"
 msgstr "语言"
 
-#: .\helpers\case\jb_admin\js_cfg.py:8
+#: .\helpers\case\jb_admin\js_cfg.py:9
 msgid "back"
 msgstr "返回"
 
-#: .\helpers\case\jb_admin\js_cfg.py:9
-msgid "Search"
-msgstr "搜索"
-
 #: .\helpers\case\jb_admin\js_cfg.py:10
+msgid "Refresh"
+msgstr "查询"
+
+#: .\helpers\case\jb_admin\js_cfg.py:11
 msgid "Change Password"
 msgstr "修改密码"
 
-#: .\helpers\case\jb_admin\js_cfg.py:11
+#: .\helpers\case\jb_admin\js_cfg.py:12
 msgid "LogOut"
 msgstr "退出"
 
-#: .\helpers\case\jb_admin\js_cfg.py:12
+#: .\helpers\case\jb_admin\js_cfg.py:13
 msgid "LogIn"
 msgstr "登录"
+
+#~ msgid "Search"
+#~ msgstr "查询"
