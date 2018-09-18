@@ -2,8 +2,7 @@ from helpers.director.base_data import js_tr_list, js_lib_list
 from helpers.maintenance.update_static_timestamp import js_stamp_dc
 def get_lib(request): 
     dc = {
-        #'vuejs': 'https://cdn.bootcss.com/vue/2.5.16/vue.js',
-        #'jquery': '/static/lib/jquery3.2.1.min.js',
+
         #'font_awesome': '/static/lib/font-awesome4.7/font-awesome4.7.min.css',
         #'bootstrap_css': '/static/lib/bootstrap.min.css',
         #'bootstrap': '/static/lib/bootstrap.min.js',

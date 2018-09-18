@@ -51,11 +51,7 @@
 
         },
         mixins:[mix_table_data,mix_ele_table_adapter],
-        computed:{
-            has_select:function(){
-                return this.selected.length !=0
-            },
-        },
+
         mounted:function(){
             var self=this
             ex.assign(this.op_funs,{

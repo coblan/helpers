@@ -233,8 +233,12 @@ var mix_table_data={
     computed:{
         changed:function(){
             return this.changed_rows.length != 0
-        }
+        },
+        has_select:function(){
+            return this.selected.length !=0
+        },
     },
+
     methods: {
         on_operation:function(kws){
             var fun_name = kws.fun || kws.name
@@ -252,7 +256,11 @@ var mix_table_data={
         add_new:function(kws){
             var self = this
             var fields_ctx=kws.fields_ctx
-            var post_data=[{fun:'get_row',director_name:fields_ctx.director_name},]
+            var dc = {fun:'get_row',director_name:fields_ctx.director_name}
+            if(kws.init_fields){
+                ex.assign(dc,kws.init_fields)
+            }
+            var post_data=[dc]
             cfg.show_load()
             ex.post('/d/ajax',JSON.stringify(post_data),function(resp){
                 cfg.hide_load()
@@ -392,6 +400,9 @@ var mix_table_data={
                 return this[name]
             }
         },
+        //has_select:function(){
+        //    return this.selected.length > 0
+        //}
 
     }
 }

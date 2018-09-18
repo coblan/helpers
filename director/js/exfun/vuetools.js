@@ -2,7 +2,7 @@ export var  vuetool = {
     vueSuper:function(self,kws){
         var mixin =kws.mixin
         var name=kws.fun
-        var args = kws.args || []
+        var args = [kws] //kws.args || []
         if (mixin){
             var index = self.$options.mixins .indexOf(mixin)
         }else{

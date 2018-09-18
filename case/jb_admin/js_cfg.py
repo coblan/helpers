@@ -18,8 +18,11 @@ js_tr_list.append(get_tr)
 
 def get_lib(request): 
     dc = {
-        'vuejs': 'https://cdn.bootcss.com/vue/2.5.16/vue.js',
-        'jquery': '/static/lib/jquery3.2.1.min.js',
+        #'vuejs': 'https://cdn.bootcss.com/vue/2.5.16/vue.js',
+        #'jquery': '/static/lib/jquery3.2.1.min.js',
+        'vuejs': '/static/lib/vue.2.5.16.js',
+        'jquery': '/static/lib/jquery.2.2.4.min.js',
+        
         'font_awesome': '/static/lib/font-awesome4.7/font-awesome4.7.min.css',
         'bootstrap_css': '/static/lib/bootstrap.min.css',
         'bootstrap': '/static/lib/bootstrap.min.js',
