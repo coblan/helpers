@@ -16,6 +16,11 @@ export var  vuetool = {
             }
         }
     },
+    vueAssign:function(old_row,new_row){
+        for(var key in new_row){
+            Vue.set(old_row,key,new_row[key])
+        }
+    },
     vueBroadCall:function(self,fun,kws){
         var rt =[]
         cusBroadCall(self,fun,kws,rt)

@@ -49,6 +49,7 @@ var mix_fields_data ={
 
         },
         dataSaver:function(callback){
+            // 该函数已经被废弃
             var post_data=[{fun:'save_row',row:this.row}]
             ex.post('/d/ajax',JSON.stringify(post_data),function (resp) {
                 callback(resp.save_row)
