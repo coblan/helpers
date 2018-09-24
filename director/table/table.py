@@ -471,7 +471,7 @@ class ModelTable(object):
         return:[{"name": "name", "label": "\u59d3\u540d"}, {"sortable": true, "name": "age", "label": "\u5e74\u9f84"}]
         """
         model_heads = self.get_model_heads()
-        heads = self.getExtraHead() + model_heads
+        heads = model_heads + self.getExtraHead() 
         heads = self.fields_sort_heads(heads)   
         heads= self.make_pop_edit_field(heads)  
         heads = [self.dict_head(head) for head in heads]

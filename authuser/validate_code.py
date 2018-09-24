@@ -74,6 +74,8 @@ from .models import ValidatorCode
 #import platform
 
 def faseGetDataUrl(): 
+    """
+    """
     #if platform.platform().find('Windows') != -1:
         #image, code = create_validate_code()
     #else:
