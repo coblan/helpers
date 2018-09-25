@@ -7,3 +7,5 @@ from . import admin_login
 from . import admin_pswd
 # Register your models here.
 
+from . import db_signal
+
