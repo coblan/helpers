@@ -24,8 +24,9 @@ export var com_file_uploader = {
 
     template:`<div class="file-uploader">
     <div v-if="!readonly">
-        <input v-if="cfg.multiple" :name="name"  v-show="!cfg.com_btn" class="pic-input" type="file" @change="upload_pictures($event)" :accept="cfg.accept" multiple="multiple">
-        <input v-else v-show="!cfg.com_btn" :name="name" class="pic-input" type="file" @change="upload_pictures($event)" :accept="cfg.accept">
+        <input v-if="cfg.multiple"  v-show="!cfg.com_btn" class="pic-input" type="file" @change="upload_pictures($event)" :accept="cfg.accept" multiple="multiple">
+        <input v-else v-show="!cfg.com_btn"  class="pic-input" type="file" @change="upload_pictures($event)" :accept="cfg.accept">
+        <input type="text" :name="name" style="display: none" v-model="value">
     </div>
 
     <div class="wrap">
