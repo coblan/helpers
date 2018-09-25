@@ -121,7 +121,12 @@ var ajax_table={
         getRows:function(){
         //
             var self=this
-            self.search_args[self.tab_head.par_field] = self.par_row[self.tab_head.par_field]
+            if(self.tab_head.tab_field){
+                self.search_args[self.tab_head.tab_field] = self.par_row[self.tab_head.par_field]
+            }else{
+                self.search_args[self.tab_head.par_field] = self.par_row[self.tab_head.par_field]
+            }
+
             ex.vueSuper(self,{fun:'getRows'})
             //var fun = get_data[this.tab_head.get_data.fun ]
             //fun(function(rows,row_pages,footer){
@@ -132,42 +137,55 @@ var ajax_table={
             //},this.par_row,this.tab_head.get_data.kws,this.search_args)
 
     },
-        del_item:function () {
-            if (this.selected.length==0){
-                return
+        add_new:function(kws){
+            var self=this
+            var inn_kws = ex.copy(kws)
+            var init_fields={}
+            if(self.tab_head.tab_field){
+                init_fields[ self.tab_head.tab_field] = self.par_row[self.tab_head.par_field]
+            }else{
+                init_fields[self.tab_head.par_field]=self.par_row[self.tab_head.par_field]
             }
-            var del_obj={}
-            for(var j=0;j<this.selected.length;j++){
-                var pk = this.selected[j]
-                for(var i=0;i<this.rows.length;i++){
-                    if(this.rows[i].pk.toString()==pk){
-                        if(!del_obj[this.rows[i]._class]){
-                            del_obj[this.rows[i]._class]=[]
-                        }
-                        del_obj[this.rows[i]._class].push(pk)
-                    }
-                }
-            }
-            var out_str=''
-            for(var key in del_obj){
-                out_str += (key+':'+ del_obj[key].join(':')+',')
-            }
-            location=ex.template("{engine_url}/del_rows?rows={rows}&next={next}",{engine_url:engine_url,
-                rows:encodeURI(out_str),
-                next:encodeURIComponent(location.href)})
-        },
-        goto_page:function (page) {
-            this.search_args._page=page
-            this.search()
-        },
-        add_new:function () {
-            var  url = ex.template('{engine_url}/{page}.edit/?next={next}',{
-                engine_url:engine_url,
-                page:page_name,
-                next:encodeURIComponent(ex.appendSearch(location.pathname,search_args))
-            })
-            location = url
-        },
+            var dc = {fun:'add_new',init_fields:init_fields }
+            ex.assign(inn_kws,dc)
+            ex.vueSuper(this,inn_kws)
+        }
+        //del_item:function () {
+        //    if (this.selected.length==0){
+        //        return
+        //    }
+        //    var del_obj={}
+        //    for(var j=0;j<this.selected.length;j++){
+        //        var pk = this.selected[j]
+        //        for(var i=0;i<this.rows.length;i++){
+        //            if(this.rows[i].pk.toString()==pk){
+        //                if(!del_obj[this.rows[i]._class]){
+        //                    del_obj[this.rows[i]._class]=[]
+        //                }
+        //                del_obj[this.rows[i]._class].push(pk)
+        //            }
+        //        }
+        //    }
+        //    var out_str=''
+        //    for(var key in del_obj){
+        //        out_str += (key+':'+ del_obj[key].join(':')+',')
+        //    }
+        //    location=ex.template("{engine_url}/del_rows?rows={rows}&next={next}",{engine_url:engine_url,
+        //        rows:encodeURI(out_str),
+        //        next:encodeURIComponent(location.href)})
+        //},
+        //goto_page:function (page) {
+        //    this.search_args._page=page
+        //    this.search()
+        //},
+        //add_new:function () {
+        //    var  url = ex.template('{engine_url}/{page}.edit/?next={next}',{
+        //        engine_url:engine_url,
+        //        page:page_name,
+        //        next:encodeURIComponent(ex.appendSearch(location.pathname,search_args))
+        //    })
+        //    location = url
+        //},
     }
 }
 

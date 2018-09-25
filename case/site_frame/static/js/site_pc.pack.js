@@ -6,9 +6,9 @@
 /******/ 	function __webpack_require__(moduleId) {
 /******/
 /******/ 		// Check if module is in cache
-/******/ 		if(installedModules[moduleId]) {
+/******/ 		if(installedModules[moduleId])
 /******/ 			return installedModules[moduleId].exports;
-/******/ 		}
+/******/
 /******/ 		// Create a new module (and put it into the cache)
 /******/ 		var module = installedModules[moduleId] = {
 /******/ 			i: moduleId,
@@ -32,6 +32,9 @@
 /******/
 /******/ 	// expose the module cache
 /******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// identity function for calling harmony imports with the correct context
+/******/ 	__webpack_require__.i = function(value) { return value; };
 /******/
 /******/ 	// define getter function for harmony exports
 /******/ 	__webpack_require__.d = function(exports, name, getter) {
@@ -60,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 2);
+/******/ 	return __webpack_require__(__webpack_require__.s = 13);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -136,7 +139,7 @@ var stylesInDom = {},
 		};
 	},
 	isOldIE = memoize(function() {
-		return /msie [6-9]\b/.test(window.navigator.userAgent.toLowerCase());
+		return /msie [6-9]\b/.test(self.navigator.userAgent.toLowerCase());
 	}),
 	getHeadElement = memoize(function () {
 		return document.head || document.getElementsByTagName("head")[0];
@@ -378,28 +381,7 @@ function updateLink(linkElement, obj) {
 "use strict";
 
 
-var _header_menu = __webpack_require__(3);
-
-var header_sim_click = _interopRequireWildcard(_header_menu);
-
-var _kuaifawu_menu = __webpack_require__(6);
-
-var kuaifawu_menu = _interopRequireWildcard(_kuaifawu_menu);
-
-var _search_kuaifawu = __webpack_require__(9);
-
-var search_kuaifawu = _interopRequireWildcard(_search_kuaifawu);
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-/***/ }),
-/* 3 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-__webpack_require__(4);
+__webpack_require__(10);
 
 Vue.component('com-header-menu', {
     props: ['menu', 'active'],
@@ -408,53 +390,13 @@ Vue.component('com-header-menu', {
 });
 
 /***/ }),
-/* 4 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(5);
-if(typeof content === 'string') content = [[module.i, content, '']];
-// add the styles to the DOM
-var update = __webpack_require__(1)(content, {});
-if(content.locals) module.exports = content.locals;
-// Hot Module Replacement
-if(false) {
-	// When the styles change, update the <style> tags
-	if(!content.locals) {
-		module.hot.accept("!!./../../../../../../../../../coblan/webcode/node_modules/.0.26.1@css-loader/index.js!./../../../../../../../../../coblan/webcode/node_modules/.6.0.0@sass-loader/lib/loader.js!./header_menu.scss", function() {
-			var newContent = require("!!./../../../../../../../../../coblan/webcode/node_modules/.0.26.1@css-loader/index.js!./../../../../../../../../../coblan/webcode/node_modules/.6.0.0@sass-loader/lib/loader.js!./header_menu.scss");
-			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-			update(newContent);
-		});
-	}
-	// When the module is disposed, remove the <style> tags
-	module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 5 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(0)();
-// imports
-
-
-// module
-exports.push([module.i, ".header-menu .menu-item {\n  display: inline-block;\n  margin: 0.6em 1.2em; }\n  .header-menu .menu-item a {\n    text-decoration: none;\n    color: black; }\n  .header-menu .menu-item .active, .header-menu .menu-item a:hover {\n    color: #66b3eb; }\n", ""]);
-
-// exports
-
-
-/***/ }),
-/* 6 */
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(7);
+__webpack_require__(11);
 
 Vue.component('com-kuaifawu-menu', {
     props: ['label', 'menu'],
@@ -485,13 +427,27 @@ Vue.component('com-kuaifawu-menu-links', {
 });
 
 /***/ }),
-/* 7 */
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+__webpack_require__(12);
+
+Vue.component('com-search-kuaifawu', {
+    props: ['search_args', 'head'],
+    template: '<div class="search-kuaifawu">\n        <input type="text" :placeholder="head.placeholder"/>\n        <span class="search-btn">\u641C\u7D22</span>\n    </div>'
+});
+
+/***/ }),
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(8);
+var content = __webpack_require__(6);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -500,8 +456,8 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!./../../../../../../../../../coblan/webcode/node_modules/.0.26.1@css-loader/index.js!./../../../../../../../../../coblan/webcode/node_modules/.6.0.0@sass-loader/lib/loader.js!./kuaifawu_menu.scss", function() {
-			var newContent = require("!!./../../../../../../../../../coblan/webcode/node_modules/.0.26.1@css-loader/index.js!./../../../../../../../../../coblan/webcode/node_modules/.6.0.0@sass-loader/lib/loader.js!./kuaifawu_menu.scss");
+		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./element_ex.scss", function() {
+			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./element_ex.scss");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -509,6 +465,34 @@ if(false) {
 	// When the module is disposed, remove the <style> tags
 	module.hot.dispose(function() { update(); });
 }
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(0)();
+// imports
+
+
+// module
+exports.push([module.i, ".only-tab.el-tabs--border-card {\n  border-bottom: none;\n  -webkit-box-shadow: none;\n  box-shadow: none; }\n  .only-tab.el-tabs--border-card .el-tabs__content {\n    display: none; }\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(0)();
+// imports
+
+
+// module
+exports.push([module.i, ".header-menu .menu-item {\n  display: inline-block;\n  margin: 0.6em 1.2em; }\n  .header-menu .menu-item a {\n    text-decoration: none;\n    color: black; }\n  .header-menu .menu-item .active, .header-menu .menu-item a:hover {\n    color: #66b3eb; }\n", ""]);
+
+// exports
+
 
 /***/ }),
 /* 8 */
@@ -528,15 +512,15 @@ exports.push([module.i, ".kuaifawu-menu {\n  position: relative;\n  z-index: 100
 /* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
+exports = module.exports = __webpack_require__(0)();
+// imports
 
 
-__webpack_require__(10);
+// module
+exports.push([module.i, ".search-kuaifawu {\n  border: 1px solid #02c9f0;\n  display: inline-block;\n  position: relative;\n  background-color: white;\n  padding-left: 1em; }\n  .search-kuaifawu input {\n    width: 20em;\n    border: none;\n    outline: none; }\n  .search-kuaifawu .search-btn {\n    display: inline-block;\n    background-color: #02c9f0;\n    color: white;\n    padding: 6px 20px; }\n", ""]);
 
-Vue.component('com-search-kuaifawu', {
-    props: ['search_args', 'head'],
-    template: '<div class="search-kuaifawu">\n        <input type="text" :placeholder="head.placeholder"/>\n        <span class="search-btn">\u641C\u7D22</span>\n    </div>'
-});
+// exports
+
 
 /***/ }),
 /* 10 */
@@ -545,7 +529,7 @@ Vue.component('com-search-kuaifawu', {
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(11);
+var content = __webpack_require__(7);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -554,8 +538,8 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!./../../../../../../../../../coblan/webcode/node_modules/.0.26.1@css-loader/index.js!./../../../../../../../../../coblan/webcode/node_modules/.6.0.0@sass-loader/lib/loader.js!./search_kuaifawu.scss", function() {
-			var newContent = require("!!./../../../../../../../../../coblan/webcode/node_modules/.0.26.1@css-loader/index.js!./../../../../../../../../../coblan/webcode/node_modules/.6.0.0@sass-loader/lib/loader.js!./search_kuaifawu.scss");
+		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./header_menu.scss", function() {
+			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./header_menu.scss");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -568,15 +552,79 @@ if(false) {
 /* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(0)();
-// imports
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(8);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// add the styles to the DOM
+var update = __webpack_require__(1)(content, {});
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./kuaifawu_menu.scss", function() {
+			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./kuaifawu_menu.scss");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 12 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(9);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// add the styles to the DOM
+var update = __webpack_require__(1)(content, {});
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./search_kuaifawu.scss", function() {
+			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./search_kuaifawu.scss");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 13 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
 
 
-// module
-exports.push([module.i, ".search-kuaifawu {\n  border: 1px solid #02c9f0;\n  display: inline-block;\n  position: relative;\n  background-color: white;\n  padding-left: 1em; }\n  .search-kuaifawu input {\n    width: 20em;\n    border: none;\n    outline: none; }\n  .search-kuaifawu .search-btn {\n    display: inline-block;\n    background-color: #02c9f0;\n    color: white;\n    padding: 6px 20px; }\n", ""]);
+var _header_menu = __webpack_require__(2);
 
-// exports
+var header_sim_click = _interopRequireWildcard(_header_menu);
 
+var _kuaifawu_menu = __webpack_require__(3);
+
+var kuaifawu_menu = _interopRequireWildcard(_kuaifawu_menu);
+
+var _search_kuaifawu = __webpack_require__(4);
+
+var search_kuaifawu = _interopRequireWildcard(_search_kuaifawu);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+__webpack_require__(5); //require('./scss/fields.scss')
+//require('./table_editor/scss/table_editor_base.scss')
+//require('./scss/tab.scss')
+//require('./scss/table.scss')
 
 /***/ })
 /******/ ]);

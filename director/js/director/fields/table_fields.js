@@ -34,4 +34,7 @@ var table_fields={
     },
     components:baseInput,
 }
+
+
+
 Vue.component('com-table-fields',table_fields)

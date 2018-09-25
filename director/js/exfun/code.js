@@ -33,6 +33,25 @@ export var code ={
         return md5(dc_str)
 
     },
+    boolExpress:function(obj,exp){
+        // 'qq == "100"'
+        if(! obj){
+            return true
+        }
+        var bb = /(\w+)\s*(==|!=)(.*)/.exec(exp)
+        if(bb[3].trim()=='undefined'){
+            var target= undefined
+        }else{
+            var target= JSON.parse(bb[3])
+        }
+
+        if(bb[2]=='=='){
+            return obj[bb[1]] == target
+        }else{
+
+            return obj[bb[1]] != target
+        }
+    }
     //hashCode: function (input){
     //    var I64BIT_TABLE =
     //        'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-'.split('');

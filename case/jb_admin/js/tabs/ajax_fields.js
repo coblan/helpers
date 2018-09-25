@@ -70,6 +70,11 @@ var ajax_fields={
                 var kws = this.tab_head.after_save.kws
                 // new_row ,old_row
                 fun(this,new_row,kws)
+
+                //if(  self.par_row._director_name == row._director_name){
+                //    // ，应该将新的属性值 去更新par_row
+                //    ex.vueAssign(self.par_row,row)
+                //}
             }
             this.row=new_row
         }

@@ -192,7 +192,7 @@ class RowFilter(object):
         send_to_front_names = valid_model_names + [x['name'] for x in extraHead]
         for proc_cls,name in zip(self.get_proc_list() ,self.valid_name):
             if name in dc:
-                # 为了性能考虑，如果有head了，就不进行自动生成head了。
+                # 为了性能考虑，如果有head了，就不进行自动生成head了，并且排除掉那些不在model里面的字段
                 #normal_heads.append(dc[name])
                 continue
             
@@ -478,7 +478,7 @@ class ModelTable(object):
         return:[{"name": "name", "label": "\u59d3\u540d"}, {"sortable": true, "name": "age", "label": "\u5e74\u9f84"}]
         """
         model_heads = self.get_model_heads()
-        heads = self.getExtraHead() + model_heads
+        heads = model_heads + self.getExtraHead() 
         heads = self.fields_sort_heads(heads)   
         heads= self.make_pop_edit_field(heads)  
         heads = [self.dict_head(head) for head in heads]
@@ -618,9 +618,11 @@ class ModelTable(object):
         query = self.row_sort.get_query(query)
         
         head_nams = [x['name'] for x in self.get_light_heads()]
-        for f in self.model._meta.get_fields():
-            if f.name in head_nams and isinstance(f, models.ForeignKey):
-                query = query.select_related(f.name)        
+        
+        if not query._fields:  # 如果这个属性部位空，证明已经调用了.values() or .values_list()
+            for f in self.model._meta.get_fields():
+                if f.name in head_nams and isinstance(f, models.ForeignKey):
+                    query = query.select_related(f.name)        
         
         query = self.pagenum.get_query(query)  
         return query

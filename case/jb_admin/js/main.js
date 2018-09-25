@@ -42,6 +42,7 @@ import * as bool_editor from  './table_editor/bool_editor.js'
 import * as jump_link from  './table_editor/jump_link.js'
 import * as change_order from  './table_editor/change_order.js'
 import * as digit from  './table_editor/digit.js'
+import * as append_html_shower from  './table_editor/append_html_shower.js'
 
 
 // field editor
@@ -52,9 +53,8 @@ import * as pop_table_select from  './field_editor/pop_table_select.js'
 import * as plain_file from  './field_editor/plain_file.js'
 import * as validate_code from  './field_editor/validate_code.js'
 import * as order_list_table from  './field_editor/order_list_table.js'
+import * as phon_code from  './field_editor/phon_code.js'
 import * as ele_tree_depend from  './field_editor/ele_tree_depend.js'
-
-
 // table operator
 import * as op_a from  './table_operator/operator_a.js'
 import * as delete_op from  './table_operator/delete_op.js'
@@ -70,13 +70,19 @@ import * as validate from  './validator'
 //misc
 import * as pop_table_layer from  './misc/pop_table_layer.js'
 import * as pop_fields_layer from  './misc/pop_fields_layer.js'
+import * as pop_layer from  './misc/pop_layer'
 
 //fields_panels
 import * as sim_fields from  './fields_panels/sim_fields.js'
 import * as pop_edit_local from  './fields_panels/pop_edit_local.js'
+import * as plain_field_panel from  './fields_panels/plain_field_panel.js'
 
 import * as ele_table from  './table_panels/ele_table.js'
 
 
 import * as user_info from  './page_com/header_bar/user_info.js'
 import * as nice_validator_rule from  './nice_validator_rule.js'
+
+// top_heads
+import * as dropdown from  './header/dropdown.js'
+import * as sm_link from  './header/sm_link.js'

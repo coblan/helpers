@@ -51,11 +51,7 @@
 
         },
         mixins:[mix_table_data,mix_ele_table_adapter],
-        computed:{
-            has_select:function(){
-                return this.selected.length !=0
-            },
-        },
+
         mounted:function(){
             var self=this
             ex.assign(this.op_funs,{
@@ -79,6 +75,7 @@
                     var new_row = kws.new_row
                     var old_row= kws.old_row
                     self.update_or_insert(new_row,old_row)
+                    self.crt_row=new_row
                 },
                 get_childs:function(kws){
                     // head:{fun:
@@ -89,6 +86,20 @@
 
             })
 
+        },
+        computed:{
+            normed_tabs:function(){
+                var self=this
+                var tabs = this.tabgroup.tabs
+                var out_tabs = ex.filter(tabs,function(tab){
+                    if(tab.show){
+                        return ex.boolExpress(self.crt_row,tab.show)
+                    }else{
+                        return true
+                    }
+                })
+                return out_tabs
+            }
         },
         methods:{
 
@@ -118,14 +129,14 @@
                 })
 
             },
-
             handleClick(tab, event) {
                 this.show_tab(tab.name)
             },
             get_childs:function(par){
                 this.search_args._par=par.value
                 this.search()
-            }
+            },
+
         }
 
     }
@@ -290,7 +301,10 @@
                          @tab-click="handleClick"
                          style="width: 100%;height: 100%;"
                          :value="tabgroup.crt" >
-                    <el-tab-pane v-for="tab in tabgroup.tabs" :name="tab.name">
+
+                    <!--<el-tab-pane v-for="tab in normed_tab( tabgroup.tabs )"-->
+                    <el-tab-pane v-for="tab in normed_tabs"
+                                 :name="tab.name">
                         <span slot="label" v-text="tab.label"></span>
 
                         <component :is="tab.com" :tab_head="tab"

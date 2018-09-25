@@ -2,7 +2,7 @@ export var  vuetool = {
     vueSuper:function(self,kws){
         var mixin =kws.mixin
         var name=kws.fun
-        var args = kws.args || []
+        var args = [kws] //kws.args || []
         if (mixin){
             var index = self.$options.mixins .indexOf(mixin)
         }else{
@@ -16,6 +16,11 @@ export var  vuetool = {
             }
         }
     },
+    vueAssign:function(old_row,new_row){
+        for(var key in new_row){
+            Vue.set(old_row,key,new_row[key])
+        }
+    },
     vueBroadCall:function(self,fun,kws){
         var rt =[]
         cusBroadCall(self,fun,kws,rt)
@@ -27,6 +32,9 @@ export var  vuetool = {
         return rt
     },
     vueExtend:function(par,mixins){
+        if(! $.isArray(mixins) ){
+            mixins=[mixins]
+        }
         var mixins = ex.map(mixins,function(item){
             if(typeof item =='string'){
                 return window[item]
@@ -36,7 +44,12 @@ export var  vuetool = {
         })
 
         var real_par = $.extend({}, par);
-        var orgin_mixins = [].concat(real_par.mixins)
+        if(real_par.mixins){
+            var orgin_mixins = [].concat(real_par.mixins)
+        }else{
+            var orgin_mixins =[]
+        }
+
         delete real_par.mixins
         if (orgin_mixins){
             var list = orgin_mixins

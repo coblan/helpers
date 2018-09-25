@@ -8,7 +8,7 @@ import {obj_control} from  './obj'
 import {vuetool} from  './vuetools'
 import {code} from  './code'
 import {sortOrder} from  './order'
-
+import {layout} from  './layout'
 var ex={
     assign:function (dst,src) {
         for(var key in src){
@@ -27,6 +27,7 @@ ex.assign(ex,cookie)
 ex.assign(ex,obj_control)
 ex.assign(ex,vuetool)
 ex.assign(ex,code)
+ex.assign(ex,layout)
 ex.sortOrder=sortOrder
 
 //ex.md5=md5

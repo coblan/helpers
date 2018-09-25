@@ -326,3 +326,5 @@ export var baseInput={
     },
 
 }
+
+window._baseInput=baseInput

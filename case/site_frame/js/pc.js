@@ -10,3 +10,5 @@ import * as kuaifawu_menu from  './pc/kuaifawu_menu.js'
 import * as search_kuaifawu from  './pc/search_kuaifawu.js'
 
 
+
+require('./pc/scss/element_ex.scss')
