@@ -491,7 +491,8 @@ class ModelFields(forms.ModelForm):
 
 class Fields(ModelFields):
     def __init__(self, dc={}, pk=None, crt_user=None, nolimit=False, *args, **kw): 
-        self.front_dc = dc
+        self.kw=dc.copy()
+        self.kw.update(kw)
     
     def is_valid(self): 
         return True

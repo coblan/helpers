@@ -43,7 +43,7 @@ import * as jump_link from  './table_editor/jump_link.js'
 import * as change_order from  './table_editor/change_order.js'
 import * as digit from  './table_editor/digit.js'
 import * as append_html_shower from  './table_editor/append_html_shower.js'
-
+import * as array_obj_shower from  './table_editor/array_obj_shower.js'
 
 // field editor
 import * as field_label_shower from  './field_editor/label_shower.js'

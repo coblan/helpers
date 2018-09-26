@@ -632,11 +632,13 @@ var order_list = {
                     'name': 'save', 'editor': 'com-field-op-btn', 'label': '确定', 'icon': 'fa-save'
                 }]
             };
-            pop_edit_local(self.crt_row, fields_ctx, function (resp) {
+            var win = pop_edit_local(self.crt_row, fields_ctx, function (resp) {
                 //ex.assign(self.row,new_row)
-                ex.assign(self.crt_row, resp.new_row);
+                var new_row = resp;
+                ex.assign(self.crt_row, new_row);
                 //self.crt_row.append(resp.new_row)
                 self.row[self.head.name] = JSON.stringify(self.rows);
+                layer.close(win);
             });
 
             //this.row[this.head].append({})
@@ -3094,9 +3096,10 @@ var pop_fields = exports.pop_fields = {
                 extra_mixin: []
             };
 
-            pop_edit_local(self.rowData, fields_ctx, function (new_row) {
+            var win = pop_edit_local(self.rowData, fields_ctx, function (new_row) {
                 ex.assign(self.rowData, new_row);
                 //self.$emit('on-custom-comp',{fun:'edit_over'} )
+                layer.close(win);
             });
         }
 
@@ -4528,6 +4531,10 @@ var _append_html_shower = __webpack_require__(24);
 
 var append_html_shower = _interopRequireWildcard(_append_html_shower);
 
+var _array_obj_shower = __webpack_require__(82);
+
+var array_obj_shower = _interopRequireWildcard(_array_obj_shower);
+
 var _label_shower2 = __webpack_require__(6);
 
 var field_label_shower = _interopRequireWildcard(_label_shower2);
@@ -4638,6 +4645,50 @@ __webpack_require__(57);
 
 
 //fields_panels
+
+/***/ }),
+/* 82 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var array_mapper = {
+    props: ['rowData', 'field', 'index'],
+    template: '<span v-text="show_data"></span>',
+    created: function created() {
+        // find head from parent table
+        var table_par = this.$parent;
+        while (true) {
+            if (table_par.heads) {
+                break;
+            }
+            table_par = table_par.$parent;
+            if (!table_par) {
+                break;
+            }
+        }
+        this.table_par = table_par;
+        this.head = ex.findone(this.table_par.heads, { name: this.field });
+    },
+    computed: {
+        show_data: function show_data() {
+            var self = this;
+            var values = self.rowData[self.field];
+            if (!values) {
+                return values;
+            }
+            var obj_list = JSON.parse(values);
+            var out_list = ex.map(obj_list, function (item) {
+                return item[self.head.key || 'label'];
+            });
+            return out_list.join(';');
+        }
+    }
+
+};
+
+Vue.component('com-table-array-obj-shower', array_mapper);
 
 /***/ })
 /******/ ]);
