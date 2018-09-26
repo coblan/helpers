@@ -7,10 +7,13 @@ from .base_data import  auth_page_dc
 
 class AuthPwsd(FieldsPage):
     template = 'authuser/changepswd.html'
+    need_login = True
     def get_context(self): 
+        
         ctx = super().get_context()
         name= self.request.user.username
         dc={
+            'site_base_template': 'authuser/base.html',
             'login_url':'/%s/login' % self.engin.engin_url,
             'username':name,
             'uid':self.request.user.pk

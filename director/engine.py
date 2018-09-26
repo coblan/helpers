@@ -84,8 +84,8 @@ class BaseEngine(object):
             return True
         if request.user.is_anonymous(): 
             return False
-        elif not request.user.is_active or not request.user.is_staff:
-            raise PermissionDenied('No permit! You should be Active User OR staff to access this System,')
+        #elif not request.user.is_active or not request.user.is_staff:
+            #raise PermissionDenied('No permit! You should be Active User OR staff to access this System,')
         else:
             return True
     
@@ -98,7 +98,11 @@ class BaseEngine(object):
         # if getattr(page_cls,'need_login',True):
             # if request.user.is_anonymous() or not request.user.is_active:
                 # return redirect(self.login_url+'?next='+request.get_full_path())
-        if self.need_login and not self.login_authorized(request):
+        if hasattr(page_cls, 'need_login'):
+            need_login = page_cls.need_login
+        else:
+            need_login = self.need_login
+        if need_login and not self.login_authorized(request):
             return redirect(self.login_url+'?next='+request.get_full_path())
         
         page=page_cls(request, engin = self)

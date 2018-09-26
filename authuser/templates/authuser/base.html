@@ -35,6 +35,8 @@
 		<body >
 			{% block content %}
 
+			{% block page_content %}
+
 		<div ng-controller='content'>
 			<div>
 				 <select ng-model="selected" ng-options="item.value for item in data"></select>
@@ -86,6 +88,7 @@
 		</div>
 
 		{% endblock %}
+			{% endblock %}
 
 		</body>
 		</html>

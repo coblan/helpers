@@ -21,7 +21,7 @@ from helpers.director.middleware.request_cache import get_request_cache
 
 import logging
 sql_log = logging.getLogger('director.sql_op')
-
+modelfields_log = logging.getLogger('ModelFields.save_form')
 
 
 class ModelFields(forms.ModelForm):
@@ -59,8 +59,7 @@ class ModelFields(forms.ModelForm):
         @dc: 当post save时 ,dc是前端传来的row字典
              当get 时，dc是前端传来的url参数，排除pk后的额外的字典
         """
-        #dc = clean_dict(dc, self._meta.model)
-        #dc = self._clean_dict(dc)
+
         dc = self.clean_dict(dc)
         if not crt_user:
             self.crt_user=dc.get('crt_user')
@@ -83,6 +82,12 @@ class ModelFields(forms.ModelForm):
                 form_kw['instance'] = self._meta.model()
         else:
             form_kw['instance']=kw.pop('instance')
+        
+        for k in dict(dc):
+            # 强制 readonly的字段，不能修改
+            if k in self.readonly:
+                dc[k] =  getattr(form_kw['instance'] , k)  
+        
         self.nolimit = nolimit
         self.kw=dc.copy()
         self.kw.update(kw)
@@ -90,20 +95,18 @@ class ModelFields(forms.ModelForm):
         super(ModelFields,self).__init__(dc,*args,**form_kw)
         self.custom_permit()
         
-        #all_fields = self._meta.model._meta.get_fields()
-        #if self._meta.exclude:
-            #all_fields = filter(lambda x : x.name not in self._meta.exclude,all_fields )
-        #all_fields = filter(lambda x : x.name not in self.fields,all_fields)
-        #for field in all_fields:
-            #self.fields[field.name]=field
-            
         self.pop_fields()
         self.init_value()
         
-        before_include = []
-        for k in self.changed_data:
-            before_include.append(k)
-        self.before = sim_dict(self.instance, include= before_include)
+        #before_include = []
+        #for k in self.changed_data:
+            #before_include.append(k)
+        #self.before = sim_dict(self.instance, include= before_include)
+        
+        # 有事直接利用table的rows，而table进行了一定的修改显示，这些字段都是readonly的，所以要过滤掉这些字段，否则会造成严重后果。
+        #self.changed_data = [x for x in self.changed_data if x not in self.readonly]
+        # 保留下instance的原始值
+        self.before_changed_data = sim_dict(self.instance, include= self.changed_data)
         
     def _clean_dict(self,dc):
         """利用field_map字典，查找前端传来的dc中，某个字段的转换方式"""
@@ -230,6 +233,7 @@ class ModelFields(forms.ModelForm):
                 
     
     def init_value(self):
+        """可能是用于 foreignkey 或者 manytomany的"""
         if self.instance.pk:
             for field in self.instance._meta.get_fields(): #get_all_field_names():
                 f=field.name
@@ -320,25 +324,6 @@ class ModelFields(forms.ModelForm):
                 if len(head['options']) > 300:
                     print('%s 选择项数目大于 300，请使用分页选择框' % head['name'])
                     break        
-                
-        
-        #heads = [head for head in heads if head['name'] not in self.hide_fields]
-        
-              
-        
-        #for k,v in self.get_options().items():
-            #for head in heads:
-                #if head['name']==k:
-                    #head['options']=v
-                    #break
-                    
-    
-                
-        #for head in heads:
-            #self.dict_head(head)         
-       
-       
-
         
         if self.field_sort:
             tmp_heads = []
@@ -401,34 +386,15 @@ class ModelFields(forms.ModelForm):
     def dict_row(self,inst):
         return {}
     
-    #def get_options(self):
-        #options=self.dict_options()
-        
-        #for name,field in self.fields.items():
-            #if name in options.keys():
-                #continue
-            #if isinstance(field,forms.models.ModelMultipleChoiceField):
-                #options[name]=[{'value':x[0],'label':str(x[1])} for x in field.choices]
-            #elif isinstance(field,forms.models.ModelChoiceField):
-                #options[name]=[{'value':x[0],'label':str(x[1])} for x in list(field.choices)]
-     
-            
-        #return options
-
-    #def dict_options(self):
-        #return {}
     
     def dict_head(self,head):
         return head      
-    
-    #def get_input_type(self):
-        #types={}
-        #return types
     
     def save_form(self):
         """
         call by model render engin
         """
+        
         if not (self.nolimit or self.crt_user.is_superuser):
 
             if not self.can_access():
@@ -448,48 +414,74 @@ class ModelFields(forms.ModelForm):
             detail=''
             self.instance.save() # if instance is a new row , need save first then manytomany_relationship can create   
         
- 
-        
-        after_include = []
-        for k,v in [(k,v) for (k,v) in self.cleaned_data.items() if k in self.changed_data]:
-            # 测试时看到self.instance已经赋值了，下面这行代码可能没用
-            setattr(self.instance,k,v)
-            after_include.append(k)
-        after = sim_dict(self.instance, include= after_include)
-    
+        #after_include = []
+        for k in self.changed_data:
+            # 测试时看到self.instance已经赋值了，下面这行代码可能没用,但是需要考虑下新建时 manytomany foreignkey 这些情况
+            setattr(self.instance,k, self.cleaned_data.get(k) )
+            #after_include.append(k)
+        #after = sim_dict(self.instance, include= after_include)
+        extra_log = self.clean_save()
         self.instance.save()
-        if op:
-            if self.crt_user.is_authenticated:
-                log =LogModel(key='{model_label}.{pk}'.format(model_label=model_to_name(self.instance),pk=self.instance.pk),kind=op,user=self.crt_user,detail=detail)
-            else:
-                log =LogModel(key='{model_label}.{pk}'.format(model_label=model_to_name(self.instance),pk=self.instance.pk),kind=op,detail=detail)                
-            log.save()
+        if op or extra_log:
             
-            # 加个控制开关，只收极少数情况，才需要详细的日志
-            if getattr(settings, 'SQL_DETAIL_LOG', None):
-                dc = {
-                    'key': '{model_label}.{pk}'.format(model_label=model_to_name(self.instance),pk=self.instance.pk), 
-                    'kind': op,
-                    'user': self.crt_user.username if self.crt_user.is_authenticated else 'anonymous',
-                    'before': self.before,
-                    'after': after,
-                }
-                sql_log.info(json.dumps(dc,cls=DirectorEncoder)) 
+            #if self.crt_user.is_authenticated:
+                #log =LogModel(key='{model_label}.{pk}'.format(model_label=model_to_name(self.instance),pk=self.instance.pk),kind=op,user=self.crt_user,detail=detail)
+            #else:
+                #log =LogModel(key='{model_label}.{pk}'.format(model_label=model_to_name(self.instance),pk=self.instance.pk),kind=op,detail=detail)                
+            #log.save()
             
+            ## 加个控制开关，只收极少数情况，才需要详细的日志
+            #if getattr(settings, 'SQL_DETAIL_LOG', None):
+            after_changed_data = sim_dict(self.instance, include= self.changed_data)
+            dc = {
+                'model': model_to_name(self.instance),
+                'pk': self.instance.pk,
+                'kind': op or 'extra_log',
+                'user': self.crt_user.username if self.crt_user.is_authenticated else 'anonymous',
+                'before': self.before_changed_data,
+                'after': after_changed_data,
+            }
+            if extra_log:
+                dc.update(extra_log)
+            sql_log.info(json.dumps(dc,cls=DirectorEncoder)) 
+            modelfields_log.info(json.dumps(dc,cls=DirectorEncoder))
         return self.instance
- 
+    
+    def clean_save(self): 
+        return {}
     
     def del_form(self):
         if self.permit.can_del() and self.instance.pk:
+            before_del_data = sim_dict(self.instance)
+            
+            model = model_to_name(self.instance)
+            pk = self.instance.pk
+            ex_del_log = self.ex_del_form()
             self.instance.delete()
+            dc = {
+                'model':model, 
+                'pk':pk, 
+                'kind':'delete', 
+                'user': self.crt_user.username if self.crt_user.is_authenticated else 'anonymous',
+                'before':before_del_data,                 
+            }
+            if ex_del_log:
+                dc.update(ex_del_log)
+            modelfields_log.info(json.dumps(dc, cls=DirectorEncoder))
         else:
             raise PermissionDenied('No permission to delete %s'%str(self.instance))
-        # del_perm = self.instance._meta.app_label+'.del_'+self.instance._meta.model_name
-        # if self.crt_user.has_perm(del_perm):
-            # self.instance.delete()
+
+    def ex_del_form(self): 
+        return {}
+    
+    def save_log(self, dc): 
+        modelfields_log.info(json.dumps(dc, cls=DirectorEncoder))
     
 
 class Fields(ModelFields):
+    """
+    普通的form表单，与model层剥离开的
+    """
     def __init__(self, dc={}, pk=None, crt_user=None, nolimit=False, *args, **kw): 
         self.kw=dc.copy()
         self.kw.update(kw)

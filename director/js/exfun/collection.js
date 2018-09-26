@@ -144,7 +144,7 @@ export var collection={
                     index_ls.push(i)
                 }
             }
-        }else{
+        }else if(typeof func_or_obj=='object'){
             var obj=func_or_obj
             for(var i=0;i<array.length;i++){
                 var match=true
@@ -157,6 +157,9 @@ export var collection={
                     index_ls.push(i)
                 }
             }
+        }else{
+            // 删除一个直接返回了
+            return array.splice(array.indexOf(func_or_obj),1)
         }
         var rm_item=[]
         index_ls.reverse()
@@ -188,5 +191,13 @@ export var collection={
         }
         return out_list
     },
-
+    walk:function(array,callback,key){
+        var key = key || 'children'
+        ex.each(array,function(item){
+            callback(item)
+            if(item[key]){
+                ex.walk(item[key],callback,key)
+            }
+        })
+    }
 }

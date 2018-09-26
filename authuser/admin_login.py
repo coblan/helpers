@@ -7,24 +7,55 @@ from .base_data import  auth_page_dc
 from urllib.parse import unquote
 from django.contrib import auth
 from django.shortcuts import redirect
+from helpers.director.middleware.request_cache import get_request_cache
+from .forms import LoginForm
 
 class LoginFormPage(FieldsPage):
     template = 'authuser/login.html'
+    
+    def get_heads(self): 
+        return [
+            {'name':'username','editor':'linetext','autofocus':True,'placeholder':'用户名'},
+            {'name':'password','editor':'password','placeholder':'用户密码',},
+        ]
+    
     def get_context(self): 
         ctx = super().get_context()
         next_url= self.request.GET.get('next','/')
         dc={
             'page_cfg': {     
                 'next':next_url,
+                'title': '用户登录',
+                'subtitle': '欢迎登录后台管理系统',
                 'regist_url': '%s/regist' % self.engin.engin_url,
                 'copyright': 'Copyright @2018  All Right Reserve',
+                'heads': self.get_heads(),
+                'login_item': '用户名',
                 },
         } 
         
         ctx.update(dc)
         return ctx
     
+    @staticmethod
+    def do_login(username,password,auto_login=False):
+        """
+        登录函数：
+        """
+        cache = get_request_cache()
+        request = cache.get('request')
+        form=LoginForm({'username':username,'password':password})
         
+        if form.is_valid():
+            user= auth.authenticate(username=username,password=password)
+            if not auto_login:
+                request.session.set_expiry(0)
+            auth.login(request, user)
+            return {'status':'success'}
+        else:
+            return {'errors':form.errors}
+        
+    
     #class fieldsCls(ModelFields):
         #field_sort = ['username', 'password', 'pswd2', 'validate_code', 'email']
         #def __init__(self,  **kws): 
@@ -76,13 +107,6 @@ class LoginFormPage(FieldsPage):
              
             #return self.cleaned_data 
         
-        #def save_form(self): 
-            #super().save_form()
-            #user = self.instance
-            #user.set_password(user.password)
-            #user.is_active=True
-            #user.save()            
-        
         
             
 
@@ -102,6 +126,10 @@ class LogOutPage(object):
         auth.logout(self.request)
         return redirect(next) 
 
+
+director.update({
+    'do_login': LoginFormPage.do_login,
+})
 
 auth_page_dc .update({
     'login': LoginFormPage,
