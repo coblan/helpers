@@ -50,13 +50,12 @@ class UserFields(ModelFields):
             })
         return heads
     
-    def save_form(self): 
-        ModelFields.save_form(self)
+    def clean_save(self): 
         if self.kw.get('user_password'):
             pswd =  self.kw.get('user_password')
             target_user = self.instance
             target_user.set_password(pswd)
-            target_user.save()            
+            #target_user.save()            
             
         
 
@@ -136,16 +135,11 @@ class GroupForm(ModelFields):
             row['permit']=[]
         return row   
     
-    def save_form(self):
-        super(self.__class__,self).save_form()
+    def clean_save(self):
         if not hasattr(self.instance, 'permitmodel'):
             PermitModel.objects.create(group = self.instance)
         if self.kw.get('permit',None):
-            self.instance.permitmodel.names = ';'.join( self.kw.get('permit') )
-            #permits=PermitModel.objects.filter(pk__in=self.kw.get('permit'))
-            #self.instance.permitmodel_set.add(*list(permits))
-        #else:
-            #self.instance.permitmodel = ''  
+            self.instance.permitmodel.names = ';'.join( self.kw.get('permit') ) 
             self.instance.permitmodel.save()
 
 def list2tree(ls):
