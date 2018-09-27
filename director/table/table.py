@@ -17,6 +17,7 @@ from django.core.exceptions import FieldDoesNotExist
 from helpers.director.middleware.request_cache import get_request_cache
 from helpers.director.model_func.field_proc import BaseFieldProc
 from helpers.func.collection.container import evalue_container
+
 from django.core.paginator import Paginator
 
 
@@ -699,5 +700,7 @@ class ModelTable(object):
             ws.append(row)        
         
         return wb
-        
+
+class PlainTable(ModelTable):
+    pass
         
