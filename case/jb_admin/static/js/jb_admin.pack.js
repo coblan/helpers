@@ -5062,6 +5062,10 @@ var _array_obj_shower = __webpack_require__(32);
 
 var array_obj_shower = _interopRequireWildcard(_array_obj_shower);
 
+var _pop_table = __webpack_require__(92);
+
+var pop_table = _interopRequireWildcard(_pop_table);
+
 var _label_shower2 = __webpack_require__(8);
 
 var field_label_shower = _interopRequireWildcard(_label_shower2);
@@ -5194,6 +5198,59 @@ __webpack_require__(64);
 
 
 // top_heads
+
+/***/ }),
+/* 92 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+/*
+
+ * */
+
+var pop_table = exports.pop_table = {
+    template: '<span @click="open_layer()" class="clickable">\n        <component v-if="head.inn_editor" :is="head.inn_editor" :rowData="rowData" :field="field" :index="index"></component>\n        <span v-else v-text="show_text"  ></span>\n    </span>',
+    props: ['rowData', 'field', 'index'],
+    created: function created() {
+        // find head from parent table
+        var table_par = this.$parent;
+        while (true) {
+            if (table_par.heads) {
+                break;
+            }
+            table_par = table_par.$parent;
+            if (!table_par) {
+                break;
+            }
+        }
+        if (table_par) {
+            var value = this.rowData[this.field];
+            this.head = ex.findone(table_par.heads, { name: this.field });
+        }
+    },
+    computed: {
+        show_text: function show_text() {
+            if (this.head.show_label) {
+                return show_label[this.head.show_label.fun](this.rowData, this.head.show_label);
+            } else {
+                return this.rowData[this.field];
+            }
+        }
+    },
+    methods: {
+        open_layer: function open_layer() {
+            var table_ctx = init_table_ctx(this.head.table_ctx);
+            pop_table_layer(this.rowData, table_ctx, function () {});
+        }
+
+    }
+};
+Vue.component('com-table-pop-fields', pop_fields);
 
 /***/ })
 /******/ ]);
