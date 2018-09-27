@@ -203,10 +203,10 @@ var mix_table_data={
                 var index =self.rows.indexOf(row)
                 if(index >=1 ){
                     var ss = swap(self.rows,index-1,index)
-                    self.rows=[]
-                    Vue.nextTick(function(){
-                        self.rows=ss
-                    })
+                    //self.rows=[]
+                    //Vue.nextTick(function(){
+                    //    self.rows=ss
+                    //})
 
                 }
                 //self.$refs.core_table.sort()
@@ -218,10 +218,10 @@ var mix_table_data={
                     //Vue.set(self,'rows',swap(self.rows,index+1,index))
                     //self.rows =
                     var ss = swap(self.rows,index+1,index)
-                    self.rows=[]
-                    Vue.nextTick(function(){
-                        self.rows=ss
-                    })
+                    //self.rows=[]
+                    //Vue.nextTick(function(){
+                    //    self.rows=ss
+                    //})
                 }
                 //self.$refs.core_table.sort()
             }
@@ -466,9 +466,10 @@ var row_match={
 
 function swap(arr,k,j) {
     var c = arr[k];
-
-    arr[k] = arr[j];
-    arr[j] = c;
+    arr.splice(k,1,arr[j])
+    arr.splice(j,1,c)
+    //arr[k] = arr[j];
+    //arr[j] = c;
     return arr
 }
 

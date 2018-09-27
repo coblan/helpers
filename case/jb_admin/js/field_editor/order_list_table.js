@@ -22,7 +22,6 @@ var order_list =  {
                                              :show-overflow-tooltip="is_show_tooltip(col) "
                                              :label="col.label"
                                              :prop="col.name.toString()"
-
                                              :width="col.width">
                                 <template slot-scope="scope">
                                     <component :is="col.editor"
@@ -103,11 +102,13 @@ var order_list =  {
                     'name':'save','editor':'com-field-op-btn','label':'确定', 'icon': 'fa-save',
                 }]
             }
-            pop_edit_local(self.crt_row,fields_ctx,function(resp) {
+           var win= pop_edit_local(self.crt_row,fields_ctx,function(resp) {
                 //ex.assign(self.row,new_row)
-                ex.assign(self.crt_row,resp.new_row)
+                var new_row=resp
+                ex.vueAssign(self.crt_row,new_row)
                 //self.crt_row.append(resp.new_row)
                 self.row[self.head.name] = JSON.stringify(self.rows)
+               layer.close(win)
             })
 
             //this.row[this.head].append({})

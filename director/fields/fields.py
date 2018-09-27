@@ -483,7 +483,8 @@ class Fields(ModelFields):
     普通的form表单，与model层剥离开的
     """
     def __init__(self, dc={}, pk=None, crt_user=None, nolimit=False, *args, **kw): 
-        self.front_dc = dc
+        self.kw=dc.copy()
+        self.kw.update(kw)
     
     def is_valid(self): 
         return True
