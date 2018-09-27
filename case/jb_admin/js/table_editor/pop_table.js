@@ -28,11 +28,7 @@ export  var pop_table={
     },
     computed:{
         show_text:function(){
-            if(this.head.show_label){
-                return show_label[this.head.show_label.fun](this.rowData,this.head.show_label)
-            }else {
-                return this.rowData[this.field]
-            }
+            return this.rowData[this.field]
         }
     },
     methods:{
@@ -44,4 +40,4 @@ export  var pop_table={
 
     }
 }
-Vue.component('com-table-pop-fields',pop_fields)
+Vue.component('com-table-pop-table',pop_table)

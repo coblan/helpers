@@ -702,5 +702,44 @@ class ModelTable(object):
         return wb
 
 class PlainTable(ModelTable):
-    pass
+    def __init__(self,_page=1,row_sort=[],row_filter={},row_search= '',crt_user=None,perpage=None,**kw):
+        """
+        kw['search_args']只是一个记录，在获取到rows时，一并返回前端页面，便于显示。
+        而真正的查询参数已经被路由到各个查询组件中，具体参见 cls.parse_request / gen_from_search_args 函数
+        如果需要设置查询的默认参数，需要到 cls.clean_search_args中去设置
+        
+        """
+        self.search_args = kw.get('search_args', {})
+        
+        self.kw=kw
+        self.crt_user=crt_user 
+        self.page=_page
+        self.footer = []
+    
+    def get_head_context(self):
+        """
+        有些时候，最先不需要返回rows，而只返回filters，head等，等待用户选择后，才返回rows
+        """
+        ops = self.get_operation()
+        ops = evalue_container(ops)
+        return {
+            'heads':self.get_heads(),
+            'rows': [], #self.get_rows(),
+            'row_pages':{}, # self.pagenum.get_context(),
+            'row_sort':self.getRowSort(),
+            'row_filters': self.getRowFilters() , #self.row_filter.get_context(),
+            'search_args': {},
+            #'search_tip':self.row_search.get_context(),
+            'director_name': self.get_director_name(),#model_to_name(self.model),
+            'ops' : ops
+        }  
+    
+    def getRowSort(self): 
+        return {}
+    
+    def getRowFilters(self): 
+        return {}
+    
+    def getRowPages(self): 
+        return {}  
         
