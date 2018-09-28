@@ -446,13 +446,19 @@ class ModelTable(object):
         return []
     
     def get_data_context(self):
+        rows =  self.get_rows()
+        table_layout = self.getTableLayout(rows)
         return {
-            'rows': self.get_rows(),
+            'rows': rows,
+            'table_layout': table_layout,
             'row_pages' : self.getRowPages(), #self.pagenum.get_context(),  
             'search_args':self.search_args, 
             'footer': self.footer,
             'parents': self.getParents(),
         }
+    
+    def getTableLayout(self, rows): 
+        return {}
     
     def getRowPages(self): 
         return self.pagenum.get_context()
@@ -507,6 +513,11 @@ class ModelTable(object):
         return heads 
     
     def footer_by_dict(self, dc): 
+        """
+        将 {'field':'sumvalue'} 形式的字典，转换为
+        [sumvalue] 这样的数组，便于前端element table 的foot 显示。
+        
+        """
         heads= self.get_light_heads()
         footer = []
         for head in heads:
