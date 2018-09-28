@@ -1,7 +1,7 @@
 export var baseInput={
     linetext: {
         props:['row','head'],
-        template:`<div>
+        template:`<div :style="head.style">
             			<span v-if='head.readonly' v-text='row[head.name]'></span>
             			<input v-else type="text" class="form-control input-sm" v-model="row[head.name]"
             		 	    :id="'id_'+head.name" :name="head.name"
