@@ -735,7 +735,9 @@ class PlainTable(ModelTable):
         }  
     
     def getRowSort(self): 
-        return {}
+        return {
+            'sortable': [],
+        }
     
     def getRowFilters(self): 
         return {}
