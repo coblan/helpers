@@ -99,7 +99,7 @@ var ajax_table={
             </div>
 
         </div>
-          <div>
+          <div v-if="row_pages.crt_page">
                     <el-pagination
                         @size-change="on_perpage_change"
                         @current-change="get_page"
