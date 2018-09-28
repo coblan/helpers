@@ -80,7 +80,7 @@ var field={
     template:`
     		<div :class='["form-group field",{"error":head.error}]' v-if="head" style="position: relative;">
                 <label :for="'id_'+head.name"  class="control-label" v-if='head.label && head.label!=""'>
-                    <span v-text="head.label"></span><span class="req_star" v-if='head.required'>*</span>
+                    <span v-html="head.label"></span><span class="req_star" v-if='head.required'>*</span>
                 </label>
                 <div class="field_input">
                     <component :is='head.editor'

@@ -1,7 +1,10 @@
 
 var switch_to_tab = {
     props:['rowData','field','index'],
-    template:'<span v-text="rowData[field]" @click="goto_tab()" class="clickable"></span>',
+    template:`<span @click="goto_tab()" class="clickable">
+     <component v-if="head.inn_editor" :is="head.inn_editor" :rowData="rowData" :field="field" :index="index"></component>
+    <span v-else v-text="rowData[field]"></span>
+    </span>`,
     created:function(){
         // find head from parent table
         var table_par = this.$parent

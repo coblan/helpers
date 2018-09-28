@@ -29,22 +29,7 @@ class UserPage(TablePage):
                 head['options'] = [{'value': group.pk, 'label': str(group),} for group in Group.objects.all()]
                 #head['parse_method'] = 'dotSplit'
             return head
-        #def dict_head(self, head):
-            
-            #if head['name']=='username':
-                #UserForm = model_dc[User].get('fields')
-                #userform = UserForm(crt_user=self.crt_user)
-                #head['editor']='com-table-pop-fields'
-                #head['get_row']={
-                    #"fun":'use_table_row'
-                #}
-                #head['fields_heads']=userform.get_heads()
-                #head['after_save']={
-                    #'fun':'do_nothing'
-                    ##'fun':'update_or_insert'
-                #}     
-                #head['ops']=userform.get_operations()
-            #return head
+
         
         
 class UserFields(ModelFields):
@@ -65,13 +50,12 @@ class UserFields(ModelFields):
             })
         return heads
     
-    def save_form(self): 
-        ModelFields.save_form(self)
+    def clean_save(self): 
         if self.kw.get('user_password'):
             pswd =  self.kw.get('user_password')
             target_user = self.instance
             target_user.set_password(pswd)
-            target_user.save()            
+            #target_user.save()            
             
         
 
@@ -96,8 +80,8 @@ class GroupPage(TablePage):
                 }
                 head['fields_ctx']=groupform.get_head_context()
                 head['after_save']={
-                    'fun':'do_nothing'
-                    #'fun':'update_or_insert'
+                    #'fun':'do_nothing'
+                    'fun':'update_or_insert'
                 }  
                 head['width'] = 200
                 #head['ops']=groupform.get_operations()
@@ -115,16 +99,6 @@ class GroupPage(TablePage):
                 dc['permit']=[]
             return dc
         
-        #def get_operation(self):
-            #opt = ModelTable.get_operation(self)
-            #for k in opt:
-                #if k['name'] == 'add_new':
-                    #fieldobj= GroupForm(crt_user=self.crt_user)
-                    #k['heads']=fieldobj.get_heads()
-                    #k['ops']= fieldobj.get_operations()     
-            #return opt        
-        
-
 
 class GroupForm(ModelFields):
     field_sort = ['name']
@@ -147,7 +121,7 @@ class GroupForm(ModelFields):
         #options = list2tree(options)
         heads.append({
             'name':'permit',
-            'editor':'com-field-ele-tree',
+            'editor':'com-field-ele-tree-depend',
             'label':'权限选择',
             'options':options
         })
@@ -161,16 +135,11 @@ class GroupForm(ModelFields):
             row['permit']=[]
         return row   
     
-    def save_form(self):
-        super(self.__class__,self).save_form()
+    def clean_save(self):
         if not hasattr(self.instance, 'permitmodel'):
             PermitModel.objects.create(group = self.instance)
         if self.kw.get('permit',None):
-            self.instance.permitmodel.names = ';'.join( self.kw.get('permit') )
-            #permits=PermitModel.objects.filter(pk__in=self.kw.get('permit'))
-            #self.instance.permitmodel_set.add(*list(permits))
-        #else:
-            #self.instance.permitmodel = ''  
+            self.instance.permitmodel.names = ';'.join( self.kw.get('permit') ) 
             self.instance.permitmodel.save()
 
 def list2tree(ls):

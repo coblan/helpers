@@ -16,6 +16,7 @@ from helpers.director.base_data import director
 from django.core.exceptions import FieldDoesNotExist
 from helpers.director.middleware.request_cache import get_request_cache
 from helpers.director.model_func.field_proc import BaseFieldProc
+from helpers.func.collection.container import evalue_container
 
 from django.core.paginator import Paginator
 
@@ -123,6 +124,9 @@ class RowFilter(object):
     range_fields=[]
     model=''
     def __init__(self,dc,user,allowed_names,kw={}):
+        # 为了让前端不显示
+        self.model_allowed_names =  allowed_names
+        
         self.names = self.names + self.range_fields #+ [x.get('name') for x in self.range_fields]
         self.valid_name= self.names  #[x for x in self.names if x in allowed_names]
         self.crt_user=user
@@ -185,7 +189,8 @@ class RowFilter(object):
         extraHead= self.getExtraHead()
         normal_heads = []
         dc = {x['name']: x  for x in extraHead }
-        total_names = self.names + [x['name'] for x in extraHead]
+        valid_model_names = [x for x in self.names if x in self.model_allowed_names]
+        send_to_front_names = valid_model_names + [x['name'] for x in extraHead]
         for proc_cls,name in zip(self.get_proc_list() ,self.valid_name):
             if name in dc:
                 # 为了性能考虑，如果有head了，就不进行自动生成head了，并且排除掉那些不在model里面的字段
@@ -193,7 +198,6 @@ class RowFilter(object):
                 continue
             
             if name in self.range_fields:
-                
                 filter_head = proc_cls().filter_get_range_head(name,self.model)
                 normal_heads.append(filter_head)
   
@@ -204,7 +208,8 @@ class RowFilter(object):
         out_list = extraHead
         out_list.extend(normal_heads)
         out_list = [self.dict_head(head) for head in out_list]
-        out_list = sorted(out_list, key= lambda x: total_names.index(x['name']))
+        out_list = [x for x in out_list if x['name'] in send_to_front_names]
+        out_list = sorted(out_list, key= lambda x: send_to_front_names.index(x['name']))
         return out_list
       
     def get_query(self,query):
@@ -384,6 +389,7 @@ class ModelTable(object):
         row_sort = self.row_sort.get_context()
         model_name = model_to_name(self.model)
         ops = self.get_operation()
+        ops = evalue_container(ops)
         return {
             'heads':heads,
             'rows': rows,
@@ -422,6 +428,8 @@ class ModelTable(object):
             #ls.append( search_head)
         #if row_filters:
             #ls.extend(row_filters)
+        ops = self.get_operation()
+        ops = evalue_container(ops)
         return {
             'heads':self.get_heads(),
             'rows': [], #self.get_rows(),
@@ -431,7 +439,7 @@ class ModelTable(object):
             'search_args': {},
             #'search_tip':self.row_search.get_context(),
             'director_name': self.get_director_name(),#model_to_name(self.model),
-            'ops' : self.get_operation()
+            'ops' : ops
         }        
     
     def getParents(self): 
@@ -648,9 +656,10 @@ class ModelTable(object):
                  'icon': 'fa-plus',
                  'label':'创建',
                  'fields_ctx':fieldobj.get_head_context(),
+                 'visible': self.permit.can_add(),
                  },
-                {'name':'save_changed_rows','editor':'com-op-btn','label':'保存','hide':'!changed','icon':'fa-save'},
-                {'name':'delete','editor':'com-op-btn','label':'删除','style': 'color:red','icon': 'fa-times','disabled':'!has_select'},
+                {'name':'save_changed_rows','editor':'com-op-btn','label':'保存','hide':'!changed','icon':'fa-save', 'visible': self.permit.can_edit()},
+                {'name':'delete','editor':'com-op-btn','label':'删除','style': 'color:red','icon': 'fa-times','disabled':'!has_select', 'visible': self.permit.can_del(),},
                 ]      
     
     def get_excel(self): 
@@ -691,5 +700,48 @@ class ModelTable(object):
             ws.append(row)        
         
         return wb
+
+class PlainTable(ModelTable):
+    def __init__(self,_page=1,row_sort=[],row_filter={},row_search= '',crt_user=None,perpage=None,**kw):
+        """
+        kw['search_args']只是一个记录，在获取到rows时，一并返回前端页面，便于显示。
+        而真正的查询参数已经被路由到各个查询组件中，具体参见 cls.parse_request / gen_from_search_args 函数
+        如果需要设置查询的默认参数，需要到 cls.clean_search_args中去设置
         
+        """
+        self.search_args = kw.get('search_args', {})
+        
+        self.kw=kw
+        self.crt_user=crt_user 
+        self.page=_page
+        self.footer = []
+    
+    def get_head_context(self):
+        """
+        有些时候，最先不需要返回rows，而只返回filters，head等，等待用户选择后，才返回rows
+        """
+        ops = self.get_operation()
+        ops = evalue_container(ops)
+        return {
+            'heads':self.get_heads(),
+            'rows': [], #self.get_rows(),
+            'row_pages':{}, # self.pagenum.get_context(),
+            'row_sort':self.getRowSort(),
+            'row_filters': self.getRowFilters() , #self.row_filter.get_context(),
+            'search_args': {},
+            #'search_tip':self.row_search.get_context(),
+            'director_name': self.get_director_name(),#model_to_name(self.model),
+            'ops' : ops
+        }  
+    
+    def getRowSort(self): 
+        return {
+            'sortable': [],
+        }
+    
+    def getRowFilters(self): 
+        return {}
+    
+    def getRowPages(self): 
+        return {}  
         

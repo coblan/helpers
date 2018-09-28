@@ -57,9 +57,9 @@ def sim_dict(instance,filt_attr=None,include=None,exclude=None):
     model_path = instance._meta.app_label+'.'+instance._meta.model_name
     fields=instance._meta.get_fields() # 如果用  instance._meta.fields 没有 manytomany (测试过) ,可能也没有 onetoone
     fields=[field for field in fields if isinstance(field,models.Field)]
-    if include:
+    if include != None :
         fields=filter(lambda field:field.name in include,fields)
-    if exclude:
+    if exclude != None:
         fields=filter(lambda field:field.name not in exclude,fields)
     if filt_attr:
         if callable(filt_attr):

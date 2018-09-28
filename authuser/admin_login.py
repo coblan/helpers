@@ -107,13 +107,6 @@ class LoginFormPage(FieldsPage):
              
             #return self.cleaned_data 
         
-        #def save_form(self): 
-            #super().save_form()
-            #user = self.instance
-            #user.set_password(user.password)
-            #user.is_active=True
-            #user.save()            
-        
         
             
 

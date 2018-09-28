@@ -43,7 +43,8 @@ import * as jump_link from  './table_editor/jump_link.js'
 import * as change_order from  './table_editor/change_order.js'
 import * as digit from  './table_editor/digit.js'
 import * as append_html_shower from  './table_editor/append_html_shower.js'
-
+import * as array_obj_shower from  './table_editor/array_obj_shower.js'
+import * as pop_table from  './table_editor/pop_table.js'
 
 // field editor
 import * as field_label_shower from  './field_editor/label_shower.js'
@@ -54,7 +55,7 @@ import * as plain_file from  './field_editor/plain_file.js'
 import * as validate_code from  './field_editor/validate_code.js'
 import * as order_list_table from  './field_editor/order_list_table.js'
 import * as phon_code from  './field_editor/phon_code.js'
-
+import * as ele_tree_depend from  './field_editor/ele_tree_depend.js'
 // table operator
 import * as op_a from  './table_operator/operator_a.js'
 import * as delete_op from  './table_operator/delete_op.js'

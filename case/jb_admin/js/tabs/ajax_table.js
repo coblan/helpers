@@ -53,6 +53,7 @@ var ajax_table={
                               :data="rows"
                               border
                               show-summary
+                              :span-method="arraySpanMethod"
                               :fit="false"
                               :stripe="true"
                               size="mini"
@@ -149,43 +150,11 @@ var ajax_table={
             var dc = {fun:'add_new',init_fields:init_fields }
             ex.assign(inn_kws,dc)
             ex.vueSuper(this,inn_kws)
+        },
+        arraySpanMethod:function({ row, column, rowIndex, columnIndex }){
+            var head = this.heads[columnIndex]
+            return [1,1]
         }
-        //del_item:function () {
-        //    if (this.selected.length==0){
-        //        return
-        //    }
-        //    var del_obj={}
-        //    for(var j=0;j<this.selected.length;j++){
-        //        var pk = this.selected[j]
-        //        for(var i=0;i<this.rows.length;i++){
-        //            if(this.rows[i].pk.toString()==pk){
-        //                if(!del_obj[this.rows[i]._class]){
-        //                    del_obj[this.rows[i]._class]=[]
-        //                }
-        //                del_obj[this.rows[i]._class].push(pk)
-        //            }
-        //        }
-        //    }
-        //    var out_str=''
-        //    for(var key in del_obj){
-        //        out_str += (key+':'+ del_obj[key].join(':')+',')
-        //    }
-        //    location=ex.template("{engine_url}/del_rows?rows={rows}&next={next}",{engine_url:engine_url,
-        //        rows:encodeURI(out_str),
-        //        next:encodeURIComponent(location.href)})
-        //},
-        //goto_page:function (page) {
-        //    this.search_args._page=page
-        //    this.search()
-        //},
-        //add_new:function () {
-        //    var  url = ex.template('{engine_url}/{page}.edit/?next={next}',{
-        //        engine_url:engine_url,
-        //        page:page_name,
-        //        next:encodeURIComponent(ex.appendSearch(location.pathname,search_args))
-        //    })
-        //    location = url
-        //},
     }
 }
 

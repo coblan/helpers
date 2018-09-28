@@ -37,7 +37,7 @@ from django.apps import apps
 import json
 from django.db import models
 from ..base_data import model_dc,permit_list, director
-from ..access.permit_data import get_model_permit
+from ..access.permit_data import get_model_permit, expand_permit_names
 
 
 def can_touch(model, user):
@@ -46,33 +46,29 @@ def can_touch(model, user):
     return validator.can_access()
 
 
-def has_permit(user,name):
+def has_permit(user, perm_name):
     """
     special.sp1
     """
-    cls,perm=name.split('.')
+    #cls,perm=name.split('.')
     if user.is_superuser:
-        if perm.startswith('-'):
+        if perm_name.startswith('-'):
             return False
         else:
             return True  
-        
-    for permit_dc in user_permit_names(user):
-        sp_permit_list= permit_dc.get(cls,[])
-        if perm in sp_permit_list:
-            return True        
-    #for group in user.groups.all():
-            #if hasattr(group,'permitmodel'):
-                #permit_dc = json.loads( group.permitmodel.permit )
-                #sp_permit_list= permit_dc.get(cls,[])
-                #if perm in sp_permit_list:
-                    #return True
-    return False
+    
+    return perm_name in user_permit_names(user)
+
+    #for permit_dc in user_permit_names(user):
+        #sp_permit_list= permit_dc.get(cls,[])
+        #if perm in sp_permit_list:
+            #return True        
+    #return False
 
 
 def user_permit_names(user):
     for group in user.groups.all():
-        for permit_dc in group_permit(group):
+        for permit_dc in expand_permit_names( group_permit(group) ):
             yield permit_dc
 
 def group_permit(group):
@@ -128,19 +124,10 @@ class ModelPermit(object):
             self.user.permit_dc_list=list(user_permit_names(self.user))
         permits_names = list(set(self.user.permit_dc_list))
         self.permit_list = list(get_model_permit(permits_names, self.model))
-        #for permit_dc in self.user.permit_dc_list:
-            #permit= permit_dc.get(model_name,[])
-            #self.permit_list.extend(permit)            
-        #for group in self.user.groups.all():
-            #if hasattr(group,'permitmodel'):
-                #permits = json.loads( group.permitmodel.permit )
-                #permit= permits.get(model_name,[])
-                #self.permit_list.extend(permit)
-        #self.permit_list=list(set(self.permit_list))
-            #setattr(self.user,'_permit_list.%s'%model_name,self.permit_list)
     
     def get_heads(self):
         """
+        现在不用了。
         这个函数好像只被 group admin 用了下,返回所有注册了的model的权限备选head信息。
         """
         ls=[]
@@ -161,23 +148,41 @@ class ModelPermit(object):
     def get_rows(self):
         pass
     
+    
+        
     def can_add(self):
         if self.nolimit or self.user.is_superuser:
             return True
         else:
-            return 'can__create' in self.permit_list
+            for perm in self.permit_list:
+                if perm.get('_can_create'):
+                    return True
+            return False
 
     def can_del(self):
         if self.nolimit or self.user.is_superuser:
             return True
         else:
-            return 'can__delete' in self.permit_list
+            for perm in self.permit_list:
+                if perm.get('_can_delete'):
+                    return True
+            return False
+
     def can_log(self):
         if self.nolimit or self.user.is_superuser:
             return True
         else:
-            return 'can__log' in self.permit_list        
+            return '_can__log' in self.permit_list
+        
     
+    def can_edit(self): 
+        if self.nolimit or self.user.is_superuser:
+            return True
+        elif self.changeable_fields():
+            return True
+        else:
+            return False
+        
     def can_access(self):
         if self.nolimit or self.user.is_superuser:
             return True
@@ -206,9 +211,10 @@ class ModelPermit(object):
             ls=[]
             for perm in self.permit_list:
                 ls.extend(perm.get('read', []))
-                #if perm.endswith('__read'):
-                    #ls.append(perm[0:-6])
-            return list(set(ls))  
+                ls.extend(perm.get('write', []))
+            ls = list(set(ls))
+            all_fields = self.all_fields()
+            return [x for x in all_fields if x in ls]
     
     def changeable_fields(self):
         if self.nolimit or self.user.is_superuser:
@@ -227,6 +233,7 @@ class ModelPermit(object):
 def model_permit_info(model,user):
     """
     // 现在 权限直接写在代码里面，不需要拼凑了。
+    所以这个函数无用了
     
     返回model权限字段，现在应该是用来拼凑前端页面。该页面用于编辑用户的权限。
     
@@ -257,6 +264,7 @@ def model_permit_info(model,user):
 
 def permit_to_text(permit):
     """
+    应该是无用了
     把permit字典转换为人能够读的文字表述。现在用于显示在前端页面上。
     @permit:
     """
