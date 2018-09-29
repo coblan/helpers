@@ -39,12 +39,12 @@ var ck_complex = {
 
 	// The toolbar groups arrangement, optimized for two toolbar rows.
 	toolbarGroups : [
+		{ name: 'tools' },
 		{ name: 'clipboard',   groups: [ 'clipboard', 'undo' ] },
 		{ name: 'editing',     groups: [ 'find', 'selection', 'spellchecker' ] },
 		{ name: 'links' },
 		{ name: 'insert' },
 		{ name: 'forms' },
-		{ name: 'tools' },
 		{ name: 'document',	   groups: [ 'mode', 'document', 'doctools' ] },
 		{ name: 'others' },
 		'/',
@@ -70,7 +70,7 @@ var ck_complex = {
 	image_previewText:'image preview',
 	imageUploadUrl: '/d/ckeditor_image',// '/_face/ckeditor_upload_image',
 	filebrowserImageUploadUrl: '/d/ckeditor_image',// '/_face/ckeditor_upload_image', // Will be replace by imageUploadUrl when upload_image
-	extraPlugins : 'justify,codesnippet,lineutils,mathjax,colorbutton,uploadimage,font,autogrow', //autogrow,
+	extraPlugins : 'justify,codesnippet,lineutils,mathjax,colorbutton,uploadimage,font,autogrow,html5video,widget,widgetselection,clipboard,lineutils', //autogrow,
 	mathJaxLib : 'https://cdn.mathjax.org/mathjax/2.6-latest/MathJax.js?config=TeX-AMS_HTML',
 	extraAllowedContent :'img[class]',
 	autoGrow_maxHeight : 600,
@@ -169,10 +169,31 @@ var ckeditor = {
 	//	}
 	//}
 }
-
+	//<script src="//cdn.ckeditor.com/4.10.1/full/ckeditor.js"></script>
 Vue.component('ckeditor',function(resolve,reject){
-	ex.load_js('https://cdn.bootcss.com/ckeditor/4.6.2/ckeditor.js',function(){
+	//ex.load_js('https://cdn.bootcss.com/ckeditor/4.6.2/ckeditor.js',function(){
+	//ex.load_js('http://cdn.ckeditor.com/4.10.1/full/ckeditor.js',function(){
+	//ex.load_js('/static/ckeditor_4.10.1/ckeditor/ckeditor.js',function(){
+	ex.load_js(cfg.js_lib.ckeditor,function(){
 		resolve(ckeditor)
+
+
+		//CKEDITOR.plugins.setLang( 'html5video', 'zh-cn', {
+		//	button: '插入HTML5视频',
+		//	title: 'HTML5 视频',
+		//	infoLabel: '视频信息',
+		//	allowed: '允许上传格式: MP4, WebM, Ogv',
+		//	urlMissing: '视频源地址丢失',
+		//	videoProperties: '视频属性',
+		//	upload: '上传',
+		//	btnUpload: '上传到服务器',
+		//	advanced: '高级',
+		//	autoplay: '自动播放?',
+		//	yes: '是',
+		//	no: '否',
+		//	responsive: '响应式宽度'
+		//} );
+
 	})
 })
 
@@ -213,12 +234,14 @@ var edit_level = {
 	format_tags : 'p;h1;h2;h3;pre',
 
 	// Simplify the dialog windows.
+	//plugins : 'wysiwygarea,toolbar,basicstyles,...',
 	removeDialogTabs : 'image:advanced;link:advanced',
 	image_previewText:'image preview',
 	imageUploadUrl:'/d/ckeditor_image', // '/_face/ckeditor_upload_image',
 	filebrowserImageUploadUrl:'/d/ckeditor_image',// '/_face/ckeditor_upload_image', // Will be replace by imageUploadUrl when upload_image
-	extraPlugins : 'justify,lineutils,colorbutton,uploadimage,font,autogrow', //,mathjax,codesnippet
-	//mathJaxLib : '//cdn.mathjax.org/mathjax/2.6-latest/MathJax.js?config=TeX-AMS_HTML',
+	//extraPlugins : 'justify,lineutils,colorbutton,uploadimage,font,autogrow', //,mathjax,codesnippet
+	removePlugins: 'html5video,forms,flash,a11yhelp,scayt,wsc,language,preview,print,save,saveall,template,newpage,templates',
+	mathJaxLib : '//cdn.mathjax.org/mathjax/2.6-latest/MathJax.js?config=TeX-AMS_HTML',
 	extraAllowedContent :'img[class]',
 	autoGrow_maxHeight : 600,
 	autoGrow_minHeight:200,
@@ -226,3 +249,5 @@ var edit_level = {
 	autoGrow_bottomSpace:50,
 	//height:800,
 };
+
+
