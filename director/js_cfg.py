@@ -15,7 +15,7 @@ def get_lib(request):
         #'adminlte': 'https://cdn.bootcss.com/admin-lte/2.4.3/js/adminlte.min.js',
         #'adminlte_css': 'https://cdn.bootcss.com/admin-lte/2.4.3/css/AdminLTE.min.css',
         #'adminlte_blue_css': 'https://cdn.bootcss.com/admin-lte/2.4.3/css/skins/skin-blue.min.css',
-        
+        'ckeditor': '/static/lib/ckeditor_4.10.1/ckeditor/ckeditor.js', 
         'nprogress': '/static/lib/nprogress/nprogress.min.js',
         'nprogress_css': '/static/lib/nprogress/nprogress.min.css',
         #'layer': 'https://cdn.bootcss.com/layer/3.1.0/layer.js',
