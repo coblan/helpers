@@ -23,9 +23,13 @@ var switch_to_tab = {
     methods:{
         goto_tab:function(){
             this.$emit('on-custom-comp',
-                {name:'switch_to_tab',
-                tab_name:this.head.tab_name,
-                row:this.rowData})
+                {
+                    name:'switch_to_tab',
+                    tab_name:this.head.tab_name,
+                    named_tabs:this.head.name_tabs,
+                    row:this.rowData
+                }
+            )
         }
     }
 }
