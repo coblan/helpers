@@ -62,14 +62,15 @@ var ajax_table={
                               :summary-method="getSum"
                               height="100%"
                               style="width: 100%">
-                        <el-table-column
-                                type="selection"
-                                width="55">
-                        </el-table-column>
 
                         <template  v-for="head in heads">
+                              <el-table-column
+                                    v-if="head.type"
+                                    :type="head.type"
+                                    :width="head.width">
+                              </el-table-column>
 
-                            <el-table-column v-if="head.editor"
+                            <el-table-column v-else-if="head.editor"
                                              :show-overflow-tooltip="is_show_tooltip(head) "
                                              :label="head.label"
                                              :sortable="is_sort(head)"
@@ -98,7 +99,7 @@ var ajax_table={
             </div>
 
         </div>
-          <div>
+          <div v-if="row_pages.crt_page">
                     <el-pagination
                         @size-change="on_perpage_change"
                         @current-change="get_page"
@@ -152,8 +153,14 @@ var ajax_table={
             ex.vueSuper(this,inn_kws)
         },
         arraySpanMethod:function({ row, column, rowIndex, columnIndex }){
-            var head = this.heads[columnIndex]
-            return [1,1]
+            if(this.table_layout){
+                return this.table_layout[`${rowIndex},${columnIndex}`] || [1,1]
+            }else{
+                return [1,1]
+            }
+            //var head = this.heads[columnIndex]
+
+            //return [1,1]
         }
     }
 }
