@@ -12,7 +12,7 @@ var ajax_table={
             ops:heads_ctx.ops || [],
             rows:[],
             row_pages:{},
-            //search_tip:this.kw.search_tip,
+            selectable:heads_ctx.selectable || true,
 
             selected:[],
             del_info:[],
@@ -63,14 +63,13 @@ var ajax_table={
                               height="100%"
                               style="width: 100%">
 
+                            <el-table-column
+                                    v-if="selectable"
+                                     type="selection"
+                                    :width="55">
+                            </el-table-column>
                         <template  v-for="head in heads">
-                              <el-table-column
-                                    v-if="head.type"
-                                    :type="head.type"
-                                    :width="head.width">
-                              </el-table-column>
-
-                            <el-table-column v-else-if="head.editor"
+                            <el-table-column v-if="head.editor"
                                              :show-overflow-tooltip="is_show_tooltip(head) "
                                              :label="head.label"
                                              :sortable="is_sort(head)"
