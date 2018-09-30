@@ -28,7 +28,7 @@ var ajax_table={
     //        this.get_data()
     //    }
     //},
-    template:`<div class="rows-block flex-v" style="position: absolute;top:0;left:0;bottom: 0;right:0;overflow: auto;padding-bottom: 3em;" >
+    template:`<div class="rows-block flex-v" style="position: absolute;top:0;left:0;bottom: 0;right:0;overflow: auto;padding-bottom: 1em;" >
         <div class='flex' style="min-height: 3em;" v-if="row_filters.length > 0">
             <com-filter class="flex" :heads="row_filters" :search_args="search_args"
                         @submit="search()"></com-filter>
