@@ -12,7 +12,7 @@ var ajax_table={
             ops:heads_ctx.ops || [],
             rows:[],
             row_pages:{},
-            //search_tip:this.kw.search_tip,
+            selectable:heads_ctx.selectable || true,
 
             selected:[],
             del_info:[],
@@ -28,7 +28,7 @@ var ajax_table={
     //        this.get_data()
     //    }
     //},
-    template:`<div class="rows-block flex-v" style="position: absolute;top:0;left:0;bottom: 0;right:0;overflow: auto;padding-bottom: 3em;" >
+    template:`<div class="rows-block flex-v" style="position: absolute;top:0;left:0;bottom: 0;right:0;overflow: auto;padding-bottom: 1em;" >
         <div class='flex' style="min-height: 3em;" v-if="row_filters.length > 0">
             <com-filter class="flex" :heads="row_filters" :search_args="search_args"
                         @submit="search()"></com-filter>
@@ -63,14 +63,13 @@ var ajax_table={
                               height="100%"
                               style="width: 100%">
 
+                            <el-table-column
+                                    v-if="selectable"
+                                     type="selection"
+                                    :width="55">
+                            </el-table-column>
                         <template  v-for="head in heads">
-                              <el-table-column
-                                    v-if="head.type"
-                                    :type="head.type"
-                                    :width="head.width">
-                              </el-table-column>
-
-                            <el-table-column v-else-if="head.editor"
+                            <el-table-column v-if="head.editor"
                                              :show-overflow-tooltip="is_show_tooltip(head) "
                                              :label="head.label"
                                              :sortable="is_sort(head)"

@@ -22,10 +22,22 @@ var switch_to_tab = {
     },
     methods:{
         goto_tab:function(){
-            this.$emit('on-custom-comp',
-                {name:'switch_to_tab',
-                tab_name:this.head.tab_name,
-                row:this.rowData})
+            //this.$emit('on-custom-comp',
+            //    {
+            //        name:'switch_to_tab',
+            //        tab_name:this.head.tab_name,
+            //        named_tabs:this.head.named_tabs,
+            //        row:this.rowData
+            //    }
+            //)
+            eventBus.$emit('switch_to_tab',
+                {
+                    name:'switch_to_tab',
+                    tab_name:this.head.tab_name,
+                    named_tabs:this.head.named_tabs,
+                    row:this.rowData
+                })
+
         }
     }
 }

@@ -87,3 +87,7 @@ import * as nice_validator_rule from  './nice_validator_rule.js'
 // top_heads
 import * as dropdown from  './header/dropdown.js'
 import * as sm_link from  './header/sm_link.js'
+
+//ui
+import * as stack_widget from './misc/stack_widget'
+import * as el_tab_widget from './misc/el_tab_widget'

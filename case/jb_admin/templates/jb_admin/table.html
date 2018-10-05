@@ -21,10 +21,14 @@
     //	search字段从 search_args._q 来取值
     extra_table_logic='{{ extra_table_logic }}'
     footer={{ footer |jsonify }}
-    tabs={{ tabs | jsonify | default:'[]' }}
     search_args={{ search_args | jsonify | default:'{}'  }}
     parents = {{ parents | jsonify | default:'[]' }}
 
+    // 这个变量留着，兼容老的调用。。准备把它移除
+    tabs={{ tabs | jsonify | default:'[]' }}
+    named_tabs={{ named_tabs | jsonify | default:'{}' }}
+
+    eventBus = new Vue({})
     table_logic={
         el:'#there',
         data:{
@@ -42,10 +46,15 @@
             search_args:search_args, //ex.parseSearch(),
             ops:ops,
             crt_row:{},
-            tabgroup:{
-                crt:'main',
-                tabs:tabs
-            },
+
+            tab_stack:[],
+            tabs:tabs,
+            named_tabs:named_tabs,
+
+//            tabgroup:{
+//                crt:'_main',
+//                crt_tabs:[],
+//            },
             tr:cfg.tr
 
 
@@ -68,7 +77,31 @@
                     }
                 },
                 switch_to_tab:function(kws){
-                    self.show_tab(kws.tab_name)
+
+                    if(kws.named_tabs){
+                        // 传入named_tabs，造成tabs的切换
+                        var next_tabs = self.named_tabs[kws.named_tabs]
+                    }else {
+                        var next_tabs = self.tabs
+                    }
+                    self.tab_stack.push( {
+                        widget:'com-widget-el-tab' ,
+                        tabs:next_tabs,
+                        crt_tab_name:kws.tab_name,
+                        par_row:kws.row,
+
+                    })
+
+//                    if(self.tabgroup.crt_tabs != next_tabs){
+////                        if(self.tabgroup.crt !='_main'){ // !=_main 证明有当前 tabs
+//                            self.tab_stack.push( {
+//                                tabs:self.tabgroup.crt_tabs,
+//                                crt:self.tabgroup.crt
+//                            })
+////                        }
+//                        self.tabgroup.crt_tabs = next_tabs
+//                    }
+//                    self.show_tab(kws.tab_name)
                     self.crt_row= kws.row
                 },
                 update_or_insert:function(kws){
@@ -86,20 +119,52 @@
 
             })
 
+            eventBus.$on('switch_to_tab',this.op_funs.switch_to_tab)
         },
         computed:{
-            normed_tabs:function(){
-                var self=this
-                var tabs = this.tabgroup.tabs
-                var out_tabs = ex.filter(tabs,function(tab){
-                    if(tab.show){
-                        return ex.boolExpress(self.crt_row,tab.show)
-                    }else{
-                        return true
+            pathable_tab_names:function(){
+                var names =[]
+                var last_stack=null
+                ex.each(this.tab_stack,function(stack){
+                    if(last_stack){
+                        var last_crt_tab = ex.findone(last_stack.tabs,{name:last_stack.crt_tab_name})
+                        names.push(last_crt_tab.label)
                     }
+                    last_stack = stack
                 })
-                return out_tabs
-            }
+                return names
+
+//                var self=this
+//                var all_tabs = ex.map(this.tab_stack,function(stack){
+//                    return stack.tabs
+//                })
+//                var tabs = ex.filter(all_tabs,function(item){
+//                    return item != self.tabs
+//                })
+//                return tabs
+            },
+//            all_tabs:function(){
+//                var tabs = [this.tabgroup].concat(this.tab_stack)
+//                return tabs
+//            },
+//            normed_tabs:function(){
+//                var self=this
+//                var tabs =self.tabs
+//                for(var k in self.named_tabs){
+//                    var tab_item = self.named_tabs[k]
+//                    tabs=tabs.concat(tab_item)
+//                }
+//
+////                var tabs = this.tabgroup.crt_tabs
+//                var out_tabs = ex.filter(tabs,function(tab){
+//                    if(tab.show){
+//                        return ex.boolExpress(self.crt_row,tab.show)
+//                    }else{
+//                        return true
+//                    }
+//                })
+//                return out_tabs
+//            }
         },
         methods:{
 
@@ -112,30 +177,50 @@
 //            on_select_group_change:function(sel,v){
 //                this.selected= sel
 //            },
-            back_to_main_page:function(){
-                this.tabgroup.crt='main'
+            pop_tab_stack:function(){
+
+                if( this.tab_stack.length != 0){
+                   this.tab_stack.pop()
+                }
+//                if(this.tab_stack.length==0){
+//                    this.tabgroup.crt='_main'
+//                    this.tabgroup.crt_tabs=[]
+//                }
                 var self=this
                 Vue.nextTick(function(){
                     self.$refs.e_table.doLayout()
                 })
 
             },
-            show_tab:function(name){
-                this.tabgroup.crt = name
-                var self =this
-
-                Vue.nextTick(function(){
-                    self.$refs['_tab_'+name][0].on_show()
-                })
-
-            },
-            handleClick(tab, event) {
-                this.show_tab(tab.name)
-            },
+//            show_tab:function(name){
+//                this.tabgroup.crt = name
+//                var self =this
+//                Vue.nextTick(function(){
+//                    self.$refs['_tab_'+name][0].on_show()
+//                })
+//            },
+//            handleClick(tab, event) {
+//                this.show_tab(tab.name)
+//            },
             get_childs:function(par){
                 this.search_args._par=par.value
                 this.search()
             },
+
+
+            get_tab_name:function(tabs){
+                if(tabs==this.tabs){
+                    return ''
+                }else{
+                    for(var k in this.named_tabs){
+                        var tmp_tabs = this.named_tabs[k]
+                        if(tmp_tabs == tabs){
+                            return k
+                        }
+                    }
+                    return 'No Name Found'
+                }
+            }
 
         }
 
@@ -183,10 +268,13 @@
     <div v-if="page_label" style="border-left: 3px solid #3e8ebd;padding-left: 1em;margin-bottom: 5px;">
         <b v-text="page_label"></b>
         <span style="display: inline-block;width: 2em;"></span>
+        <ol class="breadcrumb" style="display: inline-block;background-color: inherit;margin-bottom: 0;padding: 0"  v-show="pathable_tab_names.length >0 ">
+            <li v-for="name in pathable_tab_names"><span v-text="name"></span></li>
+        </ol>
         <button type="button"
                 class="btn btn-warning btn-xs"
-                v-show="tabgroup.crt != 'main'"
-                @click="back_to_main_page()">
+                v-show="tab_stack.length > 0"
+                @click="pop_tab_stack()">
             <i class="fa fa-arrow-circle-o-left fa-lg"></i><span v-text="tr.back"></span></button>
     </div>
 
@@ -194,7 +282,7 @@
     {% endblock %}
 
     {% block tab-content %}
-    <div id="main-page" class="rows-block flex-v flex-grow" v-show="tabgroup.crt =='main'">
+    <div id="main-page" class="rows-block flex-v flex-grow" v-show="tab_stack.length == 0">
 
 
         <div v-if="row_filters.length > 0" style="background-color: #fbfbf8;padding: 8px 1em;border-radius: 4px;margin-top: 8px">
@@ -203,7 +291,7 @@
 
         </div>
         <div  v-if="ops.length>0">
-            <div class="oprations" v-show="tabgroup.crt == 'main'" style="padding: 5px">
+            <div class="oprations" v-show="tab_stack.length ==0" style="padding: 5px">
                 <component v-for="op in ops"
                            :is="op.editor"
                            :ref="'op_'+op.name"
@@ -274,14 +362,6 @@
                 {% endblock %}
             </div>
             <div>
-                <!--<v-pagination @page-change="get_page($event)"-->
-                              <!--:total="row_pages.total"-->
-                              <!--size="small"-->
-                              <!--:page-size="row_pages.perpage"-->
-                              <!--@page-size-change="on_perpage_change($event)"-->
-                              <!--:layout="['total', 'prev', 'pager', 'next', 'sizer', 'jumper']">-->
-                <!--</v-pagination>-->
-
                 <el-pagination
                         @size-change="on_perpage_change"
                         @current-change="get_page"
@@ -295,30 +375,39 @@
             </div>
         </div>
     </div>
-    <div id="tab-wrap" v-if="tabgroup.crt!='main'" class="flex-grow" style="position: relative">
-        <div  style="position: absolute;bottom: 0;top: 0;left: 0;right: 0;" class="tab-full">
-                <el-tabs v-if="tabgroup.tabs.length >1" type="border-card"
-                         @tab-click="handleClick"
-                         style="width: 100%;height: 100%;"
-                         :value="tabgroup.crt" >
+    <div id="tab-wrap" v-if="tab_stack.length>0" class="flex-grow" style="position: relative">
 
-                    <!--<el-tab-pane v-for="tab in normed_tab( tabgroup.tabs )"-->
-                    <el-tab-pane v-for="tab in normed_tabs"
-                                 :name="tab.name">
-                        <span slot="label" v-text="tab.label"></span>
+        <com-widget-stack :ctx_list="tab_stack"></com-widget-stack>
 
-                        <component :is="tab.com" :tab_head="tab"
-                                   :par_row="crt_row"
-                                   :ref="'_tab_'+tab.name" @tab-event="on_tab_event($event)"></component>
+        <!--<div v-for="(tabs,index) in all_tabs" :key="index" v-show="tabs == tabgroup.crt_tabs"  style="position: absolute;bottom: 0;top: 0;left: 0;right: 0;" class="tab-full">-->
+
+                <!--&lt;!&ndash;<el-tabs  v-if="tabgroup.crt_tabs.length >1" type="border-card"&ndash;&gt;-->
+
+                <!--<el-tabs  v-if="tabs.length >1" type="border-card"-->
+                           <!--@tab-click="handleClick"-->
+                           <!--style="width: 100%;height: 100%;"-->
+                           <!--:value="tabgroup.crt" >-->
+
+                    <!--&lt;!&ndash;<el-tab-pane v-for="tab in normed_tab( tabgroup.tabs )"&ndash;&gt;-->
+                    <!--<el-tab-pane v-for="tab in tabs"-->
+                                 <!--:key="tab.name"-->
+                                 <!--:name="tab.name">-->
+                        <!--<span slot="label" v-text="tab.label" ></span>-->
+
+                        <!--<component :is="tab.com" :tab_head="tab"-->
+                                   <!--:par_row="crt_row"-->
+                                   <!--:ref="'_tab_'+tab.name" @tab-event="on_tab_event($event)"></component>-->
 
 
-                    </el-tab-pane>
-                </el-tabs>
+                    <!--</el-tab-pane>-->
+                <!--</el-tabs>-->
 
-                    <component v-else v-for="tab in tabgroup.tabs"  :is="tab.com" :tab_head="tab"
-                               :par_row="crt_row"
-                               :ref="'_tab_'+tab.name" @tab-event="on_tab_event($event)"></component>
-        </div>
+                <!--<component v-else v-for="tab in tabs"  :is="tab.com" :tab_head="tab"-->
+                           <!--:par_row="crt_row"-->
+                           <!--:ref="'_tab_'+tab.name" @tab-event="on_tab_event($event)"></component>-->
+
+
+        <!--</div>-->
             <!--</div>-->
 
 
