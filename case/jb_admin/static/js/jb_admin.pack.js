@@ -1588,7 +1588,11 @@ function pop_layer(com_ctx, component_name, callback, layerConfig) {
         resize: true,
         resizing: function resizing(layero) {
             var total_height = $('#fields-pop-' + pop_id).parents('.layui-layer').height();
-            $('#fields-pop-' + pop_id).parents('.layui-layer-content').height(total_height - 42);
+            if (this.title) {
+                $('#fields-pop-' + pop_id).parents('.layui-layer-content').height(total_height - 42);
+            } else {
+                $('#fields-pop-' + pop_id).parents('.layui-layer-content').height(total_height);
+            }
         },
         //shadeClose: true, //点击遮罩关闭
         content: '<div id="fields-pop-' + pop_id + '">\n                    <component :is="component_name" :com_ctx="com_ctx" @finish="on_finish($event)"></component>\n                </div>',
