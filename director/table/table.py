@@ -17,6 +17,7 @@ from django.core.exceptions import FieldDoesNotExist
 from helpers.director.middleware.request_cache import get_request_cache
 from helpers.director.model_func.field_proc import BaseFieldProc
 from helpers.func.collection.container import evalue_container
+
 from django.core.paginator import Paginator
 
 
@@ -445,13 +446,19 @@ class ModelTable(object):
         return []
     
     def get_data_context(self):
+        rows =  self.get_rows()
+        table_layout = self.getTableLayout(rows)
         return {
-            'rows': self.get_rows(),
+            'rows': rows,
+            'table_layout': table_layout,
             'row_pages' : self.getRowPages(), #self.pagenum.get_context(),  
             'search_args':self.search_args, 
             'footer': self.footer,
             'parents': self.getParents(),
         }
+    
+    def getTableLayout(self, rows): 
+        return {}
     
     def getRowPages(self): 
         return self.pagenum.get_context()
@@ -506,6 +513,11 @@ class ModelTable(object):
         return heads 
     
     def footer_by_dict(self, dc): 
+        """
+        将 {'field':'sumvalue'} 形式的字典，转换为
+        [sumvalue] 这样的数组，便于前端element table 的foot 显示。
+        
+        """
         heads= self.get_light_heads()
         footer = []
         for head in heads:
@@ -699,5 +711,48 @@ class ModelTable(object):
             ws.append(row)        
         
         return wb
+
+class PlainTable(ModelTable):
+    def __init__(self,_page=1,row_sort=[],row_filter={},row_search= '',crt_user=None,perpage=None,**kw):
+        """
+        kw['search_args']只是一个记录，在获取到rows时，一并返回前端页面，便于显示。
+        而真正的查询参数已经被路由到各个查询组件中，具体参见 cls.parse_request / gen_from_search_args 函数
+        如果需要设置查询的默认参数，需要到 cls.clean_search_args中去设置
         
+        """
+        self.search_args = kw.get('search_args', {})
+        
+        self.kw=kw
+        self.crt_user=crt_user 
+        self.page=_page
+        self.footer = []
+    
+    def get_head_context(self):
+        """
+        有些时候，最先不需要返回rows，而只返回filters，head等，等待用户选择后，才返回rows
+        """
+        ops = self.get_operation()
+        ops = evalue_container(ops)
+        return {
+            'heads':self.get_heads(),
+            'rows': [], #self.get_rows(),
+            'row_pages':{}, # self.pagenum.get_context(),
+            'row_sort':self.getRowSort(),
+            'row_filters': self.getRowFilters() , #self.row_filter.get_context(),
+            'search_args': {},
+            #'search_tip':self.row_search.get_context(),
+            'director_name': self.get_director_name(),#model_to_name(self.model),
+            'ops' : ops
+        }  
+    
+    def getRowSort(self): 
+        return {
+            'sortable': [],
+        }
+    
+    def getRowFilters(self): 
+        return {}
+    
+    def getRowPages(self): 
+        return {}  
         

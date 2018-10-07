@@ -124,7 +124,7 @@ class ModelFields(forms.ModelForm):
                     field = model._meta.get_field(k)
                     if field_map.get(field.__class__):
                         mapper_cls = field_map.get(field.__class__)
-                        if hasattr(mapper_cls,'clean_field') and dc.get(k):
+                        if hasattr(mapper_cls,'clean_field'):
                             dc[k] =  mapper_cls().clean_field(dc,k)
                         
                 field_path = model_name+'.'+k

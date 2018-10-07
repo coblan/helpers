@@ -12,7 +12,7 @@ var ajax_table={
             ops:heads_ctx.ops || [],
             rows:[],
             row_pages:{},
-            //search_tip:this.kw.search_tip,
+            selectable:heads_ctx.selectable || true,
 
             selected:[],
             del_info:[],
@@ -28,7 +28,7 @@ var ajax_table={
     //        this.get_data()
     //    }
     //},
-    template:`<div class="rows-block flex-v" style="position: absolute;top:0;left:0;bottom: 0;right:0;overflow: auto;padding-bottom: 3em;" >
+    template:`<div class="rows-block flex-v" style="position: absolute;top:0;left:0;bottom: 0;right:0;overflow: auto;padding-bottom: 1em;" >
         <div class='flex' style="min-height: 3em;" v-if="row_filters.length > 0">
             <com-filter class="flex" :heads="row_filters" :search_args="search_args"
                         @submit="search()"></com-filter>
@@ -53,6 +53,7 @@ var ajax_table={
                               :data="rows"
                               border
                               show-summary
+                              :span-method="arraySpanMethod"
                               :fit="false"
                               :stripe="true"
                               size="mini"
@@ -61,13 +62,13 @@ var ajax_table={
                               :summary-method="getSum"
                               height="100%"
                               style="width: 100%">
-                        <el-table-column
-                                type="selection"
-                                width="55">
-                        </el-table-column>
 
+                            <el-table-column
+                                    v-if="selectable"
+                                     type="selection"
+                                    :width="55">
+                            </el-table-column>
                         <template  v-for="head in heads">
-
                             <el-table-column v-if="head.editor"
                                              :show-overflow-tooltip="is_show_tooltip(head) "
                                              :label="head.label"
@@ -97,7 +98,7 @@ var ajax_table={
             </div>
 
         </div>
-          <div>
+          <div v-if="row_pages.crt_page">
                     <el-pagination
                         @size-change="on_perpage_change"
                         @current-change="get_page"
@@ -149,43 +150,17 @@ var ajax_table={
             var dc = {fun:'add_new',init_fields:init_fields }
             ex.assign(inn_kws,dc)
             ex.vueSuper(this,inn_kws)
+        },
+        arraySpanMethod:function({ row, column, rowIndex, columnIndex }){
+            if(this.table_layout){
+                return this.table_layout[`${rowIndex},${columnIndex}`] || [1,1]
+            }else{
+                return [1,1]
+            }
+            //var head = this.heads[columnIndex]
+
+            //return [1,1]
         }
-        //del_item:function () {
-        //    if (this.selected.length==0){
-        //        return
-        //    }
-        //    var del_obj={}
-        //    for(var j=0;j<this.selected.length;j++){
-        //        var pk = this.selected[j]
-        //        for(var i=0;i<this.rows.length;i++){
-        //            if(this.rows[i].pk.toString()==pk){
-        //                if(!del_obj[this.rows[i]._class]){
-        //                    del_obj[this.rows[i]._class]=[]
-        //                }
-        //                del_obj[this.rows[i]._class].push(pk)
-        //            }
-        //        }
-        //    }
-        //    var out_str=''
-        //    for(var key in del_obj){
-        //        out_str += (key+':'+ del_obj[key].join(':')+',')
-        //    }
-        //    location=ex.template("{engine_url}/del_rows?rows={rows}&next={next}",{engine_url:engine_url,
-        //        rows:encodeURI(out_str),
-        //        next:encodeURIComponent(location.href)})
-        //},
-        //goto_page:function (page) {
-        //    this.search_args._page=page
-        //    this.search()
-        //},
-        //add_new:function () {
-        //    var  url = ex.template('{engine_url}/{page}.edit/?next={next}',{
-        //        engine_url:engine_url,
-        //        page:page_name,
-        //        next:encodeURIComponent(ex.appendSearch(location.pathname,search_args))
-        //    })
-        //    location = url
-        //},
     }
 }
 

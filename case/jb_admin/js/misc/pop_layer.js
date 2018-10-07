@@ -12,7 +12,12 @@ export  function pop_layer (com_ctx,component_name,callback,layerConfig){
         resize:true,
         resizing: function(layero){
             var total_height= $('#fields-pop-'+pop_id).parents('.layui-layer').height()
-            $('#fields-pop-'+pop_id).parents('.layui-layer-content').height(total_height-42)
+            if(this.title){
+                $('#fields-pop-'+pop_id).parents('.layui-layer-content').height(total_height-42)
+            }else{
+                $('#fields-pop-'+pop_id).parents('.layui-layer-content').height(total_height)
+            }
+
         },
         //shadeClose: true, //点击遮罩关闭
         content:`<div id="fields-pop-${pop_id}">

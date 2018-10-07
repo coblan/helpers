@@ -1,7 +1,10 @@
 
 var switch_to_tab = {
     props:['rowData','field','index'],
-    template:'<span v-text="rowData[field]" @click="goto_tab()" class="clickable"></span>',
+    template:`<span @click="goto_tab()" class="clickable">
+     <component v-if="head.inn_editor" :is="head.inn_editor" :rowData="rowData" :field="field" :index="index"></component>
+    <span v-else v-text="rowData[field]"></span>
+    </span>`,
     created:function(){
         // find head from parent table
         var table_par = this.$parent
@@ -19,10 +22,22 @@ var switch_to_tab = {
     },
     methods:{
         goto_tab:function(){
-            this.$emit('on-custom-comp',
-                {name:'switch_to_tab',
-                tab_name:this.head.tab_name,
-                row:this.rowData})
+            //this.$emit('on-custom-comp',
+            //    {
+            //        name:'switch_to_tab',
+            //        tab_name:this.head.tab_name,
+            //        named_tabs:this.head.named_tabs,
+            //        row:this.rowData
+            //    }
+            //)
+            eventBus.$emit('switch_to_tab',
+                {
+                    name:'switch_to_tab',
+                    tab_name:this.head.tab_name,
+                    named_tabs:this.head.named_tabs,
+                    row:this.rowData
+                })
+
         }
     }
 }

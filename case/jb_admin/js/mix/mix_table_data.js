@@ -2,7 +2,9 @@ var mix_table_data={
     data:function(){
         return {
             op_funs:{},
-            changed_rows:[]
+            changed_rows:[],
+
+            table_layout:{},
         }
     },
     mounted:function(){
@@ -324,9 +326,11 @@ var mix_table_data={
 
                 self.rows = resp.get_rows.rows
                 self.row_pages = resp.get_rows.row_pages
-                self.search_args=resp.get_rows.search_args
+                //self.search_args=resp.get_rows.search_args
+                ex.vueAssign(self.search_args,resp.get_rows.search_args)
                 self.footer=resp.get_rows.footer
                 self.parents=resp.get_rows.parents
+                self.table_layout=resp.get_rows.table_layout
                 cfg.hide_load()
             })
         },

@@ -44,6 +44,7 @@ import * as change_order from  './table_editor/change_order.js'
 import * as digit from  './table_editor/digit.js'
 import * as append_html_shower from  './table_editor/append_html_shower.js'
 import * as array_obj_shower from  './table_editor/array_obj_shower.js'
+import * as pop_table from  './table_editor/pop_table.js'
 
 // field editor
 import * as field_label_shower from  './field_editor/label_shower.js'
@@ -86,3 +87,7 @@ import * as nice_validator_rule from  './nice_validator_rule.js'
 // top_heads
 import * as dropdown from  './header/dropdown.js'
 import * as sm_link from  './header/sm_link.js'
+
+//ui
+import * as stack_widget from './misc/stack_widget'
+import * as el_tab_widget from './misc/el_tab_widget'
