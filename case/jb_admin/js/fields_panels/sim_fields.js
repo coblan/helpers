@@ -66,7 +66,7 @@ var com_sim_fields = {
            <td class="field-label-td"></td>
                 <td colspan="1">
                     <div class="submit-block">
-                        <button @click="panel_submit" type="btn"
+                        <button @click="submit" type="btn"
                             :class="['btn',btnCls]"><span v-text="okBtn"></span></button>
                     </div>
                  </td>
@@ -76,14 +76,18 @@ var com_sim_fields = {
 
         </div>`,
     methods:{
-        panel_submit:function(){
-            if(this.isValid()){
-                this.$emit('submit')
-            }
-        },
+        //panel_submit:function(){
+        //    if(this.isValid()){
+        //        this.$emit('submit')
+        //    }
+        //},
         show_msg:function(msg,event){
             layer.tips(msg, event.target);
+        },
+        after_save:function(row){
+            this.$emit('after-save',row)
         }
+
     }
 }
 

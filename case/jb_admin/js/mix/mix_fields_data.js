@@ -91,6 +91,7 @@ var mix_fields_data ={
                     self.showErrors(rt.errors)
                 }else{
                     cfg.hide_load(2000)
+                    ex.vueAssign(self.row,rt.row)
                     self.after_save(rt.row)
                     self.setErrors({})
                 }
@@ -117,7 +118,7 @@ var mix_fields_data ={
 
         },
         after_save:function(new_row){
-            ex.assign(this.row,new_row)
+            //ex.assign(this.row,new_row)
         },
         showErrors:function(errors){
             // 落到 nice validator去
