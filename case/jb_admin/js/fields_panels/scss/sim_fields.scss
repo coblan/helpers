@@ -26,6 +26,27 @@
   }
 }
 
+.sim-fields.no-label{
+    .field-label-td{
+      display: none;
+    }
+    .field-input{
+      width: 100%;
+      text-align: left;
+    }
+    .table-fields{
+      width: 100%;
+    }
+    .submit-block{
+      margin-top: 1em;
+      text-align: left;
+
+      button{
+        width: 100%;
+      }
+    }
+}
+
 .sim-fields.field-panel.pop{
     padding-top: 8px;
 

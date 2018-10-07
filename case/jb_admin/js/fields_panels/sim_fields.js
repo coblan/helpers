@@ -63,7 +63,7 @@ var com_sim_fields = {
         </tr>
 
            <tr>
-           <td></td>
+           <td class="field-label-td"></td>
                 <td colspan="1">
                     <div class="submit-block">
                         <button @click="panel_submit" type="btn"
