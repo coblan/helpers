@@ -30,6 +30,9 @@ var mix_fields_data ={
         setErrors:function(errors){
             // errors:{field:['xxx','bbb']}
             var errors=ex.copy(errors)
+            if(!this.heads){
+                return
+            }
             ex.each(this.heads,function(head){
                 if(errors[head.name]){
                     Vue.set(head,'error',errors[head.name].join(';'))
