@@ -128,15 +128,16 @@ msg-bottom  nice validator的位置在下面，默认在右侧
     .msg-box.n-right{
         position: absolute;
         left: 100%;
-        transform:translateX(40px)
+        transform:translateX(40px);
     }
 }
 
 .field-panel.msg-bottom{
     .msg-box.n-right{
       position: absolute;
-      left: 1em;
+      left: 3px;
       bottom: 0;
+      transform:translateX(0);
     }
 }
 
