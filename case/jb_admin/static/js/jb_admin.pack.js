@@ -1898,6 +1898,9 @@ var mix_fields_data = {
         setErrors: function setErrors(errors) {
             // errors:{field:['xxx','bbb']}
             var errors = ex.copy(errors);
+            if (!this.heads) {
+                return;
+            }
             ex.each(this.heads, function (head) {
                 if (errors[head.name]) {
                     Vue.set(head, 'error', errors[head.name].join(';'));
@@ -3976,7 +3979,7 @@ var op_a = {
     },
     methods: {
         operation_call: function operation_call() {
-            this.$emit('operation', this.head.name);
+            this.$emit('operation', this.head.name || this.head.fun);
         },
         set_enable: function set_enable(yes) {
             this.enable = yes;

@@ -22,7 +22,7 @@ var op_a = {
     },
     methods:{
         operation_call:function(){
-            this.$emit('operation',this.head.name)
+            this.$emit('operation',this.head.name || this.head.fun)
         },
         set_enable:function(yes){
             this.enable= yes
