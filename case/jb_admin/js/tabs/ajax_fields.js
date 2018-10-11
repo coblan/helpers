@@ -13,7 +13,7 @@ var ajax_fields={
 
     <div>
         <div class='field-panel suit' id="form" >
-            <field  v-for='head in heads' :key="head.name" :head="head" :row='row'></field>
+            <field  v-for='head in normed_heads' :key="head.name" :head="head" :row='row'></field>
         </div>
     </div>
 

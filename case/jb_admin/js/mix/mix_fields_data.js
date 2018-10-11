@@ -14,7 +14,39 @@ var mix_fields_data ={
             }
         })
         self.setErrors({})
+        ex.each(this.heads,function(head){
+            if(typeof head.readonly=='string'){
+                head._org_readonly=head.readonly
+                head.readonly=ex.eval(head._org_readonly,{row:self.row})
+            }
+        })
     },
+    computed:{
+        normed_heads:function(){
+            var self=this
+            ex.each(self.heads,function(head){
+                if( head._org_readonly){
+                    head.readonly=ex.eval(head._org_readonly,{row:self.row})
+                }
+            })
+            var heads = self.heads
+            return heads
+
+        }
+    },
+    //watch:{
+    //    row:function(v){
+    //        var self=this
+    //        Vue.nextTick(function(){
+    //            ex.each(self.heads,function(head){
+    //                if( head._org_readonly){
+    //                    head.readonly=ex.eval(head._org_readonly,{row:v})
+    //                }
+    //            })
+    //        })
+    //
+    //    }
+    //},
     methods:{
         on_operation:function(op){
             var fun_name = op.fun || op.name
