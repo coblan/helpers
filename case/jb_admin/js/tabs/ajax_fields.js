@@ -107,16 +107,19 @@ var get_data={
 
 var after_save={
     update_or_insert:function(self,new_row,kws){
-        var old_row= self.row
-        self.$emit('tab-event',{name:'update_or_insert',new_row:new_row,old_row:old_row})
+        var old_row= self.old_row
+        // 要update_or_insert ，证明一定是 更新了 par_row
+        ex.vueAssign(self.par_row,new_row)
+        self.$emit('tab-event',{name:'update_or_insert',new_row:self.par_row,old_row:old_row})
     },
     do_nothing:function(self,new_row,kws){
     },
+
     update_par_row_from_db:function(self,new_row,kws){
         //
         var post_data=[{fun:'get_row',director_name:self.par_row._director_name,pk:self.par_row.pk}]
         ex.post('/d/ajax',JSON.stringify(post_data),function(resp){
-            ex.assign(self.par_row,resp.get_row)
+            ex.vueAssign(self.par_row,resp.get_row)
         })
     }
 }

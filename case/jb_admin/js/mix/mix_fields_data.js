@@ -71,21 +71,12 @@ var mix_fields_data ={
 
         },
         save:function () {
-            //var self =this;
-            //this.setErrors({})
-            //ex.vueBroadCall(self,'commit')
-            //if(!this.isValid()){
-            //    return
-            //}
-            //if(self.before_save() == 'break'){
-            //    return
-            //}
-            //var loader = layer.load(2)
             var self=this
             cfg.show_load()
 
 
             var post_data=[{fun:'save_row',row:this.row}]
+            this.old_row=ex.copy(this.row)
             ex.post('/d/ajax',JSON.stringify(post_data),function (resp) {
                 var rt = resp.save_row
                 if(rt.errors){

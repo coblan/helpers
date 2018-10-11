@@ -15,6 +15,7 @@ var multi_chosen={
                 self.$emit('input',$(this).val())
             });
             self.setValue(self.value)
+            $(self.$el).siblings('.chosen-container').removeAttr('style')
         })
     },
     watch:{

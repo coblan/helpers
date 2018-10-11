@@ -7,14 +7,14 @@ Vue.component('com-widget-el-tab',{
                            :value="ctx.crt_tab_name" >
 
                     <!--<el-tab-pane v-for="tab in normed_tab( tabgroup.tabs )"-->
-                    <el-tab-pane v-for="tab in ctx.tabs"
+                    <el-tab-pane v-for="tab in normed_tab"
                                  :key="tab.name"
                                  :name="tab.name">
                         <span slot="label" v-text="tab.label" ></span>
 
                         <component :is="tab.com" :tab_head="tab"
                                    :par_row="ctx.par_row"
-                                   :ref="'_tab_'+tab.name" @tab-event="on_tab_event($event)"></component>
+                                   :ref="'_tab_'+tab.name" @tab-event="up_event($event)"></component>
 
 
                     </el-tab-pane>
@@ -22,7 +22,7 @@ Vue.component('com-widget-el-tab',{
 
                 <component v-else v-for="tab in ctx.tabs"  :is="tab.com" :tab_head="tab"
                            :par_row="ctx.par_row"
-                           :ref="'_tab_'+tab.name" @tab-event="on_tab_event($event)"></component>
+                           :ref="'_tab_'+tab.name" @tab-event="up_event($event)"></component>
     </div>`,
    watch:{
        'ctx.crt_tab_name':function (v){
@@ -32,9 +32,21 @@ Vue.component('com-widget-el-tab',{
     mounted:function(){
         this.show_tab(this.ctx.crt_tab_name)
     },
+    computed:{
+        normed_tab:function(){
+            var tabs = this.ctx.tabs
+            var par_row = this.ctx.par_row
+            var out_tabs = ex.filter(tabs,function(tab){
+            if(tab.show){
+                return ex.boolExpress(par_row,tab.show)
+                }else{
+                    return true
+                }
+            })
+            return out_tabs
+        }
+    },
     methods:{
-
-
         show_tab:function(name){
             this.ctx.crt_tab_name=name
             //this.crt_tab_name = name
@@ -46,5 +58,8 @@ Vue.component('com-widget-el-tab',{
         handleClick(tab, event) {
             this.show_tab(tab.name)
         },
+        up_event:function(event){
+            this.$emit('win-event',event)
+        }
     }
 })

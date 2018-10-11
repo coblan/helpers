@@ -128,8 +128,6 @@ var mix_table_data={
                     },1500)
 
                 })
-
-
             },
             ajax_row:function(kws){
                 // kws 是head : {'fun': 'ajax_row', 'app': 'maindb', 'ajax_fun': 'modify_money_pswd', 'editor': 'com-op-btn', 'label': '重置资金密码', },
@@ -144,6 +142,33 @@ var mix_table_data={
                 ex.post('/d/ajax/'+kws.app,JSON.stringify(post_data),function(resp){
                     cfg.hide_load(2000)
                 })
+            },
+            director_call:function(kws){
+                function bb(){
+                    cfg.show_load()
+                    ex.director_call(kws.director_name,{},function(resp){
+                        if(!resp.msg){
+                            cfg.hide_load(2000)
+                        }else{
+                            cfg.hide_load()
+                        }
+                        if(kws.after_call){
+                            self.op_funs[kws.after_call](resp)
+                            if(resp.msg){
+                                cfg.showMsg(resp.msg)
+                            }
+                        }
+                    })
+                }
+
+                if(kws.confirm_msg){
+                    layer.confirm(kws.confirm_msg, {icon: 3, title:'提示'}, function(index){
+                        layer.close(index)
+                        bb()
+                    })
+                }else{
+                    bb()
+                }
             },
             director_rows:function(kws){
                 // kws: {after_call:'update_or_insert_rows'}
@@ -171,12 +196,12 @@ var mix_table_data={
 
                 if(kws.confirm_msg){
                     layer.confirm(kws.confirm_msg, {icon: 3, title:'提示'}, function(index){
+                        layer.close(index)
                         bb()
                     })
                 }else{
                     bb()
                 }
-
             },
             emitEvent:function(e){
                 self.$emit(e)
@@ -275,10 +300,9 @@ var mix_table_data={
                 //pop_fields_layer(new_row,kws.heads,kws.ops,pop_id)
                 self.crt_row= crt_row
                 if(kws.tab_name){
-                    self.show_tab(kws.tab_name)
-
-                    //self.$emit('operation',{fun:'switch_to_tab',tab_name:kws.tab_editor,row:crt_row})
-                    //self.switch_to_tab(kws.tab_editor)
+                    //self.switch_to_tab(kws)
+                    self.$emit('operation',{fun:'switch_to_tab',tab_name:kws.tab_name,row:crt_row})
+                    //self.switch_to_tab({tab_name:kws.tab_name,row:crt_row})
 
                 }else{
                     var win=pop_fields_layer(crt_row,fields_ctx,function(new_row){

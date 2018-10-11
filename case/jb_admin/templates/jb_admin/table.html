@@ -51,10 +51,6 @@
             tabs:tabs,
             named_tabs:named_tabs,
 
-//            tabgroup:{
-//                crt:'_main',
-//                crt_tabs:[],
-//            },
             tr:cfg.tr
 
 
@@ -91,17 +87,6 @@
                         par_row:kws.row,
 
                     })
-
-//                    if(self.tabgroup.crt_tabs != next_tabs){
-////                        if(self.tabgroup.crt !='_main'){ // !=_main 证明有当前 tabs
-//                            self.tab_stack.push( {
-//                                tabs:self.tabgroup.crt_tabs,
-//                                crt:self.tabgroup.crt
-//                            })
-////                        }
-//                        self.tabgroup.crt_tabs = next_tabs
-//                    }
-//                    self.show_tab(kws.tab_name)
                     self.crt_row= kws.row
                 },
                 update_or_insert:function(kws){
@@ -120,6 +105,8 @@
             })
 
             eventBus.$on('switch_to_tab',this.op_funs.switch_to_tab)
+
+            self.$on('operation',self.on_operation)
         },
         computed:{
             pathable_tab_names:function(){
@@ -192,6 +179,7 @@
                 })
 
             },
+
 //            show_tab:function(name){
 //                this.tabgroup.crt = name
 //                var self =this
@@ -377,7 +365,7 @@
     </div>
     <div id="tab-wrap" v-if="tab_stack.length>0" class="flex-grow" style="position: relative">
 
-        <com-widget-stack :ctx_list="tab_stack"></com-widget-stack>
+        <com-widget-stack :ctx_list="tab_stack" @win-event="on_tab_event($event)"></com-widget-stack>
 
         <!--<div v-for="(tabs,index) in all_tabs" :key="index" v-show="tabs == tabgroup.crt_tabs"  style="position: absolute;bottom: 0;top: 0;left: 0;right: 0;" class="tab-full">-->
 
