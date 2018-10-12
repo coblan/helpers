@@ -20,7 +20,9 @@ class UserInfo(models.Model):
     head = models.CharField('头像', max_length = 300, blank = True)
     birthday = models.DateField(verbose_name= '出生日期', blank = True, null = True)
     address = models.CharField(verbose_name = '地址', max_length = 500, blank = True)
-
+    
+    class Meta:
+        abstract = True    
 
 class ValidatorCode(models.Model):
     code = models.CharField('验证码', max_length = 30)
