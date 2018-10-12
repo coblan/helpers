@@ -10,6 +10,7 @@ import re
 from . import  js_cfg
 from django.utils.translation import ugettext as _
 from helpers.director.shortcut import model_to_name, model_full_permit, add_permits, model_read_permit
+import json
 # Register your models here.
 class UserPage(TablePage):
     template='jb_admin/table.html'
@@ -138,7 +139,7 @@ class GroupForm(ModelFields):
     def clean_save(self):
         if not hasattr(self.instance, 'permitmodel'):
             PermitModel.objects.create(group = self.instance)
-        if self.kw.get('permit',None):
+        if self.kw.get('permit',None) != None:
             self.instance.permitmodel.names = ';'.join( self.kw.get('permit') ) 
             self.instance.permitmodel.save()
 
@@ -180,10 +181,20 @@ page_dc.update({
     'jb_group':GroupPage
 })
 
+def user_write(): 
+    model = User
+    fields = model._meta.get_fields()
+    permit = {
+        'read': [f.name for f in fields],
+        'write': [f.name for f in fields if f.name != 'is_superuser'],
+        '_can_create': True,
+        '_can_delete': True,
+    } 
+    return json.dumps(permit)
 
 
 
-permits = [('User.write', model_full_permit(User), model_to_name(User) , 'model'), 
+permits = [('User.write', user_write(), model_to_name(User) , 'model'), 
            ('User.read', model_read_permit(User), model_to_name(User) , 'model'), 
            ('Group', model_full_permit(Group), model_to_name(Group) , 'model'), 
            ]

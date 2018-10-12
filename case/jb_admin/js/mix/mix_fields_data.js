@@ -14,7 +14,49 @@ var mix_fields_data ={
             }
         })
         self.setErrors({})
+        ex.each(this.heads,function(head){
+            if(typeof head.readonly=='string'){
+                head._org_readonly=head.readonly
+                head.readonly=ex.eval(head._org_readonly,{row:self.row})
+            }
+            if(typeof head.show=='string'){
+                head._org_show=head.show
+                head.show=ex.eval(head._org_show,{row:self.row})
+            }
+        })
     },
+    computed:{
+        normed_heads:function(){
+            var self=this
+            ex.each(self.heads,function(head){
+                if( head._org_readonly){
+                    head.readonly=ex.eval(head._org_readonly,{row:self.row})
+                }
+            })
+            var heads = ex.filter(self.heads,function(head){
+                if(head._org_show){
+                    return ex.eval(head._org_show,{row:self.row})
+                }else{
+                    return true
+                }
+            })
+            return heads
+
+        }
+    },
+    //watch:{
+    //    row:function(v){
+    //        var self=this
+    //        Vue.nextTick(function(){
+    //            ex.each(self.heads,function(head){
+    //                if( head._org_readonly){
+    //                    head.readonly=ex.eval(head._org_readonly,{row:v})
+    //                }
+    //            })
+    //        })
+    //
+    //    }
+    //},
     methods:{
         on_operation:function(op){
             var fun_name = op.fun || op.name
@@ -30,6 +72,9 @@ var mix_fields_data ={
         setErrors:function(errors){
             // errors:{field:['xxx','bbb']}
             var errors=ex.copy(errors)
+            if(!this.heads){
+                return
+            }
             ex.each(this.heads,function(head){
                 if(errors[head.name]){
                     Vue.set(head,'error',errors[head.name].join(';'))
@@ -68,21 +113,12 @@ var mix_fields_data ={
 
         },
         save:function () {
-            //var self =this;
-            //this.setErrors({})
-            //ex.vueBroadCall(self,'commit')
-            //if(!this.isValid()){
-            //    return
-            //}
-            //if(self.before_save() == 'break'){
-            //    return
-            //}
-            //var loader = layer.load(2)
             var self=this
             cfg.show_load()
 
 
             var post_data=[{fun:'save_row',row:this.row}]
+            this.old_row=ex.copy(this.row)
             ex.post('/d/ajax',JSON.stringify(post_data),function (resp) {
                 var rt = resp.save_row
                 if(rt.errors){
@@ -91,6 +127,7 @@ var mix_fields_data ={
                     self.showErrors(rt.errors)
                 }else{
                     cfg.hide_load(2000)
+                    ex.vueAssign(self.row,rt.row)
                     self.after_save(rt.row)
                     self.setErrors({})
                 }
@@ -117,7 +154,7 @@ var mix_fields_data ={
 
         },
         after_save:function(new_row){
-            ex.assign(this.row,new_row)
+            //ex.assign(this.row,new_row)
         },
         showErrors:function(errors){
             // 落到 nice validator去

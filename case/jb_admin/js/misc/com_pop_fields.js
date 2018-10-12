@@ -1,15 +1,15 @@
 export var  com_pop_field= {
     props:['row','heads','ops'],
     mixins:[mix_fields_data,mix_nice_validator],
-    computed:{
-        real_heads:function(){
-            if(this.dict_heads){
-                return this.dict_heads
-            }else{
-                return this.heads
-            }
-        }
-    },
+    //computed:{
+    //    real_heads:function(){
+    //        if(this.dict_heads){
+    //            return this.dict_heads
+    //        }else{
+    //            return this.heads
+    //        }
+    //    }
+    //},
     methods:{
         after_save:function(new_row){
             //this.$emit('sub_success',{new_row:new_row,old_row:this.row})
@@ -32,7 +32,7 @@ export var  com_pop_field= {
     template:`<div class="flex-v" style="margin: 0;height: 100%;">
     <div class = "flex-grow" style="overflow: auto;margin: 0;">
         <div class="field-panel suit" >
-            <field  v-for="head in real_heads" :key="head.name" :head="head" :row="row"></field>
+            <field  v-for="head in normed_heads" :key="head.name" :head="head" :row="row"></field>
         </div>
       <div style="height: 1em;">
       </div>

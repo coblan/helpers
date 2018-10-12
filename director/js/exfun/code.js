@@ -51,7 +51,10 @@ export var code ={
 
             return obj[bb[1]] != target
         }
-    }
+    },
+    eval:function(js,scope){
+        return eval(js)
+    },
     //hashCode: function (input){
     //    var I64BIT_TABLE =
     //        'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-'.split('');

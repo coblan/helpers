@@ -9,6 +9,7 @@ var com_sim_fields = {
                 return '确定'
             }
             },
+        crossBtn:'',
         btnCls:{
             default:function(){
                 return 'btn-primary btn-sm'
@@ -61,12 +62,19 @@ var com_sim_fields = {
 
             </td>
         </tr>
-
-           <tr>
-           <td></td>
-                <td colspan="1">
+        <tr v-if="crossBtn" class="btn-row">
+            <td class="field-input-td" colspan="2">
                     <div class="submit-block">
-                        <button @click="panel_submit" type="btn"
+                        <button @click="submit" type="btn"
+                            :class="['btn',btnCls]"><span v-text="okBtn"></span></button>
+                    </div>
+                 </td>
+        </tr>
+           <tr v-else class="btn-row">
+               <td class="field-label-td"></td>
+                <td class="field-input-td" colspan="1">
+                    <div class="submit-block">
+                        <button @click="submit" type="btn"
                             :class="['btn',btnCls]"><span v-text="okBtn"></span></button>
                     </div>
                  </td>
@@ -76,14 +84,18 @@ var com_sim_fields = {
 
         </div>`,
     methods:{
-        panel_submit:function(){
-            if(this.isValid()){
-                this.$emit('submit')
-            }
-        },
+        //panel_submit:function(){
+        //    if(this.isValid()){
+        //        this.$emit('submit')
+        //    }
+        //},
         show_msg:function(msg,event){
             layer.tips(msg, event.target);
+        },
+        after_save:function(row){
+            this.$emit('after-save',row)
         }
+
     }
 }
 

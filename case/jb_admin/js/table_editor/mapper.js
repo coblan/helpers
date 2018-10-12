@@ -28,8 +28,11 @@ var mapper = {
                 var value = this.rowData[this.field]
                 var options = this.head.options
                 var opt = ex.findone(options,{value:value})
-                return opt['label']
-                //return options[value]
+                if(opt){
+                    return opt['label']
+                }else{
+                    return value
+                }
             }
 
         }

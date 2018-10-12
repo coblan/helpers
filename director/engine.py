@@ -106,6 +106,9 @@ class BaseEngine(object):
             return redirect(self.login_url+'?next='+request.get_full_path())
         
         page=page_cls(request, engin = self)
+        if hasattr(page, 'check_permit'):
+            page.check_permit()
+        
         ctx=page.get_context()
         # 如果返回的事 HttpResponse，表示已经处理完毕了，不需要附加其他属性。
         if isinstance(ctx, HttpResponse):
