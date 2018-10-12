@@ -19,6 +19,10 @@ var mix_fields_data ={
                 head._org_readonly=head.readonly
                 head.readonly=ex.eval(head._org_readonly,{row:self.row})
             }
+            if(typeof head.show=='string'){
+                head._org_show=head.show
+                head.show=ex.eval(head._org_show,{row:self.row})
+            }
         })
     },
     computed:{
@@ -29,7 +33,13 @@ var mix_fields_data ={
                     head.readonly=ex.eval(head._org_readonly,{row:self.row})
                 }
             })
-            var heads = self.heads
+            var heads = ex.filter(self.heads,function(head){
+                if(head._org_show){
+                    return ex.eval(head._org_show,{row:self.row})
+                }else{
+                    return true
+                }
+            })
             return heads
 
         }

@@ -533,7 +533,7 @@ class ModelTable(object):
                 if head['name']==self.pop_edit_field:
                     director_name = self.get_director_name()
                     #model_form = model_dc[self.model].get('fields')
-                    model_form = director.get(director_name+'.edit')
+                    model_form = director.get(self.get_edit_director_name())
                     form_obj = model_form(crt_user=self.crt_user)
                     #head['name'] ==self.pop_edit_field
                     head['editor'] = 'com-table-pop-fields'
@@ -601,9 +601,13 @@ class ModelTable(object):
                 dc= to_dict(inst, include=permit_fields,filt_attr=self.dict_row( inst))
             else:
                 dc = inst
-            dc['_director_name'] = director_name+'.edit'
+            dc['_director_name'] = self.get_edit_director_name()
             out.append(dc)
         return out
+    
+    @classmethod
+    def get_edit_director_name(cls): 
+        return cls.get_director_name() + '.edit'
     
 
     
@@ -631,6 +635,8 @@ class ModelTable(object):
         
         head_nams = [x['name'] for x in self.get_light_heads()]
         
+        #[todo] 这里需要弄清楚原理
+        #[todo] 优化，是否select_related,select_related的field限定在输出的head中
         if not query._fields:  # 如果这个属性部位空，证明已经调用了.values() or .values_list()
             for f in self.model._meta.get_fields():
                 if f.name in head_nams and isinstance(f, models.ForeignKey):
