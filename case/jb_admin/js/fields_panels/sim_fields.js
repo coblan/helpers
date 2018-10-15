@@ -28,19 +28,6 @@ var com_sim_fields = {
     components:window._baseInput,
     mixins:[mix_fields_data,mix_nice_validator],
     template:` <div class="field-panel sim-fields" style="text-align:center;">
-                <!--<com-table-fields :heads="heads" :row="row">-->
-                    <!--<slot>-->
-                    <!--<tr>-->
-                        <!--<td colspan="2">-->
-                            <!--<div class="submit-block">-->
-                                <!--<button @click="panel_submit" type="btn"-->
-                                    <!--:class="['btn',btnCls]"><span v-text="okBtn"></span></button>-->
-                            <!--</div>-->
-                         <!--</td>-->
-                    <!--</tr>-->
-                    <!--</slot>-->
-           <!--</com-table-fields>-->
-
            <table class="table-fields">
         <tr v-for="head in heads">
             <td class="field-label-td"  valign="top">
@@ -62,23 +49,26 @@ var com_sim_fields = {
 
             </td>
         </tr>
-        <tr v-if="crossBtn" class="btn-row">
-            <td class="field-input-td" colspan="2">
-                    <div class="submit-block">
-                        <button @click="submit" type="btn"
-                            :class="['btn',btnCls]"><span v-text="okBtn"></span></button>
-                    </div>
-                 </td>
-        </tr>
-           <tr v-else class="btn-row">
-               <td class="field-label-td"></td>
-                <td class="field-input-td" colspan="1">
-                    <div class="submit-block">
-                        <button @click="submit" type="btn"
-                            :class="['btn',btnCls]"><span v-text="okBtn"></span></button>
-                    </div>
-                 </td>
-           </tr>
+        <slot :row="row">
+             <tr v-if="crossBtn" class="btn-row">
+                <td class="field-input-td" colspan="2">
+                        <div class="submit-block">
+                            <button @click="submit" type="btn"
+                                :class="['btn',btnCls]"><span v-text="okBtn"></span></button>
+                        </div>
+                     </td>
+            </tr>
+               <tr v-else class="btn-row">
+                   <td class="field-label-td"></td>
+                    <td class="field-input-td" colspan="1">
+                        <div class="submit-block">
+                            <button @click="submit" type="btn"
+                                :class="['btn',btnCls]"><span v-text="okBtn"></span></button>
+                        </div>
+                     </td>
+               </tr>
+        </slot>
+
     </table>
 
 
