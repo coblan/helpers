@@ -127,6 +127,7 @@ class RowFilter(object):
         # 为了让前端不显示
         self.model_allowed_names =  allowed_names
         
+        # [todo] 应该把属于 model的字段，利用allowd_names 过滤掉
         self.names = self.names + self.range_fields #+ [x.get('name') for x in self.range_fields]
         self.valid_name= self.names  #[x for x in self.names if x in allowed_names]
         self.crt_user=user

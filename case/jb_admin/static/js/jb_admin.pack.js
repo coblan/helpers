@@ -1651,7 +1651,7 @@ function pop_layer(com_ctx, component_name, callback, layerConfig) {
             }
         },
         //shadeClose: true, //点击遮罩关闭
-        content: '<div id="fields-pop-' + pop_id + '">\n                    <component :is="component_name" :com_ctx="com_ctx" @finish="on_finish($event)"></component>\n                </div>',
+        content: '<div id="fields-pop-' + pop_id + '">\n                    <component :is="component_name" :ctx="com_ctx" @finish="on_finish($event)"></component>\n                </div>',
         end: function end() {
 
             //eventBus.$emit('openlayer_changed')
@@ -1896,6 +1896,9 @@ var mix_fields_data = {
             save: function save() {
                 //self.save()
                 self.submit();
+            },
+            submit: function submit() {
+                self.submit();
             }
         });
         self.setErrors({});
@@ -1995,7 +1998,6 @@ var mix_fields_data = {
         save: function save() {
             var self = this;
             cfg.show_load();
-
             var post_data = [{ fun: 'save_row', row: this.row }];
             this.old_row = ex.copy(this.row);
             ex.post('/d/ajax', JSON.stringify(post_data), function (resp) {
@@ -2024,16 +2026,13 @@ var mix_fields_data = {
             //    }
             //})
         },
-        //before_save:function(){
-        //    return 'continue'
-        //},
-        afterSave: function afterSave(resp) {},
+
         after_save: function after_save(new_row) {
             //ex.assign(this.row,new_row)
+            console.log('mix_fields_data.after_save');
         },
         showErrors: function showErrors(errors) {
             // 落到 nice validator去
-
         },
         clear: function clear() {
             this.row = {};

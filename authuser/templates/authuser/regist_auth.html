@@ -73,23 +73,6 @@
 
 
             },
-
-//            on_tab_event:function(e){
-//                this.op_funs[e.name](e)
-//            },
-//
-//            back_to_main_page:function(){
-//                this.tabgroup.crt='main'
-//            },
-//            show_tab:function(name){
-//                this.tabgroup.crt = name
-//                var self =this
-//
-//                Vue.nextTick(function(){
-//                    self.$refs['_tab_'+name][0].on_show()
-//                })
-//
-//            },
             get_attr:function(name){
                 if(name == undefined){
                     return false
@@ -134,7 +117,7 @@
         </div>
 
 
-        <com-sim-fields  :heads="heads" :row="row" ok-btn="注册" @submit="save"></com-sim-fields>
+        <com-sim-fields  :heads="heads" :row="row" ok-btn="注册" @submit="submit" @after-save="after_save"></com-sim-fields>
     </div>
     <div v-cloak v-show="step=='on-success'" style="text-align: center">
         <h2>注册成功，现在跳转！</h2>
