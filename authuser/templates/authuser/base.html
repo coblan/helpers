@@ -13,8 +13,14 @@
 		<script src="{% static 'lib/jquery3.2.1.min.js' %}"></script>
 		<link rel="stylesheet" href="{% static 'lib/font-awesome4.7/font-awesome4.7.min.css' %}">
 
-		<script src="https://cdn.bootcss.com/vue/2.5.16/vue.js"></script>
-		<link rel="stylesheet" href="{% static 'lib/bootstrap.min.css' %}">
+		<script src="{{ js_config.js_lib.vuejs }}"></script>
+
+		<link rel="stylesheet" href="{{ js_config.js_lib.bootstrap_css }}">
+		<script src="{{ js_config.js_lib.bootstrap }}"></script>
+
+		<!--<script src="https://cdn.bootcss.com/vue/2.5.16/vue.js"></script>-->
+
+		<!--<link rels="stylesheet" href="{% static 'lib/bootstrap.min.css' %}">-->
 
 
 		<!--<script src="{% static 'js/lib/jquery.min.js' %}"></script>-->
