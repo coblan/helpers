@@ -18,6 +18,8 @@ from helpers.maintenance.update_static_timestamp import js_stamp_dc
 
 def get_lib(request): 
     dc = {
+        'swiper': 'https://cdn.staticfile.org/Swiper/4.4.1/js/swiper.min.js',
+        'swiper_css': 'https://cdn.staticfile.org/Swiper/4.4.1/css/swiper.min.css',
         'site_pc_pack_js': '/static/js/site_pc.pack.js?t=%s'%js_stamp_dc.get('site_pc_pack_js'),
     }
     return dc
