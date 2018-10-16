@@ -332,7 +332,7 @@ var mix_table_data={
             self.rows=[]
 
             var post_data=[{fun:'get_rows',director_name:self.director_name,search_args:self.search_args}]
-            $.post('/d/ajax',JSON.stringify(post_data),function(resp){
+            ex.post('/d/ajax',JSON.stringify(post_data),function(resp){
 
                 self.rows = resp.get_rows.rows
                 self.row_pages = resp.get_rows.row_pages

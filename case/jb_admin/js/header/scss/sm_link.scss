@@ -1,0 +1,17 @@
+@media (max-width: 900px) {
+  .small-link{
+      .item{
+          display: block;
+          color:white;
+
+          margin: 0.6em 1.2em;
+          a{
+            color: white;
+          }
+        .space{
+          display: none;
+        }
+      }
+  }
+
+}
