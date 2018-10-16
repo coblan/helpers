@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 96);
+/******/ 	return __webpack_require__(__webpack_require__.s = 98);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -1018,7 +1018,7 @@ Vue.component('com-field-phone-code', {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-__webpack_require__(86);
+__webpack_require__(87);
 
 /*
  * config={
@@ -1284,7 +1284,7 @@ Vue.component('com-field-op-btn', {
 "use strict";
 
 
-__webpack_require__(87);
+__webpack_require__(88);
 
 var com_plain_fields = {
     props: {
@@ -1367,7 +1367,7 @@ window.pop_edit_local = pop_edit_local;
 "use strict";
 
 
-__webpack_require__(88);
+__webpack_require__(89);
 
 var com_sim_fields = {
     props: {
@@ -1395,7 +1395,7 @@ var com_sim_fields = {
     },
     components: window._baseInput,
     mixins: [mix_fields_data, mix_nice_validator],
-    template: ' <div class="field-panel sim-fields" style="text-align:center;">\n           <table class="table-fields">\n        <tr v-for="head in heads">\n            <td class="field-label-td"  valign="top">\n            <div class="field-label" style="position: relative">\n                <span v-text="head.label"></span>\n                <span class="req_star" v-if=\'head.required\'>*</span>\n            </div>\n\n            </td>\n            <td class="field-input-td" >\n            <div class="field-input">\n                <component v-if="head.editor" :is="head.editor"\n                     @field-event="$emit(\'field-event\',$event)"\n                     :head="head" :row="row"></component>\n                <span v-if="head.help_text" class="help-text clickable">\n                    <i style="color: #3780af;position: relative;top:10px;"   @click="show_msg(head.help_text,$event)" class="fa fa-question-circle" ></i>\n                </span>\n            </div>\n\n            </td>\n        </tr>\n        <slot :row="row">\n             <tr v-if="crossBtn" class="btn-row">\n                <td class="field-input-td" colspan="2">\n                        <div class="submit-block">\n                            <button @click="submit" type="btn"\n                                :class="[\'btn\',btnCls]"><span v-text="okBtn"></span></button>\n                        </div>\n                     </td>\n            </tr>\n               <tr v-else class="btn-row">\n                   <td class="field-label-td"></td>\n                    <td class="field-input-td" colspan="1">\n                        <div class="submit-block">\n                            <button @click="submit" type="btn"\n                                :class="[\'btn\',btnCls]"><span v-text="okBtn"></span></button>\n                        </div>\n                     </td>\n               </tr>\n        </slot>\n\n    </table>\n\n\n        </div>',
+    template: ' <div class="field-panel sim-fields" style="text-align:center;">\n           <table class="table-fields">\n        <tr v-for="head in heads">\n            <td class="field-label-td"  valign="top">\n            <div class="field-label">\n                <span class="label-content">\n                     <span v-text="head.label"></span>\n                     <span class="req_star" v-if=\'head.required\'>*</span>\n                </span>\n\n\n            </div>\n\n            </td>\n            <td class="field-input-td" >\n            <div class="field-input">\n                <component v-if="head.editor" :is="head.editor"\n                     @field-event="$emit(\'field-event\',$event)"\n                     :head="head" :row="row"></component>\n                <span v-if="head.help_text" class="help-text clickable">\n                    <i style="color: #3780af;position: relative;top:10px;"   @click="show_msg(head.help_text,$event)" class="fa fa-question-circle" ></i>\n                </span>\n            </div>\n\n            </td>\n        </tr>\n        <slot :row="row">\n             <tr v-if="crossBtn" class="btn-row">\n                <td class="field-input-td" colspan="2">\n                        <div class="submit-block">\n                            <button @click="submit" type="btn"\n                                :class="[\'btn\',btnCls]"><span v-text="okBtn"></span></button>\n                        </div>\n                     </td>\n            </tr>\n               <tr v-else class="btn-row">\n                   <td class="field-label-td"></td>\n                    <td class="field-input-td" colspan="1">\n                        <div class="submit-block">\n                            <button @click="submit" type="btn"\n                                :class="[\'btn\',btnCls]"><span v-text="okBtn"></span></button>\n                        </div>\n                     </td>\n               </tr>\n        </slot>\n\n    </table>\n\n\n        </div>',
     methods: {
         //panel_submit:function(){
         //    if(this.isValid()){
@@ -1423,7 +1423,7 @@ Vue.component('com-sim-fields', com_sim_fields);
 "use strict";
 
 
-__webpack_require__(89);
+__webpack_require__(90);
 
 Vue.component('com-head-dropdown', {
     props: ['head'],
@@ -1437,7 +1437,7 @@ Vue.component('com-head-dropdown', {
 "use strict";
 
 
-__webpack_require__(98);
+__webpack_require__(91);
 
 // header 上的小链接
 Vue.component('com-head-sm-link', {
@@ -1798,7 +1798,7 @@ window.pop_table_layer = pop_table_layer;
 "use strict";
 
 
-__webpack_require__(90);
+__webpack_require__(92);
 
 Vue.component('com-widget-stack', {
     props: ['ctx_list'],
@@ -1813,7 +1813,7 @@ Vue.component('com-widget-stack', {
 "use strict";
 
 
-__webpack_require__(91);
+__webpack_require__(93);
 
 var mix_ele_table_adapter = {
     mounted: function mounted() {
@@ -3036,7 +3036,7 @@ Vue.component('com-table-call-fun', call_fun);
 "use strict";
 
 
-__webpack_require__(92);
+__webpack_require__(94);
 var change_order = {
     props: ['rowData', 'field', 'index'],
     template: '<span class="change-order">\n    <span class="arrow" @click="up()">\n    <i  class="fa fa-long-arrow-up"></i>\n    </span>\n    <span class="arrow" @click="down()">\n     <i  class="fa fa-long-arrow-down"></i>\n    </span>\n    </span>',
@@ -3062,7 +3062,7 @@ Vue.component('com-table-change-order', change_order);
 
 var _mix_editor = __webpack_require__(2);
 
-__webpack_require__(93);
+__webpack_require__(95);
 
 var check_box = {
     props: ['rowData', 'field', 'index'],
@@ -3313,7 +3313,7 @@ Vue.component('com-table-label-shower', label_shower);
 "use strict";
 
 
-__webpack_require__(94);
+__webpack_require__(96);
 var line_text = {
     props: ['rowData', 'field', 'index'],
     template: '<div :class="[\'com-table-linetext\',{\'dirty\':is_dirty}]">\n        <span v-if="readonly" v-text="rowData[field]"></span>\n        <input v-else @change="on_changed()" style="width: 100%" type="text" v-model="rowData[field]">\n    </div>',
@@ -3826,7 +3826,7 @@ Vue.component('com-table-pop-table', pop_table);
 
 var _mix_editor = __webpack_require__(2);
 
-__webpack_require__(95);
+__webpack_require__(97);
 
 
 var select = {
@@ -4484,7 +4484,7 @@ $.validator.config({
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(77);
+var content = __webpack_require__(78);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -4510,7 +4510,7 @@ if(false) {
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(78);
+var content = __webpack_require__(79);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -4536,7 +4536,7 @@ if(false) {
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(79);
+var content = __webpack_require__(80);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -4562,7 +4562,7 @@ if(false) {
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(80);
+var content = __webpack_require__(81);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -4588,7 +4588,7 @@ if(false) {
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(85);
+var content = __webpack_require__(86);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -4714,7 +4714,7 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, ".sim-fields .table-fields {\n  margin: auto; }\n\n.sim-fields .field-label {\n  min-width: 5em;\n  text-align: left; }\n\n.sim-fields .field-input {\n  width: 23em;\n  text-align: left; }\n\n.sim-fields .submit-block {\n  margin-top: 1em;\n  text-align: left; }\n  .sim-fields .submit-block button {\n    min-width: 10em;\n    padding-left: 2em;\n    padding-right: 2em; }\n\n.sim-fields.no-label .field-label-td {\n  display: none; }\n\n.sim-fields.no-label .field-input {\n  width: 100%;\n  text-align: left; }\n\n.sim-fields.no-label .table-fields {\n  width: 100%; }\n\n.sim-fields.no-label .submit-block {\n  margin-top: 1em;\n  text-align: left; }\n  .sim-fields.no-label .submit-block button {\n    width: 100%; }\n\n.sim-fields.field-panel.pop {\n  padding-top: 8px; }\n  .sim-fields.field-panel.pop .field-input {\n    width: 20em; }\n  .sim-fields.field-panel.pop .submit-block {\n    margin-top: 10px; }\n    .sim-fields.field-panel.pop .submit-block button {\n      min-width: 8em; }\n\n.sim-fields.field-panel.mb {\n  padding: 1em; }\n  .sim-fields.field-panel.mb .field-label {\n    min-width: 5em;\n    text-align: right; }\n  .sim-fields.field-panel.mb .field-input {\n    width: auto; }\n  .sim-fields.field-panel.mb .submit-block {\n    margin-top: 10px; }\n    .sim-fields.field-panel.mb .submit-block button {\n      width: 100%; }\n", ""]);
+exports.push([module.i, ".sim-fields .table-fields {\n  margin: auto; }\n\n.sim-fields .field-label-td {\n  padding-right: 1em; }\n\n.sim-fields .field-label {\n  min-width: 5em;\n  text-align: left;\n  word-break: break-all; }\n  .sim-fields .field-label .label-content {\n    position: relative; }\n    .sim-fields .field-label .label-content .req_star {\n      top: -0.3em;\n      right: -0.6em; }\n\n.sim-fields .field-input {\n  width: 23em;\n  text-align: left; }\n\n.sim-fields .submit-block {\n  margin-top: 1em;\n  text-align: left; }\n  .sim-fields .submit-block button {\n    min-width: 10em;\n    padding-left: 2em;\n    padding-right: 2em; }\n\n.sim-fields.no-label .field-label-td {\n  display: none; }\n\n.sim-fields.no-label .field-input {\n  width: 100%;\n  text-align: left; }\n\n.sim-fields.no-label .table-fields {\n  width: 100%; }\n\n.sim-fields.no-label .submit-block {\n  margin-top: 1em;\n  text-align: left; }\n  .sim-fields.no-label .submit-block button {\n    width: 100%; }\n\n.sim-fields.field-panel.pop {\n  padding-top: 8px; }\n  .sim-fields.field-panel.pop .field-input {\n    width: 20em; }\n  .sim-fields.field-panel.pop .submit-block {\n    margin-top: 10px; }\n    .sim-fields.field-panel.pop .submit-block button {\n      min-width: 8em; }\n\n.sim-fields.field-panel.mb {\n  padding: 1em; }\n  .sim-fields.field-panel.mb .field-label {\n    min-width: 5em;\n    text-align: right; }\n  .sim-fields.field-panel.mb .field-input {\n    width: auto; }\n  .sim-fields.field-panel.mb .submit-block {\n    margin-top: 10px; }\n    .sim-fields.field-panel.mb .submit-block button {\n      width: 100%; }\n", ""]);
 
 // exports
 
@@ -4742,7 +4742,7 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, ".com-widget-stack {\n  position: absolute;\n  bottom: 0;\n  top: 0;\n  left: 0;\n  right: 0; }\n", ""]);
+exports.push([module.i, "@media (max-width: 900px) {\n  .small-link .item {\n    display: block;\n    color: white;\n    margin: 0.6em 1.2em; }\n    .small-link .item a {\n      color: white; }\n    .small-link .item .space {\n      display: none; } }\n", ""]);
 
 // exports
 
@@ -4756,7 +4756,7 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, ".table .el-table__row > td, .table tr > th, table.el-table__footer tr > td {\n  padding: 2px 0; }\n", ""]);
+exports.push([module.i, ".com-widget-stack {\n  position: absolute;\n  bottom: 0;\n  top: 0;\n  left: 0;\n  right: 0; }\n", ""]);
 
 // exports
 
@@ -4770,7 +4770,7 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, ".msg-hide .field .msg {\n  display: none; }\n\n.field .picture {\n  position: relative; }\n  .field .picture .msg-box {\n    position: absolute;\n    left: 260px; }\n", ""]);
+exports.push([module.i, ".table .el-table__row > td, .table tr > th, table.el-table__footer tr > td {\n  padding: 2px 0; }\n", ""]);
 
 // exports
 
@@ -4784,7 +4784,7 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, ".el-tabs__item.is-top.is-active {\n  color: #3e8ebd; }\n\n.el-tabs__item.is-top.is-active:after {\n  content: '';\n  display: block;\n  position: absolute;\n  top: 0;\n  left: 0;\n  right: 0;\n  width: 100%;\n  height: 3px;\n  background-color: #3e8ebd; }\n\n.tab-full .el-tabs {\n  display: flex;\n  flex-direction: column;\n  height: 100%; }\n  .tab-full .el-tabs .el-tabs__content {\n    flex-grow: 10;\n    position: relative; }\n\nbody {\n  height: 100%; }\n", ""]);
+exports.push([module.i, ".msg-hide .field .msg {\n  display: none; }\n\n.field .picture {\n  position: relative; }\n  .field .picture .msg-box {\n    position: absolute;\n    left: 260px; }\n", ""]);
 
 // exports
 
@@ -4798,7 +4798,7 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, ".table.flat-head th .cell {\n  white-space: nowrap; }\n", ""]);
+exports.push([module.i, ".el-tabs__item.is-top.is-active {\n  color: #3e8ebd; }\n\n.el-tabs__item.is-top.is-active:after {\n  content: '';\n  display: block;\n  position: absolute;\n  top: 0;\n  left: 0;\n  right: 0;\n  width: 100%;\n  height: 3px;\n  background-color: #3e8ebd; }\n\n.tab-full .el-tabs {\n  display: flex;\n  flex-direction: column;\n  height: 100%; }\n  .tab-full .el-tabs .el-tabs__content {\n    flex-grow: 10;\n    position: relative; }\n\nbody {\n  height: 100%; }\n", ""]);
 
 // exports
 
@@ -4812,7 +4812,7 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, ".jb-table-parent {\n  margin-bottom: 0; }\n", ""]);
+exports.push([module.i, ".table.flat-head th .cell {\n  white-space: nowrap; }\n", ""]);
 
 // exports
 
@@ -4826,7 +4826,7 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, ".change-order .arrow {\n  cursor: pointer;\n  display: inline-block;\n  padding: 0.2em 0.6em; }\n\n.change-order .arrow:hover {\n  color: #00c000; }\n", ""]);
+exports.push([module.i, ".jb-table-parent {\n  margin-bottom: 0; }\n", ""]);
 
 // exports
 
@@ -4840,7 +4840,7 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, ".com-table-checkbox.dirty input {\n  background-color: yellow; }\n", ""]);
+exports.push([module.i, ".change-order .arrow {\n  cursor: pointer;\n  display: inline-block;\n  padding: 0.2em 0.6em; }\n\n.change-order .arrow:hover {\n  color: #00c000; }\n", ""]);
 
 // exports
 
@@ -4854,7 +4854,7 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, ".com-table-linetext.dirty input {\n  background-color: yellow; }\n", ""]);
+exports.push([module.i, ".com-table-checkbox.dirty input {\n  background-color: yellow; }\n", ""]);
 
 // exports
 
@@ -4868,7 +4868,7 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, ".el-dropdown-menu__item.crt-value {\n  background-color: #eaf8ff; }\n\n.com-table-select.dirty {\n  background-color: yellow; }\n", ""]);
+exports.push([module.i, ".com-table-linetext.dirty input {\n  background-color: yellow; }\n", ""]);
 
 // exports
 
@@ -4882,13 +4882,27 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, ".dirty {\n  background-color: yellow; }\n", ""]);
+exports.push([module.i, ".el-dropdown-menu__item.crt-value {\n  background-color: #eaf8ff; }\n\n.com-table-select.dirty {\n  background-color: yellow; }\n", ""]);
 
 // exports
 
 
 /***/ }),
 /* 86 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(0)();
+// imports
+
+
+// module
+exports.push([module.i, ".dirty {\n  background-color: yellow; }\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 87 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
@@ -4914,7 +4928,7 @@ if(false) {
 }
 
 /***/ }),
-/* 87 */
+/* 88 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
@@ -4940,7 +4954,7 @@ if(false) {
 }
 
 /***/ }),
-/* 88 */
+/* 89 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
@@ -4966,7 +4980,7 @@ if(false) {
 }
 
 /***/ }),
-/* 89 */
+/* 90 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
@@ -4992,13 +5006,39 @@ if(false) {
 }
 
 /***/ }),
-/* 90 */
+/* 91 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
 var content = __webpack_require__(75);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// add the styles to the DOM
+var update = __webpack_require__(1)(content, {});
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./sm_link.scss", function() {
+			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./sm_link.scss");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 92 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(76);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -5018,13 +5058,13 @@ if(false) {
 }
 
 /***/ }),
-/* 91 */
+/* 93 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(76);
+var content = __webpack_require__(77);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -5044,13 +5084,13 @@ if(false) {
 }
 
 /***/ }),
-/* 92 */
+/* 94 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(81);
+var content = __webpack_require__(82);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -5070,13 +5110,13 @@ if(false) {
 }
 
 /***/ }),
-/* 93 */
+/* 95 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(82);
+var content = __webpack_require__(83);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -5096,13 +5136,13 @@ if(false) {
 }
 
 /***/ }),
-/* 94 */
+/* 96 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(83);
+var content = __webpack_require__(84);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -5122,13 +5162,13 @@ if(false) {
 }
 
 /***/ }),
-/* 95 */
+/* 97 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(84);
+var content = __webpack_require__(85);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -5148,7 +5188,7 @@ if(false) {
 }
 
 /***/ }),
-/* 96 */
+/* 98 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5429,46 +5469,6 @@ __webpack_require__(67);
 
 
 //ui
-
-/***/ }),
-/* 97 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(0)();
-// imports
-
-
-// module
-exports.push([module.i, "@media (max-width: 900px) {\n  .small-link .item {\n    display: block;\n    color: white;\n    margin: 0.6em 1.2em; }\n    .small-link .item a {\n      color: white; }\n    .small-link .item .space {\n      display: none; } }\n", ""]);
-
-// exports
-
-
-/***/ }),
-/* 98 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(97);
-if(typeof content === 'string') content = [[module.i, content, '']];
-// add the styles to the DOM
-var update = __webpack_require__(1)(content, {});
-if(content.locals) module.exports = content.locals;
-// Hot Module Replacement
-if(false) {
-	// When the styles change, update the <style> tags
-	if(!content.locals) {
-		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./sm_link.scss", function() {
-			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./sm_link.scss");
-			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-			update(newContent);
-		});
-	}
-	// When the module is disposed, remove the <style> tags
-	module.hot.dispose(function() { update(); });
-}
 
 /***/ })
 /******/ ]);
