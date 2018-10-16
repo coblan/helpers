@@ -31,9 +31,13 @@ var com_sim_fields = {
            <table class="table-fields">
         <tr v-for="head in heads">
             <td class="field-label-td"  valign="top">
-            <div class="field-label" style="position: relative">
-                <span v-text="head.label"></span>
-                <span class="req_star" v-if='head.required'>*</span>
+            <div class="field-label">
+                <span class="label-content">
+                     <span v-text="head.label"></span>
+                     <span class="req_star" v-if='head.required'>*</span>
+                </span>
+
+
             </div>
 
             </td>

@@ -4,9 +4,23 @@
   .table-fields{
     margin: auto;
   }
+  .field-label-td{
+      padding-right: 1em; // 为了至少能放下 star
+  }
   .field-label{
     min-width: 5em;
     text-align: left;
+    word-break: break-all;
+
+    .label-content{
+        position: relative;
+
+      .req_star{
+          top:-0.3em;
+          right: -0.6em;
+      }
+
+    }
   }
 
   .field-input{
