@@ -192,12 +192,16 @@ var mix_table_data={
             emitEvent:function(e){
                 self.$emit(e)
             },
+            update_or_insert:function(kws){
+                self.update_or_insert(kws.new_row,kws.old_row)
+            },
             update_or_insert_rows:function(kws){
                 var rows = kws.rows
                 ex.each(rows,function(row){
                     self.update_or_insert(row)
                 })
             },
+
             export_excel:function(){
                 var search_args = ex.copy(self.search_args)
                 search_args._perpage=5000
