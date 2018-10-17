@@ -4,7 +4,7 @@ Vue.component('com-header-menu',{
     props:['menu','active'],
     template:`<div class="header-menu">
         <span class="menu-item" v-for="act in menu">
-            <a :class="{'active':active==act.name}"  @click="on_click(act.link)"  v-text="act.label"></a>
+            <a :class="['clickable',{'active':active==act.name}]"  @click="on_click(act.link)"  v-text="act.label"></a>
         </span>
     </div>`,
     methods:{
