@@ -14,7 +14,9 @@ Vue.component('com-head-sm-link',{
             if(this.$listeners && this.$listeners.jump){
                 this.$emit('jump',url)
             }else{
-                location = url
+                Vue.nextTick(function(){
+                    location = url
+                })
             }
         }
     }
