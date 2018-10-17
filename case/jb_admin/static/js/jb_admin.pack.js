@@ -2351,12 +2351,16 @@ var mix_table_data = {
             emitEvent: function emitEvent(e) {
                 self.$emit(e);
             },
+            update_or_insert: function update_or_insert(kws) {
+                self.update_or_insert(kws.new_row, kws.old_row);
+            },
             update_or_insert_rows: function update_or_insert_rows(kws) {
                 var rows = kws.rows;
                 ex.each(rows, function (row) {
                     self.update_or_insert(row);
                 });
             },
+
             export_excel: function export_excel() {
                 var search_args = ex.copy(self.search_args);
                 search_args._perpage = 5000;
