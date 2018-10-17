@@ -1,7 +1,8 @@
 var com_select = {
     props:['head','search_args','config'],
     template:`<select v-model='search_args[head.name]' class="form-control input-sm" >
-        <option :value="undefined" v-text='head.label'></option>
+        <option v-if="head.forbid_select_null" :value="null" disabled v-text='head.label'></option>
+        <option v-else :value="undefined" v-text='head.label' ></option>
         <option :value="null" disabled >---</option>
         <option v-for='option in orderBy( head.options,"label")' :value="option.value" v-text='option.label'></option>
     </select>
