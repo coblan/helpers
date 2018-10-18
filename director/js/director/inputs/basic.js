@@ -12,7 +12,9 @@ export var baseInput={
         props:['row','head'],
 
         template: `<div><span v-if='head.readonly' v-text='row[head.name]'></span>
-            		<input v-else type="number" class="form-control input-sm" v-model="row[head.name]" :id="'id_'+head.name"
+            		<input v-else type="number" class="form-control input-sm" v-model="row[head.name]"
+            		    onkeypress='return( /[\d]/.test(String.fromCharCode(event.keyCode) ) )'
+            	    	:id="'id_'+head.name"
             		    :name="head.name" :step="head.step" :min='head.min' :max="head.max"
                         :placeholder="head.placeholder" :autofocus="head.autofocus"></div>`
     },

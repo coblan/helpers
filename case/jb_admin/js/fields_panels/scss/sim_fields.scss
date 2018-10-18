@@ -2,23 +2,25 @@
 .sim-fields{
 
   .table-fields{
-    margin: auto;
+    width: 100%;
   }
   .field-label-td{
       padding-right: 1em; // 为了至少能放下 star
       padding-bottom: 1em;
+      text-align: left;
   }
   .field-input-td{
       padding-bottom: 1em;
   }
   .field-label{
-    min-width: 5em;
     text-align: left;
-    word-break: break-all;
-    display: inline-block;
 
     .label-content{
+      //min-width: 4em;
+      max-width: 12em;
+        word-break: break-all;
         position: relative;
+        display: inline-block;
 
       .req_star{
           top:-0.3em;

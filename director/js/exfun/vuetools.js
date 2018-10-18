@@ -31,6 +31,23 @@ export var  vuetool = {
         cusParCall(self,fun,kws,rt)
         return rt
     },
+    vueBroadcase:function(){
+
+    },
+    vueDispatch:function(self,event,kws){
+        var kws= kws || {}
+        kws.source=self
+        var shouldPropagate = self.$emit( event,kws);
+        if (!shouldPropagate) return;
+        var parent = self.$parent;
+        // use object event to indicate non-source emit
+        // on parents
+        while (parent) {
+            shouldPropagate = parent.$emit( event,kws);
+            parent = shouldPropagate ? parent.$parent : null;
+        }
+        return self;
+    },
     vueExtend:function(par,mixins){
         if(! $.isArray(mixins) ){
             mixins=[mixins]
