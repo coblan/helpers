@@ -50,8 +50,8 @@ var com_sim_fields = {
     template:` <div class="field-panel sim-fields" style="text-align:center;">
            <table class="table-fields">
         <tr v-for="head in heads">
-            <td class="field-label-td"  valign="top" :style="label_width">
-            <div class="field-label">
+            <td class="field-label-td"  valign="top" >
+            <div class="field-label" :style="label_width">
                 <span class="label-content">
                      <span v-text="head.label"></span>
                      <span class="req_star" v-if='head.required'>*</span>
