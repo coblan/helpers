@@ -45,8 +45,10 @@ def get_lib(request):
         'nprogress_css': 'https://cdn.staticfile.org/nprogress/0.2.0/nprogress.min.css',        
         
         
-        'element': 'https://cdn.staticfile.org/element-ui/2.4.0/index.js', 
-        'element_css':'https://cdn.staticfile.org/element-ui/2.4.0/theme-chalk/index.css', 
+        'element': '/static/lib/element/index.js', 
+        'element_css':'/static/lib/element/index.css', 
+        #'element': 'https://cdn.staticfile.org/element-ui/2.4.0/index.js', 
+        #'element_css':'https://cdn.staticfile.org/element-ui/2.4.0/theme-chalk/index.css', 
         
         'md5': 'https://cdn.staticfile.org/blueimp-md5/2.10.0/js/md5.min.js',
         
