@@ -102,25 +102,25 @@
 	})
 
 </script>
-<div class="flex flex-jc">
-	<div class='flex-v ' style="max-width: 400px" id="there">
-		<div style="margin: 2em;">
+<!--<div class="flex flex-jc">-->
+	<!--<div class='flex-v' id="there">-->
+		<div class="plain-panel" id="there">
 			<h2 class='form-signin-heading' style="text-align: center;">修改您的密码:</h2>
 			<hr>
-
+			<com-sim-fields  :heads="heads" :row="row" ok-btn="修改" @submit="save"></com-sim-fields>
 			<!--<h2 class='form-signin-heading' style="text-align: center;">更改 <span v-text="username"></span> 密码</h2>-->
 		</div>
 
 
 		<!--<field v-for="head in heads" :name="head.name" :head="head" :row="row"></field>-->
-		<com-sim-fields  :heads="heads" :row="row" ok-btn="修改" @submit="save"></com-sim-fields>
+
 
 	<!--<button class='btn btn-lg btn-primary btn-block' @click="save()">确定</button>-->
 		<!--<div style="text-align: right;padding-top: 10px;">-->
 			<!--<a href="javascript:;" @click="cancel()">取消</a>-->
 		<!--</div>-->
 
-	</div>
-</div>
+	<!--</div>-->
+<!--</div>-->
 
 {% endblock %}
