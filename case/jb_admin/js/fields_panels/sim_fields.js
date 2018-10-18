@@ -10,6 +10,11 @@ var com_sim_fields = {
             }
             },
         crossBtn:'',
+        autoWidth:{
+            default:function(){
+                return true
+            }
+        },
         btnCls:{
             default:function(){
                 return 'btn-primary btn-sm'
@@ -18,6 +23,21 @@ var com_sim_fields = {
         },
     data:function (){
         return {
+        }
+    },
+    computed:{
+        label_width:function (){
+            if(!this.autoWith){
+
+            }
+            var max=4
+            ex.each(this.heads,function(head){
+                if(max < head.label.length){
+                    max=head.label.length
+                }
+            })
+            max+=1
+            return {width:max+'em'}
         }
     },
     created:function(){
@@ -30,8 +50,8 @@ var com_sim_fields = {
     template:` <div class="field-panel sim-fields" style="text-align:center;">
            <table class="table-fields">
         <tr v-for="head in heads">
-            <td class="field-label-td"  valign="top">
-            <div class="field-label">
+            <td class="field-label-td"  valign="top" >
+            <div class="field-label" :style="label_width">
                 <span class="label-content">
                      <span v-text="head.label"></span>
                      <span class="req_star" v-if='head.required'>*</span>
@@ -56,11 +76,11 @@ var com_sim_fields = {
         <slot :row="row">
              <tr v-if="crossBtn" class="btn-row">
                 <td class="field-input-td" colspan="2">
-                        <div class="submit-block">
-                            <button @click="submit" type="btn"
-                                :class="['btn',btnCls]"><span v-text="okBtn"></span></button>
-                        </div>
-                     </td>
+                    <div class="submit-block">
+                        <button @click="submit" type="btn"
+                            :class="['btn',btnCls]"><span v-text="okBtn"></span></button>
+                    </div>
+                </td>
             </tr>
                <tr v-else class="btn-row">
                    <td class="field-label-td"></td>
