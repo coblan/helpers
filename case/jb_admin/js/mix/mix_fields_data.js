@@ -17,6 +17,9 @@ var mix_fields_data ={
             }
         })
         self.setErrors({})
+
+    },
+    created:function(){
         ex.each(this.heads,function(head){
             if(typeof head.readonly=='string'){
                 head._org_readonly=head.readonly

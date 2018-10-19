@@ -36,9 +36,11 @@ var com_date_datetimefield_range={
             },
             set:function(nv){
                 if(nv){
-                    this.search_args['_start_'+this.head.name]=nv+' 00:00:00'
+                    Vue.set(this.search_args,'_start_'+this.head.name ,nv+' 00:00:00')
+                    //this.search_args['_start_'+this.head.name]=nv+' 00:00:00'
                 }else{
-                    this.search_args['_start_'+this.head.name]=nv
+                    Vue.set(this.search_args,'_start_'+this.head.name,nv)
+                    //this.search_args['_start_'+this.head.name]=nv
                 }
 
             }
@@ -54,9 +56,11 @@ var com_date_datetimefield_range={
             },
             set:function(nv){
                 if(nv){
-                    this.search_args['_end_'+this.head.name]=nv+' 23:59:59'
+                    Vue.set(this.search_args,'_end_'+this.head.name,nv+' 23:59:59')
+                    //this.search_args['_end_'+this.head.name]=nv+' 23:59:59'
                 }else{
-                    this.search_args['_end_'+this.head.name]=nv
+                    Vue.set(this.search_args,'_end_'+this.head.name,nv)
+                    //this.search_args['_end_'+this.head.name]=nv
                 }
 
             }
