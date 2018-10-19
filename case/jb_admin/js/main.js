@@ -3,7 +3,7 @@ require('./table_editor/scss/table_editor_base.scss')
 require('./scss/tab.scss')
 require('./scss/table.scss')
 require('./scss/table_page.scss')
-
+require('./scss/element_ex.scss')
 
 //table mix
 import * as mix_table_data from  './mix/mix_table_data.js'
