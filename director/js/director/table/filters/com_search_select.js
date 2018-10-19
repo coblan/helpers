@@ -25,6 +25,7 @@ var com_search = {
                 prefix-icon="el-icon-search"
                 @keyup.native.13="$emit('submit')"
                 size="small"
+                maxlength="200"
                 v-model="search_args._q">
                  <!--<el-select v-model="search_args.qf" slot="append" placeholder="请选择">-->
                       <!--<el-option label="餐厅名" value="1"></el-option>-->

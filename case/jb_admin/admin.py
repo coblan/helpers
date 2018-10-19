@@ -47,7 +47,7 @@ class UserFields(ModelFields):
         heads = ModelFields.get_heads(self)
         if  'password' in self.permit.changeable_fields():
             heads.append({
-                'name': 'user_password', 'label': '用户密码', 'editor': 'password'
+                'name': 'user_password', 'label': '用户密码', 'editor': 'password', 'required': '!scope.row.pk',
             })
         return heads
     

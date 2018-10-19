@@ -17,10 +17,17 @@ var mix_fields_data ={
             }
         })
         self.setErrors({})
+
+    },
+    created:function(){
         ex.each(this.heads,function(head){
             if(typeof head.readonly=='string'){
                 head._org_readonly=head.readonly
                 head.readonly=ex.eval(head._org_readonly,{row:self.row})
+            }
+            if(typeof head.required=='string'){
+                head._org_required=head.required
+                head.required=ex.eval(head._org_required,{row:self.row})
             }
             if(typeof head.show=='string'){
                 head._org_show=head.show
@@ -34,6 +41,9 @@ var mix_fields_data ={
             ex.each(self.heads,function(head){
                 if( head._org_readonly){
                     head.readonly=ex.eval(head._org_readonly,{row:self.row})
+                }
+                if( head._org_required){
+                    head.required=ex.eval(head._org_required,{row:self.row})
                 }
             })
             var heads = ex.filter(self.heads,function(head){
