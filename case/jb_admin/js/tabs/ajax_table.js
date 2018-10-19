@@ -12,7 +12,7 @@ var ajax_table={
             ops:heads_ctx.ops || [],
             rows:[],
             row_pages:{},
-            selectable:heads_ctx.selectable || true,
+            selectable:heads_ctx.selectable==undefined? true:heads_ctx.selectable,
 
             selected:[],
             del_info:[],
