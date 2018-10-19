@@ -17,9 +17,11 @@ Vue.component('com-kuaifawu-menu',{
 
             <div v-show="expand" class="actions">
                 <com-kuaifawu-menu-item v-for="act in menu" :act="act"
-                    :class="['menu-item',{'active':active_act.name==act.name}]" @mouseenter.native="active_act=act"></com-kuaifawu-menu-item>
+                    :class="['menu-item',{'active':active_act.name==act.name}]"
+                    @mouseenter.native="active_act=act"></com-kuaifawu-menu-item>
             </div>
-            <com-kuaifawu-menu-links class="menu-links" v-show="active_act.name" :act="active_act"></com-kuaifawu-menu-links>
+            <com-kuaifawu-menu-links class="menu-links" v-show="active_act.name" :act="active_act">
+            </com-kuaifawu-menu-links>
 
     </div>`,
     methods:{
