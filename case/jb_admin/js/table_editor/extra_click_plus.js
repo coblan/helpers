@@ -8,7 +8,15 @@
 var extra_click_plus={
     props:['rowData','field','index'],
     template:`<div><span v-for="(ope,index) in operations">
-                <span class="clickable" v-text="ope.label" @click="on_click(ope)"></span><span v-if="index< operations.length-1">/</span>  </span>
+                <span v-if="ope.icon">
+                      <span class="clickable" v-html="ope.icon" @click="on_click(ope)"
+                      style="display: inline-block;margin-right: 0.5em;"
+                      :title="ope.label"></span>
+                </span>
+                <span v-else>
+                    <span class="clickable" v-text="ope.label" @click="on_click(ope)"></span>
+                    <span v-if="index < operations.length-1">/</span>  </span>
+                </span>
                 </div>`,
     created:function(){
         // find head from parent table
@@ -29,7 +37,11 @@ var extra_click_plus={
     computed:{
         operations:function(){
             if(this.head.filter){
-                var filter_fun=window[this.head.filter]
+                if(typeof this.head.filter=='string'){
+                    var filter_fun=window[this.head.filter]
+                }else{
+                    var filter_fun = this.head.filter
+                }
                 return filter_fun(this.head,this.rowData)
             }else{
                 return this.head.operations

@@ -9,11 +9,13 @@ import {vuetool} from  './vuetools'
 import {code} from  './code'
 import {sortOrder} from  './order'
 import {layout} from  './layout'
+import {file_proc} from  './file_proc'
 var ex={
     assign:function (dst,src) {
         for(var key in src){
             dst[key]=src[key]
         }
+        return dst
     },
 }
 
@@ -28,6 +30,8 @@ ex.assign(ex,obj_control)
 ex.assign(ex,vuetool)
 ex.assign(ex,code)
 ex.assign(ex,layout)
+ex.assign(ex,file_proc)
+
 ex.sortOrder=sortOrder
 
 //ex.md5=md5

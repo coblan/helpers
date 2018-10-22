@@ -79,8 +79,19 @@ export var network ={
                 }
             }
             document.getElementsByTagName('head')[0].appendChild(domScript);
-
         }
+    },
+    load_js_list:function(js_list,success){
+        var length = js_list.length
+        ex.each(js_list,function(js){
+            ex.load_js(js,function(){
+                length -=1
+                if(length ==0){
+                    success()
+                }
+            })
+
+        })
     },
     load_css:function (src) {
         var name = btoa(src)
