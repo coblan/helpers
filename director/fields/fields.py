@@ -85,7 +85,13 @@ class ModelFields(forms.ModelForm):
         
         for k in dict(dc):
             # 强制 readonly的字段，不能修改
+            inst =  form_kw['instance']
             if k in self.readonly:
+                if hasattr(inst, "%s_id" % k):  # 如果是ForeignKey，必须要pk值才能通过 form验证
+                    fieldcls = inst.__class__._meta.get_field(k)
+                    if isinstance(fieldcls, models.ForeignKey):
+                        dc[k] = getattr(inst, "%s_id" % k)
+                        continue
                 dc[k] =  getattr(form_kw['instance'] , k)  
         
         self.nolimit = nolimit
