@@ -1,6 +1,8 @@
+require('./scss/filter_select.scss')
+
 var com_select = {
     props:['head','search_args','config'],
-    template:`<select v-model='search_args[head.name]' class="form-control input-sm" >
+    template:`<select v-model='search_args[head.name]' class="form-control input-sm com-filter-select" >
         <option v-if="head.forbid_select_null" :value="null" disabled v-text='head.label'></option>
         <option v-else :value="undefined" v-text='head.label' ></option>
         <option :value="null" disabled >---</option>
@@ -39,6 +41,8 @@ var com_select = {
     }
 }
 Vue.component('com-select-filter',com_select)
+// 以后替换为下面的标准名
+Vue.component('com-filter-select',com_select)
 
 function isChinese(temp){
     var re=/[^\u4E00-\u9FA5]/;

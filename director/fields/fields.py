@@ -140,19 +140,20 @@ class ModelFields(forms.ModelForm):
     
     def is_valid(self): 
         rt = super().is_valid()
-        cus_errors = self.custom_valid()
-        self._cus_errors =  cus_errors
-        return rt and not cus_errors
+        extra_errors = self.extra_valid()
+        self._extra_errors =  extra_errors
+        return rt and not extra_errors
     
-    def custom_valid(self): 
+    def extra_valid(self): 
+        """在django的clean函数中，自定义的字段，raise ValidationError ，会被django清除掉，所以只能在后面重新验证"""
         return {}
         
     def get_errors(self): 
-        cus_errors = getattr(self, '_cus_errors', {})
+        extra_errors = getattr(self, '_extra_errors', {})
         
         errors = dict(self.errors)
         
-        for k, v in cus_errors.items():
+        for k, v in extra_errors.items():
             if k in errors:
                 errors[k].append(v)
             else:

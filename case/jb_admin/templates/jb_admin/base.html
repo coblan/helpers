@@ -22,7 +22,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!--<link rel="stylesheet" href="{% static 'lib/font-awesome4.7/font-awesome4.7.min.css' %}">-->
     <!--<script src="{% static 'lib/vue2.3.2.js' %}"></script>-->
     <script src="{{ js_config.js_lib.vuejs }}"></script>
-
+    <script src="{{ js_config.js_lib.vuex }}"></script>
     <link rel="stylesheet" href="{{ js_config.js_lib.bootstrap_css }}">
     <script src="{{ js_config.js_lib.bootstrap }}"></script>
 
@@ -100,6 +100,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 sessionStorage.removeItem("sidebar-collapse");
             }
         }
+
+        Vue.use(Vuex);
+        var store = new Vuex.Store({
+        });
     </script>
     <style>
         .bar{
