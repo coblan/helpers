@@ -12,6 +12,7 @@ export var baseInput={
         props:['row','head'],
         template: `<div><span v-if='head.readonly' v-text='row[head.name]'></span>
             		<input v-else type="number" class="form-control input-sm" v-model="row[head.name]"
+            		    style="ime-mode:disabled"
             		    @keypress="isNumber($event)"
             	    	:id="'id_'+head.name"
             		    :name="head.name" :step="head.step" :min='head.min' :max="head.max"
