@@ -74,7 +74,6 @@ Vue.component('com-filter',{
             })
         },
     }
-
 })
 
 

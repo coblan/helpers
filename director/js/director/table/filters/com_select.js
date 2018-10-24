@@ -10,20 +10,47 @@ var com_select = {
     </select>
     `,
     data:function(){
-        //var inn_cfg = {
-        //    order: this.head.order || false  // 默认false
-        //}
-        //ex.assign(inn_cfg,this.config)
         return {
             order:this.head.order || false
+        }
+    },
+    computed:{
+        myvalue:function(){
+            return this.search_args[this.head.name]
         }
     },
     watch:{
         myvalue:function(v){
             this.$emit('input',v)
+
+            if(this.head.changed_emit ){
+                ex.vuexEmit(this,this.head.changed_emit)
+                //this.$store.state[parName].childbus.$emit(this.head.changed_emit)
+            }
+        }
+    },
+    mounted:function(){
+        //var parName = ex.vuexParName(this)
+        var self=this
+        if(this.head.update_on ){
+            ex.vuexOn(this,this.head.update_on,this.get_options)
+            //if($.isArray(this.head.update_on)){
+            //    ex.each(this.head.update_on,function(on_event){
+            //        self.$store.state[parName].childbus.$on(on_event,self.get_options)
+            //    })
+            //}else{
+            //    this.$store.state[parName].childbus.$on(this.head.update_on,this.get_options)
+            //}
         }
     },
     methods:{
+        get_options:function(){
+            var self=this
+            console.log('sss')
+            ex.director_call(this.head._director_name,{search_args:self.search_args},function(resp){
+                self.head.options = resp
+            })
+        },
         orderBy:function (array,key) {
             if(! this.order){
                 return array
@@ -36,7 +63,6 @@ var com_select = {
                     }
                 })
             }
-
         },
     }
 }
