@@ -25,7 +25,7 @@ class DirectorEncoder(json.JSONEncoder):
             return str(obj)
         else:
             for cls, func in json_decoder.items():
-                if isinstance(cls, func):
+                if isinstance(obj, cls):
                     return func(obj)
         #elif isinstance(obj,Polygon):
             #return poly2dict(obj) 
