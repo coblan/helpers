@@ -267,11 +267,11 @@ class RowSort(object):
                         # mysql 按照拼音排序
                         query= query.extra(select={'converted_%s'%norm_name: 'CONVERT(%s USING gbk)'%norm_name},order_by=['%sconverted_%s'%(direction,norm_name)])                        
                 else:
-                    query= query.order_by(name)
+                    query= query.order_by(name, '-pk')
         #else:
             #query = query.order_by('-pk')
 
-        return query
+        return query.order_by('-pk')
 
   
 class ModelTable(object):
@@ -642,19 +642,19 @@ class ModelTable(object):
             for f in self.model._meta.get_fields():
                 if f.name in head_nams and isinstance(f, models.ForeignKey):
                     query = query.select_related(f.name)        
-        
+
         query = self.pagenum.get_query(query)  
         return query
     
     def statistics(self,query):
         """
-        因为统计会破坏pk的存在，所以把排序放在统计函数里面
+        # 因为统计会破坏pk的存在，所以把排序放在统计函数里面
+        现在 排序 完全放到 RowSort里面去了
         """
-        return query.order_by('-pk')
+        return query
     
     
     def inn_filter(self,query):
-        #return query.order_by('-pk')
         return query
     
     def get_operation(self):

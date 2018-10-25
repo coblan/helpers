@@ -6,12 +6,14 @@ var com_date_datetimefield_range={
             var start=''
         }else{
             var start=this.search_args['_start_'+this.head.name].slice(0,10)
+            this.search_args['_start_'+this.head.name]= start +' 00:00:00'
         }
         if(! this.search_args['_end_'+this.head.name]){
             Vue.set(this.search_args,'_end_'+this.head.name,'')
             var end=''
         }else{
             var end=this.search_args['_end_'+this.head.name].slice(0,10)
+            this.search_args['_end_'+this.head.name]=end+' 23:59:59'
         }
         return {
             start:start,

@@ -1,8 +1,8 @@
 var com_select = {
     props:['head','search_args','config'],
     template:`<select v-model='search_args[head.name]' class="form-control input-sm" >
-        <option :value="undefined" v-text='head.label'></option>
-        <option :value="null" disabled >---</option>
+        <option :value="null_value" v-text='head.label'></option>
+        <option  disabled >---</option>
         <option v-for='option in orderBy( head.options,"label")' :value="option.value" v-text='option.label'></option>
     </select>
     `,
@@ -13,6 +13,13 @@ var com_select = {
     computed:{
         watchedValue:function(){
             return this.search_args[this.head.related]
+        },
+        null_value:function(){
+            if(this.search_args[this.head.name] === null ){
+                return null
+            }else {
+                return undefined
+            }
         }
     },
     watch:{

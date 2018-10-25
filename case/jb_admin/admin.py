@@ -19,7 +19,7 @@ class UserPage(TablePage):
     
     class tableCls(ModelTable):
         model = User
-        exclude=['password']
+        exclude=['password', 'last_name', 'user_permissions']
         pop_edit_field = 'username'
         #fields_sort = ['username']
         
@@ -34,14 +34,16 @@ class UserPage(TablePage):
         
         
 class UserFields(ModelFields):
+    hide_fields = ['date_joined']
     class Meta:
         model=User
-        fields=['username','first_name','is_active','is_staff','is_superuser','email','groups']
+        fields=['username','first_name','is_active','is_staff','is_superuser','email','groups', 'date_joined']
         
     def dict_head(self, head):
         if head['name']=='groups':
             head['editor']='field_multi_chosen'
         return head
+
     
     def get_heads(self): 
         heads = ModelFields.get_heads(self)

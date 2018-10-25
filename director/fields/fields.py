@@ -67,7 +67,7 @@ class ModelFields(forms.ModelForm):
             self.crt_user = crt_user
         
         # if pk is None:
-        if dc.get('pk'):
+        if dc.get('pk') != None:
             pk=dc.get('pk')
         form_kw={}
         if 'instance' not in kw:
@@ -241,7 +241,7 @@ class ModelFields(forms.ModelForm):
     
     def init_value(self):
         """可能是用于 foreignkey 或者 manytomany的"""
-        if self.instance.pk:
+        if self.instance.pk != None:
             for field in self.instance._meta.get_fields(): #get_all_field_names():
                 f=field.name
                 if f in self.fields:
@@ -349,7 +349,7 @@ class ModelFields(forms.ModelForm):
         """
         if self.nolimit:
             return True
-        if not self.instance.pk:
+        if self.instance.pk != None:
             if self.permit.can_add():
                 return True
             else:
