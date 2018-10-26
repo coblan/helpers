@@ -33,12 +33,16 @@ class BoolProc(BaseFieldProc):
     
     def filter_get_head(self, name, model):
         this_field= model._meta.get_field(name)
-        if this_field.choices:        
-            options = [{'value':x[0],'label':x[1]} for x in this_field.choices]
-        else:
-            query = model.objects.all().values_list(name,flat=True)
-            ls = list(set(query))
-            options = [{ 'value':x,'label':str(x)} for x in ls]
+        options = [
+            {'value': True, 'label': '是',}, 
+            {'value': False, 'label': '否',}
+        ]
+        #if this_field.choices:        
+            #options = [{'value':x[0],'label':x[1]} for x in this_field.choices]
+        #else:
+            #query = model.objects.all().values_list(name,flat=True)
+            #ls = list(set(query))
+            #options = [{ 'value':x,'label':str(x)} for x in ls]
             
         return {
             'name':name,
