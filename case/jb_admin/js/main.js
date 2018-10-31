@@ -56,6 +56,8 @@ import * as validate_code from  './field_editor/validate_code.js'
 import * as order_list_table from  './field_editor/order_list_table.js'
 import * as phon_code from  './field_editor/phon_code.js'
 import * as ele_tree_depend from  './field_editor/ele_tree_depend.js'
+import * as com_china_address from  './field_editor/china_address.js'
+
 // table operator
 import * as op_a from  './table_operator/operator_a.js'
 import * as delete_op from  './table_operator/delete_op.js'
