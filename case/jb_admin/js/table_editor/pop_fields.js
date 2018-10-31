@@ -68,12 +68,8 @@ export  var pop_fields={
                         var fun = after_save[self.head.after_save.fun]
                         fun(self,new_row,pop_row)
 
-                   layer.close(win_index)
+                        layer.close(win_index)
 
-                    //if(kws.name =='after_save'){
-                    //    var fun = after_save[self.head.after_save.fun]
-                    //    fun(self,kws.new_row,kws.old_row)
-                    //}
                 })
             },this.rowData,kws)
 
@@ -122,12 +118,9 @@ var after_save={
     },
     update_or_insert:function(self,new_row,old_row){
         self.$emit('on-custom-comp',{name:'update_or_insert',new_row:new_row,old_row:old_row})
-        //if(! old_row.pk) {
-        //    table.rows.splice(0, 0, new_row)
-        //}else{
-        //    ex.assign(table.rowData,new_row)
-        //}
-
-
+        var par_name=ex.vuexParName(self)
+        if(par_name){
+            self.$store.state[par_name].childbus.$emit('row.update_or_insert',{new_row:new_row,old_row:old_row})
+        }
     }
 }

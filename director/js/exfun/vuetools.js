@@ -34,6 +34,28 @@ export var  vuetool = {
     vueBroadcase:function(){
 
     },
+    vuexParName:function(self){
+        var par = self.$parent
+        while(par){
+            if(par.store_name){
+                return par.store_name
+            }else{
+                par = par.$parent
+            }
+        }
+    },
+    vuexEmit:function(self,event_name,event){
+        var parName = ex.vuexParName(self)
+        if(parName){
+            self.$store.state[parName].childbus.$emit(event_name,event)
+        }
+    },
+    vuexOn:function(self,event_name,func){
+        var parName = ex.vuexParName(self)
+        if(parName){
+            self.$store.state[parName].childbus.$on(event_name,func)
+        }
+    },
     vueDispatch:function(self,event,kws){
         var kws= kws || {}
         kws.source=self

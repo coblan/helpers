@@ -24,6 +24,8 @@ def get_lib(request):
         'element_css': '/static/lib/element/index.css',
         'md5_js': '/static/lib/md5.min.js',
         'moment': '/static/lib/moment2.17.1.min.js',
+        'chosen': 'https://cdn.bootcss.com/chosen/1.8.2/chosen.jquery.min.js',
+        'chosen_css': 'https://cdn.bootcss.com/chosen/1.8.2/chosen.min.css',
     }
     return dc
 

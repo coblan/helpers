@@ -3,7 +3,7 @@ require('./table_editor/scss/table_editor_base.scss')
 require('./scss/tab.scss')
 require('./scss/table.scss')
 require('./scss/table_page.scss')
-
+require('./scss/element_ex.scss')
 
 //table mix
 import * as mix_table_data from  './mix/mix_table_data.js'
@@ -93,3 +93,6 @@ import * as sm_link from  './header/sm_link.js'
 //ui
 import * as stack_widget from './misc/stack_widget'
 import * as el_tab_widget from './misc/el_tab_widget'
+
+// store
+import * as table_store from './store/table_store'

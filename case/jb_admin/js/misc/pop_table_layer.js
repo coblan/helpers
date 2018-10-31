@@ -20,7 +20,7 @@ export  function pop_table_layer (row,table_ctx,callback,layer_config){
 
         },
         shadeClose: true, //点击遮罩关闭
-        content:`<div id="pop-table-${pop_id}" style="height: 100%;">
+        content:`<div id="pop-table-${pop_id}" style="height: 100%;padding-left: 10px">
 
             <div class="rows-block flex-v" style="height: 100%">
                 <div class='flex' style="min-height: 3em;" v-if="row_filters.length > 0">

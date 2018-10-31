@@ -62,25 +62,39 @@ var mix_table_data={
                     var post_data=[{fun:'save_rows',rows:cache_rows}]
                     cfg.show_load()
                     ex.post('/d/ajax',JSON.stringify(post_data),function(resp){
-                        ex.each(resp.save_rows,function(new_row){
-                            delete new_row._director_name  // [1]  这里还原回去
-                            self.update_or_insert(new_row)
-                        })
+                        if( !resp.save_rows.errors){
+                            ex.each(resp.save_rows,function(new_row){
+                                delete new_row._director_name  // [1]  这里还原回去
+                                self.update_or_insert(new_row)
+                            })
+                            cfg.hide_load(2000)
+                        }else{
+                            cfg.hide_load()
+                            // 留到下面的field弹出框，按照nicevalidator的方式去显示错误
+                            //cfg.showError(resp.save_rows.msg)
+                        }
+
+
                         //self.op_funs.update_or_insert_rows({rows:resp.save_rows} )
 
                         if(after_save_callback){
-                            after_save_callback()
+                            after_save_callback(resp)
                         }
-                        cfg.hide_load(2000)
+
                     })
                 }
 
                 function judge_pop_fun(){
                     if(kws.fields_ctx){
                         var one_row = ex.copy(self.selected[0])
-                        var win_index = pop_edit_local(one_row,kws.fields_ctx,function(new_row){
-                            bb(new_row,function(){
-                                layer.close(win_index)
+                        var win_index = pop_edit_local(one_row,kws.fields_ctx,function(new_row,store_id){
+                            bb(new_row,function(resp){
+                                if(resp.save_rows.errors){
+                                    self.$store.commit(store_id+'/showErrors',resp.save_rows.errors)
+                                }else{
+                                    layer.close(win_index)
+                                }
+
                             })
                         })
                     }else{
@@ -392,14 +406,13 @@ var mix_table_data={
                 cfg.show_load()
                 var post_data = [{fun: 'del_rows', rows: self.selected}]
                 ex.post('/d/ajax', JSON.stringify(post_data), function (resp) {
-                    //layer.close(ss)
-                    self.row_pages.total -= self.selected.length
-                    ex.each(self.selected,function(item){
-                        ex.remove(self.rows,{pk:item.pk} )
-                    })
-
-                    self.selected=[]
-                    cfg.hide_load(200)
+                    //self.row_pages.total -= self.selected.length
+                    //ex.each(self.selected,function(item){
+                    //    ex.remove(self.rows,{pk:item.pk} )
+                    //})
+                    //self.selected=[]
+                    cfg.hide_load(500)
+                    self.search()
                     //layer.msg('删除成功',{time:2000})
                 })
             })

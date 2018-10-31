@@ -32,10 +32,13 @@ Vue.component('com-filter',{
                 <div v-for="filter in heads" :id="'filter-'+filter.name" class="filter-item">
                     <component @submit="m_submit()" :is="filter.editor" :head="filter" :search_args='search_args' > </component>
                 </div>
+
                 <button name="go" type="button" class="btn btn-success btn-sm" @click='m_submit()' >
                   <i class="fa fa-search"></i>
                   <span v-text="search_lable"></span>
-          </button>
+                </button>
+
+
         </div>
     `,
     created:function(){
@@ -71,7 +74,6 @@ Vue.component('com-filter',{
             })
         },
     }
-
 })
 
 
