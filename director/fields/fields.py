@@ -492,6 +492,8 @@ class Fields(ModelFields):
     def __init__(self, dc={}, pk=None, crt_user=None, nolimit=False, *args, **kw): 
         self.kw=dc.copy()
         self.kw.update(kw)
+        # 太复杂，暂时不要权限
+        self.nolimit = True
     
     def is_valid(self): 
         return True

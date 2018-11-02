@@ -143,6 +143,53 @@ var mix_table_data={
                     cfg.hide_load(2000)
                 })
             },
+        create_child_row:function(kws){
+            /*
+             * */
+            if(kws.fields_ctx ){
+                var fields_ctx=kws.fields_ctx
+                var dc = {fun:'get_row',director_name:fields_ctx.director_name}
+                if(kws.init_fields){
+                    ex.assign(dc,kws.init_fields)
+                }
+                var post_data=[dc]
+                cfg.show_load()
+                ex.post('/d/ajax',JSON.stringify(post_data),function(resp){
+                    cfg.hide_load()
+                    var crt_row = resp.get_row
+                    self.crt_row= crt_row
+                    crt_row.carry_parents = self.parents
+
+                    if(kws.tab_name){
+                        self.$emit('operation',{fun:'switch_to_tab',tab_name:kws.tab_name,row:crt_row})
+                    }else{
+                        var win=pop_fields_layer(crt_row,fields_ctx,function(new_row){
+                            layer.close(win)
+                            if(kws.after_save=='refresh'){
+                                self.search()
+                            }else{
+                                self.update_or_insert(new_row, crt_row)
+                            }
+                        })
+                    }
+
+                })
+
+
+
+                //var row={
+                //    _director_name:kws.fields_ctx._director_name
+                //}
+                //pop_edit_local(row,kws.fields_ctx,function(new_row){
+                //    cfg.show_load()
+                //    ex.director_call(kws.fields_ctx.director_name,{row:new_row,parents:self.parents},function(resp){
+                //        cfg.hide_load(300)
+                //        self.update_or_insert(resp.row)
+                //    })
+                //})
+            }
+        },
+
             director_call:function(kws){
                 function bb(){
                     cfg.show_load()
@@ -206,6 +253,7 @@ var mix_table_data={
             emitEvent:function(e){
                 self.$emit(e)
             },
+
             update_or_insert:function(kws){
                 self.update_or_insert(kws.new_row,kws.old_row)
             },
