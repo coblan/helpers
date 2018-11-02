@@ -37,9 +37,12 @@ def get_lib(request):
         'nice_validator':'https://cdn.staticfile.org/nice-validator/1.1.4/jquery.validator.min.js?local=zh-CN', 
         'nice_validator_css': 'https://cdn.staticfile.org/nice-validator/1.1.4/jquery.validator.min.css',
         
-        'adminlte': 'https://cdn.staticfile.org/admin-lte/2.4.3/js/adminlte.min.js',
-        'adminlte_css': 'https://cdn.staticfile.org/admin-lte/2.4.3/css/AdminLTE.min.css',
-        'adminlte_blue_css': 'https://cdn.staticfile.org/admin-lte/2.4.3/css/skins/skin-blue.min.css',    
+        #'adminlte': 'https://cdn.staticfile.org/admin-lte/2.4.3/js/adminlte.min.js',
+        #'adminlte_css': 'https://cdn.staticfile.org/admin-lte/2.4.3/css/AdminLTE.min.css',
+        #'adminlte_blue_css': 'https://cdn.staticfile.org/admin-lte/2.4.3/css/skins/skin-blue.min.css',  
+        'adminlte': '/static/lib/adminlte/dist/js/adminlte.min.js',
+        'adminlte_css': '/static/lib/adminlte/dist/css/AdminLTE.min.css',
+        'adminlte_blue_css': '/static/lib/adminlte/dist/css/skins/skin-blue.min.css',            
         
         'nprogress': 'https://cdn.staticfile.org/nprogress/0.2.0/nprogress.min.js',
         'nprogress_css': 'https://cdn.staticfile.org/nprogress/0.2.0/nprogress.min.css',        
