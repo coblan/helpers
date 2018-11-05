@@ -31,6 +31,10 @@ var mix_ele_table_adapter = {
         handleSelectionChange(val) {
             this.selected = val;
         },
+        clearSelection:function(){
+            this.selected =[]
+            this.$refs.e_table.clearSelection()
+        },
         sortChange(params){
             //{ column, prop, order }
             var self=this

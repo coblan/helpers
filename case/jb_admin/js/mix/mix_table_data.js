@@ -67,6 +67,8 @@ var mix_table_data={
                                 delete new_row._director_name  // [1]  这里还原回去
                                 self.update_or_insert(new_row)
                             })
+                            self.clearSelection()
+
                             cfg.hide_load(2000)
                         }else{
                             cfg.hide_load()
