@@ -147,7 +147,8 @@ class RowFilter(object):
                 self.filter_args['%s__gte'%k]=start
             if kw.get('_end_%s'%k):
                 end=kw.get('_end_%s'%k)
-                self.filter_args['%s__lte'%k]=end            
+                self.filter_args['%s__lte'%k]=end
+        self.kw = kw
     
     def get_proc_list(self):
         ls=[]
@@ -212,7 +213,10 @@ class RowFilter(object):
         out_list = [x for x in out_list if x['name'] in send_to_front_names]
         out_list = sorted(out_list, key= lambda x: send_to_front_names.index(x['name']))
         return out_list
-      
+    
+    def clean_query(self, query): 
+        return query
+    
     def get_query(self,query):
         self.query=query
         dc = {}
@@ -224,6 +228,7 @@ class RowFilter(object):
         arg_dc = {k: v for k, v in self.filter_args.items() if v != None}
         
         query=query.filter(**arg_dc)
+        query = self.clean_query(query)
         return query    
     
 class RowSort(object):
