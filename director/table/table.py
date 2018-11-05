@@ -268,10 +268,10 @@ class RowSort(object):
                         query= query.extra(select={'converted_%s'%norm_name: 'CONVERT(%s USING gbk)'%norm_name},order_by=['%sconverted_%s'%(direction,norm_name)])                        
                 else:
                     query= query.order_by(name, '-pk')
-        #else:
-            #query = query.order_by('-pk')
+        else:
+            query = query.order_by('-pk')
 
-        return query.order_by('-pk')
+        return query
 
   
 class ModelTable(object):
