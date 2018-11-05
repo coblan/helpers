@@ -74,6 +74,7 @@ var com_sim_fields = {
             </td>
         </tr>
         <slot :row="row">
+            <!--按钮横跨两列 ！可能会放弃该种使用方式 -->
              <tr v-if="crossBtn" class="btn-row">
                 <td class="field-input-td" colspan="2">
                     <div class="submit-block">
@@ -82,6 +83,7 @@ var com_sim_fields = {
                     </div>
                 </td>
             </tr>
+            <!--按钮在第二列-->
                <tr v-else class="btn-row">
                    <td class="field-label-td"></td>
                     <td class="field-input-td" colspan="1">
@@ -102,7 +104,7 @@ var com_sim_fields = {
         panel_submit:function(){
             if(this.$listeners && this.$listeners.submit){
                 if(this.isValid()){
-                    this.$emit('submit')
+                    this.$emit('submit',this.row)
                 }
             }else{
                 this.submit()

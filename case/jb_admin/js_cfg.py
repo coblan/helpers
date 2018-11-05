@@ -34,8 +34,10 @@ def get_lib(request):
         #'layer_css':'https://cdn.bootcss.com/layer/3.1.0/theme/default/layer.css',
         
         # 使用 七牛的CDN
-        'nice_validator':'https://cdn.staticfile.org/nice-validator/1.1.4/jquery.validator.min.js?local=zh-CN', 
-        'nice_validator_css': 'https://cdn.staticfile.org/nice-validator/1.1.4/jquery.validator.min.css',
+        'nice_validator': '/static/lib/nice-validator1.14/dist/jquery.validator.min.js?local=zh-CN',
+        'nice_validator_css': '/static/lib/nice-validator1.14/dist/jquery.validator.css',
+        #'nice_validator':'https://cdn.staticfile.org/nice-validator/1.1.4/jquery.validator.min.js?local=zh-CN', 
+        #'nice_validator_css': 'https://cdn.staticfile.org/nice-validator/1.1.4/jquery.validator.min.css',
         
         'adminlte': 'https://cdn.staticfile.org/admin-lte/2.4.3/js/adminlte.min.js',
         'adminlte_css': 'https://cdn.staticfile.org/admin-lte/2.4.3/css/AdminLTE.min.css',
@@ -68,6 +70,8 @@ def get_lib(request):
         #'md5': 'https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.min.js',
         
         'jb_admin_pack_js': '/static/js/jb_admin.pack.js?t=%s'%js_stamp_dc.get('jb_admin_pack_js'),
+        'swiper': 'https://cdn.bootcss.com/Swiper/4.3.0/js/swiper.min.js',
+        'swiper_css': 'https://cdn.bootcss.com/Swiper/4.3.0/css/swiper.min.css',    
     }
     return dc
 
