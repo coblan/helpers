@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 103);
+/******/ 	return __webpack_require__(__webpack_require__.s = 105);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -391,13 +391,15 @@ var baseInput = exports.baseInput = {
     },
     number: {
         props: ['row', 'head'],
-        template: '<div><span v-if=\'head.readonly\' v-text=\'row[head.name]\'></span>\n            \t\t<input v-else type="number" class="form-control input-sm" v-model="row[head.name]"\n            \t\t    @keypress="isNumber($event)"\n            \t    \t:id="\'id_\'+head.name"\n            \t\t    :name="head.name" :step="head.step" :min=\'head.min\' :max="head.max"\n                        :placeholder="head.placeholder" :autofocus="head.autofocus"></div>',
+        template: '<div><span v-if=\'head.readonly\' v-text=\'row[head.name]\'></span>\n            \t\t<input v-else type="number" class="form-control input-sm" v-model="row[head.name]"\n            \t\t    style="ime-mode:disabled"\n            \t\t    @keypress="isNumber($event)"\n            \t    \t:id="\'id_\'+head.name"\n            \t\t    :name="head.name" :step="head.step" :min=\'head.min\' :max="head.max"\n                        :placeholder="head.placeholder" :autofocus="head.autofocus"></div>',
         methods: {
             isNumber: function isNumber(evt) {
                 evt = evt ? evt : window.event;
                 var charCode = evt.which ? evt.which : evt.keyCode;
-                if (charCode > 31 && (charCode < 48 || charCode > 57) && charCode !== 46) {
-                    evt.preventDefault();;
+                //if ((charCode > 31 && (charCode < 48 || charCode > 57)) && charCode !== 46) {
+                if (charCode == 101 || charCode == 69) {
+                    // 排除掉E
+                    evt.preventDefault();
                 } else {
                     return true;
                 }
@@ -647,7 +649,7 @@ var baseInput = exports.baseInput = {
     },
     richtext: {
         props: ['row', 'head'],
-        template: '<div style="position: relative">\n            <span v-if=\'head.readonly\' v-text=\'row[head.name]\'></span>\n            <div v-else>\n                <input type="text" :name=\'head.name\' style="display:none" v-model="row[head.name]">\n                <ckeditor ref="ck" :style="head.style" v-model="row[head.name]" :id="\'id_\'+head.name" :set="head.set" :config="head.config"></ckeditor>\n            </div>\n\n                       </div>',
+        template: '<div >\n            <span v-if=\'head.readonly\' v-text=\'row[head.name]\'></span>\n            <div v-else>\n                <ckeditor ref="ck" :style="head.style" v-model="row[head.name]"\n                :maxlength=\'head.maxlength\'\n                :id="\'id_\'+head.name" :set="head.set" :config="head.config"></ckeditor>\n                <div style="height: 1em;width: 0;position: relative">\n                <input type="text" :name=\'head.name\' style="display: none"  v-model="row[head.name]">\n                </div>\n            </div>\n         </div>',
         methods: {
             commit: function commit() {
                 Vue.set(this.row, this.head.name, this.$refs.ck.editor.getData());
@@ -780,7 +782,7 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 
 //import {use_color} from '../dosome/color.js'
 //import {load_js,load_css} from '../dosome/pkg.js'
-__webpack_require__(85);
+__webpack_require__(86);
 //import * as fb from './field_base.js'
 //import * as js from './adapt.js'
 
@@ -904,8 +906,8 @@ var first_col = _interopRequireWildcard(_first_col);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
-__webpack_require__(94);
-__webpack_require__(93);
+__webpack_require__(96);
+__webpack_require__(95);
 
 /***/ }),
 /* 7 */,
@@ -1187,13 +1189,14 @@ var ck_complex = {
 };
 
 var ckeditor = {
-	template: '<div class=\'ckeditor\'>\n\t\t    \t<textarea class="form-control" ></textarea>\n\t    \t</div>',
+	template: '<div class=\'ckeditor\'>\n\t\t    \t<textarea class="form-control" :maxlength="maxlength"></textarea>\n\t    \t</div>',
 	props: {
 		value: {},
 		config: {},
 		set: {
 			default: 'edit'
-		}
+		},
+		maxlength: {}
 	},
 	created: function created() {
 		var self = this;
@@ -1659,7 +1662,7 @@ img-uploador
 <<<<
 */
 
-__webpack_require__(86);
+__webpack_require__(87);
 
 var fl = {
     read: function read(file, callback) {
@@ -2328,7 +2331,7 @@ popUrlListen:
 <-<
  */
 
-__webpack_require__(87);
+__webpack_require__(88);
 
 var ln = {
     history_handle: function history_handle(obj) {
@@ -2683,7 +2686,7 @@ function order_by_key(array, key) {
 
 var _basic = __webpack_require__(2);
 
-__webpack_require__(88);
+__webpack_require__(89);
 
 var table_fields = {
     props: ['heads', 'row', 'inputWidth', 'labelWidth'],
@@ -2890,7 +2893,7 @@ Vue.component('datetime', {
 "use strict";
 
 
-__webpack_require__(89);
+__webpack_require__(90);
 
 /***/ }),
 /* 38 */
@@ -3051,22 +3054,26 @@ Vue.component('com-field-select', sim_select);
 "use strict";
 
 
-__webpack_require__(90);
+__webpack_require__(91);
 
 var field_sigle_chosen = {
     props: ['row', 'head'],
-    template: '<div  :style="head.style">\n    <select  class="chosen field-single-chosen form-control"\n        :data-placeholder="head.placeholder" >\n         <option  :value="null" ></option>\n        <option v-for="option in order_options" :value="option.value" v-text="option.label"></option>\n    </select>\n    </div>',
+    template: '<div  :style="head.style">\n    <select  class="chosen field-single-chosen form-control"\n        :data-placeholder="head.placeholder" >\n         <option  :value="undefined" ></option>\n        <option v-for="option in order_options" :value="option.value" v-text="option.label"></option>\n    </select>\n    </div>',
     mounted: function mounted() {
         var self = this;
-        ex.load_css('https://cdn.bootcss.com/chosen/1.8.2/chosen.min.css');
-        ex.load_js('https://cdn.bootcss.com/chosen/1.8.2/chosen.jquery.min.js', function () {
+        ex.load_css(cfg.js_lib.chosen_css);
+        ex.load_js(cfg.js_lib.chosen, function () {
             $(self.$el).find('select').chosen({
                 search_contains: true,
                 allow_single_deselect: true,
                 width: '100%'
             }).change(function (event) {
                 //self.$emit('input',$(this).val())
-                self.row[self.head.name] = $(this).val();
+                if ($(this).val() == '') {
+                    delete self.row[self.head.name];
+                } else {
+                    self.row[self.head.name] = $(this).val();
+                }
             });
             self.setValue(self.value);
         });
@@ -3317,7 +3324,7 @@ Vue.component('com-field-int-bool', field_bool);
 "use strict";
 
 
-__webpack_require__(91);
+__webpack_require__(92);
 
 var multi_chosen = {
     props: ['value', 'options'],
@@ -3518,7 +3525,7 @@ var com_search = {
         }
         return {};
     },
-    template: '<div>\n    <input style="max-width: 20em;min-width: 10em;"\n             type="text"\n             name="_q"\n             v-model=\'search_args._q\'\n             :placeholder=\'head.search_tip\'\n             @keyup.13="$emit(\'submit\')"\n             class=\'form-control input-sm\'/>\n    </div> '
+    template: '<div>\n    <input style="max-width: 20em;min-width: 10em;"\n             type="text"\n             name="_q"\n             v-model=\'search_args._q\'\n             :placeholder=\'head.search_tip\'\n             @keyup.13="$emit(\'submit\')"\n             maxlength="500"\n             class=\'form-control input-sm\'/>\n    </div> '
 };
 Vue.component('com-search-filter', com_search);
 
@@ -3529,7 +3536,7 @@ Vue.component('com-search-filter', com_search);
 "use strict";
 
 
-__webpack_require__(92);
+__webpack_require__(93);
 
 var com_search = {
     props: ['head', 'search_args'],
@@ -3570,24 +3577,55 @@ Vue.component('com-search-select', com_search);
 "use strict";
 
 
+__webpack_require__(94);
+
 var com_select = {
     props: ['head', 'search_args', 'config'],
-    template: '<select v-model=\'search_args[head.name]\' class="form-control input-sm" >\n        <option v-if="head.forbid_select_null" :value="null" disabled v-text=\'head.label\'></option>\n        <option v-else :value="undefined" v-text=\'head.label\' ></option>\n        <option :value="null" disabled >---</option>\n        <option v-for=\'option in orderBy( head.options,"label")\' :value="option.value" v-text=\'option.label\'></option>\n    </select>\n    ',
+    template: '<select v-model=\'search_args[head.name]\' class="form-control input-sm com-filter-select" >\n        <option v-if="head.forbid_select_null" :value="undefined" disabled v-text=\'head.label\'></option>\n        <option v-else :value="undefined" v-text=\'head.label\' ></option>\n        <option :value="null" disabled >---</option>\n        <option v-for=\'option in orderBy( head.options,"label")\' :value="option.value" v-text=\'option.label\'></option>\n    </select>\n    ',
     data: function data() {
-        //var inn_cfg = {
-        //    order: this.head.order || false  // 默认false
+        //if(!this.search_args[this.head.name]){
+        //Vue.set(this.search_args,this.head.name,'')
         //}
-        //ex.assign(inn_cfg,this.config)
         return {
             order: this.head.order || false
         };
     },
+    computed: {
+        myvalue: function myvalue() {
+            return this.search_args[this.head.name];
+        }
+    },
     watch: {
         myvalue: function myvalue(v) {
             this.$emit('input', v);
+
+            if (this.head.changed_emit) {
+                ex.vuexEmit(this, this.head.changed_emit);
+                //this.$store.state[parName].childbus.$emit(this.head.changed_emit)
+            }
+        }
+    },
+    mounted: function mounted() {
+        //var parName = ex.vuexParName(this)
+        var self = this;
+        if (this.head.update_options_on) {
+            ex.vuexOn(this, this.head.update_options_on, this.get_options);
+        }
+        if (this.head.clear_value_on) {
+            ex.vuexOn(this, this.head.update_options_on, this.clear_value);
         }
     },
     methods: {
+        get_options: function get_options() {
+            var self = this;
+            console.log('sss');
+            ex.director_call(this.head._director_name, { search_args: self.search_args }, function (resp) {
+                self.head.options = resp;
+            });
+        },
+        clear_value: function clear_value() {
+            delete this.search_args[this.head.name];
+        },
         orderBy: function orderBy(array, key) {
             if (!this.order) {
                 return array;
@@ -3604,6 +3642,8 @@ var com_select = {
     }
 };
 Vue.component('com-select-filter', com_select);
+// 以后替换为下面的标准名
+Vue.component('com-filter-select', com_select);
 
 function isChinese(temp) {
     var re = /[^\u4E00-\u9FA5]/;
@@ -3631,64 +3671,115 @@ function compare(temp1, temp2) {
 
 var com_date_datetimefield_range = {
     props: ['head', 'search_args'],
-    //data:function(){
-    //    if(! this.search_args['_start_'+this.head.name]){
-    //        Vue.set(this.search_args,'_start_'+this.head.name,'')
-    //        var start=''
-    //    }else{
-    //        var start=this.search_args['_start_'+this.head.name].slice(0,10)
-    //    }
-    //    if(! this.search_args['_end_'+this.head.name]){
-    //        Vue.set(this.search_args,'_end_'+this.head.name,'')
-    //        var end=''
-    //    }else{
-    //        var end=this.search_args['_end_'+this.head.name].slice(0,10)
-    //    }
-    //    return {
-    //        start:start,
-    //        end:end
-    //    }
-    //},
+    data: function data() {
+        if (!this.search_args['_start_' + this.head.name]) {
+            Vue.set(this.search_args, '_start_' + this.head.name, '');
+            var start = '';
+        } else {
+            var start = this.search_args['_start_' + this.head.name].slice(0, 10);
+            this.search_args['_start_' + this.head.name] = start + ' 00:00:00';
+        }
+        if (!this.search_args['_end_' + this.head.name]) {
+            Vue.set(this.search_args, '_end_' + this.head.name, '');
+            var end = '';
+        } else {
+            var end = this.search_args['_end_' + this.head.name].slice(0, 10);
+            this.search_args['_end_' + this.head.name] = end + ' 23:59:59';
+        }
+        return {
+            start: start,
+            end: end
+        };
+    },
     template: '<div  class="date-filter flex flex-ac">\n                     <date v-model="start" :placeholder="head.label"></date>\n                    <div style="display: inline-block;margin: 0 2px;" >-</div>\n                        <date  v-model="end" :placeholder="head.label"></date>\n                </div>',
 
-    computed: {
-        start: {
-            get: function get() {
-                if (this.search_args['_start_' + this.head.name]) {
-                    return this.search_args['_start_' + this.head.name].slice(0, 10);
-                } else {
-                    return '';
-                }
-            },
-            set: function set(nv) {
-                if (nv) {
-                    Vue.set(this.search_args, '_start_' + this.head.name, nv + ' 00:00:00');
-                    //this.search_args['_start_'+this.head.name]=nv+' 00:00:00'
-                } else {
-                    Vue.set(this.search_args, '_start_' + this.head.name, nv);
-                    //this.search_args['_start_'+this.head.name]=nv
+    watch: {
+        start: function start(nv, ov) {
+            if (nv && this.end) {
+                if (nv > this.end) {
+                    cfg.showError('开始时间必须小于结束时间');
+                    var self = this;
+                    Vue.nextTick(function () {
+                        self.start = ov;
+                    });
+                    return;
                 }
             }
+            if (nv) {
+                Vue.set(this.search_args, '_start_' + this.head.name, nv + ' 00:00:00');
+            } else {
+                Vue.set(this.search_args, '_start_' + this.head.name, nv);
+            }
         },
-        end: {
-            get: function get() {
-                if (this.search_args['_end_' + this.head.name]) {
-                    return this.search_args['_end_' + this.head.name].slice(0, 10);
-                } else {
-                    return '';
+        end: function end(nv, ov) {
+            if (nv && this.start) {
+                if (nv < this.start) {
+                    cfg.showError('结束时间必须大于开始时间');
+                    var self = this;
+                    Vue.nextTick(function () {
+                        self.end = ov;
+                    });
+                    return;
                 }
-            },
-            set: function set(nv) {
-                if (nv) {
-                    Vue.set(this.search_args, '_end_' + this.head.name, nv + ' 23:59:59');
-                    //this.search_args['_end_'+this.head.name]=nv+' 23:59:59'
-                } else {
-                    Vue.set(this.search_args, '_end_' + this.head.name, nv);
-                    //this.search_args['_end_'+this.head.name]=nv
-                }
+            }
+            if (nv) {
+                Vue.set(this.search_args, '_end_' + this.head.name, nv + ' 23:59:59');
+            } else {
+                Vue.set(this.search_args, '_end_' + this.head.name, nv);
             }
         }
     }
+    //computed:{
+    //    start:{
+    //        get:function(){
+    //            if(this.search_args['_start_'+this.head.name]){
+    //                return  this.search_args['_start_'+this.head.name].slice(0,10)
+    //            }else{
+    //                return ''
+    //            }
+    //
+    //        },
+    //        set:function(nv){
+    //            if(nv){
+    //                if(nv>this.end){
+    //                    cfg.showError('开始时间必须小于结束时间')
+    //                    var self=this
+    //                    Vue.nextTick(function(){
+    //                        self.start = ''
+    //                    })
+    //                    return
+    //                }
+    //            }
+    //
+    //            if(nv){
+    //                Vue.set(this.search_args,'_start_'+this.head.name ,nv+' 00:00:00')
+    //            }else{
+    //                Vue.set(this.search_args,'_start_'+this.head.name,nv)
+    //            }
+    //
+    //        }
+    //    },
+    //    end:{
+    //        get:function(){
+    //            if(this.search_args['_end_'+this.head.name]){
+    //                return   this.search_args['_end_'+this.head.name] .slice(0,10)
+    //            }else{
+    //                return ''
+    //            }
+    //
+    //        },
+    //        set:function(nv){
+    //            if(nv){
+    //                Vue.set(this.search_args,'_end_'+this.head.name,nv+' 23:59:59')
+    //                //this.search_args['_end_'+this.head.name]=nv+' 23:59:59'
+    //            }else{
+    //                Vue.set(this.search_args,'_end_'+this.head.name,nv)
+    //                //this.search_args['_end_'+this.head.name]=nv
+    //            }
+    //
+    //        }
+    //    }
+    //},
     //watch:{
     //    start:function(nv){
     //        if(nv){
@@ -3747,13 +3838,20 @@ Vue.component('com-filter-search-select', com_select);
 
 var com_select = {
     props: ['head', 'search_args', 'config'],
-    template: '<select v-model=\'search_args[head.name]\' class="form-control input-sm" >\n        <option :value="undefined" v-text=\'head.label\'></option>\n        <option :value="null" disabled >---</option>\n        <option v-for=\'option in orderBy( head.options,"label")\' :value="option.value" v-text=\'option.label\'></option>\n    </select>\n    ',
+    template: '<select v-model=\'search_args[head.name]\' class="form-control input-sm" >\n        <option :value="null_value" v-text=\'head.label\'></option>\n        <option  disabled >---</option>\n        <option v-for=\'option in orderBy( head.options,"label")\' :value="option.value" v-text=\'option.label\'></option>\n    </select>\n    ',
     data: function data() {
         return {};
     },
     computed: {
         watchedValue: function watchedValue() {
             return this.search_args[this.head.related];
+        },
+        null_value: function null_value() {
+            if (this.search_args[this.head.name] === null) {
+                return null;
+            } else {
+                return undefined;
+            }
         }
     },
     watch: {
@@ -4034,7 +4132,7 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 
  <-<
  */
-__webpack_require__(95);
+__webpack_require__(97);
 
 Vue.component('com-filter', {
     props: ['heads', 'search_args'],
@@ -4071,7 +4169,6 @@ Vue.component('com-filter', {
             });
         }
     }
-
 });
 
 var sim_filter_with_search = {
@@ -4454,7 +4551,7 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, "table.fake-suit {\n  border: 1px solid #DDD;\n  border-radius: 6px; }\n  table.fake-suit th {\n    font-weight: bold;\n    background-color: #e5e5e5;\n    background-image: linear-gradient(to bottom, #f3f3f3, #e5e5e5); }\n  table.fake-suit td {\n    border-left: 1px solid #F5F5F5; }\n  table.fake-suit tr > td:first-child {\n    border-left: none; }\n  table.fake-suit tbody tr {\n    background-color: white; }\n  table.fake-suit tbody td {\n    border-top: 1px solid #E7E7E7;\n    padding-top: 3px;\n    padding-bottom: 3px; }\n  table.fake-suit tbody tr:nth-child(even) {\n    background-color: #FAFAFA; }\n  table.fake-suit tbody tr:hover {\n    background-color: #F5F5F5; }\n\n.paginator input {\n  width: 20px; }\n\n.paginator .page-input-block {\n  display: inline-block; }\n\n.paginator button {\n  vertical-align: top; }\n\n.sort-mark img {\n  width: 10px; }\n\nul.pagination li {\n  display: inline;\n  cursor: pointer; }\n\nul.pagination li span {\n  color: black;\n  float: left;\n  padding: 4px 10px;\n  text-decoration: none;\n  border: 1px solid #ddd; }\n\nul.pagination li span.active {\n  background-color: #4CAF50;\n  color: white; }\n\nul.pagination li span:hover:not(.active) {\n  background-color: #ddd; }\n\n.com-filter .date-filter {\n  /*padding-left: 10px;*/ }\n  .com-filter .date-filter span {\n    padding-left: 5px; }\n  .com-filter .date-filter .datetime-picker {\n    min-width: 10em;\n    max-width: 14em; }\n\n.sortmark {\n  color: #d9d9de; }\n  .sortmark.sort-col {\n    color: black; }\n", ""]);
+exports.push([module.i, ".com-filter-select {\n  max-width: 25em; }\n", ""]);
 
 // exports
 
@@ -4468,7 +4565,7 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, ".table-btn-group {\n  min-width: 9em; }\n", ""]);
+exports.push([module.i, "table.fake-suit {\n  border: 1px solid #DDD;\n  border-radius: 6px; }\n  table.fake-suit th {\n    font-weight: bold;\n    background-color: #e5e5e5;\n    background-image: linear-gradient(to bottom, #f3f3f3, #e5e5e5); }\n  table.fake-suit td {\n    border-left: 1px solid #F5F5F5; }\n  table.fake-suit tr > td:first-child {\n    border-left: none; }\n  table.fake-suit tbody tr {\n    background-color: white; }\n  table.fake-suit tbody td {\n    border-top: 1px solid #E7E7E7;\n    padding-top: 3px;\n    padding-bottom: 3px; }\n  table.fake-suit tbody tr:nth-child(even) {\n    background-color: #FAFAFA; }\n  table.fake-suit tbody tr:hover {\n    background-color: #F5F5F5; }\n\n.paginator input {\n  width: 20px; }\n\n.paginator .page-input-block {\n  display: inline-block; }\n\n.paginator button {\n  vertical-align: top; }\n\n.sort-mark img {\n  width: 10px; }\n\nul.pagination li {\n  display: inline;\n  cursor: pointer; }\n\nul.pagination li span {\n  color: black;\n  float: left;\n  padding: 4px 10px;\n  text-decoration: none;\n  border: 1px solid #ddd; }\n\nul.pagination li span.active {\n  background-color: #4CAF50;\n  color: white; }\n\nul.pagination li span:hover:not(.active) {\n  background-color: #ddd; }\n\n.com-filter .date-filter {\n  /*padding-left: 10px;*/ }\n  .com-filter .date-filter span {\n    padding-left: 5px; }\n  .com-filter .date-filter .datetime-picker {\n    min-width: 10em;\n    max-width: 14em; }\n\n.sortmark {\n  color: #d9d9de; }\n  .sortmark.sort-col {\n    color: black; }\n", ""]);
 
 // exports
 
@@ -4482,20 +4579,34 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
+exports.push([module.i, ".table-btn-group {\n  min-width: 9em; }\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 78 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(0)();
+// imports
+
+
+// module
 exports.push([module.i, ".filter-item {\n  margin: auto 0.3em; }\n\n.com-filter {\n  flex-wrap: wrap; }\n\n.row-filter .bootstrap-select {\n  min-width: 10em; }\n", ""]);
 
 // exports
 
 
 /***/ }),
-/* 78 */,
 /* 79 */,
 /* 80 */,
 /* 81 */,
 /* 82 */,
 /* 83 */,
 /* 84 */,
-/* 85 */
+/* 85 */,
+/* 86 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
@@ -4521,7 +4632,7 @@ if(false) {
 }
 
 /***/ }),
-/* 86 */
+/* 87 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
@@ -4547,7 +4658,7 @@ if(false) {
 }
 
 /***/ }),
-/* 87 */
+/* 88 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
@@ -4573,7 +4684,7 @@ if(false) {
 }
 
 /***/ }),
-/* 88 */
+/* 89 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
@@ -4599,7 +4710,7 @@ if(false) {
 }
 
 /***/ }),
-/* 89 */
+/* 90 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
@@ -4625,7 +4736,7 @@ if(false) {
 }
 
 /***/ }),
-/* 90 */
+/* 91 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
@@ -4651,7 +4762,7 @@ if(false) {
 }
 
 /***/ }),
-/* 91 */
+/* 92 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
@@ -4677,7 +4788,7 @@ if(false) {
 }
 
 /***/ }),
-/* 92 */
+/* 93 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
@@ -4703,13 +4814,39 @@ if(false) {
 }
 
 /***/ }),
-/* 93 */
+/* 94 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
 var content = __webpack_require__(75);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// add the styles to the DOM
+var update = __webpack_require__(1)(content, {});
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./filter_select.scss", function() {
+			var newContent = require("!!../../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./filter_select.scss");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 95 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(76);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -4729,13 +4866,13 @@ if(false) {
 }
 
 /***/ }),
-/* 94 */
+/* 96 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(76);
+var content = __webpack_require__(77);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -4755,13 +4892,13 @@ if(false) {
 }
 
 /***/ }),
-/* 95 */
+/* 97 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(77);
+var content = __webpack_require__(78);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -4781,14 +4918,14 @@ if(false) {
 }
 
 /***/ }),
-/* 96 */,
-/* 97 */,
 /* 98 */,
 /* 99 */,
 /* 100 */,
 /* 101 */,
 /* 102 */,
-/* 103 */
+/* 103 */,
+/* 104 */,
+/* 105 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

@@ -55,6 +55,11 @@ export var code ={
     eval:function(js,scope){
         return eval(js)
     },
+    _count:0,
+    get_uid:function(){
+        this._count++
+        return this._count
+    },
     //hashCode: function (input){
     //    var I64BIT_TABLE =
     //        'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-'.split('');

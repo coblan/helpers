@@ -90,12 +90,15 @@ def get_excel(director_name,search_args,user):
 def save_rows(rows,user,request):
     kw=request.GET.dict()
     ls =[]
-    for row in rows:
-        field_obj = permit_save_model(user, row,**kw)
-        dc = field_obj.get_row() 
-        ls.append(dc)
-    return ls
-
+    try:
+        for row in rows:
+            field_obj = permit_save_model(user, row,**kw)
+            dc = field_obj.get_row() 
+            ls.append(dc)
+        return ls
+    
+    except ValidationError as e:
+        return {'errors':dict(e),}    
 
 def del_rows(rows,user):
     for row in rows:

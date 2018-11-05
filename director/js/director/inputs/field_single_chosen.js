@@ -5,21 +5,25 @@ var field_sigle_chosen={
     template:`<div  :style="head.style">
     <select  class="chosen field-single-chosen form-control"
         :data-placeholder="head.placeholder" >
-         <option  :value="null" ></option>
+         <option  :value="undefined" ></option>
         <option v-for="option in order_options" :value="option.value" v-text="option.label"></option>
     </select>
     </div>`,
     mounted:function(){
         var self=this
-        ex.load_css('https://cdn.bootcss.com/chosen/1.8.2/chosen.min.css')
-        ex.load_js('https://cdn.bootcss.com/chosen/1.8.2/chosen.jquery.min.js',function(){
+        ex.load_css(cfg.js_lib.chosen_css)
+        ex.load_js(cfg.js_lib.chosen,function(){
             $(self.$el).find('select').chosen({
                 search_contains:true,
                 allow_single_deselect: true,
                 width:'100%',
             }).change(function(event){
                 //self.$emit('input',$(this).val())
-               self.row[self.head.name]= $(this).val()
+                if($(this).val() == ''){
+                    delete self.row[self.head.name]
+                }else{
+                    self.row[self.head.name]= $(this).val()
+                }
             });
             self.setValue(self.value)
         })

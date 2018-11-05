@@ -31,6 +31,7 @@
     eventBus = new Vue({})
     table_logic={
         el:'#there',
+        store:store,
         data:{
             parents:parents,
             page_label:page_label,
@@ -57,8 +58,17 @@
         },
         mixins:[mix_table_data,mix_ele_table_adapter],
 
+        created:function(){
+            var store_name='table_'+ex.get_uid()
+            this.$store.registerModule(store_name, table_store)
+            this.store_name = store_name
+        },
         mounted:function(){
             var self=this
+
+//            this.$store.state[store_name].childbus.$on('update_or_insert',function(){
+//                console.log('jjyy')
+//            })
             ex.assign(this.op_funs,{
                 row_changed:function(kws){
                     var row= kws.row

@@ -67,7 +67,7 @@ class ModelFields(forms.ModelForm):
             self.crt_user = crt_user
         
         # if pk is None:
-        if dc.get('pk'):
+        if dc.get('pk') != None:
             pk=dc.get('pk')
         form_kw={}
         if 'instance' not in kw:
@@ -85,7 +85,13 @@ class ModelFields(forms.ModelForm):
         
         for k in dict(dc):
             # 强制 readonly的字段，不能修改
+            inst =  form_kw['instance']
             if k in self.readonly:
+                if hasattr(inst, "%s_id" % k):  # 如果是ForeignKey，必须要pk值才能通过 form验证
+                    fieldcls = inst.__class__._meta.get_field(k)
+                    if isinstance(fieldcls, models.ForeignKey):
+                        dc[k] = getattr(inst, "%s_id" % k)
+                        continue
                 dc[k] =  getattr(form_kw['instance'] , k)  
         
         self.nolimit = nolimit
@@ -140,19 +146,20 @@ class ModelFields(forms.ModelForm):
     
     def is_valid(self): 
         rt = super().is_valid()
-        cus_errors = self.custom_valid()
-        self._cus_errors =  cus_errors
-        return rt and not cus_errors
+        extra_errors = self.extra_valid()
+        self._extra_errors =  extra_errors
+        return rt and not extra_errors
     
-    def custom_valid(self): 
+    def extra_valid(self): 
+        """在django的clean函数中，自定义的字段，raise ValidationError ，会被django清除掉，所以只能在后面重新验证"""
         return {}
         
     def get_errors(self): 
-        cus_errors = getattr(self, '_cus_errors', {})
+        extra_errors = getattr(self, '_extra_errors', {})
         
         errors = dict(self.errors)
         
-        for k, v in cus_errors.items():
+        for k, v in extra_errors.items():
             if k in errors:
                 errors[k].append(v)
             else:
@@ -234,7 +241,7 @@ class ModelFields(forms.ModelForm):
     
     def init_value(self):
         """可能是用于 foreignkey 或者 manytomany的"""
-        if self.instance.pk:
+        if self.instance.pk != None:
             for field in self.instance._meta.get_fields(): #get_all_field_names():
                 f=field.name
                 if f in self.fields:
@@ -342,7 +349,7 @@ class ModelFields(forms.ModelForm):
         """
         if self.nolimit:
             return True
-        if not self.instance.pk:
+        if self.instance.pk != None:
             if self.permit.can_add():
                 return True
             else:
@@ -485,6 +492,8 @@ class Fields(ModelFields):
     def __init__(self, dc={}, pk=None, crt_user=None, nolimit=False, *args, **kw): 
         self.kw=dc.copy()
         self.kw.update(kw)
+        # 太复杂，暂时不要权限
+        self.nolimit = True
     
     def is_valid(self): 
         return True

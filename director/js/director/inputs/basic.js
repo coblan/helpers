@@ -12,6 +12,7 @@ export var baseInput={
         props:['row','head'],
         template: `<div><span v-if='head.readonly' v-text='row[head.name]'></span>
             		<input v-else type="number" class="form-control input-sm" v-model="row[head.name]"
+            		    style="ime-mode:disabled"
             		    @keypress="isNumber($event)"
             	    	:id="'id_'+head.name"
             		    :name="head.name" :step="head.step" :min='head.min' :max="head.max"
@@ -20,8 +21,9 @@ export var baseInput={
             isNumber:function(evt){
                 evt = (evt) ? evt : window.event;
                 var charCode = (evt.which) ? evt.which : evt.keyCode;
-                if ((charCode > 31 && (charCode < 48 || charCode > 57)) && charCode !== 46) {
-                    evt.preventDefault();;
+                //if ((charCode > 31 && (charCode < 48 || charCode > 57)) && charCode !== 46) {
+                if (charCode==101 ||charCode==69 ) { // 排除掉E
+                    evt.preventDefault();
                 } else {
                     return true;
                 }
@@ -322,14 +324,17 @@ export var baseInput={
     },
     richtext:{
         props:['row','head'],
-        template:`<div style="position: relative">
+        template:`<div >
             <span v-if='head.readonly' v-text='row[head.name]'></span>
             <div v-else>
-                <input type="text" :name='head.name' style="display:none" v-model="row[head.name]">
-                <ckeditor ref="ck" :style="head.style" v-model="row[head.name]" :id="'id_'+head.name" :set="head.set" :config="head.config"></ckeditor>
+                <ckeditor ref="ck" :style="head.style" v-model="row[head.name]"
+                :maxlength='head.maxlength'
+                :id="'id_'+head.name" :set="head.set" :config="head.config"></ckeditor>
+                <div style="height: 1em;width: 0;position: relative">
+                <input type="text" :name='head.name' style="display: none"  v-model="row[head.name]">
+                </div>
             </div>
-
-                       </div>`,
+         </div>`,
         methods:{
             commit:function(){
                 Vue.set(this.row,this.head.name,this.$refs.ck.editor.getData())
