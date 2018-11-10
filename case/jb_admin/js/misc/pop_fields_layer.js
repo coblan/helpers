@@ -80,29 +80,43 @@ export  function pop_fields_layer (row,fields_ctx,callback,layerConfig){
 
         //Vue.nextTick(function(){
             var store_id ='store_fields_'+ new Date().getTime()
-            new Vue({
+
+            var vc  = new Vue({
                 el:'#fields-pop-'+pop_id,
-                store:store,
                 data:{
                     has_heads_adaptor:false,
                     row:row,
                     fields_heads:heads,
                     ops:ops,
                     com_id:com_id,
+
                 },
                 mounted:function(){
-                    this.$store.registerModule(store_id,{
-                        namespaced: true,
-                        state:{
-                            fields_obj:this.$refs.field_panel
+                    var vc = this
+                    this.childStore = new Vue({
+                        data:{
+                            fields_obj:vc.$refs.field_panel,
                         },
-                        mutations:{
-                            showErrors:function(state,errors){
-                                state.fields_obj.setErrors(errors)
-                                state.fields_obj.showErrors(errors)
+                        methods:{
+                            showErrors:function(errors){
+                                vc.fields_obj.setErrors(errors)
+                                vc.fields_obj.showErrors(errors)
                             }
                         }
+
                     })
+                    //this.$store.registerModule(store_id,{
+                    //    namespaced: true,
+                    //    state:{
+                    //        fields_obj:this.$refs.field_panel
+                    //    },
+                    //    mutations:{
+                    //        showErrors:function(state,errors){
+                    //            state.fields_obj.setErrors(errors)
+                    //            state.fields_obj.showErrors(errors)
+                    //        }
+                    //    }
+                    //})
                 },
                 methods:{
                     on_sub_success:function(new_row){
