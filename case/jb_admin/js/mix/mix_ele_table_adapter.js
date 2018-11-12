@@ -8,7 +8,7 @@ var mix_ele_table_adapter = {
     },
     watch:{
         'search_args._sort':function(v){
-            if(!v){
+            if(!v && this.$refs.e_table){
                 this.$refs.e_table.clearSort()
             }
         }
