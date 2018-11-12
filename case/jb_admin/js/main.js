@@ -76,7 +76,13 @@ import * as pop_fields_layer from  './misc/pop_fields_layer.js'
 import * as pop_layer from  './misc/pop_layer'
 
 //fields_panels
+import * as panels_main from  './pannels/main.js'
+
+
+
 import * as sim_fields from  './fields_panels/sim_fields.js'
+import * as sim_fields_local from  './fields_panels/sim_fields_local.js'
+
 import * as pop_edit_local from  './fields_panels/pop_edit_local.js'
 import * as plain_field_panel from  './fields_panels/plain_field_panel.js'
 

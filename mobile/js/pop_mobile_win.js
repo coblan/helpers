@@ -6,7 +6,7 @@ function pop_mobile_win(editor,ctx,callback){
             <mt-popup  @input="on_input($event)"
                   v-model='show'
                   popup-transition="popup-fade">
-                    <component :is="editor" :ctx="ctx" @finish="on_finish"></component>
+                    <component :is="editor" :ctx="ctx" @finish="on_finish($event)"></component>
             </mt-popup>
             </div>`)
 

@@ -1,0 +1,36 @@
+.list-enter-active, .list-leave-active {
+  transition: all 0.3s;
+}
+.list-enter, .list-leave-to
+  /* .list-leave-active for below version 2.1.8 */ {
+  opacity: 0.3;
+  transform: translateX(100%);
+}
+
+.com-slide-win{
+  position: absolute;
+  top:0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  pointer-events: none ;
+  //width: 100vw;
+  //height: 100vh;
+
+  //.fixed{
+  //  position: fixed;
+  //}
+
+  .mywrap{
+    display: flex;
+    flex-direction: column;
+
+    .pop-content{
+      flex-grow: 10;
+      overflow: auto;
+      -webkit-overflow-scrolling: touch
+    }
+
+  }
+
+}

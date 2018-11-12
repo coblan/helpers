@@ -34,6 +34,16 @@ export var  vuetool = {
     vueBroadcase:function(){
 
     },
+    vueParStore:function(self){
+        var parent = self.$parent
+        while (parent){
+            if(parent.childStore){
+                return parent.childStore
+            }else {
+                parent = parent.$parent
+            }
+        }
+    },
     vuexParName:function(self){
         var par = self.$parent
         while(par){

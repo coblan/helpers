@@ -19,7 +19,7 @@ js_tr_list.append(get_tr)
 def get_lib(request): 
     dc = {
 
-        'mobile': '/static/js/mobile.pack.js?t=%s'%js_stamp_dc.get('mobile_pack_js'), 
+        'mobile': '/static/js/mobile.pack.js?t=1544'  #%s'%js_stamp_dc.get('mobile_pack_js'), 
     }
     return dc
 

@@ -1,6 +1,9 @@
+require('./scss/element_table.scss')
+
 import * as config from  './config.js'
 
-import * as com_pop_fields_panel from  './com/com_pop_fields_panel'
-import * as com_pop_fields_local from  './com/com_pop_fields_local_panel'
-
 import * as pop_win from  './pop_mobile_win'
+
+
+import * as pop_main from  './pop/main'
+import * as table_main from  './table/main'

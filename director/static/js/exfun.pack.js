@@ -408,6 +408,63 @@ window.cfg = {
             var realMsg = msg || '操作成功';
             layer.msg(realMsg, { time: delay });
         }
+    },
+    pop_edit: function pop_edit(fields_ctx) {},
+    pop_edit_local: function (_pop_edit_local) {
+        function pop_edit_local(_x, _x2) {
+            return _pop_edit_local.apply(this, arguments);
+        }
+
+        pop_edit_local.toString = function () {
+            return _pop_edit_local.toString();
+        };
+
+        return pop_edit_local;
+    }(function (fields_ctx, callback) {
+        var winindex = pop_edit_local(fields_ctx.row, fields_ctx, callback);
+        return function () {
+            layer.close(winindex);
+        };
+    }),
+
+    pop_big: function pop_big(editor, ctx, callback) {
+        var winindex = pop_layer(ctx, editor, callback);
+        return function () {
+            layer.close(winindex);
+        };
+    },
+    pop_middle: function pop_middle(editor, ctx, callback) {
+        var winindex = pop_layer(ctx, editor, callback);
+        return function () {
+            layer.close(winindex);
+        };
+        //store.commit('left_in_page',{editor:editor,ctx:ctx,callback:callback})
+        //return function (){
+        //    history.back()
+        //}
+    },
+    pop_small: function pop_small(editor, ctx, callback) {
+        //return pop_mobile_win(editor,ctx,callback)
+        var layer_cfg = {
+            title: ctx.title || '详细',
+            area: ctx.area || ['42rem', '32rem']
+        };
+        var winindex = pop_layer(ctx, editor, callback, layer_cfg);
+        return function () {
+            layer.close(winindex);
+        };
+    },
+    close_win: function close_win(index) {
+        if (index == 'full_win') {
+            history.back();
+        }
+    },
+    pop_close: function pop_close(close_func) {
+        // 关闭窗口，窗口创建函数返回的，全部是一个关闭函数
+        close_func();
+    },
+    pop_iframe: function pop_iframe(url, option) {
+        this.pop_big('com-slide-iframe', { url: url, title: option.title });
     }
 };
 
@@ -833,7 +890,19 @@ var file_proc = exports.file_proc = {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+var ua = navigator.userAgent.toLocaleLowerCase();
+var pf = navigator.platform.toLocaleLowerCase();
+var isAndroid = /android/i.test(ua) || /iPhone|iPod|iPad/i.test(ua) && /linux/i.test(pf) || /ucweb.*linux/i.test(ua);
+var isIOS = /iPhone|iPod|iPad/i.test(ua) && !isAndroid;
+var isWinPhone = /Windows Phone|ZuneWP7/i.test(ua);
+
 var layout = exports.layout = {
+    device: {
+        pc: !isAndroid && !isIOS && !isWinPhone,
+        ios: isIOS,
+        android: isAndroid,
+        winPhone: isWinPhone
+    },
     stickup: function stickup(node) {
         var $cur = $(node); //方便后面操作this。
         var top = $cur.offset().top; //获取元素距离顶部的距离
@@ -1704,6 +1773,16 @@ var vuetool = exports.vuetool = {
         return rt;
     },
     vueBroadcase: function vueBroadcase() {},
+    vueParStore: function vueParStore(self) {
+        var parent = self.$parent;
+        while (parent) {
+            if (parent.childStore) {
+                return parent.childStore;
+            } else {
+                parent = parent.$parent;
+            }
+        }
+    },
     vuexParName: function vuexParName(self) {
         var par = self.$parent;
         while (par) {

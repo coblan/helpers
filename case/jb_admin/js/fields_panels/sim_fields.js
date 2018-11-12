@@ -1,6 +1,6 @@
 require('./scss/sim_fields.scss')
 
-var com_sim_fields = {
+export var com_sim_fields = {
     props:{
         heads:'',
         row:'',
