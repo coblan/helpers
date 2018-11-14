@@ -55,15 +55,17 @@
 					var self=this
 					var post_data=[{fun:'changepswd',row:this.row}]
 //					var url = ex.appendSearch('/d/ajax/authuser',self.search_args)
+					cfg.show_load()
 					ex.post('/d/ajax/authuser',JSON.stringify(post_data),function (resp) {
 //						callback(resp.changepswd)
+
 						var rt = resp.changepswd
 						if(rt.errors){
 							cfg.hide_load()
 							self.setErrors(rt.errors)
 							self.showErrors(rt.errors)
 						}else{
-							cfg.hide_load(2000)
+							cfg.hide_load(1500,'修改成功，跳转...')
 							self.after_save(rt.row)
 							self.setErrors({})
 						}
@@ -72,7 +74,10 @@
 				},
 				after_save:function(row){
 					ex.vueSuper(this,{fun:'after_save',args:[row]})
-					location = '/'
+					setTimeout(function(){
+						location = '/'
+					},2000)
+
 				},
 //				submit:function(){
 //					var  self =this
