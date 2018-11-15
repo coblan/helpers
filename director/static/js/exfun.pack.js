@@ -998,7 +998,11 @@ var network = exports.network = {
                 }
             }
             if (msg.length != 0) {
-                cfg.warning(msg.join('\n'));
+                if (resp.success === false) {
+                    cfg.warning(msg.join('\n'));
+                } else {
+                    cfg.showMsg(msg.join('\n'));
+                }
             }
             //if (resp.status && typeof resp.status == 'string' && resp.status != 'success') {
             if (resp.success === false) {
