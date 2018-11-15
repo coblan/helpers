@@ -93,7 +93,6 @@ var order_list =  {
         add_new:function(){
             var self = this
             self.crt_row = {}
-            self.rows.push(self.crt_row)
 
             var fields_ctx={
                 heads:self.head.fields_heads,
@@ -106,6 +105,7 @@ var order_list =  {
                 //ex.assign(self.row,new_row)
                 var new_row=resp
                 ex.vueAssign(self.crt_row,new_row)
+               self.rows.push(self.crt_row)
                 //self.crt_row.append(resp.new_row)
                 self.row[self.head.name] = JSON.stringify(self.rows)
                layer.close(win)

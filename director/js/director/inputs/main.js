@@ -14,6 +14,7 @@ import * as field_single_chosen from './field_single_chosen'
 
 import * as field_select from './field_select.js'
 import * as field_date from './field_date.js'
+import * as field_single_select2 from './field_single_select2.js'
 
 
 require('./scss/file_uploader.scss')

@@ -6,6 +6,9 @@ $.validator.config({
             var digits = params[0]
             var pattern = `\\.\\d{${digits}}$`
             return RegExp(pattern).test(element.value) || '请确定有效位数为'+digits;
+        },
+        dot_split_int:function(element,params){
+            return /^(\d+[,])*(\d+)$/.test(element.value) || '请输入逗号分隔的整数'
         }
     }
 });

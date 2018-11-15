@@ -1,4 +1,9 @@
 var mix_table_data={
+    created:function(){
+        if(!this.search_args){
+            this.search_args=search_args
+        }
+    },
     data:function(){
         return {
             op_funs:{},
@@ -9,6 +14,10 @@ var mix_table_data={
     },
     mounted:function(){
         var self=this
+        this.childStore=new Vue({
+
+        })
+
         ex.assign(this.op_funs,{
             save_changed_rows:function(){
                 self.save_rows(self.changed_rows)

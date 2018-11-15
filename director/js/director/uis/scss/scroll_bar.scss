@@ -1,0 +1,10 @@
+.no-scroll-bar{
+  &::-webkit-scrollbar {
+    width: 0;   /* 滚动条宽度为0 */
+    height: 0; /* 滚动条高度为0 */
+    display: none; /* 滚动条隐藏 */
+  }
+  -ms-overflow-style: none;  // ie 10+
+  overflow: -moz-scrollbars-none; // firefox
+
+}
