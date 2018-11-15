@@ -921,7 +921,11 @@ var network = exports.network = {
                 }
             }
             if (msg.length != 0) {
-                cfg.warning(msg.join('\n'));
+                if (resp.success === false) {
+                    cfg.warning(msg.join('\n'));
+                } else {
+                    cfg.showMsg(msg.join('\n'));
+                }
             }
             //if (resp.status && typeof resp.status == 'string' && resp.status != 'success') {
             if (resp.success === false) {
@@ -1704,6 +1708,33 @@ var vuetool = exports.vuetool = {
         return rt;
     },
     vueBroadcase: function vueBroadcase() {},
+
+    vueChildBusEmit: function vueChildBusEmit(self, event_name, event) {
+        var parent = self.$parent;
+        while (parent) {
+            if (parent.childBus) {
+                break;
+            } else {
+                parent = parent.$parent;
+            }
+        }
+        if (parent) {
+            parent.childbus.$emit(event_name, event);
+        }
+    },
+    vueChildBusOn: function vueChildBusOn(self, event_name, func) {
+        var parent = self.$parent;
+        while (parent) {
+            if (parent.childBus) {
+                break;
+            } else {
+                parent = parent.$parent;
+            }
+        }
+        if (parent) {
+            parent.childbus.$on(event_name, func);
+        }
+    },
     vuexParName: function vuexParName(self) {
         var par = self.$parent;
         while (par) {

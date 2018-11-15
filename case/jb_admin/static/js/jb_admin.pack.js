@@ -2250,6 +2250,9 @@ var mix_table_data = {
             get_data: function get_data() {
                 self.getRows();
             },
+            refresh: function refresh() {
+                self.search();
+            },
             selected_set_value: function selected_set_value(kws) {
                 /* kws ={ field,value }
                 * */

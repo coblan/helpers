@@ -152,6 +152,7 @@ desired effect
 <script>
     Vue.config.devtools = true
     menu= {{menu| jsonify}}
+    menu_expand_all = {{ menu_expand_all | jsonify }} || false
     head_bar_data ={{head_bar_data | jsonify}}
     js_config = {{js_config | jsonify}}
     ex.assign(cfg.tr,js_config.tr)
@@ -361,7 +362,31 @@ desired effect
             <!-- /.search form -->
 
             <!-- Sidebar Menu -->
-            <ul class="sidebar-menu" data-widget="tree">
+            <ul v-if="menu_expand_all" class="sidebar-menu" data-widget="tree" data-api="tree" data-accordion=0>
+                <!--<li class="header">HEADER</li>-->
+                <!-- Optionally, you can add icons to the links -->
+                <!--<li style="height: 20px;"></li>-->
+                <li v-for="action in filted_menu" :class="{active:true,treeview:action.submenu}">
+                    <a :href="action.url">
+                        <i v-html="action.icon"></i>
+                        <!--<i class="fa fa-link"></i>-->
+                        <span v-text="action.label"></span>
+                    <span v-if="action.submenu" class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                      </span>
+                    </a>
+                    <ul v-if="action.submenu" class="treeview-menu">
+                        <!--<li><a href="#">Link in level 2</a></li>-->
+                        <li v-for="subact in action.submenu" :class="{'active':is_active(subact)}">
+                            <a :href="subact.url">
+                                <i class="fa fa-circle-o"></i>
+                                <span v-text="subact.label"></span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            <ul v-else class="sidebar-menu" data-widget="tree" >
                 <!--<li class="header">HEADER</li>-->
                 <!-- Optionally, you can add icons to the links -->
                 <!--<li style="height: 20px;"></li>-->
@@ -384,20 +409,6 @@ desired effect
                         </li>
                     </ul>
                 </li>
-
-                <!--<li class="active"><a href="#"><i class="fa fa-link"></i> <span>Link</span></a></li>-->
-                <!--<li><a href="#"><i class="fa fa-link"></i> <span>Another Link</span></a></li>-->
-                <!--<li class="treeview">-->
-                    <!--<a href="#"><i class="fa fa-link"></i> <span>Multilevel</span>-->
-            <!--<span class="pull-right-container">-->
-                <!--<i class="fa fa-angle-left pull-right"></i>-->
-              <!--</span>-->
-                    <!--</a>-->
-                    <!--<ul class="treeview-menu">-->
-                        <!--<li><a href="#">Link in level 2</a></li>-->
-                        <!--<li><a href="#">Link in level 2</a></li>-->
-                    <!--</ul>-->
-                <!--</li>-->
             </ul>
             <!-- /.sidebar-menu -->
         </section>
@@ -558,8 +569,9 @@ desired effect
             el: '#main-sidebar',//'.sidebar-menu',
             data:{
                 menu:menu,
+                menu_expand_all:menu_expand_all,
                 menu_search:'',
-                tr:cfg.tr
+                tr:cfg.tr,
             },
             computed:{
                 filted_menu:function(){
