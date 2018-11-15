@@ -14,7 +14,8 @@ function def_proc_error(jqxhr) {
         }else{
             alert('maybe server offline,error code is '+jqxhr.status)
         }
-        hide_upload()
+        //hide_upload()
+        cfg.hide_load()
     }
 }
 
