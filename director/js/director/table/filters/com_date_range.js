@@ -1,3 +1,5 @@
+require('./scss/com_date_range_filter.scss')
+
 var com_date_range={
     props:['head','search_args'],
     data:function(){
@@ -11,10 +13,10 @@ var com_date_range={
 
         }
     },
-    template:`<div  class="date-filter flex flex-ac">
-                     <date v-model="search_args['_start_'+head.name]" :placeholder="head.label"></date>
+    template:`<div  class="com-date-range-filter flex flex-ac">
+                    <date v-model="search_args['_start_'+head.name]" :placeholder="head.label"></date>
                     <div style="display: inline-block;margin: 0 2px;" >-</div>
-                        <date  v-model="search_args['_end_'+head.name]" :placeholder="head.label"></date>
+                    <date  v-model="search_args['_end_'+head.name]" :placeholder="head.label"></date>
                 </div>`,
 
 }

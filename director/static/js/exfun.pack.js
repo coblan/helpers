@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 114);
+/******/ 	return __webpack_require__(__webpack_require__.s = 116);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -409,6 +409,70 @@ window.cfg = {
             var realMsg = msg || '操作成功';
             layer.msg(realMsg, { time: delay });
         }
+    },
+    pop_edit: function pop_edit(fields_ctx) {},
+    pop_edit_local: function (_pop_edit_local) {
+        function pop_edit_local(_x, _x2) {
+            return _pop_edit_local.apply(this, arguments);
+        }
+
+        pop_edit_local.toString = function () {
+            return _pop_edit_local.toString();
+        };
+
+        return pop_edit_local;
+    }(function (fields_ctx, callback) {
+        var winindex = pop_edit_local(fields_ctx.row, fields_ctx, callback);
+        return function () {
+            layer.close(winindex);
+        };
+    }),
+
+    pop_big: function pop_big(editor, ctx, callback) {
+        var winindex = pop_layer(ctx, editor, callback);
+        return function () {
+            layer.close(winindex);
+        };
+    },
+    pop_middle: function pop_middle(editor, ctx, callback) {
+        var winindex = pop_layer(ctx, editor, callback);
+        return function () {
+            layer.close(winindex);
+        };
+        //store.commit('left_in_page',{editor:editor,ctx:ctx,callback:callback})
+        //return function (){
+        //    history.back()
+        //}
+    },
+    pop_small: function pop_small(editor, ctx, callback) {
+        //return pop_mobile_win(editor,ctx,callback)
+        var layer_cfg = {
+            title: ctx.title || '详细',
+            area: ctx.area || ['42rem', '32rem']
+        };
+        var winindex = pop_layer(ctx, editor, callback, layer_cfg);
+        return function () {
+            layer.close(winindex);
+        };
+    },
+    close_win: function close_win(index) {
+        if (index == 'full_win') {
+            history.back();
+        }
+    },
+    pop_close: function pop_close(close_func) {
+        // 关闭窗口，窗口创建函数返回的，全部是一个关闭函数
+        close_func();
+    },
+    pop_iframe: function pop_iframe(url, option) {
+        var dc = {
+            type: 2,
+            title: '',
+            area: ['80%', '80%'],
+            content: url //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+        };
+        ex.assign(dc, option);
+        layer.open(dc);
     }
 };
 
@@ -834,7 +898,19 @@ var file_proc = exports.file_proc = {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+var ua = navigator.userAgent.toLocaleLowerCase();
+var pf = navigator.platform.toLocaleLowerCase();
+var isAndroid = /android/i.test(ua) || /iPhone|iPod|iPad/i.test(ua) && /linux/i.test(pf) || /ucweb.*linux/i.test(ua);
+var isIOS = /iPhone|iPod|iPad/i.test(ua) && !isAndroid;
+var isWinPhone = /Windows Phone|ZuneWP7/i.test(ua);
+
 var layout = exports.layout = {
+    device: {
+        pc: !isAndroid && !isIOS && !isWinPhone,
+        ios: isIOS,
+        android: isAndroid,
+        winPhone: isWinPhone
+    },
     stickup: function stickup(node) {
         var $cur = $(node); //方便后面操作this。
         var top = $cur.offset().top; //获取元素距离顶部的距离
@@ -1553,14 +1629,14 @@ var page = _interopRequireWildcard(_page_tab);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
-__webpack_require__(110);
+__webpack_require__(112);
 //import * as a from './modal.js'
 
+__webpack_require__(110);
 __webpack_require__(108);
-__webpack_require__(106);
-__webpack_require__(107);
-__webpack_require__(112);
-__webpack_require__(111);
+__webpack_require__(109);
+__webpack_require__(114);
+__webpack_require__(113);
 
 /***/ }),
 /* 20 */
@@ -1709,20 +1785,17 @@ var vuetool = exports.vuetool = {
         return rt;
     },
     vueBroadcase: function vueBroadcase() {},
-
-    vueChildBusEmit: function vueChildBusEmit(self, event_name, event) {
+    vueParStore: function vueParStore(self) {
         var parent = self.$parent;
         while (parent) {
-            if (parent.childBus) {
-                break;
+            if (parent.childStore) {
+                return parent.childStore;
             } else {
                 parent = parent.$parent;
             }
         }
-        if (parent) {
-            parent.childbus.$emit(event_name, event);
-        }
     },
+
     vueChildBusOn: function vueChildBusOn(self, event_name, func) {
         var parent = self.$parent;
         while (parent) {
@@ -1886,7 +1959,7 @@ function cusParCall(self, fun, kws, rt) {
 "use strict";
 
 
-__webpack_require__(109);
+__webpack_require__(111);
 var template_str = '\n<div class=\'_expand_menu\'>\n\t<ul>\n\t\t<li v-for=\'act in normed_menu\'>\n\t\t\t<a :class=\'["menu_item",{"selected":act.selected,"opened_submenu":opened_submenu==act.submenu}]\'\n\t\t\t\t:href=\'act.submenu?"javascript:void(0)":act.url\'\n\t\t\t\t@click=\'main_act_click(act)\'>\n\t\t\t\t<span v-html=\'act.icon\' class=\'_icon\'></span><span v-text=\'act.label\'></span>\n\t\t\t\t<span v-show="act.submenu">\n\t\t\t\t\t<span v-if="opened_submenu==act.submenu ||act.selected" style="float: right;margin-right: 1em;">\n\t\t\t\t\t\t<i class="fa fa-chevron-down"></i>\n\t\t\t\t\t</span>\n\t\t\t\t\t<span v-else style="float: right;margin-right: 1em;"><i class="fa fa-chevron-left"></i></span>\n\t\t\t\t</span>\n\t\t\t\t<!--<span class=\'left-arrow\' v-if=\'act.selected\'></span>-->\n\t\t\t</a>\n\n\t\t\t<ul class=\'submenu\' v-show=\'opened_submenu==act.submenu ||act.selected\' transition="expand">\n\t\t\t\t<li v-for=\'sub_act in act.submenu\' :class=\'{"active":sub_act.active}\'>\n\t\t\t\t\t<a :href=\'sub_act.url\' class=\'sub_item\'>\n\t\t\t\t\t\t<span v-text=\'sub_act.label\'></span>\n\t\t\t\t\t</a>\n\n\t\t\t\t</li>\n\t\t\t</ul>\n\t\t</li>\n\t</ul>\n</div>\n';
 
 Vue.component('expand_menu', {
@@ -2016,7 +2089,8 @@ document.write('\n <style type="text/css" media="screen" id="test">\n.inst-menu{
 /* 82 */,
 /* 83 */,
 /* 84 */,
-/* 85 */
+/* 85 */,
+/* 86 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -2030,7 +2104,7 @@ exports.push([module.i, "template {\n  display: none; }\n\nhtml, body {\n  heigh
 
 
 /***/ }),
-/* 86 */
+/* 87 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -2044,7 +2118,7 @@ exports.push([module.i, "@charset \"UTF-8\";\n.center-vh {\n  position: absolute
 
 
 /***/ }),
-/* 87 */
+/* 88 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -2058,7 +2132,7 @@ exports.push([module.i, ".checkbox {\n  padding-left: 20px; }\n\n.checkbox label
 
 
 /***/ }),
-/* 88 */
+/* 89 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -2072,7 +2146,7 @@ exports.push([module.i, "._expand_menu {\n  background-color: #364150; }\n  ._ex
 
 
 /***/ }),
-/* 89 */
+/* 90 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -2086,7 +2160,7 @@ exports.push([module.i, ".flex {\n  display: flex; }\n\n.flex-v {\n  display: fl
 
 
 /***/ }),
-/* 90 */
+/* 91 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -2100,7 +2174,7 @@ exports.push([module.i, ".clickable {\n  cursor: pointer;\n  color: #4da8cd; }\n
 
 
 /***/ }),
-/* 91 */
+/* 92 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -2114,7 +2188,6 @@ exports.push([module.i, ".ellipsis {\n  white-space: nowrap;\n  text-overflow: e
 
 
 /***/ }),
-/* 92 */,
 /* 93 */,
 /* 94 */,
 /* 95 */,
@@ -2128,13 +2201,15 @@ exports.push([module.i, ".ellipsis {\n  white-space: nowrap;\n  text-overflow: e
 /* 103 */,
 /* 104 */,
 /* 105 */,
-/* 106 */
+/* 106 */,
+/* 107 */,
+/* 108 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(85);
+var content = __webpack_require__(86);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -2154,13 +2229,13 @@ if(false) {
 }
 
 /***/ }),
-/* 107 */
+/* 109 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(86);
+var content = __webpack_require__(87);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -2180,13 +2255,13 @@ if(false) {
 }
 
 /***/ }),
-/* 108 */
+/* 110 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(87);
+var content = __webpack_require__(88);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -2206,13 +2281,13 @@ if(false) {
 }
 
 /***/ }),
-/* 109 */
+/* 111 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(88);
+var content = __webpack_require__(89);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -2232,13 +2307,13 @@ if(false) {
 }
 
 /***/ }),
-/* 110 */
+/* 112 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(89);
+var content = __webpack_require__(90);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -2258,13 +2333,13 @@ if(false) {
 }
 
 /***/ }),
-/* 111 */
+/* 113 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(90);
+var content = __webpack_require__(91);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -2284,13 +2359,13 @@ if(false) {
 }
 
 /***/ }),
-/* 112 */
+/* 114 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(91);
+var content = __webpack_require__(92);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -2310,8 +2385,8 @@ if(false) {
 }
 
 /***/ }),
-/* 113 */,
-/* 114 */
+/* 115 */,
+/* 116 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

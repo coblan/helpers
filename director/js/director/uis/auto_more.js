@@ -7,7 +7,7 @@ Vue.component('com-auto-more',{
         }
     }, //onmousewheel="return false;"
     template:`<div class="com-auto-more" >
-        <div class="outer-wrap no-scroll-bar">
+        <div class="outer-wrap">
             <div class="inn-wrap">
                 <slot></slot>
             </div>
@@ -33,7 +33,7 @@ Vue.component('com-auto-more',{
                 $(this.$el).removeClass('expanded')
 
             }else{
-                $(this.$el).find('.outer-wrap').css( 'height',$(this.$el).find('.inn-wrap').height()+10 +'px' )
+                $(this.$el).find('.outer-wrap').css( 'height',$(this.$el).find('.inn-wrap').height()+20 +'px' )
                 $(this.$el).addClass('expanded')
 
             }
