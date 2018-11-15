@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 17);
+/******/ 	return __webpack_require__(__webpack_require__.s = 18);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -381,64 +381,12 @@ function updateLink(linkElement, obj) {
 "use strict";
 
 
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-__webpack_require__(14);
-
-var com_pop_fields_panel = exports.com_pop_fields_panel = {
-    props: ['ctx'],
-    data: function data() {
-        return {
-            row: this.ctx.row,
-            heads: this.ctx.heads,
-            ops: this.ctx.ops,
-            fields_editor: this.ctx.fields_editor || com_sim_fields
-        };
-    },
-    methods: {
-        on_finish: function on_finish(e) {
-            this.$emit('finish', e);
-        }
-    },
-    template: '<div class="flex-v com-pop-fields-panel">\n     <component class="msg-bottom" :is="fields_editor" :heads="heads" :row="row" @finish="on_finish($event)"></component>\n     <div style="text-align: right;padding: 8px 3em;">\n        <component v-for="op in ops" :is="op.editor" @operation="on_operation(op)" :head="op"></component>\n    </div>\n     </div>'
-};
-window.com_pop_fields_panel = com_pop_fields_panel;
-Vue.component('com-pop-fields-panel', com_pop_fields_panel);
-
-/***/ }),
-/* 3 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _com_pop_fields_panel = __webpack_require__(2);
-
-var com_pop_fields_local_panel = {
-    mixins: [_com_pop_fields_panel.com_pop_fields_panel],
-    methods: {
-        submit: function submit() {
-            if (this.isValid()) {
-                this.$emit('finish', this.row);
-            }
-        }
-    }
-
-};
-window.com_pop_fields_local_panel = com_pop_fields_local_panel;
-Vue.component('com-pop-fields-local-panel', com_pop_fields_local_panel);
-
-/***/ }),
-/* 4 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
 ex.assign(cfg, {
+    fields_editor: 'com-sim-fields',
+    fields_local_editor: 'com-sim-fields-local',
     pop_edit_local: function pop_edit_local(ctx, callback) {
-        return cfg.pop_big('com-fields-local-panel', ctx, callback);
+        ctx.fields_editor = 'com-sim-fields-local';
+        return cfg.pop_big('com-fields-panel', ctx, callback);
     },
     pop_big: function pop_big(editor, ctx, callback) {
         //store.commit('left_in_page',{editor:editor,ctx:ctx,callback:callback})
@@ -469,13 +417,13 @@ ex.assign(cfg, {
         close_func();
     },
     pop_iframe: function pop_iframe(url, option) {
-        this.pop_big('com-slide-iframe', { url: url, title: option.title });
+        return cfg.pop_big('com-slide-iframe', { url: url, title: option.title });
     }
 
 });
 
 /***/ }),
-/* 5 */
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -485,18 +433,18 @@ var _my_slide_win = __webpack_require__(9);
 
 var my_slide_win = _interopRequireWildcard(_my_slide_win);
 
-var _com_slide_head = __webpack_require__(8);
+var _com_slide_head = __webpack_require__(7);
 
 var com_slide_head = _interopRequireWildcard(_com_slide_head);
 
-var _fiexed_scrll = __webpack_require__(18);
+var _fiexed_scrll = __webpack_require__(8);
 
 var fiexed_scrll = _interopRequireWildcard(_fiexed_scrll);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 /***/ }),
-/* 6 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -506,7 +454,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.pop_layer = pop_layer;
-__webpack_require__(16);
+__webpack_require__(17);
 
 function pop_mobile_win(editor, ctx, callback) {
     var pop_id = new Date().getTime();
@@ -598,13 +546,26 @@ function pop_layer(com_ctx, component_name, callback, layerConfig) {
 window.pop_mobile_win = pop_mobile_win;
 
 /***/ }),
-/* 7 */
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _ele_table_bus_page = __webpack_require__(10);
+
+var ele_table_bus_page = _interopRequireWildcard(_ele_table_bus_page);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+/***/ }),
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(12);
+var content = __webpack_require__(13);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -624,7 +585,7 @@ if(false) {
 }
 
 /***/ }),
-/* 8 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -641,16 +602,57 @@ Vue.component('com-slide-head', {
 });
 
 /***/ }),
+/* 8 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.fixed_body = fixed_body;
+__webpack_require__(15);
+
+function fixed_body() {
+    //$('body').addClass('modal-open')
+    ModalHelper.afterOpen();
+}
+function fixed_body_quit() {
+    //$('body').removeClass('modal-open')
+    ModalHelper.beforeClose();
+}
+
+var ModalHelper = function (bodyCls) {
+    var scrollTop;
+    return {
+        afterOpen: function afterOpen() {
+            scrollTop = document.scrollingElement.scrollTop;
+            document.body.classList.add(bodyCls);
+            document.body.style.top = -scrollTop + 'px';
+        },
+        beforeClose: function beforeClose() {
+            document.body.classList.remove(bodyCls);
+            // scrollTop lost after set position:fixed, restore it back.
+            document.scrollingElement.scrollTop = scrollTop;
+        }
+    };
+}('modal-open');
+
+window.fixed_body = fixed_body;
+window.fixed_body_quit = fixed_body_quit;
+
+/***/ }),
 /* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(15);
+__webpack_require__(16);
 
 $(function () {
-    $('body').append('<div id="com-slid-win"><com-slide-win-1 :stack_pages="stack_pages"></com-slide-win-1></div>');
+    $('body').append('<div id="com-slid-win">\n        <com-slide-win-1 :stack_pages="stack_pages"></com-slide-win-1>\n    </div>');
 
     window.slide_win = new Vue({
         el: '#com-slid-win',
@@ -753,214 +755,18 @@ Vue.component('com-slide-win-1', {
 /* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(0)();
-// imports
+"use strict";
 
 
-// module
-exports.push([module.i, ".com-pop-fields-panel {\n  width: 90vw;\n  padding: 2rem 1rem;\n  border: 1px solid #e1e1e1;\n  border-radius: 0.3rem;\n  background-color: white; }\n", ""]);
+var ele_table_bus_page = {
+    mixins: [ele_table_page_logic],
+    template: ' <el-pagination\n                         @size-change="on_perpage_change"\n                        @current-change="on_page_change"\n                        :current-page="row_pages.crt_page"\n                        :page-sizes="[20, 50, 100, 500]"\n                        :page-size="row_pages.perpage"\n                        layout="total, sizes, prev, pager, next"\n                        :total="row_pages.total">\n                </el-pagination>'
 
-// exports
-
+    //  覆盖掉pc端的 同名 vuejs 组件
+};Vue.component('com-table-bus-page', ele_table_bus_page);
 
 /***/ }),
 /* 11 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(0)();
-// imports
-
-
-// module
-exports.push([module.i, ".list-enter-active, .list-leave-active {\n  transition: all 0.3s; }\n\n.list-enter, .list-leave-to {\n  opacity: 0.3;\n  transform: translateX(100%); }\n\n.com-slide-win {\n  position: absolute;\n  top: 0;\n  left: 0;\n  bottom: 0;\n  right: 0;\n  pointer-events: none; }\n  .com-slide-win .mywrap {\n    display: flex;\n    flex-direction: column; }\n    .com-slide-win .mywrap .pop-content {\n      flex-grow: 10;\n      overflow: auto;\n      -webkit-overflow-scrolling: touch; }\n", ""]);
-
-// exports
-
-
-/***/ }),
-/* 12 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(0)();
-// imports
-
-
-// module
-exports.push([module.i, ".el-table__body-wrapper.is-scrolling-middle {\n  overflow: auto;\n  -webkit-overflow-scrolling: touch; }\n", ""]);
-
-// exports
-
-
-/***/ }),
-/* 13 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(0)();
-// imports
-
-
-// module
-exports.push([module.i, ".pop-moible-win .mint-popup {\n  background: none; }\n", ""]);
-
-// exports
-
-
-/***/ }),
-/* 14 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(10);
-if(typeof content === 'string') content = [[module.i, content, '']];
-// add the styles to the DOM
-var update = __webpack_require__(1)(content, {});
-if(content.locals) module.exports = content.locals;
-// Hot Module Replacement
-if(false) {
-	// When the styles change, update the <style> tags
-	if(!content.locals) {
-		module.hot.accept("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./com_pop_fields_panel.scss", function() {
-			var newContent = require("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./com_pop_fields_panel.scss");
-			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-			update(newContent);
-		});
-	}
-	// When the module is disposed, remove the <style> tags
-	module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 15 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(11);
-if(typeof content === 'string') content = [[module.i, content, '']];
-// add the styles to the DOM
-var update = __webpack_require__(1)(content, {});
-if(content.locals) module.exports = content.locals;
-// Hot Module Replacement
-if(false) {
-	// When the styles change, update the <style> tags
-	if(!content.locals) {
-		module.hot.accept("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./my_slide_win.scss", function() {
-			var newContent = require("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./my_slide_win.scss");
-			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-			update(newContent);
-		});
-	}
-	// When the module is disposed, remove the <style> tags
-	module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 16 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(13);
-if(typeof content === 'string') content = [[module.i, content, '']];
-// add the styles to the DOM
-var update = __webpack_require__(1)(content, {});
-if(content.locals) module.exports = content.locals;
-// Hot Module Replacement
-if(false) {
-	// When the styles change, update the <style> tags
-	if(!content.locals) {
-		module.hot.accept("!!../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./pop_mobile_win.scss", function() {
-			var newContent = require("!!../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./pop_mobile_win.scss");
-			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-			update(newContent);
-		});
-	}
-	// When the module is disposed, remove the <style> tags
-	module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 17 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _config = __webpack_require__(4);
-
-var config = _interopRequireWildcard(_config);
-
-var _com_pop_fields_panel = __webpack_require__(2);
-
-var com_pop_fields_panel = _interopRequireWildcard(_com_pop_fields_panel);
-
-var _com_pop_fields_local_panel = __webpack_require__(3);
-
-var com_pop_fields_local = _interopRequireWildcard(_com_pop_fields_local_panel);
-
-var _pop_mobile_win = __webpack_require__(6);
-
-var pop_win = _interopRequireWildcard(_pop_mobile_win);
-
-var _main = __webpack_require__(5);
-
-var pop_main = _interopRequireWildcard(_main);
-
-var _main2 = __webpack_require__(22);
-
-var table_main = _interopRequireWildcard(_main2);
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-__webpack_require__(7);
-
-/***/ }),
-/* 18 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.fixed_body = fixed_body;
-__webpack_require__(20);
-
-function fixed_body() {
-    //$('body').addClass('modal-open')
-    ModalHelper.afterOpen();
-}
-function fixed_body_quit() {
-    //$('body').removeClass('modal-open')
-    ModalHelper.beforeClose();
-}
-
-var ModalHelper = function (bodyCls) {
-    var scrollTop;
-    return {
-        afterOpen: function afterOpen() {
-            scrollTop = document.scrollingElement.scrollTop;
-            document.body.classList.add(bodyCls);
-            document.body.style.top = -scrollTop + 'px';
-        },
-        beforeClose: function beforeClose() {
-            document.body.classList.remove(bodyCls);
-            // scrollTop lost after set position:fixed, restore it back.
-            document.scrollingElement.scrollTop = scrollTop;
-        }
-    };
-}('modal-open');
-
-window.fixed_body = fixed_body;
-window.fixed_body_quit = fixed_body_quit;
-
-/***/ }),
-/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -974,13 +780,55 @@ exports.push([module.i, "body.modal-open {\n  position: fixed;\n  width: 100%; }
 
 
 /***/ }),
-/* 20 */
+/* 12 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(0)();
+// imports
+
+
+// module
+exports.push([module.i, ".list-enter-active, .list-leave-active {\n  transition: all 0.3s; }\n\n.list-enter, .list-leave-to {\n  opacity: 0.3;\n  transform: translateX(100%); }\n\n.com-slide-win {\n  position: absolute;\n  top: 0;\n  left: 0;\n  bottom: 0;\n  right: 0;\n  pointer-events: none; }\n  .com-slide-win .mywrap {\n    display: flex;\n    flex-direction: column; }\n    .com-slide-win .mywrap .pop-content {\n      flex-grow: 10;\n      overflow: auto;\n      -webkit-overflow-scrolling: touch; }\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 13 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(0)();
+// imports
+
+
+// module
+exports.push([module.i, ".el-table__body-wrapper.is-scrolling-middle {\n  overflow: auto;\n  -webkit-overflow-scrolling: touch; }\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 14 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(0)();
+// imports
+
+
+// module
+exports.push([module.i, ".pop-moible-win .mint-popup {\n  background: none; }\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(19);
+var content = __webpack_require__(11);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -1000,31 +848,112 @@ if(false) {
 }
 
 /***/ }),
-/* 21 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
+// style-loader: Adds some css to the DOM by adding a <style> tag
 
-
-var ele_table_bus_page = {
-    mixins: [ele_table_page_logic],
-    template: ' <el-pagination\n                         @size-change="on_perpage_change"\n                        @current-change="on_page_change"\n                        :current-page="row_pages.crt_page"\n                        :page-sizes="[20, 50, 100, 500]"\n                        :page-size="row_pages.perpage"\n                        layout="total, sizes, prev, pager, next"\n                        :total="row_pages.total">\n                </el-pagination>'
-
-    //  覆盖掉pc端的 同名 vuejs 组件
-};Vue.component('com-table-bus-page', ele_table_bus_page);
+// load the styles
+var content = __webpack_require__(12);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// add the styles to the DOM
+var update = __webpack_require__(1)(content, {});
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./my_slide_win.scss", function() {
+			var newContent = require("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./my_slide_win.scss");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
 
 /***/ }),
-/* 22 */
+/* 17 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(14);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// add the styles to the DOM
+var update = __webpack_require__(1)(content, {});
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./pop_mobile_win.scss", function() {
+			var newContent = require("!!../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./pop_mobile_win.scss");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _ele_table_bus_page = __webpack_require__(21);
+var _config = __webpack_require__(2);
 
-var ele_table_bus_page = _interopRequireWildcard(_ele_table_bus_page);
+var config = _interopRequireWildcard(_config);
+
+var _pop_mobile_win = __webpack_require__(4);
+
+var pop_win = _interopRequireWildcard(_pop_mobile_win);
+
+var _main = __webpack_require__(3);
+
+var pop_main = _interopRequireWildcard(_main);
+
+var _main2 = __webpack_require__(5);
+
+var table_main = _interopRequireWildcard(_main2);
+
+var _main3 = __webpack_require__(19);
+
+var panels_main = _interopRequireWildcard(_main3);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+__webpack_require__(6);
+
+/***/ }),
+/* 19 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _slide_iframe = __webpack_require__(20);
+
+var slide_iframe = _interopRequireWildcard(_slide_iframe);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+/***/ }),
+/* 20 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Vue.component('com-slide-iframe', {
+    props: ['ctx'],
+    template: '<iframe :src="ctx.url" style="width:100%;height: 100%;"></iframe>'
+});
 
 /***/ })
 /******/ ]);

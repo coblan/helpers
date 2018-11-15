@@ -1,22 +1,25 @@
 var table_panel={
     props:['ctx'],
     data:function(){
+        if(this.ctx.selectable == undefined){
+            this.ctx.selectable =true
+        }
         return {
-            par_row:this.ctx.par_row,
-            heads:this.ctx.heads,
+            par_row:this.ctx.par_row || {},
+            heads:this.ctx.heads || [],
             selectable:this.ctx.selectable,
-
-            row_filters:this.ctx.row_filters,
-            row_sort:this.ctx.row_sort,
-            director_name:this.ctx.director_name,
-            row_pages:{},
+            search_args: this.ctx.search_args || {},
+            row_filters:this.ctx.row_filters || {},
+            row_sort:this.ctx.row_sort || {sortable:[]},
+            director_name:this.ctx.director_name || '',
+            ops:this.ctx.ops || [],
+            row_pages: this.ctx.row_pages || {crt_page:1,total:0,perpage:20},
             rows:[],
             footer:[],
             selected:[],
             del_info:[],
-            search_args: this.ctx.search_args || {},
-
             height:350,
+
         }
     },
     mixins:  [mix_table_data,mix_ele_table_adapter],
@@ -24,10 +27,9 @@ var table_panel={
     template:`<div class="com-table-panel" style="height: 100%;padding-left: 10px">
 
             <div class="rows-block flex-v" style="height: 100%">
-                <div class='flex' style="min-height: 3em;" v-if="row_filters.length > 0">
+                <div class='flex' style="min-height: 3rem;padding-right: 1rem" v-if="row_filters.length > 0">
                     <com-filter class="flex" :heads="row_filters" :search_args="search_args"
                                 @submit="search()"></com-filter>
-                    <div class="flex-grow"></div>
                 </div>
                 <div class="box box-success flex-grow flex-v" >
                     <div class="table-wraper flex-grow" style="position: relative">
@@ -98,4 +100,7 @@ var table_panel={
 }
 
 window.com_table_panel=table_panel
+Vue.component('com-table-editor',table_panel)
+
+//window.com_table_panel=table_panel
 Vue.component('com-table-panel',table_panel)

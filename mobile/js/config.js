@@ -1,6 +1,9 @@
 ex.assign(cfg,{
+    fields_editor:'com-sim-fields',
+    fields_local_editor:'com-sim-fields-local',
     pop_edit_local:function(ctx,callback){
-        return cfg.pop_big('com-fields-local-panel',ctx,callback)
+        ctx.fields_editor='com-sim-fields-local'
+        return cfg.pop_big('com-fields-panel',ctx,callback)
     },
     pop_big:function(editor,ctx,callback){
         //store.commit('left_in_page',{editor:editor,ctx:ctx,callback:callback})
@@ -31,7 +34,7 @@ ex.assign(cfg,{
         close_func()
     },
     pop_iframe:function(url,option){
-        this.pop_big('com-slide-iframe',{url:url,title:option.title})
+       return cfg.pop_big('com-slide-iframe',{url:url,title:option.title})
     },
 
 })

@@ -5,6 +5,8 @@ require('./scss/table.scss')
 require('./scss/table_page.scss')
 require('./scss/element_ex.scss')
 
+
+import * as config from  './config.js'
 //table mix
 import * as mix_table_data from  './mix/mix_table_data.js'
 import * as mix_v_table_adapter from './mix/mix_v_table_adapter.js'
@@ -66,7 +68,7 @@ import * as operator_btn from  './table_operator/operator_btn.js'
 //fields operator
 import * as btn from  './field_operator/btn.js'
 
-import * as validate from  './validator'
+//import * as validate from  './validator'
 
 //import * as com_table from  './misc/com_table.js'
 
@@ -102,3 +104,5 @@ import * as el_tab_widget from './misc/el_tab_widget'
 
 // store
 import * as table_store from './store/table_store'
+
+import * as fields_panels_main from  './fields_panels/main.js'

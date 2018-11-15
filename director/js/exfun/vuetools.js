@@ -44,6 +44,20 @@ export var  vuetool = {
             }
         }
     },
+
+    vueChildBusOn:function(self,event_name,func){
+        var parent =self.$parent
+        while (parent){
+            if(parent.childBus){
+                break
+            }else{
+                parent = parent.$parent
+            }
+        }
+        if(parent){
+            parent.childbus.$on(event_name,func)
+        }
+    },
     vuexParName:function(self){
         var par = self.$parent
         while(par){

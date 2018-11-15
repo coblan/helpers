@@ -2,7 +2,9 @@
 require('./scss/my_slide_win.scss')
 
 $(function(){
-    $('body').append('<div id="com-slid-win"><com-slide-win-1 :stack_pages="stack_pages"></com-slide-win-1></div>')
+    $('body').append(`<div id="com-slid-win">
+        <com-slide-win-1 :stack_pages="stack_pages"></com-slide-win-1>
+    </div>`)
 
     window.slide_win = new Vue({
         el:'#com-slid-win',
