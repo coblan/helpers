@@ -96,3 +96,5 @@ import * as el_tab_widget from './misc/el_tab_widget'
 
 // store
 import * as table_store from './store/table_store'
+
+import * as table_editor_main from './table_editor/main'
