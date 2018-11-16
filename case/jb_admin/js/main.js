@@ -106,3 +106,4 @@ import * as el_tab_widget from './misc/el_tab_widget'
 import * as table_store from './store/table_store'
 
 import * as fields_panels_main from  './fields_panels/main.js'
+import * as table_editor_main from  './table_editor/main.js'

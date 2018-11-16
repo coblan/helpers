@@ -46,8 +46,8 @@
 
     table_fun_config= {{ table_fun_config | jsonify }}
     user_msg = {{ user_msg | jsonify | default:'[]' }}
-    js_config={{js_config | jsonify }}
-
+    named_ctx={{ named_ctx | jsonify | default:'{}' }}
+ 	js_config={{js_config | jsonify }}
     {% comment %}
         intro_info={
                 template: '{{ template }}',
