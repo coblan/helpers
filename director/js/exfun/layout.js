@@ -1,4 +1,18 @@
+var ua = navigator.userAgent.toLocaleLowerCase();
+var pf = navigator.platform.toLocaleLowerCase();
+var isAndroid = (/android/i).test(ua)||((/iPhone|iPod|iPad/i).test(ua) && (/linux/i).test(pf))
+    || (/ucweb.*linux/i.test(ua));
+var isIOS =(/iPhone|iPod|iPad/i).test(ua) && !isAndroid;
+var isWinPhone = (/Windows Phone|ZuneWP7/i).test(ua);
+
+
 export var layout= {
+    device: {
+        pc:!isAndroid && !isIOS && !isWinPhone,
+        ios:isIOS,
+        android:isAndroid,
+        winPhone:isWinPhone
+    },
     stickup: function (node) {
         var $cur = $(node);//方便后面操作this。
         var top = $cur.offset().top;//获取元素距离顶部的距离

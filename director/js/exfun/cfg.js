@@ -20,5 +20,61 @@ window.cfg={
             var realMsg = msg || '操作成功'
             layer.msg(realMsg,{time:delay})
         }
-    }
+    },
+    pop_edit:function(fields_ctx){
+
+    },
+    pop_edit_local:function(fields_ctx,callback){
+        var winindex = pop_edit_local(fields_ctx.row,fields_ctx,callback)
+        return function (){
+            layer.close(winindex)
+        }
+    },
+
+    pop_big:function(editor,ctx,callback){
+        var winindex = pop_layer(ctx,editor,callback)
+        return function (){
+            layer.close(winindex)
+        }
+    },
+    pop_middle:function(editor,ctx,callback){
+        var winindex = pop_layer(ctx,editor,callback)
+        return function (){
+            layer.close(winindex)
+        }
+        //store.commit('left_in_page',{editor:editor,ctx:ctx,callback:callback})
+        //return function (){
+        //    history.back()
+        //}
+    },
+    pop_small:function(editor,ctx,callback){
+        //return pop_mobile_win(editor,ctx,callback)
+        var layer_cfg={
+            title:ctx.title || '详细',
+            area:ctx.area || ['42rem','32rem']
+        }
+        var winindex = pop_layer(ctx,editor,callback,layer_cfg)
+        return function (){
+            layer.close(winindex)
+        }
+    },
+    close_win:function(index){
+        if(index=='full_win'){
+            history.back()
+        }
+    },
+    pop_close:function(close_func){
+        // 关闭窗口，窗口创建函数返回的，全部是一个关闭函数
+        close_func()
+    },
+    pop_iframe:function(url,option){
+        var dc = {
+            type: 2,
+            title:'',
+            area: ['80%', '80%'],
+            content: url //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+        }
+        ex.assign(dc,option)
+        layer.open(dc);
+    },
 }

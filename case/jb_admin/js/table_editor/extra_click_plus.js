@@ -4,17 +4,22 @@
  2. 根据filter返回不同的按钮
  * */
 
+require('./scss/extra_click_plus.scss')
 
 var extra_click_plus={
     props:['rowData','field','index'],
-    template:`<div><span v-for="(ope,index) in operations">
-                <span v-if="ope.icon">
-                      <span class="clickable" v-html="ope.icon" @click="on_click(ope)"
-                      style="display: inline-block;margin-right: 0.5em;"
+    data:function(){
+        return {
+            is_mobile: !ex.device.pc
+        }
+    },
+    template:`<div :class="['extra-click-plus',{'mobile':is_mobile}]"><span v-for="(ope,index) in operations">
+                <span v-if="ope.icon" class="icon">
+                      <span class="clickable item" v-html="ope.icon" @click="on_click(ope)"
                       :title="ope.label"></span>
                 </span>
                 <span v-else>
-                    <span class="clickable" v-text="ope.label" @click="on_click(ope)"></span>
+                    <span class="clickable item" v-text="ope.label" @click="on_click(ope)"></span>
                     <span v-if="index < operations.length-1">/</span>  </span>
                 </span>
                 </div>`,

@@ -28,6 +28,9 @@ import * as filter_single_select2 from './filters/filter_single_select2'
 require('./scss/table_filter.scss')
 
 Vue.component('com-filter',{
+    /*
+    * 过滤器的 容器
+    * */
     props:['heads','search_args'],
     template:`<div v-if='heads.length>0' class="com-filter flex flex-grow flex-ac">
             <com-auto-more>
