@@ -2,9 +2,15 @@ import json
 from django.utils import timezone
 from datetime import datetime,date
 from decimal import Decimal
-#from helpers.func.geo import poly2dict
+from django.conf import settings
 
+#if getattr(settings, 'GEO'):
+    #from helpers.func.geo import poly2dict
 #from django.contrib.gis.geos import Polygon
+
+json_decoder = {
+}
+
 
 class DirectorEncoder(json.JSONEncoder):  
     """
@@ -17,8 +23,11 @@ class DirectorEncoder(json.JSONEncoder):
             return obj.strftime("%Y-%m-%d")  
         elif isinstance(obj, Decimal):
             return str(obj)
+        else:
+            for cls, func in json_decoder.items():
+                if isinstance(obj, cls):
+                    return func(obj)
         #elif isinstance(obj,Polygon):
-            #return poly2dict(obj)
-        else:  
+            #return poly2dict(obj) 
             return json.JSONEncoder.default(self, obj) 
         

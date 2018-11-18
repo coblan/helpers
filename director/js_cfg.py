@@ -10,7 +10,7 @@ def get_lib(request):
         #'nice_validator_css': 'https://cdn.bootcss.com/nice-validator/1.1.3/jquery.validator.min.css',
         
         'exfun': '/static/js/exfun.pack.js?t=%s'%js_stamp_dc.get('exfun_pack_js'),
-        'director': '/static/js/director.pack.js?t=%s'%js_stamp_dc.get('director_pack_js'),
+        'director': '/static/js/director.pack.js?t=126667775',  #%s'%js_stamp_dc.get('director_pack_js'),
         
         #'adminlte': 'https://cdn.bootcss.com/admin-lte/2.4.3/js/adminlte.min.js',
         #'adminlte_css': 'https://cdn.bootcss.com/admin-lte/2.4.3/css/AdminLTE.min.css',
@@ -24,6 +24,8 @@ def get_lib(request):
         'element_css': '/static/lib/element/index.css',
         'md5_js': '/static/lib/md5.min.js',
         'moment': '/static/lib/moment2.17.1.min.js',
+        'chosen': 'https://cdn.bootcss.com/chosen/1.8.2/chosen.jquery.min.js',
+        'chosen_css': 'https://cdn.bootcss.com/chosen/1.8.2/chosen.min.css',
     }
     return dc
 

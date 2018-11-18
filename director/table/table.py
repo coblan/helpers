@@ -147,7 +147,8 @@ class RowFilter(object):
                 self.filter_args['%s__gte'%k]=start
             if kw.get('_end_%s'%k):
                 end=kw.get('_end_%s'%k)
-                self.filter_args['%s__lte'%k]=end            
+                self.filter_args['%s__lte'%k]=end
+        self.kw = kw
     
     def get_proc_list(self):
         ls=[]
@@ -212,7 +213,10 @@ class RowFilter(object):
         out_list = [x for x in out_list if x['name'] in send_to_front_names]
         out_list = sorted(out_list, key= lambda x: send_to_front_names.index(x['name']))
         return out_list
-      
+    
+    def clean_query(self, query): 
+        return query
+    
     def get_query(self,query):
         self.query=query
         dc = {}
@@ -224,6 +228,7 @@ class RowFilter(object):
         arg_dc = {k: v for k, v in self.filter_args.items() if v != None}
         
         query=query.filter(**arg_dc)
+        query = self.clean_query(query)
         return query    
     
 class RowSort(object):
@@ -267,9 +272,9 @@ class RowSort(object):
                         # mysql 按照拼音排序
                         query= query.extra(select={'converted_%s'%norm_name: 'CONVERT(%s USING gbk)'%norm_name},order_by=['%sconverted_%s'%(direction,norm_name)])                        
                 else:
-                    query= query.order_by(name)
-        #else:
-            #query = query.order_by('-pk')
+                    query= query.order_by(name, '-pk')
+        else:
+            query = query.order_by('-pk')
 
         return query
 
@@ -619,8 +624,10 @@ class ModelTable(object):
         return {}
     
     def get_query(self):
-        if not self.crt_user.is_superuser and not self.permit.readable_fields():
-            raise PermissionDenied('no permission to browse %s'%self.model._meta.model_name)
+        if not self.crt_user.is_authenticated:
+            raise PermissionDenied('no permission to browse %s ,Please login first' % self.model._meta.model_name)
+        elif not self.crt_user.is_superuser and not self.permit.readable_fields():
+            raise PermissionDenied('user %s ,no permission to browse %s'% ( self.crt_user.username, self.model._meta.model_name))
         query =  self.model.objects.all()
         
         # 优化速度
@@ -642,19 +649,19 @@ class ModelTable(object):
             for f in self.model._meta.get_fields():
                 if f.name in head_nams and isinstance(f, models.ForeignKey):
                     query = query.select_related(f.name)        
-        
+
         query = self.pagenum.get_query(query)  
         return query
     
     def statistics(self,query):
         """
-        因为统计会破坏pk的存在，所以把排序放在统计函数里面
+        # 因为统计会破坏pk的存在，所以把排序放在统计函数里面
+        现在 排序 完全放到 RowSort里面去了
         """
-        return query.order_by('-pk')
+        return query
     
     
     def inn_filter(self,query):
-        #return query.order_by('-pk')
         return query
     
     def get_operation(self):

@@ -27,7 +27,7 @@ class LoginFormPage(FieldsPage):
                 'next':next_url,
                 'title': '用户登录',
                 'subtitle': '欢迎登录后台管理系统',
-                'regist_url': '%s/regist' % self.engin.engin_url,
+                #'regist_url': '%s/regist' % self.engin.engin_url,
                 'copyright': 'Copyright @2018  All Right Reserve',
                 'heads': self.get_heads(),
                 'login_item': '用户名',

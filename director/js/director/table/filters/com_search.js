@@ -15,6 +15,7 @@ var com_search = {
              v-model='search_args._q'
              :placeholder='head.search_tip'
              @keyup.13="$emit('submit')"
+             maxlength="500"
              class='form-control input-sm'/>
     </div> `
 }

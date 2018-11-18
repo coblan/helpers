@@ -83,14 +83,15 @@ var ck_complex = {
 
 var ckeditor = {
 	template:`<div class='ckeditor'>
-		    	<textarea class="form-control" ></textarea>
+		    	<textarea class="form-control" :maxlength="maxlength"></textarea>
 	    	</div>`,
 	props:{
 		value:{},
 		config:{},
 		set:{
 			default:'edit',
-		}
+		},
+		maxlength:{},
 	},
 	created:function(){
 		var self=this

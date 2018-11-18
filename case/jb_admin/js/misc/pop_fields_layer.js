@@ -63,7 +63,7 @@ export  function pop_fields_layer (row,fields_ctx,callback,layerConfig){
         //shadeClose: true, //点击遮罩关闭
         content:`<div id="fields-pop-${pop_id}" style="height: 100%;">
                     <component :is="'com-pop-fields-'+com_id" @del_success="on_del()" @submit-success="on_sub_success($event)"
-                    :row="row" :heads="fields_heads" :ops="ops"></component>
+                    :row="row" :heads="fields_heads" :ops="ops" ref="field_panel"></component>
                 </div>`,
         end: function () {
 
@@ -79,8 +79,9 @@ export  function pop_fields_layer (row,fields_ctx,callback,layerConfig){
     (function(pop_id,row,heads,ops,com_id,openfields_layer_index){
 
         //Vue.nextTick(function(){
+            var store_id ='store_fields_'+ new Date().getTime()
 
-            new Vue({
+            var vc  = new Vue({
                 el:'#fields-pop-'+pop_id,
                 data:{
                     has_heads_adaptor:false,
@@ -88,20 +89,38 @@ export  function pop_fields_layer (row,fields_ctx,callback,layerConfig){
                     fields_heads:heads,
                     ops:ops,
                     com_id:com_id,
-                },
 
+                },
+                mounted:function(){
+                    var vc = this
+                    this.childStore = new Vue({
+                        data:{
+                            fields_obj:vc.$refs.field_panel,
+                        },
+                        methods:{
+                            showErrors:function(errors){
+                                vc.fields_obj.setErrors(errors)
+                                vc.fields_obj.showErrors(errors)
+                            }
+                        }
+
+                    })
+                    //this.$store.registerModule(store_id,{
+                    //    namespaced: true,
+                    //    state:{
+                    //        fields_obj:this.$refs.field_panel
+                    //    },
+                    //    mutations:{
+                    //        showErrors:function(state,errors){
+                    //            state.fields_obj.setErrors(errors)
+                    //            state.fields_obj.showErrors(errors)
+                    //        }
+                    //    }
+                    //})
+                },
                 methods:{
                     on_sub_success:function(new_row){
-                      callback(new_row,openfields_layer_index)
-                        //callback({name:'after_save',new_row:event.new_row,old_row:event.old_row})
-
-
-                        //if(success){
-                        //    setTimeout(function(){
-                        //        layer.close(openfields_layer_index)
-                        //    },1000)
-                        //}
-
+                      callback(new_row,store_id,openfields_layer_index)
 
                     }
                 }

@@ -91,13 +91,6 @@ msg-bottom  nice validator的位置在下面，默认在右侧
   }
 
 
-  //.form-group.field .help_text{
-  //  padding: 10px;
-  //  color: #999;
-  //  font-style: italic;
-  //  font-size: 0.9em;
-  //}
-
 }
 
 .field-panel.plain{
@@ -139,7 +132,7 @@ msg-bottom  nice validator的位置在下面，默认在右侧
     .msg-box.n-right{
       position: absolute;
       left: 3px;
-      bottom: 1em;
+      bottom: 0;
       transform:translateX(0);
     }
 }
@@ -148,13 +141,6 @@ msg-bottom  nice validator的位置在下面，默认在右侧
 .field_input{
   position: relative;
 }
-
-/*.field-input{*/
-  /*position: relative;*/
-  /*margin-bottom: 1em;*/
-/*}*/
-
-
 
 
 ._tow-col-sel select{

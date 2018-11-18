@@ -57,8 +57,17 @@
         },
         mixins:[mix_table_data,mix_ele_table_adapter],
 
+//        created:function(){
+//            var store_name='table_'+ex.get_uid()
+//            this.$store.registerModule(store_name, table_store)
+//            this.store_name = store_name
+//        },
         mounted:function(){
             var self=this
+
+//            this.$store.state[store_name].childbus.$on('update_or_insert',function(){
+//                console.log('jjyy')
+//            })
             ex.assign(this.op_funs,{
                 row_changed:function(kws){
                     var row= kws.row
@@ -121,37 +130,8 @@
                 })
                 return names
 
-//                var self=this
-//                var all_tabs = ex.map(this.tab_stack,function(stack){
-//                    return stack.tabs
-//                })
-//                var tabs = ex.filter(all_tabs,function(item){
-//                    return item != self.tabs
-//                })
-//                return tabs
             },
-//            all_tabs:function(){
-//                var tabs = [this.tabgroup].concat(this.tab_stack)
-//                return tabs
-//            },
-//            normed_tabs:function(){
-//                var self=this
-//                var tabs =self.tabs
-//                for(var k in self.named_tabs){
-//                    var tab_item = self.named_tabs[k]
-//                    tabs=tabs.concat(tab_item)
-//                }
-//
-////                var tabs = this.tabgroup.crt_tabs
-//                var out_tabs = ex.filter(tabs,function(tab){
-//                    if(tab.show){
-//                        return ex.boolExpress(self.crt_row,tab.show)
-//                    }else{
-//                        return true
-//                    }
-//                })
-//                return out_tabs
-//            }
+
         },
         methods:{
 
@@ -367,46 +347,6 @@
 
         <com-widget-stack :ctx_list="tab_stack" @win-event="on_tab_event($event)"></com-widget-stack>
 
-        <!--<div v-for="(tabs,index) in all_tabs" :key="index" v-show="tabs == tabgroup.crt_tabs"  style="position: absolute;bottom: 0;top: 0;left: 0;right: 0;" class="tab-full">-->
-
-                <!--&lt;!&ndash;<el-tabs  v-if="tabgroup.crt_tabs.length >1" type="border-card"&ndash;&gt;-->
-
-                <!--<el-tabs  v-if="tabs.length >1" type="border-card"-->
-                           <!--@tab-click="handleClick"-->
-                           <!--style="width: 100%;height: 100%;"-->
-                           <!--:value="tabgroup.crt" >-->
-
-                    <!--&lt;!&ndash;<el-tab-pane v-for="tab in normed_tab( tabgroup.tabs )"&ndash;&gt;-->
-                    <!--<el-tab-pane v-for="tab in tabs"-->
-                                 <!--:key="tab.name"-->
-                                 <!--:name="tab.name">-->
-                        <!--<span slot="label" v-text="tab.label" ></span>-->
-
-                        <!--<component :is="tab.com" :tab_head="tab"-->
-                                   <!--:par_row="crt_row"-->
-                                   <!--:ref="'_tab_'+tab.name" @tab-event="on_tab_event($event)"></component>-->
-
-
-                    <!--</el-tab-pane>-->
-                <!--</el-tabs>-->
-
-                <!--<component v-else v-for="tab in tabs"  :is="tab.com" :tab_head="tab"-->
-                           <!--:par_row="crt_row"-->
-                           <!--:ref="'_tab_'+tab.name" @tab-event="on_tab_event($event)"></component>-->
-
-
-        <!--</div>-->
-            <!--</div>-->
-
-
-
-        <!--</div>-->
-
-        <!--<component v-for="tab in tabgroup.tabs"-->
-                   <!--v-show="tabgroup.crt==tab.name"-->
-                   <!--:is="tab.com" :tab_head="tab"-->
-                   <!--:par_row="crt_row"-->
-                   <!--:ref="'_tab_'+tab.name" @tab-event="on_tab_event($event)"></component>-->
 
     </div>
 

@@ -18,7 +18,7 @@ class CusDecimalProc(BaseFieldProc):
         if data:
             return {name: str(round(data, field.digits) )}
         else:
-            return {name: ''}
+            return {name: 0}
     
     def clean_field(self,dc,name):
         if dc.get(name):

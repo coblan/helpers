@@ -408,6 +408,70 @@ window.cfg = {
             var realMsg = msg || '操作成功';
             layer.msg(realMsg, { time: delay });
         }
+    },
+    pop_edit: function pop_edit(fields_ctx) {},
+    pop_edit_local: function (_pop_edit_local) {
+        function pop_edit_local(_x, _x2) {
+            return _pop_edit_local.apply(this, arguments);
+        }
+
+        pop_edit_local.toString = function () {
+            return _pop_edit_local.toString();
+        };
+
+        return pop_edit_local;
+    }(function (fields_ctx, callback) {
+        var winindex = pop_edit_local(fields_ctx.row, fields_ctx, callback);
+        return function () {
+            layer.close(winindex);
+        };
+    }),
+
+    pop_big: function pop_big(editor, ctx, callback) {
+        var winindex = pop_layer(ctx, editor, callback);
+        return function () {
+            layer.close(winindex);
+        };
+    },
+    pop_middle: function pop_middle(editor, ctx, callback) {
+        var winindex = pop_layer(ctx, editor, callback);
+        return function () {
+            layer.close(winindex);
+        };
+        //store.commit('left_in_page',{editor:editor,ctx:ctx,callback:callback})
+        //return function (){
+        //    history.back()
+        //}
+    },
+    pop_small: function pop_small(editor, ctx, callback) {
+        //return pop_mobile_win(editor,ctx,callback)
+        var layer_cfg = {
+            title: ctx.title || '详细',
+            area: ctx.area || ['42rem', '32rem']
+        };
+        var winindex = pop_layer(ctx, editor, callback, layer_cfg);
+        return function () {
+            layer.close(winindex);
+        };
+    },
+    close_win: function close_win(index) {
+        if (index == 'full_win') {
+            history.back();
+        }
+    },
+    pop_close: function pop_close(close_func) {
+        // 关闭窗口，窗口创建函数返回的，全部是一个关闭函数
+        close_func();
+    },
+    pop_iframe: function pop_iframe(url, option) {
+        var dc = {
+            type: 2,
+            title: '',
+            area: ['80%', '80%'],
+            content: url //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+        };
+        ex.assign(dc, option);
+        layer.open(dc);
     }
 };
 
@@ -476,6 +540,11 @@ var code = exports.code = {
     },
     eval: function _eval(js, scope) {
         return eval(js);
+    },
+    _count: 0,
+    get_uid: function get_uid() {
+        this._count++;
+        return this._count;
     }
     //hashCode: function (input){
     //    var I64BIT_TABLE =
@@ -828,17 +897,30 @@ var file_proc = exports.file_proc = {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+var ua = navigator.userAgent.toLocaleLowerCase();
+var pf = navigator.platform.toLocaleLowerCase();
+var isAndroid = /android/i.test(ua) || /iPhone|iPod|iPad/i.test(ua) && /linux/i.test(pf) || /ucweb.*linux/i.test(ua);
+var isIOS = /iPhone|iPod|iPad/i.test(ua) && !isAndroid;
+var isWinPhone = /Windows Phone|ZuneWP7/i.test(ua);
+
 var layout = exports.layout = {
+    device: {
+        pc: !isAndroid && !isIOS && !isWinPhone,
+        ios: isIOS,
+        android: isAndroid,
+        winPhone: isWinPhone
+    },
     stickup: function stickup(node, options) {
         /*
-        node: 需要stickup的元素
+        node: stickup 的元素
         options:
-            dom: 滚动的容器元素。注意：滚动元素应该的父元素不能 **再滚动**了。
-            top：stickup 时距离上边缘的距离
-          * */
+            dom: 滚动的容器，dom外层不能滚动，否则不能定位
+            top: stick时，距离窗口上边的距离
+        * */
         var dom = options.dom || window;
         var fixed_top = options.top || 0;
         var $cur = $(node); //方便后面操作this。
+        var dom_top = $(dom).offset().top;
         var top = $cur.offset().top; //获取元素距离顶部的距离
         var left = $cur.offset().left; //获取元素的水平位置
         var width = $cur.width(); //获取元素的宽度
@@ -850,7 +932,7 @@ var layout = exports.layout = {
         $(dom).on("scroll", function () {
 
             var socrllTop = $(dom).scrollTop();
-            if (socrllTop >= top) {
+            if (socrllTop >= top - dom_top) {
                 setStick();
             } else {
                 unsetStick();
@@ -872,53 +954,6 @@ var layout = exports.layout = {
 
         function unsetStick() {
             $cur.removeAttr("style"), now.hide();
-        }
-    },
-    stickupNest: function stickupNest(options) {
-        // {slide:'xxx',node:'xxx'}
-        var slide = options.slide;
-        var node = options.node;
-        var $slide = $(slide);
-        var $cur = $(node); //方便后面操作this。
-
-        //var top = $cur.offset().top;//获取元素距离顶部的距离
-        var left = $cur.offset().left; //获取元素的水平位置
-        var width = $cur.width(); //获取元素的宽度
-        var height = $cur.height(); //获取元素的高度
-
-        //克隆这个元素，这里opactiy和display:none 是双重保险.
-        var now = $cur.clone().css("opacity", 0).insertBefore($cur).hide();
-
-        $slide.on("scroll", function () {
-            var par_top = $slide.offset().top;
-            //var slide_top = $slide.offset().top;
-            var cur_top = $cur.offset().top;
-            var socrllTop = $slide.scrollTop();
-            if (par_top >= cur_top) {
-                setStick(par_top);
-            } else {
-                unsetStick();
-            }
-        });
-
-        function setStick(top) {
-            //console.log($(dom).scrollLeft())
-            //$cur.addClass(cls)
-            $cur.css({
-                "position": "fixed",
-                "left": left - $slide.scrollLeft(),
-                "top": top,
-                "width": width,
-                "height": height,
-                "z-index": 10
-            });
-            now.show();
-        }
-
-        function unsetStick() {
-            $cur.removeAttr("style"),
-            //$cur.removeClass(cls)
-            now.hide();
         }
     }
 };
@@ -971,7 +1006,11 @@ var network = exports.network = {
                 }
             }
             if (msg.length != 0) {
-                cfg.warning(msg.join('\n'));
+                if (resp.success === false) {
+                    cfg.warning(msg.join('\n'));
+                } else {
+                    cfg.showMsg(msg.join('\n'));
+                }
             }
             //if (resp.status && typeof resp.status == 'string' && resp.status != 'success') {
             if (resp.success === false) {
@@ -1754,6 +1793,52 @@ var vuetool = exports.vuetool = {
         return rt;
     },
     vueBroadcase: function vueBroadcase() {},
+    vueParStore: function vueParStore(self) {
+        var parent = self.$parent;
+        while (parent) {
+            if (parent.childStore) {
+                return parent.childStore;
+            } else {
+                parent = parent.$parent;
+            }
+        }
+    },
+
+    vueChildBusOn: function vueChildBusOn(self, event_name, func) {
+        var parent = self.$parent;
+        while (parent) {
+            if (parent.childBus) {
+                break;
+            } else {
+                parent = parent.$parent;
+            }
+        }
+        if (parent) {
+            parent.childbus.$on(event_name, func);
+        }
+    },
+    vuexParName: function vuexParName(self) {
+        var par = self.$parent;
+        while (par) {
+            if (par.store_name) {
+                return par.store_name;
+            } else {
+                par = par.$parent;
+            }
+        }
+    },
+    vuexEmit: function vuexEmit(self, event_name, event) {
+        var parName = ex.vuexParName(self);
+        if (parName) {
+            self.$store.state[parName].childbus.$emit(event_name, event);
+        }
+    },
+    vuexOn: function vuexOn(self, event_name, func) {
+        var parName = ex.vuexParName(self);
+        if (parName) {
+            self.$store.state[parName].childbus.$on(event_name, func);
+        }
+    },
     vueDispatch: function vueDispatch(self, event, kws) {
         var kws = kws || {};
         kws.source = self;
