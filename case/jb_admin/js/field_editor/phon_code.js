@@ -36,7 +36,10 @@ Vue.component('com-field-phone-code',{
                 return
             }
 
+            cfg.show_load()
             ex.director_call(this.head.fun,{row:this.row},function(resp){
+                cfg.hide_load()
+
                 setTimeout(function(){
                     self.countGetVCodeAgain()
                 },1000)
@@ -46,34 +49,34 @@ Vue.component('com-field-phone-code',{
             //this.$emit('field-event',{fun:'get_phone_code'})
 
         },
-        checkImageCode:function(phone,image_key,image_code){
-            var self=this
-            $(self.$el).find('input').trigger("hidemsg")
-
-            //if(this.row.image_code && this.hasValidPhone){
-            var data={
-                Phone:phone,
-                Key:image_key,
-                Answer:image_code,
-            }
-            cfg.show_load()
-            service_post('/anonymity/vcode/generate',data,function(resp){
-                if(resp.error_description){
-                    $(self.$el).find('input').trigger("showmsg", ["error", resp.error_description ])
-                }else if(resp.success){
-                    //$(self.$el).find('.image_code').trigger("showmsg", ["ok", '正确' ])
-                    setTimeout(function(){
-                        //self.image_valid=true
-                        self.countGetVCodeAgain()
-                    },1000)
-                }
-                // else {
-                //    $(self.$el).find('.image_code').trigger("showmsg", ["error", resp.error_description ])
-                //}
-
-            },false)
-            //}
-        },
+        //checkImageCode:function(phone,image_key,image_code){
+        //    var self=this
+        //    $(self.$el).find('input').trigger("hidemsg")
+        //
+        //    //if(this.row.image_code && this.hasValidPhone){
+        //    var data={
+        //        Phone:phone,
+        //        Key:image_key,
+        //        Answer:image_code,
+        //    }
+        //    cfg.show_load()
+        //    service_post('/anonymity/vcode/generate',data,function(resp){
+        //        if(resp.error_description){
+        //            $(self.$el).find('input').trigger("showmsg", ["error", resp.error_description ])
+        //        }else if(resp.success){
+        //            //$(self.$el).find('.image_code').trigger("showmsg", ["ok", '正确' ])
+        //            setTimeout(function(){
+        //                //self.image_valid=true
+        //                self.countGetVCodeAgain()
+        //            },1000)
+        //        }
+        //        // else {
+        //        //    $(self.$el).find('.image_code').trigger("showmsg", ["error", resp.error_description ])
+        //        //}
+        //
+        //    },false)
+        //    //}
+        //},
         countGetVCodeAgain:function(){
             var self=this
             self.vcode_count=120
