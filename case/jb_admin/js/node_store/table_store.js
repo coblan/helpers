@@ -192,6 +192,38 @@ var table_store={
                 ex.download(url)
             })
         },
+        director_call:function(kws){
+            var row_match_fun = kws.row_match
+            if(row_match_fun && ! row_match[row_match_fun](self,kws)){
+                return
+            }
+
+            function bb(){
+                cfg.show_load()
+                ex.director_call(kws.director_name,{rows:self.selected,},function(resp){
+                    if(!resp.msg){
+                        cfg.hide_load(2000)
+                    }else{
+                        cfg.hide_load()
+                    }
+                    if(kws.after_call){
+                        self.op_funs[kws.after_call](resp)
+                        if(resp.msg){
+                            cfg.showMsg(resp.msg)
+                        }
+                    }
+                })
+            }
+
+            if(kws.confirm_msg){
+                layer.confirm(kws.confirm_msg, {icon: 3, title:'提示'}, function(index){
+                    layer.close(index)
+                    bb()
+                })
+            }else{
+                bb()
+            }
+        },
     }
 
 }
