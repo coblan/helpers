@@ -7,5 +7,4 @@ Vue.component('com-widget-stack',{
             :is="ctx.widget" :ctx="ctx" @win-event="$emit('win-event',$event)"></component>
     </div>`,
 
-
 })

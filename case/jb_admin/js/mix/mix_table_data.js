@@ -14,9 +14,9 @@ var mix_table_data={
     },
     mounted:function(){
         var self=this
-        this.childStore=new Vue({
-
-        })
+        //this.childStore=new Vue({
+        //
+        //})
 
         ex.assign(this.op_funs,{
             save_changed_rows:function(){
@@ -400,7 +400,6 @@ var mix_table_data={
                     Vue.set(table_row,key,new_row[key])
                 }
             }
-
         },
         getRows:function(){
             /*
