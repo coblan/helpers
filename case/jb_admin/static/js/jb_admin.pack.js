@@ -5038,6 +5038,7 @@ var com_fields_panel = exports.com_fields_panel = {
             fields_editor: this.ctx.fields_editor || cfg.fields_editor || com_sim_fields,
             is_mobile: !ex.device.pc,
             cssCls: '',
+            crossBtn: this.ctx.crossBtn || '',
             okBtn: this.ctx.okBtn || '确定'
         };
     },
@@ -5046,7 +5047,7 @@ var com_fields_panel = exports.com_fields_panel = {
             this.$emit('finish', e);
         }
     },
-    template: '<div :class="[\'flex-v com-fields-panel\',cssCls,{\'mobile\':is_mobile}]">\n     <component class="msg-bottom" :is="fields_editor" :heads="heads" :row="row" :ok-btn="okBtn" @finish="on_finish($event)"></component>\n     <!--<div style="text-align: right;padding: 8px 3em;">-->\n        <!--<component v-for="op in ops" :is="op.editor" @operation="on_operation(op)" :head="op"></component>-->\n    <!--</div>-->\n     </div>'
+    template: '<div :class="[\'flex-v com-fields-panel\',cssCls,{\'mobile\':is_mobile}]">\n     <component class="msg-bottom" :is="fields_editor" :heads="heads" :row="row" :ok-btn="okBtn"\n       :cross-btn="crossBtn" @finish="on_finish($event)"></component>\n     <!--<div style="text-align: right;padding: 8px 3em;">-->\n        <!--<component v-for="op in ops" :is="op.editor" @operation="on_operation(op)" :head="op"></component>-->\n    <!--</div>-->\n     </div>'
 };
 window.com_fields_panel = com_fields_panel;
 Vue.component('com-fields-panel', com_fields_panel);
