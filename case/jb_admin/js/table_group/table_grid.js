@@ -21,7 +21,7 @@ var ele_table= {
         //this.bus.eventBus.$on('pageindex-change', this.get_page)
         //this.bus.eventBus.$on('operation', this.on_operation)
         //this.bus.eventBus.$on('perpage-change', this.on_perpage_change)
-
+        this.parStore.e_table = this.$refs.e_table
     },
 
 

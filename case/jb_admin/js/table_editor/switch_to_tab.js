@@ -28,7 +28,7 @@ var switch_to_tab = {
                     tab_name:this.head.tab_name,
                     ctx_name:this.head.ctx_name ,
                     named_tabs:this.head.named_tabs, // 准备淘汰
-                    row:this.rowData
+                    par_row:this.rowData
                 }
             )
             //eventBus.$emit('switch_to_tab',

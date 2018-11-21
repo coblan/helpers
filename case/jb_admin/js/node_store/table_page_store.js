@@ -20,7 +20,7 @@ var table_page_store={
                 widget:'com-widget-el-tab' ,
                 tabs:tabs,
                 crt_tab_name:kws.tab_name,
-                par_row:kws.row,
+                par_row:kws.par_row,
 
             })
             self.crt_row= kws.row
@@ -36,7 +36,8 @@ var table_page_store={
 //                }
             var self=this
             Vue.nextTick(function(){
-                //self.$refs.e_table.doLayout()
+                // 返回table页面时，可能是由于布局原因，造成table看不见
+                self.e_table.doLayout()
             })
 
         },

@@ -73,8 +73,12 @@ var table_store={
                 //pop_fields_layer(new_row,kws.heads,kws.ops,pop_id)
                 self.crt_row= crt_row
                 if(kws.tab_name){
+                    // 需要继承table_page_store
                     //self.switch_to_tab(kws)
-                    self.$emit('operation',{fun:'switch_to_tab',tab_name:kws.tab_name,row:crt_row})
+                    var bb = ex.copy(kws)
+                    bb.par_row=crt_row
+                    self.switch_to_tab(bb)
+                    //self.$emit('operation',{fun:'switch_to_tab',tab_name:kws.tab_name,row:crt_row})
                     //self.switch_to_tab({tab_name:kws.tab_name,row:crt_row})
 
                 }else{
