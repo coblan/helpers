@@ -51,7 +51,7 @@ export var com_sim_fields = {
     //},
     components:window._baseInput,
     mixins:[mix_fields_data,mix_nice_validator],
-    template:` <div :class="['field-panel sim-fields',{'mobile':is_mobile}]" style="text-align:center;">
+    template:` <div :class="['field-panel sim-fields',{'mobile':is_mobile,'msg-bottom':is_mobile}]" style="text-align:center;">
            <table class="table-fields">
         <tr v-for="head in heads">
             <td class="field-label-td"  valign="top" >

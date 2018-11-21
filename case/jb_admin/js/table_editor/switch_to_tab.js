@@ -22,21 +22,22 @@ var switch_to_tab = {
     },
     methods:{
         goto_tab:function(){
-            //this.$emit('on-custom-comp',
+            this.$emit('on-custom-comp',
+                {
+                    fun:'switch_to_tab',
+                    tab_name:this.head.tab_name,
+                    ctx_name:this.head.ctx_name ,
+                    named_tabs:this.head.named_tabs, // 准备淘汰
+                    par_row:this.rowData
+                }
+            )
+            //eventBus.$emit('switch_to_tab',
             //    {
             //        name:'switch_to_tab',
             //        tab_name:this.head.tab_name,
             //        named_tabs:this.head.named_tabs,
             //        row:this.rowData
-            //    }
-            //)
-            eventBus.$emit('switch_to_tab',
-                {
-                    name:'switch_to_tab',
-                    tab_name:this.head.tab_name,
-                    named_tabs:this.head.named_tabs,
-                    row:this.rowData
-                })
+            //    })
 
         }
     }

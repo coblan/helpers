@@ -8,6 +8,7 @@ Vue.component('com-widget-el-tab',{
 
                     <!--<el-tab-pane v-for="tab in normed_tab( tabgroup.tabs )"-->
                     <el-tab-pane v-for="tab in normed_tab"
+                                lazy
                                  :key="tab.name"
                                  :name="tab.name">
                         <span slot="label" v-text="tab.label" ></span>
@@ -50,10 +51,10 @@ Vue.component('com-widget-el-tab',{
         show_tab:function(name){
             this.ctx.crt_tab_name=name
             //this.crt_tab_name = name
-            var self =this
-            Vue.nextTick(function(){
-                self.$refs['_tab_'+name][0].on_show()
-            })
+            //var self =this
+            //Vue.nextTick(function(){
+            //    self.$refs['_tab_'+name][0].on_show()
+            //})
         },
         handleClick(tab, event) {
             this.show_tab(tab.name)

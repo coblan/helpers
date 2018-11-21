@@ -1,26 +1,26 @@
-var ajax_fields={
+require('./scss/tab_fields.scss')
+
+var tab_fields={
     props:['tab_head','par_row'],
     data:function(){
         var data_row = this.tab_head.row || {}
-      return {
-          heads:this.tab_head.heads,
-          ops:this.tab_head.ops,
-          errors:{},
-          row:data_row,
-      }
+        return {
+            heads:this.tab_head.heads,
+            ops:this.tab_head.ops,
+            errors:{},
+            row:data_row,
+        }
     },
     mixins:[mix_fields_data,mix_nice_validator],
-    template:`<div class="flex-v"  style="position: absolute;top:0;left:0;bottom: 0;right:0;overflow: auto;padding-bottom: 3em;">
+    template:`<div class="com-tab-fields flex-v"  style="position: absolute;top:0;left:0;bottom: 0;right:0;overflow: auto;">
 
-    <div>
+   <div class="oprations" >
+        <component v-for="op in ops" :is="op.editor" :ref="'op_'+op.name" :head="op" @operation="on_operation(op)"></component>
+    </div>
+    <div style="overflow: auto">
         <div class='field-panel suit' id="form" >
             <field  v-for='head in normed_heads' :key="head.name" :head="head" :row='row'></field>
         </div>
-    </div>
-
-    <div class="oprations" style="margin-left: 3em;margin-top: 2em;">
-        <component v-for="op in ops" :is="op.editor" :ref="'op_'+op.name" :head="op" @operation="on_operation(op)"></component>
-    </div>
     </div>
     </div>`,
 
@@ -45,12 +45,7 @@ var ajax_fields={
         }
     },
     methods:{
-        //on_show:function(){
-        //    if(! this.fetched){
-        //        this.get_data()
-        //        this.fetched = true
-        //    }
-        //},
+
         data_getter:function(){
             var self=this
             var fun = get_data [self.tab_head.get_data.fun]
@@ -69,7 +64,7 @@ var ajax_fields={
             //    self.row=resp.get_row
             //    cfg.hide_load()
             //})
-         },
+        },
         after_save:function(new_row){
             if(this.tab_head.after_save){
                 var fun = after_save[this.tab_head.after_save.fun]
@@ -85,12 +80,12 @@ var ajax_fields={
             this.row=new_row
         }
     }
-        // data_getter  回调函数，获取数据,
+    // data_getter  回调函数，获取数据,
 
 
 }
 
-Vue.component('com_tab_fields',ajax_fields)
+Vue.component('com-tab-fields',tab_fields)
 
 var get_data={
     get_row:function(self,callback,kws){
@@ -114,9 +109,11 @@ var get_data={
 var after_save={
     update_or_insert:function(self,new_row,kws){
         var old_row= self.old_row
+        var parStore = ex.vueParStore(self)
+        parStore.update_or_insert(new_row,old_row)
         // 要update_or_insert ，证明一定是 更新了 par_row
-        ex.vueAssign(self.par_row,new_row)
-        self.$emit('tab-event',{name:'update_or_insert',new_row:self.par_row,old_row:old_row})
+        //ex.vueAssign(self.par_row,new_row)
+        //self.$emit('tab-event',{name:'update_or_insert',new_row:self.par_row,old_row:old_row})
     },
     do_nothing:function(self,new_row,kws){
     },
