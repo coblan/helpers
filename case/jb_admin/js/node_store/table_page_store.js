@@ -9,15 +9,16 @@ var table_page_store={
     methods:{
         switch_to_tab:function(kws){
             var self=this
-            if(kws.named_tabs){
-                // 传入named_tabs，造成tabs的切换
-                var next_tabs = self.named_tabs[kws.named_tabs]
-            }else {
-                var next_tabs = self.tabs
-            }
+            var tabs=named_ctx[kws.ctx_name]
+            //if(kws.named_tabs){
+            //    // 传入named_tabs，造成tabs的切换
+            //    var next_tabs = self.named_tabs[kws.named_tabs]
+            //}else {
+            //    var next_tabs = self.tabs
+            //}
             self.tab_stack.push( {
                 widget:'com-widget-el-tab' ,
-                tabs:next_tabs,
+                tabs:tabs,
                 crt_tab_name:kws.tab_name,
                 par_row:kws.row,
 

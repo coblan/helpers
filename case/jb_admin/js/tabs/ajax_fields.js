@@ -38,13 +38,16 @@ var ajax_fields={
     //    this.table_par = table_par
     //},
 
+    mounted:function(){
+        this.get_data()
+    },
     methods:{
-        on_show:function(){
-            if(! this.fetched){
-                this.get_data()
-                this.fetched = true
-            }
-        },
+        //on_show:function(){
+        //    if(! this.fetched){
+        //        this.get_data()
+        //        this.fetched = true
+        //    }
+        //},
         data_getter:function(){
             var self=this
             var fun = get_data [self.tab_head.get_data.fun]

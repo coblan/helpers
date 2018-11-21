@@ -10,7 +10,7 @@ var table_store={
              director_name:'',
              footer:[],
              selected:[],
-             search_args:search_args, //ex.parseSearch(),
+             search_args:{}, //ex.parseSearch(),
              ops:[],
              crt_row:{},
              selectable:true,

@@ -1753,7 +1753,7 @@ Vue.component('com-head-sm-link', {
 
 Vue.component('com-widget-el-tab', {
     props: ['ctx'],
-    template: '<div class="tab-full" style="position: absolute;bottom: 0;top: 0;left: 0;right: 0;" >\n     <el-tabs  v-if="ctx.tabs.length >1" type="border-card"\n                           @tab-click="handleClick"\n                           style="width: 100%;height: 100%;"\n                           :value="ctx.crt_tab_name" >\n\n                    <!--<el-tab-pane v-for="tab in normed_tab( tabgroup.tabs )"-->\n                    <el-tab-pane v-for="tab in normed_tab"\n                                 :key="tab.name"\n                                 :name="tab.name">\n                        <span slot="label" v-text="tab.label" ></span>\n\n                        <component :is="tab.com" :tab_head="tab"\n                                   :par_row="ctx.par_row"\n                                   :ref="\'_tab_\'+tab.name" @tab-event="up_event($event)"></component>\n\n\n                    </el-tab-pane>\n                </el-tabs>\n\n                <component v-else v-for="tab in ctx.tabs"  :is="tab.com" :tab_head="tab"\n                           :par_row="ctx.par_row"\n                           :ref="\'_tab_\'+tab.name" @tab-event="up_event($event)"></component>\n    </div>',
+    template: '<div class="tab-full" style="position: absolute;bottom: 0;top: 0;left: 0;right: 0;" >\n     <el-tabs  v-if="ctx.tabs.length >1" type="border-card"\n                           @tab-click="handleClick"\n                           style="width: 100%;height: 100%;"\n                           :value="ctx.crt_tab_name" >\n\n                    <!--<el-tab-pane v-for="tab in normed_tab( tabgroup.tabs )"-->\n                    <el-tab-pane v-for="tab in normed_tab"\n                                lazy\n                                 :key="tab.name"\n                                 :name="tab.name">\n                        <span slot="label" v-text="tab.label" ></span>\n\n                        <component :is="tab.com" :tab_head="tab"\n                                   :par_row="ctx.par_row"\n                                   :ref="\'_tab_\'+tab.name" @tab-event="up_event($event)"></component>\n\n\n                    </el-tab-pane>\n                </el-tabs>\n\n                <component v-else v-for="tab in ctx.tabs"  :is="tab.com" :tab_head="tab"\n                           :par_row="ctx.par_row"\n                           :ref="\'_tab_\'+tab.name" @tab-event="up_event($event)"></component>\n    </div>',
     watch: {
         'ctx.crt_tab_name': function ctxCrt_tab_name(v) {
             this.show_tab(v);
@@ -1780,10 +1780,10 @@ Vue.component('com-widget-el-tab', {
         show_tab: function show_tab(name) {
             this.ctx.crt_tab_name = name;
             //this.crt_tab_name = name
-            var self = this;
-            Vue.nextTick(function () {
-                self.$refs['_tab_' + name][0].on_show();
-            });
+            //var self =this
+            //Vue.nextTick(function(){
+            //    self.$refs['_tab_'+name][0].on_show()
+            //})
         },
         handleClick: function handleClick(tab, event) {
             this.show_tab(tab.name);
@@ -3222,9 +3222,10 @@ var table_store = {
     },
 
     mutations: {}
-};
 
-window.table_store = table_store;
+    //window.table_store = table_store
+
+};
 
 /***/ }),
 /* 42 */
@@ -4311,7 +4312,8 @@ var switch_to_tab = {
             this.$emit('on-custom-comp', {
                 fun: 'switch_to_tab',
                 tab_name: this.head.tab_name,
-                named_tabs: this.head.named_tabs,
+                ctx_name: this.head.ctx_name,
+                named_tabs: this.head.named_tabs, // 准备淘汰
                 row: this.rowData
             });
             //eventBus.$emit('switch_to_tab',
@@ -4641,13 +4643,16 @@ var ajax_fields = {
     //    this.table_par = table_par
     //},
 
+    mounted: function mounted() {
+        this.get_data();
+    },
     methods: {
-        on_show: function on_show() {
-            if (!this.fetched) {
-                this.get_data();
-                this.fetched = true;
-            }
-        },
+        //on_show:function(){
+        //    if(! this.fetched){
+        //        this.get_data()
+        //        this.fetched = true
+        //    }
+        //},
         data_getter: function data_getter() {
             var self = this;
             var fun = get_data[self.tab_head.get_data.fun];
@@ -4763,13 +4768,16 @@ var ajax_table = {
     //},
     template: '<div class="rows-block flex-v" style="position: absolute;top:0;left:0;bottom: 0;right:0;overflow: auto;padding-bottom: 1em;" >\n        <div class=\'flex\' style="min-height: 3em;" v-if="row_filters.length > 0">\n            <com-filter class="flex" :heads="row_filters" :search_args="search_args"\n                        @submit="search()"></com-filter>\n            <div class="flex-grow"></div>\n        </div>\n\n        <div  v-if="ops.length>0">\n            <div class="oprations" style="padding: 5px">\n                <component v-for="op in ops"\n                           :is="op.editor"\n                           :ref="\'op_\'+op.name"\n                           :head="op"\n                           :disabled="get_attr(op.disabled)"\n                           v-show="! get_attr(op.hide)"\n                           @operation="on_operation(op)"></component>\n            </div>\n        </div>\n\n        <div class="box box-success flex-grow">\n            <div class="table-wraper" style="position: absolute;top:0;left:0;bottom: 0;right:0;">\n               <el-table class="table" ref="e_table"\n                              :data="rows"\n                              border\n                              show-summary\n                              :span-method="arraySpanMethod"\n                              :fit="false"\n                              :stripe="true"\n                              size="mini"\n                              @sort-change="sortChange($event)"\n                              @selection-change="handleSelectionChange"\n                              :summary-method="getSum"\n                              height="100%"\n                              style="width: 100%">\n\n                            <el-table-column\n                                    v-if="selectable"\n                                     type="selection"\n                                    :width="55">\n                            </el-table-column>\n                        <template  v-for="head in heads">\n                            <el-table-column v-if="head.editor"\n                                             :show-overflow-tooltip="is_show_tooltip(head) "\n                                             :label="head.label"\n                                             :sortable="is_sort(head)"\n                                             :width="head.width">\n                                <template slot-scope="scope">\n                                    <component :is="head.editor"\n                                               @on-custom-comp="on_td_event($event)"\n                                               :row-data="scope.row" :field="head.name" :index="scope.$index">\n                                    </component>\n\n                                </template>\n\n                            </el-table-column>\n\n                            <el-table-column v-else\n                                             :show-overflow-tooltip="is_show_tooltip(head) "\n                                             :prop="head.name"\n                                             :label="head.label"\n                                             :sortable="is_sort(head)"\n                                             :width="head.width">\n                            </el-table-column>\n\n                        </template>\n\n                    </el-table>\n            </div>\n\n        </div>\n          <div v-if="row_pages.crt_page">\n                    <el-pagination\n                        @size-change="on_perpage_change"\n                        @current-change="get_page"\n                        :current-page="row_pages.crt_page"\n                        :page-sizes="[20, 50, 100, 500]"\n                        :page-size="row_pages.perpage"\n                        layout="total, sizes, prev, pager, next, jumper"\n                        :total="row_pages.total">\n                </el-pagination>\n            </div>\n    </div>',
 
+    mounted: function mounted() {
+        this.search();
+    },
     methods: {
-        on_show: function on_show() {
-            if (!this.fetched) {
-                this.search();
-                this.fetched = true;
-            }
-        },
+        //on_show:function(){
+        //    if(! this.fetched){
+        //        this.search()
+        //        this.fetched = true
+        //    }
+        //},
         getRows: function getRows() {
             //
             var self = this;
@@ -5133,15 +5141,16 @@ var table_page_store = {
     methods: {
         switch_to_tab: function switch_to_tab(kws) {
             var self = this;
-            if (kws.named_tabs) {
-                // 传入named_tabs，造成tabs的切换
-                var next_tabs = self.named_tabs[kws.named_tabs];
-            } else {
-                var next_tabs = self.tabs;
-            }
+            var tabs = named_ctx[kws.ctx_name];
+            //if(kws.named_tabs){
+            //    // 传入named_tabs，造成tabs的切换
+            //    var next_tabs = self.named_tabs[kws.named_tabs]
+            //}else {
+            //    var next_tabs = self.tabs
+            //}
             self.tab_stack.push({
                 widget: 'com-widget-el-tab',
-                tabs: next_tabs,
+                tabs: tabs,
                 crt_tab_name: kws.tab_name,
                 par_row: kws.row
 
@@ -5186,7 +5195,7 @@ var table_store = {
             director_name: '',
             footer: [],
             selected: [],
-            search_args: search_args, //ex.parseSearch(),
+            search_args: {}, //ex.parseSearch(),
             ops: [],
             crt_row: {},
             selectable: true,
@@ -6776,6 +6785,10 @@ var _main6 = __webpack_require__(38);
 
 var node_store_main = _interopRequireWildcard(_main6);
 
+var _main7 = __webpack_require__(130);
+
+var tabs_main = _interopRequireWildcard(_main7);
+
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 __webpack_require__(75);
@@ -6817,6 +6830,96 @@ __webpack_require__(74);
 
 
 // store
+
+/***/ }),
+/* 130 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _tab_table = __webpack_require__(131);
+
+var tab_table = _interopRequireWildcard(_tab_table);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+/***/ }),
+/* 131 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var tab_table = {
+    props: ['tab_head', 'par_row'],
+    data: function data() {
+        var vc = this;
+        var heads_ctx = this.tab_head.table_ctx;
+        var my_table_store = {
+            data: function data() {
+                return {
+                    heads: heads_ctx.heads,
+                    row_filters: heads_ctx.row_filters,
+                    row_sort: heads_ctx.row_sort,
+                    director_name: heads_ctx.director_name,
+                    footer: heads_ctx.footer || [],
+                    ops: heads_ctx.ops || [],
+                    rows: [],
+                    row_pages: {},
+                    selectable: heads_ctx.selectable == undefined ? true : heads_ctx.selectable,
+                    selected: [],
+                    del_info: [],
+                    search_args: {},
+
+                    parStore: ex.vueParStore(vc)
+                };
+            },
+            mixins: [table_store],
+            watch: {
+                search_args: function search_args(v) {
+                    console.log(v);
+                }
+            },
+            methods: {
+                switch_to_tab: function switch_to_tab(kws) {
+                    this.parStore.switch_to_tab(kws);
+                },
+                getRows: function getRows() {
+                    if (vc.tab_head.tab_field) {
+                        this.search_args[vc.tab_head.tab_field] = vc.par_row[vc.tab_head.par_field];
+                    } else {
+                        this.search_args[vc.tab_head.par_field] = vc.par_row[vc.tab_head.par_field];
+                    }
+                    table_store.methods.getRows.call(this);
+                }
+            }
+        };
+        return {
+            childStore: new Vue(my_table_store)
+            //return {
+            //    parents:parents,
+            //    page_label:page_label,
+            //    heads:heads,
+            //    rows:rows,
+            //    row_filters:row_filters,
+            //    row_sort:row_sort,
+            //    row_pages:row_pages,
+            //    director_name:director_name,
+            //    footer:footer,
+            //    ops:ops,
+            //    search_args:search_args,
+            //}
+        };
+    },
+    mounted: function mounted() {
+        this.childStore.search();
+    },
+
+    template: '<div class="com-tab-table flex-v" style="position: absolute;top:0;left:0;bottom: 0;right:0;overflow: auto;padding-bottom: 1em;">\n       <div v-if="childStore.row_filters.length > 0" style="background-color: #fbfbf8;padding: 8px 1em;border-radius: 4px;margin-top: 8px">\n            <com-table-filters></com-table-filters>\n        </div>\n        <div  v-if="childStore.ops.length>0 ">\n            <com-table-operations></com-table-operations>\n        </div>\n\n        <!--<ol v-if="parents.length>0" class="breadcrumb jb-table-parent">-->\n            <!--<li v-for="par in parents"><a href="#" @click="get_childs(par)"  v-text="par.label"></a></li>-->\n        <!--</ol>-->\n\n        <div class="box box-success flex-v flex-grow" style="margin-bottom: 0">\n            <div class="table-wraper flex-grow" style="position: relative;">\n                <com-table-grid></com-table-grid>\n               </div>\n        </div>\n        <div style="background-color: white;">\n            <com-table-pagination></com-table-pagination>\n        </div>\n    </div>'
+};
+
+Vue.component('com-tab-table', tab_table);
 
 /***/ })
 /******/ ]);

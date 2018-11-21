@@ -9,4 +9,4 @@ var table_store={
     }
 }
 
-window.table_store = table_store
+//window.table_store = table_store
