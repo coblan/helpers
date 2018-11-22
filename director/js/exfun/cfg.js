@@ -38,7 +38,7 @@ window.cfg={
         }
     },
     pop_middle:function(editor,ctx,callback){
-        var winindex = pop_layer(ctx,editor,callback)
+        var winindex = pop_layer(ctx,editor,callback,ctx.layer)
         return function (){
             layer.close(winindex)
         }
