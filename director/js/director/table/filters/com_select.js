@@ -13,8 +13,10 @@ var com_select = {
         //if(!this.search_args[this.head.name]){
             //Vue.set(this.search_args,this.head.name,'')
         //}
+        var self=this
         return {
-            order:this.head.order || false
+            order:this.head.order || false,
+            parStore:ex.vueParStore(this)
         }
     },
     computed:{
@@ -27,7 +29,8 @@ var com_select = {
             this.$emit('input',v)
 
             if(this.head.changed_emit ){
-                ex.vuexEmit(this,this.head.changed_emit)
+                this.parStore.$emit(this.head.changed_emit,v)
+                //ex.vuexEmit(this,this.head.changed_emit)
                 //this.$store.state[parName].childbus.$emit(this.head.changed_emit)
             }
         }
@@ -35,18 +38,23 @@ var com_select = {
     mounted:function(){
         //var parName = ex.vuexParName(this)
         var self=this
+
+        // 更新值
         if(this.head.update_options_on ){
-            ex.vuexOn(this,this.head.update_options_on,this.get_options)
+            //ex.vuexOn(this,this.head.update_options_on,this.get_options)
+            this.parStore.$on(this.head.update_options_on,this.get_options)
         }
+        // 清空值
         if(this.head.clear_value_on){
-            ex.vuexOn(this,this.head.update_options_on,this.clear_value)
+            //ex.vuexOn(this,this.head.update_options_on,this.clear_value)
+            this.parStore.$on(this.head.update_options_on,this.clear_value)
         }
     },
     methods:{
         get_options:function(){
             var self=this
             console.log('sss')
-            ex.director_call(this.head._director_name,{search_args:self.search_args},function(resp){
+            ex.director_call(this.head.director_name,{search_args:self.search_args},function(resp){
                 self.head.options = resp
             })
         },

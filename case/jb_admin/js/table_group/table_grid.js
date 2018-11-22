@@ -75,6 +75,7 @@ var ele_table= {
                               :data="rows"
                               border
                               show-summary
+                              :span-method="parStore.arraySpanMethod"
                               :fit="false"
                               :stripe="true"
                               size="mini"
@@ -126,7 +127,13 @@ var ele_table= {
         },
         on_td_event:function(e){
             var fun_name = e.fun || e.name // 以后都用fun
-            this.parStore[fun_name](e)
+            if(e.head && e.head.arg_filter){
+                var filter_fun=arg_filter[e.head.arg_filter]
+                var normed_args = filter_fun(e.row,e.head)
+                this.parStore[fun_name](normed_args)
+            }else{
+                this.parStore[fun_name](e)
+            }
         }
     },
     //watch:{
@@ -136,4 +143,10 @@ var ele_table= {
     //},
 }
 Vue.component('com-table-grid',ele_table)
+
+var arg_filter={
+    field:function(row,head){
+        return row[head.field]
+    }
+}
 

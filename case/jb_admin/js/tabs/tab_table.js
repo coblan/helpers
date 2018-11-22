@@ -74,6 +74,10 @@ var tab_table={
             <com-table-operations></com-table-operations>
         </div>
 
+        <div v-if="childStore.parents.length>0">
+            <com-table-parents></com-table-parents>
+        </div>
+
         <!--<ol v-if="parents.length>0" class="breadcrumb jb-table-parent">-->
             <!--<li v-for="par in parents"><a href="#" @click="get_childs(par)"  v-text="par.label"></a></li>-->
         <!--</ol>-->

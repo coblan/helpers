@@ -44,7 +44,8 @@ var table_store={
             ex.post('/d/ajax',JSON.stringify(post_data),function(resp){
 
                 self.rows = resp.get_rows.rows
-                self.row_pages = resp.get_rows.row_pages
+                ex.vueAssign( self.row_pages,resp.get_rows.row_pages)
+                //self.row_pages = resp.get_rows.row_pages
                 //self.search_args=resp.get_rows.search_args
                 ex.vueAssign(self.search_args,resp.get_rows.search_args)
                 self.footer=resp.get_rows.footer
@@ -91,23 +92,37 @@ var table_store={
         },
         clearSelection:function(){
             this.selected =[]
+            // 在mix_ele_table_adaptor 中会触发 element table 自动清除选择。
+        },
+        get_childs:function(par){
+            this.search_args._par=par
+            this.search()
         },
         update_or_insert:function(new_row,old_row){
             // 如果是更新，不用输入old_row，old_row只是用来判断是否是创建的行为
+
             if(old_row && ! old_row.pk) {
 
                 //var rows = this.rows.splice(0, 0, new_row)
-
                 this.rows=[new_row].concat(this.rows)
                 this.row_pages.total+=1
-
             }else{
                 var table_row = ex.findone(this.rows,{pk:new_row.pk})
+                ex.vueAssign(table_row,new_row)
                 //ex.assign(table_row,new_row)
-                for(var key in new_row){
-                    Vue.set(table_row,key,new_row[key])
-                }
+                //for(var key in new_row){
+                //    Vue.set(table_row,key,new_row[key])
+                //}
             }
+            this.$emit('row.update_or_insert',[new_row])
+        },
+        update_rows:function(rows){
+            var self=this
+            ex.each(rows,function(row){
+                var table_row = ex.findone(self.rows,{pk:row.pk})
+                ex.vueAssign(table_row,row)
+            })
+            self.$emit('row.update_or_insert',[rows])
         },
         selected_set_and_save:function(kws){
             /*
@@ -197,6 +212,7 @@ var table_store={
             })
         },
         director_call:function(kws){
+            var self =this
             var row_match_fun = kws.row_match
             if(row_match_fun && ! row_match[row_match_fun](self,kws)){
                 return
@@ -210,12 +226,18 @@ var table_store={
                     }else{
                         cfg.hide_load()
                     }
-                    if(kws.after_call){
-                        self.op_funs[kws.after_call](resp)
-                        if(resp.msg){
-                            cfg.showMsg(resp.msg)
-                        }
+                    if(resp.msg){
+                        cfg.showMsg(resp.msg)
                     }
+
+                    // 返回rows ，默认更新
+                    if(resp.rows){
+                       self.update_rows(resp.rows)
+                    }
+                    if(resp.row){
+                        self.update_or_insert(resp.row)
+                    }
+                    self.clearSelection()
                 })
             }
 
@@ -228,6 +250,13 @@ var table_store={
                 bb()
             }
         },
+        arraySpanMethod:function({ row, column, rowIndex, columnIndex }){
+            if(this.table_layout){
+                return this.table_layout[`${rowIndex},${columnIndex}`] || [1,1]
+            }else{
+                return [1,1]
+            }
+        }
     }
 
 }
