@@ -17,7 +17,7 @@ var tab_fields={
    <div class="oprations" >
         <component v-for="op in ops" :is="op.editor" :ref="'op_'+op.name" :head="op" @operation="on_operation(op)"></component>
     </div>
-    <div style="overflow: auto">
+    <div style="overflow: auto;" class="flex-grow">
         <div class='field-panel suit' id="form" >
             <field  v-for='head in normed_heads' :key="head.name" :head="head" :row='row'></field>
         </div>
