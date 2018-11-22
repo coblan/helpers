@@ -39,7 +39,8 @@ Vue.component('com-widget-el-tab',{
             var par_row = this.ctx.par_row
             var out_tabs = ex.filter(tabs,function(tab){
             if(tab.show){
-                return ex.boolExpress(par_row,tab.show)
+                return ex.eval(tab.show,{par_row:par_row})
+                //return ex.boolExpress(par_row,tab.show)
                 }else{
                     return true
                 }
