@@ -4,9 +4,23 @@ var table_page_store={
             tab_stack:[],
             tabs:[],
             named_tabs:[],
+            childStore_event_router:childStore_event_router,
         }
     },
+    mounted:function(){
+        var self=this
+        ex.each(this.childStore_event_router,function(router){
+            self.$on(router.event,function(e){
+                self[router.fun](router)
+            })
+        })
+    },
     methods:{
+        update_ctx:function(router,e){
+            ex.director_call(router.director_name,{},function(resp){
+                named_ctx[router.ctx_name] = resp
+            })
+        },
         switch_to_tab:function(kws){
             var self=this
             var tabs=named_ctx[kws.ctx_name]

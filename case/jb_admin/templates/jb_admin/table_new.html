@@ -27,6 +27,7 @@
     // 这个变量留着，兼容老的调用。。准备把它移除
     tabs={{ tabs | jsonify | default:'[]' }}
     named_tabs={{ named_tabs | jsonify | default:'{}' }}
+    childStore_event_router={{ childStore_event_router | jsonify |default:'{}' }}
 
 //    eventBus = new Vue({})
 
@@ -296,9 +297,13 @@
             <com-table-operations></com-table-operations>
         </div>
 
-        <ol v-if="parents.length>0" class="breadcrumb jb-table-parent">
-            <li v-for="par in parents"><a href="#" @click="get_childs(par)"  v-text="par.label"></a></li>
-        </ol>
+        <div v-if="childStore.parents.length>0">
+            <com-table-parents></com-table-parents>
+        </div>
+
+        <!--<ol v-if="childStore.parents.length>0" class="breadcrumb jb-table-parent">-->
+            <!--<li v-for="par in childStore.parents"><a href="#" @click="get_childs(par)"  v-text="par.label"></a></li>-->
+        <!--</ol>-->
 
         <div class="box box-success flex-v flex-grow" style="margin-bottom: 0">
             <div class="table-wraper flex-grow" style="position: relative;">

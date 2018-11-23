@@ -20,6 +20,7 @@ export  var pop_fields={
     props:['rowData','field','index'],
     created:function(){
         // find head from parent table
+        this.parStore=ex.vueParStore(this)
         var table_par = this.$parent
         while (true){
             if (table_par.heads){
@@ -117,10 +118,11 @@ var after_save={
     do_nothing:function(self,new_row,old_row,table){
     },
     update_or_insert:function(self,new_row,old_row){
-        self.$emit('on-custom-comp',{name:'update_or_insert',new_row:new_row,old_row:old_row})
-        var par_name=ex.vuexParName(self)
-        if(par_name){
-            self.$store.state[par_name].childbus.$emit('row.update_or_insert',{new_row:new_row,old_row:old_row})
-        }
+        //self.$emit('on-custom-comp',{name:'update_or_insert',new_row:new_row,old_row:old_row})
+        self.parStore.update_or_insert(new_row,old_row)
+        //var par_name=ex.vuexParName(self)
+        //if(par_name){
+        //self.parStore.$emit('row.update_or_insert',{new_row:new_row,old_row:old_row})
+        //}
     }
 }
