@@ -22,18 +22,21 @@ export var com_sim_fields = {
         }
         },
     data:function (){
-        console.log(ex.is_small_screen())
         return {
             small_srn:ex.is_small_screen(),
             small:false
         }
     },
     mounted:function(){
-        if($(this.$el).width() <600 ){
-            this.small=true
-        }else{
-            this.small=false
-        }
+        // 由于与nicevalidator 有冲突，所以等渲染完成，再检测
+        setTimeout(function(){
+            if($(this.$el).width() <600 ){
+                this.small=true
+            }else{
+                this.small=false
+            }
+        },10)
+
     },
     computed:{
         normed_heads:function(){
@@ -60,7 +63,7 @@ export var com_sim_fields = {
     //},
     components:window._baseInput,
     mixins:[mix_fields_data,mix_nice_validator],
-    template:` <div :class="['field-panel sim-fields ggg',{'small':small,'msg-bottom':small}]"
+    template:` <div :class="['field-panel sim-fields',{'small':small,'msg-bottom':small}]"
     style="text-align:center;">
            <table class="table-fields">
         <tr v-for="head in heads">
