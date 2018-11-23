@@ -5615,7 +5615,7 @@ __webpack_require__(138);
 
 var iframe_panel = {
     props: ['ctx'],
-    template: '<div class="com-iframe-panel">\n        <iframe :src="ctx.url" style="width: 100%;height:99% " scrolling="auto"></iframe>\n    </div>'
+    template: '<div class="com-iframe-panel">\n        <iframe :src="ctx.url" style="width: 100%;height:100%;vertical-align:top" scrolling="auto"></iframe>\n    </div>'
 
 };
 Vue.component('com-iframe-panel', iframe_panel);
