@@ -450,6 +450,9 @@ window.cfg = {
             title: ctx.title || '详细',
             area: ctx.area || ['42rem', '32rem']
         };
+        if (ctx.layer) {
+            ex.assign(layer_cfg, ctx.layer);
+        }
         var winindex = pop_layer(ctx, editor, callback, layer_cfg);
         return function () {
             layer.close(winindex);
@@ -911,6 +914,9 @@ var layout = exports.layout = {
         ios: isIOS,
         android: isAndroid,
         winPhone: isWinPhone
+    },
+    is_small_screen: function is_small_screen() {
+        return $(window).width() < 760;
     },
     stickup: function stickup(node, options) {
         /*

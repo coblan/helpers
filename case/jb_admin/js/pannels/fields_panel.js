@@ -8,10 +8,18 @@ export var com_fields_panel={
             heads:this.ctx.heads,
             ops:this.ctx.ops,
             fields_editor: this.ctx.fields_editor || cfg.fields_editor || com_sim_fields,
-            is_mobile: !ex.device.pc,
+            small:false,
+            small_srn:ex.is_small_screen(),
             cssCls:'',
             crossBtn:this.ctx.crossBtn || '',
             okBtn: this.ctx.okBtn || '确定',
+        }
+    },
+    mounted:function(){
+        if($(this.$el).width() <600 ){
+            this.small=true
+        }else{
+            this.small=false
         }
     },
     methods:{
@@ -19,12 +27,9 @@ export var com_fields_panel={
             this.$emit('finish',e)
         }
     },
-    template:`<div :class="['flex-v com-fields-panel',cssCls,{'mobile':is_mobile}]">
+    template:`<div :class="['flex-v com-fields-panel',cssCls,{'small_srn':small_srn}]">
      <component class="msg-bottom" :is="fields_editor" :heads="heads" :row="row" :ok-btn="okBtn"
        :cross-btn="crossBtn" @finish="on_finish($event)"></component>
-     <!--<div style="text-align: right;padding: 8px 3em;">-->
-        <!--<component v-for="op in ops" :is="op.editor" @operation="on_operation(op)" :head="op"></component>-->
-    <!--</div>-->
      </div>`,
 }
 window.com_fields_panel = com_fields_panel

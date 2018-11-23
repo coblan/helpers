@@ -13,6 +13,9 @@ export var layout= {
         android:isAndroid,
         winPhone:isWinPhone
     },
+    is_small_screen:function(){
+       return $(window).width()<760
+    },
     stickup: function (node,options) {
         /*
         node: stickup 的元素
