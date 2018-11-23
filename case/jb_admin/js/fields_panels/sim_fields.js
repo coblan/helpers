@@ -22,8 +22,17 @@ export var com_sim_fields = {
         }
         },
     data:function (){
+        console.log(ex.is_small_screen())
         return {
-            is_mobile:! ex.device.pc
+            small_srn:ex.is_small_screen(),
+            small:false
+        }
+    },
+    mounted:function(){
+        if($(this.$el).width() <600 ){
+            this.small=true
+        }else{
+            this.small=false
         }
     },
     computed:{
@@ -51,7 +60,7 @@ export var com_sim_fields = {
     //},
     components:window._baseInput,
     mixins:[mix_fields_data,mix_nice_validator],
-    template:` <div :class="['field-panel sim-fields',{'mobile':is_mobile,'msg-bottom':is_mobile}]"
+    template:` <div :class="['field-panel sim-fields ggg',{'small':small,'msg-bottom':small}]"
     style="text-align:center;">
            <table class="table-fields">
         <tr v-for="head in heads">
@@ -81,8 +90,8 @@ export var com_sim_fields = {
             </td>
         </tr>
         <slot :row="row">
-            <!--按钮横跨两列 ！移动端强制 -->
-             <tr v-if="crossBtn || is_mobile" class="btn-row">
+            <!--按钮横跨两列 ！小尺寸时 强制 -->
+             <tr v-if="crossBtn || small" class="btn-row">
                 <td class="field-input-td" colspan="3">
                     <div class="submit-block">
                         <button @click="submit" type="btn"

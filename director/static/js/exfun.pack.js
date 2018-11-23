@@ -914,6 +914,9 @@ var layout = exports.layout = {
         android: isAndroid,
         winPhone: isWinPhone
     },
+    is_small_screen: function is_small_screen() {
+        return $(window).width() < 760;
+    },
     stickup: function stickup(node, options) {
         /*
         node: stickup 的元素
