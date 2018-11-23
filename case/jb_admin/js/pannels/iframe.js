@@ -1,7 +1,10 @@
+require('./scss/ifram_panel.scss')
 
 var iframe_panel={
     props:['ctx'],
-    template:`<iframe class="com-html-panel" :src="ctx.url" style="width: 100%;height:100% " scrolling="auto"></iframe>`,
+    template:`<div class="com-iframe-panel">
+        <iframe :src="ctx.url" style="width: 100%;height:99% " scrolling="auto"></iframe>
+    </div>`,
 
 
 

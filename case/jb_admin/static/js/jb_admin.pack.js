@@ -5611,9 +5611,11 @@ Vue.component('com-html-panel', html_panel);
 "use strict";
 
 
+__webpack_require__(138);
+
 var iframe_panel = {
     props: ['ctx'],
-    template: '<iframe class="com-html-panel" :src="ctx.url" style="width: 100%;height:100% " scrolling="auto"></iframe>'
+    template: '<div class="com-iframe-panel">\n        <iframe :src="ctx.url" style="width: 100%;height:99% " scrolling="auto"></iframe>\n    </div>'
 
 };
 Vue.component('com-iframe-panel', iframe_panel);
@@ -7202,6 +7204,46 @@ __webpack_require__(75);
 
 
 // store
+
+/***/ }),
+/* 137 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(0)();
+// imports
+
+
+// module
+exports.push([module.i, ".com-iframe-panel {\n  width: 100%;\n  height: 100%; }\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 138 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(137);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// add the styles to the DOM
+var update = __webpack_require__(1)(content, {});
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./ifram_panel.scss", function() {
+			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./ifram_panel.scss");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
 
 /***/ })
 /******/ ]);
