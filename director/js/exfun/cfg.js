@@ -1,4 +1,8 @@
 window.cfg={
+    env:{
+        width:$(window).width(),
+        height:$(window).height(),
+    },
     showMsg:function(msg){
         layer.alert(msg);
     },
@@ -32,13 +36,24 @@ window.cfg={
     },
 
     pop_big:function(editor,ctx,callback){
-        var winindex = pop_layer(ctx,editor,callback)
+        var width = Math.min(cfg.env.width*0.9,950)
+        var heigth = Math.min(cfg.env.height*0.9,700)
+        var winindex = pop_layer(ctx,editor,callback,{
+            area: [width+'px', heigth+'px'],
+        })
         return function (){
             layer.close(winindex)
         }
     },
     pop_middle:function(editor,ctx,callback){
-        var winindex = pop_layer(ctx,editor,callback,ctx.layer)
+        var layercfg={
+            area: ['750px', '500px'],
+        }
+        if(ctx.layer){
+            ex.assign(layercfg,ctx.layer)
+        }
+
+        var winindex = pop_layer(ctx,editor,callback,layercfg)
         return function (){
             layer.close(winindex)
         }
@@ -81,3 +96,8 @@ window.cfg={
         layer.open(dc);
     },
 }
+
+$(window).resize(function(){
+    cfg.env.width=$(window).width()
+    cfg.env.height=$(window).height()
+})
