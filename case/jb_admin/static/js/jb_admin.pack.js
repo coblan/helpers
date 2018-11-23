@@ -5176,22 +5176,29 @@ var table_page_store = {
         return {
             tab_stack: [],
             tabs: [],
-            named_tabs: [],
-            childStore_event_router: childStore_event_router
+            //named_tabs:[],
+            childStore_event_slot: childStore_event_slot
         };
     },
-    mounted: function mounted() {
+    created: function created() {
         var self = this;
-        ex.each(this.childStore_event_router, function (router) {
+        ex.each(this.childStore_event_slot, function (router) {
             self.$on(router.event, function (e) {
-                self[router.fun](router);
+                var kws = ex.eval(router.kws, e);
+                self[router.fun](kws);
             });
         });
     },
     methods: {
-        update_ctx: function update_ctx(router, e) {
-            ex.director_call(router.director_name, {}, function (resp) {
-                named_ctx[router.ctx_name] = resp;
+        hello: function hello(mm) {
+            alert(mm);
+        },
+        update_ctx: function update_ctx(kws) {
+            var post_data = kws.post_data || {};
+            ex.director_call(kws.director_name, post_data, function (resp) {
+
+                //Vue.set(named_ctx,router.ctx_name,resp)
+                named_ctx[kws.ctx_name] = resp;
             });
         },
         switch_to_tab: function switch_to_tab(kws) {
@@ -5307,6 +5314,9 @@ var table_store = {
             ex.post('/d/ajax', JSON.stringify(post_data), function (resp) {
                 cfg.hide_load();
                 var crt_row = resp.get_row;
+                if (self.search_args._par) {
+                    crt_row.meta_par = self.search_args._par;
+                }
                 //var pop_id= new Date().getTime()
                 // e = {name:'after_save',new_row:event.new_row,old_row:event.old_row}
                 //eventBus.$on('pop-win-'+pop_id,function(e){
@@ -5326,6 +5336,9 @@ var table_store = {
                     var win = pop_fields_layer(crt_row, fields_ctx, function (new_row) {
                         self.update_or_insert(new_row, crt_row);
                         layer.close(win);
+                        if (kws.after_save) {
+                            ex.eval(kws.after_save, self);
+                        }
                     });
                 }
             });
@@ -5906,9 +5919,8 @@ var ele_table = {
             heads: this.parStore.heads,
             //rows:this.parStore.rows,
             search_args: this.parStore.search_args,
-            row_sort: this.parStore.row_sort,
-            footer: this.parStore.footer,
-            selectable: this.parStore.selectable
+            row_sort: this.parStore.row_sort
+            //selectable:this.parStore.selectable,
 
         };
     },
@@ -5926,6 +5938,9 @@ var ele_table = {
         },
         selected: function selected() {
             return this.parStore.selected;
+        },
+        footer: function footer() {
+            return this.parStore.footer;
         }
         //bus_serarch_count:function(){
         //    return this.bus.search_count
@@ -5965,7 +5980,7 @@ var ele_table = {
     // height="100%"
     //style="width: 100%"
     mixins: [mix_table_data, mix_ele_table_adapter],
-    template: '  <div style="position: absolute;top:0;left:0;bottom: 0;right:0;">\n        <el-table class="table flat-head" ref="e_table"\n                              :data="rows"\n                              border\n                              show-summary\n                              :span-method="parStore.arraySpanMethod"\n                              :fit="false"\n                              :stripe="true"\n                              size="mini"\n                              height="100%"\n                              style="width: 100%"\n                              @sort-change="parStore.sortChange($event)"\n                              @selection-change="parStore.handleSelectionChange"\n                              :summary-method="getSum">\n                        <el-table-column v-if="selectable"\n                                type="selection"\n                                width="55">\n                        </el-table-column>\n\n                        <template  v-for="head in heads">\n\n                            <el-table-column v-if="head.editor"\n                                             :show-overflow-tooltip="parStore.is_show_tooltip(head) "\n                                             :label="head.label"\n                                             :prop="head.name.toString()"\n                                             :sortable="parStore.is_sort(head)"\n                                             :width="head.width">\n                                <template slot-scope="scope">\n                                    <component :is="head.editor"\n                                               @on-custom-comp="on_td_event($event)"\n                                               :row-data="scope.row" :field="head.name" :index="scope.$index">\n                                    </component>\n\n                                </template>\n\n                            </el-table-column>\n\n                            <el-table-column v-else\n                                             :show-overflow-tooltip="parStore.is_show_tooltip(head) "\n                                             :prop="head.name.toString()"\n                                             :label="head.label"\n                                             :sortable="parStore.is_sort(head)"\n                                             :width="head.width">\n                            </el-table-column>\n\n                        </template>\n\n                    </el-table>\n                    </div>\n',
+    template: '  <div style="position: absolute;top:0;left:0;bottom: 0;right:0;">\n        <el-table class="table flat-head" ref="e_table"\n                              :data="rows"\n                              border\n                              show-summary\n                              :span-method="parStore.arraySpanMethod"\n                              :fit="false"\n                              :stripe="true"\n                              size="mini"\n                              height="100%"\n                              style="width: 100%"\n                              @sort-change="parStore.sortChange($event)"\n                              @selection-change="parStore.handleSelectionChange"\n                              :summary-method="getSum">\n                        <el-table-column v-if="parStore.selectable"\n                                type="selection"\n                                width="55">\n                        </el-table-column>\n\n                        <template  v-for="head in parStore.heads">\n\n                            <el-table-column v-if="head.editor"\n                                             :show-overflow-tooltip="parStore.is_show_tooltip(head) "\n                                             :label="head.label"\n                                             :prop="head.name.toString()"\n                                             :sortable="parStore.is_sort(head)"\n                                             :width="head.width">\n                                <template slot-scope="scope">\n                                    <component :is="head.editor"\n                                               @on-custom-comp="on_td_event($event)"\n                                               :row-data="scope.row" :field="head.name" :index="scope.$index">\n                                    </component>\n\n                                </template>\n\n                            </el-table-column>\n\n                            <el-table-column v-else\n                                             :show-overflow-tooltip="parStore.is_show_tooltip(head) "\n                                             :prop="head.name.toString()"\n                                             :label="head.label"\n                                             :sortable="parStore.is_sort(head)"\n                                             :width="head.width">\n                            </el-table-column>\n\n                        </template>\n\n                    </el-table>\n                    </div>\n',
     methods: {
         bus_search: function bus_search(search_args) {
             ex.assign(this.search_args, search_args);

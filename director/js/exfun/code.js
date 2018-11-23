@@ -53,6 +53,7 @@ export var code ={
         }
     },
     eval:function(js,scope){
+        var rt=''
         return eval(js)
     },
     _count:0,

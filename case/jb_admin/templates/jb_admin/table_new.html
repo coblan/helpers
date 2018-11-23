@@ -27,7 +27,7 @@
     // 这个变量留着，兼容老的调用。。准备把它移除
     tabs={{ tabs | jsonify | default:'[]' }}
     named_tabs={{ named_tabs | jsonify | default:'{}' }}
-    childStore_event_router={{ childStore_event_router | jsonify |default:'{}' }}
+    childStore_event_slot={{ childStore_event_slot | jsonify |default:'{}' }}
 
 //    eventBus = new Vue({})
 
@@ -50,6 +50,8 @@
                 tab_stack:[],
                 tabs:tabs,
                 named_tabs:named_tabs,
+                //-------------------
+                named_ctx:named_ctx
             }
         },
         mixins:[table_store,table_page_store],
