@@ -3,22 +3,29 @@ var table_page_store={
         return {
             tab_stack:[],
             tabs:[],
-            named_tabs:[],
-            childStore_event_router:childStore_event_router,
+            //named_tabs:[],
+            childStore_event_slot:childStore_event_slot,
         }
     },
-    mounted:function(){
+    created:function(){
         var self=this
-        ex.each(this.childStore_event_router,function(router){
+        ex.each(this.childStore_event_slot,function(router){
             self.$on(router.event,function(e){
-                self[router.fun](router)
+                var kws = ex.eval(router.kws,e)
+                self[router.fun](kws)
             })
         })
     },
     methods:{
-        update_ctx:function(router,e){
-            ex.director_call(router.director_name,{},function(resp){
-                named_ctx[router.ctx_name] = resp
+        hello:function(mm){
+            alert(mm)
+        },
+        update_ctx:function(kws){
+            var post_data = kws.post_data || {}
+            ex.director_call(kws.director_name,post_data,function(resp){
+
+                //Vue.set(named_ctx,router.ctx_name,resp)
+                named_ctx[kws.ctx_name] = resp
             })
         },
         switch_to_tab:function(kws){

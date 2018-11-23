@@ -11,8 +11,7 @@ var ele_table= {
             //rows:this.parStore.rows,
             search_args: this.parStore.search_args,
             row_sort: this.parStore.row_sort,
-            footer:this.parStore.footer,
-            selectable:this.parStore.selectable,
+            //selectable:this.parStore.selectable,
 
         }
     },
@@ -31,6 +30,9 @@ var ele_table= {
         },
         selected:function(){
             return this.parStore.selected
+        },
+        footer:function(){
+            return this.parStore.footer
         }
         //bus_serarch_count:function(){
         //    return this.bus.search_count
@@ -84,12 +86,12 @@ var ele_table= {
                               @sort-change="parStore.sortChange($event)"
                               @selection-change="parStore.handleSelectionChange"
                               :summary-method="getSum">
-                        <el-table-column v-if="selectable"
+                        <el-table-column v-if="parStore.selectable"
                                 type="selection"
                                 width="55">
                         </el-table-column>
 
-                        <template  v-for="head in heads">
+                        <template  v-for="head in parStore.heads">
 
                             <el-table-column v-if="head.editor"
                                              :show-overflow-tooltip="parStore.is_show_tooltip(head) "

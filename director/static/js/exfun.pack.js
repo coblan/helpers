@@ -540,6 +540,7 @@ var code = exports.code = {
         }
     },
     eval: function _eval(js, scope) {
+        var rt = '';
         return eval(js);
     },
     _count: 0,
