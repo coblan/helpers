@@ -436,7 +436,7 @@ var com_sim_fields = exports.com_sim_fields = {
                 }
             });
             max += 1;
-            return { width: max + 'rem' };
+            return { width: max + 'em' };
         }
     },
     //created:function(){
