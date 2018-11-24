@@ -12,3 +12,4 @@ import * as header_sim_click from  './pc/header_menu.js'
 
 
 require('./pc/scss/element_ex.scss')
+require('./scss/layout.scss')
