@@ -55,11 +55,15 @@ var com_select = {
         //}
     },
     methods:{
-        get_options:function(){
-            this.clear_value()
+        get_options:function(event){
+            //this.clear_value()
             var self=this
-            console.log('sss')
-            ex.director_call(this.head.director_name,{search_args:self.search_args},function(resp){
+            if(this.head.post_data){
+                var post_data=ex.eval(this.head.post_data,{event:event,vc:self})
+            }else{
+                var post_data={}
+            }
+            ex.director_call(this.head.director_name,post_data,function(resp){
                 self.head.options = resp
             })
         },
