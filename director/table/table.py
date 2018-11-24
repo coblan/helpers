@@ -123,6 +123,7 @@ class RowFilter(object):
     names=[]
     range_fields=[]
     model=''
+    fields_sort = []
     def __init__(self,dc,user,allowed_names,kw={}):
         # 为了让前端不显示
         self.model_allowed_names =  allowed_names
@@ -211,7 +212,9 @@ class RowFilter(object):
         out_list.extend(normal_heads)
         out_list = [self.dict_head(head) for head in out_list]
         out_list = [x for x in out_list if x['name'] in send_to_front_names]
-        out_list = sorted(out_list, key= lambda x: send_to_front_names.index(x['name']))
+        if self.fields_sort:
+            out_list = [x for x in out_list if x['name'] in self.fields_sort]
+            out_list = sorted(out_list, key= lambda x: self.fields_sort.index(x['name']))
         return out_list
     
     def clean_query(self, query): 

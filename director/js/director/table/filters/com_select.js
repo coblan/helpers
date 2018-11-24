@@ -31,10 +31,12 @@ var com_select = {
     watch:{
         myvalue:function(v){
             this.$emit('input',v)
-
             if(this.head.changed_emit ){
                 this.parStore.$emit(this.head.changed_emit,v)
             }
+        },
+        options:function(v){
+            delete  this.search_args[this.head.name]
         }
     },
     mounted:function(){

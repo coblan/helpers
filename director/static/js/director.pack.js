@@ -3685,10 +3685,12 @@ var com_select = {
     watch: {
         myvalue: function myvalue(v) {
             this.$emit('input', v);
-
             if (this.head.changed_emit) {
                 this.parStore.$emit(this.head.changed_emit, v);
             }
+        },
+        options: function options(v) {
+            delete this.search_args[this.head.name];
         }
     },
     mounted: function mounted() {
