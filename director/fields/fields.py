@@ -151,7 +151,7 @@ class ModelFields(forms.ModelForm):
         return rt and not extra_errors
     
     def extra_valid(self): 
-        """在django的clean函数中，自定义的字段，raise ValidationError ，会被django清除掉，所以只能在后面重新验证"""
+        """在django的clean函数中，**自定义**的字段，raise ValidationError ，会被django清除掉，所以只能在后面重新验证"""
         return {}
         
     def get_errors(self): 
@@ -492,6 +492,8 @@ class Fields(ModelFields):
     def __init__(self, dc={}, pk=None, crt_user=None, nolimit=False, *args, **kw): 
         self.kw=dc.copy()
         self.kw.update(kw)
+        # 太复杂，暂时不要权限
+        self.nolimit = True
     
     def is_valid(self): 
         return True

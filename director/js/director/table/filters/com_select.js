@@ -6,20 +6,26 @@ var com_select = {
         <option v-if="head.forbid_select_null" :value="undefined" disabled v-text='head.label'></option>
         <option v-else :value="undefined" v-text='head.label' ></option>
         <option :value="null" disabled >---</option>
-        <option v-for='option in orderBy( head.options,"label")' :value="option.value" v-text='option.label'></option>
+        <option v-for='option in orderBy(options,"label")' :value="option.value" v-text='option.label'></option>
     </select>
     `,
     data:function(){
-        //if(!this.search_args[this.head.name]){
-            //Vue.set(this.search_args,this.head.name,'')
-        //}
+        var self=this
         return {
-            order:this.head.order || false
+            order:this.head.order || false,
+            parStore:ex.vueParStore(this)
         }
     },
     computed:{
         myvalue:function(){
             return this.search_args[this.head.name]
+        },
+        options:function(){
+            if(this.head.ctx_name){
+                return named_ctx[this.head.ctx_name]
+            }else{
+                return this.head.options
+            }
         }
     },
     watch:{
@@ -27,26 +33,31 @@ var com_select = {
             this.$emit('input',v)
 
             if(this.head.changed_emit ){
-                ex.vuexEmit(this,this.head.changed_emit)
-                //this.$store.state[parName].childbus.$emit(this.head.changed_emit)
+                this.parStore.$emit(this.head.changed_emit,v)
             }
         }
     },
     mounted:function(){
         //var parName = ex.vuexParName(this)
         var self=this
+
+        // 更新值
         if(this.head.update_options_on ){
-            ex.vuexOn(this,this.head.update_options_on,this.get_options)
+            //ex.vuexOn(this,this.head.update_options_on,this.get_options)
+            this.parStore.$on(this.head.update_options_on,this.get_options)
         }
-        if(this.head.clear_value_on){
-            ex.vuexOn(this,this.head.update_options_on,this.clear_value)
-        }
+        // 清空值
+        //if(this.head.clear_value_on){
+        //    //ex.vuexOn(this,this.head.update_options_on,this.clear_value)
+        //    this.parStore.$on(this.head.update_options_on,this.clear_value)
+        //}
     },
     methods:{
         get_options:function(){
+            this.clear_value()
             var self=this
             console.log('sss')
-            ex.director_call(this.head._director_name,{search_args:self.search_args},function(resp){
+            ex.director_call(this.head.director_name,{search_args:self.search_args},function(resp){
                 self.head.options = resp
             })
         },

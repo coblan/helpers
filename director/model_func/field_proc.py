@@ -44,7 +44,7 @@ class BaseFieldProc(object):
     
     
     def filter_get_head(self,name,model):
-        return {}
+        return {'name': name, 'editor': 'com-filter-select', 'options': [],}
     
     
     def filter_adapt_dict(self,dc,name):

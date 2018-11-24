@@ -8,7 +8,7 @@
 
 {% block page_content %}
 <script src='{% static "js/jb_admin.pack.js" %}?t={{ js_stamp.jb_admin_pack_js }}'></script>
-
+<script src="{{ js_config.js_lib.authuser }}"></script>
 <script type="text/javascript">
 
     fields_logic={
@@ -30,6 +30,9 @@
             has_select:function(){
                 return this.selected.length !=0
             },
+            is_mobile:function(){
+                return ! ex.device.pc
+            }
         },
         mounted:function(){
             var self=this
@@ -103,21 +106,41 @@
 
  </script>
 <style>
-    #there{
-        padding: 2em;
+    body{
+        background-color: #f9f9f9;
     }
+
+    .regist-form{
+        padding: 1rem 6rem;
+        width: 50rem;
+        max-width: 50rem;
+        margin: auto;
+        background-color: white;
+        border: 1px solid #eeeeee;
+        margin-top: 3rem;
+        border-radius: 0.2rem;
+    }
+
+    @media (max-width: 750px) {
+        .regist-form {
+            width: auto;
+            padding: 0 2rem;
+            margin-top:0 ;
+        }
+    }
+
+
+
     [v-cloak]{
         display: none;
     }
 </style>
-<div id="there">
+<div id="there" :class="['regist-form',{'mobile':is_mobile}]">
     <div v-show="step=='on-rigist'" >
-        <div style="text-align: center;padding: 2em;">
-            <h3>欢迎注册</h3>
-        </div>
+        <com-login-banner></com-login-banner>
 
-
-        <com-sim-fields  :heads="heads" :row="row" ok-btn="注册" @submit="submit" @after-save="after_save"></com-sim-fields>
+        <com-sim-fields :heads="heads" :row="row" ok-btn="注册"
+                         @submit="submit" @after-save="after_save"></com-sim-fields>
     </div>
     <div v-cloak v-show="step=='on-success'" style="text-align: center">
         <h2>注册成功，现在跳转！</h2>

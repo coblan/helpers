@@ -23,7 +23,6 @@ var call_fun = {
             this.$emit('on-custom-comp',{name:this.head.fun,row:this.rowData,head:this.head})
         }
     }
-
 }
 
 Vue.component('com-table-call-fun',call_fun)

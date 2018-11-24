@@ -26,10 +26,14 @@ var sim_select= {
             Vue.set(this.row, this.head.name, this.head.default)
         }
         var self=this
+        // 下面这个淘汰了,暂时为了兼容性，放在这里
         if(this.head.remote_options){
             ex.director_call(this.head.remote_options,{crt_value:this.row[this.head.name]},function(resp){
                 self.head.options=resp
             })
+        }
+        if(this.head.ctx_name){
+            self.head.options = named_ctx[this.head.ctx_name]
         }
 
     },

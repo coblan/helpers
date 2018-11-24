@@ -147,7 +147,8 @@ class RowFilter(object):
                 self.filter_args['%s__gte'%k]=start
             if kw.get('_end_%s'%k):
                 end=kw.get('_end_%s'%k)
-                self.filter_args['%s__lte'%k]=end            
+                self.filter_args['%s__lte'%k]=end
+        self.kw = kw
     
     def get_proc_list(self):
         ls=[]
@@ -212,7 +213,10 @@ class RowFilter(object):
         out_list = [x for x in out_list if x['name'] in send_to_front_names]
         out_list = sorted(out_list, key= lambda x: send_to_front_names.index(x['name']))
         return out_list
-      
+    
+    def clean_query(self, query): 
+        return query
+    
     def get_query(self,query):
         self.query=query
         dc = {}
@@ -224,6 +228,7 @@ class RowFilter(object):
         arg_dc = {k: v for k, v in self.filter_args.items() if v != None}
         
         query=query.filter(**arg_dc)
+        query = self.clean_query(query)
         return query    
     
 class RowSort(object):
@@ -268,10 +273,10 @@ class RowSort(object):
                         query= query.extra(select={'converted_%s'%norm_name: 'CONVERT(%s USING gbk)'%norm_name},order_by=['%sconverted_%s'%(direction,norm_name)])                        
                 else:
                     query= query.order_by(name, '-pk')
-        #else:
-            #query = query.order_by('-pk')
+        else:
+            query = query.order_by('-pk')
 
-        return query.order_by('-pk')
+        return query
 
   
 class ModelTable(object):
@@ -619,8 +624,10 @@ class ModelTable(object):
         return {}
     
     def get_query(self):
-        if not self.crt_user.is_superuser and not self.permit.readable_fields():
-            raise PermissionDenied('no permission to browse %s'%self.model._meta.model_name)
+        if not self.crt_user.is_authenticated:
+            raise PermissionDenied('no permission to browse %s ,Please login first' % self.model._meta.model_name)
+        elif not self.crt_user.is_superuser and not self.permit.readable_fields():
+            raise PermissionDenied('user %s ,no permission to browse %s'% ( self.crt_user.username, self.model._meta.model_name))
         query =  self.model.objects.all()
         
         # 优化速度
@@ -676,8 +683,8 @@ class ModelTable(object):
                  'fields_ctx':fieldobj.get_head_context(),
                  'visible': self.permit.can_add(),
                  },
-                {'name':'save_changed_rows','editor':'com-op-btn','label':'保存','hide':'!changed','icon':'fa-save', 'visible': self.permit.can_edit()},
-                {'name':'delete','editor':'com-op-btn','label':'删除','style': 'color:red','icon': 'fa-times','disabled':'!has_select', 'visible': self.permit.can_del(),},
+                {'name':'save_changed_rows','editor':'com-op-btn','label':'保存', 'show': 'scope.changed','hide':'!changed','icon':'fa-save', 'visible': self.permit.can_edit()},
+                {'name':'delete','editor':'com-op-btn','label':'删除','style': 'color:red','icon': 'fa-times','disabled':'!scope.has_select', 'visible': self.permit.can_del(),},
                 ]      
     
     def get_excel(self): 

@@ -1,0 +1,6 @@
+//import * as fields_local_panel from  './fields_local_panel.js'
+import * as fields_panel from  './fields_panel.js'
+import * as html_panel from  './html_panel.js'
+import * as table_panel from  './table_panel.js'
+import * as iframe from  './iframe.js'
+import * as html_content_panel from  './html_content_panel.js'

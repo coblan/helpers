@@ -22,23 +22,29 @@ import * as related_select from './filters/related_select.js'
 import * as date_datetimefield_range from './filters/date_datetimefield_range'
 import * as filter_search_select from './filters/filter_search_select'
 import * as filter_date from './filters/filter_date'
+import * as filter_single_select2 from './filters/filter_single_select2'
 
 
 require('./scss/table_filter.scss')
 
 Vue.component('com-filter',{
+    /*
+    * 过滤器的 容器
+    * */
     props:['heads','search_args'],
     template:`<div v-if='heads.length>0' class="com-filter flex flex-grow flex-ac">
-                <div v-for="filter in heads" :id="'filter-'+filter.name" class="filter-item">
-                    <component @submit="m_submit()" :is="filter.editor" :head="filter" :search_args='search_args' > </component>
+            <com-auto-more>
+                <div class="flex" style="flex-wrap: wrap">
+                     <div v-for="filter in heads" :id="'filter-'+filter.name" class="filter-item">
+                            <component @submit="m_submit()" :is="filter.editor" :head="filter" :search_args='search_args' > </component>
+                        </div>
                 </div>
+            </com-auto-more>
 
                 <button name="go" type="button" class="btn btn-success btn-sm" @click='m_submit()' >
                   <i class="fa fa-search"></i>
                   <span v-text="search_lable"></span>
                 </button>
-
-
         </div>
     `,
     created:function(){

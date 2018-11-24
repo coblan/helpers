@@ -1,11 +1,12 @@
 var ajax_fields={
     props:['tab_head','par_row'],
     data:function(){
+        var data_row = this.tab_head.row || {}
       return {
           heads:this.tab_head.heads,
           ops:this.tab_head.ops,
           errors:{},
-          row:{},
+          row:data_row,
       }
     },
     mixins:[mix_fields_data,mix_nice_validator],
@@ -38,13 +39,18 @@ var ajax_fields={
     //    this.table_par = table_par
     //},
 
+    mounted:function(){
+        if(!this.tab_head.row){
+            this.get_data()
+        }
+    },
     methods:{
-        on_show:function(){
-            if(! this.fetched){
-                this.get_data()
-                this.fetched = true
-            }
-        },
+        //on_show:function(){
+        //    if(! this.fetched){
+        //        this.get_data()
+        //        this.fetched = true
+        //    }
+        //},
         data_getter:function(){
             var self=this
             var fun = get_data [self.tab_head.get_data.fun]
