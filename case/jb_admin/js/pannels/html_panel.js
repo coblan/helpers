@@ -1,4 +1,3 @@
-require('./scss/html_panel.scss')
 
 var html_panel={
     props:['ctx'],
