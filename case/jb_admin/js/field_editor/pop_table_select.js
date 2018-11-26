@@ -11,8 +11,8 @@ var pop_table_select =  {
         }
     },
     mounted:function(){
-        var self=this
-        var name =this.head.name
+        //var self=this
+        //var name =this.head.name
         //this.validator=$(this.$el).validator({
         //    fields: {
         //        name:'required;'

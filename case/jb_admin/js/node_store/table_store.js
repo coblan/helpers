@@ -27,6 +27,9 @@ var table_store={
         },
     },
     methods:{
+        eval:function(kws){
+            ex.eval(kws.express,this)
+        },
         search:function(){
             this.search_args._page=1
             this.getRows()

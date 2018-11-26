@@ -1518,8 +1518,8 @@ var pop_table_select = {
         }
     },
     mounted: function mounted() {
-        var self = this;
-        var name = this.head.name;
+        //var self=this
+        //var name =this.head.name
         //this.validator=$(this.$el).validator({
         //    fields: {
         //        name:'required;'
@@ -5283,6 +5283,9 @@ var table_store = {
         }
     },
     methods: {
+        eval: function _eval(kws) {
+            ex.eval(kws.express, this);
+        },
         search: function search() {
             this.search_args._page = 1;
             this.getRows();
