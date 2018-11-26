@@ -373,7 +373,8 @@ class ModelTable(object):
     @classmethod
     def clean_search_args(cls,search_args):
         """
-        重载该函数，用于调整search_args的默认值，修改值
+        重载该函数，用于调整search_args的默认值，
+        修改值
         返回的参数 (1,2) 1用于传入 filter ，2 用于传回前端去显示。
         
         例如对于类型为datetime的filter，
@@ -493,11 +494,18 @@ class ModelTable(object):
         """
         return:[{"name": "name", "label": "\u59d3\u540d"}, {"sortable": true, "name": "age", "label": "\u5e74\u9f84"}]
         """
+        heads = [
+            {'name': '_sequence', 'label': '序号', 'editor': 'com-table-sequence', 'inn_editor': 'com-table-sequence',}
+        ]
         model_heads = self.get_model_heads()
-        heads = model_heads + self.getExtraHead() 
+        heads = heads + model_heads + self.getExtraHead() 
         heads = self.fields_sort_heads(heads)   
         heads= self.make_pop_edit_field(heads)  
         heads = [self.dict_head(head) for head in heads]
+        if not self.include:
+            heads = [x for x in heads if x['name'] not in self.exclude]
+        else:
+            heads = [x for x in heads if x['name'] in self.include]
         
         for head in model_heads:
             field = self.model._meta.get_field(head['name'])            
@@ -612,7 +620,18 @@ class ModelTable(object):
                 dc = inst
             dc['_director_name'] = self.get_edit_director_name()
             out.append(dc)
+        #out = self.append_sequence(out)
         return out
+    
+    #def append_sequence(self, rows): 
+        #page = self.kw['search_args'].get('_page', 1)
+        #perPage = self.pagenator.perPage
+        #start = (page - 1) * perPage
+        #for row in rows:
+            #start += 1
+            #row['_sequence'] = start
+            
+        #return rows
     
     @classmethod
     def get_edit_director_name(cls): 

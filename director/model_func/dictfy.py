@@ -346,7 +346,7 @@ def form_to_head(form,include=None):
     return out
 
 # 为了将ID翻译成 序号
-ID_tr=_('ID')
+ID_tr= _('ID')
 
 def model_to_head(model,include=[],exclude=[]):
     out = []
