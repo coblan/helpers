@@ -498,14 +498,17 @@ class ModelTable(object):
             {'name': '_sequence', 'label': '序号', 'editor': 'com-table-sequence', 'inn_editor': 'com-table-sequence',}
         ]
         model_heads = self.get_model_heads()
-        heads = heads + model_heads + self.getExtraHead() 
-        heads = self.fields_sort_heads(heads)   
-        heads= self.make_pop_edit_field(heads)  
-        heads = [self.dict_head(head) for head in heads]
+        heads =  heads + model_heads
         if not self.include:
             heads = [x for x in heads if x['name'] not in self.exclude]
         else:
             heads = [x for x in heads if x['name'] in self.include]
+            
+        heads += self.getExtraHead() 
+        heads = self.fields_sort_heads(heads)   
+        heads= self.make_pop_edit_field(heads)  
+        heads = [self.dict_head(head) for head in heads]
+
         
         for head in model_heads:
             field = self.model._meta.get_field(head['name'])            

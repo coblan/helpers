@@ -1882,7 +1882,7 @@ function pop_fields_layer(row, fields_ctx, callback, layerConfig) {
     (function (pop_id, row, heads, ops, com_id, openfields_layer_index) {
 
         //Vue.nextTick(function(){
-        var store_id = 'store_fields_' + new Date().getTime();
+        //    var store_id ='store_fields_'+ new Date().getTime()
 
         var vc = new Vue({
             el: '#fields-pop-' + pop_id,
@@ -1923,7 +1923,7 @@ function pop_fields_layer(row, fields_ctx, callback, layerConfig) {
             },
             methods: {
                 on_sub_success: function on_sub_success(new_row) {
-                    callback(new_row, store_id, openfields_layer_index);
+                    callback(new_row, this.childStore, openfields_layer_index);
                 }
             }
         });
@@ -5405,7 +5405,7 @@ var table_store = {
                         row._cache_director_name = row._director_name; // [1] 有可能是用的特殊的 direcotor
                         row._director_name = kws.fields_ctx.director_name;
                     }
-                    row[kws.field] = kws.value;
+                    //row[kws.field]=kws.value
                 });
                 var post_data = [{ fun: 'save_rows', rows: cache_rows }];
                 cfg.show_load();
@@ -5432,20 +5432,35 @@ var table_store = {
                 });
             }
 
+            //row[kws.field]=kws.value
+
             function judge_pop_fun() {
+                var one_row = {};
+                if (kws.field) {
+                    // 兼容老的，新的采用eval形式，
+                    one_row[kws.field] = kws.value;
+                } else {
+                    ex.assign(one_row, ex.eval(kws.pre_set));
+                }
+
                 if (kws.fields_ctx) {
-                    var one_row = ex.copy(self.selected[0]);
-                    var win_index = pop_edit_local(one_row, kws.fields_ctx, function (new_row, store_id) {
+                    ex.map(kws.fields_ctx.heads, function (head) {
+                        if (!head.name.startsWith('_') && one_row[head.name] == undefined) {
+                            one_row[head.name] = self.selected[0][head.name];
+                        }
+                    });
+                    var win_index = pop_edit_local(one_row, kws.fields_ctx, function (new_row, store) {
                         bb(new_row, function (resp) {
                             if (resp.save_rows.errors) {
-                                self.$store.commit(store_id + '/showErrors', resp.save_rows.errors);
+                                store.showError(resp.save_rows.errors);
+                                //self.$store.commit(store_id+'/showErrors',resp.save_rows.errors)
                             } else {
                                 layer.close(win_index);
                             }
                         });
                     });
                 } else {
-                    bb({});
+                    bb(one_row);
                 }
             }
             if (kws.confirm_msg) {
