@@ -19,8 +19,8 @@ export  function pop_layer (com_ctx,component_name,callback,layerConfig){
             }
 
         },
-        //shadeClose: true, //点击遮罩关闭
-        content:`<div id="fields-pop-${pop_id}" style="height: 100%;width: 100%">
+        //shadeClose: true, //点击遮罩关闭  style="height: 100%;width: 100%"
+        content:`<div id="fields-pop-${pop_id}" class="pop-layer">
                     <component :is="component_name" :ctx="com_ctx" @finish="on_finish($event)"></component>
                 </div>`,
         end: function () {
