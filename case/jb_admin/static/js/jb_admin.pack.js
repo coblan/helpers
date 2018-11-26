@@ -5284,7 +5284,23 @@ var table_store = {
     },
     methods: {
         express: function express(kws) {
-            ex.eval(kws.express, this);
+            var self = this;
+            var row_match_fun = kws.row_match;
+            if (row_match_fun && !row_match[row_match_fun](self, kws)) {
+                return;
+            }
+            if (kws.confirm_msg) {
+                layer.confirm(kws.confirm_msg, { icon: 3, title: '提示' }, function (index) {
+                    layer.close(index);
+                    ex.eval(kws.express, self);
+                });
+            } else {
+                var real_kws = ex.copy(kws);
+                if (kws.update_kws) {
+                    ex.assign(real_kws, ex.eval(real_kws, { ts: self, kws: kws }));
+                }
+                ex.eval(real_kws.express, { ts: self, kws: real_kws });
+            }
         },
         search: function search() {
             this.search_args._page = 1;
