@@ -5283,7 +5283,7 @@ var table_store = {
         }
     },
     methods: {
-        eval: function _eval(kws) {
+        express: function express(kws) {
             ex.eval(kws.express, this);
         },
         search: function search() {
