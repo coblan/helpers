@@ -3685,10 +3685,12 @@ var com_select = {
     watch: {
         myvalue: function myvalue(v) {
             this.$emit('input', v);
-
             if (this.head.changed_emit) {
                 this.parStore.$emit(this.head.changed_emit, v);
             }
+        },
+        options: function options(v) {
+            delete this.search_args[this.head.name];
         }
     },
     mounted: function mounted() {
@@ -3707,11 +3709,15 @@ var com_select = {
         //}
     },
     methods: {
-        get_options: function get_options() {
-            this.clear_value();
+        get_options: function get_options(event) {
+            //this.clear_value()
             var self = this;
-            console.log('sss');
-            ex.director_call(this.head.director_name, { search_args: self.search_args }, function (resp) {
+            if (this.head.post_data) {
+                var post_data = ex.eval(this.head.post_data, { event: event, vc: self });
+            } else {
+                var post_data = {};
+            }
+            ex.director_call(this.head.director_name, post_data, function (resp) {
                 self.head.options = resp;
             });
         },
@@ -4772,7 +4778,7 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, ".com-auto-more {\n  height: 3rem;\n  position: relative;\n  flex-shrink: 0;\n  flex-grow: 10; }\n  .com-auto-more .outer-wrap {\n    height: 3rem;\n    transition: height .3s;\n    z-index: 100;\n    position: absolute;\n    overflow: hidden;\n    width: 100%; }\n  .com-auto-more .inn-wrap {\n    width: 100%;\n    background-color: white;\n    padding: 0 3rem 1rem 1rem; }\n  .com-auto-more .toggle-btn {\n    display: none;\n    position: absolute;\n    z-index: 101; }\n  .com-auto-more.has-overflow .toggle-btn {\n    display: block;\n    position: absolute;\n    right: 1rem;\n    top: 0.7rem; }\n  .com-auto-more.expanded .outer-wrap {\n    border-top: 1px solid #f2f2f2;\n    box-shadow: 0px 2px 4px #9c9c9c;\n    -moz-box-shadow: 0px 2px 4px #9c9c9c;\n    -webkit-box-shadow: 0px 2px 4px #9c9c9c; }\n", ""]);
+exports.push([module.i, ".com-auto-more {\n  height: 3rem;\n  position: relative;\n  flex-shrink: 0;\n  flex-grow: 10; }\n  .com-auto-more .outer-wrap {\n    height: 3rem;\n    transition: height .3s;\n    z-index: 100;\n    position: absolute;\n    overflow: hidden;\n    width: 100%;\n    background-color: white; }\n  .com-auto-more .inn-wrap {\n    width: 100%;\n    background-color: white;\n    padding: 0 3rem 1rem 1rem; }\n  .com-auto-more .toggle-btn {\n    display: none;\n    position: absolute;\n    z-index: 101; }\n  .com-auto-more.has-overflow .toggle-btn {\n    display: block;\n    position: absolute;\n    right: 1rem;\n    top: 0.7rem; }\n  .com-auto-more.expanded .outer-wrap {\n    border-top: 1px solid #f2f2f2;\n    box-shadow: 0px 2px 4px #9c9c9c;\n    -moz-box-shadow: 0px 2px 4px #9c9c9c;\n    -webkit-box-shadow: 0px 2px 4px #9c9c9c; }\n", ""]);
 
 // exports
 
