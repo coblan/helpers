@@ -22,11 +22,14 @@ var pop_table_select =  {
     methods:{
         open_win:function(){
             var self=this
-            pop_table_layer(this.row,this.head.table_ctx,function(foreign_row){
-                Vue.set(self.row,self.head.name,foreign_row[self.head.name])
-                Vue.set(self.row,'_'+self.head.name+'_label',foreign_row._label)
-                //self.row[self.head.name]=foreign_row.pk
-                //self.row['_'+self.head.name+'_label'] = foreign_row._label
+            //pop_table_layer(this.row,this.head.table_ctx,function(foreign_row){
+            //    Vue.set(self.row,self.head.name,foreign_row[self.head.name])
+            //    Vue.set(self.row,'_'+self.head.name+'_label',foreign_row._label)
+            //})
+            var win_close = cfg.pop_middle('com-table-panel',this.head.table_ctx,function(foreign_row){
+                    Vue.set(self.row,self.head.name,foreign_row[self.head.name])
+                    Vue.set(self.row,'_'+self.head.name+'_label',foreign_row._label)
+                win_close()
             })
         },
         //isValid:function(){
