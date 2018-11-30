@@ -312,6 +312,7 @@ class ModelTable(object):
     fields_sort=[]
     pop_edit_field=""
     has_sequence = False
+    selectable = True
     def __init__(self,_page=1,row_sort=[],row_filter={},row_search= '',crt_user=None,perpage=None,**kw):
         """
         kw['search_args']只是一个记录，在获取到rows时，一并返回前端页面，便于显示。
@@ -414,6 +415,7 @@ class ModelTable(object):
             'search_args':self.search_args, 
             'parents': self.getParents(),
             'footer': self.footer,
+            'selectable': self.selectable,
         }
     
     def getRowFilters(self): 
@@ -450,7 +452,8 @@ class ModelTable(object):
             'search_args': {},
             #'search_tip':self.row_search.get_context(),
             'director_name': self.get_director_name(),#model_to_name(self.model),
-            'ops' : ops
+            'ops' : ops, 
+            'selectable': self.selectable,
         }        
     
     def getParents(self): 
