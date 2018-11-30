@@ -311,6 +311,7 @@ class ModelTable(object):
     pagenator=PageNum
     fields_sort=[]
     pop_edit_field=""
+    has_sequence = False
     def __init__(self,_page=1,row_sort=[],row_filter={},row_search= '',crt_user=None,perpage=None,**kw):
         """
         kw['search_args']只是一个记录，在获取到rows时，一并返回前端页面，便于显示。
@@ -494,9 +495,12 @@ class ModelTable(object):
         """
         return:[{"name": "name", "label": "\u59d3\u540d"}, {"sortable": true, "name": "age", "label": "\u5e74\u9f84"}]
         """
-        heads = [
-            {'name': '_sequence', 'label': '序号', 'editor': 'com-table-sequence', 'inn_editor': 'com-table-sequence',}
-        ]
+        if self.has_sequence:
+            heads = [
+                {'name': '_sequence', 'label': '序号', 'editor': 'com-table-sequence', 'inn_editor': 'com-table-sequence',}
+            ]
+        else:
+            heads = []
         model_heads = self.get_model_heads()
         heads =  heads + model_heads
         if not self.include:
