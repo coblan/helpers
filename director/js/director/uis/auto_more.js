@@ -20,7 +20,7 @@ Vue.component('com-auto-more',{
         </div>
     </div>`,
     mounted:function(){
-        if( $(this.$el).find('.inn-wrap').height() > $(this.$el).height()){
+        if( $(this.$el).find('.inn-wrap').height() > $(this.$el).height()+10){ // 10是为了去噪
             $(this.$el).addClass('has-overflow')
         }
     },
@@ -34,7 +34,7 @@ Vue.component('com-auto-more',{
                 $(this.$el).removeClass('expanded')
 
             }else{
-                $(this.$el).find('.outer-wrap').css( 'height',$(this.$el).find('.inn-wrap').height()+20 +'px' )
+                $(this.$el).find('.outer-wrap').css( 'height',$(this.$el).find('.inn-wrap').height()+2 +'px' )
                 $(this.$el).addClass('expanded')
 
             }
