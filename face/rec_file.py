@@ -47,6 +47,7 @@ def general(request):
         
         
         file_path=os.path.join(par_path,file_name)
+        print(file_path)
         if not os.path.exists( file_path ):
             with open(file_path,'wb') as general_file:
                 general_file.write(catch.getvalue())
