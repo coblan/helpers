@@ -1,3 +1,0 @@
-var table_logic={
-
-}
