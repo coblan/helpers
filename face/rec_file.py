@@ -36,7 +36,7 @@ def general(request):
         fl_name =adapt_name(name)
         mt_name=re.search('\.(\w+)$',fl_name)
         if mt_name:
-            file_name=m.hexdigest()+'___'+fl_name
+            file_name=m.hexdigest() + '.' + mt_name.group(1)  #+'___'+fl_name
         else:
             # 没有后缀名的img,使用md5.png的形式来标记它
             img_ext = re.search('image/(\w+)',fl.content_type)
