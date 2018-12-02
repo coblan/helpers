@@ -19,6 +19,7 @@ from helpers.director.model_func.field_proc import BaseFieldProc
 from helpers.func.collection.container import evalue_container
 
 from django.core.paginator import Paginator
+from django.forms.models import fields_for_model
 
 
 class PageNum(object):
@@ -516,9 +517,11 @@ class ModelTable(object):
         heads= self.make_pop_edit_field(heads)  
         heads = [self.dict_head(head) for head in heads]
 
-        
+        # 需要使用form.field才能提取到choices
+        form_fields = fields_for_model(self.model)
         for head in model_heads:
-            field = self.model._meta.get_field(head['name'])            
+            #field = self.model._meta.get_field(head['name'])  
+            field =  form_fields.get(head['name'])
             if hasattr(field, 'choices') and 'options' not in head :
                 catch = get_request_cache()
                 options_name = '%s_field_options'% ( model_to_name(self.model) + head['name'])
