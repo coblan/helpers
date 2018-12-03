@@ -2552,6 +2552,9 @@ var nice_validator = {
 "use strict";
 
 
+/*
+被 table_store 替代掉了
+* */
 var mix_table_data = {
     created: function created() {
         if (!this.search_args) {
@@ -2562,7 +2565,6 @@ var mix_table_data = {
         return {
             op_funs: {},
             changed_rows: [],
-
             table_layout: {}
         };
     },
@@ -5740,11 +5742,25 @@ var table_store = {
                 rowIndex = _ref.rowIndex,
                 columnIndex = _ref.columnIndex;
 
+            // 计算布局
             if (this.table_layout) {
                 return this.table_layout[rowIndex + ',' + columnIndex] || [1, 1];
             } else {
                 return [1, 1];
             }
+        },
+        delete_selected: function delete_selected() {
+            var self = this;
+            layer.confirm('真的删除吗?', { icon: 3, title: '确认' }, function (index) {
+                layer.close(index);
+                //var ss = layer.load(2);
+                cfg.show_load();
+                var post_data = [{ fun: 'del_rows', rows: self.selected }];
+                ex.post('/d/ajax', JSON.stringify(post_data), function (resp) {
+                    cfg.hide_load();
+                    self.search();
+                });
+            });
         }
     }
 
