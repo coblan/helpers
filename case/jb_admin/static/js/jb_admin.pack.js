@@ -5606,7 +5606,14 @@ var table_store = {
                     } else {
                         cfg.hide_load();
                         // 留到下面的field弹出框，按照nicevalidator的方式去显示错误
-                        //cfg.showError(resp.save_rows.msg)
+                        if (!after_save_callback) {
+                            if (resp.save_rows.msg) {
+                                cfg.showError(resp.save_rows.msg);
+                            } else {
+                                cfg.showError(JSON.stringify(resp.save_rows.errors));
+                            }
+                        }
+                        //
                     }
 
                     //self.op_funs.update_or_insert_rows({rows:resp.save_rows} )
