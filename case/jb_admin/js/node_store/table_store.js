@@ -354,15 +354,16 @@ var table_store={
             if(kws.panel){
                 var panel = kws.panel
             }else{
-                var panel = ex.eval(kws.panel_express,{ts:this})
+                var panel = ex.eval(kws.panel_express,{ts:self})
             }
             var ctx = ex.copy(kws)
             if(kws.ctx_express){
-                ctx = ex.eval(kws.ctx_express,{ctx:ctx})
+                var cus_ctx = ex.eval(kws.ctx_express,{ts:self,kws:kws})
+                ex.assign(ctx, cus_ctx )
             }
             cfg.pop_middle(panel,ctx,function(resp){
-                if(kws.after_express){
-                    ex.eval(kws.after_express,{ts:self,resp:resp})
+                if(ctx.after_express){
+                    ex.eval(ctx.after_express,{ts:self,resp:resp})
                 }
             })
         }

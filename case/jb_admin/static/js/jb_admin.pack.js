@@ -5761,6 +5761,28 @@ var table_store = {
                     self.search();
                 });
             });
+        },
+        pop_panel: function pop_panel(kws) {
+            var self = this;
+            var row_match_fun = kws.row_match || 'many_row';
+            if (!row_match[row_match_fun](self, kws)) {
+                return;
+            }
+            if (kws.panel) {
+                var panel = kws.panel;
+            } else {
+                var panel = ex.eval(kws.panel_express, { ts: self });
+            }
+            var ctx = ex.copy(kws);
+            if (kws.ctx_express) {
+                var cus_ctx = ex.eval(kws.ctx_express, { ts: self, kws: kws });
+                ex.assign(ctx, cus_ctx);
+            }
+            cfg.pop_middle(panel, ctx, function (resp) {
+                if (ctx.after_express) {
+                    ex.eval(ctx.after_express, { ts: self, resp: resp });
+                }
+            });
         }
     }
 
