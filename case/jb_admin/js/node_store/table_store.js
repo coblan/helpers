@@ -361,7 +361,7 @@ var table_store={
             if(kws.panel){
                 var panel = kws.panel
             }else{
-                var panel = ex.eval(kws.panel_express,{ts:self})
+                var panel = ex.eval(kws.panel_express,{ts:self,kws:kws})
             }
             var ctx = ex.copy(kws)
             if(kws.ctx_express){
