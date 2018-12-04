@@ -344,6 +344,27 @@ var table_store={
                     self.search()
                 })
             })
+        },
+        pop_panel:function(kws){
+            var self=this
+            var row_match_fun = kws.row_match || 'many_row'
+            if(! row_match[row_match_fun](self,kws)){
+                return
+            }
+            if(kws.panel){
+                var panel = kws.panel
+            }else{
+                var panel = ex.eval(kws.panel_express,{ts:this})
+            }
+            var ctx = ex.copy(kws)
+            if(kws.ctx_express){
+                ctx = ex.eval(kws.ctx_express,{ctx:ctx})
+            }
+            cfg.pop_middle(panel,ctx,function(resp){
+                if(kws.after_express){
+                    ex.eval(kws.after_express,{ts:self,resp:resp})
+                }
+            })
         }
     }
 
