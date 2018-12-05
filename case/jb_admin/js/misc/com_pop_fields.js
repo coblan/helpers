@@ -1,3 +1,5 @@
+
+
 export var  com_pop_field= {
     props:['row','heads','ops'],
     mixins:[mix_fields_data,mix_nice_validator],
@@ -29,7 +31,7 @@ export var  com_pop_field= {
             });
         }
     },
-    template:`<div class="flex-v" style="margin: 0;height: 100%;">
+    template:`<div class="flex-v com-pop-fields" style="margin: 0;height: 100%;">
     <div class = "flex-grow" style="overflow: auto;margin: 0;">
         <div class="field-panel suit" >
             <field  v-for="head in normed_heads" :key="head.name" :head="head" :row="row"></field>
@@ -53,4 +55,5 @@ export var  com_pop_field= {
 }
 
 
+window.com_pop_field = com_pop_field
 //Vue.component('com-pop-fields',)

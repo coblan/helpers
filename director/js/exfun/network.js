@@ -50,6 +50,8 @@ export var network ={
             } else {
                 callback(resp)
             }
+
+
         }
         return $.post(url,data,wrap_callback)
     },

@@ -368,10 +368,12 @@ var table_store={
                 var cus_ctx = ex.eval(kws.ctx_express,{ts:self,kws:kws})
                 ex.assign(ctx, cus_ctx )
             }
-            cfg.pop_middle(panel,ctx,function(resp){
+            var winclose = cfg.pop_middle(panel,ctx,function(resp){
                 if(ctx.after_express){
                     ex.eval(ctx.after_express,{ts:self,resp:resp})
                 }
+                self.clearSelection()
+                winclose()
             })
         }
     }
