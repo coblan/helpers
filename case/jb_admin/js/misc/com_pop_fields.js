@@ -17,6 +17,7 @@ export var  com_pop_field= {
             //this.$emit('sub_success',{new_row:new_row,old_row:this.row})
             this.$emit('submit-success',new_row)
             ex.assign(this.row,new_row)
+            this.$emit('finish',new_row)
         },
         del_row:function(){
             var self=this

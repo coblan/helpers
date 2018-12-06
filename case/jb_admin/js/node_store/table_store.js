@@ -371,6 +371,8 @@ var table_store={
             var winclose = cfg.pop_middle(panel,ctx,function(resp){
                 if(ctx.after_express){
                     ex.eval(ctx.after_express,{ts:self,resp:resp})
+                }else{
+                    self.update_or_insert(resp)
                 }
                 self.clearSelection()
                 winclose()

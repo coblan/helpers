@@ -5358,6 +5358,7 @@ var com_pop_field = exports.com_pop_field = {
             //this.$emit('sub_success',{new_row:new_row,old_row:this.row})
             this.$emit('submit-success', new_row);
             ex.assign(this.row, new_row);
+            this.$emit('finish', new_row);
         },
         del_row: function del_row() {
             var self = this;
@@ -5841,6 +5842,8 @@ var table_store = {
             var winclose = cfg.pop_middle(panel, ctx, function (resp) {
                 if (ctx.after_express) {
                     ex.eval(ctx.after_express, { ts: self, resp: resp });
+                } else {
+                    self.update_or_insert(resp);
                 }
                 self.clearSelection();
                 winclose();
