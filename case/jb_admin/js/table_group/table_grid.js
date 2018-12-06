@@ -1,3 +1,4 @@
+require('./scss/table_grid.scss')
 var ele_table= {
     props: ['bus'],
     created: function () {
@@ -78,6 +79,7 @@ var ele_table= {
                               border
                               show-summary
                               :span-method="parStore.arraySpanMethod"
+                              :row-class-name="tableRowClassName"
                               :fit="false"
                               :stripe="true"
                               size="mini"
@@ -123,6 +125,9 @@ var ele_table= {
                     </div>
 `,
     methods: {
+        tableRowClassName:function({row, rowIndex}){
+            return row._css_class
+        },
         bus_search: function (search_args) {
             ex.assign(this.search_args, search_args)
             this.search()
