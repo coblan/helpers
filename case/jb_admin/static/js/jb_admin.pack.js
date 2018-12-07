@@ -5745,9 +5745,9 @@ var table_store = {
                     } else {
                         cfg.hide_load();
                     }
-                    if (resp.msg) {
-                        cfg.showMsg(resp.msg);
-                    }
+                    //if(resp.msg){
+                    //    cfg.showMsg(resp.msg)
+                    //}
 
                     if (kws.after_save) {
                         ex.eval(kws.after_save, { resp: resp, ts: self });
@@ -6267,7 +6267,7 @@ var ele_operations = {
 
     //                      :disabled="get_attr(op.disabled)"
     //v-show="! get_attr(op.hide)"
-    template: '<div class="oprations" style="padding: 5px;">\n                <component v-for="op in ops"\n                           :is="op.editor"\n                           :ref="\'op_\'+op.name"\n                           :head="op"\n                           :disabled="eval(op.disabled)"\n                           v-show="op.show==undefined?true:eval(op.show)"\n                           @operation="on_operation(op)"></component>\n            </div>',
+    template: '<div class="oprations" style="padding: 5px;">\n                <component v-for="op in ops"\n                           :is="op.editor"\n                           :ref="\'op_\'+op.name"\n                           :head="op"\n                           :disabled="eval(op.disabled)"\n                           v-show="is_show(op)"\n                           @operation="on_operation(op)"></component>\n            </div>',
     data: function data() {
         var self = this;
         this.parStore = ex.vueParStore(this);
@@ -6275,7 +6275,18 @@ var ele_operations = {
             ops: this.parStore.ops
         };
     },
+
     methods: {
+        is_show: function is_show(op) {
+            count += 1;
+            console.log(count);
+            console.log(op.label);
+            if (op.show == undefined) {
+                return true;
+            } else {
+                return ex.eval(op.show, { ts: this.parStore });
+            }
+        },
         eval: function _eval(express) {
             if (express == undefined) {
                 return false;
@@ -6291,6 +6302,7 @@ var ele_operations = {
     }
 };
 
+var count = 0;
 Vue.component('com-table-operations', ele_operations);
 
 /***/ }),

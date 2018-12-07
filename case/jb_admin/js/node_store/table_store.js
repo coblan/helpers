@@ -279,9 +279,9 @@ var table_store={
                     }else{
                         cfg.hide_load()
                     }
-                    if(resp.msg){
-                        cfg.showMsg(resp.msg)
-                    }
+                    //if(resp.msg){
+                    //    cfg.showMsg(resp.msg)
+                    //}
 
                     if(kws.after_save){
                         ex.eval(kws.after_save,{resp:resp,ts:self})
