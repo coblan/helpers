@@ -41,8 +41,8 @@ class BasicReciever(object):
         absolut_par_path = os.path.join( settings.MEDIA_ROOT, par_dir)
         try:
             os.makedirs(absolut_par_path)
-        except os.error:
-            pass   
+        except os.error as e:
+            print(e)   
         
         absolut_file_path =os.path.join(absolut_par_path,file_name)
 

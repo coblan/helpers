@@ -71,9 +71,9 @@ class ModelFields(forms.ModelForm):
             pk=dc.get('pk')
         form_kw={}
         if 'instance' not in kw:
-            if pk=='-1':
+            if pk=='-1':  # -1 表示 最后一个记录 （一般用不到）
                 form_kw['instance']=self._meta.model.objects.last()
-            elif pk:
+            elif pk != None:  # 很多时候，pk=0 是已经创建了
                 try:
                     form_kw['instance']= self._meta.model.objects.get(pk=pk)
                 except self._meta.model.DoseNotExist:
@@ -492,6 +492,7 @@ class Fields(ModelFields):
     def __init__(self, dc={}, pk=None, crt_user=None, nolimit=False, *args, **kw): 
         self.kw=dc.copy()
         self.kw.update(kw)
+        self.crt_user = crt_user
         # 太复杂，暂时不要权限
         self.nolimit = True
     
@@ -511,7 +512,11 @@ class Fields(ModelFields):
         ls.append({
             'name':'save','editor':'com-field-op-btn','label':'保存', 'icon': 'fa-save',
         })
-        return ls    
+        return ls 
+    def get_row(self): 
+        return {
+            '_director_name': self.get_director_name(),
+        }
 
 class FieldsSet(object):
     template=''

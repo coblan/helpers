@@ -1,3 +1,6 @@
+/*
+被 table_store 替代掉了
+* */
 var mix_table_data={
     created:function(){
         if(!this.search_args){
@@ -8,7 +11,6 @@ var mix_table_data={
         return {
             op_funs:{},
             changed_rows:[],
-
             table_layout:{},
         }
     },

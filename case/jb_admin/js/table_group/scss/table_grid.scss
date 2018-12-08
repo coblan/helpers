@@ -1,0 +1,9 @@
+.el-table .success {
+  background: #f0f9eb;
+  &:hover{
+  }
+}
+.el-table--striped .el-table__body tr.success.el-table__row--striped >td{
+  background: #f0f9eb;
+}
+

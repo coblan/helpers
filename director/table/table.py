@@ -719,7 +719,7 @@ class ModelTable(object):
                  'visible': self.permit.can_add(),
                  },
                 {'name':'save_changed_rows','editor':'com-op-btn','label':'保存', 'show': 'scope.changed','hide':'!changed','icon':'fa-save', 'visible': self.permit.can_edit()},
-                {'name':'delete','editor':'com-op-btn','label':'删除','style': 'color:red','icon': 'fa-times','disabled':'!scope.has_select', 'visible': self.permit.can_del(),},
+                {'name':'delete_selected','editor':'com-op-btn','label':'删除','style': 'color:red','icon': 'fa-times','disabled':'!scope.has_select', 'visible': self.permit.can_del(),},
                 ]      
     
     def get_excel(self): 

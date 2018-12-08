@@ -137,7 +137,11 @@ var mix_fields_data ={
                     self.setErrors(rt.errors)
                     self.showErrors(rt.errors)
                 }else{
-                    cfg.hide_load(2000)
+                    if(resp.msg){
+                        cfg.hide_load()
+                    }else{
+                        cfg.hide_load(2000)
+                    }
                     ex.vueAssign(self.row,rt.row)
                     self.after_save(rt.row)
                     self.setErrors({})
