@@ -1789,7 +1789,7 @@ __webpack_require__(130);
 
 Vue.component('com-head-dropdown', {
     props: ['head'],
-    template: '<div class="com-head-userinfo">\n    <div style="z-index:200" class="login" >\n        <el-dropdown class="com-head-userinfo">\n          <span class="el-dropdown-link">\n          <span v-html="head.label"></span>\n            <i class="el-icon-arrow-down el-icon--right"></i>\n          </span>\n          <el-dropdown-menu slot="dropdown">\n            <el-dropdown-item v-for="action in head.options">\n                <a class="com-head-dropdown-action" :href="action.url" v-text="action.label"></a>\n            </el-dropdown-item>\n          </el-dropdown-menu>\n        </el-dropdown>\n    </div>\n    </div>'
+    template: '<div class="com-head-userinfo">\n    <div style="z-index:200" class="login" >\n        <el-dropdown class="com-head-userinfo">\n          <span class="el-dropdown-link">\n          <span v-html="head.label"></span>\n            <i class="el-icon-arrow-down el-icon--right"></i>\n          </span>\n          <el-dropdown-menu slot="dropdown">\n            <el-dropdown-item v-for="action in head.options">\n                <a class="com-head-dropdown-action" :href="action.link" v-text="action.label"></a>\n            </el-dropdown-item>\n          </el-dropdown-menu>\n        </el-dropdown>\n    </div>\n    </div>'
 });
 
 /***/ }),
@@ -1801,16 +1801,16 @@ Vue.component('com-head-dropdown', {
 
 __webpack_require__(131);
 
-// header 上的小链接
+// header 上的小链接,例如右上角的  [登录 | 注册  ]
 Vue.component('com-head-sm-link', {
     props: ['head'],
-    template: '<div class="small-link">\n    <span class="item" v-for="action in head.options">\n        <a  @click="on_click(action.url)" class="login-link clickable" v-text="action.label"></a>\n        <span class="space" v-if="action != head.options[head.options.length-1]">&nbsp;|&nbsp;</span>\n    </span>\n    </div>',
+    template: '<div class="small-link">\n    <span class="item" v-for="action in head.options">\n        <a  @click="on_click(action)" class="login-link clickable" v-text="action.label"></a>\n        <span class="space" v-if="action != head.options[head.options.length-1]">&nbsp;|&nbsp;</span>\n    </span>\n    </div>',
     methods: {
-        on_click: function on_click(url) {
+        on_click: function on_click(action) {
             if (this.$listeners && this.$listeners.jump) {
-                this.$emit('jump', url);
+                this.$emit('jump', action);
             } else {
-                location = url;
+                location = action.link;
             }
         }
     }
