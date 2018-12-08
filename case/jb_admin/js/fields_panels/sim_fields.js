@@ -23,22 +23,36 @@ export var com_sim_fields = {
         },
     data:function (){
         return {
-            small_srn:ex.is_small_screen(),
-            small:false
+            env:cfg.env,
+            small:false,
+            //small_srn:ex.is_small_screen(),
         }
     },
     mounted:function(){
         // 由于与nicevalidator 有冲突，所以等渲染完成，再检测
-        setTimeout(function(){
-            if($(this.$el).width() <600 ){
-                this.small=true
-            }else{
-                this.small=false
-            }
-        },10)
+        var self=this
+
+        //setTimeout(function(){
+        //    console.log('sss')
+        //    self.update_small()
+        //},5000)
 
     },
+    watch:{
+        //'evn.width':function (){
+        //    var self=this
+            //if($(self.$el).width() <450 ){
+            //    self.small=true
+            //}else{
+            //    self.small=false
+            //}
+            //self.update_nice()
+        //}
+    },
     computed:{
+        small_srn:function(){
+            return env.width < 760
+        },
         normed_heads:function(){
             return this.heads
         },
@@ -63,7 +77,7 @@ export var com_sim_fields = {
     //},
     components:window._baseInput,
     mixins:[mix_fields_data,mix_nice_validator],
-    template:` <div :class="['field-panel sim-fields',{'small':small,'msg-bottom':small}]"
+    template:` <div :class="['field-panel sim-fields',{'msg-bottom':small_srn}]"
     style="text-align:center;">
            <table class="table-fields">
         <tr v-for="head in heads">
@@ -94,10 +108,10 @@ export var com_sim_fields = {
         </tr>
         <slot :row="row">
             <!--按钮横跨两列 ！小尺寸时 强制 -->
-             <tr v-if="crossBtn || small" class="btn-row">
+             <tr v-if="crossBtn || small_srn" class="btn-row">
                 <td class="field-input-td" colspan="3">
                     <div class="submit-block">
-                        <button @click="submit" type="btn"
+                        <button @click="panel_submit" type="btn"
                             :class="['form-control btn',btnCls]"><span v-text="okBtn"></span></button>
                     </div>
                 </td>
@@ -120,7 +134,18 @@ export var com_sim_fields = {
 
         </div>`,
     methods:{
+        update_small:function(){
+            var self=this
+            if($(self.$el).width() <450 ){
+                self.small=true
+            }else{
+                self.small=false
+            }
 
+            setTimeout(function(){
+                self.update_nice()
+            },100)
+        },
         panel_submit:function(){
             if(this.$listeners && this.$listeners.submit){
                 if(this.isValid()){
