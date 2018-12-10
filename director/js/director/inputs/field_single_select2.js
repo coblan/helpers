@@ -1,3 +1,4 @@
+require('./scss/field_single_select2.scss')
 
 var field_sigle_chosen={
     props:['row','head'],
@@ -12,19 +13,20 @@ var field_sigle_chosen={
         ex.load_css('https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css')
         ex.load_js('https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js',function(){
 
-            $(self.$el).find('select').select2({
-                placeholder:self.head.placeholder,
-                allowClear: true
-            })
-            self.setValue(self.value)
-            $(self.$el).find('.select2').change(function(e) {
-                var value = $(self.$el).find('.select2').val( )
-                if(value ==''){
-                    Vue.delete(self.row,self.head.name)
-                }else{
-                    Vue.set(self.row,self.head.name,value)
-                }
-
+            setTimeout(function(){
+                $(self.$el).find('select').select2({
+                    placeholder:self.head.placeholder || '请选择',
+                    allowClear: true
+                })
+                self.setValue(self.value)
+                $(self.$el).find('.select2').change(function(e) {
+                    var value = $(self.$el).find('.select2').val( )
+                    if(value ==''){
+                        Vue.delete(self.row,self.head.name)
+                    }else{
+                        Vue.set(self.row,self.head.name,value)
+                    }
+                })
             })
 
         })
