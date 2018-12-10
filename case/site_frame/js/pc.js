@@ -9,7 +9,7 @@ import * as header_sim_click from  './pc/header_menu.js'
 //import * as kuaifawu_menu from  './pc/kuaifawu_menu.js'
 //import * as search_kuaifawu from  './pc/search_kuaifawu.js'
 
-
+import * as ui_main from  './ui/main.js'
 
 require('./pc/scss/element_ex.scss')
 require('./scss/layout.scss')
