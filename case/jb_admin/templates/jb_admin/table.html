@@ -122,10 +122,11 @@
                     self.crt_row= kws.row
                 },
                 update_or_insert:function(kws){
-                    var new_row = kws.new_row
-                    var old_row= kws.old_row
-                    self.update_or_insert(new_row,old_row)
-                    self.crt_row=new_row
+//                    var new_row = kws.new_row
+//                    var old_row= kws.old_row
+//                    self.update_or_insert(new_row,old_row)
+                    self.childStore.update_or_insert(kws.new_row)
+                    self.crt_row=kws.new_row
                 },
                 get_childs:function(kws){
                     // head:{fun:

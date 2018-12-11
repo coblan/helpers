@@ -5621,20 +5621,26 @@ var table_store = {
         },
         update_or_insert: function update_or_insert(new_row, old_row) {
             // 如果是更新，不用输入old_row，old_row只是用来判断是否是创建的行为
-
-            if (old_row && !old_row.pk) {
-
-                //var rows = this.rows.splice(0, 0, new_row)
+            // 不用 old_row 了， 只需要判断 pk 是否在rows里面即可。
+            var table_row = ex.findone(this.rows, { pk: new_row.pk });
+            if (table_row) {
+                ex.vueAssign(table_row, new_row);
+            } else {
                 this.rows = [new_row].concat(this.rows);
                 this.row_pages.total += 1;
-            } else {
-                var table_row = ex.findone(this.rows, { pk: new_row.pk });
-                ex.vueAssign(table_row, new_row);
-                //ex.assign(table_row,new_row)
-                //for(var key in new_row){
-                //    Vue.set(table_row,key,new_row[key])
-                //}
             }
+
+            //if(old_row && ! old_row.pk) {
+            //
+            //    //var rows = this.rows.splice(0, 0, new_row)
+            //    this.rows=[new_row].concat(this.rows)
+            //    this.row_pages.total+=1
+            //}else{
+            //    var table_row = ex.findone(this.rows,{pk:new_row.pk})
+            //    if(table_row){
+            //        ex.vueAssign(table_row,new_row)
+            //    }
+            //}
             this.$emit('row.update_or_insert', [new_row]);
         },
         update_rows: function update_rows(rows) {
@@ -5672,7 +5678,10 @@ var table_store = {
                 ex.post('/d/ajax', JSON.stringify(post_data), function (resp) {
                     if (!resp.save_rows.errors) {
                         ex.each(resp.save_rows, function (new_row) {
-                            delete new_row._director_name; // [1]  这里还原回去
+                            // [1]  这里还原回去
+                            if (new_row._cache_director_name) {
+                                new_row._director_name = new_row._cache_director_name;
+                            }
                             if (kws.after_save) {
                                 ex.eval(kws.after_save, { new_row: new_row, ts: self });
                             } else {

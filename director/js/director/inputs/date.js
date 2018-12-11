@@ -53,7 +53,7 @@ var date_config_set={
     },
 }
 
-Vue.component('date',{
+var com_date={
     //template:'<input type="text" class="form-control">',
     template:` <div class="com-date input-group datetime-picker">
                 <input type="text" class="form-control input-sm real-input"
@@ -77,20 +77,15 @@ Vue.component('date',{
         }
         self.input=$(this.$el).find('input')
 
-        ex.load_css('/static/lib/bootstrap-datepicker1.6.4.min.css')
-
-        ex.load_js('/static/lib/bootstrap-datepicker1.6.4.min.js',function(){
-            ex.load_js('/static/lib/bootstrap-datepicker1.6.4.zh-CN.min.js',function(){
-                self.input.datepicker(def_conf).on('changeDate', function(e) {
-                    self.$emit('input',self.input.val())
-                })
-                // if has init value,then init it
-                if(self.value){
-                    self.input.datepicker('update',self.value)
-                    self.input.val(self.value)
-                }
-            })
+        self.input.datepicker(def_conf).on('changeDate', function(e) {
+            self.$emit('input',self.input.val())
         })
+        // if has init value,then init it
+        if(self.value){
+            self.input.datepicker('update',self.value)
+            self.input.val(self.value)
+        }
+
     },
     methods:{
         click_input:function(){
@@ -99,12 +94,25 @@ Vue.component('date',{
     },
     watch:{
         value:function (n) {
-            this.input.datepicker('update',n)
-            this.input.val(n)
-
+            if(this.input.datepicker){
+                this.input.datepicker('update',n)
+                this.input.val(n)
+            }
         }
     }
-})
+}
+
+
+Vue.component('date', function (resolve, reject) {
+    ex.load_css('/static/lib/bootstrap-datepicker1.6.4.min.css')
+
+    ex.load_js('/static/lib/bootstrap-datepicker1.6.4.min.js',function(){
+        ex.load_js('/static/lib/bootstrap-datepicker1.6.4.zh-CN.min.js',function(){
+        resolve(com_date);
+        })
+    })
+
+});
 
 
 Vue.component('datetime',{

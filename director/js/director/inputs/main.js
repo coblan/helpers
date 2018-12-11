@@ -18,3 +18,5 @@ import * as field_single_select2 from './field_single_select2.js'
 
 
 require('./scss/file_uploader.scss')
+require('./scss/field.scss')
+require('./scss/field_date.scss')
