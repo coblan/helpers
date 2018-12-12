@@ -62,74 +62,7 @@ var com_date_datetimefield_range={
             }
         }
     },
-    //computed:{
-    //    start:{
-    //        get:function(){
-    //            if(this.search_args['_start_'+this.head.name]){
-    //                return  this.search_args['_start_'+this.head.name].slice(0,10)
-    //            }else{
-    //                return ''
-    //            }
-    //
-    //        },
-    //        set:function(nv){
-    //            if(nv){
-    //                if(nv>this.end){
-    //                    cfg.showError('开始时间必须小于结束时间')
-    //                    var self=this
-    //                    Vue.nextTick(function(){
-    //                        self.start = ''
-    //                    })
-    //                    return
-    //                }
-    //            }
-    //
-    //            if(nv){
-    //                Vue.set(this.search_args,'_start_'+this.head.name ,nv+' 00:00:00')
-    //            }else{
-    //                Vue.set(this.search_args,'_start_'+this.head.name,nv)
-    //            }
-    //
-    //        }
-    //    },
-    //    end:{
-    //        get:function(){
-    //            if(this.search_args['_end_'+this.head.name]){
-    //                return   this.search_args['_end_'+this.head.name] .slice(0,10)
-    //            }else{
-    //                return ''
-    //            }
-    //
-    //        },
-    //        set:function(nv){
-    //            if(nv){
-    //                Vue.set(this.search_args,'_end_'+this.head.name,nv+' 23:59:59')
-    //                //this.search_args['_end_'+this.head.name]=nv+' 23:59:59'
-    //            }else{
-    //                Vue.set(this.search_args,'_end_'+this.head.name,nv)
-    //                //this.search_args['_end_'+this.head.name]=nv
-    //            }
-    //
-    //        }
-    //    }
-    //},
-    //watch:{
-    //    start:function(nv){
-    //        if(nv){
-    //            this.search_args['_start_'+this.head.name]=nv+' 00:00:00'
-    //        }else{
-    //            this.search_args['_start_'+this.head.name]=''
-    //        }
-    //    },
-    //    end:function(nv){
-    //        if(nv){
-    //            this.search_args['_end_'+this.head.name]=nv+' 23:59:59'
-    //        }else{
-    //            this.search_args['_end_'+this.head.name]=''
-    //        }
-    //    }
-    //
-    //}
 
 }
+window.com_date_datetimefield_range=com_date_datetimefield_range
 Vue.component('com-date-datetimefield-range-filter',com_date_datetimefield_range)

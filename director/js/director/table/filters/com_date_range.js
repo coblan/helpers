@@ -20,6 +20,7 @@ var com_date_range={
                 </div>`,
 
 }
+window.com_filter_date_range=com_date_range
 Vue.component('com-date-range-filter',com_date_range)
 
 //var com_date_range={

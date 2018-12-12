@@ -2803,49 +2803,57 @@ var date_config_set = {
     }
 };
 
-Vue.component('date', {
+var com_input_date = {
     //template:'<input type="text" class="form-control">',
     template: " <div class=\"com-date input-group datetime-picker\">\n                <input type=\"text\" class=\"form-control input-sm real-input\"\n                readonly :placeholder=\"placeholder\"/>\n\n                <div class=\"input-group-addon\" >\n                    <i v-if=\"! value\" @click=\"click_input()\" class=\"fa fa-calendar\" aria-hidden=\"true\"></i>\n                    <i v-else @click=\"$emit('input','')\" class=\"fa fa-calendar-times-o\" aria-hidden=\"true\"></i>\n                </div>\n                </div>",
     props: ['value', 'set', 'config', 'placeholder'],
     mounted: function mounted() {
-        var self = this;
-        if (!this.set) {
-            var def_conf = date_config_set.date;
-        } else {
-            var def_conf = date_config_set[this.set];
-        }
-        if (this.config) {
-            ex.assign(def_conf, this.config);
-        }
-        self.input = $(this.$el).find('input');
-
-        ex.load_css('/static/lib/bootstrap-datepicker1.6.4.min.css');
-
-        ex.load_js('/static/lib/bootstrap-datepicker1.6.4.min.js', function () {
-            ex.load_js('/static/lib/bootstrap-datepicker1.6.4.zh-CN.min.js', function () {
-                self.input.datepicker(def_conf).on('changeDate', function (e) {
-                    self.$emit('input', self.input.val());
-                });
-                // if has init value,then init it
-                if (self.value) {
-                    self.input.datepicker('update', self.value);
-                    self.input.val(self.value);
-                }
-            });
-        });
+        this.init();
     },
     methods: {
+        init: function init() {
+            var self = this;
+            if (!this.set) {
+                var def_conf = date_config_set.date;
+            } else {
+                var def_conf = date_config_set[this.set];
+            }
+            if (this.config) {
+                ex.assign(def_conf, this.config);
+            }
+            self.input = $(this.$el).find('input');
+
+            ex.load_css('/static/lib/bootstrap-datepicker1.6.4.min.css');
+
+            ex.load_js('/static/lib/bootstrap-datepicker1.6.4.min.js', function () {
+                ex.load_js('/static/lib/bootstrap-datepicker1.6.4.zh-CN.min.js', function () {
+                    self.input.datepicker(def_conf).on('changeDate', function (e) {
+                        self.$emit('input', self.input.val());
+                    });
+                    // if has init value,then init it
+                    if (self.value) {
+                        self.input.datepicker('update', self.value);
+                        self.input.val(self.value);
+                    }
+                });
+            });
+        },
         click_input: function click_input() {
             this.input.focus();
+        },
+        watch_value: function watch_value(n) {
+            this.input.datepicker('update', n);
+            this.input.val(n);
         }
     },
     watch: {
         value: function value(n) {
-            this.input.datepicker('update', n);
-            this.input.val(n);
+            this.watch_value(n);
         }
     }
-});
+};
+window.com_input_date = com_input_date;
+Vue.component('date', com_input_date);
 
 Vue.component('datetime', {
     //data:function(){
@@ -3571,6 +3579,7 @@ var com_date_range = {
     template: '<div  class="com-date-range-filter flex flex-ac">\n                    <date v-model="search_args[\'_start_\'+head.name]" :placeholder="head.label"></date>\n                    <div style="display: inline-block;margin: 0 2px;" >-</div>\n                    <date  v-model="search_args[\'_end_\'+head.name]" :placeholder="head.label"></date>\n                </div>'
 
 };
+window.com_filter_date_range = com_date_range;
 Vue.component('com-date-range-filter', com_date_range);
 
 //var com_date_range={
@@ -3827,76 +3836,9 @@ var com_date_datetimefield_range = {
             }
         }
     }
-    //computed:{
-    //    start:{
-    //        get:function(){
-    //            if(this.search_args['_start_'+this.head.name]){
-    //                return  this.search_args['_start_'+this.head.name].slice(0,10)
-    //            }else{
-    //                return ''
-    //            }
-    //
-    //        },
-    //        set:function(nv){
-    //            if(nv){
-    //                if(nv>this.end){
-    //                    cfg.showError('开始时间必须小于结束时间')
-    //                    var self=this
-    //                    Vue.nextTick(function(){
-    //                        self.start = ''
-    //                    })
-    //                    return
-    //                }
-    //            }
-    //
-    //            if(nv){
-    //                Vue.set(this.search_args,'_start_'+this.head.name ,nv+' 00:00:00')
-    //            }else{
-    //                Vue.set(this.search_args,'_start_'+this.head.name,nv)
-    //            }
-    //
-    //        }
-    //    },
-    //    end:{
-    //        get:function(){
-    //            if(this.search_args['_end_'+this.head.name]){
-    //                return   this.search_args['_end_'+this.head.name] .slice(0,10)
-    //            }else{
-    //                return ''
-    //            }
-    //
-    //        },
-    //        set:function(nv){
-    //            if(nv){
-    //                Vue.set(this.search_args,'_end_'+this.head.name,nv+' 23:59:59')
-    //                //this.search_args['_end_'+this.head.name]=nv+' 23:59:59'
-    //            }else{
-    //                Vue.set(this.search_args,'_end_'+this.head.name,nv)
-    //                //this.search_args['_end_'+this.head.name]=nv
-    //            }
-    //
-    //        }
-    //    }
-    //},
-    //watch:{
-    //    start:function(nv){
-    //        if(nv){
-    //            this.search_args['_start_'+this.head.name]=nv+' 00:00:00'
-    //        }else{
-    //            this.search_args['_start_'+this.head.name]=''
-    //        }
-    //    },
-    //    end:function(nv){
-    //        if(nv){
-    //            this.search_args['_end_'+this.head.name]=nv+' 23:59:59'
-    //        }else{
-    //            this.search_args['_end_'+this.head.name]=''
-    //        }
-    //    }
-    //
-    //}
 
 };
+window.com_date_datetimefield_range = com_date_datetimefield_range;
 Vue.component('com-date-datetimefield-range-filter', com_date_datetimefield_range);
 
 /***/ }),

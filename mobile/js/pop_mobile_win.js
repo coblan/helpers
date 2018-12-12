@@ -1,5 +1,94 @@
 require('./scss/pop_mobile_win.scss')
 
+class PopMobileWin{
+    constructor({ctx,editor}){
+        this.ctx=ctx
+        this.editor=editor
+    }
+    appendHtml(){
+        this.pop_id =new Date().getTime()
+        $('body').append(`<div id="pop-${this.pop_id}" class="pop-moible-win">
+            <mt-popup  @input="on_input($event)"
+                  v-model='show'
+                  popup-transition="popup-fade">
+                    <component :is="editor" :ctx="ctx" @finish="on_finish($event)"></component>
+            </mt-popup>
+            </div>`)
+    }
+    mountVue(){
+        var control =this
+        this.vc= new Vue({
+            el:'#pop-'+this.pop_id,
+            data:{
+                ctx:control.ctx,
+                editor:control.editor,
+                show:true
+            },
+
+            destroyed:function(){
+                $('#pop-'+control.pop_id).remove()
+            },
+            methods:{
+                on_input:function(e){
+                    console.log(e)
+
+                    if(!e){
+                        var self=this
+                        setTimeout(function(){
+                            self.$destroy()
+                        },3000)
+                    }
+                },
+                on_finish:function(e){
+                    if(callback){
+                        callback(e)
+                    }
+                },
+            }
+        })
+    }
+    closeFun(){
+        this.vc.show=false
+    }
+}
+
+class SlideWin extends PopMobileWin{
+    appendHtml(){
+        this.pop_id =new Date().getTime()
+        $('body').append(`<div id="pop-${this.pop_id}" class="pop-slide-win">
+            <mt-popup
+                  v-model='show'
+                  :modal="true"
+                  :closeOnClickModal="false"
+                  position="right">
+                   <com-slide-head :title="ctx.title" ></com-slide-head>
+                    <component :is="editor" :ctx="ctx" @finish="on_finish($event)"></component>
+            </mt-popup>
+            </div>`)
+    }
+    closeFun(){
+        this.vc.show=false
+        this.destroy()
+    }
+    destroy(){
+        var self=this.vc
+        setTimeout(function(){
+            self.$destroy()
+        },3000)
+    }
+}
+
+function slide_mobile_win({editor,ctx,callback}){
+    var obj = new SlideWin({editor,ctx})
+    obj.appendHtml()
+    obj.mountVue()
+    var fun_id =new Date().getTime()
+    named_hub[fun_id] = function(){obj.closeFun()}
+    history.replaceState({callback:fun_id},'')
+    history.pushState({},'')
+}
+
+
 function pop_mobile_win(editor,ctx,callback){
     var pop_id =new Date().getTime()
     $('body').append(`<div id="pop-${pop_id}" class="pop-moible-win">
@@ -101,5 +190,5 @@ export  function pop_layer (com_ctx,component_name,callback,layerConfig){
 
 
 
-
+window.slide_mobile_win=slide_mobile_win
 window.pop_mobile_win = pop_mobile_win

@@ -6,16 +6,15 @@ ex.assign(cfg,{
         return cfg.pop_big('com-fields-panel',ctx,callback)
     },
     pop_big:function(editor,ctx,callback){
-        //store.commit('left_in_page',{editor:editor,ctx:ctx,callback:callback})
-        window.slide_win.left_in_page({editor:editor,ctx:ctx,callback:callback})
+        slide_mobile_win({editor:editor,ctx:ctx,callback:callback})
+        //window.slide_win.left_in_page({editor:editor,ctx:ctx,callback:callback})
         return function (){
             history.back()
         }
     },
     pop_middle:function(editor,ctx,callback){
-       //return pop_mobile_win(editor,ctx,callback)
-       // store.commit('left_in_page',{editor:editor,ctx:ctx,callback:callback})
-        window.slide_win.left_in_page({editor:editor,ctx:ctx,callback:callback})
+        slide_mobile_win({editor:editor,ctx:ctx,callback:callback})
+        //window.slide_win.left_in_page({editor:editor,ctx:ctx,callback:callback})
         return function (){
             history.back()
         }

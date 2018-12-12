@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 18);
+/******/ 	return __webpack_require__(__webpack_require__.s = 20);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -389,16 +389,15 @@ ex.assign(cfg, {
         return cfg.pop_big('com-fields-panel', ctx, callback);
     },
     pop_big: function pop_big(editor, ctx, callback) {
-        //store.commit('left_in_page',{editor:editor,ctx:ctx,callback:callback})
-        window.slide_win.left_in_page({ editor: editor, ctx: ctx, callback: callback });
+        slide_mobile_win({ editor: editor, ctx: ctx, callback: callback });
+        //window.slide_win.left_in_page({editor:editor,ctx:ctx,callback:callback})
         return function () {
             history.back();
         };
     },
     pop_middle: function pop_middle(editor, ctx, callback) {
-        //return pop_mobile_win(editor,ctx,callback)
-        // store.commit('left_in_page',{editor:editor,ctx:ctx,callback:callback})
-        window.slide_win.left_in_page({ editor: editor, ctx: ctx, callback: callback });
+        slide_mobile_win({ editor: editor, ctx: ctx, callback: callback });
+        //window.slide_win.left_in_page({editor:editor,ctx:ctx,callback:callback})
         return function () {
             history.back();
         };
@@ -429,17 +428,9 @@ ex.assign(cfg, {
 "use strict";
 
 
-var _my_slide_win = __webpack_require__(9);
+var _slide_iframe = __webpack_require__(8);
 
-var my_slide_win = _interopRequireWildcard(_my_slide_win);
-
-var _com_slide_head = __webpack_require__(7);
-
-var com_slide_head = _interopRequireWildcard(_com_slide_head);
-
-var _fiexed_scrll = __webpack_require__(8);
-
-var fiexed_scrll = _interopRequireWildcard(_fiexed_scrll);
+var slide_iframe = _interopRequireWildcard(_slide_iframe);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -450,11 +441,153 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 "use strict";
 
 
+var _my_slide_win = __webpack_require__(11);
+
+var my_slide_win = _interopRequireWildcard(_my_slide_win);
+
+var _com_slide_head = __webpack_require__(9);
+
+var com_slide_head = _interopRequireWildcard(_com_slide_head);
+
+var _fiexed_scrll = __webpack_require__(10);
+
+var fiexed_scrll = _interopRequireWildcard(_fiexed_scrll);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 exports.pop_layer = pop_layer;
-__webpack_require__(17);
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+__webpack_require__(19);
+
+var PopMobileWin = function () {
+    function PopMobileWin(_ref) {
+        var ctx = _ref.ctx,
+            editor = _ref.editor;
+
+        _classCallCheck(this, PopMobileWin);
+
+        this.ctx = ctx;
+        this.editor = editor;
+    }
+
+    _createClass(PopMobileWin, [{
+        key: 'appendHtml',
+        value: function appendHtml() {
+            this.pop_id = new Date().getTime();
+            $('body').append('<div id="pop-' + this.pop_id + '" class="pop-moible-win">\n            <mt-popup  @input="on_input($event)"\n                  v-model=\'show\'\n                  popup-transition="popup-fade">\n                    <component :is="editor" :ctx="ctx" @finish="on_finish($event)"></component>\n            </mt-popup>\n            </div>');
+        }
+    }, {
+        key: 'mountVue',
+        value: function mountVue() {
+            var control = this;
+            this.vc = new Vue({
+                el: '#pop-' + this.pop_id,
+                data: {
+                    ctx: control.ctx,
+                    editor: control.editor,
+                    show: true
+                },
+
+                destroyed: function destroyed() {
+                    $('#pop-' + control.pop_id).remove();
+                },
+                methods: {
+                    on_input: function on_input(e) {
+                        console.log(e);
+
+                        if (!e) {
+                            var self = this;
+                            setTimeout(function () {
+                                self.$destroy();
+                            }, 3000);
+                        }
+                    },
+                    on_finish: function on_finish(e) {
+                        if (callback) {
+                            callback(e);
+                        }
+                    }
+                }
+            });
+        }
+    }, {
+        key: 'closeFun',
+        value: function closeFun() {
+            this.vc.show = false;
+        }
+    }]);
+
+    return PopMobileWin;
+}();
+
+var SlideWin = function (_PopMobileWin) {
+    _inherits(SlideWin, _PopMobileWin);
+
+    function SlideWin() {
+        _classCallCheck(this, SlideWin);
+
+        return _possibleConstructorReturn(this, (SlideWin.__proto__ || Object.getPrototypeOf(SlideWin)).apply(this, arguments));
+    }
+
+    _createClass(SlideWin, [{
+        key: 'appendHtml',
+        value: function appendHtml() {
+            this.pop_id = new Date().getTime();
+            $('body').append('<div id="pop-' + this.pop_id + '" class="pop-slide-win">\n            <mt-popup\n                  v-model=\'show\'\n                  :modal="true"\n                  :closeOnClickModal="false"\n                  position="right">\n                   <com-slide-head :title="ctx.title" ></com-slide-head>\n                    <component :is="editor" :ctx="ctx" @finish="on_finish($event)"></component>\n            </mt-popup>\n            </div>');
+        }
+    }, {
+        key: 'closeFun',
+        value: function closeFun() {
+            this.vc.show = false;
+            this.destroy();
+        }
+    }, {
+        key: 'destroy',
+        value: function destroy() {
+            var self = this.vc;
+            setTimeout(function () {
+                self.$destroy();
+            }, 3000);
+        }
+    }]);
+
+    return SlideWin;
+}(PopMobileWin);
+
+function slide_mobile_win(_ref2) {
+    var editor = _ref2.editor,
+        ctx = _ref2.ctx,
+        callback = _ref2.callback;
+
+    var obj = new SlideWin({ editor: editor, ctx: ctx });
+    obj.appendHtml();
+    obj.mountVue();
+    var fun_id = new Date().getTime();
+    named_hub[fun_id] = function () {
+        obj.closeFun();
+    };
+    history.replaceState({ callback: fun_id }, '');
+    history.pushState({}, '');
+}
 
 function pop_mobile_win(editor, ctx, callback) {
     var pop_id = new Date().getTime();
@@ -543,29 +676,30 @@ function pop_layer(com_ctx, component_name, callback, layerConfig) {
     return opened_layer_index;
 }
 
+window.slide_mobile_win = slide_mobile_win;
 window.pop_mobile_win = pop_mobile_win;
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _ele_table_bus_page = __webpack_require__(10);
+var _ele_table_bus_page = __webpack_require__(12);
 
 var ele_table_bus_page = _interopRequireWildcard(_ele_table_bus_page);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(13);
+var content = __webpack_require__(15);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -585,7 +719,19 @@ if(false) {
 }
 
 /***/ }),
-/* 7 */
+/* 8 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Vue.component('com-slide-iframe', {
+    props: ['ctx'],
+    template: '<iframe :src="ctx.url" style="width:100%;height: 100%;"></iframe>'
+});
+
+/***/ }),
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -602,7 +748,7 @@ Vue.component('com-slide-head', {
 });
 
 /***/ }),
-/* 8 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -612,7 +758,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.fixed_body = fixed_body;
-__webpack_require__(15);
+__webpack_require__(17);
 
 function fixed_body() {
     //$('body').addClass('modal-open')
@@ -643,13 +789,13 @@ window.fixed_body = fixed_body;
 window.fixed_body_quit = fixed_body_quit;
 
 /***/ }),
-/* 9 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(16);
+__webpack_require__(18);
 
 $(function () {
     $('body').append('<div id="com-slid-win">\n        <com-slide-win-1 :stack_pages="stack_pages"></com-slide-win-1>\n    </div>');
@@ -677,12 +823,18 @@ $(function () {
             }
         }
     });
+});
 
-    window.addEventListener('popstate', function (event) {
-        if (event.state && event.state.pop_win) {
-            slide_win.right_out_page();
-        }
-    });
+window.named_hub = {};
+window.addEventListener('popstate', function (event) {
+    if (event.state && event.state.pop_win) {
+        slide_win.right_out_page();
+    }
+    if (event.state && event.state.callback) {
+        var callback = named_hub[event.state.callback];
+        callback();
+        delete named_hub[event.state.callback];
+    }
 });
 
 Vue.component('com-slide-win-1', {
@@ -752,7 +904,7 @@ Vue.component('com-slide-win-1', {
 });
 
 /***/ }),
-/* 10 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -766,7 +918,7 @@ var ele_table_bus_page = {
 };Vue.component('com-table-bus-page', ele_table_bus_page);
 
 /***/ }),
-/* 11 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -780,7 +932,7 @@ exports.push([module.i, "body.modal-open {\n  position: fixed;\n  width: 100%; }
 
 
 /***/ }),
-/* 12 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -794,7 +946,7 @@ exports.push([module.i, ".list-enter-active, .list-leave-active {\n  transition:
 
 
 /***/ }),
-/* 13 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -808,7 +960,7 @@ exports.push([module.i, ".el-table__body-wrapper.is-scrolling-middle {\n  overfl
 
 
 /***/ }),
-/* 14 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -816,19 +968,19 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, ".pop-moible-win .mint-popup {\n  background: none; }\n", ""]);
+exports.push([module.i, ".pop-moible-win .mint-popup {\n  background: none; }\n\n.pop-slide-win .mint-popup {\n  height: 100vh;\n  width: 100vw; }\n\n.pop-slide-win .v-modal {\n  opacity: 0; }\n\n.pop-slide-win .com-table-panel {\n  padding: 10px; }\n\n.pop-slide-win .weui-mask {\n  z-index: 3000; }\n", ""]);
 
 // exports
 
 
 /***/ }),
-/* 15 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(11);
+var content = __webpack_require__(13);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -848,13 +1000,13 @@ if(false) {
 }
 
 /***/ }),
-/* 16 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(12);
+var content = __webpack_require__(14);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -874,13 +1026,13 @@ if(false) {
 }
 
 /***/ }),
-/* 17 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(14);
+var content = __webpack_require__(16);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -900,7 +1052,7 @@ if(false) {
 }
 
 /***/ }),
-/* 18 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -910,50 +1062,185 @@ var _config = __webpack_require__(2);
 
 var config = _interopRequireWildcard(_config);
 
-var _pop_mobile_win = __webpack_require__(4);
+var _pop_mobile_win = __webpack_require__(5);
 
 var pop_win = _interopRequireWildcard(_pop_mobile_win);
 
-var _main = __webpack_require__(3);
+var _main = __webpack_require__(4);
 
 var pop_main = _interopRequireWildcard(_main);
 
-var _main2 = __webpack_require__(5);
+var _main2 = __webpack_require__(6);
 
 var table_main = _interopRequireWildcard(_main2);
 
-var _main3 = __webpack_require__(19);
+var _main3 = __webpack_require__(3);
 
 var panels_main = _interopRequireWildcard(_main3);
 
+var _main4 = __webpack_require__(22);
+
+var filters_main = _interopRequireWildcard(_main4);
+
+var _main5 = __webpack_require__(23);
+
+var input_main = _interopRequireWildcard(_main5);
+
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
-__webpack_require__(6);
+__webpack_require__(7);
 
 /***/ }),
-/* 19 */
+/* 21 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+//Vue.component('com-date-datetimefield-range-filter',{
+//    mixins:[com_date_datetimefield_range],
+//    template:`<div  class="com-filter-date-time-range mobile date-filter flex flex-ac">
+//                     <date v-model="start" :placeholder="head.label"></date>
+//                    <div style="display: inline-block;margin: 0 2px;" >-</div>
+//                        <date  v-model="end" :placeholder="head.label"></date>
+//                </div>`,
+//})
+//
+//Vue.component('com-date-range-filter',{
+//    mixins:[com_filter_date_range],
+//    template:`<div  class="com-date-range-filter mobile flex flex-ac">
+//            <mt-datetime-picker
+//                  v-model="search_args['_start_'+head.name]"
+//                  type="date"
+//                  year-format="{value} 年"
+//                  month-format="{value} 月"
+//                  date-format="{value} 日">
+//            </mt-datetime-picker>
+//
+//                    <!--<date v-model="search_args['_start_'+head.name]" :placeholder="head.label"></date>-->
+//                    <div style="display: inline-block;margin: 0 2px;" >-</div>
+//                    <date  v-model="search_args['_end_'+head.name]" :placeholder="head.label"></date>
+//                </div>`,
+//})
+
+
+/***/ }),
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _slide_iframe = __webpack_require__(20);
+var _com_date_range = __webpack_require__(21);
 
-var slide_iframe = _interopRequireWildcard(_slide_iframe);
+var com_date_range = _interopRequireWildcard(_com_date_range);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 /***/ }),
-/* 20 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-Vue.component('com-slide-iframe', {
-    props: ['ctx'],
-    template: '<iframe :src="ctx.url" style="width:100%;height: 100%;"></iframe>'
+var _com_input_date = __webpack_require__(24);
+
+var com_input_date = _interopRequireWildcard(_com_input_date);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+/***/ }),
+/* 24 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+__webpack_require__(26);
+
+Vue.component('date', {
+    mixins: [com_input_date],
+    template: ' <div class="com-date input-group datetime-picker">\n                <input type="text" class="form-control input-sm real-input"\n                readonly :placeholder="placeholder" @click="click_input()" v-model="value"/>\n\n                <div class="input-group-addon" >\n                    <i v-if="! value" @click="click_input()" class="fa fa-calendar" aria-hidden="true"></i>\n                    <i v-else @click="$emit(\'input\',\'\')" class="fa fa-calendar-times-o" aria-hidden="true"></i>\n                </div>\n                </div>',
+    data: function data() {
+        return {
+            inn_value: this.value
+        };
+    },
+    methods: {
+        init: function init() {},
+        click_input: function click_input() {
+            var id = new Date().getTime();
+            var defvalue = new Date();
+            if (this.value) {
+                var defvalue = this.value.split('-');
+            }
+
+            var self = this;
+            window.bb = weui.datePicker({
+                start: 1970,
+                end: 2030,
+                defaultValue: defvalue,
+                className: 'com-input-date',
+                onChange: function onChange(result) {},
+                onClose: function onClose() {
+                    if (named_hub[id]) {
+                        history.back();
+                    }
+                    console.log('on close');
+                },
+                onConfirm: function onConfirm(result) {
+                    self.$emit('input', result.join('-'));
+                },
+                id: 'datePicker_' + id
+            });
+            named_hub[id] = function () {
+                bb.hide();
+            };
+            history.replaceState({ callback: id }, '');
+            history.pushState({}, '');
+        },
+        watch_value: function watch_value(n) {}
+    }
 });
+
+/***/ }),
+/* 25 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(0)();
+// imports
+
+
+// module
+exports.push([module.i, ".com-input-date .weui-mask {\n  z-index: 3000; }\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 26 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(25);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// add the styles to the DOM
+var update = __webpack_require__(1)(content, {});
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./com_input_date.scss", function() {
+			var newContent = require("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./com_input_date.scss");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
 
 /***/ })
 /******/ ]);

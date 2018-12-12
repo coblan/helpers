@@ -3,4 +3,21 @@
     background:none;
   }
 }
+.pop-slide-win{
+  .mint-popup{
+    height: 100vh;
+    width: 100vw;
+  }
+  .v-modal{
+    opacity: 0;
+  }
+
+  .com-table-panel{
+    padding: 10px;
+  }
+
+  .weui-mask{
+    z-index: 3000;
+  }
+}
 
