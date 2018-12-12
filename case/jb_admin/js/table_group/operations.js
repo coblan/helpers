@@ -7,7 +7,7 @@ var ele_operations={
                            :is="op.editor"
                            :ref="'op_'+op.name"
                            :head="op"
-                           :disabled="eval(op.disabled)"
+                           :disabled="is_disable(op)"
                            v-show="is_show(op)"
                            @operation="on_operation(op)"></component>
             </div>`,
@@ -20,6 +20,14 @@ var ele_operations={
     },
 
     methods:{
+        is_disable:function(op){
+            if(op.disabled==undefined){
+                return false
+            }else{
+                return ex.eval(op.disabled,{ts:this.parStore})
+            }
+
+        },
         is_show:function(op){
             count +=1
             console.log(count)
