@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 20);
+/******/ 	return __webpack_require__(__webpack_require__.s = 26);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -428,9 +428,9 @@ ex.assign(cfg, {
 "use strict";
 
 
-var _slide_iframe = __webpack_require__(8);
+var _com_date_range = __webpack_require__(10);
 
-var slide_iframe = _interopRequireWildcard(_slide_iframe);
+var com_date_range = _interopRequireWildcard(_com_date_range);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -441,22 +441,48 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 "use strict";
 
 
-var _my_slide_win = __webpack_require__(11);
+var _com_input_date = __webpack_require__(11);
+
+var com_input_date = _interopRequireWildcard(_com_input_date);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _slide_iframe = __webpack_require__(12);
+
+var slide_iframe = _interopRequireWildcard(_slide_iframe);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _my_slide_win = __webpack_require__(15);
 
 var my_slide_win = _interopRequireWildcard(_my_slide_win);
 
-var _com_slide_head = __webpack_require__(9);
+var _com_slide_head = __webpack_require__(13);
 
 var com_slide_head = _interopRequireWildcard(_com_slide_head);
 
-var _fiexed_scrll = __webpack_require__(10);
+var _fiexed_scrll = __webpack_require__(14);
 
 var fiexed_scrll = _interopRequireWildcard(_fiexed_scrll);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 /***/ }),
-/* 5 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -476,17 +502,19 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-__webpack_require__(19);
+__webpack_require__(25);
 
 var PopMobileWin = function () {
     function PopMobileWin(_ref) {
         var ctx = _ref.ctx,
-            editor = _ref.editor;
+            editor = _ref.editor,
+            callback = _ref.callback;
 
         _classCallCheck(this, PopMobileWin);
 
         this.ctx = ctx;
         this.editor = editor;
+        this.callback = callback;
     }
 
     _createClass(PopMobileWin, [{
@@ -522,8 +550,8 @@ var PopMobileWin = function () {
                         }
                     },
                     on_finish: function on_finish(e) {
-                        if (callback) {
-                            callback(e);
+                        if (control.callback) {
+                            control.callback(e);
                         }
                     }
                 }
@@ -552,7 +580,7 @@ var SlideWin = function (_PopMobileWin) {
         key: 'appendHtml',
         value: function appendHtml() {
             this.pop_id = new Date().getTime();
-            $('body').append('<div id="pop-' + this.pop_id + '" class="pop-slide-win">\n            <mt-popup\n                  v-model=\'show\'\n                  :modal="true"\n                  :closeOnClickModal="false"\n                  position="right">\n                   <com-slide-head :title="ctx.title" ></com-slide-head>\n                    <component :is="editor" :ctx="ctx" @finish="on_finish($event)"></component>\n            </mt-popup>\n            </div>');
+            $('body').append('<div id="pop-' + this.pop_id + '" class="pop-slide-win">\n            <mt-popup\n                  v-model=\'show\'\n                  :modal="true"\n                  :closeOnClickModal="false"\n                  position="right">\n                  <div class="flex-v" style="height: 100%;width: 100%">\n                        <com-slide-head :title="ctx.title" ></com-slide-head>\n\n                        <component class="flex-grow" style="overflow: auto;position: relative" :is="editor" :ctx="ctx" @finish="on_finish($event)"></component>\n\n\n                  </div>\n\n\n            </mt-popup>\n            </div>');
         }
     }, {
         key: 'closeFun',
@@ -578,7 +606,8 @@ function slide_mobile_win(_ref2) {
         ctx = _ref2.ctx,
         callback = _ref2.callback;
 
-    var obj = new SlideWin({ editor: editor, ctx: ctx });
+    // 用于移动端的滑动打开页面，返回函数 是 history.back  ,在 pop_middle 里面写了
+    var obj = new SlideWin({ editor: editor, ctx: ctx, callback: callback });
     obj.appendHtml();
     obj.mountVue();
     var fun_id = new Date().getTime();
@@ -590,6 +619,7 @@ function slide_mobile_win(_ref2) {
 }
 
 function pop_mobile_win(editor, ctx, callback) {
+    // 用于弹出小窗口，【不】使用  history.back 返回
     var pop_id = new Date().getTime();
     $('body').append('<div id="pop-' + pop_id + '" class="pop-moible-win">\n            <mt-popup  @input="on_input($event)"\n                  v-model=\'show\'\n                  popup-transition="popup-fade">\n                    <component :is="editor" :ctx="ctx" @finish="on_finish($event)"></component>\n            </mt-popup>\n            </div>');
 
@@ -680,26 +710,26 @@ window.slide_mobile_win = slide_mobile_win;
 window.pop_mobile_win = pop_mobile_win;
 
 /***/ }),
-/* 6 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _ele_table_bus_page = __webpack_require__(12);
+var _ele_table_bus_page = __webpack_require__(16);
 
 var ele_table_bus_page = _interopRequireWildcard(_ele_table_bus_page);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 /***/ }),
-/* 7 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(15);
+var content = __webpack_require__(20);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -719,7 +749,93 @@ if(false) {
 }
 
 /***/ }),
-/* 8 */
+/* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+//Vue.component('com-date-datetimefield-range-filter',{
+//    mixins:[com_date_datetimefield_range],
+//    template:`<div  class="com-filter-date-time-range mobile date-filter flex flex-ac">
+//                     <date v-model="start" :placeholder="head.label"></date>
+//                    <div style="display: inline-block;margin: 0 2px;" >-</div>
+//                        <date  v-model="end" :placeholder="head.label"></date>
+//                </div>`,
+//})
+//
+//Vue.component('com-date-range-filter',{
+//    mixins:[com_filter_date_range],
+//    template:`<div  class="com-date-range-filter mobile flex flex-ac">
+//            <mt-datetime-picker
+//                  v-model="search_args['_start_'+head.name]"
+//                  type="date"
+//                  year-format="{value} 年"
+//                  month-format="{value} 月"
+//                  date-format="{value} 日">
+//            </mt-datetime-picker>
+//
+//                    <!--<date v-model="search_args['_start_'+head.name]" :placeholder="head.label"></date>-->
+//                    <div style="display: inline-block;margin: 0 2px;" >-</div>
+//                    <date  v-model="search_args['_end_'+head.name]" :placeholder="head.label"></date>
+//                </div>`,
+//})
+
+
+/***/ }),
+/* 11 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+__webpack_require__(22);
+
+Vue.component('date', {
+    mixins: [com_input_date],
+    template: ' <div class="com-date input-group datetime-picker">\n                <input type="text" class="form-control input-sm real-input"\n                readonly :placeholder="placeholder" @click="click_input()" v-model="value"/>\n\n                <div class="input-group-addon" >\n                    <i v-if="! value" @click="click_input()" class="fa fa-calendar" aria-hidden="true"></i>\n                    <i v-else @click="$emit(\'input\',\'\')" class="fa fa-calendar-times-o" aria-hidden="true"></i>\n                </div>\n                </div>',
+    data: function data() {
+        return {
+            inn_value: this.value
+        };
+    },
+    methods: {
+        init: function init() {},
+        click_input: function click_input() {
+            var id = new Date().getTime();
+            var defvalue = new Date();
+            if (this.value) {
+                var defvalue = this.value.split('-');
+            }
+
+            var self = this;
+            window.bb = weui.datePicker({
+                start: 1970,
+                end: 2030,
+                defaultValue: defvalue,
+                className: 'com-input-date',
+                onChange: function onChange(result) {},
+                onClose: function onClose() {
+                    if (named_hub[id]) {
+                        history.back();
+                    }
+                    console.log('on close');
+                },
+                onConfirm: function onConfirm(result) {
+                    self.$emit('input', result.join('-'));
+                },
+                id: 'datePicker_' + id
+            });
+            named_hub[id] = function () {
+                bb.hide();
+            };
+            history.replaceState({ callback: id }, '');
+            history.pushState({}, '');
+        },
+        watch_value: function watch_value(n) {}
+    }
+});
+
+/***/ }),
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -731,7 +847,7 @@ Vue.component('com-slide-iframe', {
 });
 
 /***/ }),
-/* 9 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -748,7 +864,7 @@ Vue.component('com-slide-head', {
 });
 
 /***/ }),
-/* 10 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -758,7 +874,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.fixed_body = fixed_body;
-__webpack_require__(17);
+__webpack_require__(23);
 
 function fixed_body() {
     //$('body').addClass('modal-open')
@@ -789,14 +905,17 @@ window.fixed_body = fixed_body;
 window.fixed_body_quit = fixed_body_quit;
 
 /***/ }),
-/* 11 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(18);
+__webpack_require__(24);
 
+/*
+* 因为没有遮挡层，可能造成多次打开窗口问题，所以使用mint-ui替代了这个组件
+* */
 $(function () {
     $('body').append('<div id="com-slid-win">\n        <com-slide-win-1 :stack_pages="stack_pages"></com-slide-win-1>\n    </div>');
 
@@ -904,7 +1023,7 @@ Vue.component('com-slide-win-1', {
 });
 
 /***/ }),
-/* 12 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -918,7 +1037,21 @@ var ele_table_bus_page = {
 };Vue.component('com-table-bus-page', ele_table_bus_page);
 
 /***/ }),
-/* 13 */
+/* 17 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(0)();
+// imports
+
+
+// module
+exports.push([module.i, ".com-input-date .weui-mask {\n  z-index: 3000; }\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -932,7 +1065,7 @@ exports.push([module.i, "body.modal-open {\n  position: fixed;\n  width: 100%; }
 
 
 /***/ }),
-/* 14 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -946,7 +1079,7 @@ exports.push([module.i, ".list-enter-active, .list-leave-active {\n  transition:
 
 
 /***/ }),
-/* 15 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -960,7 +1093,7 @@ exports.push([module.i, ".el-table__body-wrapper.is-scrolling-middle {\n  overfl
 
 
 /***/ }),
-/* 16 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -974,13 +1107,39 @@ exports.push([module.i, ".pop-moible-win .mint-popup {\n  background: none; }\n\
 
 
 /***/ }),
-/* 17 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(13);
+var content = __webpack_require__(17);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// add the styles to the DOM
+var update = __webpack_require__(1)(content, {});
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./com_input_date.scss", function() {
+			var newContent = require("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./com_input_date.scss");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 23 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(18);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -1000,13 +1159,13 @@ if(false) {
 }
 
 /***/ }),
-/* 18 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(14);
+var content = __webpack_require__(19);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -1026,13 +1185,13 @@ if(false) {
 }
 
 /***/ }),
-/* 19 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(16);
+var content = __webpack_require__(21);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -1052,7 +1211,7 @@ if(false) {
 }
 
 /***/ }),
-/* 20 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1062,185 +1221,33 @@ var _config = __webpack_require__(2);
 
 var config = _interopRequireWildcard(_config);
 
-var _pop_mobile_win = __webpack_require__(5);
+var _pop_mobile_win = __webpack_require__(7);
 
 var pop_win = _interopRequireWildcard(_pop_mobile_win);
 
-var _main = __webpack_require__(4);
+var _main = __webpack_require__(6);
 
 var pop_main = _interopRequireWildcard(_main);
 
-var _main2 = __webpack_require__(6);
+var _main2 = __webpack_require__(8);
 
 var table_main = _interopRequireWildcard(_main2);
 
-var _main3 = __webpack_require__(3);
+var _main3 = __webpack_require__(5);
 
 var panels_main = _interopRequireWildcard(_main3);
 
-var _main4 = __webpack_require__(22);
+var _main4 = __webpack_require__(3);
 
 var filters_main = _interopRequireWildcard(_main4);
 
-var _main5 = __webpack_require__(23);
+var _main5 = __webpack_require__(4);
 
 var input_main = _interopRequireWildcard(_main5);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
-__webpack_require__(7);
-
-/***/ }),
-/* 21 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-//Vue.component('com-date-datetimefield-range-filter',{
-//    mixins:[com_date_datetimefield_range],
-//    template:`<div  class="com-filter-date-time-range mobile date-filter flex flex-ac">
-//                     <date v-model="start" :placeholder="head.label"></date>
-//                    <div style="display: inline-block;margin: 0 2px;" >-</div>
-//                        <date  v-model="end" :placeholder="head.label"></date>
-//                </div>`,
-//})
-//
-//Vue.component('com-date-range-filter',{
-//    mixins:[com_filter_date_range],
-//    template:`<div  class="com-date-range-filter mobile flex flex-ac">
-//            <mt-datetime-picker
-//                  v-model="search_args['_start_'+head.name]"
-//                  type="date"
-//                  year-format="{value} 年"
-//                  month-format="{value} 月"
-//                  date-format="{value} 日">
-//            </mt-datetime-picker>
-//
-//                    <!--<date v-model="search_args['_start_'+head.name]" :placeholder="head.label"></date>-->
-//                    <div style="display: inline-block;margin: 0 2px;" >-</div>
-//                    <date  v-model="search_args['_end_'+head.name]" :placeholder="head.label"></date>
-//                </div>`,
-//})
-
-
-/***/ }),
-/* 22 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _com_date_range = __webpack_require__(21);
-
-var com_date_range = _interopRequireWildcard(_com_date_range);
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-/***/ }),
-/* 23 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _com_input_date = __webpack_require__(24);
-
-var com_input_date = _interopRequireWildcard(_com_input_date);
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-/***/ }),
-/* 24 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-__webpack_require__(26);
-
-Vue.component('date', {
-    mixins: [com_input_date],
-    template: ' <div class="com-date input-group datetime-picker">\n                <input type="text" class="form-control input-sm real-input"\n                readonly :placeholder="placeholder" @click="click_input()" v-model="value"/>\n\n                <div class="input-group-addon" >\n                    <i v-if="! value" @click="click_input()" class="fa fa-calendar" aria-hidden="true"></i>\n                    <i v-else @click="$emit(\'input\',\'\')" class="fa fa-calendar-times-o" aria-hidden="true"></i>\n                </div>\n                </div>',
-    data: function data() {
-        return {
-            inn_value: this.value
-        };
-    },
-    methods: {
-        init: function init() {},
-        click_input: function click_input() {
-            var id = new Date().getTime();
-            var defvalue = new Date();
-            if (this.value) {
-                var defvalue = this.value.split('-');
-            }
-
-            var self = this;
-            window.bb = weui.datePicker({
-                start: 1970,
-                end: 2030,
-                defaultValue: defvalue,
-                className: 'com-input-date',
-                onChange: function onChange(result) {},
-                onClose: function onClose() {
-                    if (named_hub[id]) {
-                        history.back();
-                    }
-                    console.log('on close');
-                },
-                onConfirm: function onConfirm(result) {
-                    self.$emit('input', result.join('-'));
-                },
-                id: 'datePicker_' + id
-            });
-            named_hub[id] = function () {
-                bb.hide();
-            };
-            history.replaceState({ callback: id }, '');
-            history.pushState({}, '');
-        },
-        watch_value: function watch_value(n) {}
-    }
-});
-
-/***/ }),
-/* 25 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(0)();
-// imports
-
-
-// module
-exports.push([module.i, ".com-input-date .weui-mask {\n  z-index: 3000; }\n", ""]);
-
-// exports
-
-
-/***/ }),
-/* 26 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(25);
-if(typeof content === 'string') content = [[module.i, content, '']];
-// add the styles to the DOM
-var update = __webpack_require__(1)(content, {});
-if(content.locals) module.exports = content.locals;
-// Hot Module Replacement
-if(false) {
-	// When the styles change, update the <style> tags
-	if(!content.locals) {
-		module.hot.accept("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./com_input_date.scss", function() {
-			var newContent = require("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./com_input_date.scss");
-			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-			update(newContent);
-		});
-	}
-	// When the module is disposed, remove the <style> tags
-	module.hot.dispose(function() { update(); });
-}
+__webpack_require__(9);
 
 /***/ })
 /******/ ]);

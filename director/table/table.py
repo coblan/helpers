@@ -19,6 +19,7 @@ from helpers.director.model_func.field_proc import BaseFieldProc
 from helpers.func.collection.container import evalue_container
 
 from django.core.paginator import Paginator
+from django.forms.models import fields_for_model
 
 
 class PageNum(object):
@@ -311,6 +312,8 @@ class ModelTable(object):
     pagenator=PageNum
     fields_sort=[]
     pop_edit_field=""
+    has_sequence = False
+    selectable = True
     def __init__(self,_page=1,row_sort=[],row_filter={},row_search= '',crt_user=None,perpage=None,**kw):
         """
         kw['search_args']只是一个记录，在获取到rows时，一并返回前端页面，便于显示。
@@ -413,6 +416,7 @@ class ModelTable(object):
             'search_args':self.search_args, 
             'parents': self.getParents(),
             'footer': self.footer,
+            'selectable': self.selectable,
         }
     
     def getRowFilters(self): 
@@ -449,7 +453,8 @@ class ModelTable(object):
             'search_args': {},
             #'search_tip':self.row_search.get_context(),
             'director_name': self.get_director_name(),#model_to_name(self.model),
-            'ops' : ops
+            'ops' : ops, 
+            'selectable': self.selectable,
         }        
     
     def getParents(self): 
@@ -494,9 +499,12 @@ class ModelTable(object):
         """
         return:[{"name": "name", "label": "\u59d3\u540d"}, {"sortable": true, "name": "age", "label": "\u5e74\u9f84"}]
         """
-        heads = [
-            {'name': '_sequence', 'label': '序号', 'editor': 'com-table-sequence', 'inn_editor': 'com-table-sequence',}
-        ]
+        if self.has_sequence:
+            heads = [
+                {'name': '_sequence', 'label': '序号', 'editor': 'com-table-sequence', 'inn_editor': 'com-table-sequence',}
+            ]
+        else:
+            heads = []
         model_heads = self.get_model_heads()
         heads =  heads + model_heads
         if not self.include:
@@ -509,9 +517,11 @@ class ModelTable(object):
         heads= self.make_pop_edit_field(heads)  
         heads = [self.dict_head(head) for head in heads]
 
-        
+        # 需要使用form.field才能提取到choices
+        form_fields = fields_for_model(self.model)
         for head in model_heads:
-            field = self.model._meta.get_field(head['name'])            
+            #field = self.model._meta.get_field(head['name'])  
+            field =  form_fields.get(head['name'])
             if hasattr(field, 'choices') and 'options' not in head :
                 catch = get_request_cache()
                 options_name = '%s_field_options'% ( model_to_name(self.model) + head['name'])
@@ -709,7 +719,7 @@ class ModelTable(object):
                  'visible': self.permit.can_add(),
                  },
                 {'name':'save_changed_rows','editor':'com-op-btn','label':'保存', 'show': 'scope.changed','hide':'!changed','icon':'fa-save', 'visible': self.permit.can_edit()},
-                {'name':'delete','editor':'com-op-btn','label':'删除','style': 'color:red','icon': 'fa-times','disabled':'!scope.has_select', 'visible': self.permit.can_del(),},
+                {'name':'delete_selected','editor':'com-op-btn','label':'删除','style': 'color:red','icon': 'fa-times','disabled':'!scope.has_select', 'visible': self.permit.can_del(),},
                 ]      
     
     def get_excel(self): 

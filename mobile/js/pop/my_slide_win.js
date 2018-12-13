@@ -1,6 +1,9 @@
 
 require('./scss/my_slide_win.scss')
 
+/*
+* 因为没有遮挡层，可能造成多次打开窗口问题，所以使用mint-ui替代了这个组件
+* */
 $(function(){
     $('body').append(`<div id="com-slid-win">
         <com-slide-win-1 :stack_pages="stack_pages"></com-slide-win-1>

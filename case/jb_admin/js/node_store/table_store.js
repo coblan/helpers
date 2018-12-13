@@ -126,20 +126,27 @@ var table_store={
         },
         update_or_insert:function(new_row,old_row){
             // 如果是更新，不用输入old_row，old_row只是用来判断是否是创建的行为
-
-            if(old_row && ! old_row.pk) {
-
-                //var rows = this.rows.splice(0, 0, new_row)
+            // 不用 old_row 了， 只需要判断 pk 是否在rows里面即可。
+            var table_row = ex.findone(this.rows,{pk:new_row.pk})
+            if(table_row){
+                ex.vueAssign(table_row,new_row)
+            }else{
                 this.rows=[new_row].concat(this.rows)
                 this.row_pages.total+=1
-            }else{
-                var table_row = ex.findone(this.rows,{pk:new_row.pk})
-                ex.vueAssign(table_row,new_row)
-                //ex.assign(table_row,new_row)
-                //for(var key in new_row){
-                //    Vue.set(table_row,key,new_row[key])
-                //}
             }
+
+
+            //if(old_row && ! old_row.pk) {
+            //
+            //    //var rows = this.rows.splice(0, 0, new_row)
+            //    this.rows=[new_row].concat(this.rows)
+            //    this.row_pages.total+=1
+            //}else{
+            //    var table_row = ex.findone(this.rows,{pk:new_row.pk})
+            //    if(table_row){
+            //        ex.vueAssign(table_row,new_row)
+            //    }
+            //}
             this.$emit('row.update_or_insert',[new_row])
         },
         update_rows:function(rows){
@@ -177,7 +184,10 @@ var table_store={
                 ex.post('/d/ajax',JSON.stringify(post_data),function(resp){
                     if( !resp.save_rows.errors){
                         ex.each(resp.save_rows,function(new_row){
-                            delete new_row._director_name  // [1]  这里还原回去
+                            // [1]  这里还原回去
+                            if(new_row._cache_director_name){
+                                new_row._director_name = new_row._cache_director_name
+                            }
                             if(kws.after_save){
                                 ex.eval(kws.after_save,{new_row:new_row,ts:self})
                             }else{
@@ -191,7 +201,14 @@ var table_store={
                     }else{
                         cfg.hide_load()
                         // 留到下面的field弹出框，按照nicevalidator的方式去显示错误
-                        //cfg.showError(resp.save_rows.msg)
+                        if(!after_save_callback){
+                            if(resp.save_rows.msg){
+                                cfg.showError(resp.save_rows.msg)
+                            }else{
+                                cfg.showError(JSON.stringify(resp.save_rows.errors) )
+                            }
+                        }
+                        //
                     }
 
 
@@ -272,9 +289,9 @@ var table_store={
                     }else{
                         cfg.hide_load()
                     }
-                    if(resp.msg){
-                        cfg.showMsg(resp.msg)
-                    }
+                    //if(resp.msg){
+                    //    cfg.showMsg(resp.msg)
+                    //}
 
                     if(kws.after_save){
                         ex.eval(kws.after_save,{resp:resp,ts:self})
@@ -325,11 +342,51 @@ var table_store={
             }
         },
         arraySpanMethod:function({ row, column, rowIndex, columnIndex }){
+            // 计算布局
             if(this.table_layout){
                 return this.table_layout[`${rowIndex},${columnIndex}`] || [1,1]
             }else{
                 return [1,1]
             }
+        },
+        delete_selected:function(){
+            var self=this
+            layer.confirm('真的删除吗?', {icon: 3, title:'确认'}, function(index) {
+                layer.close(index);
+                //var ss = layer.load(2);
+                cfg.show_load()
+                var post_data = [{fun: 'del_rows', rows: self.selected}]
+                ex.post('/d/ajax', JSON.stringify(post_data), function (resp) {
+                    cfg.hide_load()
+                    self.search()
+                })
+            })
+        },
+        pop_panel:function(kws){
+            var self=this
+            var row_match_fun = kws.row_match || 'many_row'
+            if(! row_match[row_match_fun](self,kws)){
+                return
+            }
+            if(kws.panel){
+                var panel = kws.panel
+            }else{
+                var panel = ex.eval(kws.panel_express,{ts:self,kws:kws})
+            }
+            var ctx = ex.copy(kws)
+            if(kws.ctx_express){
+                var cus_ctx = ex.eval(kws.ctx_express,{ts:self,kws:kws})
+                ex.assign(ctx, cus_ctx )
+            }
+            var winclose = cfg.pop_middle(panel,ctx,function(resp){
+                if(ctx.after_express){
+                    ex.eval(ctx.after_express,{ts:self,resp:resp})
+                }else{
+                    self.update_or_insert(resp)
+                }
+                self.clearSelection()
+                winclose()
+            })
         }
     }
 
@@ -340,15 +397,29 @@ var row_match={
         if(self.selected.length !=1){
             cfg.showMsg('请选择一行数据！')
             return false
-        }else{
-            return true
+        }else if(head.match_express){
+                var matched= ex.eval(head.match_express,{row:self.selected[0]})
+                if(!matched){
+                    cfg.showError(head.match_msg)
+                    return false
+                }
         }
+        return true
     },
     many_row:function(self,head){
         if(self.selected.length ==0 ){
             cfg.showMsg('请至少选择一行数据！')
             return false
         }else{
+            if(head.match_express){
+                for (var i=0;i<self.selected.length;i++){
+                    var row = self.selected[i]
+                    if( !ex.eval(head.match_express,{row:row}) ){
+                        cfg.showError(head.match_msg)
+                        return false
+                    }
+                }
+            }
             return true
         }
     },

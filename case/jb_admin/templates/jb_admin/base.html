@@ -397,15 +397,30 @@ desired effect
                         <span v-text="action.label"></span>
                     <span v-if="action.submenu" class="pull-right-container">
                         <i class="fa fa-angle-left pull-right"></i>
-                      </span>
+                    </span>
                     </a>
+                    <!--二级菜单-->
                     <ul v-if="action.submenu" class="treeview-menu">
                         <!--<li><a href="#">Link in level 2</a></li>-->
-                        <li v-for="subact in action.submenu" :class="{'active':is_active(subact)}">
-                            <a :href="subact.url">
+                        <!--leve2_url(subact)-->
+                        <li v-for="subact in action.submenu" :class="{'active':is_active(subact),treeview:subact.submenu}">
+                            <a  :href="subact.url">
                                 <i class="fa fa-circle-o"></i>
                                 <span v-text="subact.label"></span>
+                                <span v-if="subact.submenu" class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                              </span>
                             </a>
+
+                            <!--三级菜单-->
+                            <ul v-if="subact.submenu" class="treeview-menu">
+                                <li v-for="sub_subact in subact.submenu" :class="{'active':is_active(sub_subact)}">
+                                    <a :href="sub_subact.url">
+                                        <i class="fa fa-square-o"></i>
+                                        <span v-text="sub_subact.label"></span>
+                                    </a>
+                                </li>
+                            </ul>
                         </li>
                     </ul>
                 </li>
@@ -608,19 +623,31 @@ desired effect
             },
             methods:{
                 is_active:function(action){
+                    var self=this
                     if (action.url == location.pathname){
                         return true
                     }else if(action.submenu){
                         var find_submenu_active= false
-                        ex.each(action.submenu,function(subact){
-                            if(subact.url == location.pathname){
-                                find_submenu_active = true
+                        for(var i=0;i<action.submenu.length;i++){
+                            var subact = action.submenu[i]
+                            find_submenu_active = self.is_active(subact)
+                            if(find_submenu_active){
+                                return true
                             }
-                        })
+                        }
                         return find_submenu_active
+                    }else{
+                        return false
                     }
-                    return false
-                }
+                },
+                leve2_url:function(action){
+                    if(this.is_active(action)){
+                        return location.pathname
+                    }else{
+                        return ''
+                    }
+
+                },
             }
         })
     new Vue({

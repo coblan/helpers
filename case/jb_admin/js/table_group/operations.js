@@ -8,7 +8,7 @@ var ele_operations={
                            :ref="'op_'+op.name"
                            :head="op"
                            :disabled="eval(op.disabled)"
-                           v-show="op.show==undefined?true:eval(op.show)"
+                           v-show="is_show(op)"
                            @operation="on_operation(op)"></component>
             </div>`,
     data:function(){
@@ -18,7 +18,18 @@ var ele_operations={
             ops:this.parStore.ops,
         }
     },
+
     methods:{
+        is_show:function(op){
+            count +=1
+            console.log(count)
+            console.log(op.label)
+            if(op.show==undefined){
+                return true
+            }else{
+                return ex.eval(op.show,{ts:this.parStore})
+            }
+        },
         eval:function (express){
             if(express ==undefined){
                 return false
@@ -34,4 +45,5 @@ var ele_operations={
     }
 }
 
+var count = 0
 Vue.component('com-table-operations',ele_operations)

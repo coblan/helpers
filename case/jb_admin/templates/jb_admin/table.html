@@ -19,7 +19,7 @@
     //    eventBus = new Vue({})
 
 
-    var real_table_store = {
+    var base_table_store = {
         data:function(){
             return {
                 parents:parents,
@@ -44,6 +44,12 @@
         mixins:[table_store,table_page_store],
 
     }
+
+    {% block custom-store %}
+
+    real_table_store = base_table_store
+
+    {% endblock %}
 
 
     table_logic={
@@ -91,6 +97,7 @@
 //            this.$store.state[store_name].childbus.$on('update_or_insert',function(){
 //                console.log('jjyy')
 //            })
+            this.childStore.vc=this
             ex.assign(this.op_funs,{
                 row_changed:function(kws){
                     var row= kws.row
@@ -122,10 +129,11 @@
                     self.crt_row= kws.row
                 },
                 update_or_insert:function(kws){
-                    var new_row = kws.new_row
-                    var old_row= kws.old_row
-                    self.update_or_insert(new_row,old_row)
-                    self.crt_row=new_row
+//                    var new_row = kws.new_row
+//                    var old_row= kws.old_row
+//                    self.update_or_insert(new_row,old_row)
+                    self.childStore.update_or_insert(kws.new_row)
+                    self.crt_row=kws.new_row
                 },
                 get_childs:function(kws){
                     // head:{fun:

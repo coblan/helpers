@@ -20,6 +20,14 @@ class CusDecimalProc(BaseFieldProc):
         else:
             return {name: 0}
     
+    def dict_field_head(self, head):
+        name = head['name']
+        field = self.instance.__class__._meta.get_field(name)
+        head['fv_rule'] = 'digit(%s)' % field.digits
+        head['editor'] = 'number'
+        return head
+        
+    
     def clean_field(self,dc,name):
         if dc.get(name):
             return Decimal(dc.get(name))

@@ -1,9 +1,10 @@
 require('./scss/pop_mobile_win.scss')
 
 class PopMobileWin{
-    constructor({ctx,editor}){
+    constructor({ctx,editor,callback}){
         this.ctx=ctx
         this.editor=editor
+        this.callback=callback
     }
     appendHtml(){
         this.pop_id =new Date().getTime()
@@ -40,8 +41,8 @@ class PopMobileWin{
                     }
                 },
                 on_finish:function(e){
-                    if(callback){
-                        callback(e)
+                    if(control.callback){
+                        control.callback(e)
                     }
                 },
             }
@@ -61,8 +62,15 @@ class SlideWin extends PopMobileWin{
                   :modal="true"
                   :closeOnClickModal="false"
                   position="right">
-                   <com-slide-head :title="ctx.title" ></com-slide-head>
-                    <component :is="editor" :ctx="ctx" @finish="on_finish($event)"></component>
+                  <div class="flex-v" style="height: 100%;width: 100%">
+                        <com-slide-head :title="ctx.title" ></com-slide-head>
+
+                        <component class="flex-grow" style="overflow: auto;position: relative" :is="editor" :ctx="ctx" @finish="on_finish($event)"></component>
+
+
+                  </div>
+
+
             </mt-popup>
             </div>`)
     }
@@ -79,7 +87,8 @@ class SlideWin extends PopMobileWin{
 }
 
 function slide_mobile_win({editor,ctx,callback}){
-    var obj = new SlideWin({editor,ctx})
+    // 用于移动端的滑动打开页面，返回函数 是 history.back  ,在 pop_middle 里面写了
+    var obj = new SlideWin({editor,ctx,callback})
     obj.appendHtml()
     obj.mountVue()
     var fun_id =new Date().getTime()
@@ -90,6 +99,7 @@ function slide_mobile_win({editor,ctx,callback}){
 
 
 function pop_mobile_win(editor,ctx,callback){
+    // 用于弹出小窗口，【不】使用  history.back 返回
     var pop_id =new Date().getTime()
     $('body').append(`<div id="pop-${pop_id}" class="pop-moible-win">
             <mt-popup  @input="on_input($event)"

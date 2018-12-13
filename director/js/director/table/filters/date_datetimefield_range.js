@@ -20,7 +20,7 @@ var com_date_datetimefield_range={
             end:end
         }
     },
-    template:`<div  class="date-filter flex flex-ac">
+    template:`<div  class="com-date-range-filter date-filter flex flex-ac">
                      <date v-model="start" :placeholder="head.label"></date>
                     <div style="display: inline-block;margin: 0 2px;" >-</div>
                         <date  v-model="end" :placeholder="head.label"></date>

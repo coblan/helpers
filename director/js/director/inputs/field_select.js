@@ -53,6 +53,10 @@ var sim_select= {
         my_value:function(){
             return this.row[this.head.name]
         },
+        is_select:function(){
+            var v = this.row[this.head.name]
+            return v != undefined
+        },
         place_value:function(){
             var v = this.row[this.head.name]
             if(v === undefined){

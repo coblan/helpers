@@ -34,3 +34,4 @@ export var com_fields_panel={
 }
 window.com_fields_panel = com_fields_panel
 Vue.component('com-fields-panel',com_fields_panel)
+Vue.component('com-panel-fields',com_fields_panel)

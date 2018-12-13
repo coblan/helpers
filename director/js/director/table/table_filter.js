@@ -32,12 +32,12 @@ Vue.component('com-filter',{
     * 过滤器的 容器
     * */
     props:['heads','search_args'],
-    template:`<div v-if='heads.length>0' class="com-filter flex flex-grow flex-ac">
-            <com-auto-more>
-                <div class="flex" style="flex-wrap: wrap">
-                     <div v-for="filter in heads" :id="'filter-'+filter.name" class="filter-item">
+    template:`<div v-if='heads.length>0' class="com-filter flex flex-grow flex-ac" >
+            <com-auto-more org-height="2.8em">
+                <div class="flex" style="flex-wrap: wrap;padding: 0.3em">
+                     <div v-for="filter in heads" :id="'filter-'+filter.name" class="filter-item" style="margin-bottom: 0.3em">
                             <component @submit="m_submit()" :is="filter.editor" :head="filter" :search_args='search_args' > </component>
-                        </div>
+                     </div>
                 </div>
             </com-auto-more>
 

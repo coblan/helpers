@@ -1,3 +1,4 @@
+require('./scss/table_grid.scss')
 var ele_table= {
     props: ['bus'],
     created: function () {
@@ -71,6 +72,7 @@ var ele_table= {
     },
     // height="100%"
     //style="width: 100%"
+    // :row-class-name="tableRowClassName"  行标记颜色，效果不好，暂时不用
     mixins: [mix_table_data, mix_ele_table_adapter],
     template: `  <div style="position: absolute;top:0;left:0;bottom: 0;right:0;">
         <el-table class="table flat-head" ref="e_table"
@@ -123,6 +125,9 @@ var ele_table= {
                     </div>
 `,
     methods: {
+        tableRowClassName:function({row, rowIndex}){
+            return row._css_class
+        },
         bus_search: function (search_args) {
             ex.assign(this.search_args, search_args)
             this.search()
