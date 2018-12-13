@@ -11,9 +11,12 @@
     search_args={{ search_args | jsonify | default:'{}'  }}
     parents = {{ parents | jsonify | default:'[]' }}
 
+
     // 这个变量留着，兼容老的调用。。准备把它移除
 //    tabs={{ tabs | jsonify | default:'[]' }}
 //    named_tabs={{ named_tabs | jsonify | default:'{}' }}
+    event_slots = {{ event_slots | jsonify | default:'[]' }}
+
     childStore_event_slot={{ childStore_event_slot | jsonify |default:'{}' }}
 
     //    eventBus = new Vue({})
@@ -38,7 +41,8 @@
 //                tabs:tabs,
 //                named_tabs:named_tabs,
                 //-------------------
-                named_ctx:named_ctx
+                named_ctx:named_ctx,
+                event_slots:event_slots,
             }
         },
         mixins:[table_store,table_page_store],

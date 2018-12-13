@@ -7,8 +7,14 @@ var table_parents={
     },
     template:`<div class="com-table-parents">
           <ol v-if="parStore.parents.length>0" class="breadcrumb jb-table-parent">
-            <li v-for="par in parStore.parents"><a href="#" @click="parStore.get_childs(par.value)"  v-text="par.label"></a></li>
+            <li v-for="par in parStore.parents"><a href="#" @click="on_click(par)"  v-text="par.label"></a></li>
         </ol>
-    </div>`
+    </div>`,
+    methods:{
+        on_click:function(par){
+            this.parStore.$emit('parent_changed',par)
+            this.parStore.get_childs(par.value)
+        }
+    }
 }
 Vue.component('com-table-parents',table_parents)

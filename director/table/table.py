@@ -417,7 +417,11 @@ class ModelTable(object):
             'parents': self.getParents(),
             'footer': self.footer,
             'selectable': self.selectable,
+            'event_slots':self.get_event_slots()
         }
+    
+    def get_event_slots(self):
+        return []
     
     def getRowFilters(self): 
         ls=[]
@@ -455,6 +459,7 @@ class ModelTable(object):
             'director_name': self.get_director_name(),#model_to_name(self.model),
             'ops' : ops, 
             'selectable': self.selectable,
+            'event_slots':self.get_event_slots()
         }        
     
     def getParents(self): 

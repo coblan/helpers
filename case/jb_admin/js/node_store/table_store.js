@@ -15,9 +15,18 @@ var table_store={
              crt_row:{},
              selectable:true,
              changed_rows:[],
+             event_slots:[]
          }
     },
     mixins:[mix_ele_table_adapter],
+    created:function(){
+        var self=this
+        ex.each(this.event_slots,function(router){
+            self.$on(router.event,function(e){
+                ex.eval(router.express,{event:e,ts:self})
+            })
+        })
+    },
     computed:{
         changed:function(){
             return this.changed_rows.length != 0
