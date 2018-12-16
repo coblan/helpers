@@ -274,7 +274,8 @@ class RowSort(object):
                 else:
                     query= query.order_by(name, '-pk')
         else:
-            query = query.order_by('-pk')
+            if not query._fields: # 没有这个字段，才能默认使用pk 排序
+                query = query.order_by('-pk')
 
         return query
 
@@ -645,7 +646,7 @@ class ModelTable(object):
         
         #[todo] 这里需要弄清楚原理
         #[todo] 优化，是否select_related,select_related的field限定在输出的head中
-        if not query._fields:  # 如果这个属性部位空，证明已经调用了.values() or .values_list()
+        if not query._fields:  # 如果这个属性不为空，证明已经调用了.values() or .values_list()
             for f in self.model._meta.get_fields():
                 if f.name in head_nams and isinstance(f, models.ForeignKey):
                     query = query.select_related(f.name)        
