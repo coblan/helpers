@@ -111,14 +111,16 @@ var ajax_table={
             </div>
     </div>`,
 
-
+    mounted:function(){
+        this.search()
+    },
     methods:{
-        on_show:function(){
-            if(! this.fetched){
-                this.search()
-                this.fetched = true
-            }
-        },
+        //on_show:function(){
+        //    if(! this.fetched){
+        //        this.search()
+        //        this.fetched = true
+        //    }
+        //},
         getRows:function(){
         //
             var self=this

@@ -26,7 +26,7 @@ msgstr "用户名已经存在了"
 
 #: .\helpers\director\model_func\dictfy.py:349
 msgid "ID"
-msgstr "序号"
+msgstr "ID"
 
 #: .\helpers\director\models.py:12
 msgid "operator"

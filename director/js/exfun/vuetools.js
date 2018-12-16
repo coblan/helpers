@@ -34,20 +34,17 @@ export var  vuetool = {
     vueBroadcase:function(){
 
     },
-
-    vueChildBusEmit:function(self,event_name,event){
-        var parent =self.$parent
+    vueParStore:function(self){
+        var parent = self.$parent
         while (parent){
-            if(parent.childBus){
-                break
-            }else{
+            if(parent.childStore){
+                return parent.childStore
+            }else {
                 parent = parent.$parent
             }
         }
-        if(parent){
-            parent.childbus.$emit(event_name,event)
-        }
     },
+
     vueChildBusOn:function(self,event_name,func){
         var parent =self.$parent
         while (parent){

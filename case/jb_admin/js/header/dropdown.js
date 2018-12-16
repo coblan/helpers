@@ -12,7 +12,7 @@ Vue.component('com-head-dropdown',{
           </span>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item v-for="action in head.options">
-                <a class="com-head-dropdown-action" :href="action.url" v-text="action.label"></a>
+                <a class="com-head-dropdown-action" :href="action.link" v-text="action.label"></a>
             </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>

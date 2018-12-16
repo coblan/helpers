@@ -43,6 +43,7 @@ class RequestCacheMiddleware(MiddlewareMixin):
     def process_request(self, request):
         cache = {
             'request': request,
+            'msg': [],
             }  #_request_cache.get(currentThread()) or RequestCache()
         _request_cache[currentThread()] = cache
         

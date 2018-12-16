@@ -22,3 +22,11 @@ site_cfg = {
 
 #permit_dc = {
 #}
+
+def director_view(name): 
+    def _fun(fun): 
+        director[name] = fun
+        def _fun2(*args, **kargs): 
+            return fun(*args, **kargs)
+        return _fun2
+    return _fun

@@ -17,7 +17,7 @@
 
     .label-content{
       //min-width: 4em;
-      max-width: 12em;
+      max-width: 12rem;
         word-break: break-all;
         position: relative;
         display: inline-block;
@@ -30,12 +30,18 @@
     }
   }
 
+
   .field-input{
     //width: 23em;
     text-align: left;
     position: relative;
   }
 
+  .help-text{
+    position: relative;
+    top:-2rem;
+    right: auto;
+  }
   .submit-block{
       margin-top: 1em;
       text-align: left;
@@ -103,6 +109,13 @@
     }
   }
 }
+
+//.sim-fields.mobile{
+//  .help-text{
+//    right:0;
+//  }
+//}
+
 
 
 

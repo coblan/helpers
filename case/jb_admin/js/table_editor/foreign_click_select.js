@@ -4,6 +4,7 @@ var foreign_click_select = {
     template:`<span class="clickable" v-text="rowData[field]" @click="on_click()"></span>`,
     data:function(){
         return {
+            parStore:ex.vueParStore(this),
             label:'_'+this.field+'_label'
         }
     },
@@ -11,7 +12,8 @@ var foreign_click_select = {
     },
     methods:{
         on_click:function(){
-            this.$emit('on-custom-comp',{fun:'send_select',row:this.rowData})
+            //this.$emit('on-custom-comp',{fun:'send_select',row:this.rowData})
+            this.parStore.$emit('finish',this.rowData)
         }
     }
 }

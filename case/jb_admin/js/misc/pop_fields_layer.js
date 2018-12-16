@@ -79,7 +79,7 @@ export  function pop_fields_layer (row,fields_ctx,callback,layerConfig){
     (function(pop_id,row,heads,ops,com_id,openfields_layer_index){
 
         //Vue.nextTick(function(){
-            var store_id ='store_fields_'+ new Date().getTime()
+        //    var store_id ='store_fields_'+ new Date().getTime()
 
             var vc  = new Vue({
                 el:'#fields-pop-'+pop_id,
@@ -120,7 +120,7 @@ export  function pop_fields_layer (row,fields_ctx,callback,layerConfig){
                 },
                 methods:{
                     on_sub_success:function(new_row){
-                      callback(new_row,store_id,openfields_layer_index)
+                      callback(new_row,this.childStore,openfields_layer_index)
 
                     }
                 }

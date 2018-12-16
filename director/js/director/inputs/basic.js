@@ -136,7 +136,7 @@ export var baseInput={
         template:`<div>
             <span v-if='head.readonly' v-text='get_label(head.options,row[head.name])'></span>
             <select v-else v-model='row[head.name]'  :id="'id_'+head.name" :name="head.name"  class="form-control input-sm">
-                <option v-if="head.placeholder" :value="place_value" disabled selected style='display:none;' class="placeholder" v-text="head.placeholder"></option>
+                <option v-if="head.placeholder" :value="place_value" disabled selected style='display:none;color: grey;' class="placeholder" v-text="head.placeholder"></option>
             	<option v-for='opt in normed_options' :value='opt.value' v-text='opt.label'></option>
             </select>
             </div>`,
@@ -309,7 +309,7 @@ export var baseInput={
     date: {
         // 被 com-field-date 替代
         props:['row','head'],
-        template:`<div><span v-if='head.readonly' v-text='row[head.name]'></span>
+        template:`<div class="com-field com-field-date"><span v-if='head.readonly' v-text='row[head.name]'></span>
                                 <date v-else v-model="row[head.name]" :id="'id_'+head.name"
                                     :placeholder="head.placeholder"></date>
                                </div>`,

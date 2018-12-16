@@ -53,7 +53,7 @@ var date_config_set={
     },
 }
 
-Vue.component('date',{
+var com_input_date = {
     //template:'<input type="text" class="form-control">',
     template:` <div class="com-date input-group datetime-picker">
                 <input type="text" class="form-control input-sm real-input"
@@ -66,46 +66,52 @@ Vue.component('date',{
                 </div>`,
     props:['value','set','config','placeholder'],
     mounted:function () {
-        var self=this
-        if(!this.set){
-            var def_conf=date_config_set.date
-        }else{
-            var def_conf=date_config_set[this.set]
-        }
-        if(this.config){
-            ex.assign(def_conf,this.config)
-        }
-        self.input=$(this.$el).find('input')
-
-        ex.load_css('/static/lib/bootstrap-datepicker1.6.4.min.css')
-
-        ex.load_js('/static/lib/bootstrap-datepicker1.6.4.min.js',function(){
-            ex.load_js('/static/lib/bootstrap-datepicker1.6.4.zh-CN.min.js',function(){
-                self.input.datepicker(def_conf).on('changeDate', function(e) {
-                    self.$emit('input',self.input.val())
-                })
-                // if has init value,then init it
-                if(self.value){
-                    self.input.datepicker('update',self.value)
-                    self.input.val(self.value)
-                }
-            })
-        })
+        this.init()
     },
     methods:{
+        init:function(){
+            var self=this
+            if(!this.set){
+                var def_conf=date_config_set.date
+            }else{
+                var def_conf=date_config_set[this.set]
+            }
+            if(this.config){
+                ex.assign(def_conf,this.config)
+            }
+            self.input=$(this.$el).find('input')
+
+            ex.load_css('/static/lib/bootstrap-datepicker1.6.4.min.css')
+
+            ex.load_js('/static/lib/bootstrap-datepicker1.6.4.min.js',function(){
+                ex.load_js('/static/lib/bootstrap-datepicker1.6.4.zh-CN.min.js',function(){
+                    self.input.datepicker(def_conf).on('changeDate', function(e) {
+                        self.$emit('input',self.input.val())
+                    })
+                    // if has init value,then init it
+                    if(self.value){
+                        self.input.datepicker('update',self.value)
+                        self.input.val(self.value)
+                    }
+                })
+            })
+        },
         click_input:function(){
             this.input.focus()
+        },
+        watch_value:function(n){
+            this.input.datepicker('update',n)
+            this.input.val(n)
         }
     },
     watch:{
         value:function (n) {
-            this.input.datepicker('update',n)
-            this.input.val(n)
-
+            this.watch_value(n)
         }
     }
-})
-
+}
+window.com_input_date=com_input_date
+Vue.component('date',com_input_date)
 
 Vue.component('datetime',{
     //data:function(){

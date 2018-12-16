@@ -1,0 +1,15 @@
+.extra-click-plus{
+  .icon{
+    .item{
+        display: inline-block;
+        margin-right: 0.5em;
+    }
+  }
+  &.mobile{
+    .item{
+        display: inline-block;
+        margin-left: 0.5rem;
+        margin-right: 0.5rem;
+    }
+  }
+}

@@ -9,7 +9,10 @@ from decimal import Decimal
 class DecimalProc(BaseFieldProc):
     def to_dict(self,inst,name):
         data = getattr(inst,name)
-        return {name:str(data)}
+        if data is None:
+            return {name: None,}
+        else:
+            return {name:str(data)}
     
     def clean_field(self,dc,name):
         if dc.get(name): 

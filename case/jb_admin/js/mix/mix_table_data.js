@@ -1,3 +1,6 @@
+/*
+被 table_store 替代掉了
+* */
 var mix_table_data={
     created:function(){
         if(!this.search_args){
@@ -8,15 +11,14 @@ var mix_table_data={
         return {
             op_funs:{},
             changed_rows:[],
-
             table_layout:{},
         }
     },
     mounted:function(){
         var self=this
-        this.childStore=new Vue({
-
-        })
+        //this.childStore=new Vue({
+        //
+        //})
 
         ex.assign(this.op_funs,{
             save_changed_rows:function(){
@@ -34,6 +36,9 @@ var mix_table_data={
             },
             get_data:function(){
                 self.getRows()
+            },
+            refresh:function(){
+                self.search()
             },
             selected_set_value:function(kws){
                 /* kws ={ field,value }
@@ -397,7 +402,6 @@ var mix_table_data={
                     Vue.set(table_row,key,new_row[key])
                 }
             }
-
         },
         getRows:function(){
             /*

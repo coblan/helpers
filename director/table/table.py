@@ -19,6 +19,7 @@ from helpers.director.model_func.field_proc import BaseFieldProc
 from helpers.func.collection.container import evalue_container
 
 from django.core.paginator import Paginator
+from django.forms.models import fields_for_model
 
 
 class PageNum(object):
@@ -123,6 +124,7 @@ class RowFilter(object):
     names=[]
     range_fields=[]
     model=''
+    fields_sort = []
     def __init__(self,dc,user,allowed_names,kw={}):
         # 为了让前端不显示
         self.model_allowed_names =  allowed_names
@@ -211,7 +213,9 @@ class RowFilter(object):
         out_list.extend(normal_heads)
         out_list = [self.dict_head(head) for head in out_list]
         out_list = [x for x in out_list if x['name'] in send_to_front_names]
-        out_list = sorted(out_list, key= lambda x: send_to_front_names.index(x['name']))
+        if self.fields_sort:
+            out_list = [x for x in out_list if x['name'] in self.fields_sort]
+            out_list = sorted(out_list, key= lambda x: self.fields_sort.index(x['name']))
         return out_list
     
     def clean_query(self, query): 
@@ -309,6 +313,8 @@ class ModelTable(object):
     pagenator=PageNum
     fields_sort=[]
     pop_edit_field=""
+    has_sequence = False
+    selectable = True
     def __init__(self,_page=1,row_sort=[],row_filter={},row_search= '',crt_user=None,perpage=None,**kw):
         """
         kw['search_args']只是一个记录，在获取到rows时，一并返回前端页面，便于显示。
@@ -371,7 +377,8 @@ class ModelTable(object):
     @classmethod
     def clean_search_args(cls,search_args):
         """
-        重载该函数，用于调整search_args的默认值，修改值
+        重载该函数，用于调整search_args的默认值，
+        修改值
         返回的参数 (1,2) 1用于传入 filter ，2 用于传回前端去显示。
         
         例如对于类型为datetime的filter，
@@ -410,7 +417,12 @@ class ModelTable(object):
             'search_args':self.search_args, 
             'parents': self.getParents(),
             'footer': self.footer,
+            'selectable': self.selectable,
+            'event_slots':self.get_event_slots()
         }
+    
+    def get_event_slots(self):
+        return []
     
     def getRowFilters(self): 
         ls=[]
@@ -446,7 +458,9 @@ class ModelTable(object):
             'search_args': {},
             #'search_tip':self.row_search.get_context(),
             'director_name': self.get_director_name(),#model_to_name(self.model),
-            'ops' : ops
+            'ops' : ops, 
+            'selectable': self.selectable,
+            'event_slots':self.get_event_slots()
         }        
     
     def getParents(self): 
@@ -491,14 +505,29 @@ class ModelTable(object):
         """
         return:[{"name": "name", "label": "\u59d3\u540d"}, {"sortable": true, "name": "age", "label": "\u5e74\u9f84"}]
         """
+        if self.has_sequence:
+            heads = [
+                {'name': '_sequence', 'label': '序号', 'editor': 'com-table-sequence', 'inn_editor': 'com-table-sequence',}
+            ]
+        else:
+            heads = []
         model_heads = self.get_model_heads()
-        heads = model_heads + self.getExtraHead() 
+        heads =  heads + model_heads
+        if not self.include:
+            heads = [x for x in heads if x['name'] not in self.exclude]
+        else:
+            heads = [x for x in heads if x['name'] in self.include]
+            
+        heads += self.getExtraHead() 
         heads = self.fields_sort_heads(heads)   
         heads= self.make_pop_edit_field(heads)  
         heads = [self.dict_head(head) for head in heads]
-        
+
+        # 需要使用form.field才能提取到choices
+        form_fields = fields_for_model(self.model)
         for head in model_heads:
-            field = self.model._meta.get_field(head['name'])            
+            #field = self.model._meta.get_field(head['name'])  
+            field =  form_fields.get(head['name'])
             if hasattr(field, 'choices') and 'options' not in head :
                 catch = get_request_cache()
                 options_name = '%s_field_options'% ( model_to_name(self.model) + head['name'])
@@ -610,7 +639,18 @@ class ModelTable(object):
                 dc = inst
             dc['_director_name'] = self.get_edit_director_name()
             out.append(dc)
+        #out = self.append_sequence(out)
         return out
+    
+    #def append_sequence(self, rows): 
+        #page = self.kw['search_args'].get('_page', 1)
+        #perPage = self.pagenator.perPage
+        #start = (page - 1) * perPage
+        #for row in rows:
+            #start += 1
+            #row['_sequence'] = start
+            
+        #return rows
     
     @classmethod
     def get_edit_director_name(cls): 
@@ -684,8 +724,8 @@ class ModelTable(object):
                  'fields_ctx':fieldobj.get_head_context(),
                  'visible': self.permit.can_add(),
                  },
-                {'name':'save_changed_rows','editor':'com-op-btn','label':'保存','hide':'!changed','icon':'fa-save', 'visible': self.permit.can_edit()},
-                {'name':'delete','editor':'com-op-btn','label':'删除','style': 'color:red','icon': 'fa-times','disabled':'!has_select', 'visible': self.permit.can_del(),},
+                {'name':'save_changed_rows','editor':'com-op-btn','label':'保存', 'show': 'scope.changed','hide':'!changed','icon':'fa-save', 'visible': self.permit.can_edit()},
+                {'name':'delete_selected','editor':'com-op-btn','label':'删除','style': 'color:red','icon': 'fa-times','disabled':'!scope.has_select', 'visible': self.permit.can_del(),},
                 ]      
     
     def get_excel(self): 

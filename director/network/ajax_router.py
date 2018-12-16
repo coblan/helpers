@@ -7,6 +7,7 @@ from django.contrib.auth.models import User
 from django.conf import settings
 from django.core.exceptions import PermissionDenied
 from ..data_format.json_format import DirectorEncoder
+from ..middleware.request_cache import get_request_cache
 """
 >->helpers/port.rst>
 ===========
@@ -53,6 +54,17 @@ def ajax_view(request):
     """
     router=RouterAjax(request, scope,rt_except= not settings.DEBUG)
     rt = router.run()
+    catch = get_request_cache()
+    if catch['msg']:
+        bb =  rt.get('msg')
+        if bb:
+            if isinstance(bb, str):
+                msg = [bb] + catch['msg']
+            else:
+                msg = bb + catch['msg']
+        else:
+            msg = catch['msg']
+        rt['msg'] = msg
     return HttpResponse(json.dumps(rt, cls= DirectorEncoder), content_type="application/json") 
 
 
