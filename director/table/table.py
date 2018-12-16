@@ -274,7 +274,8 @@ class RowSort(object):
                 else:
                     query= query.order_by(name, '-pk')
         else:
-            query = query.order_by('-pk')
+            if not query._fields:
+                query = query.order_by('-pk')
 
         return query
 
