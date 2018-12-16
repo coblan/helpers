@@ -274,7 +274,7 @@ class RowSort(object):
                 else:
                     query= query.order_by(name, '-pk')
         else:
-            if not query._fields:
+            if not query._fields: # 如果这个为空，才能弄一个默认排序，否则造成聚合函数无效
                 query = query.order_by('-pk')
 
         return query
