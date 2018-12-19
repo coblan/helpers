@@ -113,17 +113,9 @@ var com_input_date = {
 window.com_input_date=com_input_date
 Vue.component('date',com_input_date)
 
+
+
 Vue.component('datetime',{
-    //data:function(){
-    //    return {
-    //        input_value:'',
-    //    }
-    //},
-    //template:'<input type="text" class="form-control">',
-    //template:`<span class="datetime-picker">
-    //            <span class="cross" @click="$emit('input','')">X</span>
-    //            <input type="text" readonly/>
-    //            </span>`,
     template:` <div class="com-datetime input-group datetime-picker">
                 <input type="text" class="form-control input-sm" readonly :placeholder="placeholder"/>
                 <div class="input-group-addon" >
@@ -141,6 +133,7 @@ Vue.component('datetime',{
             format: "yyyy-mm-dd hh:ii",
             autoclose: true,
             todayHighlight: true,
+            minuteStep:1,
         }
         if(self.config){
             ex.assign(def_conf,this.config)
@@ -150,6 +143,17 @@ Vue.component('datetime',{
         ex.load_css('/static/lib/smalot-bootstrap-datetimepicker2.4.3.min.css')
         ex.load_js('/static/lib/moment2.17.1.min.js')
         ex.load_js('/static/lib/smalot-bootstrap-datetimepicker2.4.3.min.js',function(){
+
+            $.fn.datetimepicker.dates['zh-CN'] = {
+                days: ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六", "星期日"],
+                daysShort: ["周日", "周一", "周二", "周三", "周四", "周五", "周六", "周日"],
+                daysMin:  ["日", "一", "二", "三", "四", "五", "六", "日"],
+                months: ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"],
+                monthsShort: ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"],
+                today: "今天",
+                suffix: [],
+                meridiem: ["上午", "下午"]
+            };
 
             self.input.datetimepicker(def_conf).on('changeDate', function(e) {
                 self.$emit('input',self.input.val())
