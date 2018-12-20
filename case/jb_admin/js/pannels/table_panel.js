@@ -7,7 +7,7 @@ var table_panel={
         if(this.ctx.selectable == undefined){
             this.ctx.selectable =true
         }
-        var base_table_store ={
+        var base_table_panel_store ={
             props:['ctx'],
             propsData: {
                 ctx: self.ctx
@@ -28,11 +28,12 @@ var table_panel={
                     selected:[],
                 }
             },
+            mixins:[table_store]
         }
-        var custom_store = this.get_custom_store()
-        var this_table_store =  {
-            mixins:[table_store,base_table_store].concat(custom_store)
-        }
+        var this_table_store = this.get_custom_store(base_table_panel_store)
+        //var this_table_store =  {
+        //    mixins:[table_store,base_table_store].concat(custom_store)
+        //}
         return {
             childStore:new Vue(this_table_store),
             par_row:this.ctx.par_row || {},
@@ -53,7 +54,7 @@ var table_panel={
             this.$emit('finish',event)
         }
     },
-    template:`<div class="com-table-panel" style="height: 100%;padding-left: 10px">
+    template:`<div class="com-table-panel" style="height: 100%;">
 
             <div class="rows-block flex-v" style="height: 100%">
 
