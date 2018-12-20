@@ -51,6 +51,9 @@ def ajax_views(request,app=None):
         return HttpResponse(json.dumps(rt),content_type="application/json")  
 
 def general_upload(request):
+    if request.GET.get('director'):
+        UploadView=director.get(request.GET.get('director'))
+        return UploadView().asView(request)
     return GeneralUpload().asView(request)
 
 @csrf_exempt
