@@ -16,6 +16,7 @@ var com_select = {
             parStore:ex.vueParStore(this)
         }
     },
+
     computed:{
         myvalue:function(){
             return this.search_args[this.head.name]
@@ -31,9 +32,12 @@ var com_select = {
     watch:{
         myvalue:function(v){
             this.$emit('input',v)
-            if(this.head.changed_emit ){
-                this.parStore.$emit(this.head.changed_emit,v)
-            }
+            //if(this.head.changed_emit ){
+            //    this.parStore.$emit(this.head.changed_emit,v)
+            //}
+            //if(this.head.on_changed_express){
+            //    ex.eval(this.head.on_changed_express,{ts:this.parStore,value:v})
+            //}
         },
         options:function(v){
             delete  this.search_args[this.head.name]
@@ -44,25 +48,45 @@ var com_select = {
         var self=this
 
         // 更新值
-        if(this.head.update_options_on ){
-            //ex.vuexOn(this,this.head.update_options_on,this.get_options)
-            this.parStore.$on(this.head.update_options_on,this.get_options)
-        }
+        //if(this.head.update_options_on ){
+        //    //ex.vuexOn(this,this.head.update_options_on,this.get_options)
+        //    this.parStore.$on(this.head.update_options_on,this.get_options)
+        //}
         // 清空值
         //if(this.head.clear_value_on){
         //    //ex.vuexOn(this,this.head.update_options_on,this.clear_value)
         //    this.parStore.$on(this.head.update_options_on,this.clear_value)
         //}
+        if(this.head.event_slots){
+            this.set_event_slot()
+        }
+
     },
     methods:{
-        get_options:function(event){
+        set_event_slot:function(){
+                var self=this
+                ex.each(this.head.event_slots,function(router){
+                    if(router.event){
+                        self.$on(router.event,function(e){
+                            ex.eval(router.express,{event:e,ts:self.parStore,vc:self})
+                        })
+                    }
+                    if(router.par_event){
+                        self.parStore.$on(router.par_event,function(e){
+                            ex.eval(router.express,{event:e,ts:self.parStore,vc:self})
+                        })
+                    }
+
+                })
+        },
+        get_options:function({post_data={}}){
             //this.clear_value()
             var self=this
-            if(this.head.post_data){
-                var post_data=ex.eval(this.head.post_data,{event:event,vc:self})
-            }else{
-                var post_data={}
-            }
+            //if(this.head.post_data){
+            //    var post_data=ex.eval(this.head.post_data,{event:event,vc:self})
+            //}else{
+            //    var post_data={}
+            //}
             ex.director_call(this.head.director_name,post_data,function(resp){
                 self.head.options = resp
             })

@@ -15,9 +15,18 @@ var table_store={
              crt_row:{},
              selectable:true,
              changed_rows:[],
+             event_slots:[]
          }
     },
     mixins:[mix_ele_table_adapter],
+    created:function(){
+        var self=this
+        ex.each(this.event_slots,function(router){
+            self.$on(router.event,function(e){
+                ex.eval(router.express,{event:e,ts:self})
+            })
+        })
+    },
     computed:{
         changed:function(){
             return this.changed_rows.length != 0
@@ -240,7 +249,7 @@ var table_store={
                     var win_index = pop_edit_local(one_row,kws.fields_ctx,function(new_row,store){
                         bb(new_row,function(resp){
                             if(resp.save_rows.errors){
-                                store.showError(resp.save_rows.errors)
+                                cfg.showError(JSON.stringify( resp.save_rows.errors))
                                 //self.$store.commit(store_id+'/showErrors',resp.save_rows.errors)
                             }else{
                                 layer.close(win_index)
@@ -442,24 +451,37 @@ var row_match={
             }
         }
     },
+    // 这个函数被 many_row 替代了。 只需要加上 match_express 就可以替换这个函数
     many_row_match:function(self,head){
         // head : @match_field , @match_values ,@match_msg
         if(self.selected.length ==0 ){
             cfg.showMsg('请至少选择一行数据！')
             return false
         }else{
-            var field=head.match_field
-            var values = head.match_values
-            var msg = head.match_msg
+            if(head.match_field){ // 老的用法，准备剔除  ,现在全部改用 match_express
+                var field=head.match_field
+                var values = head.match_values
+                var msg = head.match_msg
 
-            for (var i=0;i<self.selected.length;i++){
-                var row = self.selected[i]
-                if( ! ex.isin(row[field],values ) ){
-                    cfg.showMsg(msg)
-                    return false
+                for (var i=0;i<self.selected.length;i++){
+                    var row = self.selected[i]
+                    if( ! ex.isin(row[field],values ) ){
+                        cfg.showMsg(msg)
+                        return false
+                    }
                 }
+                return true
+            }else{
+                for (var i=0;i<self.selected.length;i++){
+                    var row = self.selected[i]
+                    if( !ex.eval(head.match_express)){
+                        cfg.showMsg(head.match_msg)
+                        return false
+                    }
+                }
+                return true
             }
-            return true
+
         }
     },
 }

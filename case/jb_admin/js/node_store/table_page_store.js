@@ -9,6 +9,7 @@ var table_page_store={
     },
     created:function(){
         var self=this
+        // 这个不用了，转到 table_store 里面去了
         ex.each(this.childStore_event_slot,function(router){
             self.$on(router.event,function(e){
                 var kws = ex.eval(router.kws,e)

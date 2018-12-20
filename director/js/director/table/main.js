@@ -11,4 +11,6 @@ import * as sort_mark from './sort_mark.js'
 
 import * as first_col from './first_col.js'
 
+import * as filter_main from './filters/main.js'
+
 

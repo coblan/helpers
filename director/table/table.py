@@ -276,9 +276,10 @@ class RowSort(object):
                         # mysql 按照拼音排序
                         query= query.extra(select={'converted_%s'%norm_name: 'CONVERT(%s USING gbk)'%norm_name},order_by=['%sconverted_%s'%(direction,norm_name)])                        
                 else:
-                    query= query.order_by(name, '-pk')
+                    query= query.order_by(name)
         else:
-            query = query.order_by('-pk')
+            if not query._fields: # 如果这个为空，才能弄一个默认排序，否则造成聚合函数无效
+                query = query.order_by('-pk')
 
         return query
 
@@ -417,7 +418,11 @@ class ModelTable(object):
             'parents': self.getParents(),
             'footer': self.footer,
             'selectable': self.selectable,
+            'event_slots':self.get_event_slots()
         }
+    
+    def get_event_slots(self):
+        return []
     
     def getRowFilters(self): 
         ls=[]
@@ -455,6 +460,7 @@ class ModelTable(object):
             'director_name': self.get_director_name(),#model_to_name(self.model),
             'ops' : ops, 
             'selectable': self.selectable,
+            'event_slots':self.get_event_slots()
         }        
     
     def getParents(self): 

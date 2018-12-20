@@ -3,10 +3,11 @@ var ele_operations={
     //                      :disabled="get_attr(op.disabled)"
     //v-show="! get_attr(op.hide)"
     template:`<div class="oprations" style="padding: 5px;">
-                <component v-for="op in ops"
+                <component v-for="(op,index) in ops"
                            :is="op.editor"
                            :ref="'op_'+op.name"
                            :head="op"
+                           :key="index"
                            :disabled="is_disable(op)"
                            v-show="is_show(op)"
                            @operation="on_operation(op)"></component>
