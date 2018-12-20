@@ -58,7 +58,19 @@ export var network ={
         }
         return $.post(url,data,wrap_callback)
     },
-    load_js: function(src,success) {
+    load_js:function(src,success){
+        if(success){
+            return ex._load_js(src,success)
+        }else{
+            var p = new Promise(function(resolve,reject){
+                ex._load_js(src,function(){
+                    resolve()
+                })
+            })
+            return p
+        }
+    },
+    _load_js: function(src,success) {
         success = success || function(){};
         var name = src //btoa(src)
         if(!window['__js_hook_'+name]){

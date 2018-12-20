@@ -2832,17 +2832,29 @@ var com_input_date = {
 
             ex.load_css('/static/lib/bootstrap-datepicker1.6.4.min.css');
 
-            ex.load_js('/static/lib/bootstrap-datepicker1.6.4.min.js', function () {
-                ex.load_js('/static/lib/bootstrap-datepicker1.6.4.zh-CN.min.js', function () {
-                    self.input.datepicker(def_conf).on('changeDate', function (e) {
-                        self.$emit('input', self.input.val());
-                    });
-                    // if has init value,then init it
-                    if (self.value) {
-                        self.input.datepicker('update', self.value);
-                        self.input.val(self.value);
-                    }
+            //ex.load_js('/static/lib/bootstrap-datepicker1.6.4.min.js',function(){
+            //    ex.load_js('/static/lib/bootstrap-datepicker1.6.4.zh-CN.min.js',function(){
+            //        self.input.datepicker(def_conf).on('changeDate', function(e) {
+            //            self.$emit('input',self.input.val())
+            //        })
+            //        // if has init value,then init it
+            //        if(self.value){
+            //            self.input.datepicker('update',self.value)
+            //            self.input.val(self.value)
+            //        }
+            //    })
+            //})
+            ex.load_js('/static/lib/bootstrap-datepicker1.6.4.min.js').then(function () {
+                return ex.load_js('/static/lib/bootstrap-datepicker1.6.4.zh-CN.min.js');
+            }).then(function () {
+                self.input.datepicker(def_conf).on('changeDate', function (e) {
+                    self.$emit('input', self.input.val());
                 });
+                // if has init value,then init it
+                if (self.value) {
+                    self.input.datepicker('update', self.value);
+                    self.input.val(self.value);
+                }
             });
         },
         click_input: function click_input() {
