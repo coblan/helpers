@@ -349,13 +349,13 @@ class ModelFields(forms.ModelForm):
         """
         if self.nolimit:
             return True
-        if self.instance.pk != None:
+        if self.instance.pk ==None:
             if self.permit.can_add():
                 return True
-            else:
-                return False
-        else:
-            return self.permit.can_access()
+            #else:
+                #return False
+
+        return self.permit.can_access()
         # perm = self.instance._meta.app_label+'.change_'+self.instance._meta.model_name
         # return self.crt_user.has_perm(perm)
     
