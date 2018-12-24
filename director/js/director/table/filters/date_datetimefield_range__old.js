@@ -21,38 +21,11 @@ var com_date_datetimefield_range={
         }
     },
     template:`<div  class="com-date-range-filter date-filter flex flex-ac">
-                     <!--<date v-model="start" :placeholder="head.label"></date>-->
-                     <span v-text="head.label" style="white-space: nowrap"></span>:
-                        <input class="start form-control input-sm " v-model="start" readonly
-                        style="background-color: white"
-                        placeholder="开始日期">
+                     <date v-model="start" :placeholder="head.label"></date>
                     <div style="display: inline-block;margin: 0 2px;" >-</div>
-                        <!--<date  v-model="end" :placeholder="head.label"></date>-->
-                        <input class="end form-control input-sm"  v-model="end"  readonly
-                         style="background-color: white"
-                         placeholder="结束日期">
+                        <date  v-model="end" :placeholder="head.label"></date>
                 </div>`,
-    mounted:function(){
-        var self=this
-        ex.load_js('/static/lib/laydate/laydate.js',function(){
-            laydate.render({
-                elem: $(self.$el).find('.start')[0],
-                type: 'date',
-                done: function(value, date, endDate){
-                    //self.search_args['_start_'+self.head.name]=value
-                    self.start=value
-                }
-            });
-            laydate.render({
-                elem: $(self.$el).find('.end')[0],
-                type: 'date',
-                done: function(value, date, endDate){
-                    //self.search_args['_end_'+self.head.name]=value
-                    self.end=value
-                }
-            });
-        })
-    },
+
     watch:{
         start:function(nv,ov){
             if(nv && this.end){
