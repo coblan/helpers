@@ -63,8 +63,10 @@ msg-bottom  nice validator的位置在下面，默认在右侧
     }
 
     .field_input{
+        width: 23em;
+
         flex-grow:0;
-      align-self:center;
+        align-self:center;
         padding:5px 20px;
         input {
           /*max-width:25em;*/
