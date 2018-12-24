@@ -47,8 +47,8 @@ var table_panel={
         this.childStore.search()
     },
     methods:{
-        get_custom_store:function(){
-            return []
+        get_custom_store:function(base_table_panel_store){
+            return base_table_panel_store
         },
         emit_finish:function(event){
             this.$emit('finish',event)
