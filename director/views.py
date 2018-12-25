@@ -40,14 +40,18 @@ def ajax_views(request,app=None):
         app_dot_path=conf.module.__name__
         ajax_module=locate('%(app)s.ajax'%{'app':app_dot_path})
     try:
+        print('start ajax_router')
         return ajax_router(request, ajax_module.get_global())
     except KeyError as e:
         rt={'success':False,'msg':'key error '+str(e) +' \n may function name error'}
     except UserWarning as e:
+        print('get UserWarning')
         rt = {'success': False, 'msg': str(e)}
     if isinstance(rt, HttpResponse):
+        print('first rt')
         return rt
     else:
+        print('finael rt')
         return HttpResponse(json.dumps(rt),content_type="application/json")  
 
 def general_upload(request):
