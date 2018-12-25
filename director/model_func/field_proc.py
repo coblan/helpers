@@ -1,10 +1,18 @@
 # encoding:utf-8
 from __future__ import unicode_literals
 from helpers.director.middleware.request_cache import get_request_cache
+from django.forms.models import fields_for_model
+from django.core import exceptions
+
 class BaseFieldProc(object):
-    def __init__(self, instance = None, field = None): 
+    def __init__(self, instance = None, name = None,model=None): 
         self.instance = instance
-        self.field = field
+        self.name=name
+        self.model=model
+        
+        self.form_field=None
+        self.field=None
+        
         catch = get_request_cache()
         self.request = catch.get('request')
         self.crt_user= self.request.user
@@ -24,13 +32,34 @@ class BaseFieldProc(object):
     def dict_table_head(self,head):
         """
         """
-        if self.field.choices:
-            head['editor'] = 'com-table-mapper'
-            #head['options'] =  [{'value':x[0],'label':x[1]} for x in self.field.choices]
+        head=self.get_options(head)
         return head 
     
-    def dict_field_head(self,head):     
+    def dict_field_head(self,head): 
+        head = self.get_options(head)      
         return head
+    
+    def get_options(self,head):
+        try:
+            if not self.form_field:
+                self.form_field = fields_for_model(self.model,fields=[self.name])[self.name]
+            if hasattr(self.form_field,'choices'):
+                head['editor'] = 'com-table-mapper'
+                #head['options'] =  [{'value':x[0],'label':x[1]} for x in self.field.choices]
+                catch = get_request_cache()
+                options_name = '%(model)s.%(field)s.options'% {'model': model_to_name(self.model) ,'field': head['name']}
+                if not catch.get(options_name):
+                    def myoption():
+                        options=[{'value':val,'label':str(lab)} for val,lab in self.form_field.choices]
+                        catch[options_name]=options
+                        return options
+                    head['options']= myoption  #catch.get(options_name)
+                else:
+                    head['options']=catch.get(options_name)
+        except exceptions.FieldError:
+            pass
+        return head
+    
     
     def filter_get_range_head(self,name,model):
         """
@@ -64,4 +93,11 @@ class BaseFieldProc(object):
         if q_str == '':
             return None
         return q_str
+
+
+def model_to_name(model):
+    """
+    @model: model or instance
     
+    """
+    return model._meta.app_label+'.'+model._meta.model_name

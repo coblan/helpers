@@ -78,7 +78,7 @@ def sim_dict(instance,filt_attr=None,include=None,exclude=None):
                 mapper_cls = field_map.get(field.__class__)
                 
             if mapper_cls:
-                mapper = mapper_cls()
+                mapper = mapper_cls(instance=instance,name=field.name,model=field.model)
                 out.update( mapper.to_dict(instance,field.name) )
                 if '_%s_label'%field.name in out:
                     continue
@@ -350,6 +350,7 @@ def form_to_head(form,include=None):
 ID_tr= _('ID')
 
 def model_to_head(model,include=[],exclude=[]):
+    """不要再使用。被table 的 函数替换掉了"""
     out = []
     model_name = model_to_name(model)
     for field in model._meta.get_fields():

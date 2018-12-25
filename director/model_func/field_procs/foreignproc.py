@@ -5,6 +5,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from .. .base_data import field_map
 from django.utils.translation import ugettext as _
 from ..dictfy  import model_to_name,name_to_model
+from helpers.director.middleware.request_cache import get_request_cache
 
 class ForeignProc(BaseFieldProc):
     def to_dict(self,inst,name):
@@ -37,10 +38,20 @@ class ForeignProc(BaseFieldProc):
         return head
     
     def filter_get_head(self, name, model):
+        catch = get_request_cache()
+        option_name = model_to_name(model)+'.%s.options'%name
         this_field= model._meta.get_field(name)
-        ls=this_field.get_choices()
-        ls=ls[1:]
-        options= [{'value':x[0],'label':x[1]} for x in ls]       
+        if not catch.get(option_name):
+            def mychoice_func():
+                ls=this_field.get_choices()
+                ls=ls[1:]
+                options = [{'value':x[0],'label':x[1]} for x in ls] 
+                catch[option_name] = options
+                return options
+            options= mychoice_func  
+            
+        else:
+            options = catch.get(option_name)
         return {
             'name':name,
             'label':_(this_field.verbose_name),

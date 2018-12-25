@@ -216,6 +216,9 @@ class RowFilter(object):
         if self.fields_sort:
             out_list = [x for x in out_list if x['name'] in self.fields_sort]
             out_list = sorted(out_list, key= lambda x: self.fields_sort.index(x['name']))
+        
+        out_list = evalue_container(out_list)
+        
         return out_list
     
     def clean_query(self, query): 
@@ -450,6 +453,7 @@ class ModelTable(object):
             #ls.extend(row_filters)
         ops = self.get_operation()
         ops = evalue_container(ops)
+        
         return {
             'heads':self.get_heads(),
             'rows': [], #self.get_rows(),
@@ -501,6 +505,7 @@ class ModelTable(object):
     
     def getExtraHead(self):
         return []
+    
     @request_cache
     def get_heads(self):
         """
@@ -525,30 +530,52 @@ class ModelTable(object):
         heads = [self.dict_head(head) for head in heads]
 
         # 需要使用form.field才能提取到choices
-        form_fields = fields_for_model(self.model)
-        for head in model_heads:
-            #field = self.model._meta.get_field(head['name'])  
-            if 'options' in head:
-                continue
-            field =  form_fields.get(head['name'])
-            if hasattr(field, 'choices') and 'options' not in head :
-                catch = get_request_cache()
-                options_name = '%s_field_options'% ( model_to_name(self.model) + head['name'])
-                if not catch.get(options_name):
-                    catch[options_name]=[{'value':val,'label':str(lab)} for val,lab in field.choices]    
-                head['options']=catch.get(options_name)
+        #form_fields = fields_for_model(self.model)
+        #for head in model_heads:
+            ##field = self.model._meta.get_field(head['name'])  
+            #if 'options' in head:
+                #continue
+            #field =  form_fields.get(head['name'])
+            #if hasattr(field, 'choices'):
+                #catch = get_request_cache()
+                #options_name = '%s_field_options'% ( model_to_name(self.model) + head['name'])
+                #if not catch.get(options_name):
+                    #catch[options_name]=[{'value':val,'label':str(lab)} for val,lab in field.choices]    
+                #head['options']=catch.get(options_name)
+                
+        heads=evalue_container(heads)
         return heads
     
     def get_model_heads(self): 
         ls = self.permited_fields()   
-        ls = [x for x in ls if x not in self.hide_fields]
-        heads = model_to_head(self.model,include=ls)
+        visible_fields = [x for x in ls if x not in self.hide_fields]
+        heads = []
+        model_name = model_to_name(self.model)
+        for field in self.model._meta.get_fields():
+            if isinstance(field,models.Field): # 可能是为了排除 related_object
+                dc= {'name':field.name,'label':_(field.verbose_name)}
+                
+                #fieldName = model_name + '.' + field.name
+                #if fieldName in field_map:
+                    #mapper = field_map.get(fieldName)
+                    #mapper(name=field.name,model=self.model).dict_table_head(dc)
+                #elif field.__class__ in field_map:
+                    #mapper = field_map.get(field.__class__)
+                    #if hasattr(mapper,'dict_table_head'):
+                        #mapper(name=field.name,model=self.model).dict_table_head(dc)
+                ##elif isinstance(field,models.ForeignKey):
+                    ##dc['editor']='com-table-label-shower'            
+                    
+                heads.append(dc)
+
+        heads=[x for x in heads if x.get('name') in visible_fields]
+        #heads.sort(key=lambda x : heads.index(x.get('name')))
         return heads
     
     def get_light_heads(self): 
         heads = self.get_model_heads()
         heads.extend(self.getExtraHead())
-        heads = self.fields_sort_heads(heads)   
+        #heads = self.fields_sort_heads(heads)   
         return heads 
     
     def footer_by_dict(self, dc): 
