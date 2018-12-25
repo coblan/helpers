@@ -342,7 +342,7 @@ class ModelFields(forms.ModelForm):
                 for head in heads:
                     if head['name'] == k:
                         tmp_heads.append(head)
-            heads=heads
+            heads=tmp_heads
             
         heads=evalue_container(heads)
         return heads
