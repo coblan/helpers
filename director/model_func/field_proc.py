@@ -1,10 +1,13 @@
 # encoding:utf-8
 from __future__ import unicode_literals
-
+from helpers.director.middleware.request_cache import get_request_cache
 class BaseFieldProc(object):
     def __init__(self, instance = None, field = None): 
         self.instance = instance
         self.field = field
+        catch = get_request_cache()
+        self.request = catch.get('request')
+        self.crt_user= self.request.user
         
     def to_dict(self,inst,name):
         """返回字典

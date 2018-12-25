@@ -33,6 +33,7 @@ class ForeignProc(BaseFieldProc):
     
     def dict_table_head(self, head): 
         head['editor'] = 'com-table-label-shower'
+        head['options']=[]
         return head
     
     def filter_get_head(self, name, model):

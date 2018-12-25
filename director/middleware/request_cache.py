@@ -13,11 +13,12 @@ def get_request_cache():
 def request_cache(fun): 
     def _fun(*args, **kws):
         cache = get_request_cache()
-        key = hash(fun)
+        key = str( hash(fun))
         if args:
-            key += hash(args)
+            for item in args:
+                key += '%s_%s'%(item.__class__.__name__, id(item) )
         if kws:
-            key += hash(json.dumps(kws, sort_keys=True))
+            key += str( hash(json.dumps(kws, sort_keys=True)) )
             
         if cache.get(key):
             return cache.get(key)

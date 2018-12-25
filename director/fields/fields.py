@@ -17,7 +17,7 @@ from helpers.director.base_data import director
 from helpers.director.data_format.json_format import DirectorEncoder
 from django.conf import settings
 from django.utils.translation import ugettext as _
-from helpers.director.middleware.request_cache import get_request_cache
+from helpers.director.middleware.request_cache import get_request_cache,request_cache
 
 import logging
 sql_log = logging.getLogger('director.sql_op')
@@ -190,6 +190,7 @@ class ModelFields(forms.ModelForm):
             'extra_mixins':self.extra_mixins
         } 
     
+    @request_cache
     def get_head_context(self):
         heads = self.get_heads()
         ops =  self.get_operations()
@@ -245,7 +246,10 @@ class ModelFields(forms.ModelForm):
             for field in self.instance._meta.get_fields(): #get_all_field_names():
                 f=field.name
                 if f in self.fields:
-                    value = getattr(self.instance,f)
+                    try:
+                        value = getattr(self.instance,f)
+                    except field.related_model.DoesNotExist as e:
+                        value = None
                     if hasattr(value,'all'):
                         value=value.all()
                     self.fields[f].initial= value
@@ -310,7 +314,7 @@ class ModelFields(forms.ModelForm):
             out.append(dc)
         return out
     
-     
+    @request_cache
     def get_heads(self):
         
         #heads = form_to_head(self)

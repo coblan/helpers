@@ -14,7 +14,7 @@ import time
 from django.conf import settings
 from helpers.director.base_data import director
 from django.core.exceptions import FieldDoesNotExist
-from helpers.director.middleware.request_cache import get_request_cache
+from helpers.director.middleware.request_cache import get_request_cache,request_cache
 from helpers.director.model_func.field_proc import BaseFieldProc
 from helpers.func.collection.container import evalue_container
 
@@ -435,6 +435,7 @@ class ModelTable(object):
             ls.extend(row_filters)
         return ls
     
+    @request_cache
     def get_head_context(self):
         """
         有些时候，最先不需要返回rows，而只返回filters，head等，等待用户选择后，才返回rows
@@ -500,7 +501,7 @@ class ModelTable(object):
     
     def getExtraHead(self):
         return []
-    
+    @request_cache
     def get_heads(self):
         """
         return:[{"name": "name", "label": "\u59d3\u540d"}, {"sortable": true, "name": "age", "label": "\u5e74\u9f84"}]
@@ -527,6 +528,8 @@ class ModelTable(object):
         form_fields = fields_for_model(self.model)
         for head in model_heads:
             #field = self.model._meta.get_field(head['name'])  
+            if 'options' in head:
+                continue
             field =  form_fields.get(head['name'])
             if hasattr(field, 'choices') and 'options' not in head :
                 catch = get_request_cache()
