@@ -8,12 +8,22 @@ from django.utils.translation import ugettext as _
 
 class CharProc(BaseFieldProc):
 
+    def dict_field_head(self, head): 
+        options_head = self.get_options()   
+        if options_head:
+            head.update(options_head)
+            head['editor'] = 'com-field-select'
+        else:
+            head['editor'] = 'linetext'
+        return head    
+
     def filter_get_range_head(self,name,model):
         f = model._meta.get_field(name)
         return {'name':name,
                 'label':_(f.verbose_name),
                 'editor':'com-date-range-filter'
                 }
+    
     def filter_get_head(self, name, model):
         this_field= model._meta.get_field(name)
         if this_field.choices:        

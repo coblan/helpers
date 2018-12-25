@@ -18,10 +18,15 @@ class IntProc(BaseFieldProc):
 
     
     def dict_field_head(self, head): 
-        if hasattr(self.field, 'choices'): 
-            head['editor'] = 'sim_select'
-            #options = [{'value':x[0],'label':x[1]} for x in self.field.choices]
-            #head['options'] = options
+        options = self.get_options()   
+        if options:
+            head['options']=options
+            head['editor'] = 'com-field-select'
+    
+        #if hasattr(self.field, 'choices'): 
+            #head['editor'] = 'sim_select'
+            ##options = [{'value':x[0],'label':x[1]} for x in self.field.choices]
+            ##head['options'] = options
         else:
             head['editor'] = 'number'
             head['fv_rule'] = 'range(-2147483648~2147483647)'

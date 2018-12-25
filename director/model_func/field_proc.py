@@ -32,33 +32,39 @@ class BaseFieldProc(object):
     def dict_table_head(self,head):
         """
         """
-        head=self.get_options(head)
+        options=self.get_options()
+        if options:
+            head['options'] = options
+            head['editor'] = 'com-table-mapper'
         return head 
     
     def dict_field_head(self,head): 
-        head = self.get_options(head)      
+        options = self.get_options()   
+        if options:
+            head['options']=options
+            head['editor'] = 'com-field-select'
         return head
     
-    def get_options(self,head):
+    def get_options(self):
+        options=None
         try:
             if not self.form_field:
                 self.form_field = fields_for_model(self.model,fields=[self.name])[self.name]
             if hasattr(self.form_field,'choices'):
-                head['editor'] = 'com-table-mapper'
                 #head['options'] =  [{'value':x[0],'label':x[1]} for x in self.field.choices]
                 catch = get_request_cache()
-                options_name = '%(model)s.%(field)s.options'% {'model': model_to_name(self.model) ,'field': head['name']}
+                options_name = '%(model)s.%(field)s.options'% {'model': model_to_name(self.model) ,'field': self.name}
                 if not catch.get(options_name):
                     def myoption():
                         options=[{'value':val,'label':str(lab)} for val,lab in self.form_field.choices]
                         catch[options_name]=options
                         return options
-                    head['options']= myoption  #catch.get(options_name)
+                    options= myoption  #catch.get(options_name)
                 else:
-                    head['options']=catch.get(options_name)
+                    options=catch.get(options_name)
         except exceptions.FieldError:
             pass
-        return head
+        return options
     
     
     def filter_get_range_head(self,name,model):
