@@ -7,16 +7,26 @@ var multi_chosen={
 </select>`,
     mounted:function(){
         var self=this
-        ex.load_css('https://cdn.bootcss.com/chosen/1.8.2/chosen.min.css')
-        ex.load_js('https://cdn.bootcss.com/chosen/1.8.2/chosen.jquery.min.js',function(){
-            $(self.$el).chosen({
-                search_contains:true
-            }).change(function(event){
-                self.$emit('input',$(this).val())
-            });
-            self.setValue(self.value)
-            $(self.$el).siblings('.chosen-container').removeAttr('style')
+        ex.load_css(cfg.js_lib.chosen_css)
+        ex.load_js(cfg.js_lib.chosen).then(function(){
+                $(self.$el).chosen({
+                    search_contains:true
+                }).change(function(event){
+                    self.$emit('input',$(this).val())
+                });
+                self.setValue(self.value)
+                $(self.$el).siblings('.chosen-container').removeAttr('style')
         })
+        //ex.load_css('https://cdn.bootcss.com/chosen/1.8.2/chosen.min.css')
+        //ex.load_js('https://cdn.bootcss.com/chosen/1.8.2/chosen.jquery.min.js',function(){
+        //    $(self.$el).chosen({
+        //        search_contains:true
+        //    }).change(function(event){
+        //        self.$emit('input',$(this).val())
+        //    });
+        //    self.setValue(self.value)
+        //    $(self.$el).siblings('.chosen-container').removeAttr('style')
+        //})
     },
     watch:{
         value:function(nv){
