@@ -36,7 +36,7 @@ class SelectSearch(object):
         try:
             f = self.model._meta.get_field(self.qf)
             mapperCls = field_map.get(f.__class__)
-            mapper = mapperCls(field = f)
+            mapper = mapperCls(name=f.name,model = f.model)
             q_str = mapper.filter_clean_search(self.q)
         except :
             q_str = self.q
