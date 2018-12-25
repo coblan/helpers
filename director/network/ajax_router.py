@@ -52,8 +52,10 @@ def ajax_view(request):
             return HttpResponse(json.dumps(rt),content_type="application/json")
             
     """
-    router=RouterAjax(request, scope,rt_except= True) #  not settings.DEBUG) 运行时需要根据异常返回 success:false,
-    rt = router.run()                                  # 所以不能屏蔽 rt_except
+    # rt_except 指 RouterAjax 是否捕捉异常，转换为msg。 
+    # 现在异常是在 ajax_view中处理，所以这里不再捕捉异常 ,令他永远等于false
+    router=RouterAjax(request, scope,rt_except= False) #  not settings.DEBUG) rt_except 
+    rt = router.run() 
     catch = get_request_cache()
     if catch['msg']:
         bb =  rt.get('msg')
