@@ -555,16 +555,16 @@ class ModelTable(object):
             if isinstance(field,models.Field): # 可能是为了排除 related_object
                 dc= {'name':field.name,'label':_(field.verbose_name)}
                 
-                #fieldName = model_name + '.' + field.name
-                #if fieldName in field_map:
-                    #mapper = field_map.get(fieldName)
-                    #mapper(name=field.name,model=self.model).dict_table_head(dc)
-                #elif field.__class__ in field_map:
-                    #mapper = field_map.get(field.__class__)
-                    #if hasattr(mapper,'dict_table_head'):
-                        #mapper(name=field.name,model=self.model).dict_table_head(dc)
-                ##elif isinstance(field,models.ForeignKey):
-                    ##dc['editor']='com-table-label-shower'            
+                fieldName = model_name + '.' + field.name
+                if fieldName in field_map:
+                    mapper = field_map.get(fieldName)
+                    mapper(name=field.name,model=self.model).dict_table_head(dc)
+                elif field.__class__ in field_map:
+                    mapper = field_map.get(field.__class__)
+                    if hasattr(mapper,'dict_table_head'):
+                        mapper(name=field.name,model=self.model).dict_table_head(dc)
+                #elif isinstance(field,models.ForeignKey):
+                    #dc['editor']='com-table-label-shower'            
                     
                 heads.append(dc)
 
