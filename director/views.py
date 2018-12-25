@@ -16,6 +16,10 @@ from django.views.decorators.csrf import csrf_exempt
 from .network.ckeditor import Ckeditor
 from .base_data import director
 
+import logging
+
+req_log = logging.getLogger('general_log')
+
 """
 >5>helpers/port.rst>
 总的ajax view
@@ -40,18 +44,18 @@ def ajax_views(request,app=None):
         app_dot_path=conf.module.__name__
         ajax_module=locate('%(app)s.ajax'%{'app':app_dot_path})
     try:
-        print('start ajax_router')
+        req_log.debug('start ajax_router')
         return ajax_router(request, ajax_module.get_global())
     except KeyError as e:
         rt={'success':False,'msg':'key error '+str(e) +' \n may function name error'}
     except UserWarning as e:
-        print('get UserWarning')
+        req_log.debug('get UserWarning')
         rt = {'success': False, 'msg': str(e)}
     if isinstance(rt, HttpResponse):
-        print('first rt')
+        req_log.debug('rt 是 response对象，直接返回')
         return rt
     else:
-        print('finael rt')
+        req_log.debug('构造response对象返回')
         return HttpResponse(json.dumps(rt),content_type="application/json")  
 
 def general_upload(request):
