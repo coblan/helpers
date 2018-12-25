@@ -45,7 +45,7 @@ def ajax_views(request,app=None):
         ajax_module=locate('%(app)s.ajax'%{'app':app_dot_path})
     try:
         req_log.debug('start ajax_router')
-        return ajax_router(request, ajax_module.get_global())
+        rt = ajax_router(request, ajax_module.get_global())
     except KeyError as e:
         rt={'success':False,'msg':'key error '+str(e) +' \n may function name error'}
     except UserWarning as e:
