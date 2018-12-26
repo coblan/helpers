@@ -1,7 +1,7 @@
 from helpers.director.base_data import js_tr_list, js_lib_list
 from django.utils.translation import ugettext as _
 from helpers.maintenance.update_static_timestamp import js_stamp_dc
-
+from django.conf import settings
 def get_tr():
     return {
         'base_setting':_('Basic Setting'),
@@ -17,10 +17,15 @@ def get_tr():
 js_tr_list.append(get_tr)
 
 def get_lib(request): 
+    if settings.DEBUG:
+        vue='/static/lib/vue2.5/vue.js'
+    else:
+        vue = '/static/lib/vue2.5/vue.min.js'
+        
     dc = {
         #'vuejs': 'https://cdn.bootcss.com/vue/2.5.16/vue.js',
         'jquery': '/static/lib/jquery3.2.1.min.js',
-        'vuejs': '/static/lib/vue.2.5.16.js',
+        'vuejs': vue,
         'vuex': '/static/lib/vuex.min.js', 
 
         'font_awesome': '/static/lib/font-awesome4.7/font-awesome4.7.min.css',

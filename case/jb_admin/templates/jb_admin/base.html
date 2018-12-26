@@ -150,13 +150,15 @@ desired effect
 
 {% include 'jb_admin/cus_base.html' %}
 <script>
-    Vue.config.devtools = true
+    {% if debug %}
+       Vue.config.devtools = true
+    {% endif %}
     menu= {{menu| jsonify}}
     menu_expand_all = {{ menu_expand_all | jsonify }} || false
     head_bar_data ={{head_bar_data | jsonify}}
-    js_config = {{js_config | jsonify}}
-    ex.assign(cfg.tr,js_config.tr)
-    cfg.js_lib = js_config.js_lib
+
+//    js_config = {//{js_config | jsonify}//}
+
 
     $(function(){
 
