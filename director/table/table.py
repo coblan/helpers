@@ -572,10 +572,11 @@ class ModelTable(object):
         #heads.sort(key=lambda x : heads.index(x.get('name')))
         return heads
     
+    @request_cache
     def get_light_heads(self): 
         heads = self.get_model_heads()
         heads.extend(self.getExtraHead())
-        #heads = self.fields_sort_heads(heads)   
+        heads = self.fields_sort_heads(heads)   
         return heads 
     
     def footer_by_dict(self, dc): 
