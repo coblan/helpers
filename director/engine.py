@@ -138,6 +138,7 @@ class BaseEngine(object):
                 ctx['page_label'] =page.get_label()
             ctx['head_bar_data']=self.get_head_bar_data(request)
             ctx['js_config'] = self.getJsConfig()
+            
             ctx=self.custome_ctx(ctx)
             resp= render(request,template,context=ctx)
         if getattr(page,'get_cache_control',None):
@@ -202,7 +203,7 @@ class BaseEngine(object):
             'lans':lans,
             'crt_lan': crt_lan,
             'tr':tr_dc ,
-            'js_lib':lib_dc
+            'js_lib':lib_dc,
         }
     
 

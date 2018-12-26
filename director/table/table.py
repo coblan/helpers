@@ -202,11 +202,11 @@ class RowFilter(object):
                 continue
             
             if name in self.range_fields:
-                filter_head = proc_cls().filter_get_range_head(name,self.model)
+                filter_head = proc_cls(name=name,model=self.model).filter_get_range_head(name,self.model)
                 normal_heads.append(filter_head)
   
             else:
-                filter_head = proc_cls().filter_get_head(name,self.model)
+                filter_head = proc_cls(name=name,model=self.model).filter_get_head(name,self.model)
                 normal_heads.append(filter_head)
         
         out_list = extraHead

@@ -11,7 +11,6 @@ def get_tr():
         'change_password':_('Change Password'),
         'logout':_('LogOut'),
         'login':_('LogIn'), 
-        
     }
 
 js_tr_list.append(get_tr)
