@@ -44,14 +44,20 @@ class UserFields(ModelFields):
             head['editor']='field_multi_chosen'
         return head
 
-    
-    def get_heads(self): 
-        heads = ModelFields.get_heads(self)
+    def getExtraHeads(self):
+        ls =[]
         if  'password' in self.permit.changeable_fields():
-            heads.append({
+            ls.append({
                 'name': 'user_password', 'label': '用户密码', 'editor': 'password', 'required': '!scope.row.pk',
             })
-        return heads
+        return ls
+    #def get_heads(self): 
+        #heads = ModelFields.get_heads(self)
+        #if  'password' in self.permit.changeable_fields():
+            #heads.append({
+                #'name': 'user_password', 'label': '用户密码', 'editor': 'password', 'required': '!scope.row.pk',
+            #})
+        #return heads
     
     def clean_save(self): 
         if self.kw.get('user_password'):
