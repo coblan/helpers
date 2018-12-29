@@ -5,7 +5,7 @@ from django.utils.translation import ugettext as _
 from django.db import models
 from .dir_man import DirMan
 from helpers.director.shortcut import ModelFields
-from helpers.director.model_validator import has_str
+from helpers.director.model_func.model_validator import has_str
 
 class DepartmentBase(models.Model):
     name=models.CharField(_('department name'),max_length=500,default='new department',validators=[has_str])

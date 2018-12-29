@@ -121,9 +121,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
     {% endblock %}
 </head>
 
-<script>
+{% include 'director/reverse.html' %}
 
-    Vue.config.devtools = true
+<script>
+    if(js_config.is_debug){
+        Vue.config.devtools = true
+    }
 
     //    menu= {{menu| jsonify}}
     //    head_bar_data ={{head_bar_data | jsonify}}

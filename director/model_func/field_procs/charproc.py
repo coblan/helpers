@@ -9,9 +9,9 @@ from django.utils.translation import ugettext as _
 class CharProc(BaseFieldProc):
 
     def dict_field_head(self, head): 
-        options_head = self.get_options()   
-        if options_head:
-            head.update(options_head)
+        options = self.get_options()   
+        if options:
+            head['options']=options
             head['editor'] = 'com-field-select'
         else:
             head['editor'] = 'linetext'
