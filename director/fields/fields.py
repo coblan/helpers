@@ -19,7 +19,9 @@ from django.conf import settings
 from django.utils.translation import ugettext as _
 from helpers.director.middleware.request_cache import get_request_cache,request_cache
 from helpers.func.collection.container import evalue_container
+
 import logging
+# sql_log 可能没有什么用
 sql_log = logging.getLogger('director.sql_op')
 modelfields_log = logging.getLogger('ModelFields.save_form')
 

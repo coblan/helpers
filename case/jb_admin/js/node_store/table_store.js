@@ -84,9 +84,12 @@ var table_store={
             })
         },
         add_new:function(kws){
+            var head =kws
+
             var self = this
             var fields_ctx=kws.fields_ctx
             var dc = {fun:'get_row',director_name:fields_ctx.director_name}
+
             if(kws.init_fields){
                 ex.assign(dc,kws.init_fields)
             }
@@ -97,6 +100,9 @@ var table_store={
                 var crt_row = resp.get_row
                 if(self.search_args._par){
                     crt_row.meta_par=self.search_args._par
+                }
+                if(head.preset){
+                    ex.vueAssign(crt_row,ex.eval(head.preset,{ts:self}))
                 }
                 //var pop_id= new Date().getTime()
                 // e = {name:'after_save',new_row:event.new_row,old_row:event.old_row}
@@ -119,7 +125,7 @@ var table_store={
                         self.update_or_insert(new_row, crt_row)
                         layer.close(win)
                         if(kws.after_save){
-                            ex.eval(kws.after_save,self)
+                            ex.eval(kws.after_save,{ts:self})
                         }
                     })
                 }
