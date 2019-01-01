@@ -34,6 +34,7 @@ class PhoneCode(models.Model):
     code = models.CharField('验证码', max_length = 30)
     valid = models.BooleanField('是否有效', default = True)
     create_time = models.DateTimeField(auto_now_add= True)
-    
+
+
 
     

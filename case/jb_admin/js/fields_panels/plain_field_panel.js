@@ -31,7 +31,7 @@ var com_plain_fields = {
     components:window._baseInput,
     mixins:[mix_fields_data,mix_nice_validator],
     template:` <div class="field-panel plain-field-panel">
-        <div v-for="head in heads">
+        <div class="field" v-for="head in heads">
             <label for="" v-text="head.label"></label>
             <span class="req_star" v-if='head.required'>*</span>
              <span v-if="head.help_text" class="help-text clickable">
