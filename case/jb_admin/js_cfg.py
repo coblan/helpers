@@ -78,6 +78,7 @@ def get_lib(request):
         #'md5': 'https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.min.js',
         
         'jb_admin_pack_js': '/static/js/jb_admin.pack.js?t=%s&t2=123'%js_stamp_dc.get('jb_admin_pack_js'),
+        'jb_admin': '/static/js/jb_admin.pack.js?t=%s&t2=123'%js_stamp_dc.get('jb_admin_pack_js'),
         #'swiper': 'https://cdn.bootcss.com/Swiper/4.3.0/js/swiper.min.js',
         #'swiper_css': 'https://cdn.bootcss.com/Swiper/4.3.0/css/swiper.min.css',  
         'swiper': '/static/lib/swiper/js/swiper.min.js',
