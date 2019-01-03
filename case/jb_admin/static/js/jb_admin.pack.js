@@ -1239,13 +1239,17 @@ Vue.component('com-field-label-shower', label_shower);
 "use strict";
 
 
-var _invite_code = __webpack_require__(84);
+var _invite_code = __webpack_require__(83);
 
 var invite_code = _interopRequireWildcard(_invite_code);
 
-var _line_text = __webpack_require__(85);
+var _line_text = __webpack_require__(84);
 
 var line_text = _interopRequireWildcard(_line_text);
+
+var _phone_code = __webpack_require__(85);
+
+var phone_code = _interopRequireWildcard(_phone_code);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -1349,99 +1353,6 @@ Vue.component('com-field-table-list', order_list);
 
 /***/ }),
 /* 19 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Vue.component('com-field-phone-code', {
-    props: ['row', 'head'],
-    template: ' <div  style="position: relative;" class="phone-code flex">\n         <input  type="text" class="form-control input-sm" v-model="row[head.name]"\n            :id="\'id_\'+head.name" :name="head.name"\n            :placeholder="head.placeholder" :autofocus="head.autofocus" :maxlength=\'head.maxlength\'>\n\n          <button style="width: 9em" type="button" class="btn btn-default btn-sm"\n              :disabled="vcode_count !=0"\n               @click="sendGetCodeOrder()" v-text="vcodeLabel"></button>\n     </div>\n    ',
-    data: function data() {
-        return {
-            vcode_count: 0
-        };
-    },
-    computed: {
-        vcodeLabel: function vcodeLabel() {
-            if (this.vcode_count != 0) {
-                return '获取验证码(' + this.vcode_count + ')';
-            } else {
-                return '获取验证码';
-            }
-        },
-        hasValidPhone: function hasValidPhone() {
-            var mt = /^1[3-9]\d{9}$/.exec(this.row[this.head.phone_field]);
-            if (mt) {
-                return true;
-            } else {
-                return false;
-            }
-        }
-    },
-    methods: {
-        sendGetCodeOrder: function sendGetCodeOrder() {
-            var self = this;
-            if (!$(this.$parent.$el).find('[name=' + this.head.phone_field + ']').isValid()) {
-                return;
-            }
-
-            cfg.show_load();
-            ex.director_call(this.head.fun, { row: this.row }, function (resp) {
-                cfg.hide_load();
-
-                setTimeout(function () {
-                    self.countGetVCodeAgain();
-                }, 1000);
-            });
-
-            //ex.vueParCall(this,'get_phone_code',{com_vcode:this})
-            //this.$emit('field-event',{fun:'get_phone_code'})
-        },
-        //checkImageCode:function(phone,image_key,image_code){
-        //    var self=this
-        //    $(self.$el).find('input').trigger("hidemsg")
-        //
-        //    //if(this.row.image_code && this.hasValidPhone){
-        //    var data={
-        //        Phone:phone,
-        //        Key:image_key,
-        //        Answer:image_code,
-        //    }
-        //    cfg.show_load()
-        //    service_post('/anonymity/vcode/generate',data,function(resp){
-        //        if(resp.error_description){
-        //            $(self.$el).find('input').trigger("showmsg", ["error", resp.error_description ])
-        //        }else if(resp.success){
-        //            //$(self.$el).find('.image_code').trigger("showmsg", ["ok", '正确' ])
-        //            setTimeout(function(){
-        //                //self.image_valid=true
-        //                self.countGetVCodeAgain()
-        //            },1000)
-        //        }
-        //        // else {
-        //        //    $(self.$el).find('.image_code').trigger("showmsg", ["error", resp.error_description ])
-        //        //}
-        //
-        //    },false)
-        //    //}
-        //},
-        countGetVCodeAgain: function countGetVCodeAgain() {
-            var self = this;
-            self.vcode_count = 120;
-            var idx = setInterval(function () {
-                self.vcode_count -= 1;
-                if (self.vcode_count <= 0) {
-                    clearInterval(idx);
-                    self.vcode_count = 0;
-                }
-            }, 1000);
-        }
-    }
-});
-
-/***/ }),
-/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1625,7 +1536,7 @@ var com_file_uploader = exports.com_file_uploader = {
 Vue.component('com-field-plain-file', field_file_uploader);
 
 /***/ }),
-/* 21 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1670,7 +1581,7 @@ var pop_table_select = {
 Vue.component('com-field-pop-table-select', pop_table_select);
 
 /***/ }),
-/* 22 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1696,7 +1607,7 @@ var validate_code = {
 Vue.component('com-field-validate-code', validate_code);
 
 /***/ }),
-/* 23 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1713,7 +1624,7 @@ Vue.component('com-field-op-btn', {
 });
 
 /***/ }),
-/* 24 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1734,7 +1645,7 @@ var suit_fields_local = _interopRequireWildcard(_suit_fields_local);
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 /***/ }),
-/* 25 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1774,8 +1685,16 @@ var com_plain_fields = {
     template: ' <div class="field-panel plain-field-panel">\n        <div class="field" v-for="head in heads">\n            <label for="" v-text="head.label"></label>\n            <span class="req_star" v-if=\'head.required\'>*</span>\n             <span v-if="head.help_text" class="help-text clickable">\n                    <i style="color: #3780af;position: relative;top:10px;" @click="show_msg(head.help_text,$event)" class="fa fa-question-circle" ></i>\n              </span>\n              <div class="field-input">\n                <component v-if="head.editor" :is="head.editor"\n                     @field-event="$emit(\'field-event\',$event)"\n                     :head="head" :row="row"></component>\n            </div>\n\n        </div>\n\n        <div class="submit-block">\n            <button @click="panel_submit" type="btn"\n                :class="[\'btn\',btnCls]"><span v-text="okBtn"></span></button>\n        </div>\n        </div>',
     methods: {
         panel_submit: function panel_submit() {
-            if (this.isValid()) {
-                this.$emit('submit');
+            //if(this.isValid()){
+            //    this.$emit('submit')
+            //}
+
+            if (this.$listeners && this.$listeners.submit) {
+                if (this.isValid()) {
+                    this.$emit('submit', this.row);
+                }
+            } else {
+                this.submit();
             }
         },
         show_msg: function show_msg(msg, event) {
@@ -1789,7 +1708,7 @@ window.com_plain_fields = com_plain_fields;
 Vue.component('com-plain-field-panel', com_plain_fields);
 
 /***/ }),
-/* 26 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1825,7 +1744,7 @@ function pop_edit_local(row, fields_ctx, callback, layerConfig) {
 window.pop_edit_local = pop_edit_local;
 
 /***/ }),
-/* 27 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1849,7 +1768,7 @@ window.com_sim_fields_local = com_sim_fields_local;
 Vue.component('com-sim-fields-local', com_sim_fields_local);
 
 /***/ }),
-/* 28 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1863,7 +1782,7 @@ Vue.component('com-head-dropdown', {
 });
 
 /***/ }),
-/* 29 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1887,7 +1806,7 @@ Vue.component('com-head-sm-link', {
 });
 
 /***/ }),
-/* 30 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1939,7 +1858,7 @@ Vue.component('com-widget-el-tab', {
 });
 
 /***/ }),
-/* 31 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2082,7 +2001,7 @@ function pop_fields_layer(row, fields_ctx, callback, layerConfig) {
 window.pop_fields_layer = pop_fields_layer;
 
 /***/ }),
-/* 32 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2144,7 +2063,7 @@ function pop_layer(com_ctx, component_name, callback, layerConfig) {
 window.pop_layer = pop_layer;
 
 /***/ }),
-/* 33 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2253,7 +2172,7 @@ function pop_table_layer(row, table_ctx, callback, layer_config) {
 window.pop_table_layer = pop_table_layer;
 
 /***/ }),
-/* 34 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2268,7 +2187,7 @@ Vue.component('com-widget-stack', {
 });
 
 /***/ }),
-/* 35 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2344,7 +2263,7 @@ var mix_ele_table_adapter = {
 window.mix_ele_table_adapter = mix_ele_table_adapter;
 
 /***/ }),
-/* 36 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2490,20 +2409,9 @@ var mix_fields_data = {
                     ex.vueAssign(self.row, rt.row);
                     self.after_save(rt.row);
                     self.setErrors({});
+                    self.$emit('finish', rt.row);
                 }
             });
-
-            //self.dataSaver(function(rt){
-            //    if( rt.errors){
-            //        cfg.hide_load()
-            //        self.setErrors(rt.errors)
-            //        self.showErrors(rt.errors)
-            //    }else{
-            //        cfg.hide_load(1000)
-            //        self.after_save(rt.row)
-            //        self.setErrors({})
-            //    }
-            //})
         },
 
         after_save: function after_save(new_row) {
@@ -2524,7 +2432,7 @@ var mix_fields_data = {
 window.mix_fields_data = mix_fields_data;
 
 /***/ }),
-/* 37 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2620,7 +2528,7 @@ var nice_validator = {
 };window.mix_nice_validator = nice_validator;
 
 /***/ }),
-/* 38 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3186,7 +3094,7 @@ function swap(arr, k, j) {
 window.mix_table_data = mix_table_data;
 
 /***/ }),
-/* 39 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3274,7 +3182,7 @@ var mix_v_table_adapter = {
 window.mix_v_table_adapter = mix_v_table_adapter;
 
 /***/ }),
-/* 40 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3299,7 +3207,7 @@ $.validator.config({
 });
 
 /***/ }),
-/* 41 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3316,7 +3224,7 @@ var table_page_store = _interopRequireWildcard(_table_page_store);
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 /***/ }),
-/* 42 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3335,7 +3243,7 @@ var user_info = {
 Vue.component('com-headbar-user-info', user_info);
 
 /***/ }),
-/* 43 */
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3372,7 +3280,7 @@ var pop_fields_panel = _interopRequireWildcard(_pop_fields_panel);
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 /***/ }),
-/* 44 */
+/* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3391,7 +3299,7 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 
 
 /***/ }),
-/* 45 */
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3409,7 +3317,7 @@ var append_html_shower = {
 Vue.component('com-table-append-html-shower', append_html_shower);
 
 /***/ }),
-/* 46 */
+/* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3484,7 +3392,7 @@ var parse_input = {
 Vue.component('com-table-array-mapper', array_mapper);
 
 /***/ }),
-/* 47 */
+/* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3528,7 +3436,7 @@ var array_mapper = {
 Vue.component('com-table-array-obj-shower', array_mapper);
 
 /***/ }),
-/* 48 */
+/* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3576,7 +3484,7 @@ var mapper = {
 Vue.component('com-table-array-option-mapper', mapper);
 
 /***/ }),
-/* 49 */
+/* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3612,7 +3520,7 @@ var bool_shower = {
 Vue.component('com-table-bool-editor', bool_shower);
 
 /***/ }),
-/* 50 */
+/* 49 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3627,7 +3535,7 @@ var bool_shower = {
 Vue.component('com-table-bool-shower', bool_shower);
 
 /***/ }),
-/* 51 */
+/* 50 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3662,7 +3570,7 @@ var call_fun = {
 Vue.component('com-table-call-fun', call_fun);
 
 /***/ }),
-/* 52 */
+/* 51 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3686,7 +3594,7 @@ var change_order = {
 Vue.component('com-table-change-order', change_order);
 
 /***/ }),
-/* 53 */
+/* 52 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3705,7 +3613,7 @@ var check_box = {
 Vue.component('com-table-checkbox', check_box);
 
 /***/ }),
-/* 54 */
+/* 53 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3745,7 +3653,7 @@ var money_shower = {
 Vue.component('com-table-digit-shower', money_shower);
 
 /***/ }),
-/* 55 */
+/* 54 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3787,7 +3695,7 @@ var extra_click = {
 Vue.component('com-table-extraclick', extra_click);
 
 /***/ }),
-/* 56 */
+/* 55 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3851,7 +3759,7 @@ var extra_click_plus = {
 Vue.component('com-table-extraclick-plus', extra_click_plus);
 
 /***/ }),
-/* 57 */
+/* 56 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3878,7 +3786,7 @@ var foreign_click_select = {
 Vue.component('com-table-foreign-click-select', foreign_click_select);
 
 /***/ }),
-/* 58 */
+/* 57 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3893,7 +3801,7 @@ var bool_shower = {
 Vue.component('com-table-html-shower', bool_shower);
 
 /***/ }),
-/* 59 */
+/* 58 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3928,7 +3836,7 @@ var bool_shower = {
 Vue.component('com-table-jump-link', bool_shower);
 
 /***/ }),
-/* 60 */
+/* 59 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3952,7 +3860,7 @@ var label_shower = {
 Vue.component('com-table-label-shower', label_shower);
 
 /***/ }),
-/* 61 */
+/* 60 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4025,7 +3933,7 @@ var _readonly = {
 };
 
 /***/ }),
-/* 62 */
+/* 61 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4042,7 +3950,7 @@ var sequence = _interopRequireWildcard(_sequence);
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 /***/ }),
-/* 63 */
+/* 62 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4090,7 +3998,7 @@ var mapper = {
 Vue.component('com-table-mapper', mapper);
 
 /***/ }),
-/* 64 */
+/* 63 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4134,7 +4042,7 @@ var operations = {
 Vue.component('com-table-operations', operations);
 
 /***/ }),
-/* 65 */
+/* 64 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4180,7 +4088,7 @@ var picture = {
 Vue.component('com-table-picture', picture);
 
 /***/ }),
-/* 66 */
+/* 65 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4295,7 +4203,7 @@ var show_label = {
 };
 
 /***/ }),
-/* 67 */
+/* 66 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4344,7 +4252,7 @@ var pop_table = exports.pop_table = {
 Vue.component('com-table-pop-table', pop_table);
 
 /***/ }),
-/* 68 */
+/* 67 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4451,7 +4359,7 @@ Vue.component('com-table-select', select);
 //Vue.component('com-table-select',select)
 
 /***/ }),
-/* 69 */
+/* 68 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4498,7 +4406,7 @@ var switch_to_tab = {
 Vue.component('com-table-switch-to-tab', switch_to_tab);
 
 /***/ }),
-/* 70 */
+/* 69 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4527,7 +4435,7 @@ var parents = _interopRequireWildcard(_parents);
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 /***/ }),
-/* 71 */
+/* 70 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4554,7 +4462,7 @@ var delete_op = {
 Vue.component('com-op-delete', delete_op);
 
 /***/ }),
-/* 72 */
+/* 71 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4580,7 +4488,7 @@ var op_a = {
 Vue.component('com-op-a', op_a);
 
 /***/ }),
-/* 73 */
+/* 72 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4615,7 +4523,7 @@ var op_a = {
 Vue.component('com-op-btn', op_a);
 
 /***/ }),
-/* 74 */
+/* 73 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4781,7 +4689,7 @@ window.ele_table_logic = ele_table;
 window.ele_table_page_logic = ele_page;
 
 /***/ }),
-/* 75 */
+/* 74 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4906,7 +4814,7 @@ var _after_save = {
 };
 
 /***/ }),
-/* 76 */
+/* 75 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5025,7 +4933,7 @@ Vue.component('com_tab_table', ajax_table);
 //}
 
 /***/ }),
-/* 77 */
+/* 76 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5042,7 +4950,7 @@ var tab_fields = _interopRequireWildcard(_tab_fields);
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 /***/ }),
-/* 78 */
+/* 77 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
@@ -5068,7 +4976,7 @@ if(false) {
 }
 
 /***/ }),
-/* 79 */
+/* 78 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
@@ -5094,7 +5002,7 @@ if(false) {
 }
 
 /***/ }),
-/* 80 */
+/* 79 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
@@ -5120,7 +5028,7 @@ if(false) {
 }
 
 /***/ }),
-/* 81 */
+/* 80 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
@@ -5146,7 +5054,7 @@ if(false) {
 }
 
 /***/ }),
-/* 82 */
+/* 81 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
@@ -5172,7 +5080,7 @@ if(false) {
 }
 
 /***/ }),
-/* 83 */
+/* 82 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
@@ -5198,7 +5106,7 @@ if(false) {
 }
 
 /***/ }),
-/* 84 */
+/* 83 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5223,7 +5131,7 @@ var com_field_invite_code = {
 Vue.component('com-field-invite-code', com_field_invite_code);
 
 /***/ }),
-/* 85 */
+/* 84 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5234,6 +5142,110 @@ var line_text = {
         template: '<div :style="head.style">\n            \t\t\t<span v-if=\'head.readonly\' v-text=\'row[head.name]\'></span>\n            \t\t\t<input v-else type="text" class="form-control input-sm" v-model="row[head.name]"\n            \t\t \t    :id="\'id_\'+head.name" :name="head.name"\n                        \t:placeholder="head.placeholder" :autofocus="head.autofocus" :maxlength=\'head.maxlength\'>\n                       </div>'
 };
 Vue.component('com-field-linetext', line_text);
+
+/***/ }),
+/* 85 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Vue.component('com-field-phone-code', {
+    /*
+    parStore.get_phone_code(callback){
+      }
+      * */
+    props: ['row', 'head'],
+    template: ' <div  style="position: relative;" class="com-field-phone-code flex">\n         <input  type="text" class="form-control input-sm" v-model="row[head.name]"\n            :id="\'id_\'+head.name" :name="head.name"\n            :placeholder="head.placeholder" :autofocus="head.autofocus" :maxlength=\'head.maxlength\'>\n\n          <button style="width: 9em" type="button" class="btn btn-default btn-sm"\n              :disabled="vcode_count !=0"\n               @click="get_phone_code" v-text="vcodeLabel"></button>\n     </div>\n    ',
+    data: function data() {
+        var parStore = ex.vueParStore(this);
+        return {
+            parStore: parStore,
+            vcode_count: 0
+        };
+    },
+    computed: {
+        vcodeLabel: function vcodeLabel() {
+            if (this.vcode_count != 0) {
+                return '' + this.vcode_count + ' s';
+            } else {
+                return '获取验证码';
+            }
+        }
+    },
+    methods: {
+        get_phone_code: function get_phone_code() {
+            var self = this;
+            this.parStore.get_phone_code(function () {
+                self.vcode_count = self.head.vcode_count || 120;
+                self.countGetVCodeAgain();
+            });
+        },
+        //get_phone_code:function(){
+        //var phone = this.row[this.head.phone_field]
+        //var img_code = this.row[this.head.img_code_field]
+        ////var com_vcode =kws.com_vcode
+        //var ph =$(this.$el).find('#id_'+this.hea).trigger("validate")
+        //var image_code_input_element=$(this.$el).find('[name=image_code]')
+        //var image_code =image_code_input_element.trigger("validate")
+        //
+        //if(ph.isValid() && image_code.isValid()){
+        //    self.checkImageCode(this.row.Phone,this.row.image_key,this.row.image_code,image_code_input_element)
+        //}
+
+        //if(this.head.isValid()){
+        //    self.checkImageCode(self.row.Phone,self.row.image_key,self.row.image_code,image_code_input_element)
+        //}
+
+        //var self=this
+        //this.$emit('trigger-get-code',function(){
+        //    self.checkImageCode(self.row.Phone,self.row.image_key,self.row.image_code,image_code_input_element)
+        //})
+        //},
+
+        //sendGetCodeOrder:function(){
+        //    ex.vueParCall(this,'get_phone_code',{com_vcode:this})
+        //    //this.$emit('field-event',{fun:'get_phone_code'})
+        //
+        //},
+        //checkImageCode:function(phone,image_key,image_code,image_code_input_element){
+        //    var self=this
+        //    $(self.$el).find('input').trigger("hidemsg")
+        //
+        //    //if(this.row.image_code && this.hasValidPhone){
+        //    var data={
+        //        Phone:phone,
+        //        Key:image_key,
+        //        Answer:image_code,
+        //    }
+        //    cfg.show_load()
+        //    service_post('/anonymity/vcode/generate',data,function(resp){
+        //        if(resp.error_description){
+        //            image_code_input_element.trigger("showmsg", ["error", resp.error_description ])
+        //        }else if(resp.success){
+        //            setTimeout(function(){
+        //                self.countGetVCodeAgain()
+        //            },1000)
+        //        }
+        //        // else {
+        //        //    $(self.$el).find('.image_code').trigger("showmsg", ["error", resp.error_description ])
+        //        //}
+        //
+        //    },false)
+        //    //}
+        //},
+        countGetVCodeAgain: function countGetVCodeAgain() {
+            var self = this;
+            var idx = setInterval(function () {
+                self.vcode_count -= 1;
+                if (self.vcode_count <= 0) {
+                    clearInterval(idx);
+                    self.vcode_count = 0;
+                }
+            }, 1000);
+        }
+    }
+});
 
 /***/ }),
 /* 86 */
@@ -7502,31 +7514,31 @@ var _config = __webpack_require__(10);
 
 var config = _interopRequireWildcard(_config);
 
-var _mix_table_data = __webpack_require__(38);
+var _mix_table_data = __webpack_require__(37);
 
 var mix_table_data = _interopRequireWildcard(_mix_table_data);
 
-var _mix_v_table_adapter = __webpack_require__(39);
+var _mix_v_table_adapter = __webpack_require__(38);
 
 var mix_v_table_adapter = _interopRequireWildcard(_mix_v_table_adapter);
 
-var _mix_nice_validator = __webpack_require__(37);
+var _mix_nice_validator = __webpack_require__(36);
 
 var mix_nice_validator = _interopRequireWildcard(_mix_nice_validator);
 
-var _mix_fields_data = __webpack_require__(36);
+var _mix_fields_data = __webpack_require__(35);
 
 var mix_fields_data = _interopRequireWildcard(_mix_fields_data);
 
-var _mix_ele_table_adapter = __webpack_require__(35);
+var _mix_ele_table_adapter = __webpack_require__(34);
 
 var mix_ele_table_adapter = _interopRequireWildcard(_mix_ele_table_adapter);
 
-var _ajax_fields = __webpack_require__(75);
+var _ajax_fields = __webpack_require__(74);
 
 var ajax_fields = _interopRequireWildcard(_ajax_fields);
 
-var _ajax_table = __webpack_require__(76);
+var _ajax_table = __webpack_require__(75);
 
 var ajax_table = _interopRequireWildcard(_ajax_table);
 
@@ -7534,19 +7546,19 @@ var _ele_tree = __webpack_require__(14);
 
 var ele_tree = _interopRequireWildcard(_ele_tree);
 
-var _picture = __webpack_require__(65);
+var _picture = __webpack_require__(64);
 
 var table_picture = _interopRequireWildcard(_picture);
 
-var _label_shower = __webpack_require__(60);
+var _label_shower = __webpack_require__(59);
 
 var table_label_shower = _interopRequireWildcard(_label_shower);
 
-var _mapper = __webpack_require__(63);
+var _mapper = __webpack_require__(62);
 
 var table_mapper = _interopRequireWildcard(_mapper);
 
-var _call_fun = __webpack_require__(51);
+var _call_fun = __webpack_require__(50);
 
 var call_fun = _interopRequireWildcard(_call_fun);
 
@@ -7554,83 +7566,83 @@ var _pop_fields = __webpack_require__(3);
 
 var table_pop_fields = _interopRequireWildcard(_pop_fields);
 
-var _pop_fields_local = __webpack_require__(66);
+var _pop_fields_local = __webpack_require__(65);
 
 var pop_fields_local = _interopRequireWildcard(_pop_fields_local);
 
-var _linetext = __webpack_require__(61);
+var _linetext = __webpack_require__(60);
 
 var table_linetext = _interopRequireWildcard(_linetext);
 
-var _check_box = __webpack_require__(53);
+var _check_box = __webpack_require__(52);
 
 var table_checkbox = _interopRequireWildcard(_check_box);
 
-var _switch_to_tab = __webpack_require__(69);
+var _switch_to_tab = __webpack_require__(68);
 
 var switch_to_tab = _interopRequireWildcard(_switch_to_tab);
 
-var _select = __webpack_require__(68);
+var _select = __webpack_require__(67);
 
 var select = _interopRequireWildcard(_select);
 
-var _extra_click = __webpack_require__(55);
+var _extra_click = __webpack_require__(54);
 
 var extra_click = _interopRequireWildcard(_extra_click);
 
-var _extra_click_plus = __webpack_require__(56);
+var _extra_click_plus = __webpack_require__(55);
 
 var extra_click_plus = _interopRequireWildcard(_extra_click_plus);
 
-var _array_mapper = __webpack_require__(46);
+var _array_mapper = __webpack_require__(45);
 
 var array_mapper = _interopRequireWildcard(_array_mapper);
 
-var _operations = __webpack_require__(64);
+var _operations = __webpack_require__(63);
 
 var operations = _interopRequireWildcard(_operations);
 
-var _bool_shower = __webpack_require__(50);
+var _bool_shower = __webpack_require__(49);
 
 var bool_shower = _interopRequireWildcard(_bool_shower);
 
-var _foreign_click_select = __webpack_require__(57);
+var _foreign_click_select = __webpack_require__(56);
 
 var foreign_click_select = _interopRequireWildcard(_foreign_click_select);
 
-var _array_option_mapper = __webpack_require__(48);
+var _array_option_mapper = __webpack_require__(47);
 
 var array_option_mapper = _interopRequireWildcard(_array_option_mapper);
 
-var _html_shower = __webpack_require__(58);
+var _html_shower = __webpack_require__(57);
 
 var html_shower = _interopRequireWildcard(_html_shower);
 
-var _bool_editor = __webpack_require__(49);
+var _bool_editor = __webpack_require__(48);
 
 var bool_editor = _interopRequireWildcard(_bool_editor);
 
-var _jump_link = __webpack_require__(59);
+var _jump_link = __webpack_require__(58);
 
 var jump_link = _interopRequireWildcard(_jump_link);
 
-var _change_order = __webpack_require__(52);
+var _change_order = __webpack_require__(51);
 
 var change_order = _interopRequireWildcard(_change_order);
 
-var _digit = __webpack_require__(54);
+var _digit = __webpack_require__(53);
 
 var digit = _interopRequireWildcard(_digit);
 
-var _append_html_shower = __webpack_require__(45);
+var _append_html_shower = __webpack_require__(44);
 
 var append_html_shower = _interopRequireWildcard(_append_html_shower);
 
-var _array_obj_shower = __webpack_require__(47);
+var _array_obj_shower = __webpack_require__(46);
 
 var array_obj_shower = _interopRequireWildcard(_array_obj_shower);
 
-var _pop_table = __webpack_require__(67);
+var _pop_table = __webpack_require__(66);
 
 var pop_table = _interopRequireWildcard(_pop_table);
 
@@ -7650,25 +7662,21 @@ var _datetime = __webpack_require__(12);
 
 var datetime = _interopRequireWildcard(_datetime);
 
-var _pop_table_select = __webpack_require__(21);
+var _pop_table_select = __webpack_require__(20);
 
 var pop_table_select = _interopRequireWildcard(_pop_table_select);
 
-var _plain_file = __webpack_require__(20);
+var _plain_file = __webpack_require__(19);
 
 var plain_file = _interopRequireWildcard(_plain_file);
 
-var _validate_code = __webpack_require__(22);
+var _validate_code = __webpack_require__(21);
 
 var validate_code = _interopRequireWildcard(_validate_code);
 
 var _order_list_table = __webpack_require__(18);
 
 var order_list_table = _interopRequireWildcard(_order_list_table);
-
-var _phon_code = __webpack_require__(19);
-
-var phon_code = _interopRequireWildcard(_phon_code);
 
 var _ele_tree_depend = __webpack_require__(15);
 
@@ -7678,35 +7686,35 @@ var _china_address = __webpack_require__(11);
 
 var com_china_address = _interopRequireWildcard(_china_address);
 
-var _operator_a = __webpack_require__(72);
+var _operator_a = __webpack_require__(71);
 
 var op_a = _interopRequireWildcard(_operator_a);
 
-var _delete_op = __webpack_require__(71);
+var _delete_op = __webpack_require__(70);
 
 var delete_op = _interopRequireWildcard(_delete_op);
 
-var _operator_btn = __webpack_require__(73);
+var _operator_btn = __webpack_require__(72);
 
 var operator_btn = _interopRequireWildcard(_operator_btn);
 
-var _btn = __webpack_require__(23);
+var _btn = __webpack_require__(22);
 
 var btn = _interopRequireWildcard(_btn);
 
-var _pop_table_layer = __webpack_require__(33);
+var _pop_table_layer = __webpack_require__(32);
 
 var pop_table_layer = _interopRequireWildcard(_pop_table_layer);
 
-var _pop_fields_layer = __webpack_require__(31);
+var _pop_fields_layer = __webpack_require__(30);
 
 var pop_fields_layer = _interopRequireWildcard(_pop_fields_layer);
 
-var _pop_layer = __webpack_require__(32);
+var _pop_layer = __webpack_require__(31);
 
 var pop_layer = _interopRequireWildcard(_pop_layer);
 
-var _main2 = __webpack_require__(43);
+var _main2 = __webpack_require__(42);
 
 var panels_main = _interopRequireWildcard(_main2);
 
@@ -7714,78 +7722,78 @@ var _sim_fields = __webpack_require__(2);
 
 var sim_fields = _interopRequireWildcard(_sim_fields);
 
-var _sim_fields_local = __webpack_require__(27);
+var _sim_fields_local = __webpack_require__(26);
 
 var sim_fields_local = _interopRequireWildcard(_sim_fields_local);
 
-var _pop_edit_local = __webpack_require__(26);
+var _pop_edit_local = __webpack_require__(25);
 
 var pop_edit_local = _interopRequireWildcard(_pop_edit_local);
 
-var _plain_field_panel = __webpack_require__(25);
+var _plain_field_panel = __webpack_require__(24);
 
 var plain_field_panel = _interopRequireWildcard(_plain_field_panel);
 
-var _ele_table = __webpack_require__(74);
+var _ele_table = __webpack_require__(73);
 
 var ele_table = _interopRequireWildcard(_ele_table);
 
-var _user_info = __webpack_require__(42);
+var _user_info = __webpack_require__(41);
 
 var user_info = _interopRequireWildcard(_user_info);
 
-var _nice_validator_rule = __webpack_require__(40);
+var _nice_validator_rule = __webpack_require__(39);
 
 var nice_validator_rule = _interopRequireWildcard(_nice_validator_rule);
 
-var _dropdown = __webpack_require__(28);
+var _dropdown = __webpack_require__(27);
 
 var dropdown = _interopRequireWildcard(_dropdown);
 
-var _sm_link = __webpack_require__(29);
+var _sm_link = __webpack_require__(28);
 
 var sm_link = _interopRequireWildcard(_sm_link);
 
-var _stack_widget = __webpack_require__(34);
+var _stack_widget = __webpack_require__(33);
 
 var stack_widget = _interopRequireWildcard(_stack_widget);
 
-var _el_tab_widget = __webpack_require__(30);
+var _el_tab_widget = __webpack_require__(29);
 
 var el_tab_widget = _interopRequireWildcard(_el_tab_widget);
 
-var _table_store = __webpack_require__(44);
+var _table_store = __webpack_require__(43);
 
 var table_store = _interopRequireWildcard(_table_store);
 
-var _main3 = __webpack_require__(24);
+var _main3 = __webpack_require__(23);
 
 var fields_panels_main = _interopRequireWildcard(_main3);
 
-var _main4 = __webpack_require__(62);
+var _main4 = __webpack_require__(61);
 
 var table_editor_main = _interopRequireWildcard(_main4);
 
-var _main5 = __webpack_require__(70);
+var _main5 = __webpack_require__(69);
 
 var table_group_main = _interopRequireWildcard(_main5);
 
-var _main6 = __webpack_require__(41);
+var _main6 = __webpack_require__(40);
 
 var node_store_main = _interopRequireWildcard(_main6);
 
-var _main7 = __webpack_require__(77);
+var _main7 = __webpack_require__(76);
 
 var tabs_main = _interopRequireWildcard(_main7);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
+__webpack_require__(78);
+__webpack_require__(82);
 __webpack_require__(79);
-__webpack_require__(83);
 __webpack_require__(80);
 __webpack_require__(81);
-__webpack_require__(82);
-__webpack_require__(78);
+__webpack_require__(77);
 //table mix
 
 //import * as com_pop_fields from './com_pop_fields.js'
@@ -7794,6 +7802,8 @@ __webpack_require__(78);
 
 
 // field editor
+
+//import * as phon_code from  './field_editor/phon_code.js'
 
 
 // table operator

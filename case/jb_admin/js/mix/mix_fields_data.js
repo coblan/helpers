@@ -145,22 +145,9 @@ var mix_fields_data ={
                     ex.vueAssign(self.row,rt.row)
                     self.after_save(rt.row)
                     self.setErrors({})
+                    self.$emit('finish',rt.row)
                 }
             })
-
-
-            //self.dataSaver(function(rt){
-            //    if( rt.errors){
-            //        cfg.hide_load()
-            //        self.setErrors(rt.errors)
-            //        self.showErrors(rt.errors)
-            //    }else{
-            //        cfg.hide_load(1000)
-            //        self.after_save(rt.row)
-            //        self.setErrors({})
-            //    }
-            //})
-
         },
 
         after_save:function(new_row){
