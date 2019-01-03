@@ -48,8 +48,28 @@ export var network ={
                     }
                 }
             }
+
+            var success=true
+            if(resp.success ==false ){
+                success = false
+            }
+            if(resp.status && typeof resp.status == 'string' && resp.status != 'success'){
+                success = false
+            }
+            //if(! success){
+            //    hide_upload(300)
+            //    if(resp.msg){
+            //        cfg.showError(resp.msg)
+            //    }
+            //}else{
+            //    if(resp.msg){
+            //        cfg.showMsg(resp.msg)
+            //    }
+            //    callback(resp)
+            //}
+
             //if (resp.status && typeof resp.status == 'string' && resp.status != 'success') {
-            if (resp.success === false) {
+            if (!success) {
                 cfg.hide_load() // sometime
             } else {
                 var rt = callback(resp)
@@ -59,7 +79,7 @@ export var network ={
             }
 
             if(msg.length!=0){
-                if(resp.success===false){
+                if(!success){
                     cfg.showError(msg.join('\n'))
                 }else{
                     cfg.showMsg(msg.join('\n'))
