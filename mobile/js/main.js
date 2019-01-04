@@ -10,3 +10,5 @@ import * as table_main from  './table/main'
 import * as panels_main from  './panels/main'
 import * as filters_main from  './filters/main'
 import * as input_main from  './input/main'
+
+import * as field_edito_main from './field_editor/main.js'
