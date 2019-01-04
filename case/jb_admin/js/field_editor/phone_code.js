@@ -1,3 +1,5 @@
+require('./scss/phone_code.scss')
+
 Vue.component('com-field-phone-code',{
     /*
     parStore.get_phone_code(callback){
@@ -6,12 +8,12 @@ Vue.component('com-field-phone-code',{
 
     * */
     props:['row','head'],
-    template:` <div  style="position: relative;" class="com-field-phone-code flex">
+    template:` <div class="com-field-phone-code flex">
          <input  type="text" class="form-control input-sm" v-model="row[head.name]"
             :id="'id_'+head.name" :name="head.name"
             :placeholder="head.placeholder" :autofocus="head.autofocus" :maxlength='head.maxlength'>
 
-          <button style="width: 9em" type="button" class="btn btn-default btn-sm"
+          <button style="width: 9em" type="button" class="btn btn-sm"
               :disabled="vcode_count !=0"
                @click="get_phone_code" v-text="vcodeLabel"></button>
      </div>

@@ -3096,7 +3096,9 @@ var sim_select = {
         update_options: function update_options(post_data) {
             var self = this;
             if (this.head.director_name) {
+                cfg.show_load();
                 ex.director_call(self.head.director_name, post_data, function (data) {
+                    cfg.hide_load();
                     Vue.set(self.head, 'options', data);
                 });
             }
