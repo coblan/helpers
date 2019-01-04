@@ -15,6 +15,8 @@ import io
 from helpers.director.base_data import director
 from django.http import HttpResponse
 from django.utils.timezone import datetime
+
+
 try:
     os.makedirs(os.path.join(settings.MEDIA_ROOT, 'gen_files'))
 except:
