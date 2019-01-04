@@ -52,8 +52,16 @@ var com_plain_fields = {
         </div>`,
     methods:{
         panel_submit:function(){
-            if(this.isValid()){
-                this.$emit('submit')
+            //if(this.isValid()){
+            //    this.$emit('submit')
+            //}
+
+            if(this.$listeners && this.$listeners.submit){
+                if(this.isValid()){
+                    this.$emit('submit',this.row)
+                }
+            }else{
+                this.submit()
             }
         },
         show_msg:function(msg,event){

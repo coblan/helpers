@@ -13,7 +13,8 @@ var sim_select= {
 
         return {
             model: this.row[this.head.name],
-            cfg: inn_config
+            cfg: inn_config,
+            parStore:ex.vueParStore(this)
         }
     },
     template: `<div>
@@ -29,26 +30,30 @@ var sim_select= {
             Vue.set(this.row, this.head.name, this.head.default)
         }
         var self=this
-        // 下面这个淘汰了,暂时为了兼容性，放在这里
+        // remote_options 只用在初始化的时候，请求远端服务器获取options。如果需要动态切换options，请设置 director_name 。
+
         if(this.head.remote_options){
             ex.director_call(this.head.remote_options,{crt_value:this.row[this.head.name]},function(resp){
                 self.head.options=resp
             })
         }
+        // 这种方式，一般是与filter共用options的时候
         if(this.head.ctx_name){
             self.head.options = named_ctx[this.head.ctx_name]
         }
+        ex.vueEventRout(this)
 
     },
 
     watch:{
-        my_value:function(){
-            if(this.head.remote_options){
-                var self=this
-                ex.director_call(this.head.remote_options,{row:self.row},function(data){
-                    Vue.set(self.head,'options' ,data)
-                })
-            }
+        my_value:function(v){
+            this.$emit('input',v)
+            //if(this.head.remote_options){
+            //    var self=this
+            //    ex.director_call(this.head.remote_options,{row:self.row},function(data){
+            //        Vue.set(self.head,'options' ,data)
+            //    })
+            //}
         }
     },
 
@@ -89,6 +94,16 @@ var sim_select= {
         }
     },
     methods:{
+        update_options:function(post_data){
+            var self=this
+            if(this.head.director_name){
+                cfg.show_load()
+                ex.director_call(self.head.director_name,post_data,function(data){
+                    cfg.hide_load()
+                    Vue.set(self.head,'options' ,data)
+                })
+            }
+        },
         get_label:function(options,value){
             var option = ex.findone(options,{value:value})
             if(!option){

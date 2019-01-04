@@ -44,7 +44,24 @@ export var  vuetool = {
             }
         }
     },
+    vueEventRout:function(self){
+        if(! self.head.event_slots && self.parStore){
+            return
+        }
+        ex.each(self.head.event_slots,function(router){
+            if(router.event){
+                self.$on(router.event,function(e){
+                    ex.eval(router.express,{event:e,ts:self.parStore,vc:self})
+                })
+            }
+            if(router.par_event){
+                self.parStore.$on(router.par_event,function(e){
+                    ex.eval(router.express,{event:e,ts:self.parStore,vc:self})
+                })
+            }
 
+        })
+    },
     vueChildBusOn:function(self,event_name,func){
         var parent =self.$parent
         while (parent){
