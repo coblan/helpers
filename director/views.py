@@ -15,7 +15,7 @@ from .recv_file import GeneralUpload
 from django.views.decorators.csrf import csrf_exempt
 from .network.ckeditor import Ckeditor
 from .base_data import director
-
+from django.db import transaction
 import logging
 
 req_log = logging.getLogger('general_log')
@@ -44,18 +44,17 @@ def ajax_views(request,app=None):
         app_dot_path=conf.module.__name__
         ajax_module=locate('%(app)s.ajax'%{'app':app_dot_path})
     try:
-        req_log.debug('start ajax_router')
-        rt = ajax_router(request, ajax_module.get_global())
+        with transaction.atomic():
+            rt = ajax_router(request, ajax_module.get_global())
+            
     except KeyError as e:
         rt={'success':False,'msg':'key error '+str(e) +' \n may function name error'}
     except UserWarning as e:
-        req_log.debug('get UserWarning')
+  
         rt = {'success': False, 'msg': str(e)}
     if isinstance(rt, HttpResponse):
-        req_log.debug('rt 是 response对象，直接返回')
         return rt
     else:
-        req_log.debug('构造response对象返回')
         return HttpResponse(json.dumps(rt),content_type="application/json")  
 
 def general_upload(request):
