@@ -45,7 +45,7 @@ export var  vuetool = {
         }
     },
     vueEventRout:function(self){
-        if(! self.head.event_slots && self.parStore){
+        if(! self.head.event_slots || self.parStore){
             return
         }
         ex.each(self.head.event_slots,function(router){

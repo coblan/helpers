@@ -77,6 +77,7 @@ var ck_complex = {
 	autoGrow_minHeight:200,
 	autoGrow_onStartup:true,
 	autoGrow_bottomSpace:50,
+	baseFloatZIndex : 99891014, //  > layer
 	//height:800,
 };
 
@@ -248,7 +249,8 @@ var edit_level = {
 	autoGrow_minHeight:200,
 	autoGrow_onStartup:true,
 	autoGrow_bottomSpace:50,
-	//height:800,
+	baseFloatZIndex : 99891014, //  > layer
+//height:800,
 };
 
 
