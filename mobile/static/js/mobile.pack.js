@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 26);
+/******/ 	return __webpack_require__(__webpack_require__.s = 28);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -428,9 +428,9 @@ ex.assign(cfg, {
 "use strict";
 
 
-var _com_date_range = __webpack_require__(10);
+var _index_select = __webpack_require__(11);
 
-var com_date_range = _interopRequireWildcard(_com_date_range);
+var index_select = _interopRequireWildcard(_index_select);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -441,9 +441,9 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 "use strict";
 
 
-var _com_input_date = __webpack_require__(11);
+var _com_date_range = __webpack_require__(12);
 
-var com_input_date = _interopRequireWildcard(_com_input_date);
+var com_date_range = _interopRequireWildcard(_com_date_range);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -454,9 +454,9 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 "use strict";
 
 
-var _slide_iframe = __webpack_require__(12);
+var _com_input_date = __webpack_require__(13);
 
-var slide_iframe = _interopRequireWildcard(_slide_iframe);
+var com_input_date = _interopRequireWildcard(_com_input_date);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -467,22 +467,35 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 "use strict";
 
 
-var _my_slide_win = __webpack_require__(15);
+var _slide_iframe = __webpack_require__(14);
+
+var slide_iframe = _interopRequireWildcard(_slide_iframe);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _my_slide_win = __webpack_require__(17);
 
 var my_slide_win = _interopRequireWildcard(_my_slide_win);
 
-var _com_slide_head = __webpack_require__(13);
+var _com_slide_head = __webpack_require__(15);
 
 var com_slide_head = _interopRequireWildcard(_com_slide_head);
 
-var _fiexed_scrll = __webpack_require__(14);
+var _fiexed_scrll = __webpack_require__(16);
 
 var fiexed_scrll = _interopRequireWildcard(_fiexed_scrll);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -502,7 +515,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-__webpack_require__(25);
+__webpack_require__(27);
 
 var PopMobileWin = function () {
     function PopMobileWin(_ref) {
@@ -710,26 +723,26 @@ window.slide_mobile_win = slide_mobile_win;
 window.pop_mobile_win = pop_mobile_win;
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _ele_table_bus_page = __webpack_require__(16);
+var _ele_table_bus_page = __webpack_require__(18);
 
 var ele_table_bus_page = _interopRequireWildcard(_ele_table_bus_page);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(20);
+var content = __webpack_require__(22);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -749,7 +762,71 @@ if(false) {
 }
 
 /***/ }),
-/* 10 */
+/* 11 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+__webpack_require__(30);
+
+Vue.component('com-field-index-select', {
+    props: ['row', 'head'],
+    template: '<div class="com-field-index-select">\n    <input type="text" :name="head.name" v-model="row[head.name]" style="display: none">\n    <input  type="text" @click="open_panel()"  v-model="mylabel" readonly>\n    </div>',
+    data: function data() {
+        return {
+            parStore: ex.vueParStore(this)
+        };
+    },
+    mounted: function mounted() {
+        ex.vueEventRout(this);
+    },
+    computed: {
+        mylabel: function mylabel() {
+            var crt_value = this.row[this.head.name];
+            if (crt_value) {
+                for (var i = 0; i < this.head.bucket_list.length; i++) {
+                    var bucket = this.head.bucket_list[i];
+                    var one = ex.findone(bucket.items, { value: crt_value });
+                    if (one) {
+                        return one.label;
+                    }
+                }
+            } else {
+                return '';
+            }
+        }
+    },
+    methods: {
+        open_panel: function open_panel() {
+            var self = this;
+            var ctx = {
+                title: this.head.label,
+                item_editor: this.head.item_editor,
+                bucket_list: this.head.bucket_list
+            };
+            var win_close = cfg.pop_big('com-index-select', ctx, function (resp) {
+                Vue.set(self.row, self.head.name, resp.value);
+                win_close();
+                self.$emit('input', resp.value);
+                //self.row[self.head.name] = resp.value
+            });
+        }
+    }
+});
+
+Vue.component('com-index-select', {
+    props: ['ctx'],
+    template: '<div class="com-index-select">\n     <mt-index-list>\n      <mt-index-section v-for="bucket in ctx.bucket_list" :index="bucket.index">\n        <component v-for="item in bucket.items" :is="ctx.item_editor" :ctx="item" @click.native="select_this(item)"></component>\n      </mt-index-section>\n    </mt-index-list>\n    </div>',
+    methods: {
+        select_this: function select_this(event) {
+            this.$emit('finish', event);
+        }
+    }
+});
+
+/***/ }),
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -781,13 +858,13 @@ if(false) {
 
 
 /***/ }),
-/* 11 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(22);
+__webpack_require__(24);
 
 Vue.component('date', {
     mixins: [com_input_date],
@@ -835,7 +912,7 @@ Vue.component('date', {
 });
 
 /***/ }),
-/* 12 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -847,7 +924,7 @@ Vue.component('com-slide-iframe', {
 });
 
 /***/ }),
-/* 13 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -864,7 +941,7 @@ Vue.component('com-slide-head', {
 });
 
 /***/ }),
-/* 14 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -874,7 +951,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.fixed_body = fixed_body;
-__webpack_require__(23);
+__webpack_require__(25);
 
 function fixed_body() {
     //$('body').addClass('modal-open')
@@ -905,13 +982,13 @@ window.fixed_body = fixed_body;
 window.fixed_body_quit = fixed_body_quit;
 
 /***/ }),
-/* 15 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(24);
+__webpack_require__(26);
 
 /*
 * 因为没有遮挡层，可能造成多次打开窗口问题，所以使用mint-ui替代了这个组件
@@ -958,7 +1035,7 @@ window.addEventListener('popstate', function (event) {
 
 Vue.component('com-slide-win-1', {
     props: ['stack_pages'],
-    template: '<div  class="com-slide-win">\n        <transition-group name="list" tag="p">\n            <div class="mywrap" :key="index" v-for="(page,index) in stack_pages"\n                 style="position:fixed;top:0;left: 0;right: 0;bottom: 0;background-color: white;z-index:1000;\n                 pointer-events: auto ;-moz-box-shadow:0px 0px 5px #333333; -webkit-box-shadow:0px 0px 5px #333333; box-shadow:0px 0px 5px #333333;">\n                <com-slide-head :title="page.ctx? page.ctx.title:\'\'" ></com-slide-head>\n                <component class="pop-content" :is="page.editor" :ctx="page.ctx" @finish="on_finish($event,page)"></component>\n            </div>\n        </transition-group>\n    </div>',
+    template: '<div  class="com-slide-win">\n        <transition-group name="list" tag="p">\n            <div class="mywrap" v-for="(page,index) in stack_pages"\n                 style="position:fixed;top:0;left: 0;right: 0;bottom: 0;background-color: white;z-index:1000;\n                 pointer-events: auto ;-moz-box-shadow:0px 0px 5px #333333; -webkit-box-shadow:0px 0px 5px #333333; box-shadow:0px 0px 5px #333333;">\n                <com-slide-head :title="page.ctx? page.ctx.title:\'\'" ></com-slide-head>\n                <component class="pop-content" :is="page.editor" :ctx="page.ctx" @finish="on_finish($event,page)"></component>\n            </div>\n        </transition-group>\n    </div>',
     created: function created() {
         //var client_h = document.documentElement.clientHeight;
         //$(window).on("resize",function(){
@@ -1023,7 +1100,7 @@ Vue.component('com-slide-win-1', {
 });
 
 /***/ }),
-/* 16 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1037,7 +1114,7 @@ var ele_table_bus_page = {
 };Vue.component('com-table-bus-page', ele_table_bus_page);
 
 /***/ }),
-/* 17 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -1051,7 +1128,7 @@ exports.push([module.i, ".com-input-date .weui-mask {\n  z-index: 3000; }\n", ""
 
 
 /***/ }),
-/* 18 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -1065,7 +1142,7 @@ exports.push([module.i, "body.modal-open {\n  position: fixed;\n  width: 100%; }
 
 
 /***/ }),
-/* 19 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -1079,7 +1156,7 @@ exports.push([module.i, ".list-enter-active, .list-leave-active {\n  transition:
 
 
 /***/ }),
-/* 20 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -1093,7 +1170,7 @@ exports.push([module.i, ".el-table__body-wrapper.is-scrolling-middle {\n  overfl
 
 
 /***/ }),
-/* 21 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -1107,13 +1184,13 @@ exports.push([module.i, ".pop-moible-win .mint-popup {\n  background: none; }\n\
 
 
 /***/ }),
-/* 22 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(17);
+var content = __webpack_require__(19);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -1133,13 +1210,13 @@ if(false) {
 }
 
 /***/ }),
-/* 23 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(18);
+var content = __webpack_require__(20);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -1159,13 +1236,13 @@ if(false) {
 }
 
 /***/ }),
-/* 24 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(19);
+var content = __webpack_require__(21);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -1185,13 +1262,13 @@ if(false) {
 }
 
 /***/ }),
-/* 25 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(21);
+var content = __webpack_require__(23);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -1211,7 +1288,7 @@ if(false) {
 }
 
 /***/ }),
-/* 26 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1221,33 +1298,77 @@ var _config = __webpack_require__(2);
 
 var config = _interopRequireWildcard(_config);
 
-var _pop_mobile_win = __webpack_require__(7);
+var _pop_mobile_win = __webpack_require__(8);
 
 var pop_win = _interopRequireWildcard(_pop_mobile_win);
 
-var _main = __webpack_require__(6);
+var _main = __webpack_require__(7);
 
 var pop_main = _interopRequireWildcard(_main);
 
-var _main2 = __webpack_require__(8);
+var _main2 = __webpack_require__(9);
 
 var table_main = _interopRequireWildcard(_main2);
 
-var _main3 = __webpack_require__(5);
+var _main3 = __webpack_require__(6);
 
 var panels_main = _interopRequireWildcard(_main3);
 
-var _main4 = __webpack_require__(3);
+var _main4 = __webpack_require__(4);
 
 var filters_main = _interopRequireWildcard(_main4);
 
-var _main5 = __webpack_require__(4);
+var _main5 = __webpack_require__(5);
 
 var input_main = _interopRequireWildcard(_main5);
 
+var _main6 = __webpack_require__(3);
+
+var field_edito_main = _interopRequireWildcard(_main6);
+
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
-__webpack_require__(9);
+__webpack_require__(10);
+
+/***/ }),
+/* 29 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(0)();
+// imports
+
+
+// module
+exports.push([module.i, ".com-index-select .mint-indexlist {\n  position: absolute;\n  top: 0;\n  right: 0;\n  bottom: 0;\n  left: 0; }\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 30 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(29);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// add the styles to the DOM
+var update = __webpack_require__(1)(content, {});
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./index_select.scss", function() {
+			var newContent = require("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./index_select.scss");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
 
 /***/ })
 /******/ ]);

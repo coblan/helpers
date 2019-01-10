@@ -52,7 +52,7 @@ Vue.component('com-slide-win-1',{
     props:['stack_pages'],
     template:`<div  class="com-slide-win">
         <transition-group name="list" tag="p">
-            <div class="mywrap" :key="index" v-for="(page,index) in stack_pages"
+            <div class="mywrap" v-for="(page,index) in stack_pages"
                  style="position:fixed;top:0;left: 0;right: 0;bottom: 0;background-color: white;z-index:1000;
                  pointer-events: auto ;-moz-box-shadow:0px 0px 5px #333333; -webkit-box-shadow:0px 0px 5px #333333; box-shadow:0px 0px 5px #333333;">
                 <com-slide-head :title="page.ctx? page.ctx.title:''" ></com-slide-head>

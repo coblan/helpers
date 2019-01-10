@@ -50,7 +50,7 @@ from django.views.decorators.cache import patch_cache_control
 import time
 from django.shortcuts import redirect
 from .base_data import js_tr_list,js_lib_list
-
+from django.views.decorators.csrf import csrf_exempt
 
 class BaseEngine(object):
     _pages=None
@@ -88,7 +88,7 @@ class BaseEngine(object):
             #raise PermissionDenied('No permit! You should be Active User OR staff to access this System,')
         else:
             return True
-    
+    @csrf_exempt 
     def view(self,request,name):    
         self.request = request
         self.engin_url =  reverse(self.url_name,args=('aa',))[:-3]
