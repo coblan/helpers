@@ -35,7 +35,10 @@ var tab_table={
                     this.parStore.switch_to_tab(kws)
                 },
                 getRows:function(){
-                    if(vc.tab_head.tab_field){
+                    if(vc.tab_head.pre_get){
+                        var pre_set = ex.eval(vc.tab_head.pre_get,{par_row:vc.par_row})
+                        ex.assign(this.search_args,pre_set)
+                    }else if(vc.tab_head.tab_field){ // 下面是老的调用，
                         this.search_args[vc.tab_head.tab_field] = vc.par_row[vc.tab_head.par_field]
                     }else{
                         this.search_args[vc.tab_head.par_field] = vc.par_row[vc.tab_head.par_field]

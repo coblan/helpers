@@ -61,7 +61,8 @@ class ModelFields(forms.ModelForm):
         @dc: 当post save时 ,dc是前端传来的row字典
              当get 时，dc是前端传来的url参数，排除pk后的额外的字典
         """
-
+        self.kw = kw.copy()
+        
         dc = self.clean_dict(dc)
         if not crt_user:
             self.crt_user=dc.get('crt_user')
@@ -97,8 +98,9 @@ class ModelFields(forms.ModelForm):
                 dc[k] =  getattr(form_kw['instance'] , k)  
         
         self.nolimit = nolimit
-        self.kw=dc.copy()
-        self.kw.update(kw)
+        self.kw.update(dc)
+        #self.kw=dc.copy()
+        #self.kw.update(kw)
 
         super(ModelFields,self).__init__(dc,*args,**form_kw)
         self.custom_permit()

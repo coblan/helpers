@@ -90,7 +90,10 @@ var table_store={
             var fields_ctx=kws.fields_ctx
             var dc = {fun:'get_row',director_name:fields_ctx.director_name}
 
-            if(kws.init_fields){
+            if(kws.pre_set){
+                var pre_set = ex.eval(kws.pre_set,{vc:self,search_args:self.search_args})
+                ex.assign(dc,pre_set)
+            }else if(kws.init_fields){ // 老的的调用，准备移除
                 ex.assign(dc,kws.init_fields)
             }
             var post_data=[dc]

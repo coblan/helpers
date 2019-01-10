@@ -752,6 +752,7 @@ class ModelTable(object):
                  'editor':'com-op-btn',
                  'icon': 'fa-plus',
                  'label':'创建',
+                 'pre_set':'', # 预先设置的字段,一般用于com-tab-table下的创建
                  'fields_ctx':fieldobj.get_head_context(),
                  'visible': self.permit.can_add(),
                  },

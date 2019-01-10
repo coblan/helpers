@@ -352,7 +352,10 @@ var mix_table_data={
             var self = this
             var fields_ctx=kws.fields_ctx
             var dc = {fun:'get_row',director_name:fields_ctx.director_name}
-            if(kws.init_fields){
+            if(kws.pre_set){
+                var pre_set = ex.eval(kws.pre_set,{vc:self})
+                ex.assign(dc,pre_set)
+            }else if(kws.init_fields){ // 老的的调用，准备移除
                 ex.assign(dc,kws.init_fields)
             }
             var post_data=[dc]
@@ -360,12 +363,6 @@ var mix_table_data={
             ex.post('/d/ajax',JSON.stringify(post_data),function(resp){
                 cfg.hide_load()
                 var crt_row = resp.get_row
-                //var pop_id= new Date().getTime()
-                // e = {name:'after_save',new_row:event.new_row,old_row:event.old_row}
-                //eventBus.$on('pop-win-'+pop_id,function(e){
-                //    self.update_or_insert(e.new_row, e.old_row)
-                //})
-                //pop_fields_layer(new_row,kws.heads,kws.ops,pop_id)
                 self.crt_row= crt_row
                 if(kws.tab_name){
                     //self.switch_to_tab(kws)

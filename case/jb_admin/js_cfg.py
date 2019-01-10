@@ -32,7 +32,7 @@ def get_lib(request):
         'bootstrap': '/static/lib/bootstrap.min.js',
 
         'layer': '/static/lib/layer/layer.js',
-        #'layer_css':'/static/lib/layer/layer.css', 
+        'layer_css':'/static/lib/layer/theme/default/layer.css', 
         
         #'layer': 'https://cdn.bootcss.com/layer/3.1.0/layer.js',
         #'layer_css':'https://cdn.bootcss.com/layer/3.1.0/theme/default/layer.css',
