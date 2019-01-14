@@ -31,8 +31,9 @@ export var rabbit={
                 callback(client)
 
             };
-            var on_error =  function() {
+            var on_error =  function(e) {
                 console.log('error');
+                console.log(e)
 
                 setTimeout(function(){
                     client = Stomp.client(ctx.url);

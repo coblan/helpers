@@ -1746,8 +1746,9 @@ var rabbit = exports.rabbit = {
                 //});
                 callback(client);
             };
-            var on_error = function on_error() {
+            var on_error = function on_error(e) {
                 console.log('error');
+                console.log(e);
 
                 setTimeout(function () {
                     client = Stomp.client(ctx.url);
