@@ -10,6 +10,7 @@ import {code} from  './code'
 import {sortOrder} from  './order'
 import {layout} from  './layout'
 import {file_proc} from  './file_proc'
+import {rabbit} from  './rabbit'
 var ex={
     assign:function (dst,src) {
         for(var key in src){
@@ -31,6 +32,7 @@ ex.assign(ex,vuetool)
 ex.assign(ex,code)
 ex.assign(ex,layout)
 ex.assign(ex,file_proc)
+ex.assign(ex,rabbit)
 
 ex.sortOrder=sortOrder
 
