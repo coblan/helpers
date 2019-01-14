@@ -29,10 +29,10 @@ var mix_fields_data ={
                 head._org_required=head.required
                 head.required=ex.eval(head._org_required,{row:self.row})
             }
-            if(typeof head.show=='string'){
-                head._org_show=head.show
-                head.show=ex.eval(head._org_show,{row:self.row})
-            }
+            //if(typeof head.show=='string'){
+            //    head._org_show=head.show
+            //    head.show=ex.eval(head._org_show,{row:self.row})
+            //}
         })
     },
     computed:{
@@ -46,30 +46,26 @@ var mix_fields_data ={
                     head.required=ex.eval(head._org_required,{row:self.row})
                 }
             })
+
+            // 准备用下面两个替换前面所有逻辑
             var heads = ex.filter(self.heads,function(head){
-                if(head._org_show){
-                    return ex.eval(head._org_show,{row:self.row})
+                if(head.show){
+                    return ex.eval(head.show,{row:self.row})
                 }else{
                     return true
                 }
             })
+            
+            ex.each(self.heads,function(head){
+                if(head.express){
+                    ex.vueAssign(head, ex.eval(head.express,{row:self.row}) )
+                }
+            })
+
             return heads
 
         }
     },
-    //watch:{
-    //    row:function(v){
-    //        var self=this
-    //        Vue.nextTick(function(){
-    //            ex.each(self.heads,function(head){
-    //                if( head._org_readonly){
-    //                    head.readonly=ex.eval(head._org_readonly,{row:v})
-    //                }
-    //            })
-    //        })
-    //
-    //    }
-    //},
     methods:{
         on_operation:function(op){
             var fun_name = op.fun || op.name
