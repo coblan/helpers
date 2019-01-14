@@ -39,6 +39,7 @@ class ModelFields(forms.ModelForm):
     field_sort=[]
     extra_mixins=[]
     hide_fields = []
+    show_pk=False
     @classmethod
     def parse_request(cls,request):
         """
@@ -322,7 +323,13 @@ class ModelFields(forms.ModelForm):
     def get_heads(self):
         
         #heads = form_to_head(self)
-        heads = self._base_dict_fieldmap_heads()
+        if self.show_pk:
+            heads=[
+                {'name':self._meta.model._meta.pk.name,'label':self._meta.model._meta.pk.verbose_name,'editor':'linetext','readonly':True}
+            ]
+        else:
+            heads=[]
+        heads += self._base_dict_fieldmap_heads()
         heads.extend(self.getExtraHeads())
         
         self.heads = heads
