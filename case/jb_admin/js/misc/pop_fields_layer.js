@@ -96,11 +96,12 @@ export  function pop_fields_layer (row,fields_ctx,callback,layerConfig){
                     this.childStore = new Vue({
                         data:{
                             fields_obj:vc.$refs.field_panel,
+                            vc:vc,
                         },
                         methods:{
                             showErrors:function(errors){
-                                vc.fields_obj.setErrors(errors)
-                                vc.fields_obj.showErrors(errors)
+                                this.fields_obj.setErrors(errors)
+                                this.fields_obj.showErrors(errors)
                             }
                         }
 
