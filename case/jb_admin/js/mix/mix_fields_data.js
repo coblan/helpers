@@ -55,7 +55,7 @@ var mix_fields_data ={
                     return true
                 }
             })
-            
+
             ex.each(self.heads,function(head){
                 if(head.express){
                     ex.vueAssign(head, ex.eval(head.express,{row:self.row}) )
