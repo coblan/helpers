@@ -270,7 +270,7 @@ class ModelFields(forms.ModelForm):
             if k in self.hide_fields:
                 continue
             
-            dc = {'name':k,'label':_(v.label),
+            dc = {'name':k,'label':str(v.label),
                   'help_text':str(v.help_text),
                   'editor':'linetext'}
                   
