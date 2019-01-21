@@ -37,11 +37,14 @@ var field_sigle_chosen={
 
     },
     watch:{
-        //value:function(nv){
-        //    this.setValue(nv)
-        //}
+        value:function(nv){
+            this.setValue(nv)
+        }
     },
     computed:{
+        value:function(){
+            return this.row[this.head.name]
+        },
         label_text:function(){
             var opt = ex.findone(this.head.options,{value:this.row[this.head.name]})
             if(opt){

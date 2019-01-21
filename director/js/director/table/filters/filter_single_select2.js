@@ -1,8 +1,35 @@
 
 var com_select = {
     props: ['head', 'search_args'],
-    template: `<com-field-single-select2 :head="head" :row="search_args"></com-field-single-select2>
+    template: `<com-field-single-select2 ref="select2" :head="head" :row="search_args"></com-field-single-select2>
     `,
+    data:function(){
+        var self=this
+        return {
+            order:this.head.order || false,
+            parStore:ex.vueParStore(this)
+        }
+    },
+    mounted:function(){
+        var self=this
+        if(this.head.event_slots){
+            ex.vueEventRout(self)
+        }
+
+    },
+    methods:{
+        get_options:function({post_data={}}){
+            var self=this
+            ex.director_call(this.head.director_name,post_data,function(resp){
+                self.head.options = resp
+            })
+        },
+        clear_value:function(){
+            Vue.delete(this.search_args,this.head.name)
+            //this.$refs.select2.setValue(undefined)
+            //delete this.search_args[this.head.name]
+        },
+    }
 }
 
 
