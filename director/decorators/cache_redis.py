@@ -15,13 +15,13 @@ def cache_redis(ex=None):
                 key += str( hash(json.dumps(kws, sort_keys=True)) )
                 
             cache_name = 'cache:fun:%s'%key
-            rt = redis_conn.get(cache_name)
+            rt = redis_conn.get(cache_name.encode('utf-8'))
             if not rt:
                 rt_obj = fun(*args, **kws)
                 rt = json.dumps(rt_obj)
                 redis_conn.set(cache_name,rt,ex=ex)
             else:
-                rt_obj = json.loads(rt)
+                rt_obj = json.loads(rt.decode('utf-8'))
             return rt_obj
       
         return _fun2
