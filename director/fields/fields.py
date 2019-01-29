@@ -521,7 +521,8 @@ class Fields(ModelFields):
     
     def get_errors(self):
         return self._errors
-    
+    def clean(self):
+        pass
     def is_valid(self):
         self.clean()
         if self._errors:
