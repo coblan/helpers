@@ -4,11 +4,18 @@ var tab_fields={
     props:['tab_head','par_row'],
     data:function(){
         var data_row = this.tab_head.row || {}
+        var self=this
+        var childStore = new Vue({
+            data:{
+                vc:self
+            }
+        })
         return {
             heads:this.tab_head.heads,
             ops:this.tab_head.ops,
             errors:{},
             row:data_row,
+            childStore:childStore
         }
     },
     mixins:[mix_fields_data,mix_nice_validator],
@@ -53,6 +60,7 @@ var tab_fields={
             fun(self,function(row){
                 //ex.assign(self.row,row)
                 self.row = row
+                self.childStore.$emit('row.update_or_insert',row)
             },kws)
 
             //var self=this
