@@ -47,6 +47,7 @@ var multi_chosen= {
     watch:{
         my_value:function(v){
             this.$emit('input',v)
+
         }
     },
 
