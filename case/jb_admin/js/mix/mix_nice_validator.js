@@ -12,7 +12,7 @@ var nice_validator={
     methods:{
         update_nice:function(){
             var self=this
-            var validator={}
+            var validate_fields={}
             ex.each(this.heads,function(head){
                 var ls=[]
 
@@ -24,15 +24,37 @@ var nice_validator={
                         ls.push('required')
                     }
                 }
-                validator[head.name]=ls.join(';')
+                if(head.validate_showError){
+                    validate_fields[head.name]={
+                        rule:ls.join(';'),
+                        msgClass:'hide',
+                        invalid:function(e,b){
+                            var label =head.label
+                            ex.eval(head.validate_showError,{msg:label+' : '+b.msg})
+                        }
+                    }
+                }else{
+                    validate_fields[head.name]=ls
+                }
+
             })
             if($(this.$el).hasClass('field-panel')){
                 this.nice_validator =$(this.$el).validator({
-                    fields: validator,
+                    fields: validate_fields,
+                    //msgShow:function($msgbox, type){
+                    //    alert('aajjyy')
+                    //},validation: function(element, result){
+                    //   alert('aaabbbb')
+                    //}
                 });
             }else{
                 this.nice_validator =$(this.$el).find('.field-panel').validator({
-                    fields: validator,
+                    fields: validate_fields,
+                    //msgShow:function($msgbox, type){
+                    //    alert('jjyybbb')
+                    //},validation: function(element, result){
+                    //    alert('bccbbbb')
+                    //}
                 });
             }
         },
@@ -63,14 +85,19 @@ var nice_validator={
         //    }
         //},
         showErrors:function(errors){
+            var real_input = $(this.$el).find('.real-input')
+            if(real_input.length !=0){
+                real_input.trigger("showmsg", ["error", errors[k].join(';')]);
+            }
+
             for(var k in errors){
-                //var head = ex.findone(this.heads,{name:k})
-                var real_input = $(this.$el).find('.real-input')
-                if(real_input.length !=0){
-                    real_input.trigger("showmsg", ["error", errors[k].join(';')]);
+                var head = ex.findone(this.heads,{name:k})
+                if(head && head.validate_showError){
+                    ex.eval(head.validate_showError,{msg:errors[k].join(';')})
                 }else{
                     $(this.$el).find('[name='+k+']').trigger("showmsg", ["error", errors[k].join(';')]);
                 }
+
             }
         }
     }
