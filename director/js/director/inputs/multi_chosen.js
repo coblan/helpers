@@ -1,8 +1,8 @@
 require('./scss/multi_chosen.scss')
 
 var multi_chosen={
-    props:['value','options'],
-    template:`<select  multiple="multiple" class="multi-chosen form-control" data-placeholder="请选择">
+    props:['value','options','placeholder'],
+    template:`<select  multiple="multiple" class="multi-chosen form-control" :data-placeholder="placeholder || '请选择'">
     <option v-for="option in options" :value="option.value" v-text="option.label"></option>
 </select>`,
     mounted:function(){

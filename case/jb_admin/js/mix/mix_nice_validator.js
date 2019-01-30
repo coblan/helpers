@@ -24,6 +24,7 @@ var nice_validator={
                         ls.push('required')
                     }
                 }
+
                 if(head.validate_showError){
                     validate_fields[head.name]={
                         rule:ls.join(';'),

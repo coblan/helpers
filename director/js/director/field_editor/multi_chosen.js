@@ -21,7 +21,7 @@ var multi_chosen= {
 	        	<ul v-if='head.readonly'><li v-for='value in row[head.name]' v-text='get_label(value)'></li></ul>
 	        	<div v-else>
 	        	<input type="text" style="display: none" v-model='row[head.name]' :name="head.name">
-	        	<multi-chosen  v-model='row[head.name]' :id="'id_'+head.name" :options='normed_options'></multi-chosen>
+	        	<multi-chosen  v-model='row[head.name]' :id="'id_'+head.name" :options='normed_options' :placeholder="head.placeholder"></multi-chosen>
 	        	</div>
 	        	</div>`,
     mounted: function () {
