@@ -1,7 +1,7 @@
 var lay_datetime={
     props:['row','head'],
     template:`<div><span v-show='head.readonly' v-text='row[head.name]'></span>
-                    <input v-show="!head.readonly" type="text" :id="'id_'+head.name" v-model="row[head.name]"  :placeholder="head.placeholder || '选择月份'" readonly>
+                    <input class="form-control input-sm" v-show="!head.readonly" type="text" :id="'id_'+head.name" v-model="row[head.name]"  :placeholder="head.placeholder || '选择月份'" readonly>
 
                </div>`,
     mounted:function(){
