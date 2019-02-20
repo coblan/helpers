@@ -1255,6 +1255,10 @@ var _phone_code = __webpack_require__(85);
 
 var phone_code = _interopRequireWildcard(_phone_code);
 
+var _month = __webpack_require__(148);
+
+var month = _interopRequireWildcard(_month);
+
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 /***/ }),
@@ -7950,6 +7954,34 @@ __webpack_require__(77);
 
 
 // store
+
+/***/ }),
+/* 148 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var lay_datetime = {
+    props: ['row', 'head'],
+    template: '<div><span v-show=\'head.readonly\' v-text=\'row[head.name]\'></span>\n                    <input v-show="!head.readonly" type="text" :id="\'id_\'+head.name" v-model="row[head.name]"  :placeholder="head.placeholder || \'\u9009\u62E9\u6708\u4EFD\'" readonly>\n\n               </div>',
+    mounted: function mounted() {
+        var self = this;
+        laydate.render({
+            elem: $(this.$el).find('input')[0], //指定元素
+            type: 'month',
+            done: function done(value, date, endDate) {
+                self.row[self.head.name] = value;
+            }
+        });
+    }
+};
+
+Vue.component('com-field-month', function (resolve, reject) {
+    ex.load_js('/static/lib/laydate/laydate.js', function () {
+        resolve(lay_datetime);
+    });
+});
 
 /***/ })
 /******/ ]);
