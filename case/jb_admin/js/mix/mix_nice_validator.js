@@ -35,7 +35,7 @@ var nice_validator={
                         }
                     }
                 }else{
-                    validate_fields[head.name]=ls
+                    validate_fields[head.name]=ls.join(';')
                 }
 
             })
