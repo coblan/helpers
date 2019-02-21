@@ -12,7 +12,18 @@ Vue.component('com-field-index-select',{
         }
     },
     mounted:function(){
+        var self=this
         ex.vueEventRout(this)
+        Vue.nextTick(function(){
+            self.$emit('on-mount')
+        })
+        var crt_value = this.row[this.head.name]
+        if(crt_value ){
+            Vue.nextTick(function(){
+                self.$emit('init-value',crt_value)
+            })
+
+        }
     },
     computed:{
         mylabel:function(){
@@ -31,6 +42,12 @@ Vue.component('com-field-index-select',{
         }
     },
     methods:{
+        update_options:function(data){
+            var self=this
+           ex.director_call(this.head.director_name,data,function(resp){
+               self.head.bucket_list=resp
+           })
+        },
         open_panel:function(){
             var self=this
             var ctx={

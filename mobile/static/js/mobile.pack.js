@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 28);
+/******/ 	return __webpack_require__(__webpack_require__.s = 32);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -515,7 +515,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-__webpack_require__(27);
+__webpack_require__(31);
 
 var PopMobileWin = function () {
     function PopMobileWin(_ref) {
@@ -742,7 +742,7 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(22);
+var content = __webpack_require__(24);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -768,7 +768,7 @@ if(false) {
 "use strict";
 
 
-__webpack_require__(30);
+__webpack_require__(26);
 
 Vue.component('com-field-index-select', {
     props: ['row', 'head'],
@@ -779,7 +779,17 @@ Vue.component('com-field-index-select', {
         };
     },
     mounted: function mounted() {
+        var self = this;
         ex.vueEventRout(this);
+        Vue.nextTick(function () {
+            self.$emit('on-mount');
+        });
+        var crt_value = this.row[this.head.name];
+        if (crt_value) {
+            Vue.nextTick(function () {
+                self.$emit('init-value', crt_value);
+            });
+        }
     },
     computed: {
         mylabel: function mylabel() {
@@ -798,6 +808,12 @@ Vue.component('com-field-index-select', {
         }
     },
     methods: {
+        update_options: function update_options(data) {
+            var self = this;
+            ex.director_call(this.head.director_name, data, function (resp) {
+                self.head.bucket_list = resp;
+            });
+        },
         open_panel: function open_panel() {
             var self = this;
             var ctx = {
@@ -864,7 +880,7 @@ Vue.component('com-index-select', {
 "use strict";
 
 
-__webpack_require__(24);
+__webpack_require__(27);
 
 Vue.component('date', {
     mixins: [com_input_date],
@@ -930,9 +946,11 @@ Vue.component('com-slide-iframe', {
 "use strict";
 
 
+__webpack_require__(30);
+
 Vue.component('com-slide-head', {
     props: ['title'],
-    template: '<div style="height: 6rem;flex-shrink:0;background-color: #393738;color: white;position: relative">\n        <div class="center-v" style="left: 1rem;padding: 1rem" @click="go_back()"><i class="fa fa-angle-left fa-2x"></i></div>\n        <div class="center-vh"  v-text="title"></div>\n    </div>',
+    template: '<div class="com-slide-head">\n        <div class="center-v go-back"  @click="go_back()"><i class="fa fa-angle-left fa-2x"></i></div>\n        <div class="center-vh head-text"  v-text="title"></div>\n    </div>',
     methods: {
         go_back: function go_back() {
             history.back();
@@ -951,7 +969,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.fixed_body = fixed_body;
-__webpack_require__(25);
+__webpack_require__(28);
 
 function fixed_body() {
     //$('body').addClass('modal-open')
@@ -988,7 +1006,7 @@ window.fixed_body_quit = fixed_body_quit;
 "use strict";
 
 
-__webpack_require__(26);
+__webpack_require__(29);
 
 /*
 * 因为没有遮挡层，可能造成多次打开窗口问题，所以使用mint-ui替代了这个组件
@@ -1122,7 +1140,7 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, ".com-input-date .weui-mask {\n  z-index: 3000; }\n", ""]);
+exports.push([module.i, ".com-index-select .mint-indexlist {\n  position: absolute;\n  top: 0;\n  right: 0;\n  bottom: 0;\n  left: 0; }\n", ""]);
 
 // exports
 
@@ -1136,7 +1154,7 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, "body.modal-open {\n  position: fixed;\n  width: 100%; }\n", ""]);
+exports.push([module.i, ".com-input-date .weui-mask {\n  z-index: 3000; }\n", ""]);
 
 // exports
 
@@ -1150,7 +1168,7 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, ".list-enter-active, .list-leave-active {\n  transition: all 0.3s; }\n\n.list-enter, .list-leave-to {\n  opacity: 0.3;\n  transform: translateX(100%); }\n\n.com-slide-win {\n  position: absolute;\n  top: 0;\n  left: 0;\n  bottom: 0;\n  right: 0;\n  pointer-events: none; }\n  .com-slide-win .mywrap {\n    display: flex;\n    flex-direction: column; }\n    .com-slide-win .mywrap .pop-content {\n      flex-grow: 10;\n      overflow: auto;\n      -webkit-overflow-scrolling: touch; }\n", ""]);
+exports.push([module.i, "body.modal-open {\n  position: fixed;\n  width: 100%; }\n", ""]);
 
 // exports
 
@@ -1164,7 +1182,7 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, ".el-table__body-wrapper.is-scrolling-middle {\n  overflow: auto;\n  -webkit-overflow-scrolling: touch; }\n", ""]);
+exports.push([module.i, ".list-enter-active, .list-leave-active {\n  transition: all 0.3s; }\n\n.list-enter, .list-leave-to {\n  opacity: 0.3;\n  transform: translateX(100%); }\n\n.com-slide-win {\n  position: absolute;\n  top: 0;\n  left: 0;\n  bottom: 0;\n  right: 0;\n  pointer-events: none; }\n  .com-slide-win .mywrap {\n    display: flex;\n    flex-direction: column; }\n    .com-slide-win .mywrap .pop-content {\n      flex-grow: 10;\n      overflow: auto;\n      -webkit-overflow-scrolling: touch; }\n", ""]);
 
 // exports
 
@@ -1178,7 +1196,7 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, ".pop-moible-win .mint-popup {\n  background: none; }\n\n.pop-slide-win .mint-popup {\n  height: 100vh;\n  width: 100vw; }\n\n.pop-slide-win .v-modal {\n  opacity: 0; }\n\n.pop-slide-win .weui-mask {\n  z-index: 3000; }\n", ""]);
+exports.push([module.i, ".com-slide-head {\n  height: 6rem;\n  flex-shrink: 0;\n  background-color: #393738;\n  color: white;\n  position: relative; }\n  .com-slide-head .go-back {\n    left: 1rem;\n    padding: 1rem; }\n", ""]);
 
 // exports
 
@@ -1187,10 +1205,64 @@ exports.push([module.i, ".pop-moible-win .mint-popup {\n  background: none; }\n\
 /* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
+exports = module.exports = __webpack_require__(0)();
+// imports
+
+
+// module
+exports.push([module.i, ".el-table__body-wrapper.is-scrolling-middle {\n  overflow: auto;\n  -webkit-overflow-scrolling: touch; }\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 25 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(0)();
+// imports
+
+
+// module
+exports.push([module.i, ".pop-moible-win .mint-popup {\n  background: none; }\n\n.pop-slide-win .mint-popup {\n  height: 100vh;\n  width: 100vw; }\n\n.pop-slide-win .v-modal {\n  opacity: 0; }\n\n.pop-slide-win .weui-mask {\n  z-index: 3000; }\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 26 */
+/***/ (function(module, exports, __webpack_require__) {
+
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
 var content = __webpack_require__(19);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// add the styles to the DOM
+var update = __webpack_require__(1)(content, {});
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./index_select.scss", function() {
+			var newContent = require("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./index_select.scss");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 27 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(20);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -1210,13 +1282,13 @@ if(false) {
 }
 
 /***/ }),
-/* 25 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(20);
+var content = __webpack_require__(21);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -1236,13 +1308,13 @@ if(false) {
 }
 
 /***/ }),
-/* 26 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(21);
+var content = __webpack_require__(22);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -1262,13 +1334,39 @@ if(false) {
 }
 
 /***/ }),
-/* 27 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
 var content = __webpack_require__(23);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// add the styles to the DOM
+var update = __webpack_require__(1)(content, {});
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./slide_head.scss", function() {
+			var newContent = require("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./slide_head.scss");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 31 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(25);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -1288,7 +1386,7 @@ if(false) {
 }
 
 /***/ }),
-/* 28 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1329,46 +1427,6 @@ var field_edito_main = _interopRequireWildcard(_main6);
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 __webpack_require__(10);
-
-/***/ }),
-/* 29 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(0)();
-// imports
-
-
-// module
-exports.push([module.i, ".com-index-select .mint-indexlist {\n  position: absolute;\n  top: 0;\n  right: 0;\n  bottom: 0;\n  left: 0; }\n", ""]);
-
-// exports
-
-
-/***/ }),
-/* 30 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(29);
-if(typeof content === 'string') content = [[module.i, content, '']];
-// add the styles to the DOM
-var update = __webpack_require__(1)(content, {});
-if(content.locals) module.exports = content.locals;
-// Hot Module Replacement
-if(false) {
-	// When the styles change, update the <style> tags
-	if(!content.locals) {
-		module.hot.accept("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./index_select.scss", function() {
-			var newContent = require("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./index_select.scss");
-			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-			update(newContent);
-		});
-	}
-	// When the module is disposed, remove the <style> tags
-	module.hot.dispose(function() { update(); });
-}
 
 /***/ })
 /******/ ]);
