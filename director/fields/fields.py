@@ -508,11 +508,27 @@ class Fields(ModelFields):
         self.kw=dc.copy()
         self.kw.update(kw)
         self.crt_user = crt_user
+        
+        self._errors={
+        }
         # 太复杂，暂时不要权限
         self.nolimit = True
     
-    def is_valid(self): 
-        return True
+    def add_error(self,key,msg):
+        if key not in self._errors:
+            self._errors[key]=[]
+        self._errors[key].append(msg)
+    
+    def get_errors(self):
+        return self._errors
+    def clean(self):
+        pass
+    def is_valid(self):
+        self.clean()
+        if self._errors:
+            return False
+        else:
+            return True
     
     def save_form(self): 
         "overwrite this method"
