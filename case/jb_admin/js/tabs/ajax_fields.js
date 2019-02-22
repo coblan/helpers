@@ -10,7 +10,7 @@ var ajax_fields={
       }
     },
     mixins:[mix_fields_data,mix_nice_validator],
-    template:`<div class="flex-v"  style="position: absolute;top:0;left:0;bottom: 0;right:0;overflow: auto;padding-bottom: 3em;">
+    template:`<div class="flex-v"  style="position: absolute;top:0;left:0;bottom: 0;right:0;overflow: auto;padding-bottom: 1rem;">
 
     <div>
         <div class='field-panel suit' id="form" >
