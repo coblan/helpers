@@ -4,6 +4,12 @@
   }
 }
 .pop-slide-win{
+
+  .content-wrap{
+    //border-left: 1px solid grey;
+    -moz-box-shadow:-1px 0px 1px #bbbbbb; -webkit-box-shadow:-1px 0px 1px #b2b2b2; box-shadow:-1px 0px 1px #9a9a9a;
+  }
+
   .mint-popup{
     height: 100vh;
     width: 100vw;

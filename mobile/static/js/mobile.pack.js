@@ -593,7 +593,7 @@ var SlideWin = function (_PopMobileWin) {
         key: 'appendHtml',
         value: function appendHtml() {
             this.pop_id = new Date().getTime();
-            $('body').append('<div id="pop-' + this.pop_id + '" class="pop-slide-win">\n            <mt-popup\n                  v-model=\'show\'\n                  :modal="true"\n                  :closeOnClickModal="false"\n                  position="right">\n                  <div class="flex-v" style="height: 100%;width: 100%">\n                        <com-slide-head :title="ctx.title" ></com-slide-head>\n\n                        <component class="flex-grow" style="overflow: auto;position: relative" :is="editor" :ctx="ctx" @finish="on_finish($event)"></component>\n\n\n                  </div>\n\n\n            </mt-popup>\n            </div>');
+            $('body').append('<div id="pop-' + this.pop_id + '" class="pop-slide-win" v-cloak>\n            <mt-popup\n                  v-model=\'show\'\n                  :modal="true"\n                  :closeOnClickModal="false"\n                  position="right">\n                  <div class="flex-v content-wrap" style="height: 100%;width: 100%">\n                        <com-slide-head :title="ctx.title" ></com-slide-head>\n\n                        <component class="flex-grow" style="overflow: auto;position: relative" :is="editor" :ctx="ctx" @finish="on_finish($event)"></component>\n\n\n                  </div>\n\n\n            </mt-popup>\n            </div>');
         }
     }, {
         key: 'closeFun',
@@ -1224,7 +1224,7 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, ".pop-moible-win .mint-popup {\n  background: none; }\n\n.pop-slide-win .mint-popup {\n  height: 100vh;\n  width: 100vw; }\n\n.pop-slide-win .v-modal {\n  opacity: 0; }\n\n.pop-slide-win .weui-mask {\n  z-index: 3000; }\n", ""]);
+exports.push([module.i, ".pop-moible-win .mint-popup {\n  background: none; }\n\n.pop-slide-win .content-wrap {\n  -moz-box-shadow: -1px 0px 1px #bbbbbb;\n  -webkit-box-shadow: -1px 0px 1px #b2b2b2;\n  box-shadow: -1px 0px 1px #9a9a9a; }\n\n.pop-slide-win .mint-popup {\n  height: 100vh;\n  width: 100vw; }\n\n.pop-slide-win .v-modal {\n  opacity: 0; }\n\n.pop-slide-win .weui-mask {\n  z-index: 3000; }\n", ""]);
 
 // exports
 
