@@ -1,0 +1,224 @@
+{% extends "jb_admin/base.html" %}
+{% load static %}
+{% load jsonify %}
+
+{% block page_content %}
+<script src='{% static "js/jb_admin.pack.js" %}?t={{ js_stamp.jb_admin_pack_js }}'></script>
+
+<script type="text/javascript">
+
+//    extra_fields_logic='{{ extra_fields_logic }}'
+
+//    extra_mixins = {{ extra_mixins | jsonify |default:'null' }}
+
+//    tabs={{ tabs | jsonify | default:'[]' }}
+
+//    main_com={{ main_com | jsonify | default:'null'  }}
+
+tab_ctx={{tab_ctx | jsonify }}
+tab_name={{tab_name | jsonify }}
+
+base_store={
+
+}
+
+    fields_logic={
+        el:'#there',
+        data:{
+            page_label:page_label,
+//            heads:heads,
+//            row:row,
+//            director_name:director_name,
+
+//            ops:ops,
+
+            search_args:search_args,
+            //---------table_page---------
+            tab_stack:[],
+            //-------------------
+            named_ctx:named_ctx,
+            tab_ctx:tab_ctx,
+            tab_name:tab_name,
+            tr:cfg.tr
+
+
+        },
+//        mixins:[mix_fields_data,mix_nice_validator],
+//        computed:{
+//            has_select:function(){
+//                return this.selected.length !=0
+//            },
+//        },
+//        mounted:function(){
+//            var self=this
+//            ex.assign(this.op_funs,{
+//                row_changed:function(kws){
+//                    var row= kws.row
+//                    if(!ex.isin(row,self.changed_rows)){
+//                        self.changed_rows.push(row)
+//                    }
+//                },
+//                row_changed_undo_act:function(kws){
+//                    var md5= ex.hashDict(kws.row)
+//                    if(md5 == kws.row._hash){
+//                        ex.remove(self.changed_rows,{pk:kws.row.pk})
+//                    }
+//                },
+//                switch_to_tab:function(kws){
+//                    self.show_tab(kws.tab_name)
+//                    self.crt_row= kws.row
+//                },
+//                update_or_insert:function(kws){
+//                    var new_row = kws.new_row
+//                    var old_row= kws.old_row
+//                    self.update_or_insert(new_row,old_row)
+//                },
+//
+//            })
+//
+//        },
+        mounted:function(){
+            this.switch_to_tab(this.tab_ctx,this.tab_name)
+        },
+        computed:{
+            pathable_tab_names:function(){
+                var names =[]
+                var last_stack=null
+                ex.each(this.childStore.tab_stack,function(stack){
+                    if(last_stack){
+                        var last_crt_tab = ex.findone(last_stack.tabs,{name:last_stack.crt_tab_name})
+                        names.push(last_crt_tab.label)
+                    }
+                    last_stack = stack
+                })
+                return names
+
+            },
+
+        },
+
+        methods:{
+            switch_to_tab:function(tab_ctx,tab_name){
+                var self=this
+                var tabs=named_ctx[tab_ctx]
+                self.tab_stack.push( {
+                    widget:'com-widget-el-tab' ,
+                    tabs:tabs,
+                    crt_tab_name:tab_name,
+                })
+            },
+
+            on_tab_event:function(e){
+                this.op_funs[e.name](e)
+            },
+
+            back_to_main_page:function(){
+                this.tabgroup.crt='main'
+            },
+            show_tab:function(name){
+                this.tabgroup.crt = name
+                var self =this
+
+                Vue.nextTick(function(){
+                    self.$refs['_tab_'+name][0].on_show()
+                })
+
+            },
+            get_attr:function(name){
+                if(name == undefined){
+                    return false
+                }
+                if(name.startsWith('!')){
+                    name=name.slice(1)
+                    name= name.trim()
+                    return !this[name]
+                }else{
+                    name= name.trim()
+                    return this[name]
+                }
+            },
+            handleClick(tab, event) {
+                this.show_tab(tab.name)
+
+            }
+        }
+
+    }
+
+    function update_cnt_size(){
+//        var cnt_ht =  Math.max( $(document).height(),window.innerHeight)
+        var cnt_ht =  window.innerHeight
+        $('#there').height(cnt_ht -80)
+    }
+    $(function () {
+        update_cnt_size()
+//        $('.main-tab-content').height(window.innerHeight -230)
+        $(window).resize(function(){
+            update_cnt_size()
+        });
+//        $(document).resize(update_cnt_size)
+
+//        if(extra_mixins){
+//            fields_logic =ex.vueExtend(fields_logic,extra_mixins)
+//        }
+//        // 可能不会要下面的extra_fields_logic了
+//        if(extra_fields_logic){
+//            fields_logic.mixins.push(window[extra_fields_logic])
+//        }
+
+
+        fields=new Vue(fields_logic)
+
+    })
+
+</script>
+
+{% block extra_head %}
+{% endblock %}
+<style>
+    a[disabled] {
+        color: gray;
+        pointer-events: none;
+    }
+</style>
+<div id='there' class="flex-v">
+
+    {% block flag %}
+    <div v-if="page_label" style="border-left: 3px solid #3e8ebd;padding-left: 1em;margin-bottom: 5px;">
+        <b v-text="page_label"></b>
+        <span style="display: inline-block;width: 2em;"></span>
+        <ol class="breadcrumb" style="display: inline-block;background-color: inherit;margin-bottom: 0;padding: 0"  v-show="pathable_tab_names.length >0 ">
+            <li v-for="name in pathable_tab_names"><span v-text="name"></span></li>
+        </ol>
+        <button type="button"
+                class="btn btn-warning btn-xs"
+                v-show="childStore.tab_stack.length > 0"
+                @click="childStore.pop_tab_stack()">
+            <i class="fa fa-arrow-circle-o-left fa-lg"></i><span v-text="tr.back"></span></button>
+    </div>
+
+    {% endblock %}
+
+    {% block tab-content %}
+    <div id="tab-wrap"  v-if="childStore.tab_stack.length>0" class="flex-grow" style="position: relative">
+
+        <com-widget-stack :ctx_list="childStore.tab_stack" @win-event="on_tab_event($event)"></com-widget-stack>
+
+    </div>
+
+    {% endblock %}
+
+</div>
+<style>
+    .main-tab-content{
+
+    }
+
+    .fake-suit th{
+        white-space: nowrap;
+    }
+
+</style>
+{% block extra %}
+{% endblock %}
+{% endblock %}
