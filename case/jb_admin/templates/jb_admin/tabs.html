@@ -19,12 +19,17 @@ tab_ctx={{tab_ctx | jsonify }}
 tab_name={{tab_name | jsonify }}
 
 base_store={
-
+    data:function(){
+        return {
+            parents:parents,
+        }
+    }
 }
 
     fields_logic={
         el:'#there',
         data:{
+            childStore : new Vue(real_table_store),
             page_label:page_label,
 //            heads:heads,
 //            row:row,
