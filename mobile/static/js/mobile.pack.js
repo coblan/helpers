@@ -593,7 +593,7 @@ var SlideWin = function (_PopMobileWin) {
         key: 'appendHtml',
         value: function appendHtml() {
             this.pop_id = new Date().getTime();
-            $('body').append('<div id="pop-' + this.pop_id + '" class="pop-slide-win">\n            <mt-popup\n                  v-model=\'show\'\n                  :modal="true"\n                  :closeOnClickModal="false"\n                  position="right">\n                  <div class="flex-v" style="height: 100%;width: 100%">\n                        <com-slide-head :title="ctx.title" ></com-slide-head>\n\n                        <component class="flex-grow" style="overflow: auto;position: relative" :is="editor" :ctx="ctx" @finish="on_finish($event)"></component>\n\n\n                  </div>\n\n\n            </mt-popup>\n            </div>');
+            $('body').append('<div id="pop-' + this.pop_id + '" class="pop-slide-win" v-cloak>\n            <mt-popup\n                  v-model=\'show\'\n                  :modal="true"\n                  :closeOnClickModal="false"\n                  position="right">\n                  <div class="flex-v content-wrap" style="height: 100%;width: 100%">\n                        <com-slide-head :title="ctx.title" ></com-slide-head>\n\n                        <component class="flex-grow" style="overflow: auto;position: relative" :is="editor" :ctx="ctx" @finish="on_finish($event)"></component>\n\n\n                  </div>\n\n\n            </mt-popup>\n            </div>');
         }
     }, {
         key: 'closeFun',
@@ -1224,7 +1224,7 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, ".pop-moible-win .mint-popup {\n  background: none; }\n\n.pop-slide-win .mint-popup {\n  height: 100vh;\n  width: 100vw; }\n\n.pop-slide-win .v-modal {\n  opacity: 0; }\n\n.pop-slide-win .weui-mask {\n  z-index: 3000; }\n", ""]);
+exports.push([module.i, ".pop-moible-win .mint-popup {\n  background: none; }\n\n.pop-slide-win .content-wrap {\n  -moz-box-shadow: -1px 0px 2px #c5c5c5;\n  -webkit-box-shadow: -1px 0px 2px #dedede;\n  box-shadow: -1px 0px 2px #cccccc; }\n\n.pop-slide-win .mint-popup {\n  height: 100vh;\n  width: 100vw; }\n\n.pop-slide-win .v-modal {\n  opacity: 0; }\n\n.pop-slide-win .weui-mask {\n  z-index: 3000; }\n", ""]);
 
 // exports
 
@@ -1424,9 +1424,255 @@ var _main6 = __webpack_require__(3);
 
 var field_edito_main = _interopRequireWildcard(_main6);
 
+var _main7 = __webpack_require__(33);
+
+var effect_main = _interopRequireWildcard(_main7);
+
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 __webpack_require__(10);
+
+/***/ }),
+/* 33 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _material_wave = __webpack_require__(34);
+
+var material_wave = _interopRequireWildcard(_material_wave);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+/***/ }),
+/* 34 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/*
+*
+* 增加点击的水波纹效果。
+*
+* 示例：
+*
+* 1. html
+* <div class="material-wave">点击我</div>
+*
+*2. js初始化
+* <script>
+*     material_wave_init()
+* </script>
+*
+* */
+
+__webpack_require__(36);
+
+var Wave = function () {
+    function Wave() {
+        _classCallCheck(this, Wave);
+    }
+
+    _createClass(Wave, [{
+        key: 'append_canvas',
+        value: function append_canvas(element) {
+            var canvas = document.createElement('canvas');
+            element.appendChild(canvas);
+            canvas.style.width = '100%';
+            canvas.style.height = '100%';
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+        }
+    }, {
+        key: 'press',
+        value: function press(event) {
+
+            this.element = event.currentTarget.getElementsByTagName('canvas')[0];
+            this.context = this.element.getContext('2d');
+            this.color = this.element.parentElement.dataset.color || '#d4d4d0';
+            var speed = this.element.parentElement.dataset.speed || 30;
+            this.speed = parseInt(speed);
+
+            this.radius = 0;
+            //centerX = event.offsetX;
+            //centerY = event.offsetY;
+            var cx = event.clientX;
+            var cy = event.clientY;
+            //var cx =event.changedTouches[0].clientX
+            //var cy = event.changedTouches[0].clientY
+            var pos = map_from_client(this.element, cx, cy);
+            this.centerX = pos[0];
+            this.centerY = pos[1];
+
+            this.context.clearRect(0, 0, this.element.width, this.element.height);
+            this.draw();
+        }
+    }, {
+        key: 'draw',
+        value: function draw() {
+            this.context.beginPath();
+            this.context.arc(this.centerX, this.centerY, this.radius, 0, 2 * Math.PI, false);
+            this.context.fillStyle = this.color;
+            this.context.fill();
+            this.radius += this.speed;
+            if (this.radius < this.element.width) {
+                var self = this;
+                requestAnimFrame(function () {
+                    self.draw();
+                });
+            } else {
+                this.context.clearRect(0, 0, this.element.width, this.element.height);
+            }
+        }
+    }]);
+
+    return Wave;
+}();
+
+var requestAnimFrame = function () {
+    return window.requestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || function (callback) {
+        window.setTimeout(callback, 1000 / 60);
+    };
+}();
+
+$(document).on('click', '.material-wave', function (e) {
+    var wave = new Wave();
+    if ($(e.currentTarget).find('canvas').length == 0) {
+        wave.append_canvas(e.currentTarget);
+    }
+    wave.press(e);
+});
+
+window.material_wave_init = function () {
+    var canvas = {};
+    var centerX = 0;
+    var centerY = 0;
+    var color = '';
+    var speed = 30;
+    var containers = document.getElementsByClassName('material-wave');
+    var context = {};
+    var element = {};
+    var radius = 0;
+
+    var requestAnimFrame = function () {
+        return window.requestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || function (callback) {
+            window.setTimeout(callback, 1000 / 60);
+        };
+    }();
+
+    var init = function init() {
+        containers = Array.prototype.slice.call(containers);
+        for (var i = 0; i < containers.length; i += 1) {
+            canvas = document.createElement('canvas');
+            //canvas.addEventListener('click', press, false);
+
+            containers[i].addEventListener('touchstart', press, false);
+            //containers[i].insertBefore(canvas,containers[i].childNodes[0]);
+            containers[i].appendChild(canvas);
+            canvas.style.width = '100%';
+            canvas.style.height = '100%';
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+        }
+    };
+    var append_canvas = function append_canvas(element) {
+        var canvas = document.createElement('canvas');
+        element.appendChild(canvas);
+        canvas.style.width = '100%';
+        canvas.style.height = '100%';
+        canvas.width = canvas.offsetWidth;
+        canvas.height = canvas.offsetHeight;
+    };
+
+    var press = function press(event) {
+        element = event.currentTarget.getElementsByTagName('canvas')[0];
+        color = element.parentElement.dataset.color || '#d4d4d0';
+        speed = element.parentElement.dataset.speed || 20;
+        speed = parseInt(speed);
+        context = element.getContext('2d');
+        radius = 0;
+        //centerX = event.offsetX;
+        //centerY = event.offsetY;
+        var cx = event.offsetX;
+        var cy = event.offsetY;
+        //var cx =event.changedTouches[0].clientX
+        //var cy = event.changedTouches[0].clientY
+        var pos = map_from_client(element, cx, cy);
+        centerX = pos[0];
+        centerY = pos[1];
+
+        context.clearRect(0, 0, element.width, element.height);
+        draw();
+    };
+
+    var draw = function draw() {
+        context.beginPath();
+        context.arc(centerX, centerY, radius, 0, 2 * Math.PI, false);
+        context.fillStyle = color;
+        context.fill();
+        radius += speed;
+        if (radius < element.width) {
+            requestAnimFrame(draw);
+        } else {
+            context.clearRect(0, 0, element.width, element.height);
+        }
+    };
+
+    //init()
+};
+
+function map_from_client(canvas, cx, cy) {
+    var box = canvas.getBoundingClientRect();
+    var mouseX = (cx - box.left) * canvas.width / box.width;
+    var mouseY = (cy - box.top) * canvas.height / box.height;
+    return [mouseX, mouseY];
+}
+
+/***/ }),
+/* 35 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(0)();
+// imports
+
+
+// module
+exports.push([module.i, ".material-wave {\n  position: relative; }\n\n.material-wave canvas {\n  opacity: 0.25;\n  position: absolute;\n  top: 0;\n  left: 0;\n  pointer-events: none; }\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 36 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(35);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// add the styles to the DOM
+var update = __webpack_require__(1)(content, {});
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./material_wave.scss", function() {
+			var newContent = require("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./material_wave.scss");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
 
 /***/ })
 /******/ ]);

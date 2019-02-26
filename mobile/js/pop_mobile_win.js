@@ -56,13 +56,13 @@ class PopMobileWin{
 class SlideWin extends PopMobileWin{
     appendHtml(){
         this.pop_id =new Date().getTime()
-        $('body').append(`<div id="pop-${this.pop_id}" class="pop-slide-win">
+        $('body').append(`<div id="pop-${this.pop_id}" class="pop-slide-win" v-cloak>
             <mt-popup
                   v-model='show'
                   :modal="true"
                   :closeOnClickModal="false"
                   position="right">
-                  <div class="flex-v" style="height: 100%;width: 100%">
+                  <div class="flex-v content-wrap" style="height: 100%;width: 100%">
                         <com-slide-head :title="ctx.title" ></com-slide-head>
 
                         <component class="flex-grow" style="overflow: auto;position: relative" :is="editor" :ctx="ctx" @finish="on_finish($event)"></component>
