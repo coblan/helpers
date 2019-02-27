@@ -19,10 +19,11 @@ from django.conf import settings
 from django.utils.translation import ugettext as _
 from helpers.director.middleware.request_cache import get_request_cache,request_cache
 from helpers.func.collection.container import evalue_container
-
+from django.db import transaction
 import logging
 # sql_log 可能没有什么用
-sql_log = logging.getLogger('director.sql_op')
+#sql_log = logging.getLogger('director.sql_op')
+
 modelfields_log = logging.getLogger('ModelFields.save_form')
 
 
@@ -100,8 +101,6 @@ class ModelFields(forms.ModelForm):
         
         self.nolimit = nolimit
         self.kw.update(dc)
-        #self.kw=dc.copy()
-        #self.kw.update(kw)
 
         super(ModelFields,self).__init__(dc,*args,**form_kw)
         self.custom_permit()
@@ -109,10 +108,7 @@ class ModelFields(forms.ModelForm):
         self.pop_fields()
         self.init_value()
         
-        #before_include = []
-        #for k in self.changed_data:
-            #before_include.append(k)
-        #self.before = sim_dict(self.instance, include= before_include)
+        self.op_log={}
         
         # 有事直接利用table的rows，而table进行了一定的修改显示，这些字段都是readonly的，所以要过滤掉这些字段，否则会造成严重后果。
         #self.changed_data = [x for x in self.changed_data if x not in self.readonly]
@@ -443,18 +439,11 @@ class ModelFields(forms.ModelForm):
             setattr(self.instance,k, self.cleaned_data.get(k) )
             #after_include.append(k)
         #after = sim_dict(self.instance, include= after_include)
-        extra_log = self.clean_save()
-        self.instance.save()
+        with transaction.atomic():
+            extra_log = self.clean_save()
+            self.instance.save()
+            
         if op or extra_log:
-            
-            #if self.crt_user.is_authenticated:
-                #log =LogModel(key='{model_label}.{pk}'.format(model_label=model_to_name(self.instance),pk=self.instance.pk),kind=op,user=self.crt_user,detail=detail)
-            #else:
-                #log =LogModel(key='{model_label}.{pk}'.format(model_label=model_to_name(self.instance),pk=self.instance.pk),kind=op,detail=detail)                
-            #log.save()
-            
-            ## 加个控制开关，只收极少数情况，才需要详细的日志
-            #if getattr(settings, 'SQL_DETAIL_LOG', None):
             after_changed_data = sim_dict(self.instance, include= self.changed_data)
             dc = {
                 'model': model_to_name(self.instance),
@@ -466,7 +455,9 @@ class ModelFields(forms.ModelForm):
             }
             if extra_log:
                 dc.update(extra_log)
-            sql_log.info(json.dumps(dc,cls=DirectorEncoder)) 
+            if self.op_log:
+                dc.update(self.op_log)
+            #sql_log.info(json.dumps(dc,cls=DirectorEncoder)) 
             modelfields_log.info(json.dumps(dc,cls=DirectorEncoder))
         return self.instance
     
