@@ -64,12 +64,12 @@ class ModelFields(forms.ModelForm):
         """
         self.kw = kw.copy()
         
-        dc = self.clean_dict(dc)
         if not crt_user:
             self.crt_user=dc.get('crt_user')
         else:
             self.crt_user = crt_user
-        
+            
+        dc = self.clean_dict(dc)
         # if pk is None:
         if dc.get('pk') != None:
             pk=dc.get('pk')
@@ -128,9 +128,10 @@ class ModelFields(forms.ModelForm):
             
         model = self.Meta.model
         model_name = model_to_name(model)
+        
+        all_field_names =[f.name for f in model._meta.get_fields()]
         for k,v in dc.items():
             if not k.startswith('_'):
-                all_field_names =[f.name for f in model._meta.get_fields()]
                 if k in all_field_names:
                     field = model._meta.get_field(k)
                     if field_map.get(field.__class__):

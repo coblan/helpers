@@ -1,6 +1,6 @@
 Vue.component('com-field-op-btn',{
     props:['head'],
-    template:`<button @click="operation_call()" class="btn btn-default">
+    template:`<button @click="operation_call()" :class="head.class?head.class:'btn btn-default'">
         <i v-if="head.icon" :class="['fa',head.icon]"></i><span v-text="head.label"></span>
         </button>`,
     methods:{

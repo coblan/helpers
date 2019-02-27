@@ -21,32 +21,52 @@ tab_name={{tab_name | jsonify }}
 base_store={
     data:function(){
         return {
-            parents:parents,
+            search_args:search_args,
+            //---------table_page---------
+            tab_stack:[],
+            //-------------------
+            named_ctx:named_ctx,
+
         }
+    },
+    methods:{
+        switch_to_tab:function(kws){
+            var self=this
+            var tabs=named_ctx[kws.tab_ctx]
+            self.tab_stack.push( {
+                widget:'com-widget-el-tab' ,
+                tabs:tabs,
+                crt_tab_name:kws.tab_name,
+            })
+        },
+        pop_tab_stack:function(){
+
+            if( this.tab_stack.length != 0){
+                this.tab_stack.pop()
+            }
+//                if(this.tab_stack.length==0){
+//                    this.tabgroup.crt='_main'
+//                    this.tabgroup.crt_tabs=[]
+//                }
+            var self=this
+            Vue.nextTick(function(){
+                // 返回table页面时，可能是由于布局原因，造成table看不见
+                self.e_table.doLayout()
+            })
+
+        },
     }
 }
 
     fields_logic={
         el:'#there',
         data:{
-            childStore : new Vue(real_table_store),
+            childStore : new Vue(base_store),
             page_label:page_label,
-//            heads:heads,
-//            row:row,
-//            director_name:director_name,
+            tr:cfg.tr,
 
-//            ops:ops,
-
-            search_args:search_args,
-            //---------table_page---------
-            tab_stack:[],
-            //-------------------
-            named_ctx:named_ctx,
             tab_ctx:tab_ctx,
             tab_name:tab_name,
-            tr:cfg.tr
-
-
         },
 //        mixins:[mix_fields_data,mix_nice_validator],
 //        computed:{
@@ -83,7 +103,11 @@ base_store={
 //
 //        },
         mounted:function(){
-            this.switch_to_tab(this.tab_ctx,this.tab_name)
+            var kws = {
+                tab_ctx:this.tab_ctx,
+                tab_name:this.tab_name,
+            }
+            this.childStore.switch_to_tab(kws)
         },
         computed:{
             pathable_tab_names:function(){
@@ -103,15 +127,7 @@ base_store={
         },
 
         methods:{
-            switch_to_tab:function(tab_ctx,tab_name){
-                var self=this
-                var tabs=named_ctx[tab_ctx]
-                self.tab_stack.push( {
-                    widget:'com-widget-el-tab' ,
-                    tabs:tabs,
-                    crt_tab_name:tab_name,
-                })
-            },
+
 
             on_tab_event:function(e){
                 this.op_funs[e.name](e)
@@ -197,7 +213,7 @@ base_store={
         </ol>
         <button type="button"
                 class="btn btn-warning btn-xs"
-                v-show="childStore.tab_stack.length > 0"
+                v-show="childStore.tab_stack.length > 1"
                 @click="childStore.pop_tab_stack()">
             <i class="fa fa-arrow-circle-o-left fa-lg"></i><span v-text="tr.back"></span></button>
     </div>

@@ -40,7 +40,7 @@ var tab_table={
                         ex.assign(this.search_args,pre_set)
                     }else if(vc.tab_head.tab_field){ // 下面是老的调用，
                         this.search_args[vc.tab_head.tab_field] = vc.par_row[vc.tab_head.par_field]
-                    }else{
+                    }else if(vc.tab_head.par_field){
                         this.search_args[vc.tab_head.par_field] = vc.par_row[vc.tab_head.par_field]
                     }
                     table_store.methods.getRows.call(this)
