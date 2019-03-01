@@ -58,12 +58,19 @@ msg-bottom  nice validator的位置在下面，默认在右侧
     align-items:stretch;
     margin-bottom: 0;
 
+    .help-text{
+      padding: 13px 3px;
+      color: #999;
+      font-style: italic;
+      font-size: 0.9em;
+    }
+
     .label-content{
       word-break: break-all;
     }
 
       .field_input{
-        input{
+        input[type=text],input[type=number]{
           width: 23rem;
         }
 
@@ -123,6 +130,7 @@ msg-bottom  nice validator的位置在下面，默认在右侧
     flex-shrink:0;
     font-weight:400;
   }
+
 }
 
 .field-panel {
