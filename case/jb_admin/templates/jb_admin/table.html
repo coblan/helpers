@@ -157,11 +157,12 @@
                 var names =[]
                 var last_stack=null
                 ex.each(this.childStore.tab_stack,function(stack){
-                    if(last_stack){
-                        var last_crt_tab = ex.findone(last_stack.tabs,{name:last_stack.crt_tab_name})
-                        names.push(last_crt_tab.label)
+                    if(stack){
+                        var last_crt_tab = ex.findone(stack.tabs,{name:stack.crt_tab_name})
+//                        names.push(last_crt_tab.label)
+                        names.push(last_crt_tab.label+"("+stack.par_row._label+")")
                     }
-                    last_stack = stack
+//                    last_stack = stack
                 })
                 return names
 
