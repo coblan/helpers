@@ -459,10 +459,14 @@ class ModelFields(forms.ModelForm):
                 dc.update(self.op_log)
             #sql_log.info(json.dumps(dc,cls=DirectorEncoder)) 
             modelfields_log.info(json.dumps(dc,cls=DirectorEncoder))
+        self.after_save()
         return self.instance
     
     def clean_save(self): 
         return {}
+    
+    def after_save(self):
+        pass
     
     def del_form(self):
         if self.permit.can_del() and self.instance.pk:
