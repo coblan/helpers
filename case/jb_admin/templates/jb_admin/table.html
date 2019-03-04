@@ -160,7 +160,11 @@
                     if(stack){
                         var last_crt_tab = ex.findone(stack.tabs,{name:stack.crt_tab_name})
 //                        names.push(last_crt_tab.label)
-                        names.push(last_crt_tab.label+"("+stack.par_row._label+")")
+                        if(stack.par_row._label){
+                            names.push(last_crt_tab.label+"("+stack.par_row._label+")")
+                        }else{
+                            names.push(last_crt_tab.label)
+                        }
                     }
 //                    last_stack = stack
                 })
