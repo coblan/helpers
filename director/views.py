@@ -47,10 +47,9 @@ def ajax_views(request,app=None):
         with transaction.atomic():
             rt = ajax_router(request, ajax_module.get_global())
             
-    except KeyError as e:
-        rt={'success':False,'msg':'key error '+str(e) +' \n may function name error'}
+    #except KeyError as e:
+        #rt={'success':False,'msg':'key error '+str(e) +' \n may function name error'}
     except UserWarning as e:
-  
         rt = {'success': False, 'msg': str(e)}
     if isinstance(rt, HttpResponse):
         return rt
