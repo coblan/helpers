@@ -97,6 +97,7 @@ var ele_table= {
 
                             <el-table-column v-if="head.editor"
                                              :show-overflow-tooltip="parStore.is_show_tooltip(head) "
+                                              :fixed="head.fixed"
                                              :label="head.label"
                                              :prop="head.name.toString()"
                                              :sortable="parStore.is_sort(head)"
@@ -113,6 +114,7 @@ var ele_table= {
 
                             <el-table-column v-else
                                              :show-overflow-tooltip="parStore.is_show_tooltip(head) "
+                                             :fixed="head.fixed"
                                              :prop="head.name.toString()"
                                              :label="head.label"
                                              :sortable="parStore.is_sort(head)"

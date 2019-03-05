@@ -45,7 +45,8 @@ var table_page_store={
                 par_row:kws.par_row,
 
             })
-            self.crt_row= kws.row
+            self.crt_row=kws.par_row
+            //self.crt_row= kws.row
         },
         pop_tab_stack:function(){
 

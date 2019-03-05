@@ -333,7 +333,7 @@ var table_store={
             }
 
 
-            function bb(new_row,callback){
+            function do_director_call(new_row,callback){
                 cfg.show_load()
                 ex.director_call(kws.director_name,{rows:self.selected,new_row:new_row},function(resp){
                     if(!resp.msg){
@@ -341,10 +341,6 @@ var table_store={
                     }else{
                         cfg.hide_load()
                     }
-                    //if(resp.msg){
-                    //    cfg.showMsg(resp.msg)
-                    //}
-
                     if(kws.after_save){
                         ex.eval(kws.after_save,{resp:resp,ts:self})
                     }else{
@@ -367,7 +363,7 @@ var table_store={
 
             function judge_pop_fun(){
                 var one_row={}
-                ex.assign(one_row,ex.eval(kws.pre_set))
+                ex.assign(one_row,ex.eval(kws.pre_set,{head:kws,ps:self.parStore}))
                 if(kws.fields_ctx){
                     ex.map(kws.fields_ctx.heads,function(head){
                         if(!head.name.startsWith('_') && one_row[head.name]==undefined){
@@ -375,12 +371,12 @@ var table_store={
                         }
                     })
                     var win_index = pop_edit_local(one_row,kws.fields_ctx,function(new_row,store){
-                        bb(new_row,function(resp){
+                        do_director_call(new_row,function(resp){
                             layer.close(win_index)
                         })
                     })
                 }else{
-                    bb(one_row)
+                    do_director_call(one_row)
                 }
             }
 
