@@ -4,7 +4,8 @@ Vue.component('com-op-switch',{
     props:['head'],
     data:function(){
         return {
-            myvalue:false
+            myvalue:false,
+            parStore:ex.vueParStore(this)
         }
     },
     template:`<div class="com-op-switch">
@@ -15,7 +16,15 @@ Vue.component('com-op-switch',{
       inactive-color="#888">
     </el-switch>
     </div>`,
+    mounted:function(){
+        if(this.head.init_express){
+            ex.eval(this.head.init_express,{ps:this.parStore,vc:this})
+        }
+
+        //switch_get_value(this)
+    },
     methods:{
+
         trig_switch:function(){
             var self=this
             if(this.head.op_confirm_msg){
@@ -39,3 +48,16 @@ Vue.component('com-op-switch',{
         //},
     }
 })
+
+async  function switch_get_value(self){
+    let resp = await ex.director_call(self.head.init_express,{})
+    self.myvalue=resp
+}
+
+//async  function asyncDirector(name){
+//    return new Promise((resolve,reject)=>{
+//        ex.director_call(name,{},function(resp){
+//            resolve(resp)
+//        })
+//    })
+//}

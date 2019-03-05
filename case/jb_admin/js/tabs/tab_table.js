@@ -20,7 +20,7 @@ var tab_table={
                     selected:[],
                     del_info:[],
                     search_args: {},
-
+                    vc:vc,
                     parStore:ex.vueParStore(vc)
                 }
             },

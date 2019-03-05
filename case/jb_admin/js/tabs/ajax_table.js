@@ -2,8 +2,18 @@
 var ajax_table={
     props:['tab_head','par_row'],//['heads','row_filters','kw'],
     data:function(){
+        var self=this
         var heads_ctx = this.tab_head.table_ctx
+        var childStore = new Vue({
+            data:function (){
+                return {
+                    vc:self,
+                    vcname:'ajax_table',
+                }
+            }
+        })
         return {
+            childStore:childStore,
             heads:heads_ctx.heads,
             row_filters:heads_ctx.row_filters,
             row_sort:heads_ctx.row_sort,
@@ -13,7 +23,6 @@ var ajax_table={
             rows:[],
             row_pages:{},
             selectable:heads_ctx.selectable==undefined? true:heads_ctx.selectable,
-
             selected:[],
             del_info:[],
 
