@@ -59,7 +59,6 @@ var tab_fields={
                 var fun = get_data [self.tab_head.get_data.fun]
                 var kws = self.tab_head.get_data.kws
                 fun(self,function(row){
-                    //ex.assign(self.row,row)
                     self.row = row
                     self.childStore.$emit('row.update_or_insert',row)
                 },kws)

@@ -111,3 +111,5 @@ import * as table_editor_main from  './table_editor/main.js'
 import * as table_group_main from  './table_group/main.js'
 import * as node_store_main from  './node_store/main.js'
 import * as tabs_main from  './tabs/main'
+
+import * as operator_main from  './operator/main.js'
