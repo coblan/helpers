@@ -808,6 +808,10 @@ class PlainTable(ModelTable):
         self.crt_user=crt_user 
         self.page=_page
         self.footer = []
+        self.custom_permit()
+    
+    def custom_permit(self):
+        pass
     
     def get_head_context(self):
         """
