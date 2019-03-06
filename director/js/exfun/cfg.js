@@ -12,6 +12,9 @@ window.cfg={
     showError:function(msg){
         layer.alert(msg, {icon: 5,title:'错误'});
     },
+    showTip:function(msg,...parm){
+        layer.msg(msg,...parm)
+    },
     tr:{
         'picture_size_excceed':'图片尺寸不能超过{maxsize}'
     },
