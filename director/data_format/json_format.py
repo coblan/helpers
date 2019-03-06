@@ -3,12 +3,14 @@ from django.utils import timezone
 from datetime import datetime,date
 from decimal import Decimal
 from django.conf import settings
-
+import base64
 #if getattr(settings, 'GEO'):
     #from helpers.func.geo import poly2dict
 #from django.contrib.gis.geos import Polygon
 
+
 json_decoder = {
+    bytes:lambda x: base64.b64encode(x).decode('utf-8')
 }
 
 
