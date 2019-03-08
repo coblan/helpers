@@ -56,7 +56,10 @@ class BaseFieldProc(object):
                 options_name = '%(model)s.%(field)s.options'% {'model': model_to_name(self.model) ,'field': self.name}
                 if not catch.get(options_name):
                     def myoption():
-                        options=[{'value':val,'label':str(lab)} for val,lab in self.form_field.choices if val!='']
+                        if self.form_field.required:
+                            options=[{'value':val,'label':str(lab)} for val,lab in self.form_field.choices if val !='']
+                        else:
+                            options=[{'value':None if val=='' else val,'label':str(lab)} for val,lab in self.form_field.choices ]
                         catch[options_name]=options
                         return options
                     options= myoption  #catch.get(options_name)

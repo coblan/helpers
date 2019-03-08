@@ -1,4 +1,12 @@
 .com-filter-select{
     max-width: 25em;
-
+    &.novalue{
+        color: #aaaaaa;
+    }
+    .fake-placeholder{
+        color: #aaaaaa;
+    }
+    option{
+        color: black;
+    }
 }

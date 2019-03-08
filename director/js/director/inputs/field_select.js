@@ -20,7 +20,7 @@ var sim_select= {
     template: `<div>
             <span v-if='head.readonly' v-text='get_label(head.options,row[head.name])'></span>
             <select v-else v-model='row[head.name]'  :id="'id_'+head.name" :name="head.name"  class="form-control input-sm">
-                <option v-if="head.placeholder" :value="place_value" disabled selected style='display:none;' class="placeholder" v-text="head.placeholder"></option>
+                <option v-if="head.required"  :value="null" disabled selected style='display:none;' class="placeholder" v-text="head.placeholder"></option>
             	<option v-for='opt in normed_options' :value='opt.value' v-text='opt.label'></option>
             </select>
             </div>`,
