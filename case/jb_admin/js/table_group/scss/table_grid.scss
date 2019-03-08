@@ -3,13 +3,24 @@
   &:hover{
   }
 }
+
+
+
 .el-table{
   .row-select{
-      background: #fff0ef;
+      background-color: #ffe5d2;
+      td:hover{
+        background: #ffe9eb ;
+
+      }
   }
+
 }
 .el-table--striped .el-table__body tr.el-table__row--striped.row-select td{
-  background: #fff0ef ;
+  background: #ffe5d2 ;
+}
+.el-table--enable-row-hover .el-table__body tr.row-select:hover>td{
+  background: #ffe9eb;
 }
 
 //.el-table--striped .el-table__body tr.success.el-table__row--striped >td{
