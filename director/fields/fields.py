@@ -353,6 +353,11 @@ class ModelFields(forms.ModelForm):
             heads=tmp_heads
             
         heads=evalue_container(heads)
+        for head in heads:
+            if head['name']=='_meta_head':
+                heads.remove(head)
+                heads= [head]+heads
+                break
         return heads
     
     def can_access(self):

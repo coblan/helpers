@@ -14,7 +14,7 @@ class CharProc(BaseFieldProc):
             head['options']=options
             head['editor'] = 'com-field-select'
         else:
-            head['editor'] = 'linetext'
+            head['editor'] = 'com-field-linetext'
         return head    
 
     def filter_get_range_head(self,name,model):
