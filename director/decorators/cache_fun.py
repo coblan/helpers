@@ -69,7 +69,7 @@ def cache_in_db(ex=None):
     return _fun
 
 
-if settings.REDIS_HOST:
+if getattr(settings,'REDIS_HOST',None):
     cache_fun = cache_redis
 else:
     cache_fun = cache_in_db
