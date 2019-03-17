@@ -24,37 +24,27 @@ var tab_fields={
    <div class="oprations" >
         <component v-for="op in ops" :is="op.editor" :ref="'op_'+op.name" :head="op" @operation="on_operation(op)"></component>
     </div>
-    <div style="overflow: auto;" class="flex-grow">
+    <div style="overflow: auto;" class="flex-grow fields-area">
         <div v-if="heads[0].name !='_meta_head'" class='field-panel suit' id="form" >
             <field  v-for='head in normed_heads' :key="head.name" :head="head" :row='row'></field>
         </div>
-       <div class="table-fields field-panel msg-bottom">
-           <table v-if="heads[0].name =='_meta_head' && heads[0].table_grid " >
-            <tr v-for="heads_row in table_grid_heads">
-                <template v-for="head in heads_row">
-                    <td class="field-label-td"  >
-                        <div class="field-label">
-                            <span class="label-content">
-                                 <span v-text="head.label"></span>
-                                 <span class="req_star" v-if='head.required'>*</span>
-                            </span>
-                        </div>
-                    </td>
-                    <td class="field-input-td" :colspan="head.colspan" :rowspan="head.rowspan">
-                        <div class="field-input">
-                            <component v-if="head.editor" :is="head.editor"
-                                 @field-event="$emit('field-event',$event)"
-                                 :head="head" :row="row"></component>
-                            <span v-if="head.help_text" class="help-text clickable">
-                                 <i style="color: #3780af;position: relative;top:10px;"   @click="show_msg(head.help_text,$event)" class="fa fa-question-circle" ></i>
-                            </span>
-                        </div>
-                    </td>
-                </template>
-            </tr>
-        </table>
-       </div>
-
+        <template v-else>
+               <div v-if="heads[0].fields_group">
+                    <div v-for="group in heads[0].fields_group">
+                        <div class="fields-group-title" v-html="group.label"></div>
+                        <com-fields-table-block v-if="heads[0].table_grid"
+                            :heads="group_filter_heads(group)" :meta-head="heads[0]" :row="row">
+                            </com-fields-table-block>
+                         <div v-else class='field-panel suit' id="form" >
+                            <field  v-for='head in group_filter_heads(group)' :key="head.name" :head="head" :row='row'></field>
+                       </div>
+                    </div>
+                </div>
+                <div v-else>
+                    <com-fields-table-block v-if="heads[0].table_grid"
+                        :heads="normed_heads.slice(1)" :row="row" :metaHead="heads[0]"></com-fields-table-block>
+                </div>
+        </template>
 
 
     </div>
@@ -80,27 +70,13 @@ var tab_fields={
             this.get_data()
         }
     },
-    computed:{
-        table_grid_heads:function(){
-            var self=this
-            var table_grid = this.heads[0].table_grid
-            var heads_bucket =[]
-            ex.each(table_grid,function(name_row){
-                let heads_row =[]
-                ex.each(self.normed_heads,function(head){
-                    if(ex.isin(head.name,name_row)){
-                        heads_row.push(head)
-                    }
-                })
-                if(heads_row){
-                    heads_bucket.push(heads_row)
-                }
-            })
-            return heads_bucket
-        },
-    },
-    methods:{
 
+    methods:{
+        group_filter_heads:function(group){
+            return ex.filter(this.normed_heads,function(head){
+                return ex.isin(head.name,group.head_names)
+            })
+        },
         data_getter:function(){
             var self=this
             if(self.tab_head.get_data){
