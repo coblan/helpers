@@ -1,4 +1,4 @@
-from ..network.myredis import redis_conn
+
 import json
 from helpers.director.kv import get_value,set_value
 import time
@@ -70,6 +70,7 @@ def cache_in_db(ex=None):
 
 
 if getattr(settings,'REDIS_HOST',None):
+    from ..network.myredis import redis_conn
     cache_fun = cache_redis
 else:
     cache_fun = cache_in_db
