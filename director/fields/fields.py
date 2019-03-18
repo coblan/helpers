@@ -353,6 +353,11 @@ class ModelFields(forms.ModelForm):
             heads=tmp_heads
             
         heads=evalue_container(heads)
+        for head in heads:
+            if head['name']=='_meta_head':
+                heads.remove(head)
+                heads= [head]+heads
+                break
         return heads
     
     def can_access(self):
@@ -427,20 +432,16 @@ class ModelFields(forms.ModelForm):
         if self.changed_data:
             op='change'
             detail=','.join(self.changed_data)
-            
-        if self.instance.pk is None:
-            op='add'
-            detail=''
-            self.instance.save() # if instance is a new row , need save first then manytomany_relationship can create   
         
-        #after_include = []
-        for k in self.changed_data:
-            # 测试时看到self.instance已经赋值了，下面这行代码可能没用,但是需要考虑下新建时 manytomany foreignkey 这些情况
-            setattr(self.instance,k, self.cleaned_data.get(k) )
-            #after_include.append(k)
-        #after = sim_dict(self.instance, include= after_include)
         with transaction.atomic():
             extra_log = self.clean_save()
+            if self.instance.pk is None:
+                op='add'
+                detail=''
+                #self.instance.save() # if instance is a new row , need save first then manytomany_relationship can create   
+            #for k in self.changed_data:
+                ## 测试时看到self.instance已经赋值了，下面这行代码可能没用,但是需要考虑下新建时 manytomany foreignkey 这些情况
+                #setattr(self.instance,k, self.cleaned_data.get(k) )
             self.instance.save()
             
         if op or extra_log:

@@ -403,7 +403,7 @@ class ModelTable(object):
         director_name =self.get_director_name()
         heads = self.get_heads()
         rows = self.get_rows()
-        row_sort = self.row_sort.get_context()
+        #row_sort = self.row_sort.get_context()
         model_name = model_to_name(self.model)
         ops = self.get_operation()
         ops = evalue_container(ops)
@@ -411,7 +411,7 @@ class ModelTable(object):
             'heads':heads,
             'rows': rows,
             'row_pages' : self.getRowPages(),
-            'row_sort':row_sort,
+            'row_sort': self.getRowSort(),#row_sort,
             'row_filters':  self.getRowFilters(), #ls,
             #'search_tip':self.row_search.get_context(),
             'director_name':director_name,
@@ -443,14 +443,6 @@ class ModelTable(object):
         """
         有些时候，最先不需要返回rows，而只返回filters，head等，等待用户选择后，才返回rows
         """
-        #ls=[]
-        #search_head = self.row_search.get_context()
-        #row_filters = self.row_filter.get_context()
-        ## 合并search和rowfilter 为rowfilter
-        #if search_head:
-            #ls.append( search_head)
-        #if row_filters:
-            #ls.extend(row_filters)
         ops = self.get_operation()
         ops = evalue_container(ops)
         
@@ -488,6 +480,9 @@ class ModelTable(object):
     
     def getRowPages(self): 
         return self.pagenum.get_context()
+    
+    def getRowSort(self):
+        return self.row_sort.get_context()
     
     def permited_fields(self):
         ls = self.permit.readable_fields()
@@ -813,6 +808,10 @@ class PlainTable(ModelTable):
         self.crt_user=crt_user 
         self.page=_page
         self.footer = []
+        self.custom_permit()
+    
+    def custom_permit(self):
+        pass
     
     def get_head_context(self):
         """
@@ -831,6 +830,29 @@ class PlainTable(ModelTable):
             'director_name': self.get_director_name(),#model_to_name(self.model),
             'ops' : ops
         }  
+    
+    def get_context(self):
+        director_name =self.get_director_name()
+        heads = self.get_heads()
+        rows = self.get_rows()
+
+        ops = self.get_operation()
+        ops = evalue_container(ops)
+        return {
+            'heads':heads,
+            'rows': rows,
+            'row_pages' : self.getRowPages(),
+            'row_sort': self.getRowSort(),#row_sort,
+            'row_filters':  self.getRowFilters(), #ls,
+            #'search_tip':self.row_search.get_context(),
+            'director_name':director_name,
+            'ops' : ops,
+            'search_args':self.search_args, 
+            'parents': self.getParents(),
+            'footer': self.footer,
+            'selectable': self.selectable,
+            'event_slots':self.get_event_slots()
+        }    
     
     def getRowSort(self): 
         return {

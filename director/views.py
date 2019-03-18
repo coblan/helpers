@@ -1,6 +1,6 @@
 #encoding:utf-8
 from django.shortcuts import render,redirect
-from django.http import HttpResponse
+from django.http import HttpResponse,JsonResponse
 
 import json
 
@@ -16,8 +16,8 @@ from django.views.decorators.csrf import csrf_exempt
 from .network.ckeditor import Ckeditor
 from .base_data import director
 from django.db import transaction
-import logging
 
+import logging
 req_log = logging.getLogger('general_log')
 
 """
@@ -79,6 +79,25 @@ def export_excel(request):
     response['Content-Disposition'] = 'attachment; filename=%s.xlsx' % fl_name
     wb.save(response)
     return response 
+
+@csrf_exempt
+def director_view(request,director_name):
+    """将director函数以api的方式直接暴露出去"""
+    directorEnt= director.get(director_name)
+    if request.method=='GET':
+        kws = request.GET.dict()
+    else:
+        CONTENT_TYPE = request.META.get('CONTENT_TYPE')
+        if CONTENT_TYPE == 'text/plain':
+            kws = json.loads(request.body)
+        else:
+            kws = request.POST.dict()
+    rt = directorEnt(**kws)
+    if isinstance(rt,HttpResponse):
+        return rt
+    else:
+        return JsonResponse(rt)
+    
 
     
 

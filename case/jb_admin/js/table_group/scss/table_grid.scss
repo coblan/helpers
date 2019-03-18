@@ -3,9 +3,29 @@
   &:hover{
   }
 }
-.el-table--striped .el-table__body tr.success.el-table__row--striped >td{
-  background: #f0f9eb;
+
+
+
+.el-table{
+  .row-select{
+      background-color: #ffe5d2;
+      td:hover{
+        background: #ffe9eb ;
+
+      }
+  }
+
 }
+.el-table--striped .el-table__body tr.el-table__row--striped.row-select td{
+  background: #ffe5d2 ;
+}
+.el-table--enable-row-hover .el-table__body tr.row-select:hover>td{
+  background: #ffe9eb;
+}
+
+//.el-table--striped .el-table__body tr.success.el-table__row--striped >td{
+//  background: #f0f9eb;
+//}
 
 .el-table__fixed{
   /*由于element.table的bug造成固定列覆盖层 覆盖了滚动条，造成无法滚动。所以去掉覆盖层的事件获取能力，再加上内部元素的事件获取能力*/

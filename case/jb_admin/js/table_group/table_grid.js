@@ -79,6 +79,7 @@ var ele_table= {
                               :data="rows"
                               border
                               show-summary
+                              :row-class-name="tableRowClassName"
                               :span-method="parStore.arraySpanMethod"
                               :fit="false"
                               :stripe="true"
@@ -128,7 +129,13 @@ var ele_table= {
 `,
     methods: {
         tableRowClassName:function({row, rowIndex}){
-            return row._css_class
+            if(row._css_class){
+                return row._css_class
+            }else{
+                if(ex.isin(row,this.selected)){
+                    return 'row-select'
+                }
+            }
         },
         bus_search: function (search_args) {
             ex.assign(this.search_args, search_args)

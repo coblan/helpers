@@ -26,7 +26,7 @@ class BoolProc(BaseFieldProc):
         return head
     
     def dict_field_head(self, head): 
-        head['editor'] = 'bool'
+        head['editor'] = 'com-field-bool'
         return head
     
     
