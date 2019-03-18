@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 132);
+/******/ 	return __webpack_require__(__webpack_require__.s = 134);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -799,7 +799,7 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 
 //import {use_color} from '../dosome/color.js'
 //import {load_js,load_css} from '../dosome/pkg.js'
-__webpack_require__(105);
+__webpack_require__(106);
 //import * as fb from './field_base.js'
 //import * as js from './adapt.js'
 
@@ -894,8 +894,8 @@ var field_single_select2 = _interopRequireWildcard(_field_single_select);
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 __webpack_require__(3);
-__webpack_require__(110);
 __webpack_require__(111);
+__webpack_require__(112);
 
 /***/ }),
 /* 7 */
@@ -938,8 +938,8 @@ var filter_main = _interopRequireWildcard(_main);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
+__webpack_require__(121);
 __webpack_require__(120);
-__webpack_require__(119);
 
 /***/ }),
 /* 8 */
@@ -954,8 +954,8 @@ var auto_more = _interopRequireWildcard(_auto_more);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
-__webpack_require__(123);
 __webpack_require__(124);
+__webpack_require__(125);
 
 /***/ }),
 /* 9 */,
@@ -1905,7 +1905,7 @@ img-uploador
 <<<<
 */
 
-__webpack_require__(106);
+__webpack_require__(107);
 
 var fl = {
     read: function read(file, callback) {
@@ -2574,7 +2574,7 @@ popUrlListen:
 <-<
  */
 
-__webpack_require__(107);
+__webpack_require__(108);
 
 var ln = {
     history_handle: function history_handle(obj) {
@@ -2929,7 +2929,7 @@ function order_by_key(array, key) {
 
 var _basic = __webpack_require__(2);
 
-__webpack_require__(108);
+__webpack_require__(109);
 
 var table_fields = {
     props: ['heads', 'row', 'inputWidth', 'labelWidth'],
@@ -3158,7 +3158,7 @@ Vue.component('datetime', {
 "use strict";
 
 
-__webpack_require__(109);
+__webpack_require__(110);
 
 /***/ }),
 /* 43 */
@@ -3345,7 +3345,7 @@ Vue.component('com-field-select', sim_select);
 "use strict";
 
 
-__webpack_require__(112);
+__webpack_require__(113);
 
 var field_sigle_chosen = {
     props: ['row', 'head'],
@@ -3400,7 +3400,7 @@ Vue.component('com-field-single-chosen', field_sigle_chosen);
 "use strict";
 
 
-__webpack_require__(113);
+__webpack_require__(114);
 
 var field_sigle_chosen = {
     props: ['row', 'head'],
@@ -3683,7 +3683,7 @@ Vue.component('com-field-int-bool', field_bool);
 "use strict";
 
 
-__webpack_require__(114);
+__webpack_require__(115);
 
 var multi_chosen = {
     props: ['value', 'options', 'placeholder'],
@@ -3842,7 +3842,7 @@ Vue.component('com-table', com_table);
 "use strict";
 
 
-__webpack_require__(115);
+__webpack_require__(116);
 
 var com_date_range = {
     props: ['head', 'search_args'],
@@ -3905,7 +3905,7 @@ Vue.component('com-search-filter', com_search);
 "use strict";
 
 
-__webpack_require__(116);
+__webpack_require__(117);
 
 var com_search = {
     props: ['head', 'search_args'],
@@ -3946,7 +3946,7 @@ Vue.component('com-search-select', com_search);
 "use strict";
 
 
-__webpack_require__(117);
+__webpack_require__(118);
 
 var com_select = {
     props: ['head', 'search_args', 'config'],
@@ -4342,7 +4342,7 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 "use strict";
 
 
-__webpack_require__(118);
+__webpack_require__(119);
 
 var com_month = {
     props: ['head', 'search_args'],
@@ -4643,7 +4643,7 @@ var filter_single_select2 = _interopRequireWildcard(_filter_single_select);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
-__webpack_require__(121); /**
+__webpack_require__(122); /**
                                       >5>front/table.rst>
                                      
                                       table的过滤器
@@ -4908,7 +4908,7 @@ window.table_fun = table_fun;
 "use strict";
 
 
-__webpack_require__(122);
+__webpack_require__(123);
 
 Vue.component('com-auto-more', {
     props: ['orgHeight'],
@@ -5290,7 +5290,8 @@ exports.push([module.i, ".fade-enter-active, .fade-leave-active {\n  transition:
 /* 102 */,
 /* 103 */,
 /* 104 */,
-/* 105 */
+/* 105 */,
+/* 106 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
@@ -5316,7 +5317,7 @@ if(false) {
 }
 
 /***/ }),
-/* 106 */
+/* 107 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
@@ -5342,7 +5343,7 @@ if(false) {
 }
 
 /***/ }),
-/* 107 */
+/* 108 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
@@ -5368,7 +5369,7 @@ if(false) {
 }
 
 /***/ }),
-/* 108 */
+/* 109 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
@@ -5394,7 +5395,7 @@ if(false) {
 }
 
 /***/ }),
-/* 109 */
+/* 110 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
@@ -5420,7 +5421,7 @@ if(false) {
 }
 
 /***/ }),
-/* 110 */
+/* 111 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
@@ -5446,7 +5447,7 @@ if(false) {
 }
 
 /***/ }),
-/* 111 */
+/* 112 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
@@ -5472,7 +5473,7 @@ if(false) {
 }
 
 /***/ }),
-/* 112 */
+/* 113 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
@@ -5498,7 +5499,7 @@ if(false) {
 }
 
 /***/ }),
-/* 113 */
+/* 114 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
@@ -5524,7 +5525,7 @@ if(false) {
 }
 
 /***/ }),
-/* 114 */
+/* 115 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
@@ -5550,7 +5551,7 @@ if(false) {
 }
 
 /***/ }),
-/* 115 */
+/* 116 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
@@ -5576,7 +5577,7 @@ if(false) {
 }
 
 /***/ }),
-/* 116 */
+/* 117 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
@@ -5602,7 +5603,7 @@ if(false) {
 }
 
 /***/ }),
-/* 117 */
+/* 118 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
@@ -5628,7 +5629,7 @@ if(false) {
 }
 
 /***/ }),
-/* 118 */
+/* 119 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
@@ -5654,7 +5655,7 @@ if(false) {
 }
 
 /***/ }),
-/* 119 */
+/* 120 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
@@ -5680,7 +5681,7 @@ if(false) {
 }
 
 /***/ }),
-/* 120 */
+/* 121 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
@@ -5706,7 +5707,7 @@ if(false) {
 }
 
 /***/ }),
-/* 121 */
+/* 122 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
@@ -5732,7 +5733,7 @@ if(false) {
 }
 
 /***/ }),
-/* 122 */
+/* 123 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
@@ -5758,7 +5759,7 @@ if(false) {
 }
 
 /***/ }),
-/* 123 */
+/* 124 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
@@ -5784,7 +5785,7 @@ if(false) {
 }
 
 /***/ }),
-/* 124 */
+/* 125 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
@@ -5810,14 +5811,15 @@ if(false) {
 }
 
 /***/ }),
-/* 125 */,
 /* 126 */,
 /* 127 */,
 /* 128 */,
 /* 129 */,
 /* 130 */,
 /* 131 */,
-/* 132 */
+/* 132 */,
+/* 133 */,
+/* 134 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
