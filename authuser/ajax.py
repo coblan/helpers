@@ -30,9 +30,10 @@ def do_login(username,password,request,auto_login=False):
         if not auto_login:
             request.session.set_expiry(0)
         auth.login(request, user)
-        return {'status':'success'}
+        #return {'status':'success'}
+        return {'success':True}
     else:
-        return {'errors':form.errors}
+        return {'errors':form.errors,'success':False}
 
 def do_login_old(username,password,request):
     """

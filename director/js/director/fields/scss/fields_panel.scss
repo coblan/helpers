@@ -47,7 +47,7 @@ msg-bottom  nice validator的位置在下面，默认在右侧
     top:0px;
     left:0px;
     bottom:0px;
-    width:190px;
+    width:210px;
     border-radius:6px;
     background-color: #fff;
     z-index:0;
@@ -92,9 +92,9 @@ msg-bottom  nice validator的位置在下面，默认在右侧
         border-top: 5px solid #FFF;
     }
     .control-label{
-        width:160px;
+        width:180px;
         text-align: right;
-        padding:5px 30px;
+        padding:5px 30px 5px 0;
         z-index:100;
         flex-shrink:0;
         border-top: 1px solid #EEE;

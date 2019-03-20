@@ -3,7 +3,7 @@ require('./scss/tab_fields.scss')
 var tab_fields={
     props:['tab_head','par_row'],
     data:function(){
-        var data_row = this.tab_head.row || {}
+        var data_row =  this.tab_head.row || {}
         var self=this
         var childStore = new Vue({
             data:{
@@ -24,10 +24,29 @@ var tab_fields={
    <div class="oprations" >
         <component v-for="op in ops" :is="op.editor" :ref="'op_'+op.name" :head="op" @operation="on_operation(op)"></component>
     </div>
-    <div style="overflow: auto;" class="flex-grow">
-        <div class='field-panel suit' id="form" >
+    <div style="overflow: auto;" class="flex-grow fields-area">
+        <div v-if="heads[0].name !='_meta_head'" class='field-panel suit' id="form" >
             <field  v-for='head in normed_heads' :key="head.name" :head="head" :row='row'></field>
         </div>
+        <template v-else>
+               <div v-if="heads[0].fields_group" :class="heads[0].class">
+                    <div v-for="group in heads[0].fields_group" :class="'group_'+group.name">
+                        <div class="fields-group-title" v-html="group.label"></div>
+                        <com-fields-table-block v-if="heads[0].table_grid"
+                            :heads="group_filter_heads(group)" :meta-head="heads[0]" :row="row">
+                            </com-fields-table-block>
+                         <div v-else class='field-panel suit' id="form" >
+                            <field  v-for='head in group_filter_heads(group)' :key="head.name" :head="head" :row='row'></field>
+                       </div>
+                    </div>
+                </div>
+                <div v-else :class="heads[0].class">
+                    <com-fields-table-block v-if="heads[0].table_grid"
+                        :heads="normed_heads.slice(1)" :row="row" :metaHead="heads[0]"></com-fields-table-block>
+                </div>
+        </template>
+
+
     </div>
     </div>`,
 
@@ -47,19 +66,27 @@ var tab_fields={
     //},
 
     mounted:function(){
+        if(this.heads[0] && this.heads[0].name=='_meta_head'&&this.heads[0].style){
+            ex.append_css(this.heads[0].style)
+        }
         if(!this.tab_head.row){
             this.get_data()
         }
     },
-    methods:{
 
+    methods:{
+        group_filter_heads:function(group){
+            return ex.filter(this.normed_heads,function(head){
+                return ex.isin(head.name,group.head_names)
+            })
+        },
         data_getter:function(){
             var self=this
             if(self.tab_head.get_data){
                 var fun = get_data [self.tab_head.get_data.fun]
                 var kws = self.tab_head.get_data.kws
                 fun(self,function(row){
-                    self.row = row
+                    self.row = ex.copy(row)
                     self.childStore.$emit('row.update_or_insert',row)
                 },kws)
             }

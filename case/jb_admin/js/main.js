@@ -35,7 +35,7 @@ import * as select from  './table_editor/select.js'
 import * as extra_click from  './table_editor/extra_click.js'
 import * as extra_click_plus from  './table_editor/extra_click_plus.js'
 import * as array_mapper from  './table_editor/array_mapper.js'
-import * as operations from  './table_editor/operations.js'
+
 import * as bool_shower from  './table_editor/bool_shower.js'
 import * as foreign_click_select from  './table_editor/foreign_click_select.js'
 import * as array_option_mapper from  './table_editor/array_option_mapper.js'

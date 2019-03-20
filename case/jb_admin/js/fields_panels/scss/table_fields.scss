@@ -1,0 +1,23 @@
+.table-fields.field-panel{
+    background-color: #F5F5F5;
+    //margin: auto;
+    padding: 20px 30px;
+    position: relative;
+    border: 1px solid #f6f6f6;
+
+    td{
+      padding: 8px 5px;
+      position: relative;
+      .field-label{
+        text-align: right;
+      }
+    }
+  .msg-box.n-right{
+    bottom: 7px;
+  }
+  .req_star {
+    top: 6px;
+    right: 0;
+    color:red;
+  }
+}
