@@ -44,6 +44,7 @@ EDITOR_TYPE=(
 )
 
 class KVModel(models.Model):
-    key=models.CharField('key',max_length=500,blank=True)
+    key=models.CharField('key',max_length=500,blank=True,unique=True)
     value=models.TextField(verbose_name='value',blank=True)
-    editor_type=models.CharField('编辑器类型',max_length=30,default='blocktext',choices=EDITOR_TYPE)
+    #update=models.DateTimeField(auto_now=True)
+    #editor_type=models.CharField('编辑器类型',max_length=30,default='blocktext',choices=EDITOR_TYPE)

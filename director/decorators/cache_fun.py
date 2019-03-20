@@ -54,9 +54,9 @@ def cache_in_db(ex=None):
                     
             if not rt or expired:
                 rt_obj = fun(*args, **kws)
-                rt = json.dumps(rt_obj)
+                #rt = json.dumps(rt_obj)
                 dc = {
-                    'value':rt,
+                    'value':rt_obj,
                     'ex':ex,
                     'snapshot':time.time()
                 }

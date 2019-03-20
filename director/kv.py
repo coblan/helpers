@@ -9,3 +9,10 @@ def get_value(key,default=None):
 
 def set_value(key,value):
     KVModel.objects.update_or_create(key=key,defaults={'value':value})
+    
+def clear_value(key):
+    KVModel.objects.filter(key=key).delete()
+
+def lock_created(key,value):
+    obj,created = KVModel.objects.update_or_create(key=key,defaults={'value':value})
+    return created
