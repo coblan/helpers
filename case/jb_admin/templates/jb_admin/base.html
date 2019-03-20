@@ -17,6 +17,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 
     <script src="{{ js_config.js_lib.jquery }}"></script>
+    <script src="{{ js_config.js_lib.md5_js }}"></script>
     <link rel="stylesheet" href="{{ js_config.js_lib.font_awesome }}">
     <!--<script src="{% static 'lib/jquery3.2.1.min.js' %}"></script>-->
     <!--<link rel="stylesheet" href="{% static 'lib/font-awesome4.7/font-awesome4.7.min.css' %}">-->
@@ -700,7 +701,7 @@ desired effect
 <link href="{{ js_config.js_lib.element_css }}" rel="stylesheet">
 <!--<link href="https://unpkg.com/element-ui/lib/theme-chalk/index.css" rel="stylesheet">-->
 <!--<script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.min.js"></script>-->
-<script src="{{ js_config.js_lib.md5_js }}"></script>
+
 
 {% for lib in extra_js %}
     <script src='{{ lib }}'></script>
