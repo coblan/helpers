@@ -1,9 +1,10 @@
 
 import json
-from helpers.director.kv import get_value,set_value
+from helpers.director.kv import get_value,set_value,lock_created,clear_value
 import time
 from django.conf import settings
 
+import hashlib
 
 def cache_redis(ex=None): 
     """
@@ -16,14 +17,32 @@ def cache_redis(ex=None):
                 for item in args:
                     key += '%s_%s'%(item.__class__.__name__, id(item) )
             if kws:
-                key += str( hash(json.dumps(kws, sort_keys=True)) )
-                
+                m = hashlib.md5()
+                kws_str = json.dumps(kws, sort_keys=True)
+                m.update(kws_str.encode('utf-8')) #参数必须是byte类型，否则报Unicode-objects must be encoded before hashing错误
+                md5value=m.hexdigest()            
+                key += '_'+md5value
+
             cache_name = 'cache:fun:%s'%key
             rt = redis_conn.get(cache_name.encode('utf-8'))
             if not rt:
-                rt_obj = fun(*args, **kws)
-                rt = json.dumps(rt_obj)
-                redis_conn.set(cache_name,rt,ex=ex)
+                lock_key = 'lock:fun:%s'%key
+                created = lock_created(lock_key,1)
+                if created:
+                    rt_obj = fun(*args, **kws)
+                    rt = json.dumps(rt_obj)
+                    redis_conn.set(cache_name,rt,ex=ex)
+                    clear_value(lock_key)
+                else:
+                    count = 0
+                    while(True):
+                        if count>10000:
+                            raise UserWarning('缓存等待同步函数执行完成超时')
+                        count +=200
+                        time.sleep(200)
+                        if not get_value(lock_key):
+                            rt = redis_conn.get(cache_name.encode('utf-8'))
+                            rt_obj =json.loads(rt.decode('utf-8'))
             else:
                 rt_obj = json.loads(rt.decode('utf-8'))
             return rt_obj
@@ -42,7 +61,11 @@ def cache_in_db(ex=None):
                 for item in args:
                     key += '%s_%s'%(item.__class__.__name__, id(item) )
             if kws:
-                key += str( hash(json.dumps(kws, sort_keys=True)) )
+                m = hashlib.md5()
+                kws_str = json.dumps(kws, sort_keys=True)
+                m.update(kws_str.encode('utf-8')) #参数必须是byte类型，否则报Unicode-objects must be encoded before hashing错误
+                md5value=m.hexdigest()            
+                key += '_'+md5value
                 
             cache_name = 'cache:fun:%s'%key
             rt = get_value(cache_name)
@@ -53,14 +76,29 @@ def cache_in_db(ex=None):
                     expired=True
                     
             if not rt or expired:
-                rt_obj = fun(*args, **kws)
-                #rt = json.dumps(rt_obj)
-                dc = {
-                    'value':rt_obj,
-                    'ex':ex,
-                    'snapshot':time.time()
-                }
-                set_value(cache_name,json.dumps(dc))
+                lock_key = 'lock:fun:%s'%key
+                created = lock_created(lock_key,1)
+                if created:
+                    rt_obj = fun(*args, **kws)
+                    dc = {
+                        'value':rt_obj,
+                        'ex':ex,
+                        'snapshot':time.time()
+                    }
+                    set_value(cache_name,json.dumps(dc))  
+                    clear_value(lock_key)
+                else:
+                    count = 0
+                    while(True):
+                        if count>10000:
+                            raise UserWarning('缓存等待同步函数执行完成超时')
+                        count +=200
+                        time.sleep(200)
+                        if not get_value(lock_key):
+                            rt = get_value(cache_name)
+                            rt_obj =json.loads(rt)['value']
+                        
+               
             else:
                 rt_obj = dc['value']
             return rt_obj

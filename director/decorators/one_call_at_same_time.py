@@ -32,4 +32,4 @@ def single_call_in_db(fun):
   
     return _fun2
 
-single_call = single_call_in_db
+one_call_at_same_time = single_call_in_db
