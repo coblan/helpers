@@ -6956,7 +6956,7 @@ var tab_fields = {
         };
     },
     mixins: [mix_fields_data, mix_nice_validator],
-    template: '<div class="com-tab-fields flex-v"  style="position: absolute;top:0;left:0;bottom: 0;right:0;overflow: auto;">\n\n   <div class="oprations" >\n        <component v-for="op in ops" :is="op.editor" :ref="\'op_\'+op.name" :head="op" @operation="on_operation(op)"></component>\n    </div>\n    <div style="overflow: auto;" class="flex-grow fields-area">\n        <div v-if="heads[0].name !=\'_meta_head\'" class=\'field-panel suit\' id="form" >\n            <field  v-for=\'head in normed_heads\' :key="head.name" :head="head" :row=\'row\'></field>\n        </div>\n        <template v-else>\n               <div v-if="heads[0].fields_group">\n                    <div v-for="group in heads[0].fields_group">\n                        <div class="fields-group-title" v-html="group.label"></div>\n                        <com-fields-table-block v-if="heads[0].table_grid"\n                            :heads="group_filter_heads(group)" :meta-head="heads[0]" :row="row">\n                            </com-fields-table-block>\n                         <div v-else class=\'field-panel suit\' id="form" >\n                            <field  v-for=\'head in group_filter_heads(group)\' :key="head.name" :head="head" :row=\'row\'></field>\n                       </div>\n                    </div>\n                </div>\n                <div v-else>\n                    <com-fields-table-block v-if="heads[0].table_grid"\n                        :heads="normed_heads.slice(1)" :row="row" :metaHead="heads[0]"></com-fields-table-block>\n                </div>\n        </template>\n\n\n    </div>\n    </div>',
+    template: '<div class="com-tab-fields flex-v"  style="position: absolute;top:0;left:0;bottom: 0;right:0;overflow: auto;">\n\n   <div class="oprations" >\n        <component v-for="op in ops" :is="op.editor" :ref="\'op_\'+op.name" :head="op" @operation="on_operation(op)"></component>\n    </div>\n    <div style="overflow: auto;" class="flex-grow fields-area">\n        <div v-if="heads[0].name !=\'_meta_head\'" class=\'field-panel suit\' id="form" >\n            <field  v-for=\'head in normed_heads\' :key="head.name" :head="head" :row=\'row\'></field>\n        </div>\n        <template v-else>\n               <div v-if="heads[0].fields_group" :class="heads[0].class">\n                    <div v-for="group in heads[0].fields_group" :class="\'group_\'+group.name">\n                        <div class="fields-group-title" v-html="group.label"></div>\n                        <com-fields-table-block v-if="heads[0].table_grid"\n                            :heads="group_filter_heads(group)" :meta-head="heads[0]" :row="row">\n                            </com-fields-table-block>\n                         <div v-else class=\'field-panel suit\' id="form" >\n                            <field  v-for=\'head in group_filter_heads(group)\' :key="head.name" :head="head" :row=\'row\'></field>\n                       </div>\n                    </div>\n                </div>\n                <div v-else :class="heads[0].class">\n                    <com-fields-table-block v-if="heads[0].table_grid"\n                        :heads="normed_heads.slice(1)" :row="row" :metaHead="heads[0]"></com-fields-table-block>\n                </div>\n        </template>\n\n\n    </div>\n    </div>',
 
     //created:function(){
     //    // find head from parent table
@@ -6974,6 +6974,9 @@ var tab_fields = {
     //},
 
     mounted: function mounted() {
+        if (this.heads[0] && this.heads[0].name == '_meta_head' && this.heads[0].style) {
+            ex.append_css(this.heads[0].style);
+        }
         if (!this.tab_head.row) {
             this.get_data();
         }
@@ -7220,7 +7223,7 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, ".table-fields.field-panel {\n  background-color: #F5F5F5;\n  padding: 20px 30px;\n  position: relative;\n  border: 1px solid #f6f6f6; }\n  .table-fields.field-panel td {\n    padding: 8px 5px;\n    position: relative; }\n    .table-fields.field-panel td .field-label {\n      text-align: right; }\n  .table-fields.field-panel .msg-box.n-right {\n    bottom: 7px; }\n  .table-fields.field-panel .req_star {\n    top: 6px;\n    right: 0; }\n", ""]);
+exports.push([module.i, ".table-fields.field-panel {\n  background-color: #F5F5F5;\n  padding: 20px 30px;\n  position: relative;\n  border: 1px solid #f6f6f6; }\n  .table-fields.field-panel td {\n    padding: 8px 5px;\n    position: relative; }\n    .table-fields.field-panel td .field-label {\n      text-align: right; }\n  .table-fields.field-panel .msg-box.n-right {\n    bottom: 7px; }\n  .table-fields.field-panel .req_star {\n    top: 6px;\n    right: 0;\n    color: red; }\n", ""]);
 
 // exports
 

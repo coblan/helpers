@@ -29,8 +29,8 @@ var tab_fields={
             <field  v-for='head in normed_heads' :key="head.name" :head="head" :row='row'></field>
         </div>
         <template v-else>
-               <div v-if="heads[0].fields_group">
-                    <div v-for="group in heads[0].fields_group">
+               <div v-if="heads[0].fields_group" :class="heads[0].class">
+                    <div v-for="group in heads[0].fields_group" :class="'group_'+group.name">
                         <div class="fields-group-title" v-html="group.label"></div>
                         <com-fields-table-block v-if="heads[0].table_grid"
                             :heads="group_filter_heads(group)" :meta-head="heads[0]" :row="row">
@@ -40,7 +40,7 @@ var tab_fields={
                        </div>
                     </div>
                 </div>
-                <div v-else>
+                <div v-else :class="heads[0].class">
                     <com-fields-table-block v-if="heads[0].table_grid"
                         :heads="normed_heads.slice(1)" :row="row" :metaHead="heads[0]"></com-fields-table-block>
                 </div>
@@ -66,6 +66,9 @@ var tab_fields={
     //},
 
     mounted:function(){
+        if(this.heads[0] && this.heads[0].name=='_meta_head'&&this.heads[0].style){
+            ex.append_css(this.heads[0].style)
+        }
         if(!this.tab_head.row){
             this.get_data()
         }
