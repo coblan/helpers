@@ -1,3 +1,5 @@
+require('./scss/cfg.scss')
+
 window.cfg={
     env:{
         width:$(window).width(),
@@ -17,6 +19,13 @@ window.cfg={
     },
     tr:{
         'picture_size_excceed':'图片尺寸不能超过{maxsize}'
+    },
+
+    show_cloak:function(){
+        this._cloak_index = layer.load()
+    },
+    hide_cloak:function(){
+        layer.close(this._cloak_index)
     },
     show_load:function(){
         this._loader_index = layer.load(1)
