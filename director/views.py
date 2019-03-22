@@ -108,6 +108,7 @@ def director_view(request,director_name):
         rt = JsonResponse({'success':False,'msg':str(e)})
     #response.setHeader("Access-Control-Allow-Origin", "*");
     rt["Access-Control-Allow-Origin"]='*'
+    rt['Access-Control-Allow-Headers']='Origin, X-Requested-With, Content-Type, Accept'
     return rt
     
 
