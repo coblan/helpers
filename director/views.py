@@ -88,15 +88,22 @@ def director_view(request,director_name):
         kws = request.GET.dict()
     else:
         CONTENT_TYPE = request.META.get('CONTENT_TYPE')
-        if CONTENT_TYPE == 'text/plain':
-            kws = json.loads(request.body)
+        if CONTENT_TYPE.lower() in [ 'text/plain','application/json']:
+            if isinstance(request.body,bytes):
+                text = request.body.decode('utf-8')
+            else:
+                text = request.body
+            kws = json.loads(text)
         else:
             kws = request.POST.dict()
-    rt = directorEnt(**kws)
-    if isinstance(rt,HttpResponse):
-        return rt
-    else:
-        return JsonResponse(rt)
+    try:
+        rt = directorEnt(**kws)
+        if isinstance(rt,HttpResponse):
+            return rt
+        else:
+            return JsonResponse(rt,safe=False)
+    except UserWarning as e:
+        return JsonResponse({'success':False,'msg':str(e)})
     
 
     

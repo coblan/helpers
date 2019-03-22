@@ -23,7 +23,7 @@ def get_argument(request):
     else:
         return DotObj( request.GET.dict() )
 
-def validate_argument(dc,validate_dict):
+def validate_argument(dc,validate_dict={},eliminate = False):
     if isinstance(dc,DotObj):
         dc=dc.__dict__
     for k,v in validate_dict.items():
@@ -31,6 +31,10 @@ def validate_argument(dc,validate_dict):
         for validator in v:
             value=validator(value,k)
         dc[k]=value
+    if eliminate:
+        for k in dict(dc):
+            if k not in validate_dict:
+                dc.pop(k)
     return DotObj( dc )
 
 
@@ -67,7 +71,10 @@ def default(def_value):
         
 
 def int_str(value,name):
+    """确保可以 转换为int"""
     try:
-        return int(value)
+        if value is not None:
+            return int(value)
     except ValueError as e:
         raise UserWarning('%(name)s=%(value)s counld not be covert to int'%{'name':name,'value':value})
+
