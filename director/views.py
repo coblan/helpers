@@ -101,7 +101,8 @@ def director_view(request,director_name):
         if isinstance(rt,HttpResponse):
             return rt
         else:
-            return JsonResponse(rt,safe=False)
+            dc ={'success':True,'data':rt}
+            return JsonResponse(dc,safe=False)
     except UserWarning as e:
         return JsonResponse({'success':False,'msg':str(e)})
     
