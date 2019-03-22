@@ -99,12 +99,16 @@ def director_view(request,director_name):
     try:
         rt = directorEnt(**kws)
         if isinstance(rt,HttpResponse):
-            return rt
+            #return rt
+            pass
         else:
             dc ={'success':True,'data':rt}
-            return JsonResponse(dc,safe=False)
+            rt = JsonResponse(dc,safe=False)
     except UserWarning as e:
-        return JsonResponse({'success':False,'msg':str(e)})
+        rt = JsonResponse({'success':False,'msg':str(e)})
+    #response.setHeader("Access-Control-Allow-Origin", "*");
+    rt["Access-Control-Allow-Origin"]='*'
+    return rt
     
 
     
