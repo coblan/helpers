@@ -99,7 +99,7 @@ def director_view(request,director_name):
     try:
         rt = directorEnt(**kws)
         if isinstance(rt,HttpResponse):
-            #return rt
+            # 直接返回
             pass
         else:
             dc ={'success':True,'data':rt}
