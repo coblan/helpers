@@ -88,6 +88,7 @@ def director_view(request,director_name):
         kws = request.GET.dict()
     else:
         CONTENT_TYPE = request.META.get('CONTENT_TYPE')
+        print(CONTENT_TYPE)
         if CONTENT_TYPE.lower() in [ 'text/plain','application/json','application/x-www-form-urlencoded']:
             if isinstance(request.body,bytes):
                 text = request.body.decode('utf-8')
