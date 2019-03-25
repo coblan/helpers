@@ -88,8 +88,13 @@ def director_view(request,director_name):
         kws = request.GET.dict()
     else:
         CONTENT_TYPE = request.META.get('CONTENT_TYPE')
-        print(CONTENT_TYPE)
-        if CONTENT_TYPE.lower() in [ 'text/plain','application/json','application/x-www-form-urlencoded']:
+        #print(CONTENT_TYPE)
+        is_text =False
+        for c_type in  [ 'text/plain','application/json','application/x-www-form-urlencoded']:
+            if c_type in CONTENT_TYPE.lower():
+                is_text=True
+                break
+        if is_text:
             if isinstance(request.body,bytes):
                 text = request.body.decode('utf-8')
             else:
