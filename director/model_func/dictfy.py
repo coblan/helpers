@@ -44,7 +44,7 @@ def to_dict(instance,filt_attr=None,include=None,exclude=None,hash_keys=None,for
     return out
 
 
-def sim_dict(instance,filt_attr=None,include=None,exclude=None):
+def sim_dict(instance,filt_attr=None,include=None,exclude=None,include_pk=True):
     """
     fields=['name','age'] 虽然中函数中fields是django中的model.field对象，但是这里为了方便，接受外部
                          输入是字段的名字
@@ -87,8 +87,15 @@ def sim_dict(instance,filt_attr=None,include=None,exclude=None):
                 if isinstance(out.get(field.name),list):
                     # 如果遇到 manytomany的情况，是一个list
                     out['_%s_label'%field.name]=[str(x) for x in out[field.name]]
-                #else:
-                    #out['_%s_label'%field.name]=str(getattr(instance,field.name,''))
+                
+                # 下面生成 _{name}_label
+                if '_%s_label'%field.name in out:
+                    continue                
+                elif field.choices:
+                    org_value= out[field.name]
+                    mt = [x for x in field.choices if x[0]==org_value]
+                    if mt:
+                        out[ '_%s_label'%field.name]=mt[0][1]
             else:
                 
                 # 考虑到使用到get_prep_value转换为str的field很少（大部分特殊的都在field_map类集中处理了。）
@@ -106,7 +113,8 @@ def sim_dict(instance,filt_attr=None,include=None,exclude=None):
     #if 'id' in [x.name for x in instance._meta.get_fields()] and \
        #instance.id:
         #out['id']=instance.id
-    out['pk']=instance.pk
+    if include_pk:
+        out['pk']=instance.pk
     return out
     
 

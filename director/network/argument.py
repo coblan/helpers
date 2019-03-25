@@ -69,6 +69,11 @@ def default(def_value):
             return value
     return _default
         
+def dot_list_str(value,name):
+    if not value:
+        return ''
+    else:
+        return ','.join(value)
 
 def int_str(value,name):
     """确保可以 转换为int"""
