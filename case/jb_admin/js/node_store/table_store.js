@@ -108,12 +108,6 @@ var table_store={
                 if(head.preset){
                     ex.vueAssign(crt_row,ex.eval(head.preset,{ts:self}))
                 }
-                //var pop_id= new Date().getTime()
-                // e = {name:'after_save',new_row:event.new_row,old_row:event.old_row}
-                //eventBus.$on('pop-win-'+pop_id,function(e){
-                //    self.update_or_insert(e.new_row, e.old_row)
-                //})
-                //pop_fields_layer(new_row,kws.heads,kws.ops,pop_id)
                 self.crt_row= crt_row
                 if(kws.tab_name){
                     // 需要继承table_page_store

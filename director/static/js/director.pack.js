@@ -3425,6 +3425,10 @@ var field_sigle_chosen = {
                     Vue.set(self.row, self.head.name, value);
                 }
             });
+
+            if (this.head.dyn_options) {
+                ex.eval(this.head.dyn_options, { row: this.row, vc: this });
+            }
         });
     },
     watch: {
@@ -3457,6 +3461,12 @@ var field_sigle_chosen = {
             $(this.$el).find('.select2').val(val);
             $(this.$el).find('.select2').trigger('change');
             Vue.set(this.row, this.head.name, val);
+        },
+        update_options: function update_options(director_name, data) {
+            var self = this;
+            ex.director_call(director_name, data, function (resp) {
+                self.head.options = resp;
+            });
         }
     }
 };

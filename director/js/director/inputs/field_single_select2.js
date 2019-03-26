@@ -33,6 +33,10 @@ var field_sigle_chosen={
                 }
             })
 
+            if(this.head.dyn_options){
+                ex.eval(this.head.dyn_options,{row:this.row,vc:this})
+            }
+
         })
 
     },
@@ -66,6 +70,12 @@ var field_sigle_chosen={
             $(this.$el).find('.select2').val(val);
             $(this.$el).find('.select2').trigger('change');
             Vue.set(this.row,this.head.name,val)
+        },
+        update_options:function(director_name,data){
+            let self=this
+            ex.director_call(director_name,data,function(resp){
+                self.head.options=resp
+            })
         }
     }
 }

@@ -86,6 +86,7 @@ var tab_fields={
                 var fun = get_data [self.tab_head.get_data.fun]
                 var kws = self.tab_head.get_data.kws
                 fun(self,function(row){
+                    self.org_row = row
                     self.row = ex.copy(row)
                     self.childStore.$emit('row.update_or_insert',row)
                 },kws)
@@ -106,7 +107,8 @@ var tab_fields={
                     // new_row ,old_row
                     fun(this,new_row,kws)
                 }
-                this.row=new_row
+                ex.vueAssign(this.org_row,new_row)
+                //this.row=new_row
             }
 
         }
