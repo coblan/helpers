@@ -4015,6 +4015,10 @@ var _ops_cell = __webpack_require__(102);
 
 var ops_cell = _interopRequireWildcard(_ops_cell);
 
+var _span = __webpack_require__(159);
+
+var table_span = _interopRequireWildcard(_span);
+
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 /***/ }),
@@ -6813,8 +6817,13 @@ var ele_table = {
     },
     data: function data() {
         this.parStore = ex.vueParStore(this);
+        var keyed_heads = {};
+        ex.each(this.parStore.heads, function (head) {
+            keyed_heads[head.name] = head;
+        });
         return {
             heads: this.parStore.heads,
+            keyed_heads: keyed_heads,
             //rows:this.parStore.rows,
             search_args: this.parStore.search_args,
             row_sort: this.parStore.row_sort
@@ -6828,6 +6837,12 @@ var ele_table = {
         //this.bus.eventBus.$on('operation', this.on_operation)
         //this.bus.eventBus.$on('perpage-change', this.on_perpage_change)
         this.parStore.e_table = this.$refs.e_table;
+
+        ex.each(this.parStore.heads, function (head) {
+            if (head.style) {
+                ex.append_css(head.style);
+            }
+        });
     },
 
     computed: {
@@ -6875,12 +6890,24 @@ var ele_table = {
             }
         }
     },
+    //         :cell-class-name="get_td_class"
+    //:header-cell-class-name="get_class"
     // height="100%"
     //style="width: 100%"
     // :row-class-name="tableRowClassName"  行标记颜色，效果不好，暂时不用
     mixins: [mix_table_data, mix_ele_table_adapter],
-    template: '  <div style="position: absolute;top:0;left:0;bottom: 0;right:0;">\n        <el-table class="table flat-head" ref="e_table"\n                              :data="rows"\n                              border\n                              show-summary\n                              :row-class-name="tableRowClassName"\n                              :span-method="parStore.arraySpanMethod"\n                              :fit="false"\n                              :stripe="true"\n                              size="mini"\n                              height="100%"\n                              style="width: 100%"\n                              @sort-change="parStore.sortChange($event)"\n                              @selection-change="parStore.handleSelectionChange"\n                              :summary-method="getSum">\n                        <el-table-column v-if="parStore.selectable"\n                                type="selection"\n                                width="55">\n                        </el-table-column>\n\n                        <template  v-for="head in parStore.heads">\n\n                            <el-table-column v-if="head.editor"\n                                             :show-overflow-tooltip="parStore.is_show_tooltip(head) "\n                                              :fixed="head.fixed"\n                                             :label="head.label"\n                                             :prop="head.name.toString()"\n                                             :sortable="parStore.is_sort(head)"\n                                             :width="head.width">\n                                <template slot-scope="scope">\n                                    <component :is="head.editor"\n                                               @on-custom-comp="on_td_event($event)"\n                                               :row-data="scope.row" :field="head.name" :index="scope.$index">\n                                    </component>\n\n                                </template>\n\n                            </el-table-column>\n\n                            <el-table-column v-else\n                                             :show-overflow-tooltip="parStore.is_show_tooltip(head) "\n                                             :fixed="head.fixed"\n                                             :prop="head.name.toString()"\n                                             :label="head.label"\n                                             :sortable="parStore.is_sort(head)"\n                                             :width="head.width">\n                            </el-table-column>\n\n                        </template>\n\n                    </el-table>\n                    </div>\n',
+    template: '  <div class="com-table-grid" style="position: absolute;top:0;left:0;bottom: 0;right:0;">\n        <el-table class="table flat-head" ref="e_table"\n                              :data="rows"\n                               border\n                              show-summary\n                              :row-class-name="tableRowClassName"\n                              :span-method="parStore.arraySpanMethod"\n                              :fit="false"\n                              :stripe="true"\n                              size="mini"\n                              height="100%"\n                              style="width: 100%"\n                              @sort-change="parStore.sortChange($event)"\n                              @selection-change="parStore.handleSelectionChange"\n                              :summary-method="getSum">\n\n                        <el-table-column v-if="parStore.selectable"\n                                type="selection"\n                                width="55">\n                        </el-table-column>\n                        <template v-for="head in parStore.heads">\n                             <el-table-column v-if="head.children"\n                                :label="head.label"\n                                 :class-name="head.class">\n                                   <el-table-column v-for="head2 in name2head(head.children)"\n                                            :class-name="head2.class"\n                                             :show-overflow-tooltip="parStore.is_show_tooltip(head2) "\n                                              :fixed="head2.fixed"\n                                             :label="head2.label"\n                                             :prop="head2.name.toString()"\n                                             :sortable="parStore.is_sort(head2)"\n                                             :width="head2.width">\n                                        <template  slot-scope="scope">\n                                            <component :is="head2.editor"\n                                                       @on-custom-comp="on_td_event($event)"\n                                                       :row-data="scope.row" :field="head2.name" :index="scope.$index">\n                                            </component>\n\n                                        </template>\n\n                                    </el-table-column>\n                             </el-table-column>\n                            <el-table-column v-else-if="! head.sublevel && head.editor"\n                                              :class-name="head.class"\n                                             :show-overflow-tooltip="parStore.is_show_tooltip(head) "\n                                              :fixed="head.fixed"\n                                             :label="head.label"\n                                             :prop="head.name.toString()"\n                                             :sortable="parStore.is_sort(head)"\n                                             :width="head.width">\n                                <template  slot-scope="scope">\n                                    <component :is="head.editor"\n                                               @on-custom-comp="on_td_event($event)"\n                                               :row-data="scope.row" :field="head.name" :index="scope.$index">\n                                    </component>\n\n                                </template>\n\n                            </el-table-column>\n                              <el-table-column v-else-if="! head.sublevel"\n                                             :show-overflow-tooltip="parStore.is_show_tooltip(head) "\n                                             :fixed="head.fixed"\n                                             :prop="head.name.toString()"\n                                             :label="head.label"\n                                             :sortable="parStore.is_sort(head)"\n                                             :width="head.width">\n                            </el-table-column>\n\n                        </template>\n                    </el-table>\n                    </div>\n',
     methods: {
+        name2head: function name2head(name_list) {
+            var _this = this;
+
+            return ex.map(name_list, function (name) {
+                return _this.keyed_heads[name];
+            });
+            //return ex.filter(this.parStore.heads,function(head){
+            //    return ex.isin(head.name,name_list)
+            //})
+        },
         tableRowClassName: function tableRowClassName(_ref) {
             var row = _ref.row,
                 rowIndex = _ref.rowIndex;
@@ -6921,6 +6948,17 @@ var arg_filter = {
         return row[head.field];
     }
 };
+
+Vue.component('com-element-table-colomu', {
+    props: ['head'],
+    data: function data() {
+        var self = this;
+        return {
+            parStore: ex.vueParStore(self)
+        };
+    },
+    template: '<template >\n\n                            <el-table-column v-if="head.editor"\n                                             :show-overflow-tooltip="parStore.is_show_tooltip(head) "\n                                              :fixed="head.fixed"\n                                             :label="head.label"\n                                             :prop="head.name.toString()"\n                                             :sortable="parStore.is_sort(head)"\n                                             :width="head.width">\n                                <template slot-scope="scope">\n                                    <component :is="head.editor"\n                                               @on-custom-comp="on_td_event($event)"\n                                               :row-data="scope.row" :field="head.name" :index="scope.$index">\n                                    </component>\n\n                                </template>\n\n                            </el-table-column>\n\n                            <el-table-column v-else\n                                             :show-overflow-tooltip="parStore.is_show_tooltip(head) "\n                                             :fixed="head.fixed"\n                                             :prop="head.name.toString()"\n                                             :label="head.label"\n                                             :sortable="parStore.is_sort(head)"\n                                             :width="head.width">\n                            </el-table-column>\n\n         </template>\n    '
+});
 
 /***/ }),
 /* 111 */
@@ -8312,6 +8350,25 @@ __webpack_require__(77);
 
 
 // store
+
+/***/ }),
+/* 159 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var label_shower = {
+    props: ['rowData', 'field', 'index'],
+    template: '<span v-text="show_text"></span>',
+    computed: {
+        show_text: function show_text() {
+            return this.rowData[this.field] || '';
+        }
+    }
+};
+
+Vue.component('com-table-span', label_shower);
 
 /***/ })
 /******/ ]);
