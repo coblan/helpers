@@ -8,11 +8,16 @@ var field_sigle_chosen={
     <div v-show="!head.readonly">
         <select  class="select2 field-single-select2 form-control" :id="'id_'+head.name">
              <option  :value="undefined" ></option>
-            <option v-for="option in order_options" :value="option.value" v-text="option.label"></option>
+            <option v-for="option in inn_options" :value="option.value" v-text="option.label"></option>
         </select>
     </div>
 
     </div>`,
+    data:function(){
+        return {
+            inn_options :this.head.options
+        }
+    },
     mounted:function(){
         var self=this
 
@@ -20,9 +25,14 @@ var field_sigle_chosen={
             ex.append_css(this.head.style)
         }
         ex.load_css('https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css')
-        ex.load_js('https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js',function(){
 
-
+        let prom1 = ex.load_js('https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js')
+        if(this.head.dyn_options){
+            var prom2 =  ex.eval(this.head.dyn_options,{row:this.row,vc:this})
+        }else{
+            var prom2 =1
+        }
+        Promise.all([prom1,prom2]).then(function(){
             $(self.$el).find('select').select2({
                 placeholder:self.head.placeholder || '请选择',
                 allowClear: true
@@ -37,9 +47,7 @@ var field_sigle_chosen={
                 }
             })
         })
-        if(this.head.dyn_options){
-            ex.eval(this.head.dyn_options,{row:this.row,vc:this})
-        }
+
 
     },
     watch:{
@@ -52,20 +60,20 @@ var field_sigle_chosen={
             return this.row[this.head.name]
         },
         label_text:function(){
-            var opt = ex.findone(this.head.options,{value:this.row[this.head.name]})
+            var opt = ex.findone(this.inn_options,{value:this.row[this.head.name]})
             if(opt){
                 return opt.label
             }else{
                 return ''
             }
         },
-        order_options:function(){
-            if (this.head.order){
-                return ex.sortOrder(this.head.options,'label')
-            }else{
-                return this.head.options
-            }
-        }
+        //order_options:function(){
+        //    if (this.head.order){
+        //        return ex.sortOrder(this.inn_options,'label')
+        //    }else{
+        //        return this.inn_options
+        //    }
+        //}
     },
     methods:{
         setValue:function(val){
@@ -75,9 +83,13 @@ var field_sigle_chosen={
         },
         update_options:function(director_name,data){
             let self=this
-            ex.director_call(director_name,data,function(resp){
-                self.head.options=resp
+            return new Promise(function(resolve,reject){
+                ex.director_call(director_name,data).then(resp=>{
+                        self.inn_options = resp
+                        resolve()
+                    })
             })
+
         }
     }
 }
