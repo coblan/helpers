@@ -642,9 +642,7 @@ class ModelTable(object):
             for head in heads:
                 if head['name'] == k:
                     tmp_heads.append(head)
-                    #heads.remove(head)
                     break
-        #tmp_heads.extend(heads)
         return tmp_heads
             
     def get_rows(self):

@@ -15,8 +15,6 @@ class IntProc(BaseFieldProc):
                 'editor':'com-date-range-filter'
                 }
 
-
-    
     def dict_field_head(self, head): 
         options = self.get_options()   
         if options:

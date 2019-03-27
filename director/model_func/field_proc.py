@@ -36,6 +36,8 @@ class BaseFieldProc(object):
         if options:
             head['options'] = options
             head['editor'] = 'com-table-mapper'
+        else:
+            head['editor']='com-table-span'
         return head 
     
     def dict_field_head(self,head): 
