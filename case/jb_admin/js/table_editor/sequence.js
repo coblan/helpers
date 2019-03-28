@@ -1,3 +1,6 @@
+/*
+* 用于 表格最左侧的 序号显示。。。
+* */
 var com_table_sequence={
     props:['rowData','field','index'],
     template:`<div><span v-text="show_text" ></span></div>`,
