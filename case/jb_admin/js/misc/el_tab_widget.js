@@ -26,9 +26,9 @@ Vue.component('com-widget-el-tab',{
                            :ref="'_tab_'+tab.name" @tab-event="up_event($event)"></component>
     </div>`,
    watch:{
-       'ctx.crt_tab_name':function (v){
-            this.show_tab(v)
-        }
+       //'ctx.crt_tab_name':function (v){
+       //     this.show_tab(v)
+       // }
    },
     mounted:function(){
         this.show_tab(this.ctx.crt_tab_name)
@@ -52,10 +52,13 @@ Vue.component('com-widget-el-tab',{
         show_tab:function(name){
             this.ctx.crt_tab_name=name
             //this.crt_tab_name = name
-            //var self =this
-            //Vue.nextTick(function(){
-            //    self.$refs['_tab_'+name][0].on_show()
-            //})
+            // 当tab页面点击进入时
+            var self =this
+            Vue.nextTick(function(){
+                if(self.$refs['_tab_'+name][0].on_show){
+                    self.$refs['_tab_'+name][0].on_show()
+                }
+            })
         },
         handleClick(tab, event) {
             this.show_tab(tab.name)

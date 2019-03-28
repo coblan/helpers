@@ -72,6 +72,7 @@ var mix_fields_data ={
             cfg.show_load()
             ex.director_call(director_name,data).then(resp=>{
                 cfg.hide_load()
+                ex.vueAssign(this.org_row,resp)
                 ex.vueAssign(this.row,resp)
             })
         },

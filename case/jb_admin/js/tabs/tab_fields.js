@@ -10,12 +10,15 @@ var tab_fields={
                 vc:self
             }
         })
+        var parStore = ex.vueParStore(this)
         return {
             heads:this.tab_head.heads,
             ops:this.tab_head.ops,
             errors:{},
             row:data_row,
-            childStore:childStore
+            org_row:data_row,
+            childStore:childStore,
+            parStore:parStore,
         }
     },
     mixins:[mix_fields_data,mix_nice_validator],
@@ -72,6 +75,7 @@ var tab_fields={
         if(!this.tab_head.row){
             this.get_data()
         }
+        ex.vueEventRout(this,this.tab_head.event_slots)
     },
 
     methods:{

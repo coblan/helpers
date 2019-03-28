@@ -49,24 +49,20 @@ var tab_table={
             }
         }
         return {
-            childStore:new Vue(my_table_store)
+            childStore:new Vue(my_table_store),
+            parStore:ex.vueParStore(vc),
+            loaded:false,
         }
-        //return {
-        //    parents:parents,
-        //    page_label:page_label,
-        //    heads:heads,
-        //    rows:rows,
-        //    row_filters:row_filters,
-        //    row_sort:row_sort,
-        //    row_pages:row_pages,
-        //    director_name:director_name,
-        //    footer:footer,
-        //    ops:ops,
-        //    search_args:search_args,
-        //}
     },
     mounted:function(){
-        this.childStore.search()
+        ex.vueEventRout(this,this.tab_head.event_slots)
+    },
+    methods:{
+        on_show:function (){
+            if(! this.loaded){
+                this.childStore.search()
+            }
+        }
     },
 
     template:`<div class="com-tab-table flex-v" style="position: absolute;top:0;left:0;bottom: 0;right:0;overflow: auto;padding-bottom: 1em;">
