@@ -67,6 +67,14 @@ var mix_fields_data ={
         }
     },
     methods:{
+        get_row:function(director_name,data){
+            // 后端可以控制，直接更新row数据
+            cfg.show_load()
+            ex.director_call(director_name,data).then(resp=>{
+                cfg.hide_load()
+                ex.vueAssign(this.row,resp)
+            })
+        },
         on_operation:function(op){
             var fun_name = op.fun || op.name
             this.op_funs[fun_name](op.kws)

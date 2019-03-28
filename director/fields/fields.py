@@ -21,6 +21,7 @@ from helpers.director.middleware.request_cache import get_request_cache,request_
 from helpers.func.collection.container import evalue_container
 from django.db import transaction
 import logging
+from helpers.director.decorator import get_request_cache
 # sql_log 可能没有什么用
 #sql_log = logging.getLogger('director.sql_op')
 
@@ -66,7 +67,8 @@ class ModelFields(forms.ModelForm):
         self.kw = kw.copy()
         
         if not crt_user:
-            self.crt_user=dc.get('crt_user')
+            #self.crt_user=dc.get('crt_user')
+            self.crt_user = get_request_cache()['request'].user
         else:
             self.crt_user = crt_user
             

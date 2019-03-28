@@ -91,9 +91,9 @@ var tab_fields={
                     self.childStore.$emit('row.update_or_insert',row)
                 },kws)
             }
-            if(self.tab_head.row_express){
-                var row_dc = ex.eval(self.tab_head.row_express)
-                ex.vueAssign(self.row,row_dc)
+            if(self.tab_head.get_row){
+                ex.eval(self.tab_head.get_row,{vc:self})
+                //ex.vueAssign(self.row,row_dc)
             }
         },
         after_save:function(new_row){

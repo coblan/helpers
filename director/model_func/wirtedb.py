@@ -4,6 +4,7 @@ from django.db import models
 from .dictfy import name_to_model,model_dc
 from django.core.exceptions import ValidationError
 from helpers.director.base_data import director
+
 def permit_save_model(user,row,**kw):
     for k in row: # convert model instance to pk for normal validation
         if isinstance(row[k],models.Model):

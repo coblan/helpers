@@ -136,13 +136,14 @@ class RowFilter(object):
         #self._names=[x for x in self.names if x in allowed_names]        
         self.filter_args={}
         for k in self.names:
-            v = dc.pop(k,None)
-            if v != None:
-                self.filter_args[k]=v   
-            if v=='0':
-                self.filter_args[k]=False
-            elif v=='1':
-                self.filter_args[k]=True
+            v = dc.pop(k,'')
+            self.filter_args[k] = v
+            #if v != None:
+                #self.filter_args[k]=v   
+            #if v=='0':
+                #self.filter_args[k]=False
+            #elif v=='1':
+                #self.filter_args[k]=True
         for k in self.range_fields: #[x.get('name') for x in self.range_fields]:
             if kw.get('_start_%s'%k):
                 start=kw.get('_start_%s'%k)
@@ -226,13 +227,15 @@ class RowFilter(object):
     
     def get_query(self,query):
         self.query=query
-        dc = {}
+        arg_dc = {}
         for proc_cls,name in zip(self.get_proc_list() ,self.valid_name):
-            value =  self.filter_args.get(name, None)
-            if value != None:
-                dc[name] = proc_cls().filter_clean_filter_arg(value ) 
-        self.filter_args.update(dc)
-        arg_dc = {k: v for k, v in self.filter_args.items() if v != None}
+            tmp_dc = proc_cls().filter_clean_filter_arg(name ,self.filter_args )
+            arg_dc.update( tmp_dc )
+            #value =  self.filter_args.get(name, None)
+            #if value != None:
+                #dc[name] = proc_cls().filter_clean_filter_arg(value ) 
+        #self.filter_args.update(dc)
+        #arg_dc = {k: v for k, v in self.filter_args.items() if v != None}
         
         query=query.filter(**arg_dc)
         query = self.clean_query(query)
@@ -368,13 +371,13 @@ class ModelTable(object):
         page = kw.pop('_page','1')
         perpage = kw.pop('_perpage',None)
         row_sort = kw.pop('_sort','').split(',')
-        row_sort=filter(lambda x: x!='',row_sort)
+        row_sort=list( filter(lambda x: x!='',row_sort) )
         q=kw.pop('_q',None)
         row_filter={}
         for k in cls.filters.names:
-            arg = kw.pop(k,None)
-            if arg is not None:
-                row_filter[k]=arg
+            arg = kw.pop(k,'')
+            #if arg is not None:
+            row_filter[k]=arg
         return cls(page,row_sort,row_filter,q,user,perpage=perpage,**kw)
     
     @classmethod

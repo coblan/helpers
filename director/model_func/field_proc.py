@@ -94,11 +94,14 @@ class BaseFieldProc(object):
     def filter_adapt_dict(self,dc,name):
         return dc
     
-    def filter_clean_filter_arg(self, f_str):
-        if f_str == '':
-            return  None
+    def filter_clean_filter_arg(self, name,search_args):
+        value = search_args.get(name,'')
+        if value == '':
+            return  {}      # 如果是空字符串，就表示不过滤
+        elif value is None:
+            return {'%s__isnull'%name:True}
         else:
-            return f_str
+            return {name:value}
 
     
     def filter_clean_search(self, q_str):

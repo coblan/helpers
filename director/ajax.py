@@ -15,7 +15,7 @@ import io
 from helpers.director.base_data import director
 from django.http import HttpResponse
 from django.utils.timezone import datetime
-
+from .fields.fields import ModelFields
 
 try:
     os.makedirs(os.path.join(settings.MEDIA_ROOT, 'gen_files'))
@@ -27,7 +27,11 @@ def get_global():
 
 def director_call(director_name, kws): 
     directorEnt= director.get(director_name)
-    return directorEnt(**kws)
+    rt= directorEnt(**kws)
+    if isinstance(rt,ModelFields):
+        return rt.get_row()
+    else:
+        return rt
 
 def save(row,user,request):
     """
@@ -52,17 +56,8 @@ def get_new_row_ctx(model_name,user):
     return fields_cls(crt_user = user).get_context()
     
 def get_row(director_name,pk=None,user=None,**kws):
-    #model = name_to_model(model_name)
-    #fields_cls = model_dc[model].get('fields')
     fields_cls = director.get(director_name)
     fields_obj = fields_cls(pk=pk,crt_user = user, **kws)
-    #if pk:
-        #fields_obj = fields_cls(pk=pk,crt_user = user)
-    #elif kws:
-        #instance = fields_cls._meta.model.objects.get(**kws)
-        #fields_obj = fields_cls(instance=instance,crt_user = user)
-    #else:
-        #fields_obj =fields_cls(crt_user = user)
     return fields_obj.get_row()
 
 

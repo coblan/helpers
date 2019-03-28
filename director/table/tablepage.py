@@ -5,7 +5,6 @@ import time
 class TablePage(object):
     template=''
     tableCls=''
-    #ajax_scope={}
     extra_js=[]
     def __init__(self,request, engin):
         self.engin = engin
