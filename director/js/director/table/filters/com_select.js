@@ -2,7 +2,7 @@ require('./scss/filter_select.scss')
 
 var com_select = {
     props:['head','search_args','config'],
-    template:`<select v-model='search_args[head.name]' :class="['form-control input-sm com-filter-select',{novalue:search_args[head.name]==undefined}]" >
+    template:`<select v-model='search_args[head.name]' :class="['form-control input-sm com-filter-select',{novalue:search_args[head.name]===undefined}]" >
         <option class="fake-placeholder" v-if="head.forbid_select_null" :value="undefined" disabled v-text='head.label'></option>
         <option class="fake-placeholder" v-else :value="undefined" v-text='head.label' ></option>
         <option v-for='option in orderBy(options,"label")' :value="option.value" v-text='option.label'></option>

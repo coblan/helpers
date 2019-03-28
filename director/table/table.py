@@ -231,13 +231,15 @@ class RowFilter(object):
         for proc_cls,name in zip(self.get_proc_list() ,self.valid_name):
             tmp_dc = proc_cls().filter_clean_filter_arg(name ,self.filter_args )
             arg_dc.update( tmp_dc )
+            # 由 field_map处理， 移除filter_args的同名字段
+            self.filter_args.pop(name,None)
             #value =  self.filter_args.get(name, None)
             #if value != None:
                 #dc[name] = proc_cls().filter_clean_filter_arg(value ) 
-        #self.filter_args.update(dc)
+        self.filter_args.update(arg_dc)
         #arg_dc = {k: v for k, v in self.filter_args.items() if v != None}
         
-        query=query.filter(**arg_dc)
+        query=query.filter(**self.filter_args)
         query = self.clean_query(query)
         return query    
     

@@ -21,9 +21,9 @@ var sim_select= {
     },
     template: `<div class="com-field-select">
             <span v-if='head.readonly' v-text='get_label(head.options,row[head.name])'></span>
-            <select v-else v-model='row[head.name]'  :id="'id_'+head.name" :name="head.name"  :class="['form-control input-sm',{novalue:row[head.name]==null}] ">
-                <option v-if="head.required"  :value="null" disabled selected style='display:none;' class="placeholder" v-text="head.placeholder"></option>
-            	<option v-else  :value="null" selected style="color: #b8b8b8" class="placeholder" v-text="head.placeholder"></option>
+            <select v-else v-model='row[head.name]'  :id="'id_'+head.name" :name="head.name"  :class="['form-control input-sm',{ novalue: ! is_select}] ">
+                <option v-if="head.required"  :value="undefined" disabled selected style='display:none;' class="placeholder" v-text="head.placeholder"></option>
+            	<option v-else  :value="undefined" selected style="color: #b8b8b8" class="placeholder" v-text="head.placeholder"></option>
 
             	<option v-for='opt in normed_options' :value='opt.value' v-text='opt.label'></option>
             </select>
@@ -52,12 +52,6 @@ var sim_select= {
     watch:{
         my_value:function(v){
             this.$emit('input',v)
-            //if(this.head.remote_options){
-            //    var self=this
-            //    ex.director_call(this.head.remote_options,{row:self.row},function(data){
-            //        Vue.set(self.head,'options' ,data)
-            //    })
-            //}
         }
     },
 
@@ -67,7 +61,7 @@ var sim_select= {
         },
         is_select:function(){
             var v = this.row[this.head.name]
-            return v != undefined
+            return v !== undefined
         },
         place_value:function(){
             var v = this.row[this.head.name]

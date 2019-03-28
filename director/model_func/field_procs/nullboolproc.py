@@ -10,10 +10,15 @@ class NullBoolProc(BaseFieldProc):
         return head
     
     def dict_field_head(self, head): 
-        head['editor'] = 'com-field-bool'
+        head['editor'] = 'com-field-select'
+        head['options']=[
+            {'value':None,'label':'空'},
+            {'value': True, 'label': '是',}, 
+            {'value': False, 'label': '否',},
+        ]
+
         return head
-    
-    
+       
     
     def filter_get_head(self, name, model):
         this_field= model._meta.get_field(name)
