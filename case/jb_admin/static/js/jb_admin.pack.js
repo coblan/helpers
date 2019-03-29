@@ -7724,7 +7724,7 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, ".com-tab-fields .oprations {\n  background: #fbfbf8;\n  padding: 0.2rem 1rem;\n  margin: 0.2rem 0;\n  border-bottom: 1px solid #cccccc; }\n\n.com-tab-fields .table-fields {\n  border: 1px solid #e3e3e3;\n  border-radius: 4px;\n  margin: 5px 15px;\n  padding: 10px 30px; }\n\n.fields-group-title {\n  padding: 2rem 0 .3rem 2rem;\n  font-weight: 700; }\n", ""]);
+exports.push([module.i, ".com-tab-fields .oprations {\n  background: #fbfbf8;\n  padding: 0.2rem 1rem;\n  margin: 0.2rem 0;\n  border-bottom: 1px solid #cccccc; }\n\n.com-tab-fields .table-fields {\n  border: 1px solid #efefef;\n  background-color: #f8f8f8;\n  margin: 5px 15px;\n  padding: 10px 30px; }\n\n.fields-group-title {\n  padding: 2rem 0 .3rem 2rem;\n  font-weight: 700; }\n", ""]);
 
 // exports
 
