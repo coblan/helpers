@@ -225,6 +225,9 @@ class RowFilter(object):
     def clean_query(self, query): 
         return query
     
+    def clean_search_args(self,search_args):
+        return search_args
+    
     def get_query(self,query):
         self.query=query
         arg_dc = {}
@@ -237,6 +240,7 @@ class RowFilter(object):
             #if value != None:
                 #dc[name] = proc_cls().filter_clean_filter_arg(value ) 
         self.filter_args.update(arg_dc)
+        self.filter_args = self.clean_search_args(self.filter_args)
         #arg_dc = {k: v for k, v in self.filter_args.items() if v != None}
         
         query=query.filter(**self.filter_args)
