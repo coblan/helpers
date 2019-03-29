@@ -76,27 +76,29 @@ def cache_in_db(ex=None):
                     expired=True
                     
             if not rt or expired:
-                lock_key = 'lock:fun:%s'%key
-                created = lock_created(lock_key,1)
-                if created:
-                    rt_obj = fun(*args, **kws)
-                    dc = {
-                        'value':rt_obj,
-                        'ex':ex,
-                        'snapshot':time.time()
-                    }
-                    set_value(cache_name,json.dumps(dc))  
-                    clear_value(lock_key)
-                else:
-                    count = 0
-                    while(True):
-                        if count>10000:
-                            raise UserWarning('缓存等待同步函数执行完成超时')
-                        count +=200
-                        time.sleep(200)
-                        if not get_value(lock_key):
-                            rt = get_value(cache_name)
-                            rt_obj =json.loads(rt)['value']
+                #lock_key = 'lock:fun:%s'%key
+             
+                    #created = lock_created(lock_key,1)
+                    #if created:
+                rt_obj = fun(*args, **kws)
+                dc = {
+                    'value':rt_obj,
+                    'ex':ex,
+                    'snapshot':time.time()
+                }
+                set_value(cache_name,json.dumps(dc))  
+ 
+                    #clear_value(lock_key)
+                #else:
+                    #count = 0
+                    #while(True):
+                        #if count>10000:
+                            #raise UserWarning('缓存等待同步函数执行完成超时')
+                        #count +=200
+                        #time.sleep(200)
+                        #if not get_value(lock_key):
+                            #rt = get_value(cache_name)
+                            #rt_obj =json.loads(rt)['value']
                         
                
             else:
