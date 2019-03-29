@@ -28,6 +28,7 @@ var nice_validator={
                 if(head.validate_showError){
                     validate_fields[head.name]={
                         rule:ls.join(';'),
+                        msg:head.fv_msg,
                         msgClass:'hide',
                         invalid:function(e,b){
                             var label =head.label
@@ -35,7 +36,10 @@ var nice_validator={
                         }
                     }
                 }else{
-                    validate_fields[head.name]=ls.join(';')
+                        validate_fields[head.name]={
+                            rule:ls.join(';'),
+                            msg:head.fv_msg
+                        }
                 }
 
             })

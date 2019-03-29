@@ -2501,6 +2501,7 @@ var nice_validator = {
                 if (head.validate_showError) {
                     validate_fields[head.name] = {
                         rule: ls.join(';'),
+                        msg: head.fv_msg,
                         msgClass: 'hide',
                         invalid: function invalid(e, b) {
                             var label = head.label;
@@ -2508,7 +2509,10 @@ var nice_validator = {
                         }
                     };
                 } else {
-                    validate_fields[head.name] = ls.join(';');
+                    validate_fields[head.name] = {
+                        rule: ls.join(';'),
+                        msg: head.fv_msg
+                    };
                 }
             });
             if ($(this.$el).hasClass('field-panel')) {
@@ -5198,7 +5202,7 @@ Vue.component('com-field-invite-code', com_field_invite_code);
 
 var line_text = {
         props: ['row', 'head'],
-        template: '<div :style="head.style">\n            \t\t\t<span v-if=\'head.readonly\' v-text=\'row[head.name]\'></span>\n            \t\t\t<input v-else type="text" class="form-control input-sm" v-model="row[head.name]"\n            \t\t \t    :id="\'id_\'+head.name" :name="head.name"\n                        \t:placeholder="head.placeholder" :autofocus="head.autofocus" :maxlength=\'head.maxlength\'>\n                       </div>'
+        template: '<div :class="[\'com-field-linetext\',head.class]" :style="head.style">\n            \t\t\t<span v-if=\'head.readonly\' v-text=\'row[head.name]\'></span>\n            \t\t\t<input v-else type="text" :class="[\'form-control input-sm\',head.input_class]" v-model="row[head.name]"\n            \t\t \t    :id="\'id_\'+head.name" :name="head.name" data-\n                        \t:placeholder="head.placeholder" :autofocus="head.autofocus" :maxlength=\'head.maxlength\'>\n                       </div>'
 };
 Vue.component('com-field-linetext', line_text);
 
