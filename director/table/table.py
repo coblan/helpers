@@ -125,6 +125,7 @@ class RowFilter(object):
     range_fields=[]
     model=''
     fields_sort = []
+    icontains=[]
     def __init__(self,dc,user,allowed_names,kw={}):
         # 为了让前端不显示
         self.model_allowed_names =  allowed_names
@@ -212,6 +213,10 @@ class RowFilter(object):
         
         out_list = extraHead
         out_list.extend(normal_heads)
+        for head in out_list:
+            if head['name'] in self.icontains:
+                head['editor'] = 'com-filter-text'
+        
         out_list = [self.dict_head(head) for head in out_list]
         out_list = [x for x in out_list if x['name'] in send_to_front_names]
         if self.fields_sort:
@@ -226,7 +231,13 @@ class RowFilter(object):
         return query
     
     def clean_search_args(self,search_args):
-        return search_args
+        out={}
+        for k,v in search_args.items():
+            if k in self.icontains:
+                out['%s__icontains'%k]=v
+            else:
+                out[k]=v
+        return out
     
     def get_query(self,query):
         self.query=query
