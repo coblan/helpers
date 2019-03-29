@@ -129,6 +129,41 @@ var table_store={
                 }
             })
         },
+        pop_edit:function({row,fields_ctx,after_save}){
+            var self=this
+            var win_index =  pop_fields_layer(row,fields_ctx,function(new_row) {
+                if(after_save){
+                    ex.eval(after_save,{new_row:new_row,ps:self})
+                }else{
+                    self.update_or_insert(new_row)
+                }
+                //var fun = after_save[self.head.after_save.fun]
+                //fun(self, new_row, pop_row)
+
+                layer.close(win_index)
+            })
+            //var fun= get_row[this.head.get_row.fun]
+            //if(this.head.get_row.kws){
+            //    //  这个是兼顾老的调用，新的调用，参数直接写在get_row里面，与fun平级
+            //    var kws= this.head.get_row.kws
+            //}else{
+            //    var kws= this.head.get_row
+            //}
+            //kws.director_name = this.head.fields_ctx.director_name
+
+            //fun(function(pop_row){
+            //    //pop_fields_layer(pop_row,self.head.fields_heads,ops,self.head.extra_mixins,function(kws){
+            //    var win_index =  pop_fields_layer(pop_row,self.head.fields_ctx,function(new_row){
+            //
+            //        var fun = after_save[self.head.after_save.fun]
+            //        fun(self,new_row,pop_row)
+            //
+            //        layer.close(win_index)
+            //
+            //    })
+            //},this.rowData,kws)
+        },
+
         clearSelection:function(){
             this.selected =[]
             // 在mix_ele_table_adaptor 中会触发 element table 自动清除选择。
