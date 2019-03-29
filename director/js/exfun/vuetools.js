@@ -47,7 +47,7 @@ export var  vuetool = {
     vueEventRout:function(self,event_slots){
         if(!event_slots){
             if(self.head && self.head.event_slots){
-                event_slots = event_slots
+                event_slots = self.head.event_slots
             }
         }
         if(! event_slots  ){

@@ -14,8 +14,10 @@ var field_sigle_chosen={
 
     </div>`,
     data:function(){
+        var self =this
         return {
-            inn_options :this.head.options
+            inn_options :this.head.options,
+            parStore:ex.vueParStore(self),
         }
     },
     mounted:function(){
@@ -25,7 +27,6 @@ var field_sigle_chosen={
             ex.append_css(this.head.style)
         }
         ex.load_css('https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css')
-
         let prom1 = ex.load_js('https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js')
         if(this.head.dyn_options){
             var prom2 =  ex.eval(this.head.dyn_options,{row:this.row,vc:this})
@@ -47,6 +48,8 @@ var field_sigle_chosen={
                 }
             })
         })
+
+        ex.vueEventRout(this)
 
 
     },
@@ -80,6 +83,7 @@ var field_sigle_chosen={
             $(this.$el).find('.select2').val(val);
             $(this.$el).find('.select2').trigger('change');
             Vue.set(this.row,this.head.name,val)
+            this.$emit('input',val)
         },
         update_options:function(director_name,data){
             let self=this
