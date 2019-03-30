@@ -7328,6 +7328,7 @@ var tab_table = {
         on_show: function on_show() {
             if (!this.loaded) {
                 this.childStore.search();
+                this.loaded = true;
             }
         }
     },

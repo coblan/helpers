@@ -61,6 +61,7 @@ var tab_table={
         on_show:function (){
             if(! this.loaded){
                 this.childStore.search()
+                this.loaded=true
             }
         }
     },
