@@ -155,6 +155,7 @@ desired effect
     }
 
     menu= {{menu| jsonify}}
+    menu_search={{ menu_search | jsonify}}
     menu_expand_all = {{ menu_expand_all | jsonify }} || false
     head_bar_data ={{head_bar_data | jsonify}}
 
@@ -353,9 +354,9 @@ desired effect
             <!--</div>-->
 
             <!-- search form (Optional) -->
-            <div action="#" method="get" class="sidebar-form">
+            <div action="#" method="get" class="sidebar-form" v-if="menu_search">
                 <div class="input-group">
-                    <input type="text" name="q" class="form-control" v-model="menu_search" :placeholder="tr.search+'...'">
+                    <input type="text" name="q" class="form-control" v-model="menu_search_value" :placeholder="tr.search+'...'">
                 <span class="input-group-btn">
                   <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
                   </button>
@@ -588,25 +589,26 @@ desired effect
             data:{
                 menu:menu,
                 menu_expand_all:menu_expand_all,
-                menu_search:'',
+                menu_search:menu_search,
+                menu_search_value:'',
                 tr:cfg.tr,
             },
             computed:{
                 filted_menu:function(){
                     var tmp_menus = ex.copy(this.menu)
-                    if(this.menu_search == ''){
+                    if(this.menu_search_value == ''){
                         return tmp_menus
                     }
                     var self=this
                     var valid_menus = ex.filter(tmp_menus,function(menu){
-                            return menu.label.toLowerCase().indexOf(self.menu_search.toLowerCase()) !=-1
+                            return menu.label.toLowerCase().indexOf(self.menu_search_value.toLowerCase()) !=-1
                     })
 
                     ex.each(tmp_menus,function(menu){
                         if(menu.submenu && menu.submenu.length != 0 ){
                             if(! ex.isin(menu,valid_menus)){
                                 ex.remove(menu.submenu,function(act){
-                                    return act.label.toLowerCase().indexOf(self.menu_search.toLowerCase()) ==-1
+                                    return act.label.toLowerCase().indexOf(self.menu_search_value.toLowerCase()) ==-1
                                 })
                             }
                         }

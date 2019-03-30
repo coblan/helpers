@@ -3,6 +3,9 @@ from .. field_procs.charproc import CharProc
 from .. .base_data import field_map
 
 class MultiChoiceField(CharField):
+    """
+    多选字段，选项由 choices传入，与django的普通字段一致.
+    """
     def __init__(self, *args, **kwargs):
         self.my_choices = kwargs.pop('choices',[])
         super().__init__(*args,**kwargs)
