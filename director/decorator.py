@@ -13,7 +13,9 @@ def need_login(fun):
         if request.user.is_authenticated():
             return fun(*args,**kw)
         else:
-            raise PermissionDenied('Need login !')
+            return HttpResponse('Unauthorized', status=401)
+            #raise PermissionDenied('Need login !')
+        
     return _fun
 
 def need_permit(fun):
