@@ -32,12 +32,9 @@ var table_page_store={
         switch_to_tab:function(kws){
             var self=this
             var tabs=named_ctx[kws.ctx_name]
-            //if(kws.named_tabs){
-            //    // 传入named_tabs，造成tabs的切换
-            //    var next_tabs = self.named_tabs[kws.named_tabs]
-            //}else {
-            //    var next_tabs = self.tabs
-            //}
+            if(!tabs){
+                throw `named_ctx. ${kws.ctx_name} 不存在，检查是否传入`
+            }
             self.tab_stack.push( {
                 widget:'com-widget-el-tab' ,
                 tabs:tabs,

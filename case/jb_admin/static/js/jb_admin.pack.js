@@ -5616,12 +5616,9 @@ var table_page_store = {
         switch_to_tab: function switch_to_tab(kws) {
             var self = this;
             var tabs = named_ctx[kws.ctx_name];
-            //if(kws.named_tabs){
-            //    // 传入named_tabs，造成tabs的切换
-            //    var next_tabs = self.named_tabs[kws.named_tabs]
-            //}else {
-            //    var next_tabs = self.tabs
-            //}
+            if (!tabs) {
+                throw 'named_ctx. ' + kws.ctx_name + ' \u4E0D\u5B58\u5728\uFF0C\u68C0\u67E5\u662F\u5426\u4F20\u5165';
+            }
             self.tab_stack.push({
                 widget: 'com-widget-el-tab',
                 tabs: tabs,
