@@ -91,3 +91,8 @@ def int_str(value,name):
     except ValueError as e:
         raise UserWarning('%(name)s=%(value)s counld not be covert to int'%{'name':name,'value':value})
 
+def choice_in(choices):
+    def _choice_in(value,name):
+        if value and value not in choices:
+            raise UserWarning('%(name)s=%(value)s can not be find in %(choices)s'%{'name':name,'value':value,'choices':choices})
+    return _model_validator
