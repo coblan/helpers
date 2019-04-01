@@ -2,6 +2,9 @@
  与 extra_click的区别是
  1. 可以添加多个按钮
  2. 根据filter返回不同的按钮
+
+ 现在全部使用  com-table-ops-cell 控件
+
  * */
 
 require('./scss/extra_click_plus.scss')

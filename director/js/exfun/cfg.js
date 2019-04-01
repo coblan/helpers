@@ -89,6 +89,18 @@ window.cfg={
             layer.close(winindex)
         }
     },
+    pop_vue_com:function({ctx,editor,option}){
+        return new Promise(function(resolve,reject){
+            var callback = function(e){
+                close_fun()
+                resolve(e)
+            }
+            var winindex = pop_layer(ctx,editor,callback,option)
+            var close_fun = function (){
+                layer.close(winindex)
+            }
+        })
+    },
     close_win:function(index){
         if(index=='full_win'){
             history.back()

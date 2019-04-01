@@ -7,8 +7,10 @@ var op_a = {
     </button>
     </span>`,
     data:function(){
+        var parStore = ex.vueParStore(this)
         return {
-            enable:true
+            enable:true,
+            parStore : parStore,
         }
     },
     computed:{
@@ -22,7 +24,11 @@ var op_a = {
     },
     methods:{
         operation_call:function(){
-            this.$emit('operation',this.head.name || this.head.fun)
+            if (this.head.action) {
+                ex.eval(this.head.action, {ps: this.parStore, head: this.head})
+            }else{
+                this.$emit('operation',this.head.name || this.head.fun)
+            }
         },
         set_enable:function(yes){
             this.enable= yes

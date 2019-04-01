@@ -77,6 +77,8 @@ import * as btn from  './field_operator/btn.js'
 import * as pop_table_layer from  './misc/pop_table_layer.js'
 import * as pop_fields_layer from  './misc/pop_fields_layer.js'
 import * as pop_layer from  './misc/pop_layer'
+import * as misc_main from  './misc/main.js'
+
 
 //fields_panels
 import * as panels_main from  './pannels/main.js'
@@ -113,3 +115,4 @@ import * as node_store_main from  './node_store/main.js'
 import * as tabs_main from  './tabs/main'
 
 import * as operator_main from  './operator/main.js'
+

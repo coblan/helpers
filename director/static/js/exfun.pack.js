@@ -493,6 +493,22 @@ window.cfg = {
             layer.close(winindex);
         };
     },
+    pop_vue_com: function pop_vue_com(_ref) {
+        var ctx = _ref.ctx,
+            editor = _ref.editor,
+            option = _ref.option;
+
+        return new Promise(function (resolve, reject) {
+            var callback = function callback(e) {
+                close_fun();
+                resolve(e);
+            };
+            var winindex = pop_layer(ctx, editor, callback, option);
+            var close_fun = function close_fun() {
+                layer.close(winindex);
+            };
+        });
+    },
     close_win: function close_win(index) {
         if (index == 'full_win') {
             history.back();
