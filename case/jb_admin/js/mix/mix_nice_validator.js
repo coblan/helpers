@@ -28,6 +28,7 @@ var nice_validator={
                 if(head.validate_showError){
                     validate_fields[head.name]={
                         rule:ls.join(';'),
+                        msg:head.fv_msg,
                         msgClass:'hide',
                         invalid:function(e,b){
                             var label =head.label
@@ -35,7 +36,10 @@ var nice_validator={
                         }
                     }
                 }else{
-                    validate_fields[head.name]=ls.join(';')
+                        validate_fields[head.name]={
+                            rule:ls.join(';'),
+                            msg:head.fv_msg
+                        }
                 }
 
             })
@@ -61,21 +65,22 @@ var nice_validator={
         },
         isValid:function(){
             var nice_rt = this.nice_validator.isValid()
+            return nice_rt
             //var totalValid=[nice_rt]
-            var totalValid=ex.vueBroadCall(this,'isValid')
-            totalValid.push(nice_rt)
-
-            //ex.each(this.$children,function(child){
-            //    if(child.isValid){
-            //        totalValid.push(child.isValid())
-            //    }
+            //var totalValid=ex.vueBroadCall(this,'isValid')
+            //totalValid.push(nice_rt)
+            //
+            ////ex.each(this.$children,function(child){
+            ////    if(child.isValid){
+            ////        totalValid.push(child.isValid())
+            ////    }
+            ////})
+            //
+            //var valid =true
+            //ex.each(totalValid,function(item){
+            //    valid = valid && item
             //})
-
-            var valid =true
-            ex.each(totalValid,function(item){
-                valid = valid && item
-            })
-            return valid
+            //return valid
         },
         //before_save:function(){
         //    ex.vueSuper(this,{mixin:nice_validator,fun:'before_save'})

@@ -62,6 +62,7 @@ class BaseEngine(object):
     prefer='pc'
     login_url=settings.LOGIN_URL
     need_login = True
+    menu_search = True
     home = '/' # 当前engine的主页，没有目的的时候，可以往这里跳
     
     root_page='/'   # 被home 替代了
@@ -120,6 +121,7 @@ class BaseEngine(object):
         else:
             ctx['brand'] = self.brand
             ctx['title'] = self.title
+            ctx['menu_search']=self.menu_search
             ctx['menu']=self.get_menu(request)   
             ctx['page_name']=name
             ctx['engin_url']= self.engin_url

@@ -34,14 +34,15 @@ var big_fields={
         </div>
         <template v-else>
                <div v-if="layout.fields_group" :class="layout.class">
-                    <div v-for="group in layout.fields_group" :class="'group_'+group.name">
-                        <div class="fields-group-title" v-html="group.label"></div>
-                        <com-fields-table-block v-if="layout.table_grid"
-                            :heads="group_filter_heads(group)" :meta-head="layout" :row="row">
-                            </com-fields-table-block>
-                         <div v-else class='field-panel suit' id="form" >
-                            <field  v-for='head in group_filter_heads(group)' :key="head.name" :head="head" :row='row'></field>
-                       </div>
+                    <div v-for="group in grouped_heads_bucket" :class="'group_'+group.name" v-if="group.heads.length > 0">
+
+                             <div class="fields-group-title"  v-html="group.label"></div>
+                            <com-fields-table-block v-if="layout.table_grid"
+                                :heads="group.heads" :meta-head="layout" :row="row">
+                             </com-fields-table-block>
+                             <div v-else class='field-panel suit' >
+                                <field  v-for='head in group.heads' :key="head.name" :head="head" :row='row'></field>
+                            </div>
                     </div>
                 </div>
                 <div v-else :class="layout.class">
@@ -69,7 +70,19 @@ var big_fields={
     //    }
     //    this.table_par = table_par
     //},
+    computed:{
+        grouped_heads_bucket:function(){
+            var out_bucket = []
+            ex.each(this.layout.fields_group,(group)=>{
+                var heads = ex.filter(this.normed_heads,function(head){
+                    return ex.isin(head.name,group.head_names)
+                })
+                out_bucket.push({name:group.name,label:group.label,heads:heads})
+            })
+            return out_bucket
 
+        }
+    },
     mounted:function(){
         if(this.ctx.style){
             ex.append_css(this.ctx.style)
@@ -77,6 +90,9 @@ var big_fields={
         //if(!this.tab_head.row){
         //    this.get_data()
         //}
+        if(this.ctx.init_express){
+            ex.eval(this.ctx.init_express,{row:this.row,ps:this.parStore,cs:this.childStore,vc:this})
+        }
         ex.vueEventRout(this,this.ctx.event_slots)
     },
 

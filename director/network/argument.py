@@ -75,6 +75,14 @@ def dot_list_str(value,name):
     else:
         return ','.join(value)
 
+def is_list(value,name):
+    if not value:
+        return []
+    if not isinstance(value,(list,tuple)):
+        raise UserWarning('%s 需要传入列表数据')
+    else:
+        return value
+
 def int_str(value,name):
     """确保可以 转换为int"""
     try:

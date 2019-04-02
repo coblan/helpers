@@ -1,0 +1,33 @@
+.com-field-multi-picture{
+    .img-wrap{
+        display: inline-block;
+        position: relative;
+        width: 100px;
+        height: 100px;
+        vertical-align: top;
+        margin:20px;
+    }
+  .img-wrap  img{
+      max-width:100%;
+      max-height:100%;
+    }
+  .add-btn{
+    margin:20px;
+
+    .inn-btn{
+      background-color: #e2e2e2;
+      border: 1px solid #e2e2e2;
+      width: 80px;
+      height: 80px;
+      position: relative
+    }
+      .inn-btn:hover{
+          background-color: #efefef;
+          cursor: pointer;
+      }
+  }
+}
+
+.layui-layer.img-shower{
+    background-color: rgba(0,0,0,0.3) ;
+}
