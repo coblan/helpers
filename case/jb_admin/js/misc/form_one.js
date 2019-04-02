@@ -3,7 +3,7 @@ require('./scss/form_one.scss')
 var big_fields={
     props:['ctx'],
     data:function(){
-        var data_row =  this.ctx.row || {}
+        var data_row = ex.copy(this.ctx.row  || {} )
         var self=this
         var childStore = new Vue({
             data:{
@@ -33,7 +33,7 @@ var big_fields={
             <field  v-for='head in normed_heads' :key="head.name" :head="head" :row='row'></field>
         </div>
         <template v-else>
-               <div v-if="layout.fields_group" :class="layout.class">
+               <div class="" v-if="layout.fields_group" :class="layout.class">
                     <div v-for="group in grouped_heads_bucket" :class="'group_'+group.name" v-if="group.heads.length > 0">
 
                              <div class="fields-group-title"  v-html="group.label"></div>
