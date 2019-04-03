@@ -1,5 +1,10 @@
 export  var pop_fields={
-    template:'<span v-text="show_text" @click="edit_me()" class="clickable"></span>',
+    template:`<div class="com-table-pop-fields-local">
+        <span  @click="edit_me()" class="clickable">
+        <component v-if="head.inn_editor" :is="head.inn_editor" :rowData="rowData" :field="field" :index="index"></component>
+         <span v-else v-text="show_text"></span>
+         </span>
+    </div>`,
     props:['rowData','field','index'],
     created:function(){
         // find head from parent table

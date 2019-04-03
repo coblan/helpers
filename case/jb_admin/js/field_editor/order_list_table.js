@@ -1,8 +1,15 @@
 var order_list =  {
     props:['row','head'],
-    template:`<div>
-    <button @click="add_new()">+</button>
-    <button @click="delete_rows()">-</button>
+    template:`<div class="com-field-table-list">
+    <div>
+        <button @click="add_new()">+</button>
+        <button @click="delete_rows()">-</button>
+        <div style="display: inline-block;position: relative;vertical-align: top">
+            <textarea :name="head.name" v-model="row[head.name]" id="" cols="1" rows="1" style="display: none"></textarea>
+        </div>
+    </div>
+
+
                     <el-table ref="core_table" class="table"
                               :data="rows"
                               border
@@ -36,15 +43,11 @@ var order_list =  {
                                              :show-overflow-tooltip="is_show_tooltip(col) "
                                              :prop="col.name.toString()"
                                              :label="col.label"
-
                                              :width="col.width">
                             </el-table-column>
-
-
                         </template>
-
                     </el-table>
-          </div>`,
+              </div>`,
     mixins:[mix_table_data,mix_ele_table_adapter],
     data:function(){
         if(this.row[this.head.name]){
