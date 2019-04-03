@@ -155,10 +155,18 @@ export var network ={
         $('head').append('<link rel="stylesheet" href="'+src+'" type="text/css" />')
     },
     append_css:function(style){
-        let key = md5(style)
-        if(!window['__css_'+key]){
-            $("<style type='text/css'> "+style + " </style>").appendTo("head");
+        if(!window.md5){
+            var pro = ex.load_js('https://cdn.jsdelivr.net/npm/blueimp-md5@2.10.0/js/md5.min.js')
+        }else{
+            var pro = 1
         }
+        Promise.all([pro]).then(()=>{
+                let key = md5(style)
+                if(!window['__css_'+key]){
+                    $("<style type='text/css'> "+style + " </style>").appendTo("head");
+                }
+        })
+
     },
     director_call:function(director_name,kws,callback){
         var post_data=[{fun:"director_call",director_name:director_name,kws:kws}]
