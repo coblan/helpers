@@ -214,6 +214,7 @@ class ModelFields(forms.ModelForm):
         if self.permit.changeable_fields():
             ls.append({
                 'name':'save','editor':'com-field-op-btn','label':'保存', 'icon': 'fa-save',
+                'class':'btn btn-info btn-sm',
             })
         return ls
     
@@ -540,7 +541,7 @@ class Fields(ModelFields):
     def get_operations(self):
         ls=[]
         ls.append({
-            'name':'save','editor':'com-field-op-btn','label':'保存', 'icon': 'fa-save',
+            'name':'save','editor':'com-field-op-btn','label':'保存', 'icon': 'fa-save','class':'btn btn-info'
         })
         return ls 
     def get_row(self): 

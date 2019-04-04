@@ -17,7 +17,6 @@ var mix_fields_data ={
             }
         })
         self.setErrors({})
-
     },
     created:function(){
         ex.each(this.heads,function(head){

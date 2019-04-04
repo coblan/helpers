@@ -2,7 +2,12 @@
 var my_click = {
     // head: {fun:'xxx'}
     props:['rowData','field','index'],
-    template:`<span v-text="rowData[field]" class="clickable" @click="on_click()"></span>`,
+    template:`<div class="com-table-click clickable" @click="on_click()">
+        <component v-if="head.inn_editor"
+            :is="head.inn_editor"
+            :row-data="rowData" :field="field" :index="index"></component>
+        <span v-else="" v-text="rowData[field]" ></span>
+    </div>`,
     created:function(){
         // find head from parent table
         var table_par = this.$parent

@@ -764,12 +764,15 @@ class ModelTable(object):
         return [{'name':'add_new',
                  'editor':'com-op-btn',
                  'icon': 'fa-plus',
+                 'class':'btn btn-primary btn-sm',
                  'label':'创建',
                  'pre_set':'', # 预先设置的字段,一般用于com-tab-table下的创建
                  'fields_ctx':fieldobj.get_head_context(),
                  'visible': self.permit.can_add(),
                  },
-                {'name':'save_changed_rows','editor':'com-op-btn','label':'保存', 'show': 'scope.changed','hide':'!changed','icon':'fa-save', 'visible': self.permit.can_edit()},
+                {'name':'save_changed_rows','editor':'com-op-btn','label':'保存', 
+                 'class':'btn btn-info btn-sm',
+                 'show': 'scope.changed','hide':'!changed','icon':'fa-save', 'visible': self.permit.can_edit()},
                 {'name':'delete_selected','editor':'com-op-btn','label':'删除','style': 'color:red','icon': 'fa-times','disabled':'!scope.ts.has_select', 'visible': self.permit.can_del(),},
                 ]      
     

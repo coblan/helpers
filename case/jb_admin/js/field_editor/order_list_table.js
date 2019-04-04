@@ -2,8 +2,12 @@ var order_list =  {
     props:['row','head'],
     template:`<div class="com-field-table-list">
     <div>
-        <button @click="add_new()">+</button>
-        <button @click="delete_rows()">-</button>
+        <button @click="add_new()" class="btn btn-default btn-xs">
+            <i style="color: green" class="fa fa-plus-circle"></i>
+        </button>
+        <button @click="delete_rows()" class="btn btn-default btn-xs">
+            <i style="color: red" class="fa fa-minus-circle"></i>
+        </button>
         <div style="display: inline-block;position: relative;vertical-align: top">
             <textarea :name="head.name" v-model="row[head.name]" id="" cols="1" rows="1" style="display: none"></textarea>
         </div>
