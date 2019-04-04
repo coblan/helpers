@@ -16,6 +16,7 @@ from helpers.director.base_data import director
 from django.http import HttpResponse
 from django.utils.timezone import datetime
 from .fields.fields import ModelFields
+from .network import argument
 
 try:
     os.makedirs(os.path.join(settings.MEDIA_ROOT, 'gen_files'))
@@ -42,7 +43,7 @@ def save(row,user,request):
 
 def save_row(row,user,request):
     try:
-        kw=request.GET.dict()
+        kw = request.GET.dict()
         field_obj = permit_save_model(user, row,**kw)
         dc = field_obj.get_row()
         return {'status':'success','row':dc}

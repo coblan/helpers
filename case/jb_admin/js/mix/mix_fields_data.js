@@ -77,8 +77,12 @@ var mix_fields_data ={
             })
         },
         on_operation:function(op){
-            var fun_name = op.fun || op.name
-            this.op_funs[fun_name](op.kws)
+            if(op.action){
+                ex.eval(op.action,{vc:this,row:this.row,head:this.head})
+            }else{
+                var fun_name = op.fun || op.name
+                this.op_funs[fun_name](op.kws)
+            }
         },
         on_field_event:function(kws){
             var fun_name = kws.fun || kws.name

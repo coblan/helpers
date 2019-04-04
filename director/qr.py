@@ -1,5 +1,5 @@
 import base64
-import qrcode
+
 from io import BytesIO
 from django.http import HttpResponse
 
@@ -8,6 +8,7 @@ def general_qr(request):
     通用 qr，使用方式
     /d/qr?content=xxxxxxx&encode=base64
     """
+    import qrcode # 有时候没有安装 qrcode 模块
     #args=get_argument(request)
     #kind=args.get('type')
     #if kind=='a':

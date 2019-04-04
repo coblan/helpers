@@ -24,9 +24,6 @@ export  function pop_layer (com_ctx,component_name,callback,layerConfig){
                     <component :is="component_name" :ctx="com_ctx" @finish="on_finish($event)"></component>
                 </div>`,
         end: function () {
-
-            //eventBus.$emit('openlayer_changed')
-
         }
     }
     if(layerConfig){

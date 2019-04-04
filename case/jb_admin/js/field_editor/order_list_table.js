@@ -1,8 +1,15 @@
 var order_list =  {
     props:['row','head'],
-    template:`<div>
-    <button @click="add_new()">+</button>
-    <button @click="delete_rows()">-</button>
+    template:`<div class="com-field-table-list">
+    <div>
+        <button @click="add_new()">+</button>
+        <button @click="delete_rows()">-</button>
+        <div style="display: inline-block;position: relative;vertical-align: top">
+            <textarea :name="head.name" v-model="row[head.name]" id="" cols="1" rows="1" style="display: none"></textarea>
+        </div>
+    </div>
+
+
                     <el-table ref="core_table" class="table"
                               :data="rows"
                               border
@@ -36,15 +43,11 @@ var order_list =  {
                                              :show-overflow-tooltip="is_show_tooltip(col) "
                                              :prop="col.name.toString()"
                                              :label="col.label"
-
                                              :width="col.width">
                             </el-table-column>
-
-
                         </template>
-
                     </el-table>
-          </div>`,
+              </div>`,
     mixins:[mix_table_data,mix_ele_table_adapter],
     data:function(){
         if(this.row[this.head.name]){
@@ -83,6 +86,14 @@ var order_list =  {
             }else{
                 this.rows = []
             }
+        },
+        rows:function(v){
+            if(v.length>0){
+                this.row[this.head.name] = JSON.stringify(v)
+            }else{
+                this.row[this.head.name] = ''
+            }
+
         }
     },
     methods:{
@@ -107,7 +118,7 @@ var order_list =  {
                 ex.vueAssign(self.crt_row,new_row)
                self.rows.push(self.crt_row)
                 //self.crt_row.append(resp.new_row)
-                self.row[self.head.name] = JSON.stringify(self.rows)
+                //self.row[self.head.name] = JSON.stringify(self.rows)
                layer.close(win)
             })
 
@@ -120,7 +131,6 @@ var order_list =  {
                 ex.remove(self.rows,function(row){
                     return self.selected.indexOf(row )!=-1
                 })
-
                 layer.close(index);
             });
             //alert(this.selected.length)

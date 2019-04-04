@@ -12,10 +12,11 @@ def get_argument(request):
     """
     """
     if request.method=='POST':
-        if re.match('{.+}|\[.+\]',request.body):
+        if request.body and re.match('{.+}|\[.+\]',request.body.decode('utf-8')):
             dc=json.loads(request.body)
         else:
             dc =parse.parse_qs(request.body)
+            
         for k,v in dc.items():
             if isinstance(v,list):
                 dc[k]=v[0]

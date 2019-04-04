@@ -41,7 +41,8 @@ class UserFields(ModelFields):
         
     def dict_head(self, head):
         if head['name']=='groups':
-            head['editor']='field_multi_chosen'
+            #head['editor']='field_multi_chosen'
+            head['editor'] = 'com-field-multi-chosen'
         return head
 
     def getExtraHeads(self):

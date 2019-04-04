@@ -493,6 +493,22 @@ window.cfg = {
             layer.close(winindex);
         };
     },
+    pop_vue_com: function pop_vue_com(_ref) {
+        var ctx = _ref.ctx,
+            editor = _ref.editor,
+            option = _ref.option;
+
+        return new Promise(function (resolve, reject) {
+            var callback = function callback(e) {
+                close_fun();
+                resolve(e);
+            };
+            var winindex = pop_layer(ctx, editor, callback, option);
+            var close_fun = function close_fun() {
+                layer.close(winindex);
+            };
+        });
+    },
     close_win: function close_win(index) {
         if (index == 'full_win') {
             history.back();
@@ -1169,10 +1185,17 @@ var network = exports.network = {
         $('head').append('<link rel="stylesheet" href="' + src + '" type="text/css" />');
     },
     append_css: function append_css(style) {
-        var key = md5(style);
-        if (!window['__css_' + key]) {
-            $("<style type='text/css'> " + style + " </style>").appendTo("head");
+        if (!window.md5) {
+            var pro = ex.load_js('https://cdn.jsdelivr.net/npm/blueimp-md5@2.10.0/js/md5.min.js');
+        } else {
+            var pro = 1;
         }
+        Promise.all([pro]).then(function () {
+            var key = md5(style);
+            if (!window['__css_' + key]) {
+                $("<style type='text/css'> " + style + " </style>").appendTo("head");
+            }
+        });
     },
     director_call: function director_call(director_name, kws, callback) {
         var post_data = [{ fun: "director_call", director_name: director_name, kws: kws }];
