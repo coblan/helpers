@@ -120,6 +120,14 @@ window.cfg={
         ex.assign(dc,option)
         layer.open(dc);
     },
+    confirm:function(msg){
+        return new Promise(function(resolve,reject){
+            layer.confirm(msg, {icon: 3, title:'提示'}, function(index){
+                layer.close(index);
+                resolve()
+            });
+        })
+    }
 }
 
 $(window).resize(function(){

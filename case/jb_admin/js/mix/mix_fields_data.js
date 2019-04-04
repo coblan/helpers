@@ -161,7 +161,23 @@ var mix_fields_data ={
 
         after_save:function(new_row){
             //ex.assign(this.row,new_row)
-            console.log('mix_fields_data.after_save')
+            if(this.tab_head.after_save ){
+                if(typeof this.tab_head.after_save =='string'){
+                    ex.eval(this.tab_head.after_save,{vc:this,})
+                } else{
+                    // 为了兼容老的
+                    if(this.tab_head.after_save){
+                        var fun = after_save[this.tab_head.after_save.fun]
+                        var kws = this.tab_head.after_save.kws
+                        // new_row ,old_row
+                        fun(this,new_row,kws)
+                    }
+                    ex.vueAssign(this.org_row,new_row)
+                }
+            }
+            else if(this.tab_head.after_save_express){
+                ex.eval(this.tab_head.after_save_express,{vc:this,})
+            }
         },
         showErrors:function(errors){
             // 落到 nice validator去
