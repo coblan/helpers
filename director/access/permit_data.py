@@ -40,8 +40,8 @@ def model_read_permit(model):
     permit = {
         'read': [f.name for f in fields],
         'write': [],
-        'create': False,
-        'delete': False,
+        '_can_create': False,
+        '_can_delete': False,
     }
     return json.dumps( permit )    
 

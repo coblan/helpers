@@ -437,14 +437,14 @@ class ModelFields(forms.ModelForm):
             detail=','.join(self.changed_data)
         
         with transaction.atomic():
-            extra_log = self.clean_save()
             if self.instance.pk is None:
                 op='add'
                 detail=''
-                #self.instance.save() # if instance is a new row , need save first then manytomany_relationship can create   
+                self.instance.save() # if instance is a new row , need save first then manytomany_relationship can create   
             for k in self.changed_data:
                 ## 测试时看到self.instance已经赋值了，下面这行代码可能没用,但是需要考虑下新建时 manytomany foreignkey 这些情况
                 setattr(self.instance,k, self.cleaned_data.get(k) )
+            extra_log = self.clean_save()
             self.instance.save()
             
         if op or extra_log:
