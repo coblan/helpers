@@ -24,6 +24,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='kvmodel',
             name='key',
-            field=models.CharField(blank=True, max_length=500, unique=True, verbose_name='key'),
+            field=models.CharField(blank=True, max_length=200, unique=True, verbose_name='key'),
         ),
     ]
