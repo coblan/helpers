@@ -1,0 +1,129 @@
+{% extends 'authuser/base.html' %}
+{% load static %}
+{% load jsonify %}
+
+{% block page_content %}
+
+<style type="text/css" media="screen" id="test">
+	.warn{
+		color: red;
+	}
+</style>
+<script type="text/javascript">
+//	eventBus=new Vue()
+
+	username='{{ username }}'
+	uid='{{ uid }}'
+
+	heads=[{name:'old_pswd',editor:'password',label:'原密码',required:true}, //,help_text:'如果您是超级管理员，不需要输入原密码'},
+		{name:'first_pswd',editor:'password',label:'新密码',required:true,fv_rule:'新密码:'},
+		{name:'second_pswd',editor:'password',label:'确认输入',fv_rule:'match(first_pswd)'}]
+	row={
+		uid:uid,
+		old_pswd:'',
+		first_pswd:'',
+		second_pswd:''
+	}
+	$(function(){
+		new Vue({
+			el:'#there',
+			data:{
+				heads:heads,
+				row:row,
+				errors:{},
+
+				username:username,
+			},
+			mixins:[mix_fields_data,mix_nice_validator],
+			methods:{
+//				setError:function(errors){
+//					ex.each(this.heads,function(head){
+//						delete head.error
+//					})
+//					for(var k in errors){
+//						var head = ex.findone(this.heads,{name:k})
+//						Vue.set(head,'error',errors[k])
+////						head.error=errors[k]
+//					}
+//				},
+				save:function(){
+					var self=this
+					var post_data=[{fun:'changepswd',row:this.row}]
+//					var url = ex.appendSearch('/d/ajax/authuser',self.search_args)
+					cfg.show_load()
+					ex.post('/d/ajax/authuser',JSON.stringify(post_data),function (resp) {
+//						callback(resp.changepswd)
+
+						var rt = resp.changepswd
+						if(rt.errors){
+							cfg.hide_load()
+							self.setErrors(rt.errors)
+							self.showErrors(rt.errors)
+						}else{
+							cfg.hide_load(1500,'修改成功，跳转...')
+							self.after_save(rt.row)
+							self.setErrors({})
+						}
+
+					})
+				},
+				after_save:function(row){
+					ex.vueSuper(this,{fun:'after_save',args:[row]})
+					setTimeout(function(){
+						location = '/'
+					},2000)
+
+				},
+//				submit:function(){
+//					var  self =this
+//					var post_data=[{fun:'changepswd',row:this.row},]
+//					$.post('/d/ajax/authuser',JSON.stringify(post_data),function(resp){
+//						if(resp.changepswd.errors){
+//							self.setError(resp.changepswd.errors)
+//
+//						}else if(resp.changepswd.status=='success'){
+//							var search_args=ex.parseSearch()
+//							if(search_args.next){
+//								location=decodeURIComponent(search_args.next)
+//							}else{
+//								self.setError({})
+//								alert('修改成功')
+//							}
+//							location = '/'
+//						}
+//
+//					})
+//				},
+				cancel:function(){
+					history.back()
+				}
+			}
+		})
+	})
+
+</script>
+<!--<div class="flex flex-jc">-->
+	<!--<div class='flex-v' id="there">-->
+		<div class="plain-panel" id="there">
+			<h2 class='form-signin-heading' style="text-align: center;">修改您({{ user.username }})的密码:</h2>
+			<hr>
+			<div style="max-width: 20em;margin: auto">
+				<com-sim-fields class="msg-bottom" ref="panel"  :heads="heads" :row="row" ok-btn="修改" @submit="save"></com-sim-fields>
+			</div>
+
+			<!--<h2 class='form-signin-heading' style="text-align: center;">更改 <span v-text="username"></span> 密码</h2>-->
+		</div>
+
+
+		<!--<field v-for="head in heads" :name="head.name" :head="head" :row="row"></field>-->
+
+
+	<!--<button class='btn btn-lg btn-primary btn-block' @click="save()">确定</button>-->
+		<!--<div style="text-align: right;padding-top: 10px;">-->
+			<!--<a href="javascript:;" @click="cancel()">取消</a>-->
+		<!--</div>-->
+
+	<!--</div>-->
+<!--</div>-->
+
+{% endblock %}

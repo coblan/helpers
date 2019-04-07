@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 
 from django.db import migrations, models
 import django.db.models.deletion
-import helpers.director.model_validator
+import helpers.director.model_func.model_validator
 
 
 class Migration(migrations.Migration):
@@ -46,7 +46,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='department',
             name='name',
-            field=models.CharField(default='new department', max_length=500, validators=[helpers.director.model_validator.has_str], verbose_name='\u90e8\u95e8'),
+            field=models.CharField(default='new department', max_length=500, validators=[helpers.director.model_func.model_validator.has_str], verbose_name='\u90e8\u95e8'),
         ),
         migrations.AlterField(
             model_name='department',

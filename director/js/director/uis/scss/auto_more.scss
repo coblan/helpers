@@ -1,0 +1,58 @@
+.com-auto-more{
+    //height: 3.4rem;
+    //overflow: hidden;
+    position: relative;
+    flex-shrink: 0;
+    flex-grow: 10;
+
+
+    .outer-wrap{
+      padding: 0.2rem;
+      //height: 3.4rem;
+      transition: height .3s;
+      z-index: 100;
+      position: absolute;
+      overflow:hidden;
+      width: 100%;
+      background-color: white;
+
+    }
+    .inn-wrap{
+      //width: calc(100% + 18px);
+      width: 100%;
+      background-color: white;
+      padding: 0 3rem 1rem 1rem;
+    }
+    .toggle-btn{
+      display: none;
+      position: absolute;
+      z-index: 101;
+
+    }
+
+    &.has-overflow{
+        .toggle-btn{
+          display: block;
+          position: absolute;
+          right: 1rem;
+          top:0.7rem;
+        }
+    }
+
+  &.expanded{
+
+    .outer-wrap{
+      //overflow:visible;
+      border-top:1px solid #f2f2f2;
+      box-shadow: 0px 2px 4px rgb(156, 156, 156);
+      -moz-box-shadow: 0px 2px 4px rgb(156, 156, 156);
+      -webkit-box-shadow: 0px 2px 4px rgb(156, 156, 156);
+    }
+
+    //.inn-wrap{
+    //  border: 1px solid #d2d2d2;
+    //}
+
+  }
+
+}

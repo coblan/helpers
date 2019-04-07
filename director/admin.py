@@ -1,26 +1,38 @@
 # encoding:utf-8
 from __future__ import unicode_literals
 
-# from model_admin.render import TablePage,FormPage
-from .pages import TablePage,FormPage,TabGroup
-from model_admin.tabel import ModelTable,RowFilter,RowSort
-from model_admin.fields import ModelFields
-from model_admin.base import model_dc,page_dc,permit_list
-from django.contrib.auth.models import Group,User
-import ajax
-import json
-from .model_admin.base import page_dc
-from django.conf import settings
-from .models import KVModel,PermitModel
-from . import short_gen
-import cgi
-from .admin_pages.assem_group import AssemGroupPage
-from .db_tools import to_dict,model_to_name
-from django import forms
-from django.utils.translation import ugettext as _
-from model_admin.permit import permit_to_text
-from helpers.director.model_admin.tabel import chinese_order
+from .base_data import model_dc,page_dc,permit_list
+from .fields.fieldspage import FieldsPage
+from .fields.fields import ModelFields
 
+from .table.tablepage import TablePage
+from .table.tabpage import TabPage
+from .table.table import ModelTable,RowFilter,RowSort
+
+from django.contrib.auth.models import Group,User
+from django.conf import settings
+from django import forms
+
+import json
+
+
+from .models import PermitModel 
+
+from .access.assem_group import AssemGroupPage
+from .model_func.dictfy import to_dict,model_to_name
+
+from django.utils.translation import ugettext as _
+from .access.permit import permit_to_text
+from . import  ajax
+from .fields.delpage import DelPage
+from .log.logpage import LogPage
+from .base_data import page_dc, director
+from . import  admin_kv
+
+from .model_func.field_procs import dateproc,datetimeproc,decimalproc,foreignproc,manyproc,oneproc,charproc,intproc,boolproc
+from .model_func.field_procs import nullboolproc
+
+from . import js_cfg
 
 class UserGroupTable(ModelTable):
     
@@ -40,9 +52,7 @@ class UserGroupTable(ModelTable):
     include=['name']
     
     def inn_filter(self, query):
-        #return chinese_order(query, 'name')
         return query.order_by('name')
-    
     
     def get_heads(self):
         heads = super(self.__class__,self).get_heads()
@@ -83,7 +93,7 @@ class UserGroupFields(ModelFields):
         # ctx['permit_heads']=self.permit.get_heads()
         # return ctx
 
-class GroupFormPage(FormPage):
+class GroupFormPage(FieldsPage):
     template='authuser/permit_group_form.html'
     class GroupForm(ModelFields):
         class Meta:
@@ -93,9 +103,9 @@ class GroupFormPage(FormPage):
             heads= super(self.__class__,self).get_heads()
             heads.append({
                 'name':'permit',
-                'type':'tow_col',
+                'editor':'tow_col',
                 'label':'权限选择',
-                'options':[{'value':x.pk,'label':unicode(x)} for x in PermitModel.objects.all()]
+                'options':[{'value':x.pk,'label':str(x)} for x in PermitModel.objects.all()]
             })
             return heads
         
@@ -151,16 +161,13 @@ class PermitPage(TablePage):
     
         def dict_row(self, inst):
             return {'permit' :permit_to_text( inst.permit)}
-        
-        def inn_filter(self, query):
-            return chinese_order(query, 'name')
             
     PermitTable.sort=PermitSort
     tableCls=PermitTable
     template='authuser/permit_table.html'
     
 
-class GroupGroup(TabGroup):
+class GroupGroup(TabPage):
     tabs=[{'name':'assem','label':'用户权限组','page_cls':GroupAssemPage,'suffix':''},
           {'name':'prim','label':'可用权限','page_cls':PermitPage,'suffix':''},
           ]
@@ -168,7 +175,7 @@ class GroupGroup(TabGroup):
         super(self.__class__,self).__init__(request)
         
 
-class PermitFormPage(FormPage):
+class PermitFormPage(FieldsPage):
     class PermitForm(ModelFields):
         class Meta:
             model=PermitModel
@@ -231,24 +238,11 @@ class UserFields(ModelFields):
     class Meta:
         model=User
         fields=['username','first_name','is_active','is_staff','is_superuser','email','groups']
-    
-    def clean_first_pswd(self):
-        print('hello')
-    def clean(self):
-        if self.kw.get('first_pswd') or self.kw.get('second_pswd'):
-            if self.kw.get('first_pswd') != self.kw.get('second_pswd'):
-                self.errors['first_pswd']='两次密码不匹配'
-                raise forms.ValidationError('两次密码不匹配')                
-        return ModelFields.clean(self)
-    
-    def save_form(self):
-        rt = ModelFields.save_form(self)
-        if self.kw.get('first_pswd'):
-            user= self.instance
-            user.set_password(self.kw.get('first_pswd'))
-            user.save()
-        return rt
-
+        
+    def dict_head(self, head):
+        if head['name']=='groups':
+            head['editor']='field_multi_chosen'
+        return head
 
 class UserTable(ModelTable):
     model=User
@@ -277,7 +271,7 @@ class UserTablePage(TablePage):
     #template='authuser/user_table.html'
     tableCls=UserTable
 
-class UserFormPage(FormPage):
+class UserFormPage(FieldsPage):
     template='authuser/user_form.html'
     fieldsCls=UserFields
 
@@ -285,6 +279,15 @@ model_dc[Group]={'fields':GroupFormPage.GroupForm}
 model_dc[User]={'fields':UserFields}
 model_dc[PermitModel]={'fields':PermitFormPage.PermitForm}
 
+director.update({
+    'permit.programer': PermitPage.PermitTable,
+    'permit.programer.edit': PermitFormPage.PermitForm,
+})
+
+page_dc.update({
+    'del_rows':DelPage,
+        'log':LogPage,
+} )
 
 page_dc.update({'user':UserTablePage,
                 'user.edit':UserFormPage,
@@ -303,38 +306,3 @@ permit_list.append({'name':'myauth','label':'账号管理','fields':[
     {'name':'modify_other_pswd','label':'修改所有人密码','type':'bool'},]
 })
 
-class KVTable(ModelTable):
-    model=KVModel
-    exclude=[]
-    def dict_row(self, inst):
-        if len(inst.value)>50:
-            value=inst.value[:50]+'...'
-        else:
-            value=inst.value
-        return {
-            'value':cgi.escape(value)
-        }
-
-class KvTablePage(TablePage):
-    tableCls=KVTable
-
-class KvFields(ModelFields):
-    class Meta:
-        model=KVModel
-        exclude=[]
-
-class KvFormPage(FormPage):
-    fieldsCls=KvFields
-    def get_template(self, prefer=None):
-        if prefer=='wx':
-            return 'wx/kvform.html'
-        else:
-            return 'director/kvform.html'
-
-# short_gen.regist_director(['kv','kv.wx'],KVModel)
-page_dc.update({
-    'kv':KvTablePage,
-    'kv.edit':KvFormPage,
-})
-
-model_dc[KVModel]={'fields':KvFields}

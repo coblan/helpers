@@ -2,17 +2,20 @@
 from __future__ import unicode_literals
 
 from django.core.exceptions import PermissionDenied
-from .model_admin.permit import has_permit
 from django.http import HttpResponse
 import json
 from django.core.exceptions import ObjectDoesNotExist
+from .middleware.request_cache import get_request_cache
 
 def need_login(fun):
-    def _fun(request,*args,**kw):
+    def _fun(*args,**kw):
+        request = get_request_cache().get('request')
         if request.user.is_authenticated():
-            return fun(request,*args,**kw)
+            return fun(*args,**kw)
         else:
-            raise PermissionDenied('need login ! If you access with session_id,it is mainly because session_id has been destroyed,this is happen when login at same device with diffrent accounts,the older session_id will be destroyed')
+            return HttpResponse('Unauthorized', status=401)
+            #raise PermissionDenied('Need login !')
+        
     return _fun
 
 def need_permit(fun):
@@ -31,7 +34,7 @@ def warn_free(fun):
         except (UserWarning,ObjectDoesNotExist) as e:
             dc= {
                 'status':'fail',
-                'msg':unicode(e)
+                'msg':str(e)
             }
         if isinstance(dc,HttpResponse):
             return dc

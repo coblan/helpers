@@ -43,7 +43,7 @@ class DakaRecordTable(ModelTable):
     def dict_row(self, inst):
         tm = timezone.localtime(inst.create_time)
         return {
-            '_label':unicode(tm),
+            '_label':str(tm),
             'pos':json.loads(inst.pos)
         }
 
@@ -52,7 +52,7 @@ class DakaRecordTablePage(TablePage):
     template='map_daka/daka_record_f7.html'
     
     def get_label(self):
-        return  unicode(self.crt_user)+'的打卡记录'
+        return  str(self.crt_user)+'的打卡记录'
     
     
 model_dc[DakaRecord]={'fields':DakaForm}

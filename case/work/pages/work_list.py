@@ -38,7 +38,7 @@ class WorkList(ModelTable):
             })
         if inst.checker:
             dc.update({
-                'checker_name':unicode(inst.checker)
+                'checker_name':str(inst.checker)
             })
         dc.update({
             # 'emp':unicode(inst.emp),
@@ -111,7 +111,7 @@ class WorkListForm(ModelFields):
             head['readonly']=True
         return heads
 
-class WorkListFormPage(FormPage):
+class WorkListFormPage(FieldsPage):
     fieldsCls=WorkListForm
     template='work/work_list_form_f7.html'
 

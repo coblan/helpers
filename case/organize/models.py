@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 from django.contrib.auth.models import User,Group
 from django.db import models
 from django.utils.translation import ugettext as _
-from helpers.director.model_validator import has_str
+from helpers.director.model_func.model_validator import has_str
 from .config import config
 
 GEN=(

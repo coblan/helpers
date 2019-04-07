@@ -34,23 +34,33 @@ class EmployeeFields(ModelFields):
     def dict_head(self, head):
         if head['name']=='eid':
             head['readonly']=True
+        if head['name'] == 'user':
+            users =list(User.objects.filter(employee=None))
+            if self.instance.user:
+                users.append(self.instance.user) 
+            
+            user_options=[{'value':None,'label':'---'}]
+            options=[{'value':user.pk,'label':str(user)}for user in users]
+            options=sorted(options,cmp=lambda x,y: cmp(x['label'],y['label']) )
+            user_options.extend(options)
+            head['options'] = user_options
         return head
     
-    def dict_options(self):
-        users =list(User.objects.filter(employee=None))
-        if self.instance.user:
-            users.append(self.instance.user) 
+    #def dict_options(self):
+        #users =list(User.objects.filter(employee=None))
+        #if self.instance.user:
+            #users.append(self.instance.user) 
         
-        user_options=[{'value':None,'label':'---'}]
-        options=[{'value':user.pk,'label':unicode(user)}for user in users]
-        options=sorted(options,cmp=lambda x,y: cmp(x['label'],y['label']) )
-        user_options.extend(options)
-        return {
-            'user':user_options,
-            #'depart':[],
-        }
+        #user_options=[{'value':None,'label':'---'}]
+        #options=[{'value':user.pk,'label':str(user)}for user in users]
+        #options=sorted(options,cmp=lambda x,y: cmp(x['label'],y['label']) )
+        #user_options.extend(options)
+        #return {
+            #'user':user_options,
+            ##'depart':[],
+        #}
     
-class EmployeeItem(FormPage):
+class EmployeeItem(FieldsPage):
     template=''
     fieldsCls=EmployeeFields
     
@@ -135,7 +145,7 @@ class UserTab(UserFormPage):
         name = self.emp.baseinfo.name if self.emp.baseinfo else 'unnamed employee'
         return '%s的账号信息'%name
 
-class EmpGroup(TabGroup):
+class EmpGroup(TabPage):
     tabs=[{'name':'emp','label':'员工','page_cls':EmployeeItem},
           {'name':'baseinfo','label':'基本信息','page_cls':BaseinfoItem,'visible':and_list([BasicInfo])},
           {'name':'user','label':'账号','page_cls':UserTab,'visible':and_list([User])},
@@ -161,10 +171,10 @@ class EmployeeTable(ModelTable):
     
     def dict_row(self, inst):
         dc={
-            'user':unicode(inst.user),
-            'baseinfo':unicode(inst.baseinfo),
+            'user':str(inst.user),
+            'baseinfo':str(inst.baseinfo),
             'head':inst.baseinfo.head if inst.baseinfo else '',
-            'depart':','.join([unicode(x) for x in inst.depart.all()]),
+            'depart':','.join([str(x) for x in inst.depart.all()]),
         }
         return dc 
 

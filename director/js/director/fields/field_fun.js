@@ -1,3 +1,7 @@
+/*
+* field_fun 应该会被 mix_table_data 取代,以后不会使用了。
+* */
+
 export var field_fun={
     data:function(){
         return {
@@ -50,7 +54,7 @@ export var field_fun={
             show_upload()
             var search =ex.parseSearch()
             var post_data=[{fun:'save',row:this.kw.row}]
-            var url = ex.appendSearch('/_ajax',search_args)
+            var url = ex.appendSearch('/d/ajax',search_args)
             ex.post(url,JSON.stringify(post_data),function (resp) {
                 hide_upload(500)
                 if( resp.save.errors){
@@ -69,7 +73,7 @@ export var field_fun={
             show_upload()
             var search =ex.parseSearch()
             var post_data=[{fun:'save',row:this.kw.row}]
-            var url = ex.appendSearch('/_ajax',search_args)
+            var url = ex.appendSearch('/d/ajax',search_args)
             ex.post(url,JSON.stringify(post_data),function (resp) {
                 hide_upload(500)
                 if( resp.save.errors){

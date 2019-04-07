@@ -62,7 +62,7 @@ export var table_fun={
             var norm_ls=this.filter_minus(ls)
             return ex.isin(name,norm_ls)
         },
-        // 我放到 com table 去，试试。如果行，证明这里的无用了。
+        // 移到sort_mark
         toggle:function (sort_str,name) {
             var ls=ex.split(sort_str,',')
             var norm_ls=this.filter_minus(ls)
@@ -74,25 +74,29 @@ export var table_fun={
             }
             return ls.join(',')
         },
-
+        //remove_sort:function (sort_str,name) {
+        // 移到sort_mark.js 去了
+        //    var ls=ex.split(sort_str,',')
+        //    ls=ex.filter(ls,function (v) {
+        //        return v!='-'+name && v!=name
+        //    })
+        //    return ls.join(',')
+        //},
         map:function(name,row){
-
             if(name==this.heads[0].name && !table_fun_config.detail_link){
-                var prefix = ex.cdLast(location.pathname)
                 return ex.template('<a href="{edit}?pk={pk}&next={next}">{text}</a>',
                     {
                         text: row[name],
-                        edit: prefix +'/'+page_name + '.edit',
+                        edit: page_name + '.edit',
                         pk: row.pk,
                         next:encodeURIComponent(ex.appendSearch(location.pathname,search_args))
                     })
             }
             if(name=='_detail_link') {
-                var prefix = ex.cdLast(location.pathname)
                 return ex.template('<a href="{edit}?pk={pk}&next={next}">{text}</a>',
                     {
                         text: table_fun_config.detail_link,
-                        edit: prefix +'/'+page_name + '.edit',
+                        edit: page_name + '.edit',
                         pk: row.pk,
                         next:encodeURIComponent(ex.appendSearch(location.pathname,search_args))
                     })
@@ -120,13 +124,13 @@ export var table_fun={
             }
             var del_obj={}
             for(var j=0;j<this.selected.length;j++){
-                var pk = this.selected[j]
+                var pk = this.selected[j].pk
                 for(var i=0;i<this.rows.length;i++){
                     if(this.rows[i].pk.toString()==pk){
-                        if(!del_obj[this.rows[i]._class]){
-                            del_obj[this.rows[i]._class]=[]
+                        if(!del_obj[this.rows[i]._director_name]){
+                            del_obj[this.rows[i]._director_name]=[]
                         }
-                        del_obj[this.rows[i]._class].push(pk)
+                        del_obj[this.rows[i]._director_name].push(pk)
                     }
                 }
             }

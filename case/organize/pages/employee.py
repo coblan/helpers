@@ -25,7 +25,7 @@ class EmployeeFields(ModelFields):
             users.append(self.instance.user) 
         
         user_options=[{'value':None,'label':'---'}]
-        options=[{'value':user.pk,'label':unicode(user)}for user in users]
+        options=[{'value':user.pk,'label':str(user)}for user in users]
         options=sorted(options,cmp=lambda x,y: cmp(x['label'],y['label']) )
         user_options.extend(options)
         return {

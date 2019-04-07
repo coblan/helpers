@@ -50,15 +50,15 @@ var date_config_set={
         startView: "months",
         minViewMode: "months",
         autoclose: true,
-
-
     },
 }
 
-Vue.component('date',{
+var com_input_date = {
     //template:'<input type="text" class="form-control">',
-    template:` <div class="input-group datetime-picker" style="width: 12em;">
-                <input type="text" class="form-control" readonly :placeholder="placeholder"/>
+    template:` <div class="com-date input-group datetime-picker">
+                <input type="text" class="form-control input-sm real-input"
+                readonly :placeholder="placeholder"/>
+
                 <div class="input-group-addon" >
                     <i v-if="! value" @click="click_input()" class="fa fa-calendar" aria-hidden="true"></i>
                     <i v-else @click="$emit('input','')" class="fa fa-calendar-times-o" aria-hidden="true"></i>
@@ -66,59 +66,78 @@ Vue.component('date',{
                 </div>`,
     props:['value','set','config','placeholder'],
     mounted:function () {
-        var self=this
-        if(!this.set){
-            var def_conf=date_config_set.date
-        }else{
-            var def_conf=date_config_set[this.set]
-        }
-        if(this.config){
-            ex.assign(def_conf,this.config)
-        }
-        self.input=$(this.$el).find('input')
-
-        ex.load_css('/static/lib/bootstrap-datepicker1.6.4.min.css')
-
-        ex.load_js('/static/lib/bootstrap-datepicker1.6.4.min.js',function(){
-            ex.load_js('/static/lib/bootstrap-datepicker1.6.4.zh-CN.min.js',function(){
-                self.input.datepicker(def_conf).on('changeDate', function(e) {
-                    self.$emit('input',self.input.val())
-                })
-                // if has init value,then init it
-                if(self.value){
-                    self.input.datepicker('update',self.value)
-                    self.input.val(self.value)
-                }
-            })
-        })
+        this.init()
     },
     methods:{
+        init:function(){
+            var self=this
+            if(!this.set){
+                var def_conf=date_config_set.date
+            }else{
+                var def_conf=date_config_set[this.set]
+            }
+            if(this.config){
+                ex.assign(def_conf,this.config)
+            }
+            self.input=$(this.$el).find('input')
+
+            ex.load_css('/static/lib/bootstrap-datepicker1.6.4.min.css')
+
+            //ex.load_js('/static/lib/bootstrap-datepicker1.6.4.min.js',function(){
+            //    ex.load_js('/static/lib/bootstrap-datepicker1.6.4.zh-CN.min.js',function(){
+            //        self.input.datepicker(def_conf).on('changeDate', function(e) {
+            //            self.$emit('input',self.input.val())
+            //        })
+            //        // if has init value,then init it
+            //        if(self.value){
+            //            self.input.datepicker('update',self.value)
+            //            self.input.val(self.value)
+            //        }
+            //    })
+            //})
+            ex.load_js('/static/lib/bootstrap-datepicker1.6.4.min.js').then(function(){
+                return ex.load_js('/static/lib/bootstrap-datepicker1.6.4.zh-CN.min.js')
+            }).then(function(){
+                    self.input.datepicker(def_conf).on('changeDate', function(e) {
+                        self.$emit('input',self.input.val())
+                    })
+                    // if has init value,then init it
+                    if(self.value){
+                        self.input.datepicker('update',self.value)
+                        self.input.val(self.value)
+                    }
+            })
+        },
         click_input:function(){
             this.input.focus()
+        },
+        watch_value:function(n){
+            this.input.datepicker('update',n)
+            this.input.val(n)
         }
     },
     watch:{
         value:function (n) {
-            this.input.datepicker('update',n)
-            this.input.val(n)
-
+            this.watch_value(n)
         }
     }
-})
+}
+window.com_input_date=com_input_date
+Vue.component('date',com_input_date)
+
 
 
 Vue.component('datetime',{
-    //data:function(){
-    //    return {
-    //        input_value:'',
-    //    }
-    //},
-    //template:'<input type="text" class="form-control">',
-    template:`<span class="datetime-picker">
-                <span class="cross" @click="$emit('input','')">X</span>
-                <input type="text" readonly/>
-                </span>`,
-    props:['value','config'],
+    template:` <div class="com-datetime input-group datetime-picker">
+                <input type="text" class="form-control input-sm" readonly :placeholder="placeholder"/>
+                <div class="input-group-addon" >
+                    <i v-if="! value" @click="click_input()" class="fa fa-calendar" aria-hidden="true"></i>
+                    <i v-else @click="$emit('input','')" class="fa fa-calendar-times-o" aria-hidden="true"></i>
+                </div>
+                </div>`,
+
+    //props:['value','config'],
+    props:['value','set','config','placeholder'],
     mounted:function () {
         var self=this
         var def_conf={
@@ -126,6 +145,7 @@ Vue.component('datetime',{
             format: "yyyy-mm-dd hh:ii",
             autoclose: true,
             todayHighlight: true,
+            minuteStep:1,
         }
         if(self.config){
             ex.assign(def_conf,this.config)
@@ -135,6 +155,17 @@ Vue.component('datetime',{
         ex.load_css('/static/lib/smalot-bootstrap-datetimepicker2.4.3.min.css')
         ex.load_js('/static/lib/moment2.17.1.min.js')
         ex.load_js('/static/lib/smalot-bootstrap-datetimepicker2.4.3.min.js',function(){
+
+            $.fn.datetimepicker.dates['zh-CN'] = {
+                days: ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六", "星期日"],
+                daysShort: ["周日", "周一", "周二", "周三", "周四", "周五", "周六", "周日"],
+                daysMin:  ["日", "一", "二", "三", "四", "五", "六", "日"],
+                months: ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"],
+                monthsShort: ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"],
+                today: "今天",
+                suffix: [],
+                meridiem: ["上午", "下午"]
+            };
 
             self.input.datetimepicker(def_conf).on('changeDate', function(e) {
                 self.$emit('input',self.input.val())
@@ -148,7 +179,11 @@ Vue.component('datetime',{
 
         })
     },
-
+    methods:{
+        click_input:function(){
+            this.input.focus()
+        }
+    },
     watch:{
         value:function (n) {
             this.input.val(n)

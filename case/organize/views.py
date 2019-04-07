@@ -13,7 +13,7 @@ from helpers.common.layer_tree import LayerTree
 def manage_department(request):
     manager=DirMan(Department)
     scope= dict(inspect.getmembers(manager,inspect.ismethod))
-    return jsonpost(request, scope)
+    return ajax_router(request, scope)
 
 def tree_department(request):
     manager=LayerTree(Department)
@@ -21,4 +21,4 @@ def tree_department(request):
     if request.GET.get('get_class'):
         return HttpResponse( json.dumps(scope.keys()),content_type="application/json")
     else:
-        return jsonpost(request, scope)
+        return ajax_router(request, scope)

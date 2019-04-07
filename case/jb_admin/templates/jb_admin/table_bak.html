@@ -1,0 +1,369 @@
+{% extends "jb_admin/base.html" %}
+{% load static %}
+{% load jsonify %}
+
+{% block page_content %}
+
+<!--<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">-->
+
+<script type="text/javascript">
+
+    //	row_filters=
+    //	placeholder =
+    //	row_sort=
+    //	heads=
+    //	rows=
+    //	row_pages =
+
+    //	can_add=
+    //	can_del=
+    //	search_args=ex.parseSearch()
+    //	search字段从 search_args._q 来取值
+    extra_table_logic='{{ extra_table_logic }}'
+    footer={{ footer |jsonify }}
+    search_args={{ search_args | jsonify | default:'{}'  }}
+    parents = {{ parents | jsonify | default:'[]' }}
+
+    // 这个变量留着，兼容老的调用。。准备把它移除
+    tabs={{ tabs | jsonify | default:'[]' }}
+    named_tabs={{ named_tabs | jsonify | default:'{}' }}
+
+    eventBus = new Vue({})
+    table_logic={
+        el:'#there',
+        data:{
+            parents:parents,
+            page_label:page_label,
+            heads:heads,
+            rows:rows,
+            row_filters:row_filters,
+            row_sort:row_sort,
+            row_pages:row_pages,
+            director_name:director_name,
+            footer:footer,
+//            model_name:model_name,
+            selected:[],
+            search_args:search_args, //ex.parseSearch(),
+            ops:ops,
+            crt_row:{},
+
+            tab_stack:[],
+            tabs:tabs,
+            named_tabs:named_tabs,
+
+            tr:cfg.tr
+
+
+        },
+        mixins:[mix_table_data,mix_ele_table_adapter],
+
+//        created:function(){
+//            var store_name='table_'+ex.get_uid()
+//            this.$store.registerModule(store_name, table_store)
+//            this.store_name = store_name
+//        },
+        mounted:function(){
+            var self=this
+
+//            this.$store.state[store_name].childbus.$on('update_or_insert',function(){
+//                console.log('jjyy')
+//            })
+            ex.assign(this.op_funs,{
+                row_changed:function(kws){
+                    var row= kws.row
+                    if(!ex.isin(row,self.changed_rows)){
+                        self.changed_rows.push(row)
+                    }
+                },
+                row_changed_undo_act:function(kws){
+                    var md5= ex.hashDict(kws.row)
+                    if(md5 == kws.row._hash){
+                        ex.remove(self.changed_rows,{pk:kws.row.pk})
+                    }
+                },
+                switch_to_tab:function(kws){
+
+                    if(kws.named_tabs){
+                        // 传入named_tabs，造成tabs的切换
+                        var next_tabs = self.named_tabs[kws.named_tabs]
+                    }else {
+                        var next_tabs = self.tabs
+                    }
+                    self.tab_stack.push( {
+                        widget:'com-widget-el-tab' ,
+                        tabs:next_tabs,
+                        crt_tab_name:kws.tab_name,
+                        par_row:kws.row,
+
+                    })
+                    self.crt_row= kws.row
+                },
+                update_or_insert:function(kws){
+                    var new_row = kws.new_row
+                    var old_row= kws.old_row
+                    self.update_or_insert(new_row,old_row)
+                    self.crt_row=new_row
+                },
+                get_childs:function(kws){
+                    // head:{fun:
+                    var value =kws.row[kws.head.field]
+                    self.search_args._par=value
+                    self.search()
+                }
+
+            })
+
+            eventBus.$on('switch_to_tab',this.op_funs.switch_to_tab)
+
+            self.$on('operation',self.on_operation)
+        },
+        computed:{
+            pathable_tab_names:function(){
+                var names =[]
+                var last_stack=null
+                ex.each(this.tab_stack,function(stack){
+                    if(last_stack){
+                        var last_crt_tab = ex.findone(last_stack.tabs,{name:last_stack.crt_tab_name})
+                        names.push(last_crt_tab.label)
+                    }
+                    last_stack = stack
+                })
+                return names
+
+            },
+
+        },
+        methods:{
+
+//            on_td_event:function(e){
+//                this.op_funs[e.name](e)
+//            },
+            on_tab_event:function(e){
+                this.op_funs[e.name](e)
+            },
+//            on_select_group_change:function(sel,v){
+//                this.selected= sel
+//            },
+            pop_tab_stack:function(){
+
+                if( this.tab_stack.length != 0){
+                    this.tab_stack.pop()
+                }
+//                if(this.tab_stack.length==0){
+//                    this.tabgroup.crt='_main'
+//                    this.tabgroup.crt_tabs=[]
+//                }
+                var self=this
+                Vue.nextTick(function(){
+                    self.$refs.e_table.doLayout()
+                })
+
+            },
+
+//            show_tab:function(name){
+//                this.tabgroup.crt = name
+//                var self =this
+//                Vue.nextTick(function(){
+//                    self.$refs['_tab_'+name][0].on_show()
+//                })
+//            },
+//            handleClick(tab, event) {
+//                this.show_tab(tab.name)
+//            },
+            get_childs:function(par){
+                this.search_args._par=par.value
+                this.search()
+            },
+
+
+            get_tab_name:function(tabs){
+                if(tabs==this.tabs){
+                    return ''
+                }else{
+                    for(var k in this.named_tabs){
+                        var tmp_tabs = this.named_tabs[k]
+                        if(tmp_tabs == tabs){
+                            return k
+                        }
+                    }
+                    return 'No Name Found'
+                }
+            }
+
+        }
+
+    }
+
+    function update_cnt_size(){
+//        var cnt_ht =  Math.max( $(document).height(),window.innerHeight)
+        var cnt_ht =  window.innerHeight
+        $('#there').height(cnt_ht -80)
+    }
+    $(function () {
+        update_cnt_size()
+//        $('.main-tab-content').height(window.innerHeight -230)
+        $(window).resize(function(){
+            update_cnt_size()
+        });
+//        $(document).resize(update_cnt_size)
+
+        if(extra_table_logic){
+            table_logic.mixins.push(window[extra_table_logic])
+        }
+        table=new Vue(table_logic)
+
+    })
+
+</script>
+
+{% block extra_head %}
+{% endblock %}
+<style>
+    a[disabled] {
+        color: gray;
+        pointer-events: none;
+    }
+    .table th .cell{
+        white-space:nowrap;
+    }
+    .el-table .has-gutter th>.cell{
+        width: auto;
+    }
+</style>
+<div id='there' class="flex-v">
+
+    {% block flag %}
+    <div v-if="page_label" style="border-left: 3px solid #3e8ebd;padding-left: 1em;margin-bottom: 5px;">
+        <b v-text="page_label"></b>
+        <span style="display: inline-block;width: 2em;"></span>
+        <ol class="breadcrumb" style="display: inline-block;background-color: inherit;margin-bottom: 0;padding: 0"  v-show="pathable_tab_names.length >0 ">
+            <li v-for="name in pathable_tab_names"><span v-text="name"></span></li>
+        </ol>
+        <button type="button"
+                class="btn btn-warning btn-xs"
+                v-show="tab_stack.length > 0"
+                @click="pop_tab_stack()">
+            <i class="fa fa-arrow-circle-o-left fa-lg"></i><span v-text="tr.back"></span></button>
+    </div>
+
+
+    {% endblock %}
+
+    {% block tab-content %}
+    <div id="main-page" class="rows-block flex-v flex-grow" v-show="tab_stack.length == 0">
+
+
+        <div v-if="row_filters.length > 0" style="background-color: #fbfbf8;padding: 8px 1em;border-radius: 4px;margin-top: 8px">
+            <com-filter class="flex" :heads="row_filters" :search_args="search_args"
+                        @submit="search()"></com-filter>
+
+        </div>
+        <div  v-if="ops.length>0">
+            <div class="oprations" v-show="tab_stack.length ==0" style="padding: 5px">
+                <component v-for="op in ops"
+                           :is="op.editor"
+                           :ref="'op_'+op.name"
+                           :head="op"
+                           :disabled="get_attr(op.disabled)"
+                           v-show="! get_attr(op.hide)"
+                           @operation="on_operation(op)"></component>
+            </div>
+        </div>
+
+        <ol v-if="parents.length>0" class="breadcrumb jb-table-parent">
+            <li v-for="par in parents"><a href="#" @click="get_childs(par)"  v-text="par.label"></a></li>
+        </ol>
+
+        <div class="box box-success flex-v flex-grow">
+            <div class="table-wraper flex-grow" style="position: relative;">
+                {% block table_content %}
+                <div style="position: absolute;top:0;left:0;bottom: 0;right:0;">
+                    <el-table class="table one-row-head" ref="e_table"
+                              :data="rows"
+                              border
+                              show-summary
+                              :fit="false"
+                              :stripe="true"
+                              size="mini"
+                              @sort-change="sortChange($event)"
+                              @selection-change="handleSelectionChange"
+                              :summary-method="getSum"
+                              height="100%"
+                              style="width: 100%">
+                        <el-table-column
+                                type="selection"
+                                width="55">
+                        </el-table-column>
+
+                        <template  v-for="head in heads">
+
+                            <el-table-column v-if="head.editor"
+                                             :show-overflow-tooltip="is_show_tooltip(head) "
+                                             :label="head.label"
+                                             :prop="head.name.toString()"
+                                             :sortable="is_sort(head)"
+                                             :width="head.width">
+                                <template slot-scope="scope">
+                                    <component :is="head.editor"
+                                               @on-custom-comp="on_td_event($event)"
+                                               :row-data="scope.row" :field="head.name" :index="scope.$index">
+                                    </component>
+
+                                </template>
+
+                            </el-table-column>
+
+                            <el-table-column v-else
+                                             :show-overflow-tooltip="is_show_tooltip(head) "
+                                             :prop="head.name.toString()"
+                                             :label="head.label"
+                                             :sortable="is_sort(head)"
+                                             :width="head.width">
+                            </el-table-column>
+
+                        </template>
+
+                    </el-table>
+
+                </div>
+
+                {% endblock %}
+            </div>
+            <div>
+                <el-pagination
+                        @size-change="on_perpage_change"
+                        @current-change="get_page"
+                        :current-page="row_pages.crt_page"
+                        :page-sizes="[20, 50, 100, 500]"
+                        :page-size="row_pages.perpage"
+                        layout="total, sizes, prev, pager, next, jumper"
+                        :total="row_pages.total">
+                </el-pagination>
+
+            </div>
+        </div>
+    </div>
+    <div id="tab-wrap" v-if="tab_stack.length>0" class="flex-grow" style="position: relative">
+
+        <com-widget-stack :ctx_list="tab_stack" @win-event="on_tab_event($event)"></com-widget-stack>
+
+
+    </div>
+
+    {% endblock %}
+
+</div>
+<style>
+    .main-tab-content{
+
+    }
+
+
+    .fake-suit th{
+        white-space: nowrap;
+    }
+
+</style>
+{% block extra %}
+{% endblock %}
+{% endblock %}

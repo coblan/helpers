@@ -8,4 +8,4 @@ import inspect
 def dir_man(request):
     mana=DirMan(Index, Work)
     scope= dict(inspect.getmembers(mana,inspect.ismethod))
-    return jsonpost(request, scope)
+    return ajax_router(request, scope)

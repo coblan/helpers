@@ -63,7 +63,7 @@ class WorkForm(ModelFields):
                 }
         return heads
 
-class WorkFormPage(FormPage):
+class WorkFormPage(FieldsPage):
     fieldsCls=WorkForm
 
 class WorkIdexForm(ModelFields):
@@ -71,7 +71,7 @@ class WorkIdexForm(ModelFields):
         model=Index
         exclude=['par']
         
-class WorkIndexFormPage(FormPage):
+class WorkIndexFormPage(FieldsPage):
     fieldsCls=WorkIdexForm
     
 class WorkTable(ModelTable):
@@ -81,7 +81,7 @@ class WorkTable(ModelTable):
         if inst.desp_img:
             rt_dc['desp_img']='<img src="%s" width="30"/>'%inst.desp_img
         if inst.par:
-            rt_dc['par']=unicode(inst.par)
+            rt_dc['par']=str(inst.par)
         return rt_dc
 
 class WorkTablePage(TablePage):
@@ -162,7 +162,7 @@ class WorkRecordForm(ModelFields):
 
 
 
-class WorkRecordFormPage(FormPage):
+class WorkRecordFormPage(FieldsPage):
     fieldsCls=WorkRecordForm
 
 class WorkPageNum(PageNum):
@@ -199,7 +199,7 @@ class WorkRecordTable(ModelTable):
             })
         if inst.checker:
             dc.update({
-                'checker_name':unicode(inst.checker)
+                'checker_name':str(inst.checker)
             })
         dc.update({
             # 'emp':unicode(inst.emp),
@@ -311,7 +311,7 @@ class WRselfForm(ModelFields):
         return rt
     
 
-class WRselfFormPage(FormPage):
+class WRselfFormPage(FieldsPage):
     template='work/workself_form_f7.html'
     fieldsCls=WRselfForm
 
@@ -338,7 +338,7 @@ class WRselfTable(ModelTable):
     
     def dict_row(self, inst):
         return {
-            'work': unicode(inst.work),
+            'work': str(inst.work),
             'work_desp_img':inst.work.desp_img
         }
 

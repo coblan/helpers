@@ -27,6 +27,11 @@ form_logic={
 //				can_del:can_del,
 //				can_log:can_log,
 //			},
+	data:{
+		heads:heads,
+		row:row,
+		errors:{}
+	},
 
 	mixins:[field_fun],
 
@@ -64,7 +69,7 @@ form_logic={
 
 	<div class='field-panel'>
 		
-		<field  v-for='head in kw.heads' :key="head.name" :name='head.name' :kw='kw'></field>
+		<field  v-for='head in heads' :key="head.name" :name='head.name' :row="row" :head='head'></field>
 	</div>
 </div>
 

@@ -1,14 +1,112 @@
+# encoding:utf-8
+from __future__ import unicode_literals
 from .models import PermitModel
-from .model_admin.base import model_dc
+from .base_data import model_dc
 from django.contrib.auth.models import Group
+from django.core.exceptions import ValidationError
+from django.conf import settings
 import json
-from .model_admin.ajax import *
-from helpers.common.download_response import downloadfy_response
-from helpers.director.db_tools import sim_dict,from_dict
+import os
+from helpers.func.network.download_response import downloadfy_response
+
+from .model_func.wirtedb import permit_save_model
+from .model_func.dictfy import name_to_model,model_to_name,to_dict
 import io
+from helpers.director.base_data import director
+from django.http import HttpResponse
+from django.utils.timezone import datetime
+from .fields.fields import ModelFields
+from .network import argument
+
+try:
+    os.makedirs(os.path.join(settings.MEDIA_ROOT, 'gen_files'))
+except:
+    pass
 
 def get_global():
     return globals()
+
+def director_call(director_name, kws): 
+    directorEnt= director.get(director_name)
+    rt= directorEnt(**kws)
+    if isinstance(rt,ModelFields):
+        return rt.get_row()
+    else:
+        return rt
+
+def save(row,user,request):
+    """
+    为了兼顾老的调用
+    """
+    return save_row(row, user, request)
+    
+
+def save_row(row,user,request):
+    try:
+        kw = request.GET.dict()
+        field_obj = permit_save_model(user, row,**kw)
+        dc = field_obj.get_row()
+        return {'status':'success','row':dc}
+    except ValidationError as e:
+        return {'errors':dict(e)}
+
+
+def get_new_row_ctx(model_name,user):
+    model = name_to_model(model_name)
+    fields_cls = model_dc[model].get('fields')
+    return fields_cls(crt_user = user).get_context()
+    
+def get_row(director_name,pk=None,user=None,**kws):
+    fields_cls = director.get(director_name)
+    fields_obj = fields_cls(pk=pk,crt_user = user, **kws)
+    return fields_obj.get_row()
+
+
+
+def get_rows(director_name,search_args,user):
+    table_cls = director.get(director_name)
+    #model = name_to_model(model_name)
+    #table_cls = model_dc[model].get('table')
+    table_obj = table_cls.gen_from_search_args(search_args,user)
+    return table_obj.get_data_context()
+
+def get_excel(director_name,search_args,user): 
+    table_cls = director.get(director_name)
+    table_obj = table_cls.gen_from_search_args(search_args,user)
+    wb = table_obj.get_excel()
+    fl_name = director_name.replace('.', '_')
+    now = datetime.now().strftime('%Y_%m_%d_%H_%M_%S')
+    fl_name =  '%s_%s.xlsx' % (fl_name, now)
+    
+    wb.save(filename = os.path.join(settings.MEDIA_ROOT, 'gen_files', fl_name))
+    return {'file_url': '/media/gen_files/%s' % fl_name,}
+    #response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    #response['Content-Disposition'] = 'attachment; filename=%s.xlsx' % fl_name
+    #wb.save(response)
+    #return response    
+
+def save_rows(rows,user,request):
+    kw=request.GET.dict()
+    ls =[]
+    try:
+        for row in rows:
+            field_obj = permit_save_model(user, row,**kw)
+            dc = field_obj.get_row() 
+            ls.append(dc)
+        return ls
+    
+    except ValidationError as e:
+        return {'errors':dict(e),}    
+
+def del_rows(rows,user):
+    for row in rows:
+        fields_cls = director.get(row.get('_director_name'))
+        #model = name_to_model(row.get('_class'))
+        #fields_cls = model_dc.get(model).get('fields')
+        fields_obj = fields_cls(row,crt_user=user)
+        fields_obj.del_form()
+    rows_only_pk=[{'pk':x['pk']} for x in rows]
+    return rows_only_pk
 
 def save_group_permit(row,user):
     field_obj = permit_save_model(user, row)
@@ -67,85 +165,3 @@ def upload_group(request):
         gp_obj.permitmodel_set.add(*list(permits))
         gp_obj.save()
     return {'status':'success'}
-
-# def save_group_and_permit(row,permits,user): 
-    # field_cls = model_dc.get(Group).get('fields')
-    # group_form= field_cls(row, crt_user= user)
-    # if group_form.is_valid():
-        # group_form.save_form()
-    # group = group_form.instance
-    # if not hasattr(group,'permitmodel'):
-        # PermitModel.objects.create(group=group)
-    # group.permitmodel.permit=json.dumps(permits)
-    # group.permitmodel.save()
-    
-    # # perm={'group':group_form.instance.pk,'permit':permits}
-    # # perm_form = save_row(perm, user)
-    # return {'status':'success'}
-
-# def download_group_permit(items):
-    # pk_list = items.split('-')
-    # pk_list=[x for x in pk_list if x ]
-    # str_list=[]
-    # for pk in pk_list:
-        # obj = Group.objects.get(pk=pk)
-        
-        # if obj.permitmodel:
-            # if obj.name.startswith('assem.'):
-                # ls=json.loads(obj.permitmodel.permit)
-                # ls=[x.group.name for x in PermitModel.objects.filter(pk__in=ls)]
-                # dc={'group_name':obj.name,'permit_content':ls}
-            # else:
-                # dc={'group_name':obj.name,'permit_content':json.loads(obj.permitmodel.permit)}
-
-            # str_list.append(dc)
-        
-    # return downloadfy_response(json.dumps(str_list), 'permits.json')
-
-# def upload_group_permit(request):
-    # fl = request.FILES['file']
-    # catch = io.BytesIO()
-           
-    # for chunk in fl.chunks():
-        # catch.write(chunk) 
-    # data=catch.getvalue()
-    # group_permit = json.loads(data)
-    
-    # assem_groups=[]
-    # other_groups=[]
-    # for gp in group_permit:
-        # if gp['group_name'].startswith('assem.'):
-            # assem_groups.append(gp)
-        # else:
-            # other_groups.append(gp)
-    
-    # for gp in other_groups:
-        # name=gp['group_name']
-        # permit_content=json.dumps(gp['permit_content'])
-        # group,c = Group.objects.get_or_create(name=name)
-        # permitmodel,c=PermitModel.objects.get_or_create(group=group)
-        # permitmodel.permit=permit_content
-        # permitmodel.save()
-    
-    # for gp in assem_groups:
-        # name=gp['group_name']
-        # permit_content=gp['permit_content']
-        # group,c = Group.objects.get_or_create(name=name)
-        # permitmodel,c=PermitModel.objects.get_or_create(group=group)
-        
-        # permit_content=[x.pk for x in Group.objects.filter(name__in=permit_content)]
-        # permitmodel.permit=json.dumps(permit_content)
-        # permitmodel.save()
-        
-    # return {'status':'success'}
-
-# def save_assem_group(row,user):
-    
-    # group=from_dict(row)
-    # if not group.name.startswith('assem.'):
-        # group.name='assem.'+group.name
-    # group.save()
-    # permitmodel,c = PermitModel.objects.get_or_create(group=group)
-    # permitmodel.permit=json.dumps(row.get('child_group',[]))
-    # permitmodel.save()
-    # return {'status':'success'}

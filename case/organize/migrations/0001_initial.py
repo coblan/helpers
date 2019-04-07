@@ -5,7 +5,7 @@ from __future__ import unicode_literals
 from django.conf import settings
 from django.db import migrations, models
 import django.db.models.deletion
-import helpers.director.model_validator
+import helpers.director.model_func.model_validator
 
 
 class Migration(migrations.Migration):
@@ -34,7 +34,7 @@ class Migration(migrations.Migration):
             name='Department',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(default='new department', max_length=500, validators=[helpers.director.model_validator.has_str], verbose_name='department name')),
+                ('name', models.CharField(default='new department', max_length=500, validators=[helpers.director.model_func.model_validator.has_str], verbose_name='department name')),
                 ('detail', models.TextField(blank=True, verbose_name='\u8be6\u7ec6')),
                 ('par_chain', models.CharField(blank=True, max_length=200, verbose_name='parent chain')),
                 ('par', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='childs', to='organize.Department', verbose_name='parent department')),

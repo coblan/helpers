@@ -10,7 +10,7 @@ class DepartmentForm(ModelFields):
         exclude=['par','par_chain']
     
     
-class DepartmentTab(FormPage):
+class DepartmentTab(FieldsPage):
     template=''
     fieldsCls=DepartmentForm
     # def __init__(self, request):
@@ -43,13 +43,17 @@ class DepartManageForm(ModelFields):
     def dict_head(self, head):
         if head['name']=='recv_event':
             head['type']='check_select'
+            head['options'] = [
+                {'value':'normal_work','label':'普通工作'},
+                {'value':'importent_work','label':'重要工作'}
+            ]
         return head
     
-    def dict_options(self):
-        return {'recv_event':[
-        {'value':'normal_work','label':'普通工作'},
-        {'value':'importent_work','label':'重要工作'}
-        ]}
+    #def dict_options(self):
+        #return {'recv_event':[
+        #{'value':'normal_work','label':'普通工作'},
+        #{'value':'importent_work','label':'重要工作'}
+        #]}
     #def clean_recv_event(self):
         #data = self.cleaned_data['recv_event']
         #return data
@@ -57,7 +61,7 @@ class DepartManageForm(ModelFields):
     
     
         
-class DepartManageTab(FormPage):
+class DepartManageTab(FieldsPage):
     template=''
     fieldsCls=DepartManageForm
     def __init__(self,request):
@@ -81,7 +85,7 @@ class DepartManageTab(FormPage):
         # self.ctx=self.fields.get_context()
     
 
-class DepartmentGroup(TabGroup):
+class DepartmentGroup(TabPage):
     tabs=[{'name':'department','label':'基本信息','page_cls':DepartmentTab},
           {'name':'departmanage','label':'管理设置','page_cls':DepartManageTab}
           ]

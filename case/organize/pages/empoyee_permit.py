@@ -5,7 +5,7 @@ from ..models import WorkPermitModel,Employee
 from helpers.director.db_tools import to_dict
 from django.contrib.auth.models import Group
 
-class EmployePermitTab(FormPage):
+class EmployePermitTab(FieldsPage):
     template=''
 
     def __init__(self, request):
@@ -48,7 +48,7 @@ class EmployePermitTab(FormPage):
             return 'organize/employee_permit.html'
     
     def get_label(self):
-        return '%s的工作权限'% unicode(self.emp)
+        return '%s的工作权限'% str(self.emp)
  
     
 
