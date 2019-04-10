@@ -166,10 +166,13 @@ var mix_fields_data ={
                 } else{
                     // 为了兼容老的
                     if(this.tab_head.after_save){
-                        var fun = after_save[this.tab_head.after_save.fun]
-                        var kws = this.tab_head.after_save.kws
-                        // new_row ,old_row
-                        fun(this,new_row,kws)
+                        //var fun = after_save[this.tab_head.after_save.fun]
+                        //var kws = this.tab_head.after_save.kws
+                        //// new_row ,old_row
+                        //fun(this,new_row,kws)
+                        if(this.parStore){
+                            this.parStore.update_or_insert(new_row)
+                        }
                     }
                     ex.vueAssign(this.org_row,new_row)
                 }
