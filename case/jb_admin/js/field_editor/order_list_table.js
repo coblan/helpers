@@ -5,7 +5,7 @@ var order_list =  {
         <button @click="add_new()" class="btn btn-default btn-xs">
             <i style="color: green" class="fa fa-plus-circle"></i>
         </button>
-        <button @click="delete_rows()" class="btn btn-default btn-xs">
+        <button @click="delete_rows()" :disabled="selected.length==0" class="btn btn-default btn-xs">
             <i style="color: red" class="fa fa-minus-circle"></i>
         </button>
         <div style="display: inline-block;position: relative;vertical-align: top">
