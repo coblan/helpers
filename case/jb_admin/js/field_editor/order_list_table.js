@@ -9,7 +9,7 @@ var order_list =  {
             <i style="color: red" class="fa fa-minus-circle"></i>
         </button>
         <div style="display: inline-block;position: relative;vertical-align: top">
-            <textarea :name="head.name" v-model="row[head.name]" id="" cols="1" rows="1" style="display: none"></textarea>
+            <textarea :name="head.name" v-model="row[head.name]"  style="display: none"></textarea>
         </div>
     </div>
 
@@ -91,14 +91,22 @@ var order_list =  {
                 this.rows = []
             }
         },
-        rows:function(v){
-            if(v.length>0){
-                this.row[this.head.name] = JSON.stringify(v)
-            }else{
-                this.row[this.head.name] = ''
-            }
+        rows:{
+            handler: function(v){
+                if(v.length>0){
+                    Vue.set(this.row,this.head.name,JSON.stringify(v))
+                    //this.row[this.head.name] = JSON.stringify(v)
+                }else{
+                    Vue.set(this.row,this.head.name,'')
+                    //this.row[this.head.name] = ''
+                }
 
-        }
+            },
+            deep: true
+        },
+
+
+
     },
     methods:{
         commit:function(){
@@ -125,12 +133,10 @@ var order_list =  {
                 //self.row[self.head.name] = JSON.stringify(self.rows)
                layer.close(win)
             })
-
-            //this.row[this.head].append({})
         },
         delete_rows:function(){
             var self=this
-            layer.confirm('真的删除吗?', {icon: 3, title:'提示'}, function(index){
+            layer.confirm('确定删除?', {icon: 3, title:'提示'}, function(index){
                 //do something
                 ex.remove(self.rows,function(row){
                     return self.selected.indexOf(row )!=-1
