@@ -570,7 +570,7 @@ var pop_fields = exports.pop_fields = {
             fun(function (pop_row) {
                 //pop_fields_layer(pop_row,self.head.fields_heads,ops,self.head.extra_mixins,function(kws){
                 var win_index = pop_fields_layer(pop_row, self.head.fields_ctx, function (new_row) {
-
+                    //TODO 配合 tab_fields ，mix_fields_data 统一处理 after_save的问题
                     var fun = after_save[self.head.after_save.fun];
                     fun(self, new_row, pop_row);
 
@@ -2468,24 +2468,26 @@ var mix_fields_data = {
 
         after_save: function after_save(new_row) {
             //ex.assign(this.row,new_row)
-            if (this.tab_head.after_save) {
-                if (typeof this.tab_head.after_save == 'string') {
-                    ex.eval(this.tab_head.after_save, { vc: this });
-                } else {
-                    // 为了兼容老的
-                    if (this.tab_head.after_save) {
-                        //var fun = after_save[this.tab_head.after_save.fun]
-                        //var kws = this.tab_head.after_save.kws
-                        //// new_row ,old_row
-                        //fun(this,new_row,kws)
-                        if (this.parStore) {
-                            this.parStore.update_or_insert(new_row);
+            //TODO 配合 table_pop_fields ，tab-fields 统一处理 after_save的问题
+            if (this.tab_head) {
+                // 如果表单在一个tab 下,
+                if (this.tab_head.after_save) {
+                    if (typeof this.tab_head.after_save == 'string') {
+                        ex.eval(this.tab_head.after_save, { vc: this });
+                    } else {
+                        // 为了兼容老的
+                        if (this.tab_head.after_save) {
+                            if (this.parStore) {
+                                this.parStore.update_or_insert(new_row);
+                            }
                         }
+                        ex.vueAssign(this.org_row, new_row);
                     }
-                    ex.vueAssign(this.org_row, new_row);
                 }
-            } else if (this.tab_head.after_save_express) {
-                ex.eval(this.tab_head.after_save_express, { vc: this });
+                // 老的调用名字，新的后端调用名全部用 after_save
+                else if (this.tab_head.after_save_express) {
+                        ex.eval(this.tab_head.after_save_express, { vc: this });
+                    }
             }
         },
         showErrors: function showErrors(errors) {
