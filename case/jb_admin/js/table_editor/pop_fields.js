@@ -65,7 +65,7 @@ export  var pop_fields={
             fun(function(pop_row){
                 //pop_fields_layer(pop_row,self.head.fields_heads,ops,self.head.extra_mixins,function(kws){
                var win_index =  pop_fields_layer(pop_row,self.head.fields_ctx,function(new_row){
-
+                        //TODO 配合 tab_fields ，mix_fields_data 统一处理 after_save的问题
                         var fun = after_save[self.head.after_save.fun]
                         fun(self,new_row,pop_row)
 
