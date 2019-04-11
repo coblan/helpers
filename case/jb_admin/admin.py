@@ -9,7 +9,8 @@ from helpers.director.base_data import site_cfg
 import re
 from . import  js_cfg
 from django.utils.translation import ugettext as _
-from helpers.director.shortcut import model_to_name, model_full_permit, add_permits, model_read_permit
+from helpers.director.shortcut import model_to_name, model_full_permit, add_permits, model_read_permit,RowSearch
+
 import json
 # Register your models here.
 class UserPage(TablePage):
@@ -30,15 +31,17 @@ class UserPage(TablePage):
                 head['options'] = [{'value': group.pk, 'label': str(group),} for group in Group.objects.all()]
                 #head['parse_method'] = 'dotSplit'
             return head
+        
+        class search(RowSearch):
+            names=['username']
 
-        
-        
 class UserFields(ModelFields):
     hide_fields = ['date_joined']
     class Meta:
         model=User
         fields=['username','first_name','is_active','is_staff','is_superuser','email','groups', 'date_joined']
-        
+    
+    
     def dict_head(self, head):
         if head['name']=='groups':
             #head['editor']='field_multi_chosen'
