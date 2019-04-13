@@ -26,12 +26,18 @@
     <script src="{{ js_config.js_lib.director }}"></script>
     <script src="{{ js_config.js_lib.jb_admin }}"></script>
 
-    <title>Admin</title>
+
 
     <script src="{{ js_config.js_lib.nprogress }}"></script>
     <link href="{{ js_config.js_lib.nprogress_css }}" rel="stylesheet">
     <script src="{{ js_config.js_lib.layer }}"></script>
 
+    <script src="{{ js_config.js_lib.mint_ui }}"></script>
+    <link rel="stylesheet" href="{{ js_config.js_lib.mint_ui_css }}">
+    <script src="{{ js_config.js_lib.mobile }}"></script>
+    {% block head-content %}
+        <title>标题</title>
+    {% endblock %}
     <script>
         (function(){
             document.onreadystatechange = function(){

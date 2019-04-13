@@ -16,9 +16,9 @@ module.exports =
     },
 
     watch: true,
-    //resolve:{
-    //    modules:["D:/coblan/webcode/node_modules"],
-    //},
+    resolve:{
+        modules:["D:/coblan/webcode/node_modules"],
+    },
     resolveLoader: {
         //moduleExtensions:["D:/coblan/webcode/node_modules"],
         modules: ["D:/coblan/webcode/node_modules"],

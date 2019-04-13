@@ -2332,6 +2332,15 @@ var mix_fields_data = {
             }
         });
         self.setErrors({});
+        if (this.head) {
+            if (this.head.style) {
+                ex.append_css(this.head.style);
+            }
+            if (this.head.init_express) {
+                ex.eval(this.head.init_express, { row: this.row, ps: this.parStore, cs: this.childStore, vc: this });
+            }
+            ex.vueEventRout(this, this.head.event_slots);
+        }
     },
     created: function created() {
         ex.each(this.heads, function (head) {
@@ -2446,6 +2455,8 @@ var mix_fields_data = {
             });
         },
         save: function save() {
+            var _this2 = this;
+
             var self = this;
             cfg.show_load();
             var post_data = [{ fun: 'save_row', row: this.row }];
@@ -2463,7 +2474,12 @@ var mix_fields_data = {
                         cfg.hide_load(2000);
                     }
                     ex.vueAssign(self.row, rt.row);
-                    self.after_save(rt.row);
+                    if (_this2.head.after_save && typeof _this2.head.after_save == 'string') {
+                        ex.eval(_this2.head.after_save, { ps: self.parStore, vc: self });
+                    } else {
+                        // 调用组件默认的
+                        self.after_save(rt.row);
+                    }
                     self.setErrors({});
                     self.$emit('finish', rt.row);
                 }
@@ -2471,28 +2487,11 @@ var mix_fields_data = {
         },
 
         after_save: function after_save(new_row) {
+
             //ex.assign(this.row,new_row)
             //TODO 配合 table_pop_fields ，tab-fields 统一处理 after_save的问题
-            if (this.tab_head) {
-                // 如果表单在一个tab 下,
-                if (this.tab_head.after_save) {
-                    if (typeof this.tab_head.after_save == 'string') {
-                        ex.eval(this.tab_head.after_save, { vc: this });
-                    } else {
-                        // 为了兼容老的
-                        if (this.tab_head.after_save) {
-                            if (this.parStore) {
-                                this.parStore.update_or_insert(new_row);
-                            }
-                        }
-                        ex.vueAssign(this.org_row, new_row);
-                    }
-                }
-                // 老的调用名字，新的后端调用名全部用 after_save
-                else if (this.tab_head.after_save_express) {
-                        ex.eval(this.tab_head.after_save_express, { vc: this });
-                    }
-            }
+
+
         },
         showErrors: function showErrors(errors) {
             // 落到 nice validator去
@@ -5718,6 +5717,7 @@ var big_fields = {
         });
         var parStore = ex.vueParStore(this);
         return {
+            head: this.ctx,
             heads: this.ctx.heads,
             layout: this.ctx.layout,
             ops: this.ctx.ops,
@@ -5759,18 +5759,6 @@ var big_fields = {
             });
             return out_bucket;
         }
-    },
-    mounted: function mounted() {
-        if (this.ctx.style) {
-            ex.append_css(this.ctx.style);
-        }
-        //if(!this.tab_head.row){
-        //    this.get_data()
-        //}
-        if (this.ctx.init_express) {
-            ex.eval(this.ctx.init_express, { row: this.row, ps: this.parStore, cs: this.childStore, vc: this });
-        }
-        ex.vueEventRout(this, this.ctx.event_slots);
     },
 
     methods: {
@@ -7525,6 +7513,7 @@ var tab_fields = {
         });
         var parStore = ex.vueParStore(this);
         return {
+            head: this.tab_head,
             heads: this.tab_head.heads,
             ops: this.tab_head.ops,
             errors: {},
@@ -7571,7 +7560,7 @@ var tab_fields = {
         },
         data_getter: function data_getter() {
             var self = this;
-            // 兼容老调用,废弃
+            // 兼容老调用,废弃  现在用 init_express 来初始化
             if (self.tab_head.get_data) {
                 var fun = get_data[self.tab_head.get_data.fun];
                 var kws = self.tab_head.get_data.kws;
@@ -7585,6 +7574,29 @@ var tab_fields = {
                 ex.eval(self.tab_head.get_row, { vc: self });
                 //ex.vueAssign(self.row,row_dc)
             }
+        },
+        after_save: function after_save(new_row) {
+            // 为了兼容 老的 版本，才留下 这个 after-save TODO 移除老系统调用后，删除这个函数
+            if (this.tab_head.after_save) {
+                if (typeof this.tab_head.after_save == 'string') {
+                    ex.eval(this.tab_head.after_save, { vc: this });
+                } else {
+                    // 为了兼容老的
+                    if (this.tab_head.after_save) {
+                        if (this.parStore) {
+                            this.parStore.update_or_insert(new_row);
+                        }
+                    }
+                    ex.vueAssign(this.org_row, new_row);
+                }
+            }
+            // 老的调用名字，新的后端调用名全部用 after_save
+            else if (this.tab_head.after_save_express) {
+                    ex.eval(this.tab_head.after_save_express, { vc: this });
+                } else {
+                    // 默认
+                    this.parStore.update_or_insert(new_row);
+                }
         }
         // data_getter  回调函数，获取数据,
 

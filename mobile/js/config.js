@@ -1,6 +1,21 @@
+import { Dialog } from 'vant';
+
+Vue.use(Dialog);
+
 ex.assign(cfg,{
     fields_editor:'com-sim-fields',
     fields_local_editor:'com-sim-fields-local',
+    showMsg:function(msg){
+        if(typeof msg =='string'){
+            return Dialog.alert({
+                message: msg
+            })
+        }else{
+             //  {title:'xxx',message:'xxx'}
+            return Dialog.alert(msg)
+        }
+
+    },
     pop_edit_local:function(ctx,callback){
         ctx.fields_editor='com-sim-fields-local'
         return cfg.pop_big('com-fields-panel',ctx,callback)

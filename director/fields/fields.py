@@ -72,7 +72,8 @@ class ModelFields(forms.ModelForm):
         else:
             self.crt_user = crt_user
             
-        dc = self.clean_dict(dc)
+        dc = self._clean_dict(dc)
+        dc=self.clean_dict(dc)
         # if pk is None:
         if dc.get('pk') != None:
             pk=dc.get('pk')
@@ -145,7 +146,6 @@ class ModelFields(forms.ModelForm):
         return dc
     
     def clean_dict(self,dc):   
-        dc = self._clean_dict(dc)
         return dc
     
     def is_valid(self): 
