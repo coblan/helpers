@@ -6597,9 +6597,10 @@ Vue.component('com-op-switch', {
     }
 });
 
-async function switch_get_value(self) {
-    var resp = await ex.director_call(self.head.init_express, {});
-    self.myvalue = resp;
+function switch_get_value(self) {
+    ex.director_call(self.head.init_express, {}).then(function (resp) {
+        self.myvalue = resp;
+    });
 }
 
 //async  function asyncDirector(name){

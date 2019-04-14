@@ -1008,13 +1008,8 @@ window.pop_mobile_win = pop_mobile_win;
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
+//import * as ele_table_bus_page from  './ele_table_bus_page'
 
-
-var _ele_table_bus_page = __webpack_require__(31);
-
-var ele_table_bus_page = _interopRequireWildcard(_ele_table_bus_page);
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 /***/ }),
 /* 14 */
@@ -1848,20 +1843,7 @@ Vue.component('com-slide-win-1', {
 });
 
 /***/ }),
-/* 31 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var ele_table_bus_page = {
-    mixins: [ele_table_page_logic],
-    template: ' <el-pagination\n                         @size-change="on_perpage_change"\n                        @current-change="on_page_change"\n                        :current-page="row_pages.crt_page"\n                        :page-sizes="[20, 50, 100, 500]"\n                        :page-size="row_pages.perpage"\n                        layout="total, sizes, prev, pager, next"\n                        :total="row_pages.total">\n                </el-pagination>'
-
-    //  覆盖掉pc端的 同名 vuejs 组件
-};Vue.component('com-table-bus-page', ele_table_bus_page);
-
-/***/ }),
+/* 31 */,
 /* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
