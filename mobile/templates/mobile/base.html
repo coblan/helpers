@@ -13,23 +13,14 @@
     <script src="{{ js_config.js_lib.jquery }}"></script>
     <script src="{{ js_config.js_lib.md5 }}"></script>
     <link rel="stylesheet" href="{{ js_config.js_lib.font_awesome }}">
-
     <script src="{{ js_config.js_lib.vuejs }}"></script>
-    <script src="{{ js_config.js_lib.vuex }}"></script>
-    <link rel="stylesheet" href="{{ js_config.js_lib.bootstrap_css }}">
-    <script src="{{ js_config.js_lib.bootstrap }}"></script>
-
     <script src="{{ js_config.js_lib.nice_validator }}"></script>
     <link rel="stylesheet" href="{{ js_config.js_lib.nice_validator_css }}">
 
     <script src="{{ js_config.js_lib.exfun }}"></script>
-    <script src="{{ js_config.js_lib.director }}"></script>
+
     <script src="{{ js_config.js_lib.jb_admin }}"></script>
 
-
-
-    <script src="{{ js_config.js_lib.nprogress }}"></script>
-    <link href="{{ js_config.js_lib.nprogress_css }}" rel="stylesheet">
     <script src="{{ js_config.js_lib.layer }}"></script>
 
     <script src="{{ js_config.js_lib.mint_ui }}"></script>
@@ -38,38 +29,6 @@
     {% block head-content %}
         <title>标题</title>
     {% endblock %}
-    <script>
-        (function(){
-            document.onreadystatechange = function(){
-                NProgress.configure({ showSpinner: false });
-                NProgress.start();
-                console.log(document.readyState);
-                if(document.readyState == "Uninitialized"){
-                    NProgress.set(1);
-                }
-                if(document.readyState == "Interactive"){
-                    NProgress.set(0.5);
-                }
-                if(document.readyState == "complete"){
-                    NProgress.done();
-                }
-            }
-        })();
-
-        window.onbeforeunload=function(){
-            NProgress.start();
-            setInterval(function(){
-                NProgress.inc()
-            },300)
-
-            if($('body').hasClass('sidebar-collapse')){
-                sessionStorage.setItem("sidebar-collapse",true);
-            }else{
-                sessionStorage.removeItem("sidebar-collapse");
-            }
-        }
-
-    </script>
     <style>
         .bar{
             background: #dd453b !important;

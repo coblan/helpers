@@ -6,8 +6,7 @@
 
 var nice_validator={
     mounted:function(){
-        this.update_nice()
-
+            this.update_nice()
     },
     //watch:{
     //    heads:function(new_heads,old_heads){
@@ -26,6 +25,7 @@ var nice_validator={
     //},
     methods:{
         get_head_fv_rule:function(head){
+            // todo  判断 该函数应该是没有用了，注意删除
             var ls =[]
             if(head.fv_rule){
                 ls.push(head.fv_rule)
@@ -43,7 +43,7 @@ var nice_validator={
                     invalid:function(e,b){
                         var label =head.label
                         ex.eval(head.validate_showError,{msg:label+' : '+b.msg})
-                    }
+                    },
                 }
             }else{
                 return {
@@ -75,13 +75,17 @@ var nice_validator={
                         msgClass:'hide',
                         invalid:function(e,b){
                             var label =head.label
-                            ex.eval(head.validate_showError,{msg:label+' : '+b.msg})
-                        }
+                            ex.eval(head.validate_showError,{msg:b.msg,head:head})
+                        },
+                        valid : function(element, result){
+                             ex.eval(head.validate_clearError,{head:head})
+                         }
                     }
                 }else{
                         validate_fields[head.name]={
                             rule:ls.join(';'),
-                            msg:head.fv_msg
+                            msg:head.fv_msg,
+
                         }
                 }
 
@@ -95,25 +99,6 @@ var nice_validator={
                 //}
             });
 
-            //if($(this.$el).hasClass('field-panel')){
-            //    this.nice_validator =$(this.$el).validator({
-            //        fields: validate_fields,
-            //        //msgShow:function($msgbox, type){
-            //        //    alert('aajjyy')
-            //        //},validation: function(element, result){
-            //        //   alert('aaabbbb')
-            //        //}
-            //    });
-            //}else{
-            //    this.nice_validator =$(this.$el).find('.field-panel').validator({
-            //        fields: validate_fields,
-            //        //msgShow:function($msgbox, type){
-            //        //    alert('jjyybbb')
-            //        //},validation: function(element, result){
-            //        //    alert('bccbbbb')
-            //        //}
-            //    });
-            //}
         },
         isValid:function(){
             var nice_rt = this.nice_validator.isValid()
@@ -151,7 +136,7 @@ var nice_validator={
             for(var k in errors){
                 var head = ex.findone(this.heads,{name:k})
                 if(head && head.validate_showError){
-                    ex.eval(head.validate_showError,{msg:errors[k].join(';')})
+                    ex.eval(head.validate_showError,{head:this.head,msg:errors[k].join(';')})
                 }else{
                     $(this.$el).find('[name='+k+']').trigger("showmsg", ["error", errors[k].join(';')]);
                 }

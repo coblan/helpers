@@ -13,6 +13,7 @@ var big_fields={
         var parStore = ex.vueParStore(this)
         return {
             head:this.ctx,
+            par_row:this.ctx.par_row,
             heads:this.ctx.heads,
             layout:this.ctx.layout,
             ops:this.ctx.ops,

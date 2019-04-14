@@ -427,7 +427,11 @@ window.cfg = {
         this._loader_index = layer.load(1);
     },
     hide_load: function hide_load(delay, msg) {
+        if (!this._loader_index) {
+            return;
+        }
         layer.close(this._loader_index);
+        this._loader_index = null;
         if (delay) {
             var realMsg = msg || '操作成功';
             layer.msg(realMsg, { time: delay });

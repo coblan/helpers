@@ -282,9 +282,9 @@ class ModelFields(forms.ModelForm):
                 #dc['options']=[{'value':val,'label':str(lab)} for val,lab in v.widget.choices]
             elif v.__class__==forms.fields.CharField:
                 if v.max_length:
-                    dc.update({'editor':'linetext','maxlength':v.max_length})
+                    dc.update({'editor':'com-field-linetext','maxlength':v.max_length})
                 else:
-                    dc.update({'editor':'blocktext'})
+                    dc.update({'editor':'com-field-blocktext'})
             elif v.__class__==forms.fields.BooleanField:
                 dc['editor']='bool'
                 #dc['no_auto_label']=True
@@ -437,6 +437,7 @@ class ModelFields(forms.ModelForm):
             detail=','.join(self.changed_data)
         
         with transaction.atomic():
+            extra_log = self.clean_save()
             if self.instance.pk is None:
                 op='add'
                 detail=''
@@ -444,7 +445,6 @@ class ModelFields(forms.ModelForm):
             for k in self.changed_data:
                 ## 测试时看到self.instance已经赋值了，下面这行代码可能没用,但是需要考虑下新建时 manytomany foreignkey 这些情况
                 setattr(self.instance,k, self.cleaned_data.get(k) )
-            extra_log = self.clean_save()
             self.instance.save()
             
         if op or extra_log:

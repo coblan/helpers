@@ -84,6 +84,7 @@ export  function pop_fields_layer (row,fields_ctx,callback,layerConfig){
             var vc  = new Vue({
                 el:'#fields-pop-'+pop_id,
                 data:{
+                    head:fields_ctx,
                     has_heads_adaptor:false,
                     row:row,
                     fields_heads:heads,

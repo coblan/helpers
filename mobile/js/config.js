@@ -1,20 +1,29 @@
-import { Dialog } from 'vant';
-
-Vue.use(Dialog);
+//import { Dialog } from 'vant';
+//
+//Vue.use(Dialog);
+import { MessageBox } from 'mint-ui';
 
 ex.assign(cfg,{
     fields_editor:'com-sim-fields',
     fields_local_editor:'com-sim-fields-local',
     showMsg:function(msg){
         if(typeof msg =='string'){
-            return Dialog.alert({
-                message: msg
-            })
+            //return Dialog.alert({
+            //    message: msg
+            //})
+            return MessageBox.alert(msg)
         }else{
              //  {title:'xxx',message:'xxx'}
-            return Dialog.alert(msg)
+            //return Dialog.alert(msg)
+            return MessageBox(msg)
         }
-
+    },
+    showError:function(msg){
+        if(typeof msg =='string'){
+            return MessageBox.alert(msg)
+        }else{
+            return MessageBox(msg)
+        }
     },
     pop_edit_local:function(ctx,callback){
         ctx.fields_editor='com-sim-fields-local'

@@ -53,6 +53,7 @@ class UserFields(ModelFields):
         if  'password' in self.permit.changeable_fields():
             ls.append({
                 'name': 'user_password', 'label': '用户密码', 'editor': 'password', 'required': '!scope.row.pk',
+                'fv_msg':'新建用户必须输入密码！'
             })
         return ls
     #def get_heads(self): 
@@ -149,6 +150,7 @@ class GroupForm(ModelFields):
         return row   
     
     def clean_save(self):
+        self.instance.save()
         if not hasattr(self.instance, 'permitmodel'):
             PermitModel.objects.create(group = self.instance)
         if self.kw.get('permit',None) != None:

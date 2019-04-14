@@ -1983,6 +1983,7 @@ function pop_fields_layer(row, fields_ctx, callback, layerConfig) {
         var vc = new Vue({
             el: '#fields-pop-' + pop_id,
             data: {
+                head: fields_ctx,
                 has_heads_adaptor: false,
                 row: row,
                 fields_heads: heads,
@@ -2427,7 +2428,8 @@ var mix_fields_data = {
                     delete errors[head.name];
                 } else if (head.error) {
                     //delete head.error
-                    Vue.delete(head, 'error');
+                    //Vue.delete(head,'error')
+                    Vue.set(head, 'error', '');
                     //Vue.set(head,'error',null)
                 }
             });
@@ -2447,43 +2449,59 @@ var mix_fields_data = {
             var self = this;
             this.setErrors({});
             ex.vueBroadCall(self, 'commit');
-            Vue.nextTick(function () {
-                if (!self.isValid()) {
-                    return;
-                }
-                self.save();
+            return new Promise(function (resolve, reject) {
+                Vue.nextTick(function () {
+                    if (!self.isValid()) {
+                        //reject()
+                    } else {
+                        self.save().then(function (res) {
+                            resolve(res);
+                        }).then(function () {
+                            // 如果所有流程都没处理load框，再隐藏load框
+                            cfg.hide_load(2000);
+                        });
+                    }
+                });
             });
         },
         save: function save() {
             var _this2 = this;
 
+            /*三种方式设置after_save
+            * 1. ps.submit().then((new_row)=>{ps.update_or_insert(new_row)})
+            * 2. head.after_save = "scope.ps.update_or_insert(scope.row)"
+            * 3. @finish="onfinish"   函数: onfinsih(new_row){}
+            * */
             var self = this;
             cfg.show_load();
             var post_data = [{ fun: 'save_row', row: this.row }];
             this.old_row = ex.copy(this.row);
-            ex.post('/d/ajax', JSON.stringify(post_data), function (resp) {
-                var rt = resp.save_row;
-                if (rt.errors) {
-                    cfg.hide_load();
-                    self.setErrors(rt.errors);
-                    self.showErrors(rt.errors);
-                } else {
-                    if (resp.msg) {
+            var p = new Promise(function (resolve, reject) {
+                ex.post('/d/ajax', JSON.stringify(post_data), function (resp) {
+                    var rt = resp.save_row;
+                    if (rt.errors) {
                         cfg.hide_load();
+                        self.setErrors(rt.errors);
+                        self.showErrors(rt.errors);
+                        //reject(rt.errors)
                     } else {
-                        cfg.hide_load(2000);
+                        ex.vueAssign(self.row, rt.row);
+                        if (_this2.head && _this2.head.after_save && typeof _this2.head.after_save == 'string') {
+                            ex.eval(_this2.head.after_save, { ps: self.parStore, vc: self, row: rt.row });
+                        } else {
+                            // 调用组件默认的
+                            self.after_save(rt.row);
+                        }
+                        if (resp.msg) {
+                            cfg.hide_load();
+                        }
+                        self.setErrors({});
+                        self.$emit('finish', rt.row);
+                        resolve(rt.row);
                     }
-                    ex.vueAssign(self.row, rt.row);
-                    if (_this2.head.after_save && typeof _this2.head.after_save == 'string') {
-                        ex.eval(_this2.head.after_save, { ps: self.parStore, vc: self });
-                    } else {
-                        // 调用组件默认的
-                        self.after_save(rt.row);
-                    }
-                    self.setErrors({});
-                    self.$emit('finish', rt.row);
-                }
+                });
             });
+            return p;
         },
 
         after_save: function after_save(new_row) {
@@ -2540,6 +2558,7 @@ var nice_validator = {
     //},
     methods: {
         get_head_fv_rule: function get_head_fv_rule(head) {
+            // todo  判断 该函数应该是没有用了，注意删除
             var ls = [];
             if (head.fv_rule) {
                 ls.push(head.fv_rule);
@@ -2590,13 +2609,17 @@ var nice_validator = {
                         msgClass: 'hide',
                         invalid: function invalid(e, b) {
                             var label = head.label;
-                            ex.eval(head.validate_showError, { msg: label + ' : ' + b.msg });
+                            ex.eval(head.validate_showError, { msg: b.msg, head: head });
+                        },
+                        valid: function valid(element, result) {
+                            ex.eval(head.validate_clearError, { head: head });
                         }
                     };
                 } else {
                     validate_fields[head.name] = {
                         rule: ls.join(';'),
                         msg: head.fv_msg
+
                     };
                 }
             });
@@ -2608,26 +2631,6 @@ var nice_validator = {
                 //   alert('aaabbbb')
                 //}
             });
-
-            //if($(this.$el).hasClass('field-panel')){
-            //    this.nice_validator =$(this.$el).validator({
-            //        fields: validate_fields,
-            //        //msgShow:function($msgbox, type){
-            //        //    alert('aajjyy')
-            //        //},validation: function(element, result){
-            //        //   alert('aaabbbb')
-            //        //}
-            //    });
-            //}else{
-            //    this.nice_validator =$(this.$el).find('.field-panel').validator({
-            //        fields: validate_fields,
-            //        //msgShow:function($msgbox, type){
-            //        //    alert('jjyybbb')
-            //        //},validation: function(element, result){
-            //        //    alert('bccbbbb')
-            //        //}
-            //    });
-            //}
         },
         isValid: function isValid() {
             var nice_rt = this.nice_validator.isValid();
@@ -2665,7 +2668,7 @@ var nice_validator = {
             for (var k in errors) {
                 var head = ex.findone(this.heads, { name: k });
                 if (head && head.validate_showError) {
-                    ex.eval(head.validate_showError, { msg: errors[k].join(';') });
+                    ex.eval(head.validate_showError, { head: this.head, msg: errors[k].join(';') });
                 } else {
                     $(this.$el).find('[name=' + k + ']').trigger("showmsg", ["error", errors[k].join(';')]);
                 }
@@ -5532,6 +5535,9 @@ Object.defineProperty(exports, "__esModule", {
 });
 __webpack_require__(8);
 
+/*
+*  todo  感觉无用，移除该组件
+* */
 var com_form = exports.com_form = {
     props: {
         heads: '',
@@ -5718,6 +5724,7 @@ var big_fields = {
         var parStore = ex.vueParStore(this);
         return {
             head: this.ctx,
+            par_row: this.ctx.par_row,
             heads: this.ctx.heads,
             layout: this.ctx.layout,
             ops: this.ctx.ops,
