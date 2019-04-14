@@ -1263,6 +1263,10 @@ var _radio = __webpack_require__(88);
 
 var radio = _interopRequireWildcard(_radio);
 
+var _blocktext = __webpack_require__(171);
+
+var blocktext = _interopRequireWildcard(_blocktext);
+
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 /***/ }),
@@ -8985,6 +8989,18 @@ __webpack_require__(78);
 
 
 // store
+
+/***/ }),
+/* 171 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Vue.component('com-field-blocktext', {
+    props: ['row', 'head'],
+    template: '<div>\n            <span v-if=\'head.readonly\' v-text=\'row[head.name]\'></span>\n            <textarea :style="head.style" v-else :maxlength="head.maxlength" class="form-control input-sm"\n                :name="head.name"\n                :id="\'id_\'+head.name" v-model="row[head.name]" :placeholder="head.placeholder"\n                :readonly=\'head.readonly\'></textarea>\n            </div>'
+});
 
 /***/ })
 /******/ ]);
