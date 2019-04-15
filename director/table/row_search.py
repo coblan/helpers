@@ -2,7 +2,7 @@
 from django.utils.translation import ugettext as _
 from helpers.director.base_data import field_map
 from django.db.models import Q
-
+from helpers.director.model_func.dictfy import model_to_name
 class SelectSearch(object):
     names=[]
     exact_names = []
@@ -34,9 +34,14 @@ class SelectSearch(object):
     
     def clean_search(self): 
         try:
-            f = self.model._meta.get_field(self.qf)
-            mapperCls = field_map.get(f.__class__)
-            mapper = mapperCls(name=f.name,model = f.model)
+            field_path = '%s.%s'%(model_to_name(self.model),self.qf)
+            if field_path in field_map:
+                mapperCls = field_map[field_path]
+                mapper = mapperCls(name=self.qf,model = self.model)
+            else:
+                f = self.model._meta.get_field(self.qf)
+                mapperCls = field_map.get(f.__class__)
+                mapper = mapperCls(name=f.name,model = f.model)
             q_str = mapper.filter_clean_search(self.q)
         except :
             q_str = self.q

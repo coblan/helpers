@@ -26,7 +26,7 @@ class UserPage(TablePage):
         
         def dict_head(self, head): 
             if head['name'] == 'groups':
-                
+                head['label']='权限组'
                 head['editor'] = 'com-table-array-mapper'
                 head['options'] = [{'value': group.pk, 'label': str(group),} for group in Group.objects.all()]
                 #head['parse_method'] = 'dotSplit'
@@ -44,6 +44,7 @@ class UserFields(ModelFields):
     
     def dict_head(self, head):
         if head['name']=='groups':
+            head['label']='权限组'
             #head['editor']='field_multi_chosen'
             head['editor'] = 'com-field-multi-chosen'
         return head
