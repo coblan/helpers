@@ -94,12 +94,12 @@ import * as plain_field_panel from  './fields_panels/plain_field_panel.js'
 import * as ele_table from  './table_panels/ele_table.js'
 
 
-import * as user_info from  './page_com/header_bar/user_info.js'
 import * as nice_validator_rule from  './nice_validator_rule.js'
 
 // top_heads
 import * as dropdown from  './header/dropdown.js'
 import * as sm_link from  './header/sm_link.js'
+import * as header_main from  './header/main.js'
 
 //ui
 import * as stack_widget from './misc/stack_widget'
