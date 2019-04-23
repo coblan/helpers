@@ -2,6 +2,7 @@
 //
 //Vue.use(Dialog);
 import { MessageBox } from 'mint-ui';
+import { Indicator } from 'mint-ui';
 
 ex.assign(cfg,{
     fields_editor:'com-sim-fields',
@@ -59,5 +60,13 @@ ex.assign(cfg,{
     pop_iframe:function(url,option){
        return cfg.pop_big('com-slide-iframe',{url:url,title:option.title})
     },
+    show_load(){
+        Indicator.open(
+            {spinnerType: 'fading-circle'}
+        )
+    },
+    hide_load(delay,msg){
+        Indicator.close()
+    }
 
 })

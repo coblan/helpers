@@ -600,6 +600,9 @@ process.umask = function() { return 0; };
 
 var _mintUi = __webpack_require__(39);
 
+//import { Dialog } from 'vant';
+//
+//Vue.use(Dialog);
 ex.assign(cfg, {
     fields_editor: 'com-sim-fields',
     fields_local_editor: 'com-sim-fields-local',
@@ -655,11 +658,14 @@ ex.assign(cfg, {
     },
     pop_iframe: function pop_iframe(url, option) {
         return cfg.pop_big('com-slide-iframe', { url: url, title: option.title });
+    },
+    show_load: function show_load() {
+        _mintUi.Indicator.open({ spinnerType: 'fading-circle' });
+    },
+    hide_load: function hide_load(delay, msg) {
+        _mintUi.Indicator.close();
     }
-
-}); //import { Dialog } from 'vant';
-//
-//Vue.use(Dialog);
+});
 
 /***/ }),
 /* 5 */
@@ -776,6 +782,10 @@ var com_slide_head = _interopRequireWildcard(_com_slide_head);
 var _fiexed_scrll = __webpack_require__(29);
 
 var fiexed_scrll = _interopRequireWildcard(_fiexed_scrll);
+
+var _pop_image_shower = __webpack_require__(54);
+
+var pop_image_shower = _interopRequireWildcard(_pop_image_shower);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -1471,9 +1481,69 @@ Vue.component('com-field-linetext', {
 "use strict";
 
 
+__webpack_require__(53);
+
 Vue.component('com-field-multi-picture', {
     props: ['row', 'head'],
-    template: ' <van-cell class="com-field-multi-picture" :title="head.label" >\n    ssss\n    </van-cell>'
+    template: ' <van-cell class="com-field-multi-picture" :title="head.label" >\n       <textarea style="display: none;" :name="head.name" id="" cols="30" rows="10" v-model="row[head.name]"></textarea>\n        <div class="picture-panel" style="vertical-align: top" >\n            <div v-if="!head.readonly" class="add-btn" @click="open_select_images()">\n                <div class="inn-btn"  style="">\n                    <span class="center-vh" style="font-size: 300%;">+</span>\n                </div>\n            </div>\n            <div class="img-wrap" v-for="(imgsrc,index) in row[head.name]" @click="big_win(imgsrc)">\n                <img class="center-vh" :src="imgsrc" alt="\u56FE\u7247\u4E0D\u80FD\u52A0\u8F7D">\n                <div v-if="!head.readonly" class="close" @click=\'remove_image(index)\'><i class="fa fa-times-circle" aria-hidden="true" style="color:red;position:relative;left:30px;"></i></div>\n            </div>\n        </div>\n        <input class="my-file-input" v-if="!head.readonly" style="display: none"\n            type=\'file\' accept=\'image/*\'  multiple  @change=\'on_change($event)\'>\n    </van-cell>',
+    data: function data() {
+        return {};
+    },
+
+    methods: {
+        on_change: function on_change(event) {
+            var new_selected_files = event.target.files;
+            this.uploadImage(new_selected_files);
+            $(this.$el).find('.my-file-input').val('');
+        },
+        uploadImage: function uploadImage(image_files) {
+            if (!image_files) {
+                return;
+            }
+            var self = this;
+            console.log('start upload');
+            //if(! self.validate(v)){
+            //    return
+            //}
+            var up_url = this.head.up_url || '/d/upload?path=general_upload/images';
+            cfg.show_load();
+            ex.uploads(image_files, up_url, function (url_list) {
+                cfg.hide_load();
+                if (!self.row[self.head.name]) {
+                    Vue.set(self.row, self.head.name, url_list);
+                    //self.row[self.head.name] = url_list
+                } else {
+                    self.row[self.head.name] = self.row[self.head.name].concat(url_list);
+                }
+            });
+        },
+        open_select_images: function open_select_images() {
+            console.log('before select');
+            var self = this;
+            if (!this.disable) {
+                $(this.$el).find('input[type=file]').click();
+                this.disable = true;
+                setTimeout(function () {
+                    self.disable = false;
+                }, 3000);
+            }
+            console.log('after select');
+        },
+        remove_image: function remove_image(index) {
+            var image_list = this.row[this.head.name];
+            image_list.splice(index, 1);
+        },
+        big_win: function big_win(imgsrc) {
+            var ctx = { imgsrc: imgsrc };
+            pop_layer(ctx, 'com-pop-image', function () {}, {
+                title: false,
+                area: ['90%', '90%'],
+                shade: 0.8,
+                skin: 'img-shower',
+                shadeClose: true
+            });
+        }
+    }
 });
 
 /***/ }),
@@ -20829,6 +20899,74 @@ var operation_main = _interopRequireWildcard(_main8);
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 __webpack_require__(14);
+
+/***/ }),
+/* 52 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(0)();
+// imports
+
+
+// module
+exports.push([module.i, ".com-field-multi-picture .van-cell__title {\n  max-width: 90px;\n}\n.com-field-multi-picture .van-cell__value {\n  text-align: left;\n}\n.com-field-multi-picture .add-btn {\n  width: 60px;\n  height: 60px;\n  position: relative;\n  display: inline-block;\n  margin: 10px;\n}\n.com-field-multi-picture .img-wrap {\n  vertical-align: top;\n  display: inline-block;\n  width: 60px;\n  height: 60px;\n  position: relative;\n  margin: 10px;\n}\n.com-field-multi-picture .img-wrap img {\n  height: 100%;\n  width: 100%;\n}\n.com-field-multi-picture .img-wrap .close {\n  position: absolute;\n  top: 0;\n  right: 1rem;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 53 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(52);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// add the styles to the DOM
+var update = __webpack_require__(1)(content, {});
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./multi_picture.styl", function() {
+			var newContent = require("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./multi_picture.styl");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 54 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Vue.component('com-pop-image', {
+    props: ['ctx'],
+    data: function data() {
+        return {
+            crt_view: '2d',
+            read_3d: ''
+        };
+    },
+    computed: {
+        wraped_3d: function wraped_3d() {
+            return '/3d_wrap?d3_url=' + encodeURIComponent(this.ctx.floor.img_3d);
+        }
+    },
+    methods: {
+        start_read: function start_read() {
+            this.read_3d = this.wraped_3d;
+        }
+    },
+    template: '<div class="com-pop-image"  style="position: absolute;top:0;left: 0;bottom: 0;right: 0;">\n             <img  class="center-vh" :src="ctx.imgsrc" style="max-width: 95%;max-height:95%" alt="">\n    </div>'
+});
 
 /***/ })
 /******/ ]);
