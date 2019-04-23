@@ -1,1 +1,0 @@
-import * as user_info from  './header_bar/user_info.js'

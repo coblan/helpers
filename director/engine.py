@@ -168,7 +168,7 @@ class BaseEngine(object):
             'brand':self.brand,
             'mini_brand':self.mini_brand ,
             'header_bar_widgets': [
-                {'editor': 'com-headbar-user-info', 'first_name': username, 'username': username,}
+                {'editor': 'com-headbar-user-info', 'first_name': username, 'username': username,},
                 ],
         }
     def get_page_cls(self,name):

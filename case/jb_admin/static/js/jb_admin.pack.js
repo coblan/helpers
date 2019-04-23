@@ -3408,25 +3408,7 @@ var search = _interopRequireWildcard(_search);
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 /***/ }),
-/* 43 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var user_info = {
-    props: ['ctx'],
-    template: ' <li class="dropdown user user-menu">\n                        <!-- Menu Toggle Button -->\n                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">\n                            <!-- The user image in the navbar-->\n                            <!--<img src="dist/img/user2-160x160.jpg" class="user-image" alt="User Image">-->\n                            <i class="fa fa-user-circle-o"></i>\n\n                            <!-- hidden-xs hides the username on small devices so only the image appears. -->\n                            <span class="hidden-xs" v-text="ctx.first_name || ctx.username">\n                            </span>\n                        </a>\n                        <ul class="dropdown-menu">\n                            <!-- The user image in the menu -->\n                            <li class="user-header" style="font-size: 3em;">\n                                <!--<img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">-->\n                                <i class="fa fa-user-circle-o fa-lg"></i>\n                                <p v-text="ctx.first_name || ctx.username">\n                                </p>\n                            </li>\n                            <!-- Menu Body -->\n                            <!--<li class="user-body">-->\n                                <!--<div class="row">-->\n                                    <!--<div class="col-xs-4 text-center">-->\n                                        <!--<a href="#">Followers</a>-->\n                                    <!--</div>-->\n                                    <!--<div class="col-xs-4 text-center">-->\n                                        <!--<a href="#">Sales</a>-->\n                                    <!--</div>-->\n                                    <!--<div class="col-xs-4 text-center">-->\n                                        <!--<a href="#">Friends</a>-->\n                                    <!--</div>-->\n                                <!--</div>-->\n                                <!--&lt;!&ndash; /.row &ndash;&gt;-->\n                            <!--</li>-->\n                            <!-- Menu Footer-->\n                            <li class="user-footer">\n                                <div class="pull-left">\n                                    <a href="/accounts/pswd" class="btn btn-default btn-flat" v-text="tr.change_password"></a>\n                                </div>\n                                <div class="pull-right">\n                                    <a href="/accounts/logout" class="btn btn-default btn-flat" v-text="tr.logout"></a>\n                                </div>\n                            </li>\n                        </ul>\n                    </li>',
-    data: function data() {
-        return {
-            tr: cfg.tr
-        };
-    }
-};
-
-Vue.component('com-headbar-user-info', user_info);
-
-/***/ }),
+/* 43 */,
 /* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -8907,10 +8889,6 @@ var _ele_table = __webpack_require__(74);
 
 var ele_table = _interopRequireWildcard(_ele_table);
 
-var _user_info = __webpack_require__(43);
-
-var user_info = _interopRequireWildcard(_user_info);
-
 var _nice_validator_rule = __webpack_require__(40);
 
 var nice_validator_rule = _interopRequireWildcard(_nice_validator_rule);
@@ -8922,6 +8900,10 @@ var dropdown = _interopRequireWildcard(_dropdown);
 var _sm_link = __webpack_require__(28);
 
 var sm_link = _interopRequireWildcard(_sm_link);
+
+var _main4 = __webpack_require__(172);
+
+var header_main = _interopRequireWildcard(_main4);
 
 var _stack_widget = __webpack_require__(34);
 
@@ -8935,29 +8917,29 @@ var _table_store = __webpack_require__(45);
 
 var table_store = _interopRequireWildcard(_table_store);
 
-var _main4 = __webpack_require__(23);
+var _main5 = __webpack_require__(23);
 
-var fields_panels_main = _interopRequireWildcard(_main4);
+var fields_panels_main = _interopRequireWildcard(_main5);
 
-var _main5 = __webpack_require__(63);
+var _main6 = __webpack_require__(63);
 
-var table_editor_main = _interopRequireWildcard(_main5);
+var table_editor_main = _interopRequireWildcard(_main6);
 
-var _main6 = __webpack_require__(70);
+var _main7 = __webpack_require__(70);
 
-var table_group_main = _interopRequireWildcard(_main6);
+var table_group_main = _interopRequireWildcard(_main7);
 
-var _main7 = __webpack_require__(41);
+var _main8 = __webpack_require__(41);
 
-var node_store_main = _interopRequireWildcard(_main7);
+var node_store_main = _interopRequireWildcard(_main8);
 
-var _main8 = __webpack_require__(77);
+var _main9 = __webpack_require__(77);
 
-var tabs_main = _interopRequireWildcard(_main8);
+var tabs_main = _interopRequireWildcard(_main9);
 
-var _main9 = __webpack_require__(42);
+var _main10 = __webpack_require__(42);
 
-var operator_main = _interopRequireWildcard(_main9);
+var operator_main = _interopRequireWildcard(_main10);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -9002,6 +8984,121 @@ __webpack_require__(78);
 
 
 // store
+
+/***/ }),
+/* 172 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _sys_link = __webpack_require__(173);
+
+var sys_link = _interopRequireWildcard(_sys_link);
+
+var _user_info = __webpack_require__(176);
+
+var user_info = _interopRequireWildcard(_user_info);
+
+var _space = __webpack_require__(177);
+
+var space = _interopRequireWildcard(_space);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+/***/ }),
+/* 173 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+__webpack_require__(175);
+
+Vue.component('com-headbar-sys-link', {
+    props: ['head'],
+    template: '<li :class="[\'com-headbar-sys-link user-menu\',{active:head.active,link:head.link}]" @click="on_click()">\n    <span v-text="head.label"></span>\n    </li>',
+    methods: {
+        on_click: function on_click() {
+            if (this.head.link) {
+                location = this.head.link;
+            }
+        }
+    }
+});
+
+/***/ }),
+/* 174 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(0)();
+// imports
+
+
+// module
+exports.push([module.i, ".com-headbar-sys-link {\n  height: 100%;\n  padding: 15px;\n  line-height: 20px;\n  float: right;\n  color: #dcdcdc;\n}\n.com-headbar-sys-link.active {\n  color: #fdf7ff;\n  background-color: #980000;\n}\n.com-headbar-sys-link.active:hover {\n  background-color: #bd0000;\n}\n.com-headbar-sys-link:hover {\n  background: rgba(0,0,0,0.1);\n  color: #f6f6f6;\n}\n.com-headbar-sys-link.link:hover {\n  cursor: pointer;\n}\n.com-headbar-space {\n  display: inline-block;\n  float: right;\n  height: 10px;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 175 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(174);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// add the styles to the DOM
+var update = __webpack_require__(1)(content, {});
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./sys_link.styl", function() {
+			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./sys_link.styl");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 176 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var user_info = {
+    props: ['head'],
+    template: ' <li class="dropdown user user-menu">\n                        <!-- Menu Toggle Button -->\n                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">\n                            <!-- The user image in the navbar-->\n                            <!--<img src="dist/img/user2-160x160.jpg" class="user-image" alt="User Image">-->\n                            <i class="fa fa-user-circle-o"></i>\n\n                            <!-- hidden-xs hides the username on small devices so only the image appears. -->\n                            <span class="hidden-xs" v-text="head.first_name || head.username">\n                            </span>\n                        </a>\n                        <ul class="dropdown-menu">\n                            <!-- The user image in the menu -->\n                            <li class="user-header" style="font-size: 3em;">\n                                <!--<img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">-->\n                                <i class="fa fa-user-circle-o fa-lg"></i>\n                                <p v-text="head.first_name || head.username">\n                                </p>\n                            </li>\n                            <!-- Menu Body -->\n                            <!--<li class="user-body">-->\n                                <!--<div class="row">-->\n                                    <!--<div class="col-xs-4 text-center">-->\n                                        <!--<a href="#">Followers</a>-->\n                                    <!--</div>-->\n                                    <!--<div class="col-xs-4 text-center">-->\n                                        <!--<a href="#">Sales</a>-->\n                                    <!--</div>-->\n                                    <!--<div class="col-xs-4 text-center">-->\n                                        <!--<a href="#">Friends</a>-->\n                                    <!--</div>-->\n                                <!--</div>-->\n                                <!--&lt;!&ndash; /.row &ndash;&gt;-->\n                            <!--</li>-->\n                            <!-- Menu Footer-->\n                            <li class="user-footer">\n                                <div class="pull-left">\n                                    <a href="/accounts/pswd" class="btn btn-default btn-flat" v-text="tr.change_password"></a>\n                                </div>\n                                <div class="pull-right">\n                                    <a href="/accounts/logout" class="btn btn-default btn-flat" v-text="tr.logout"></a>\n                                </div>\n                            </li>\n                        </ul>\n                    </li>',
+    data: function data() {
+        return {
+            tr: cfg.tr
+        };
+    }
+};
+
+Vue.component('com-headbar-user-info', user_info);
+
+/***/ }),
+/* 177 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+__webpack_require__(175);
+
+Vue.component('com-headbar-space', {
+    props: ['head'],
+    template: '<li :class="[\'com-headbar-space\',head.class]" :style="head.style">\n    </li>'
+});
 
 /***/ })
 /******/ ]);

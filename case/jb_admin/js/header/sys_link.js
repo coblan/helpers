@@ -1,14 +1,14 @@
 require('./styl/sys_link.styl')
 
-Vue.component('com-head-sys-link',{
+Vue.component('com-headbar-sys-link',{
     props:['head'],
-    template:`<div :class="['com-head-sys-link',{active:head.active}]" @click="on_click()">
+    template:`<li :class="['com-headbar-sys-link user-menu',{active:head.active,link:head.link}]" @click="on_click()">
     <span v-text="head.label"></span>
-    </div>`,
+    </li>`,
     methods:{
         on_click:function(){
             if(this.head.link){
-                location = link
+                location = this.head.link
             }
         }
     }
