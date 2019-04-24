@@ -957,6 +957,34 @@ var file_proc = exports.file_proc = {
             ex.assign(def_cfg, kws);
             $(selector).qrcode(def_cfg);
         });
+    },
+    uploads: function uploads(files, url, success, progress) {
+        var url = url || '/d/upload?path=general_upload/images';
+        var fd = new FormData();
+        for (var x = 0; x < files.length; x++) {
+            var file = files[x];
+            fd.append(file.name, file);
+        }
+        $.ajax({
+            url: url,
+            type: 'post',
+            data: fd,
+            contentType: false,
+            success: success,
+            processData: false,
+            xhr: function xhr() {
+                var xhr = new window.XMLHttpRequest();
+                xhr.upload.addEventListener("progress", function (evt) {
+                    if (progress && evt.lengthComputable) {
+                        var percentComplete = evt.loaded / evt.total;
+                        progress(percentComplete);
+                        //console.log('进度', percentComplete);
+                    }
+                }, false);
+
+                return xhr;
+            }
+        });
     }
 };
 
