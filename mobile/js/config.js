@@ -3,6 +3,7 @@
 //Vue.use(Dialog);
 import { MessageBox } from 'mint-ui';
 import { Indicator } from 'mint-ui';
+require('./styl/config.styl')
 
 ex.assign(cfg,{
     fields_editor:'com-sim-fields',

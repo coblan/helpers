@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 51);
+/******/ 	return __webpack_require__(__webpack_require__.s = 56);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -598,11 +598,13 @@ process.umask = function() { return 0; };
 "use strict";
 
 
-var _mintUi = __webpack_require__(39);
+var _mintUi = __webpack_require__(42);
 
 //import { Dialog } from 'vant';
 //
 //Vue.use(Dialog);
+__webpack_require__(53);
+
 ex.assign(cfg, {
     fields_editor: 'com-sim-fields',
     fields_local_editor: 'com-sim-fields-local',
@@ -783,7 +785,7 @@ var _fiexed_scrll = __webpack_require__(29);
 
 var fiexed_scrll = _interopRequireWildcard(_fiexed_scrll);
 
-var _pop_image_shower = __webpack_require__(54);
+var _pop_image_shower = __webpack_require__(31);
 
 var pop_image_shower = _interopRequireWildcard(_pop_image_shower);
 
@@ -810,7 +812,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-__webpack_require__(47);
+__webpack_require__(50);
 
 var PopMobileWin = function () {
     function PopMobileWin(_ref) {
@@ -1032,7 +1034,7 @@ window.pop_mobile_win = pop_mobile_win;
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(36);
+var content = __webpack_require__(37);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -1105,7 +1107,7 @@ exports._unrefActive = exports.active = function(item) {
 };
 
 // setimmediate attaches itself to the global object
-__webpack_require__(41);
+__webpack_require__(44);
 // On some exotic environments, it's not clear which object `setimmeidate` was
 // able to install onto.  Search each possibility in the same order as the
 // `setimmediate` library.
@@ -1177,7 +1179,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 *
 * */
 
-__webpack_require__(42);
+__webpack_require__(45);
 
 var Wave = function () {
     function Wave() {
@@ -1367,7 +1369,7 @@ Vue.component('com-field-blocktext', {
 "use strict";
 
 
-__webpack_require__(43);
+__webpack_require__(46);
 
 Vue.component('com-field-index-select', {
     props: ['row', 'head'],
@@ -1481,7 +1483,7 @@ Vue.component('com-field-linetext', {
 "use strict";
 
 
-__webpack_require__(53);
+__webpack_require__(51);
 
 Vue.component('com-field-multi-picture', {
     props: ['row', 'head'],
@@ -1698,7 +1700,7 @@ Vue.component('com-op-submit', {
 "use strict";
 
 
-__webpack_require__(48);
+__webpack_require__(52);
 
 Vue.component('com-fields-panel', {
     props: ['ctx'],
@@ -1756,7 +1758,7 @@ Vue.component('com-slide-iframe', {
 "use strict";
 
 
-__webpack_require__(46);
+__webpack_require__(49);
 
 Vue.component('com-slide-head', {
     props: ['title'],
@@ -1779,7 +1781,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.fixed_body = fixed_body;
-__webpack_require__(44);
+__webpack_require__(47);
 
 function fixed_body() {
     //$('body').addClass('modal-open')
@@ -1816,7 +1818,7 @@ window.fixed_body_quit = fixed_body_quit;
 "use strict";
 
 
-__webpack_require__(45);
+__webpack_require__(48);
 
 /*
 * 因为没有遮挡层，可能造成多次打开窗口问题，所以使用mint-ui替代了这个组件
@@ -1931,15 +1933,29 @@ Vue.component('com-slide-win-1', {
 /* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(0)();
-// imports
+"use strict";
 
 
-// module
-exports.push([module.i, ".material-wave {\n  position: relative; }\n\n.material-wave canvas {\n  opacity: 0.25;\n  position: absolute;\n  top: 0;\n  left: 0;\n  pointer-events: none; }\n", ""]);
-
-// exports
-
+Vue.component('com-pop-image', {
+    props: ['ctx'],
+    data: function data() {
+        return {
+            crt_view: '2d',
+            read_3d: ''
+        };
+    },
+    computed: {
+        wraped_3d: function wraped_3d() {
+            return '/3d_wrap?d3_url=' + encodeURIComponent(this.ctx.floor.img_3d);
+        }
+    },
+    methods: {
+        start_read: function start_read() {
+            this.read_3d = this.wraped_3d;
+        }
+    },
+    template: '<div class="com-pop-image"  style="position: absolute;top:0;left: 0;bottom: 0;right: 0;">\n             <img  class="center-vh" :src="ctx.imgsrc" style="max-width: 95%;max-height:95%" alt="">\n    </div>'
+});
 
 /***/ }),
 /* 32 */
@@ -1950,7 +1966,7 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, ".com-index-select .mint-indexlist {\n  position: absolute;\n  top: 0;\n  right: 0;\n  bottom: 0;\n  left: 0; }\n", ""]);
+exports.push([module.i, ".material-wave {\n  position: relative; }\n\n.material-wave canvas {\n  opacity: 0.25;\n  position: absolute;\n  top: 0;\n  left: 0;\n  pointer-events: none; }\n", ""]);
 
 // exports
 
@@ -1964,7 +1980,7 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, "body.modal-open {\n  position: fixed;\n  width: 100%; }\n", ""]);
+exports.push([module.i, ".com-index-select .mint-indexlist {\n  position: absolute;\n  top: 0;\n  right: 0;\n  bottom: 0;\n  left: 0; }\n", ""]);
 
 // exports
 
@@ -1978,7 +1994,7 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, ".list-enter-active, .list-leave-active {\n  transition: all 0.3s; }\n\n.list-enter, .list-leave-to {\n  opacity: 0.3;\n  transform: translateX(100%); }\n\n.com-slide-win {\n  position: absolute;\n  top: 0;\n  left: 0;\n  bottom: 0;\n  right: 0;\n  pointer-events: none; }\n  .com-slide-win .mywrap {\n    display: flex;\n    flex-direction: column; }\n    .com-slide-win .mywrap .pop-content {\n      flex-grow: 10;\n      overflow: auto;\n      -webkit-overflow-scrolling: touch; }\n", ""]);
+exports.push([module.i, "body.modal-open {\n  position: fixed;\n  width: 100%; }\n", ""]);
 
 // exports
 
@@ -1992,7 +2008,7 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, ".com-slide-head {\n  height: 6rem;\n  flex-shrink: 0;\n  background-color: #393738;\n  color: white;\n  position: relative; }\n  .com-slide-head .go-back {\n    left: .3rem;\n    padding: 1rem; }\n", ""]);
+exports.push([module.i, ".list-enter-active, .list-leave-active {\n  transition: all 0.3s; }\n\n.list-enter, .list-leave-to {\n  opacity: 0.3;\n  transform: translateX(100%); }\n\n.com-slide-win {\n  position: absolute;\n  top: 0;\n  left: 0;\n  bottom: 0;\n  right: 0;\n  pointer-events: none; }\n  .com-slide-win .mywrap {\n    display: flex;\n    flex-direction: column; }\n    .com-slide-win .mywrap .pop-content {\n      flex-grow: 10;\n      overflow: auto;\n      -webkit-overflow-scrolling: touch; }\n", ""]);
 
 // exports
 
@@ -2006,7 +2022,7 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, ".el-table__body-wrapper.is-scrolling-middle {\n  overflow: auto;\n  -webkit-overflow-scrolling: touch; }\n", ""]);
+exports.push([module.i, ".com-slide-head {\n  height: 6rem;\n  flex-shrink: 0;\n  background-color: #393738;\n  color: white;\n  position: relative; }\n  .com-slide-head .go-back {\n    left: .3rem;\n    padding: 1rem; }\n", ""]);
 
 // exports
 
@@ -2020,7 +2036,7 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, ".pop-moible-win .mint-popup {\n  background: none; }\n\n.pop-slide-win .content-wrap {\n  -moz-box-shadow: -1px 0px 2px #c5c5c5;\n  -webkit-box-shadow: -1px 0px 2px #dedede;\n  box-shadow: -1px 0px 2px #cccccc; }\n\n.pop-slide-win .mint-popup {\n  height: 100vh;\n  width: 100vw; }\n\n.pop-slide-win .v-modal {\n  opacity: 0; }\n\n.pop-slide-win .weui-mask {\n  z-index: 3000; }\n", ""]);
+exports.push([module.i, ".el-table__body-wrapper.is-scrolling-middle {\n  overflow: auto;\n  -webkit-overflow-scrolling: touch; }\n", ""]);
 
 // exports
 
@@ -2034,13 +2050,55 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, ".com-fileds-panel .ops {\n  margin: 0.5rem 5vw;\n}\n", ""]);
+exports.push([module.i, ".pop-moible-win .mint-popup {\n  background: none; }\n\n.pop-slide-win .content-wrap {\n  -moz-box-shadow: -1px 0px 2px #c5c5c5;\n  -webkit-box-shadow: -1px 0px 2px #dedede;\n  box-shadow: -1px 0px 2px #cccccc; }\n\n.pop-slide-win .mint-popup {\n  height: 100vh;\n  width: 100vw; }\n\n.pop-slide-win .v-modal {\n  opacity: 0; }\n\n.pop-slide-win .weui-mask {\n  z-index: 3000; }\n", ""]);
 
 // exports
 
 
 /***/ }),
 /* 39 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(0)();
+// imports
+
+
+// module
+exports.push([module.i, ".com-field-multi-picture .van-cell__title {\n  max-width: 90px;\n}\n.com-field-multi-picture .van-cell__value {\n  text-align: left;\n}\n.com-field-multi-picture .add-btn {\n  width: 60px;\n  height: 60px;\n  position: relative;\n  display: inline-block;\n  margin: 10px;\n}\n.com-field-multi-picture .img-wrap {\n  vertical-align: top;\n  display: inline-block;\n  width: 60px;\n  height: 60px;\n  position: relative;\n  margin: 10px;\n}\n.com-field-multi-picture .img-wrap img {\n  height: 100%;\n  width: 100%;\n}\n.com-field-multi-picture .img-wrap .close {\n  position: absolute;\n  top: 0;\n  right: 1rem;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 40 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(0)();
+// imports
+
+
+// module
+exports.push([module.i, ".com-fileds-panel .ops {\n  margin: 0.5rem 5vw;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 41 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(0)();
+// imports
+
+
+// module
+exports.push([module.i, ".mint-indicator .mint-indicator-wrapper {\n  z-index: 90000;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports =
@@ -2213,7 +2271,7 @@ module.exports = function normalizeComponent (
 /* 1 */
 /***/ function(module, exports) {
 
-module.exports = __webpack_require__(50);
+module.exports = __webpack_require__(55);
 
 /***/ },
 /* 2 */
@@ -11943,13 +12001,13 @@ module.exports = __webpack_require__(16);
 /* 200 */
 /***/ function(module, exports) {
 
-module.exports = __webpack_require__(40);
+module.exports = __webpack_require__(43);
 
 /***/ },
 /* 201 */
 /***/ function(module, exports) {
 
-module.exports = __webpack_require__(49);
+module.exports = __webpack_require__(54);
 
 /***/ },
 /* 202 */
@@ -11962,7 +12020,7 @@ module.exports = __webpack_require__(14);
 /******/ ]);
 
 /***/ }),
-/* 40 */
+/* 43 */
 /***/ (function(module, exports) {
 
 /*
@@ -12009,7 +12067,7 @@ module.exports = __webpack_require__(14);
 
 
 /***/ }),
-/* 41 */
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, process) {(function (global, undefined) {
@@ -12202,13 +12260,13 @@ module.exports = __webpack_require__(14);
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2), __webpack_require__(3)))
 
 /***/ }),
-/* 42 */
+/* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(31);
+var content = __webpack_require__(32);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -12228,13 +12286,13 @@ if(false) {
 }
 
 /***/ }),
-/* 43 */
+/* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(32);
+var content = __webpack_require__(33);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -12254,13 +12312,13 @@ if(false) {
 }
 
 /***/ }),
-/* 44 */
+/* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(33);
+var content = __webpack_require__(34);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -12280,13 +12338,13 @@ if(false) {
 }
 
 /***/ }),
-/* 45 */
+/* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(34);
+var content = __webpack_require__(35);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -12306,13 +12364,13 @@ if(false) {
 }
 
 /***/ }),
-/* 46 */
+/* 49 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(35);
+var content = __webpack_require__(36);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -12332,13 +12390,13 @@ if(false) {
 }
 
 /***/ }),
-/* 47 */
+/* 50 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(37);
+var content = __webpack_require__(38);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -12358,13 +12416,39 @@ if(false) {
 }
 
 /***/ }),
-/* 48 */
+/* 51 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(38);
+var content = __webpack_require__(39);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// add the styles to the DOM
+var update = __webpack_require__(1)(content, {});
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./multi_picture.styl", function() {
+			var newContent = require("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./multi_picture.styl");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 52 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(40);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -12384,7 +12468,33 @@ if(false) {
 }
 
 /***/ }),
-/* 49 */
+/* 53 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(41);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// add the styles to the DOM
+var update = __webpack_require__(1)(content, {});
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./config.styl", function() {
+			var newContent = require("!!../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./config.styl");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 54 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*!
@@ -12396,7 +12506,7 @@ if(false) {
 
 
 /***/ }),
-/* 50 */
+/* 55 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -20850,7 +20960,7 @@ if (inBrowser) {
 /* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(3), __webpack_require__(2), __webpack_require__(15).setImmediate))
 
 /***/ }),
-/* 51 */
+/* 56 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -20899,74 +21009,6 @@ var operation_main = _interopRequireWildcard(_main8);
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 __webpack_require__(14);
-
-/***/ }),
-/* 52 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(0)();
-// imports
-
-
-// module
-exports.push([module.i, ".com-field-multi-picture .van-cell__title {\n  max-width: 90px;\n}\n.com-field-multi-picture .van-cell__value {\n  text-align: left;\n}\n.com-field-multi-picture .add-btn {\n  width: 60px;\n  height: 60px;\n  position: relative;\n  display: inline-block;\n  margin: 10px;\n}\n.com-field-multi-picture .img-wrap {\n  vertical-align: top;\n  display: inline-block;\n  width: 60px;\n  height: 60px;\n  position: relative;\n  margin: 10px;\n}\n.com-field-multi-picture .img-wrap img {\n  height: 100%;\n  width: 100%;\n}\n.com-field-multi-picture .img-wrap .close {\n  position: absolute;\n  top: 0;\n  right: 1rem;\n}\n", ""]);
-
-// exports
-
-
-/***/ }),
-/* 53 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(52);
-if(typeof content === 'string') content = [[module.i, content, '']];
-// add the styles to the DOM
-var update = __webpack_require__(1)(content, {});
-if(content.locals) module.exports = content.locals;
-// Hot Module Replacement
-if(false) {
-	// When the styles change, update the <style> tags
-	if(!content.locals) {
-		module.hot.accept("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./multi_picture.styl", function() {
-			var newContent = require("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./multi_picture.styl");
-			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-			update(newContent);
-		});
-	}
-	// When the module is disposed, remove the <style> tags
-	module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 54 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Vue.component('com-pop-image', {
-    props: ['ctx'],
-    data: function data() {
-        return {
-            crt_view: '2d',
-            read_3d: ''
-        };
-    },
-    computed: {
-        wraped_3d: function wraped_3d() {
-            return '/3d_wrap?d3_url=' + encodeURIComponent(this.ctx.floor.img_3d);
-        }
-    },
-    methods: {
-        start_read: function start_read() {
-            this.read_3d = this.wraped_3d;
-        }
-    },
-    template: '<div class="com-pop-image"  style="position: absolute;top:0;left: 0;bottom: 0;right: 0;">\n             <img  class="center-vh" :src="ctx.imgsrc" style="max-width: 95%;max-height:95%" alt="">\n    </div>'
-});
 
 /***/ })
 /******/ ]);
