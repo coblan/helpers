@@ -2092,7 +2092,7 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, ".mint-indicator .mint-indicator-wrapper {\n  z-index: 90000;\n}\n", ""]);
+exports.push([module.i, ".mint-indicator .mint-indicator-wrapper {\n  z-index: 90000;\n}\n.mint-indicator .mint-indicator-mask {\n  z-index: 90000;\n}\n", ""]);
 
 // exports
 

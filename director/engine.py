@@ -36,7 +36,7 @@ from django.shortcuts import render
 from django.core.urlresolvers import reverse
 from django.shortcuts import redirect
 from django.conf import settings
-from django.http import HttpResponse
+from django.http import HttpResponse,JsonResponse
 #from .model_admin import ajax
 from helpers.func.collection.container import evalue_container,find_one_r
 from .access.permit import ModelPermit,has_permit
@@ -110,7 +110,10 @@ class BaseEngine(object):
         if hasattr(page, 'check_permit'):
             page.check_permit()
         
-        ctx=page.get_context()
+        try:
+            ctx=page.get_context()
+        except UserWarning as e:
+            return JsonResponse({'success':False,'msg':str(e)})
         # 如果返回的事 HttpResponse，表示已经处理完毕了，不需要附加其他属性。
         if isinstance(ctx, HttpResponse):
             return ctx
