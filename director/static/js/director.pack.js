@@ -5353,7 +5353,7 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, ".select2-container--open {\n  z-index: 99999999; }\n", ""]);
+exports.push([module.i, ".select2-container--open {\n  z-index: 99999999; }\n\n.com-field-single-select2 select {\n  min-width: 200px; }\n", ""]);
 
 // exports
 
