@@ -119,7 +119,7 @@ class RowFilter(object):
     @names : 普通字段，用于过滤用.
     @range_fields: span字段，例如时间段
     
-     range_fields=[{'name':'create_time','type':'date'}]
+     #range_fields=[{'name':'create_time','type':'date'}]
     """
     names=[]
     range_fields=[]
@@ -381,7 +381,7 @@ class ModelTable(object):
         return cls.gen_from_search_args(kw,request.user)
 
     @classmethod
-    def gen_from_search_args(cls,search_args,user):
+    def gen_from_search_args(cls,search_args,user =None):
         args = cls.clean_search_args(search_args)
         kw = dict(args)
         kw['search_args'] = args
@@ -395,6 +395,7 @@ class ModelTable(object):
             arg = kw.pop(k,'')
             #if arg is not None:
             row_filter[k]=arg
+        user = user or get_request_cache()['request'].user
         return cls(page,row_sort,row_filter,q,user,perpage=perpage,**kw)
     
     @classmethod
