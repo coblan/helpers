@@ -95,7 +95,7 @@ def get_lib(request):
             'bootstrap': 'https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js',
             'layer': 'https://cdn.jsdelivr.net/npm/layerui@3.1.1/src/layer.min.js',
             'layer_css':'https://cdn.jsdelivr.net/npm/layerui@3.1.1/src/theme/default/layer.css', 
-            'nice_validator': 'https://cdn.jsdelivr.net/npm/nice-validator@1.1.4/dist/jquery.validator.min.js',
+            'nice_validator': 'https://cdn.jsdelivr.net/npm/nice-validator@1.1.4/dist/jquery.validator.min.js?local=zh-CN',
             'nice_validator_css': 'https://cdn.jsdelivr.net/npm/nice-validator@1.1.4/dist/jquery.validator.css',
             'adminlte': 'https://cdn.jsdelivr.net/npm/admin-lte@2.4.10/dist/js/adminlte.min.js',
             'adminlte_css': 'https://cdn.jsdelivr.net/npm/admin-lte@2.4.10/dist/css/AdminLTE.min.css',
