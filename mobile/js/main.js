@@ -1,5 +1,5 @@
 require('./scss/element_table.scss')
-
+require('./scss/base.scss')   // 单位宽度等
 import * as config from  './config.js'
 
 import * as pop_win from  './pop_mobile_win'
