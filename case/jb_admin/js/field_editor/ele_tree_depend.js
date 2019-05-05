@@ -46,7 +46,6 @@ var label_shower =  {
 
         },
         handleNodeClick(data) {
-
             //this.last_click=data
             //console.log(data);
         },
@@ -214,7 +213,12 @@ var label_shower =  {
              @check-change="handleCheckChange"
              :default-checked-keys="row[head.name]"
              node-key="value"
-    ></el-tree>
+    >
+      <span class="custom-tree-node" slot-scope="{ node, data }">
+        <span :title="data.help_text" v-text="node.label"></span>
+      </span>
+
+    </el-tree>
     </div>`,
     //default-expand-all
     computed:{

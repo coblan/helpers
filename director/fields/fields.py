@@ -72,7 +72,8 @@ class ModelFields(forms.ModelForm):
         else:
             self.crt_user = crt_user
             
-        dc = self.clean_dict(dc)
+        dc = self._clean_dict(dc)
+        dc=self.clean_dict(dc)
         # if pk is None:
         if dc.get('pk') != None:
             pk=dc.get('pk')
@@ -145,7 +146,6 @@ class ModelFields(forms.ModelForm):
         return dc
     
     def clean_dict(self,dc):   
-        dc = self._clean_dict(dc)
         return dc
     
     def is_valid(self): 
@@ -282,9 +282,9 @@ class ModelFields(forms.ModelForm):
                 #dc['options']=[{'value':val,'label':str(lab)} for val,lab in v.widget.choices]
             elif v.__class__==forms.fields.CharField:
                 if v.max_length:
-                    dc.update({'editor':'linetext','maxlength':v.max_length})
+                    dc.update({'editor':'com-field-linetext','maxlength':v.max_length})
                 else:
-                    dc.update({'editor':'blocktext'})
+                    dc.update({'editor':'com-field-blocktext'})
             elif v.__class__==forms.fields.BooleanField:
                 dc['editor']='bool'
                 #dc['no_auto_label']=True
@@ -437,14 +437,16 @@ class ModelFields(forms.ModelForm):
             detail=','.join(self.changed_data)
         
         with transaction.atomic():
+            extra_log = self.clean_save()
             if self.instance.pk is None:
                 op='add'
                 detail=''
                 self.instance.save() # if instance is a new row , need save first then manytomany_relationship can create   
             for k in self.changed_data:
                 ## 测试时看到self.instance已经赋值了，下面这行代码可能没用,但是需要考虑下新建时 manytomany foreignkey 这些情况
-                setattr(self.instance,k, self.cleaned_data.get(k) )
-            extra_log = self.clean_save()
+                if k in self.kw:  # 排除开那些前端没有传递，而是后端model 默认生成的值
+                                  # 这些默认的值不能用 cleaned_data.get 来获取，因为他们是空
+                    setattr(self.instance,k, self.cleaned_data.get(k) )
             self.instance.save()
             
         if op or extra_log:

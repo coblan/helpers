@@ -10,11 +10,12 @@ class CharProc(BaseFieldProc):
 
     def dict_field_head(self, head): 
         options = self.get_options()   
-        if options:
+        if options is None:
+            head['editor'] = 'com-field-linetext'
+           
+        else:
             head['options']=options
             head['editor'] = 'com-field-select'
-        else:
-            head['editor'] = 'com-field-linetext'
         return head    
 
     def filter_get_range_head(self,name,model):

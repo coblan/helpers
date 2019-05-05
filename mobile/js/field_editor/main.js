@@ -1,1 +1,7 @@
 import * as index_select from './index_select.js'
+import * as linetext from './linetext.js'
+import * as blocktext from './blocktext.js'
+import * as phone from './phone.js'
+import * as select from './select.js'
+import * as multi_picture from './multi_picture.js'
+import * as phone_code from './phone_code.js'

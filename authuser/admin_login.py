@@ -51,7 +51,7 @@ class LoginFormPage(FieldsPage):
             if not auto_login:
                 request.session.set_expiry(0)
             auth.login(request, user)
-            return {'status':'success'}
+            return {'success':True,'token':request.session.session_key}
         else:
             return {'errors':form.errors}
         

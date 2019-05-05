@@ -36,7 +36,7 @@ from django.shortcuts import render
 from django.core.urlresolvers import reverse
 from django.shortcuts import redirect
 from django.conf import settings
-from django.http import HttpResponse
+from django.http import HttpResponse,JsonResponse
 #from .model_admin import ajax
 from helpers.func.collection.container import evalue_container,find_one_r
 from .access.permit import ModelPermit,has_permit
@@ -66,6 +66,7 @@ class BaseEngine(object):
     home = '/' # 当前engine的主页，没有目的的时候，可以往这里跳
     
     root_page='/'   # 被home 替代了
+    access_from_internet = False
     
     @classmethod
     def as_view(cls):
@@ -110,7 +111,10 @@ class BaseEngine(object):
         if hasattr(page, 'check_permit'):
             page.check_permit()
         
-        ctx=page.get_context()
+        try:
+            ctx=page.get_context()
+        except UserWarning as e:
+            return JsonResponse({'success':False,'msg':str(e)})
         # 如果返回的事 HttpResponse，表示已经处理完毕了，不需要附加其他属性。
         if isinstance(ctx, HttpResponse):
             return ctx
@@ -168,7 +172,7 @@ class BaseEngine(object):
             'brand':self.brand,
             'mini_brand':self.mini_brand ,
             'header_bar_widgets': [
-                {'editor': 'com-headbar-user-info', 'first_name': username, 'username': username,}
+                {'editor': 'com-headbar-user-info', 'first_name': username, 'username': username,},
                 ],
         }
     def get_page_cls(self,name):
@@ -199,6 +203,7 @@ class BaseEngine(object):
             tr_dc.update(fun())
         
         lib_dc = {}
+        self.request.META['ACCESS_FROM_INTERNET'] = self.access_from_internet
         for fun in js_lib_list:
             lib_dc.update(fun(self.request))
         return {

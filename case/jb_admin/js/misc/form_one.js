@@ -12,6 +12,8 @@ var big_fields={
         })
         var parStore = ex.vueParStore(this)
         return {
+            head:this.ctx,
+            par_row:this.ctx.par_row,
             heads:this.ctx.heads,
             layout:this.ctx.layout,
             ops:this.ctx.ops,
@@ -82,18 +84,6 @@ var big_fields={
             return out_bucket
 
         }
-    },
-    mounted:function(){
-        if(this.ctx.style){
-            ex.append_css(this.ctx.style)
-        }
-        //if(!this.tab_head.row){
-        //    this.get_data()
-        //}
-        if(this.ctx.init_express){
-            ex.eval(this.ctx.init_express,{row:this.row,ps:this.parStore,cs:this.childStore,vc:this})
-        }
-        ex.vueEventRout(this,this.ctx.event_slots)
     },
 
     methods:{

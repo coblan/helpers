@@ -12,6 +12,7 @@ var tab_fields={
         })
         var parStore = ex.vueParStore(this)
         return {
+            head:this.tab_head,
             heads:this.tab_head.heads,
             ops:this.tab_head.ops,
             errors:{},
@@ -87,7 +88,7 @@ var tab_fields={
         },
         data_getter:function(){
             var self=this
-            // 兼容老调用,废弃
+            // 兼容老调用,废弃  现在用 init_express 来初始化
             if(self.tab_head.get_data){
                 var fun = get_data [self.tab_head.get_data.fun]
                 var kws = self.tab_head.get_data.kws
@@ -102,6 +103,30 @@ var tab_fields={
                 //ex.vueAssign(self.row,row_dc)
             }
         },
+        after_save:function(new_row){
+            // 为了兼容 老的 版本，才留下 这个 after-save TODO 移除老系统调用后，删除这个函数
+            if(this.tab_head.after_save ){
+                if(typeof this.tab_head.after_save =='string'){
+                    ex.eval(this.tab_head.after_save,{vc:this,})
+                } else{
+                    // 为了兼容老的
+                    if(this.tab_head.after_save){
+                        if(this.parStore){
+                            this.parStore.update_or_insert(new_row)
+                        }
+                    }
+                    ex.vueAssign(this.org_row,new_row)
+                }
+            }
+            // 老的调用名字，新的后端调用名全部用 after_save
+            else if(this.tab_head.after_save_express){
+                ex.eval(this.tab_head.after_save_express,{vc:this,})
+            }else{
+                // 默认
+                this.parStore.update_or_insert(new_row)
+            }
+
+        }
     }
     // data_getter  回调函数，获取数据,
 

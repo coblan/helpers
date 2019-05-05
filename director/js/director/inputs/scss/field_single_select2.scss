@@ -1,4 +1,9 @@
 .select2-container--open{
   z-index: 99999999; // 超过 layer
 }
+.com-field-single-select2{
+  select{
+    min-width: 200px;
+  }
+}
 

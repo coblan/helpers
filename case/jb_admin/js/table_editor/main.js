@@ -7,3 +7,26 @@ import * as array_shower from  './array_shower.js'
 import * as click from  './click.js'
 import * as my_json from  './json.js'
 import * as multi_image from  './multi_image.js'
+
+/*
+
+按钮组
+================
+{'name':'extra_op',
+     'label':'操作',
+     'editor':'com-table-ops-cell',
+     'ops':[
+     {
+     'editor':'com-op-plain-btn',
+     'label':'详情',
+     'class':'btn btn-primary btn-xs',
+     'action':"""rt=scope.ps.switch_to_tab({
+     par_row:scope.row,
+     tab_name: 'baseinfo',
+     ctx_name: 'detail_tabs', })"""}
+     ],
+ }
+
+*
+*
+* */

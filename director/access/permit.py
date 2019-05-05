@@ -61,12 +61,6 @@ def has_permit(user, perm_name):
     
     return perm_name in user_permit_names(user)
 
-    #for permit_dc in user_permit_names(user):
-        #sp_permit_list= permit_dc.get(cls,[])
-        #if perm in sp_permit_list:
-            #return True        
-    #return False
-
 
 def user_permit_names(user):
     for group in user.groups.all():

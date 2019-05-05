@@ -90,7 +90,7 @@ def int_str(value,name):
         if value is not None:
             return int(value)
     except ValueError as e:
-        raise UserWarning('%(name)s=%(value)s counld not be covert to int'%{'name':name,'value':value})
+        raise UserWarning('%(name)s=%(value)s could not be covert to int'%{'name':name,'value':value})
 
 def choice_in(choices):
     def _choice_in(value,name):
@@ -99,3 +99,13 @@ def choice_in(choices):
         else:
             return value
     return _choice_in
+
+def datetime(value,name):
+    try:
+        if value:
+            return value.strptime('%Y-%m-%d %H:%M:%S')
+        else:
+            return ''
+    except :
+        raise UserWarning('%(name)s could not be convert to datetime')
+        

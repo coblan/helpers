@@ -44,6 +44,20 @@ module.exports =
                 }, {
                     loader: "sass-loader" // compiles Sass to CSS
                 }]
+            },
+            {
+                test: /\.styl$/,
+                use: [
+                    {
+                        loader: "style-loader" // creates style nodes from JS strings
+                    },
+                    {
+                        loader: "css-loader" // translates CSS into CommonJS
+                    },
+                    {
+                        loader: "stylus-loader" // compiles Stylus to CSS
+                    }
+                ]
             }
         ],
         //rules: [{
@@ -59,13 +73,13 @@ module.exports =
 
     },
     plugins: [
-        //new webpack.optimize.UglifyJsPlugin({  //压缩包
-         //    compress: {
-         //      warnings: false
-         //    },
-         //   sourceMap: true,
-         //   mangle: false
-        //}),
+        new webpack.optimize.UglifyJsPlugin({  //压缩包
+             compress: {
+               warnings: false
+             },
+            sourceMap: true,
+            mangle: false
+        }),
 
 
 

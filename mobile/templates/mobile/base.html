@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+{% load static %}
+{% load jsonify %}
+{% load rpdot %}
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+
+
+    {% block head-content %}
+        <title>标题</title>
+    {% endblock %}
+    <style>
+        .bar{
+            background: #dd453b;
+        }
+
+    </style>
+    {% block head-script %}
+    {% endblock %}
+</head>
+
+
+{% include 'director/reverse.html' %}
+<script>
+    if(js_config.is_debug){
+        Vue.config.devtools = true
+    }
+
+</script>
+
+<body >
+{% block page_body %}
+<div>
+    hello world
+</div>
+{% endblock %}
+
+
+</body>
+
+
+
+{% for lib in extra_js %}
+<script src='{{ lib }}'></script>
+{% endfor %}
+</html>

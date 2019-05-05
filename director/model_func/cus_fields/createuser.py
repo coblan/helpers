@@ -5,6 +5,7 @@ from .. .base_data import field_map
 from helpers.director.middleware.request_cache import get_request_cache
 
 class CreateUser(IntegerField):
+    "这个是用户京波系统，用的id关联，而不是外键"
     pass
     #def __init__(self, verbose_name=None, name=None, max_digits=None, decimal_places=None, **kwargs): 
         #self.digits = kwargs.pop('digits', 2)
@@ -13,7 +14,7 @@ class CreateUser(IntegerField):
 
 
 class CreateUserProc(BaseFieldProc):
-    
+    "这个是用户京波系统，用的id关联，而不是外键"
     def to_dict(self,inst,name):
         data = getattr(inst,name)
         field = inst.__class__._meta.get_field(name)

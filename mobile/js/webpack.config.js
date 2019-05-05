@@ -16,9 +16,9 @@ module.exports =
     },
 
     watch: true,
-    //resolve:{
-    //    modules:["D:/coblan/webcode/node_modules"],
-    //},
+    resolve:{
+        modules:["D:/coblan/webcode/node_modules"],
+    },
     resolveLoader: {
         //moduleExtensions:["D:/coblan/webcode/node_modules"],
         modules: ["D:/coblan/webcode/node_modules"],
@@ -44,6 +44,20 @@ module.exports =
                 }, {
                     loader: "sass-loader" // compiles Sass to CSS
                 }]
+            },
+            {
+                test: /\.styl$/,
+                    use: [
+                {
+                    loader: "style-loader" // creates style nodes from JS strings
+                },
+                {
+                    loader: "css-loader" // translates CSS into CommonJS
+                },
+                {
+                    loader: "stylus-loader" // compiles Stylus to CSS
+                }
+            ]
             }
         ],
         //rules: [{

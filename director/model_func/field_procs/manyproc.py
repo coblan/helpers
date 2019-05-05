@@ -13,14 +13,19 @@ class ManyProc(BaseFieldProc):
             name:out
             }
     
-    #def dict_field_head(self,head):  
-        #head['editor'] = 'field_multi_chosen'
-        #return head  
+    
+    def dict_field_head(self,head):  
+        options = self.get_options()   
+        head['editor'] = 'com-field-multi-chosen'
+        head['options'] = options
+        return head 
     
     def dict_table_head(self,head):
         """
         """
+        options = self.get_options() 
         head['editor'] = 'com-table-array-mapper'
+        head['options'] = options
         return head
        
 

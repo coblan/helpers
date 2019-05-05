@@ -1,5 +1,8 @@
 require('./scss/sim_fields.scss')
 
+/*
+*  todo  感觉无用，移除该组件
+* */
 export var com_form = {
     props:{
         heads:'',
