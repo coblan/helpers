@@ -471,8 +471,11 @@ var table_store={
 
 var row_match={
     one_row:function(self,head){
-        if(self.selected.length !=1){
-            cfg.showMsg('请选择一行数据！')
+        if(self.selected.length ==0){
+            cfg.showMsg('请选择一条数据！')
+            return false
+        }else if(self.selected.length >1){
+            cfg.showMsg('只能选择一条数据！')
             return false
         }else if(head.match_express){
                 var matched= ex.eval(head.match_express,{row:self.selected[0]})
@@ -485,7 +488,7 @@ var row_match={
     },
     many_row:function(self,head){
         if(self.selected.length ==0 ){
-            cfg.showMsg('请至少选择一行数据！')
+            cfg.showMsg('请至少选择一条数据！')
             return false
         }else{
             if(head.match_express){
