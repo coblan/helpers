@@ -36,17 +36,20 @@ $(function(){
 
 })
 
-window.named_hub={}
-window.addEventListener('popstate' ,function (event) {
-    if(event.state && event.state.pop_win){
-        slide_win.right_out_page()
-    }
-    if(event.state && event.state.callback){
-        var callback = named_hub[event.state.callback]
-        callback()
-        delete named_hub[event.state.callback]
-    }
-})
+if(window.named_hub==undefined){
+    window.named_hub={}
+    window.addEventListener('popstate' ,function (event) {
+        if(event.state && event.state.pop_win){
+            slide_win.right_out_page()
+        }
+        if(event.state && event.state.callback){
+            var callback = named_hub[event.state.callback]
+            callback()
+            delete named_hub[event.state.callback]
+        }
+    })
+
+}
 
 Vue.component('com-slide-win-1',{
     props:['stack_pages'],

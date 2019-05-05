@@ -66,6 +66,7 @@ class BaseEngine(object):
     home = '/' # 当前engine的主页，没有目的的时候，可以往这里跳
     
     root_page='/'   # 被home 替代了
+    access_from_internet = False
     
     @classmethod
     def as_view(cls):
@@ -202,6 +203,7 @@ class BaseEngine(object):
             tr_dc.update(fun())
         
         lib_dc = {}
+        self.request.META['ACCESS_FROM_INTERNET'] = self.access_from_internet
         for fun in js_lib_list:
             lib_dc.update(fun(self.request))
         return {
