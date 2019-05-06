@@ -37,6 +37,7 @@ def evalue_container(container,**kw):
         for k,v in kw.items():
             if k in args:
                 real_kw[k]=v
+            
         return container(**real_kw)
     else:
         return container
@@ -44,31 +45,37 @@ def evalue_container(container,**kw):
 def evalue_dict(dc,**kw):
     out_dc={}
     for k,v in dc.items():
-        out_dc[k]=evalue_container(v,**kw)
+        if k !='visible':
+            out_dc[k]=evalue_container(v,**kw)
+        else:
+            out_dc[k]=v
     return out_dc
 
 def evalue_list(ls,**kw):
     new_ls=[]
     for item in ls:
-        # 如果不是 visible，就去掉该项，**连其他key对应的function都不要运行**
+        # 先evalue子孙元素，再计算是否显示。而且只有在list中，visible属性才起作用
         tmp = copy.deepcopy(item)
+        tmp=evalue_container(tmp,**kw)
+        
         if isinstance(tmp,dict) and 'visible' in tmp:
             visible= tmp.get('visible')
             if inspect.isfunction(visible):
-                visible=run_func(visible,**kw)
+                visible=run_func(visible,liveitem=tmp,**kw)
             if not visible:
                 continue  
             tmp.pop('visible',None)
-        tmp=evalue_container(tmp,**kw)
         new_ls.append(tmp)
     return new_ls
 
-def run_func(func,**kw):
+def run_func(func,liveitem,**kw):
     args=inspect.getargspec(func).args
     real_kw={}
     for k,v in kw.items():
         if k in args:
             real_kw[k]=v  
+    if 'liveitem' in args:
+        real_kw['liveitem'] = liveitem
     return func(**real_kw)
 
 def find_one(collection,dc):
