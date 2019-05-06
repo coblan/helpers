@@ -187,6 +187,9 @@ var label_shower =  {
 
             ex.each( opt.depend,function(item_name){
                 var item = options_dict[item_name]
+                if(!item){
+                    cfg.showError(`${item_name}不存在，而被 ${opt.label} 依赖!`)
+                }
                 opt.depend_list.push(item)
                 if(!item.depended_list){
                     item.depended_list = []
