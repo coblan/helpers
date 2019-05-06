@@ -48,7 +48,11 @@ class IntProc(BaseFieldProc):
     
     def filter_clean_search(self, q_str): 
         if re.search('^\d+$', q_str):
-            return q_str  
+            bb= int(q_str)
+            if -2147483648 < bb <2147483647:
+                return bb
+            else:
+                return None
         else:
             return None
 

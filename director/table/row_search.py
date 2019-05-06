@@ -33,17 +33,20 @@ class SelectSearch(object):
         return {'value': name, 'label': _(self.model._meta.get_field(name).verbose_name) }
     
     def clean_search(self): 
-        try:
-            field_path = '%s.%s'%(model_to_name(self.model),self.qf)
-            if field_path in field_map:
-                mapperCls = field_map[field_path]
-                mapper = mapperCls(name=self.qf,model = self.model)
-            else:
-                f = self.model._meta.get_field(self.qf)
+        
+        field_path = '%s.%s'%(model_to_name(self.model),self.qf)
+        mapper = None
+        if field_path in field_map:
+            mapperCls = field_map[field_path]
+            mapper = mapperCls(name=self.qf,model = self.model)
+        else:
+            f = self.model._meta.get_field(self.qf)
+            if f:
                 mapperCls = field_map.get(f.__class__)
                 mapper = mapperCls(name=f.name,model = f.model)
+        if mapper:
             q_str = mapper.filter_clean_search(self.q)
-        except :
+        else:
             q_str = self.q
         return q_str
     

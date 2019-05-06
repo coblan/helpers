@@ -68,7 +68,7 @@ var table_store={
             var self=this
 
             cfg.show_load()
-            self.rows=[]
+            //self.rows=[]
 
             var post_data=[{fun:'get_rows',director_name:self.director_name,search_args:self.search_args}]
             ex.post('/d/ajax',JSON.stringify(post_data),function(resp){
