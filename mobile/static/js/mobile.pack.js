@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 58);
+/******/ 	return __webpack_require__(__webpack_require__.s = 52);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -375,9 +375,7 @@ function updateLink(linkElement, obj) {
 
 
 /***/ }),
-/* 2 */,
-/* 3 */,
-/* 4 */
+/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -388,7 +386,7 @@ function updateLink(linkElement, obj) {
 //Vue.use(Dialog);
 //import { MessageBox } from 'mint-ui';
 //import { Indicator } from 'mint-ui';
-__webpack_require__(55);
+__webpack_require__(51);
 
 ex.assign(cfg, {
     fields_editor: 'com-sim-fields',
@@ -471,15 +469,65 @@ ex.assign(cfg, {
 });
 
 /***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _material_wave = __webpack_require__(14);
+
+var material_wave = _interopRequireWildcard(_material_wave);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _index_select = __webpack_require__(16);
+
+var index_select = _interopRequireWildcard(_index_select);
+
+var _linetext = __webpack_require__(17);
+
+var linetext = _interopRequireWildcard(_linetext);
+
+var _blocktext = __webpack_require__(15);
+
+var blocktext = _interopRequireWildcard(_blocktext);
+
+var _phone = __webpack_require__(19);
+
+var phone = _interopRequireWildcard(_phone);
+
+var _select = __webpack_require__(21);
+
+var select = _interopRequireWildcard(_select);
+
+var _multi_picture = __webpack_require__(18);
+
+var multi_picture = _interopRequireWildcard(_multi_picture);
+
+var _phone_code = __webpack_require__(20);
+
+var phone_code = _interopRequireWildcard(_phone_code);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+/***/ }),
 /* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _material_wave = __webpack_require__(18);
+var _com_date_range = __webpack_require__(22);
 
-var material_wave = _interopRequireWildcard(_material_wave);
+var com_date_range = _interopRequireWildcard(_com_date_range);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -488,37 +536,8 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
+//import * as com_input_date from  './com_input_date.js'
 
-
-var _index_select = __webpack_require__(20);
-
-var index_select = _interopRequireWildcard(_index_select);
-
-var _linetext = __webpack_require__(21);
-
-var linetext = _interopRequireWildcard(_linetext);
-
-var _blocktext = __webpack_require__(19);
-
-var blocktext = _interopRequireWildcard(_blocktext);
-
-var _phone = __webpack_require__(23);
-
-var phone = _interopRequireWildcard(_phone);
-
-var _select = __webpack_require__(24);
-
-var select = _interopRequireWildcard(_select);
-
-var _multi_picture = __webpack_require__(22);
-
-var multi_picture = _interopRequireWildcard(_multi_picture);
-
-var _phone_code = __webpack_require__(59);
-
-var phone_code = _interopRequireWildcard(_phone_code);
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 /***/ }),
 /* 7 */
@@ -527,9 +546,9 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 "use strict";
 
 
-var _com_date_range = __webpack_require__(25);
+var _form_submit = __webpack_require__(23);
 
-var com_date_range = _interopRequireWildcard(_com_date_range);
+var form_submit = _interopRequireWildcard(_form_submit);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -538,8 +557,17 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-//import * as com_input_date from  './com_input_date.js'
 
+
+var _slide_iframe = __webpack_require__(25);
+
+var slide_iframe = _interopRequireWildcard(_slide_iframe);
+
+var _fields_panel = __webpack_require__(24);
+
+var fields_panel = _interopRequireWildcard(_fields_panel);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 /***/ }),
 /* 9 */
@@ -548,56 +576,26 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 "use strict";
 
 
-var _form_submit = __webpack_require__(26);
-
-var form_submit = _interopRequireWildcard(_form_submit);
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-/***/ }),
-/* 10 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _slide_iframe = __webpack_require__(28);
-
-var slide_iframe = _interopRequireWildcard(_slide_iframe);
-
-var _fields_panel = __webpack_require__(27);
-
-var fields_panel = _interopRequireWildcard(_fields_panel);
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-/***/ }),
-/* 11 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _my_slide_win = __webpack_require__(31);
+var _my_slide_win = __webpack_require__(28);
 
 var my_slide_win = _interopRequireWildcard(_my_slide_win);
 
-var _com_slide_head = __webpack_require__(29);
+var _com_slide_head = __webpack_require__(26);
 
 var com_slide_head = _interopRequireWildcard(_com_slide_head);
 
-var _fiexed_scrll = __webpack_require__(30);
+var _fiexed_scrll = __webpack_require__(27);
 
 var fiexed_scrll = _interopRequireWildcard(_fiexed_scrll);
 
-var _pop_image_shower = __webpack_require__(32);
+var _pop_image_shower = __webpack_require__(29);
 
 var pop_image_shower = _interopRequireWildcard(_pop_image_shower);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 /***/ }),
-/* 12 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -617,7 +615,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-__webpack_require__(52);
+__webpack_require__(47);
 
 var PopMobileWin = function () {
     function PopMobileWin(_ref) {
@@ -825,7 +823,7 @@ window.slide_mobile_win = slide_mobile_win;
 window.pop_mobile_win = pop_mobile_win;
 
 /***/ }),
-/* 13 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -833,13 +831,13 @@ window.pop_mobile_win = pop_mobile_win;
 
 
 /***/ }),
-/* 14 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(38);
+var content = __webpack_require__(35);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -859,13 +857,13 @@ if(false) {
 }
 
 /***/ }),
-/* 15 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(39);
+var content = __webpack_require__(36);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -885,9 +883,7 @@ if(false) {
 }
 
 /***/ }),
-/* 16 */,
-/* 17 */,
-/* 18 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -913,7 +909,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 *
 * */
 
-__webpack_require__(47);
+__webpack_require__(42);
 
 var Wave = function () {
     function Wave() {
@@ -1076,7 +1072,7 @@ function map_from_client(canvas, cx, cy) {
 }
 
 /***/ }),
-/* 19 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1097,13 +1093,13 @@ Vue.component('com-field-blocktext', {
 });
 
 /***/ }),
-/* 20 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(48);
+__webpack_require__(43);
 
 Vue.component('com-field-index-select', {
     props: ['row', 'head'],
@@ -1180,7 +1176,7 @@ Vue.component('com-index-select', {
 });
 
 /***/ }),
-/* 21 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1211,13 +1207,13 @@ Vue.component('com-field-linetext', {
 });
 
 /***/ }),
-/* 22 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(53);
+__webpack_require__(48);
 
 Vue.component('com-field-multi-picture', {
     props: ['row', 'head'],
@@ -1283,7 +1279,7 @@ Vue.component('com-field-multi-picture', {
 });
 
 /***/ }),
-/* 23 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1295,7 +1291,113 @@ Vue.component('com-field-phone', {
 });
 
 /***/ }),
-/* 24 */
+/* 20 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+__webpack_require__(49);
+
+Vue.component('com-field-phone-code', {
+    /*
+     parStore.get_phone_code(callback){
+       }
+       * */
+    props: ['row', 'head'],
+    template: ' <div class="com-field-phone-code flex">\n         <input  type="text" class="form-control input-sm" v-model="row[head.name]"\n            :id="\'id_\'+head.name" :name="head.name"\n            :placeholder="head.placeholder" :autofocus="head.autofocus" :maxlength=\'head.maxlength\'>\n\n          <button type="button" class="btn btn-sm"\n              :disabled="vcode_count !=0"\n               @click="get_phone_code" v-text="vcodeLabel"></button>\n     </div>\n    ',
+    data: function data() {
+        var parStore = ex.vueParStore(this);
+        return {
+            parStore: parStore,
+            vcode_count: 0
+        };
+    },
+    computed: {
+        vcodeLabel: function vcodeLabel() {
+            if (this.vcode_count != 0) {
+                return '' + this.vcode_count + ' s';
+            } else {
+                return '获取验证码';
+            }
+        }
+    },
+    methods: {
+        get_phone_code: function get_phone_code() {
+            var self = this;
+            this.parStore.get_phone_code(function () {
+                self.vcode_count = self.head.vcode_count || 120;
+                self.countGetVCodeAgain();
+            });
+        },
+        //get_phone_code:function(){
+        //var phone = this.row[this.head.phone_field]
+        //var img_code = this.row[this.head.img_code_field]
+        ////var com_vcode =kws.com_vcode
+        //var ph =$(this.$el).find('#id_'+this.hea).trigger("validate")
+        //var image_code_input_element=$(this.$el).find('[name=image_code]')
+        //var image_code =image_code_input_element.trigger("validate")
+        //
+        //if(ph.isValid() && image_code.isValid()){
+        //    self.checkImageCode(this.row.Phone,this.row.image_key,this.row.image_code,image_code_input_element)
+        //}
+
+        //if(this.head.isValid()){
+        //    self.checkImageCode(self.row.Phone,self.row.image_key,self.row.image_code,image_code_input_element)
+        //}
+
+        //var self=this
+        //this.$emit('trigger-get-code',function(){
+        //    self.checkImageCode(self.row.Phone,self.row.image_key,self.row.image_code,image_code_input_element)
+        //})
+        //},
+
+        //sendGetCodeOrder:function(){
+        //    ex.vueParCall(this,'get_phone_code',{com_vcode:this})
+        //    //this.$emit('field-event',{fun:'get_phone_code'})
+        //
+        //},
+        //checkImageCode:function(phone,image_key,image_code,image_code_input_element){
+        //    var self=this
+        //    $(self.$el).find('input').trigger("hidemsg")
+        //
+        //    //if(this.row.image_code && this.hasValidPhone){
+        //    var data={
+        //        Phone:phone,
+        //        Key:image_key,
+        //        Answer:image_code,
+        //    }
+        //    cfg.show_load()
+        //    service_post('/anonymity/vcode/generate',data,function(resp){
+        //        if(resp.error_description){
+        //            image_code_input_element.trigger("showmsg", ["error", resp.error_description ])
+        //        }else if(resp.success){
+        //            setTimeout(function(){
+        //                self.countGetVCodeAgain()
+        //            },1000)
+        //        }
+        //        // else {
+        //        //    $(self.$el).find('.image_code').trigger("showmsg", ["error", resp.error_description ])
+        //        //}
+        //
+        //    },false)
+        //    //}
+        //},
+        countGetVCodeAgain: function countGetVCodeAgain() {
+            var self = this;
+            var idx = setInterval(function () {
+                self.vcode_count -= 1;
+                if (self.vcode_count <= 0) {
+                    clearInterval(idx);
+                    self.vcode_count = 0;
+                }
+            }, 1000);
+        }
+    }
+});
+
+/***/ }),
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1368,7 +1470,7 @@ Vue.component('com-field-select', {
 });
 
 /***/ }),
-/* 25 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1400,7 +1502,7 @@ Vue.component('com-field-select', {
 
 
 /***/ }),
-/* 26 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1428,13 +1530,13 @@ Vue.component('com-op-submit', {
 });
 
 /***/ }),
-/* 27 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(54);
+__webpack_require__(50);
 
 Vue.component('com-fields-panel', {
     props: ['ctx'],
@@ -1456,7 +1558,7 @@ Vue.component('com-fields-panel', {
         };
     },
     mixins: [mix_fields_data, mix_nice_validator],
-    template: '<div class="com-fileds-panel">\n\n    <template v-if="fields_group.length > 0">\n      <van-cell-group  v-for="group in grouped_heads_bucket" :title="group.label " >\n            <component v-for="head in group.heads" :is="head.editor" :head="head" :row="row"></component>\n        </van-cell-group>\n    </template>\n    <template v-else>\n     <van-cell-group   >\n        <component v-for="head in heads" :is="head.editor" :head="head" :row="row"></component>\n    </van-cell-group>\n    </template>\n\n\n    <div style="height: 2rem">\n    </div>\n    <van-cell-group v-if="ops.length>0" class="ops">\n       <component v-for="op in ops" :is="op.editor" :head="op"></component>\n    </van-cell-group>\n    </div>',
+    template: '<div class="com-fileds-panel">\n\n    <template v-if="fields_group.length > 0">\n      <van-cell-group  v-for="group in grouped_heads_bucket" :title="group.label " >\n            <component v-for="head in group.heads" :is="head.editor" :head="head" :row="row"></component>\n        </van-cell-group>\n    </template>\n    <template v-else>\n     <van-cell-group   >\n        <component v-for="head in heads" :is="head.editor" :head="head" :row="row"></component>\n    </van-cell-group>\n    </template>\n\n\n    <div style="height: .6rem">\n    </div>\n    <van-cell-group v-if="ops.length>0" class="ops">\n       <component v-for="op in ops" :is="op.editor" :head="op"></component>\n    </van-cell-group>\n    </div>',
     computed: {
         grouped_heads_bucket: function grouped_heads_bucket() {
             var _this = this;
@@ -1474,7 +1576,7 @@ Vue.component('com-fields-panel', {
 });
 
 /***/ }),
-/* 28 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1486,13 +1588,13 @@ Vue.component('com-slide-iframe', {
 });
 
 /***/ }),
-/* 29 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(51);
+__webpack_require__(46);
 
 Vue.component('com-slide-head', {
     props: ['title'],
@@ -1505,7 +1607,7 @@ Vue.component('com-slide-head', {
 });
 
 /***/ }),
-/* 30 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1515,7 +1617,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.fixed_body = fixed_body;
-__webpack_require__(49);
+__webpack_require__(44);
 
 function fixed_body() {
     //$('body').addClass('modal-open')
@@ -1546,13 +1648,13 @@ window.fixed_body = fixed_body;
 window.fixed_body_quit = fixed_body_quit;
 
 /***/ }),
-/* 31 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(50);
+__webpack_require__(45);
 
 /*
 * 因为没有遮挡层，可能造成多次打开窗口问题，所以使用mint-ui替代了这个组件
@@ -1666,7 +1768,7 @@ Vue.component('com-slide-win-1', {
 });
 
 /***/ }),
-/* 32 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1694,7 +1796,7 @@ Vue.component('com-pop-image', {
 });
 
 /***/ }),
-/* 33 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -1708,7 +1810,7 @@ exports.push([module.i, ".material-wave {\n  position: relative; }\n\n.material-
 
 
 /***/ }),
-/* 34 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -1722,7 +1824,7 @@ exports.push([module.i, ".com-index-select .mint-indexlist {\n  position: absolu
 
 
 /***/ }),
-/* 35 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -1736,7 +1838,7 @@ exports.push([module.i, "body.modal-open {\n  position: fixed;\n  width: 100%; }
 
 
 /***/ }),
-/* 36 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -1750,7 +1852,7 @@ exports.push([module.i, ".list-enter-active, .list-leave-active {\n  transition:
 
 
 /***/ }),
-/* 37 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -1764,7 +1866,7 @@ exports.push([module.i, ".com-slide-head {\n  height: .8rem;\n  font-size: .3rem
 
 
 /***/ }),
-/* 38 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -1778,7 +1880,7 @@ exports.push([module.i, "@charset \"UTF-8\";\n/**\r\n750px设计稿\r\n    取1r
 
 
 /***/ }),
-/* 39 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -1792,7 +1894,7 @@ exports.push([module.i, ".el-table__body-wrapper.is-scrolling-middle {\n  overfl
 
 
 /***/ }),
-/* 40 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -1806,7 +1908,7 @@ exports.push([module.i, ".pop-moible-win .mint-popup {\n  background: none; }\n\
 
 
 /***/ }),
-/* 41 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -1814,13 +1916,27 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, ".com-field-multi-picture .van-cell__title {\n  max-width: 90px;\n}\n.com-field-multi-picture .van-cell__value {\n  text-align: left;\n}\n.com-field-multi-picture .add-btn {\n  width: 60px;\n  height: 60px;\n  position: relative;\n  display: inline-block;\n  margin: 10px;\n}\n.com-field-multi-picture .img-wrap {\n  vertical-align: top;\n  display: inline-block;\n  width: 60px;\n  height: 60px;\n  position: relative;\n  margin: 10px;\n}\n.com-field-multi-picture .img-wrap img {\n  height: 100%;\n  width: 100%;\n}\n.com-field-multi-picture .img-wrap .close {\n  position: absolute;\n  top: 0;\n  right: 1rem;\n}\n", ""]);
+exports.push([module.i, ".com-field-multi-picture .van-cell__title {\n  max-width: 90px;\n}\n.com-field-multi-picture .van-cell__value {\n  text-align: left;\n}\n.com-field-multi-picture .add-btn {\n  width: 60px;\n  height: 60px;\n  position: relative;\n  display: inline-block;\n  margin: 10px;\n}\n.com-field-multi-picture .add-btn .inn-btn {\n  background-color: #e2e2e2;\n  border: 1px solid #e2e2e2;\n  width: 60px;\n  height: 60px;\n  position: relative;\n}\n.com-field-multi-picture .img-wrap {\n  vertical-align: top;\n  display: inline-block;\n  width: 60px;\n  height: 60px;\n  position: relative;\n  margin: 10px;\n}\n.com-field-multi-picture .img-wrap img {\n  height: 100%;\n  width: 100%;\n}\n.com-field-multi-picture .img-wrap .close {\n  position: absolute;\n  top: 0;\n  right: 0.3rem;\n}\n", ""]);
 
 // exports
 
 
 /***/ }),
-/* 42 */
+/* 39 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(0)();
+// imports
+
+
+// module
+exports.push([module.i, ".com-field-phone-code input {\n  flex-grow: 10;\n}\n.com-field-phone-code button {\n  flex-grow: 0;\n  width: 1.6rem;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -1834,7 +1950,7 @@ exports.push([module.i, ".com-fileds-panel .ops {\n  margin: 0.5rem 5vw;\n}\n", 
 
 
 /***/ }),
-/* 43 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -1848,16 +1964,13 @@ exports.push([module.i, ".mint-indicator .mint-indicator-wrapper {\n  z-index: 9
 
 
 /***/ }),
-/* 44 */,
-/* 45 */,
-/* 46 */,
-/* 47 */
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(33);
+var content = __webpack_require__(30);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -1877,13 +1990,13 @@ if(false) {
 }
 
 /***/ }),
-/* 48 */
+/* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(34);
+var content = __webpack_require__(31);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -1903,13 +2016,13 @@ if(false) {
 }
 
 /***/ }),
-/* 49 */
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(35);
+var content = __webpack_require__(32);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -1929,13 +2042,13 @@ if(false) {
 }
 
 /***/ }),
-/* 50 */
+/* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(36);
+var content = __webpack_require__(33);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -1955,13 +2068,13 @@ if(false) {
 }
 
 /***/ }),
-/* 51 */
+/* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(37);
+var content = __webpack_require__(34);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -1981,13 +2094,13 @@ if(false) {
 }
 
 /***/ }),
-/* 52 */
+/* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(40);
+var content = __webpack_require__(37);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -2007,13 +2120,13 @@ if(false) {
 }
 
 /***/ }),
-/* 53 */
+/* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(41);
+var content = __webpack_require__(38);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -2033,13 +2146,39 @@ if(false) {
 }
 
 /***/ }),
-/* 54 */
+/* 49 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(42);
+var content = __webpack_require__(39);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// add the styles to the DOM
+var update = __webpack_require__(1)(content, {});
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./phone_code.styl", function() {
+			var newContent = require("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./phone_code.styl");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 50 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(40);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -2059,13 +2198,13 @@ if(false) {
 }
 
 /***/ }),
-/* 55 */
+/* 51 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(43);
+var content = __webpack_require__(41);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -2085,206 +2224,56 @@ if(false) {
 }
 
 /***/ }),
-/* 56 */,
-/* 57 */,
-/* 58 */
+/* 52 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _config = __webpack_require__(4);
+var _config = __webpack_require__(2);
 
 var config = _interopRequireWildcard(_config);
 
-var _pop_mobile_win = __webpack_require__(12);
+var _pop_mobile_win = __webpack_require__(10);
 
 var pop_win = _interopRequireWildcard(_pop_mobile_win);
 
-var _main = __webpack_require__(11);
+var _main = __webpack_require__(9);
 
 var pop_main = _interopRequireWildcard(_main);
 
-var _main2 = __webpack_require__(13);
+var _main2 = __webpack_require__(11);
 
 var table_main = _interopRequireWildcard(_main2);
 
-var _main3 = __webpack_require__(10);
+var _main3 = __webpack_require__(8);
 
 var panels_main = _interopRequireWildcard(_main3);
 
-var _main4 = __webpack_require__(7);
+var _main4 = __webpack_require__(5);
 
 var filters_main = _interopRequireWildcard(_main4);
 
-var _main5 = __webpack_require__(8);
+var _main5 = __webpack_require__(6);
 
 var input_main = _interopRequireWildcard(_main5);
 
-var _main6 = __webpack_require__(6);
+var _main6 = __webpack_require__(4);
 
 var field_edito_main = _interopRequireWildcard(_main6);
 
-var _main7 = __webpack_require__(5);
+var _main7 = __webpack_require__(3);
 
 var effect_main = _interopRequireWildcard(_main7);
 
-var _main8 = __webpack_require__(9);
+var _main8 = __webpack_require__(7);
 
 var operation_main = _interopRequireWildcard(_main8);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
-__webpack_require__(15);
-__webpack_require__(14); // 单位宽度等
-
-/***/ }),
-/* 59 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-__webpack_require__(63);
-
-Vue.component('com-field-phone-code', {
-    /*
-     parStore.get_phone_code(callback){
-       }
-       * */
-    props: ['row', 'head'],
-    template: ' <div class="com-field-phone-code flex">\n         <input  type="text" class="form-control input-sm" v-model="row[head.name]"\n            :id="\'id_\'+head.name" :name="head.name"\n            :placeholder="head.placeholder" :autofocus="head.autofocus" :maxlength=\'head.maxlength\'>\n\n          <button type="button" class="btn btn-sm"\n              :disabled="vcode_count !=0"\n               @click="get_phone_code" v-text="vcodeLabel"></button>\n     </div>\n    ',
-    data: function data() {
-        var parStore = ex.vueParStore(this);
-        return {
-            parStore: parStore,
-            vcode_count: 0
-        };
-    },
-    computed: {
-        vcodeLabel: function vcodeLabel() {
-            if (this.vcode_count != 0) {
-                return '' + this.vcode_count + ' s';
-            } else {
-                return '获取验证码';
-            }
-        }
-    },
-    methods: {
-        get_phone_code: function get_phone_code() {
-            var self = this;
-            this.parStore.get_phone_code(function () {
-                self.vcode_count = self.head.vcode_count || 120;
-                self.countGetVCodeAgain();
-            });
-        },
-        //get_phone_code:function(){
-        //var phone = this.row[this.head.phone_field]
-        //var img_code = this.row[this.head.img_code_field]
-        ////var com_vcode =kws.com_vcode
-        //var ph =$(this.$el).find('#id_'+this.hea).trigger("validate")
-        //var image_code_input_element=$(this.$el).find('[name=image_code]')
-        //var image_code =image_code_input_element.trigger("validate")
-        //
-        //if(ph.isValid() && image_code.isValid()){
-        //    self.checkImageCode(this.row.Phone,this.row.image_key,this.row.image_code,image_code_input_element)
-        //}
-
-        //if(this.head.isValid()){
-        //    self.checkImageCode(self.row.Phone,self.row.image_key,self.row.image_code,image_code_input_element)
-        //}
-
-        //var self=this
-        //this.$emit('trigger-get-code',function(){
-        //    self.checkImageCode(self.row.Phone,self.row.image_key,self.row.image_code,image_code_input_element)
-        //})
-        //},
-
-        //sendGetCodeOrder:function(){
-        //    ex.vueParCall(this,'get_phone_code',{com_vcode:this})
-        //    //this.$emit('field-event',{fun:'get_phone_code'})
-        //
-        //},
-        //checkImageCode:function(phone,image_key,image_code,image_code_input_element){
-        //    var self=this
-        //    $(self.$el).find('input').trigger("hidemsg")
-        //
-        //    //if(this.row.image_code && this.hasValidPhone){
-        //    var data={
-        //        Phone:phone,
-        //        Key:image_key,
-        //        Answer:image_code,
-        //    }
-        //    cfg.show_load()
-        //    service_post('/anonymity/vcode/generate',data,function(resp){
-        //        if(resp.error_description){
-        //            image_code_input_element.trigger("showmsg", ["error", resp.error_description ])
-        //        }else if(resp.success){
-        //            setTimeout(function(){
-        //                self.countGetVCodeAgain()
-        //            },1000)
-        //        }
-        //        // else {
-        //        //    $(self.$el).find('.image_code').trigger("showmsg", ["error", resp.error_description ])
-        //        //}
-        //
-        //    },false)
-        //    //}
-        //},
-        countGetVCodeAgain: function countGetVCodeAgain() {
-            var self = this;
-            var idx = setInterval(function () {
-                self.vcode_count -= 1;
-                if (self.vcode_count <= 0) {
-                    clearInterval(idx);
-                    self.vcode_count = 0;
-                }
-            }, 1000);
-        }
-    }
-});
-
-/***/ }),
-/* 60 */,
-/* 61 */,
-/* 62 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(0)();
-// imports
-
-
-// module
-exports.push([module.i, ".com-field-phone-code input {\n  flex-grow: 10;\n}\n.com-field-phone-code button {\n  flex-grow: 0;\n  width: 1.6rem;\n}\n", ""]);
-
-// exports
-
-
-/***/ }),
-/* 63 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(62);
-if(typeof content === 'string') content = [[module.i, content, '']];
-// add the styles to the DOM
-var update = __webpack_require__(1)(content, {});
-if(content.locals) module.exports = content.locals;
-// Hot Module Replacement
-if(false) {
-	// When the styles change, update the <style> tags
-	if(!content.locals) {
-		module.hot.accept("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./phone_code.styl", function() {
-			var newContent = require("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./phone_code.styl");
-			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-			update(newContent);
-		});
-	}
-	// When the module is disposed, remove the <style> tags
-	module.hot.dispose(function() { update(); });
-}
+__webpack_require__(13);
+__webpack_require__(12); // 单位宽度等
 
 /***/ })
 /******/ ]);
