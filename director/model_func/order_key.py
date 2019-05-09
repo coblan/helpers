@@ -1,5 +1,6 @@
 from helpers.director.kv import get_value,set_value
 from django.utils import timezone
+from helpers.func.random_str import short_uuid
 
 def date_order(key,digit=6):
     # 20190101xxxxxx
@@ -15,3 +16,7 @@ def date_order(key,digit=6):
     rt = datestr + pointstr%crt_point
     set_value(key, rt)
     return rt
+
+def date_shortuuid():
+    datestr = timezone.now().strftime('%Y%m%d')
+    return datestr+short_uuid()
