@@ -445,18 +445,16 @@ ex.assign(cfg, {
         return cfg.pop_big('com-slide-iframe', { url: url, title: option.title });
     },
     show_load: function show_load() {
-        //Indicator.open(
-        //    {spinnerType: 'fading-circle'}
-        //)
-        vant.Toast.loading({
-            mask: true,
-            message: '加载中...',
-            duration: 0
-        });
+        MINT.Indicator.open({ spinnerType: 'fading-circle' });
+        //vant.Toast.loading({
+        //    mask: true,
+        //    message: '加载中...',
+        //    duration: 0,
+        //});
     },
     hide_load: function hide_load(delay, msg) {
-        //Indicator.close()
-        vant.Toast.clear();
+        //vant.Toast.clear()
+        MINT.Indicator.close();
         if (msg) {
             cfg.toast(msg);
         }
@@ -2081,7 +2079,7 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, ".com-slide-head {\n  height: .8rem;\n  font-size: .3rem;\n  flex-shrink: 0;\n  /*background-color: #393738;*/\n  /*color: white;*/\n  position: relative;\n  border-bottom: 1px solid #d5d5d5;\n  box-shadow: -1px 1px 7px #929292; }\n  .com-slide-head .go-back {\n    left: .3rem;\n    padding: .1rem; }\n", ""]);
+exports.push([module.i, ".com-slide-head {\n  height: .8rem;\n  font-size: .3rem;\n  /*flex-shrink:0;*/\n  /*background-color: #393738;*/\n  /*color: white;*/\n  position: relative;\n  border-bottom: 1px solid #d5d5d5; }\n  .com-slide-head .go-back {\n    left: .3rem;\n    padding: .1rem; }\n", ""]);
 
 // exports
 
