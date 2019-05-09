@@ -42,6 +42,7 @@ class ModelFields(forms.ModelForm):
     extra_mixins=[]
     hide_fields = []
     show_pk=False
+    nolimit=False
     @classmethod
     def parse_request(cls,request):
         """
@@ -101,8 +102,8 @@ class ModelFields(forms.ModelForm):
                         dc[k] = getattr(inst, "%s_id" % k)
                         continue
                 dc[k] =  getattr(form_kw['instance'] , k)  
-        
-        self.nolimit = nolimit
+        if nolimit is not None:
+            self.nolimit = nolimit
         self.kw.update(dc)
 
         super(ModelFields,self).__init__(dc,*args,**form_kw)

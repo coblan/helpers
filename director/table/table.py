@@ -338,6 +338,7 @@ class ModelTable(object):
     pop_edit_field=""
     has_sequence = False
     selectable = True
+    nolimit = False
     def __init__(self,_page=1,row_sort=[],row_filter={},row_search= '',crt_user=None,perpage=None,**kw):
         """
         kw['search_args']只是一个记录，在获取到rows时，一并返回前端页面，便于显示。
@@ -366,7 +367,7 @@ class ModelTable(object):
         
     
     def custom_permit(self):
-        self.permit=ModelPermit(model=self.model, user=self.crt_user)
+        self.permit=ModelPermit(model=self.model, user=self.crt_user,nolimit=self.nolimit)
 
     @classmethod
     def parse_request(cls,request):
