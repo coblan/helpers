@@ -1,0 +1,106 @@
+{% extends "wxweb/site_base.html" %}
+{% load static %}
+{% load jsonify %}
+
+{% block head-content %}
+<title>{{ page_label }}</title>
+<script src="{{ js_config.js_lib.jquery }}"></script>
+<script src="{{ js_config.js_lib.md5 }}"></script>
+<link rel="stylesheet" href="{{ js_config.js_lib.font_awesome }}">
+<script src="{{ js_config.js_lib.vuejs }}"></script>
+<script src="{{ js_config.js_lib.nice_validator }}"></script>
+<link rel="stylesheet" href="{{ js_config.js_lib.nice_validator_css }}">
+
+<script src="{{ js_config.js_lib.cube_ui }}"></script>
+<link rel="stylesheet" href="{{ js_config.js_lib.cube_ui_css }}">
+<script src="{{ js_config.js_lib.mint_ui }}"></script>
+<link rel="stylesheet" href="{{ js_config.js_lib.mint_ui_css }}">
+<script src="{{ js_config.js_lib.vant }}"></script>
+<link rel="stylesheet" href="{{ js_config.js_lib.vant_css }}">
+
+<script src="{{ js_config.js_lib.exfun }}"></script>
+<script src="{{ js_config.js_lib.director }}"></script>
+<script src="{{ js_config.js_lib.jb_admin }}"></script>
+<script src="{{ js_config.js_lib.mobile }}"></script>
+
+{% endblock %}
+
+{% block page_body %}
+
+<script>
+
+    rows={{ rows | jsonify }}
+    heads = {{ heads | jsonify }}
+    page_label = '{{ page_label }}'
+//    fields_ctx = {{ fields_ctx | jsonify }}
+//    list_panel = {{ list_panel | jsonify }}
+    table_editor={{ table_editor | jsonify }}
+    table_option = {{ table_option | jsonify }}
+    detail_editor= {{ detail_editor | jsonify }}
+    detail_ctx = {{ detail_ctx | jsonify }}
+
+    $(function(){
+        new Vue({
+            el:'#there',
+            data:function(){
+                var childStore = new Vue(table_store)
+                childStore.rows=rows
+                childStore.director_name = director_name
+                return {
+                    childStore:childStore,
+                    page_label:page_label,
+                    rows:rows,
+                    heads:heads,
+                    table_editor:table_editor,
+                    table_option:table_option,
+                    scrollOptions: {
+                        /* lock x-direction when scrolling horizontally and  vertically at the same time */
+                        directionLockThreshold: 0,
+                        click:true,
+                        pullDownRefresh:{
+                            txt:'刷新成功!',
+                        },
+                        pullUpLoad:{
+                            txt:{ more: '', noMore: '没有更多了!' }
+                        },
+
+//                        preventDefaultException:{className:/(^van-cell$)/},
+//                        preventDefault:false,
+                    },
+                    isLoading:false
+                }
+            },
+            methods:{
+                open_detail:function(row){
+//                    fields_ctx.row = row
+//                    fields_ctx.title = '报修详情'
+                    detail_ctx.row = row
+                    cfg.pop_big( detail_editor,  detail_ctx)
+                },
+                onPullingUp(){
+                    this.childStore.addNextPage().then(()=>{
+                        this.$refs.scroll.forceUpdate()
+                    })
+                },
+                onPullingDown(){
+                    this.childStore.search().then(()=>{
+                        this.$refs.scroll.forceUpdate()
+                    })
+                 },
+            }
+        })
+    })
+</script>
+<div id="there" class="mobile-list-page">
+    <div class="page-title" v-text="page_label"></div>
+
+    <cube-scroll :data="childStore.rows" ref="scroll"  :options="scrollOptions" @pulling-down="onPullingDown"
+                  @pulling-up="onPullingUp">
+        <!--<van-pull-refresh v-model="isLoading" @refresh="onRefresh">-->
+            <component :is="table_editor" :heads="heads" :rows="childStore.rows" :option="table_option" @select="open_detail($event)"></component>
+        <!--</van-pull-refresh>-->
+    </cube-scroll>
+
+</div>
+
+{% endblock %}

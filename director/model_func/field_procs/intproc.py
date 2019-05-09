@@ -26,7 +26,7 @@ class IntProc(BaseFieldProc):
             ##options = [{'value':x[0],'label':x[1]} for x in self.field.choices]
             ##head['options'] = options
         else:
-            head['editor'] = 'number'
+            head['editor'] = 'com-field-number'
             head['fv_rule'] = 'range(-2147483648~2147483647)'
         return head
     

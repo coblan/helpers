@@ -2,9 +2,11 @@
   height: .8rem;
   font-size:.3rem;
   flex-shrink:0;
-  background-color: #393738;
-  color: white;
+  /*background-color: #393738;*/
+  /*color: white;*/
   position: relative;
+  border-bottom:1px solid #d5d5d5;
+  box-shadow:-1px 1px 7px #929292;
 
   .go-back{
     left: .3rem;
