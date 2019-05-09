@@ -56,7 +56,7 @@ class ModelFields(forms.ModelForm):
         pk=dc.pop('pk',None)
         return cls(pk=pk,crt_user=request.user,**dc) 
     
-    def __init__(self,dc={},pk=None,crt_user=None,nolimit=False,*args,**kw):
+    def __init__(self,dc={},pk=None,crt_user=None,nolimit=None,*args,**kw):
         """
         调用情况：
         1. ajax save 时
