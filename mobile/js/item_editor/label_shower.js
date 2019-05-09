@@ -1,4 +1,4 @@
-Vue.component('com-item-span-label',{
+Vue.component('com-table-label-shower',{
     props:['head','row'],
     template:`<span class="com-item-span-label" v-text="label_text"></span>`,
     computed:{

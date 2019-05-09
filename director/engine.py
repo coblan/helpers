@@ -67,6 +67,7 @@ class BaseEngine(object):
     
     root_page='/'   # 被home 替代了
     access_from_internet = False
+    need_staff = False
     
     @classmethod
     def as_view(cls):
@@ -110,6 +111,11 @@ class BaseEngine(object):
         page=page_cls(request, engin = self)
         if hasattr(page, 'check_permit'):
             page.check_permit()
+        
+        if hasattr(page_cls, 'need_staff'):
+            self.need_staff = page_cls.need_staff
+        if self.need_staff and not request.user.is_staff:
+            raise PermissionDenied('Need staff to access this page!')
         
         try:
             ctx=page.get_context()

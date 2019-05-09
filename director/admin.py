@@ -34,6 +34,13 @@ from .model_func.field_procs import nullboolproc
 
 from . import js_cfg
 
+# 定制User表的显示方式
+def get_first_name(self):
+    return self.username  +'(%s)'%self.first_name
+
+User.add_to_class("__str__", get_first_name)
+
+
 class UserGroupTable(ModelTable):
     
     class GroupFilter(RowFilter):

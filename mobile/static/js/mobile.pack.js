@@ -552,9 +552,9 @@ var _span = __webpack_require__(29);
 
 var span = _interopRequireWildcard(_span);
 
-var _label_span = __webpack_require__(28);
+var _label_shower = __webpack_require__(67);
 
-var label_span = _interopRequireWildcard(_label_span);
+var label_shower = _interopRequireWildcard(_label_shower);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -1618,31 +1618,14 @@ Vue.component('com-field-select', {
 
 
 /***/ }),
-/* 28 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Vue.component('com-item-span-label', {
-    props: ['head', 'row'],
-    template: '<span class="com-item-span-label" v-text="label_text"></span>',
-    computed: {
-        label_text: function label_text() {
-            var key = '_' + this.head.name + '_label';
-            return this.row[key];
-        }
-    }
-});
-
-/***/ }),
+/* 28 */,
 /* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-Vue.component('com-item-span', {
+Vue.component('com-table-span', {
     props: ['head', 'row'],
     template: '<span class="com-item-span" v-text="row[head.name]"></span>'
 });
@@ -2601,6 +2584,24 @@ if(false) {
 	// When the module is disposed, remove the <style> tags
 	module.hot.dispose(function() { update(); });
 }
+
+/***/ }),
+/* 67 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Vue.component('com-table-label-shower', {
+    props: ['head', 'row'],
+    template: '<span class="com-item-span-label" v-text="label_text"></span>',
+    computed: {
+        label_text: function label_text() {
+            var key = '_' + this.head.name + '_label';
+            return this.row[key];
+        }
+    }
+});
 
 /***/ })
 /******/ ]);
