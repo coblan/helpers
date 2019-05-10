@@ -1,8 +1,13 @@
-//require('./scss/field_single_select2.scss')
+require('./styl/multi_select2.styl')
 
 var field_sigle_chosen={
     props:['row','head'],
-    template:`<div  :style="head.style">
+    data(){
+      return {
+          inn_value:this.row[this.head.name]
+      }
+    },
+    template:`<div class="com-field-multi-select2"  :style="head.style">
     <span v-if="head.readonly" v-text="label_text" ></span>
     <input type="text" :name="head.name" style="display: none" v-model="row[head.name]">
     <div v-show="!head.readonly">
@@ -21,16 +26,16 @@ var field_sigle_chosen={
 
             $(self.$el).find('select').select2({
                 placeholder:self.head.placeholder || '请选择',
-                allowClear: true
+                //allowClear: true
             })
-            self.setValue(self.row[self.head.name])
+            self.setDomValue(self.row[self.head.name])
             $(self.$el).find('.select2').change(function(e) {
                 var value = $(self.$el).find('.select2').val( )
-                if(value ==''){
-                    Vue.delete(self.row,self.head.name)
-                }else{
-                    Vue.set(self.row,self.head.name,value)
-                }
+                value = value.filter((item)=>{
+                    return item != ""
+                })
+                self.inn_value = value
+
             })
 
         })
@@ -38,7 +43,17 @@ var field_sigle_chosen={
     },
     watch:{
         value:function(nv){
-            this.setValue(nv)
+            this.setDomValue(nv)
+        },
+        inn_value(value,oldvalue){
+            if(JSON.stringify(value) == JSON.stringify(oldvalue)){
+                return
+            }
+            if(value ==''){
+                Vue.delete(this.row,this.head.name)
+            }else{
+                Vue.set(this.row,this.head.name,value)
+            }
         }
     },
     computed:{
@@ -62,10 +77,10 @@ var field_sigle_chosen={
         }
     },
     methods:{
-        setValue:function(val){
+        setDomValue:function(val){
             $(this.$el).find('.select2').val(val);
             $(this.$el).find('.select2').trigger('change');
-            Vue.set(this.row,this.head.name,val)
+            //Vue.set(this.row,this.head.name,val)
         }
     }
 }
