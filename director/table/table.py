@@ -680,7 +680,10 @@ class ModelTable(object):
         for inst in query:
             # 遇到一种情况，聚合时，这里的queryset返回的item是dict。所以下面做一个判断
             if isinstance(inst,models.Model):
-                dc= to_dict(inst, include=permit_fields,filt_attr=self.dict_row( inst))
+                cus_dict = self.dict_row( inst)
+                dc= to_dict(inst, include=permit_fields,filt_attr=cus_dict)
+                # 再赋值一次，以免被默认dictfy替换掉了，例如 _x_label等值
+                dc.update(cus_dict)
             else:
                 dc = inst
             dc['_director_name'] = self.get_edit_director_name()

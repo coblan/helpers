@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 64);
+/******/ 	return __webpack_require__(__webpack_require__.s = 66);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -386,7 +386,7 @@ function updateLink(linkElement, obj) {
 //Vue.use(Dialog);
 //import { MessageBox } from 'mint-ui';
 //import { Indicator } from 'mint-ui';
-__webpack_require__(63);
+__webpack_require__(65);
 
 ex.assign(cfg, {
     fields_editor: 'com-sim-fields',
@@ -518,6 +518,10 @@ var _field_number = __webpack_require__(20);
 
 var field_number = _interopRequireWildcard(_field_number);
 
+var _label_shower = __webpack_require__(67);
+
+var label_shower = _interopRequireWildcard(_label_shower);
+
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 /***/ }),
@@ -552,13 +556,13 @@ var _span = __webpack_require__(29);
 
 var span = _interopRequireWildcard(_span);
 
-var _label_shower = __webpack_require__(67);
+var _label_shower = __webpack_require__(28);
 
 var label_shower = _interopRequireWildcard(_label_shower);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
-__webpack_require__(61);
+__webpack_require__(62);
 
 /***/ }),
 /* 8 */
@@ -573,7 +577,7 @@ var arrow_cell = _interopRequireWildcard(_arrow_cell);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
-__webpack_require__(66);
+__webpack_require__(63);
 
 /***/ }),
 /* 9 */
@@ -651,7 +655,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-__webpack_require__(58);
+__webpack_require__(59);
 
 var PopMobileWin = function () {
     function PopMobileWin(_ref) {
@@ -938,7 +942,7 @@ if(false) {
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(52);
+var content = __webpack_require__(53);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -984,7 +988,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 *
 * */
 
-__webpack_require__(53);
+__webpack_require__(54);
 
 var Wave = function () {
     function Wave() {
@@ -1211,7 +1215,7 @@ Vue.component('com-field-number', {
 "use strict";
 
 
-__webpack_require__(54);
+__webpack_require__(55);
 
 Vue.component('com-field-index-select', {
     props: ['row', 'head'],
@@ -1329,7 +1333,7 @@ Vue.component('com-field-linetext', {
 "use strict";
 
 
-__webpack_require__(59);
+__webpack_require__(60);
 
 Vue.component('com-field-multi-picture', {
     props: ['row', 'head'],
@@ -1413,7 +1417,7 @@ Vue.component('com-field-phone', {
 "use strict";
 
 
-__webpack_require__(60);
+__webpack_require__(61);
 
 Vue.component('com-field-phone-code', {
     /*
@@ -1618,7 +1622,24 @@ Vue.component('com-field-select', {
 
 
 /***/ }),
-/* 28 */,
+/* 28 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Vue.component('com-table-label-shower', {
+    props: ['head', 'row'],
+    template: '<span class="com-item-span-label" v-text="label_text"></span>',
+    computed: {
+        label_text: function label_text() {
+            var key = '_' + this.head.name + '_label';
+            return this.row[key];
+        }
+    }
+});
+
+/***/ }),
 /* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1686,7 +1707,7 @@ Vue.component('com-op-submit', {
 "use strict";
 
 
-__webpack_require__(62);
+__webpack_require__(64);
 
 Vue.component('com-fields-panel', {
     props: ['ctx'],
@@ -1744,7 +1765,7 @@ Vue.component('com-slide-iframe', {
 "use strict";
 
 
-__webpack_require__(57);
+__webpack_require__(58);
 
 Vue.component('com-slide-head', {
     props: ['title'],
@@ -1767,7 +1788,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.fixed_body = fixed_body;
-__webpack_require__(55);
+__webpack_require__(56);
 
 function fixed_body() {
     //$('body').addClass('modal-open')
@@ -1804,7 +1825,7 @@ window.fixed_body_quit = fixed_body_quit;
 "use strict";
 
 
-__webpack_require__(56);
+__webpack_require__(57);
 
 /*
 * 因为没有遮挡层，可能造成多次打开窗口问题，所以使用mint-ui替代了这个组件
@@ -2160,7 +2181,7 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, ".com-fileds-panel .ops {\n  margin: 0.5rem 5vw;\n}\n", ""]);
+exports.push([module.i, ".com-list-arrow-cell .content {\n  display: flex;\n  justify-content: space-around;\n}\n", ""]);
 
 // exports
 
@@ -2174,7 +2195,7 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, ".mint-indicator .mint-indicator-wrapper {\n  z-index: 90000;\n}\n.mint-indicator .mint-indicator-mask {\n  z-index: 90000;\n}\n.mint-toast {\n  z-index: 9999999;\n}\n", ""]);
+exports.push([module.i, ".com-fileds-panel .ops {\n  margin: 0.5rem 5vw;\n}\n", ""]);
 
 // exports
 
@@ -2188,13 +2209,27 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, ".mobile-list-page .page-title {\n  height: 0.8rem;\n  text-align: center;\n  vertical-align: middle;\n  line-height: 0.7rem;\n  background-color: #00a7d0;\n  color: #fff;\n}\n.mobile-list-page .cube-scroll-wrapper {\n  height: calc(100vh - 0.8rem);\n}\n", ""]);
+exports.push([module.i, ".mint-indicator .mint-indicator-wrapper {\n  z-index: 90000;\n}\n.mint-indicator .mint-indicator-mask {\n  z-index: 90000;\n}\n.mint-toast {\n  z-index: 9999999;\n}\n", ""]);
 
 // exports
 
 
 /***/ }),
 /* 53 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(0)();
+// imports
+
+
+// module
+exports.push([module.i, ".mobile-list-page .page-title {\n  height: 0.8rem;\n  text-align: center;\n  vertical-align: middle;\n  line-height: 0.7rem;\n  background-color: #00a7d0;\n  color: #fff;\n}\n.mobile-list-page .cube-scroll-wrapper {\n  height: calc(100vh - 0.8rem);\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 54 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
@@ -2220,7 +2255,7 @@ if(false) {
 }
 
 /***/ }),
-/* 54 */
+/* 55 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
@@ -2246,7 +2281,7 @@ if(false) {
 }
 
 /***/ }),
-/* 55 */
+/* 56 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
@@ -2272,7 +2307,7 @@ if(false) {
 }
 
 /***/ }),
-/* 56 */
+/* 57 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
@@ -2298,7 +2333,7 @@ if(false) {
 }
 
 /***/ }),
-/* 57 */
+/* 58 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
@@ -2324,7 +2359,7 @@ if(false) {
 }
 
 /***/ }),
-/* 58 */
+/* 59 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
@@ -2350,7 +2385,7 @@ if(false) {
 }
 
 /***/ }),
-/* 59 */
+/* 60 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
@@ -2376,7 +2411,7 @@ if(false) {
 }
 
 /***/ }),
-/* 60 */
+/* 61 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
@@ -2402,7 +2437,7 @@ if(false) {
 }
 
 /***/ }),
-/* 61 */
+/* 62 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
@@ -2428,13 +2463,39 @@ if(false) {
 }
 
 /***/ }),
-/* 62 */
+/* 63 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
 var content = __webpack_require__(50);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// add the styles to the DOM
+var update = __webpack_require__(1)(content, {});
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./panel.styl", function() {
+			var newContent = require("!!../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./panel.styl");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 64 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(51);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -2454,13 +2515,13 @@ if(false) {
 }
 
 /***/ }),
-/* 63 */
+/* 65 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(51);
+var content = __webpack_require__(52);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -2480,7 +2541,7 @@ if(false) {
 }
 
 /***/ }),
-/* 64 */
+/* 66 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2546,59 +2607,18 @@ __webpack_require__(15); // 单位宽度等
 __webpack_require__(17);
 
 /***/ }),
-/* 65 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(0)();
-// imports
-
-
-// module
-exports.push([module.i, ".com-list-arrow-cell .content {\n  display: flex;\n  justify-content: space-around;\n}\n", ""]);
-
-// exports
-
-
-/***/ }),
-/* 66 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(65);
-if(typeof content === 'string') content = [[module.i, content, '']];
-// add the styles to the DOM
-var update = __webpack_require__(1)(content, {});
-if(content.locals) module.exports = content.locals;
-// Hot Module Replacement
-if(false) {
-	// When the styles change, update the <style> tags
-	if(!content.locals) {
-		module.hot.accept("!!../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./panel.styl", function() {
-			var newContent = require("!!../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./panel.styl");
-			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-			update(newContent);
-		});
-	}
-	// When the module is disposed, remove the <style> tags
-	module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
 /* 67 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-Vue.component('com-table-label-shower', {
+Vue.component('com-field-label-shower', {
     props: ['head', 'row'],
-    template: '<span class="com-item-span-label" v-text="label_text"></span>',
+    template: '<van-field class="com-field-label-shower"\n    v-model="label_text"\n    :label="head.label"\n    type="text"\n    :name="head.name"\n    autosize\n    readonly\n  >\n  </van-field>',
     computed: {
         label_text: function label_text() {
-            var key = '_' + this.head.name + '_label';
-            return this.row[key];
+            return this.row['_' + this.head.name + '_label'];
         }
     }
 });
