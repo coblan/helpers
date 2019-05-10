@@ -1,17 +1,20 @@
-Vue.component('com-field-linetext',{
+Vue.component('com-field-number',{
     props:['head','row'],
     template:`<van-field class="com-field-linetext"  v-model="row[head.name]" :required="head.required"
     :label="head.label"
-    type="text"
+    type="number"
     :placeholder="normed_placeholder"
     :name="head.name"
     autosize
     :error-message="head.error"
     :readonly="head.readonly"
   >
+
   </van-field>`,
     mounted:function(){
-        this.setup_validate_msg_router()
+        if(!this.head.readonly){
+            this.setup_validate_msg_router()
+        }
     },
     computed:{
         normed_placeholder:function(){
@@ -32,6 +35,7 @@ Vue.component('com-field-linetext',{
                 this.head.validate_clearError="scope.head.error=''"
             }
         }
+
     }
 })
 

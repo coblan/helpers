@@ -30,6 +30,8 @@ class UserPage(TablePage):
                 head['editor'] = 'com-table-array-mapper'
                 head['options'] = [{'value': group.pk, 'label': str(group),} for group in Group.objects.all()]
                 #head['parse_method'] = 'dotSplit'
+            if head['name'] == 'username':
+                head['label']='账号'
             return head
         
         class search(RowSearch):
@@ -47,6 +49,8 @@ class UserFields(ModelFields):
             head['label']='权限组'
             #head['editor']='field_multi_chosen'
             head['editor'] = 'com-field-multi-chosen'
+        if head['name'] == 'username':
+            head['label']='账号'
         return head
 
     def getExtraHeads(self):

@@ -27,6 +27,7 @@ class ForeignProc(BaseFieldProc):
                 '_%s_label'%name:''                
             }
     
+    
     # 外键不能转换为对象，直接用pk值就行。
     #def clean_field(self,dc,name):
     
