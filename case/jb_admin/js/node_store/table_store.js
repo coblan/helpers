@@ -58,7 +58,6 @@ var table_store={
         },
         search:function(){
             this.search_args._page=1
-            this.search_args._has_default=1
             this.getRows()
         },
         getRows:function(){

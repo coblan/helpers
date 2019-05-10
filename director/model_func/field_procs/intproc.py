@@ -20,14 +20,9 @@ class IntProc(BaseFieldProc):
         if options:
             head['options']=options
             head['editor'] = 'com-field-select'
-    
-        #if hasattr(self.field, 'choices'): 
-            #head['editor'] = 'sim_select'
-            ##options = [{'value':x[0],'label':x[1]} for x in self.field.choices]
-            ##head['options'] = options
         else:
             head['editor'] = 'com-field-number'
-            head['fv_rule'] = 'range(-2147483648~2147483647)'
+            head['fv_rule'] = 'integer'
         return head
     
     def filter_get_head(self, name, model):

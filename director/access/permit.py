@@ -144,7 +144,8 @@ class ModelPermit(object):
     def get_rows(self):
         pass
     
-    
+    def can_write(self):
+        return  len( self.changeable_fields() ) >0
         
     def can_add(self):
         if self.nolimit or self.user.is_superuser:

@@ -3,6 +3,8 @@ from django.utils.translation import ugettext as _
 from helpers.director.base_data import field_map
 from django.db.models import Q
 from helpers.director.model_func.dictfy import model_to_name
+from django.core.exceptions import FieldDoesNotExist
+
 class SelectSearch(object):
     names=[]
     exact_names = []
@@ -40,10 +42,14 @@ class SelectSearch(object):
             mapperCls = field_map[field_path]
             mapper = mapperCls(name=self.qf,model = self.model)
         else:
-            f = self.model._meta.get_field(self.qf)
-            if f:
-                mapperCls = field_map.get(f.__class__)
-                mapper = mapperCls(name=f.name,model = f.model)
+            try:
+                f = self.model._meta.get_field(self.qf)
+                if f:
+                    mapperCls = field_map.get(f.__class__)
+                    mapper = mapperCls(name=f.name,model = f.model)
+            except FieldDoesNotExist:
+                pass
+           
         if mapper:
             q_str = mapper.filter_clean_search(self.q)
         else:
