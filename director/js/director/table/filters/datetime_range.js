@@ -20,10 +20,6 @@ var com_datetime_range={
                      style="background-color: white;width: 12em"
                      placeholder="结束时间">
                 </div>`,
-    //template:`<div  class="com-filter-datetime flex flex-ac">
-    //                <input type="text" class="form-control input-sm" style="width: 23em" readonly
-    //                    :placeholder="head.placeholder">
-    //            </div>`,
     mounted:function(){
         var self=this
         ex.load_js('/static/lib/laydate/laydate.js',function(){
@@ -50,7 +46,21 @@ var com_datetime_range={
             });
         })
     },
+    computed:{
+        start_value(){
+            return this.search_args['_start_'+this.head.name]
+        },
+        end_value(){
+            return this.search_args['_end_'+this.head.name]
+        }
+    },
     watch:{
+        start_value(v){
+            this.start = v
+        },
+        end_value(v){
+            this.end=v
+        },
         start:function(nv,ov){
             if(nv && this.end){
                 if(nv>this.end){

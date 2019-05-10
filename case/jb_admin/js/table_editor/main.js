@@ -7,6 +7,7 @@ import * as array_shower from  './array_shower.js'
 import * as click from  './click.js'
 import * as my_json from  './json.js'
 import * as multi_image from  './multi_image.js'
+import * as map_html from  './map_html.js'
 
 /*
 
