@@ -31,11 +31,12 @@ class FieldsPage(object):
             return 'director/fields.html'
     
     def get_context(self):
+        self.ctx={}
         if self.fieldsCls:
-            self.ctx=self.fields.get_context()
-            #self.ctx['app']=self.fieldsCls._meta.model._meta.app_label
-        else:
-            self.ctx={}
+            dc = self.fields.get_context()
+            self.ctx.update(dc)
+            self.ctx['fields_ctx'] = dc
+            
         self.ctx['extra_js']=self.extra_js
         self.ctx['ex_css'] = self.ex_css        
         

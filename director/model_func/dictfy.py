@@ -337,7 +337,7 @@ def form_to_head(form,include=None):
             dc['editor']='bool'
             #dc['no_auto_label']=True
         elif v.__class__ in [forms.fields.IntegerField,forms.fields.FloatField]:
-            dc['editor']='number'
+            dc['editor']='com-field-number'
         elif v.__class__  == forms.fields.DateField:
             dc['editor']='date'
         if v.__class__ ==forms.models.ModelMultipleChoiceField and \

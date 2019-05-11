@@ -1,0 +1,76 @@
+{% extends "wxweb/site_base.html" %}
+{% load static %}
+{% load jsonify %}
+
+{% block head-content %}
+<title>{{ page_label }}</title>
+<script src="{{ js_config.js_lib.jquery }}"></script>
+<script src="{{ js_config.js_lib.md5 }}"></script>
+<link rel="stylesheet" href="{{ js_config.js_lib.font_awesome }}">
+<script src="{{ js_config.js_lib.vuejs }}"></script>
+<script src="{{ js_config.js_lib.nice_validator }}"></script>
+<link rel="stylesheet" href="{{ js_config.js_lib.nice_validator_css }}">
+
+<script src="{{ js_config.js_lib.cube_ui }}"></script>
+<link rel="stylesheet" href="{{ js_config.js_lib.cube_ui_css }}">
+<script src="{{ js_config.js_lib.mint_ui }}"></script>
+<link rel="stylesheet" href="{{ js_config.js_lib.mint_ui_css }}">
+<script src="{{ js_config.js_lib.vant }}"></script>
+<link rel="stylesheet" href="{{ js_config.js_lib.vant_css }}">
+
+<script src="{{ js_config.js_lib.exfun | safe }}"></script>
+<script src="{{ js_config.js_lib.director | safe }}"></script>
+<script src="{{ js_config.js_lib.jb_admin | safe }}"></script>
+<script src="{{ js_config.js_lib.mobile | safe }}"></script>
+
+{% for js in extra_js %}
+    <script src="{{ js | safe }}"></script>
+{% endfor %}
+
+{% endblock %}
+
+{% block page_body %}
+
+<script>
+
+    layout_coms={{ layout_coms | jsonify }}
+
+    $(function(){
+        new Vue({
+            el:'#there',
+            data:function(){
+                var childStore = new Vue()
+                return {
+                    childStore:childStore,
+                    page_label:page_label,
+                    layout_coms:layout_coms,
+                }
+            },
+            methods:{
+                open_detail:function(row){
+//                    fields_ctx.row = row
+//                    fields_ctx.title = '报修详情'
+                    detail_ctx.row = row
+                    cfg.pop_big( detail_editor,  detail_ctx)
+                },
+                onPullingUp(){
+                    this.childStore.addNextPage().then(()=>{
+                        this.$refs.scroll.forceUpdate()
+                })
+                },
+                onPullingDown(){
+                    this.childStore.search().then(()=>{
+                        this.$refs.scroll.forceUpdate()
+                })
+                },
+            }
+        })
+    })
+</script>
+<div id="there" class="mobile-list-page">
+    <component :is="head.editor" v-for="head in layout_coms" :ctx="head"></component>
+    <!--<com-layout-grid :heads= 'gridmenu'></com-layout-grid>-->
+
+</div>
+
+{% endblock %}

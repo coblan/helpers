@@ -108,19 +108,21 @@ class BaseEngine(object):
         if need_login and not self.login_authorized(request):
             return redirect(self.login_url+'?next='+request.get_full_path())
         
-        page=page_cls(request, engin = self)
-        if hasattr(page, 'check_permit'):
-            page.check_permit()
-        
         if hasattr(page_cls, 'need_staff'):
             self.need_staff = page_cls.need_staff
         if self.need_staff and not request.user.is_staff:
             raise PermissionDenied('Need staff to access this page!')
         
         try:
+            page=page_cls(request, engin = self)
+            if hasattr(page, 'check_permit'):
+                page.check_permit()
             ctx=page.get_context()
         except UserWarning as e:
-            return JsonResponse({'success':False,'msg':str(e)})
+            if  request.is_ajax():
+                return JsonResponse({'success':False,'msg':str(e)})
+            else:
+                return HttpResponse(str(e))
         # 如果返回的事 HttpResponse，表示已经处理完毕了，不需要附加其他属性。
         if isinstance(ctx, HttpResponse):
             return ctx
@@ -150,7 +152,8 @@ class BaseEngine(object):
                 ctx['page_label'] =page.get_label()
             ctx['head_bar_data']=self.get_head_bar_data(request)
             ctx['js_config'] = self.getJsConfig()
-            
+            if hasattr(page,'getExtraJs'):
+                ctx['extra_js'] = page.getExtraJs(ctx)
             ctx=self.custome_ctx(ctx)
             resp= render(request,template,context=ctx)
         if getattr(page,'get_cache_control',None):
