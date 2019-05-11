@@ -98,9 +98,6 @@ class BaseEngine(object):
         
         page_cls = self.get_page_cls(name)
 
-        # if getattr(page_cls,'need_login',True):
-            # if request.user.is_anonymous() or not request.user.is_active:
-                # return redirect(self.login_url+'?next='+request.get_full_path())
         if hasattr(page_cls, 'need_login'):
             need_login = page_cls.need_login
         else:
@@ -116,7 +113,11 @@ class BaseEngine(object):
         try:
             page=page_cls(request, engin = self)
             if hasattr(page, 'check_permit'):
-                page.check_permit()
+                check_rt = page.check_permit()
+                # 可以在这里检测权限，然后跳转
+                if isinstance(check_rt, HttpResponse):
+                    return check_rt
+                
             ctx=page.get_context()
         except UserWarning as e:
             if  request.is_ajax():
