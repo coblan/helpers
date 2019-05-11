@@ -1,7 +1,7 @@
 Vue.component('com-field-label-shower',{
     props:['head','row'],
     template:`<van-field class="com-field-label-shower"
-    v-model="row[head.name]"
+    v-model="label_text"
     :label="head.label"
     type="text"
     :name="head.name"
