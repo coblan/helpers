@@ -410,6 +410,10 @@ ex.assign(cfg, {
             return MINT.MessageBox(msg);
         }
     },
+    confirm: function confirm(msg) {
+        return MINT.MessageBox.confirm(msg);
+    },
+
     pop_edit_local: function pop_edit_local(ctx, callback) {
         ctx.fields_editor = 'com-sim-fields-local';
         return cfg.pop_big('com-fields-panel', ctx, callback);
@@ -597,6 +601,10 @@ __webpack_require__(70);
 var _form_submit = __webpack_require__(34);
 
 var form_submit = _interopRequireWildcard(_form_submit);
+
+var _van_btn = __webpack_require__(80);
+
+var van_btn = _interopRequireWildcard(_van_btn);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -2925,6 +2933,74 @@ Vue.component('com-grid-icon-btn', {
         }
     }
 });
+
+/***/ }),
+/* 80 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+__webpack_require__(82);
+
+Vue.component('com-op-van-btn', {
+    props: ['head'],
+    template: '<van-button class="com-op-van-btn" com-op-submit :type="head.type || \'primary\'" @click="on_click()" size="large ">\n            <span v-text="head.label || \'\u786E\u5B9A\'"></span>\n        </van-button>',
+    data: function data() {
+        var parStore = ex.vueParStore(this);
+        return {
+            parStore: parStore
+        };
+    },
+    methods: {
+        on_click: function on_click() {
+            if (this.head.action) {
+                ex.eval(this.head.action, { ps: this.parStore });
+            }
+        }
+    }
+
+});
+
+/***/ }),
+/* 81 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(0)();
+// imports
+
+
+// module
+exports.push([module.i, ".com-op-van-btn {\n  margin: 0.1rem 0;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 82 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(81);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// add the styles to the DOM
+var update = __webpack_require__(1)(content, {});
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./van_btn.styl", function() {
+			var newContent = require("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./van_btn.styl");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
 
 /***/ })
 /******/ ]);

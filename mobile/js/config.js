@@ -27,6 +27,9 @@ ex.assign(cfg,{
             return MINT.MessageBox(msg)
         }
     },
+    confirm(msg){
+        return MINT.MessageBox.confirm(msg)
+    },
     pop_edit_local:function(ctx,callback){
         ctx.fields_editor='com-sim-fields-local'
         return cfg.pop_big('com-fields-panel',ctx,callback)
