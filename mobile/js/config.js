@@ -27,6 +27,9 @@ ex.assign(cfg,{
             return MINT.MessageBox(msg)
         }
     },
+    confirm(msg){
+        return MINT.MessageBox.confirm(msg)
+    },
     pop_edit_local:function(ctx,callback){
         ctx.fields_editor='com-sim-fields-local'
         return cfg.pop_big('com-fields-panel',ctx,callback)
@@ -62,18 +65,16 @@ ex.assign(cfg,{
        return cfg.pop_big('com-slide-iframe',{url:url,title:option.title})
     },
     show_load(){
-        //Indicator.open(
-        //    {spinnerType: 'fading-circle'}
-        //)
-        vant.Toast.loading({
-            mask: true,
-            message: '加载中...',
-            duration: 0,
-        });
+        MINT.Indicator.open({spinnerType: 'fading-circle'})
+        //vant.Toast.loading({
+        //    mask: true,
+        //    message: '加载中...',
+        //    duration: 0,
+        //});
     },
     hide_load(delay,msg){
-        //Indicator.close()
-        vant.Toast.clear()
+        //vant.Toast.clear()
+        MINT.Indicator.close()
         if(msg){
             cfg.toast(msg)
         }

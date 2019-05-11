@@ -338,6 +338,7 @@ class ModelTable(object):
     pop_edit_field=""
     has_sequence = False
     selectable = True
+    nolimit = False
     def __init__(self,_page=1,row_sort=[],row_filter={},row_search= '',crt_user=None,perpage=None,**kw):
         """
         kw['search_args']只是一个记录，在获取到rows时，一并返回前端页面，便于显示。
@@ -366,7 +367,7 @@ class ModelTable(object):
         
     
     def custom_permit(self):
-        self.permit=ModelPermit(model=self.model, user=self.crt_user)
+        self.permit=ModelPermit(model=self.model, user=self.crt_user,nolimit=self.nolimit)
 
     @classmethod
     def parse_request(cls,request):
@@ -679,7 +680,10 @@ class ModelTable(object):
         for inst in query:
             # 遇到一种情况，聚合时，这里的queryset返回的item是dict。所以下面做一个判断
             if isinstance(inst,models.Model):
-                dc= to_dict(inst, include=permit_fields,filt_attr=self.dict_row( inst))
+                cus_dict = self.dict_row( inst)
+                dc= to_dict(inst, include=permit_fields,filt_attr=cus_dict)
+                # 再赋值一次，以免被默认dictfy替换掉了，例如 _x_label等值
+                dc.update(cus_dict)
             else:
                 dc = inst
             dc['_director_name'] = self.get_edit_director_name()

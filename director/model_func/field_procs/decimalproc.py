@@ -22,10 +22,11 @@ class DecimalProc(BaseFieldProc):
             return Decimal(0)
     
     def dict_field_head(self,head):   
-        head['editor'] = 'number'
+        head['editor'] = 'com-field-number'
         head['fv_rule']='digit(2)'
         return head    
     
 field_map.update({
-    DecimalField:DecimalProc
+    DecimalField:DecimalProc,
+    
 })

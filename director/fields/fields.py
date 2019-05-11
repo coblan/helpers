@@ -42,6 +42,7 @@ class ModelFields(forms.ModelForm):
     extra_mixins=[]
     hide_fields = []
     show_pk=False
+    nolimit=False
     @classmethod
     def parse_request(cls,request):
         """
@@ -55,7 +56,7 @@ class ModelFields(forms.ModelForm):
         pk=dc.pop('pk',None)
         return cls(pk=pk,crt_user=request.user,**dc) 
     
-    def __init__(self,dc={},pk=None,crt_user=None,nolimit=False,*args,**kw):
+    def __init__(self,dc={},pk=None,crt_user=None,nolimit=None,*args,**kw):
         """
         调用情况：
         1. ajax save 时
@@ -84,8 +85,8 @@ class ModelFields(forms.ModelForm):
             elif pk != None:  # 很多时候，pk=0 是已经创建了
                 try:
                     form_kw['instance']= self._meta.model.objects.get(pk=pk)
-                except self._meta.model.DoseNotExist:
-                    raise Http404('Id that you request is not exist')
+                except self._meta.model.DoesNotExist:
+                    raise Http404('Id=%s that you request is not exist'%pk)
             else:
                 form_kw['instance'] = self._meta.model()
         else:
@@ -101,8 +102,8 @@ class ModelFields(forms.ModelForm):
                         dc[k] = getattr(inst, "%s_id" % k)
                         continue
                 dc[k] =  getattr(form_kw['instance'] , k)  
-        
-        self.nolimit = nolimit
+        if nolimit is not None:
+            self.nolimit = nolimit
         self.kw.update(dc)
 
         super(ModelFields,self).__init__(dc,*args,**form_kw)
@@ -289,7 +290,7 @@ class ModelFields(forms.ModelForm):
                 dc['editor']='bool'
                 #dc['no_auto_label']=True
             elif v.__class__ in [forms.fields.IntegerField,forms.fields.FloatField]:
-                dc['editor']='number'
+                dc['editor']='com-field-number'
             elif v.__class__  == forms.fields.DateField:
                 dc['editor']='date'
             if v.__class__ ==forms.models.ModelMultipleChoiceField and \
@@ -444,7 +445,9 @@ class ModelFields(forms.ModelForm):
                 self.instance.save() # if instance is a new row , need save first then manytomany_relationship can create   
             for k in self.changed_data:
                 ## 测试时看到self.instance已经赋值了，下面这行代码可能没用,但是需要考虑下新建时 manytomany foreignkey 这些情况
-                setattr(self.instance,k, self.cleaned_data.get(k) )
+                if k in self.kw:  # 排除开那些前端没有传递，而是后端model 默认生成的值
+                                  # 这些默认的值不能用 cleaned_data.get 来获取，因为他们是空
+                    setattr(self.instance,k, self.cleaned_data.get(k) )
             self.instance.save()
             
         if op or extra_log:

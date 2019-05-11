@@ -67,6 +67,7 @@ class BaseEngine(object):
     
     root_page='/'   # 被home 替代了
     access_from_internet = False
+    need_staff = False
     
     @classmethod
     def as_view(cls):
@@ -97,9 +98,6 @@ class BaseEngine(object):
         
         page_cls = self.get_page_cls(name)
 
-        # if getattr(page_cls,'need_login',True):
-            # if request.user.is_anonymous() or not request.user.is_active:
-                # return redirect(self.login_url+'?next='+request.get_full_path())
         if hasattr(page_cls, 'need_login'):
             need_login = page_cls.need_login
         else:
@@ -107,14 +105,25 @@ class BaseEngine(object):
         if need_login and not self.login_authorized(request):
             return redirect(self.login_url+'?next='+request.get_full_path())
         
-        page=page_cls(request, engin = self)
-        if hasattr(page, 'check_permit'):
-            page.check_permit()
+        if hasattr(page_cls, 'need_staff'):
+            self.need_staff = page_cls.need_staff
+        if self.need_staff and not request.user.is_staff:
+            raise PermissionDenied('Need staff to access this page!')
         
         try:
+            page=page_cls(request, engin = self)
+            if hasattr(page, 'check_permit'):
+                check_rt = page.check_permit()
+                # 可以在这里检测权限，然后跳转
+                if isinstance(check_rt, HttpResponse):
+                    return check_rt
+                
             ctx=page.get_context()
         except UserWarning as e:
-            return JsonResponse({'success':False,'msg':str(e)})
+            if  request.is_ajax():
+                return JsonResponse({'success':False,'msg':str(e)})
+            else:
+                return HttpResponse(str(e))
         # 如果返回的事 HttpResponse，表示已经处理完毕了，不需要附加其他属性。
         if isinstance(ctx, HttpResponse):
             return ctx
@@ -144,7 +153,8 @@ class BaseEngine(object):
                 ctx['page_label'] =page.get_label()
             ctx['head_bar_data']=self.get_head_bar_data(request)
             ctx['js_config'] = self.getJsConfig()
-            
+            if hasattr(page,'getExtraJs'):
+                ctx['extra_js'] = page.getExtraJs(ctx)
             ctx=self.custome_ctx(ctx)
             resp= render(request,template,context=ctx)
         if getattr(page,'get_cache_control',None):

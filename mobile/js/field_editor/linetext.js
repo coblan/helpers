@@ -9,31 +9,29 @@ Vue.component('com-field-linetext',{
     :error-message="head.error"
     :readonly="head.readonly"
   >
-    <!--<template slot="left-icon">-->
-        <!--<input v-model="row[head.name]" type="text" :name="head.name" style="display: none">-->
-    <!--</template>-->
-
   </van-field>`,
     mounted:function(){
-        if(!this.head.validate_showError){
-            Vue.set(this.head,'error','')
-            this.head.validate_showError="scope.head.error=scope.msg"
-        }
-        if(!this.head.validate_clearError){
-            this.head.validate_clearError="scope.head.error=''"
-        }
+        this.setup_validate_msg_router()
     },
     computed:{
         normed_placeholder:function(){
             if(! this.head.readonly){
-                return this.head.placeholder || '请选择'+this.head.label
+                return this.head.placeholder || '请输入'+this.head.label
             }else{
                 return ''
             }
         }
     },
     methods:{
-
+        setup_validate_msg_router(){
+            if(!this.head.validate_showError){
+                Vue.set(this.head,'error','')
+                this.head.validate_showError="scope.head.error=scope.msg"
+            }
+            if(!this.head.validate_clearError){
+                this.head.validate_clearError="scope.head.error=''"
+            }
+        }
     }
 })
 

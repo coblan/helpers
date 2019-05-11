@@ -63,11 +63,13 @@ def sim_dict(instance,filt_attr=None,include=None,exclude=None,include_pk=True):
         fields=filter(lambda field:field.name not in exclude,fields)
     if filt_attr:
         if callable(filt_attr):
-            out=filt_attr(instance)
+            has_dict=filt_attr(instance)
         else:
-            out=filt_attr
+            has_dict=filt_attr
     else:
-        out={}
+        has_dict={}
+        
+    out = dict(has_dict)
     for field in fields:
         if field.name in out: # or\
            #isinstance(field,(models.ManyToManyRel,models.ManyToOneRel)):
@@ -335,7 +337,7 @@ def form_to_head(form,include=None):
             dc['editor']='bool'
             #dc['no_auto_label']=True
         elif v.__class__ in [forms.fields.IntegerField,forms.fields.FloatField]:
-            dc['editor']='number'
+            dc['editor']='com-field-number'
         elif v.__class__  == forms.fields.DateField:
             dc['editor']='date'
         if v.__class__ ==forms.models.ModelMultipleChoiceField and \

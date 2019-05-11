@@ -9,4 +9,6 @@ from . import admin_pswd
 
 from . import db_signal
 from . import js_cfg
+from django.contrib.auth.models import User
+
 

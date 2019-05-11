@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 58);
+/******/ 	return __webpack_require__(__webpack_require__.s = 73);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -375,9 +375,7 @@ function updateLink(linkElement, obj) {
 
 
 /***/ }),
-/* 2 */,
-/* 3 */,
-/* 4 */
+/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -388,7 +386,7 @@ function updateLink(linkElement, obj) {
 //Vue.use(Dialog);
 //import { MessageBox } from 'mint-ui';
 //import { Indicator } from 'mint-ui';
-__webpack_require__(55);
+__webpack_require__(72);
 
 ex.assign(cfg, {
     fields_editor: 'com-sim-fields',
@@ -412,6 +410,10 @@ ex.assign(cfg, {
             return MINT.MessageBox(msg);
         }
     },
+    confirm: function confirm(msg) {
+        return MINT.MessageBox.confirm(msg);
+    },
+
     pop_edit_local: function pop_edit_local(ctx, callback) {
         ctx.fields_editor = 'com-sim-fields-local';
         return cfg.pop_big('com-fields-panel', ctx, callback);
@@ -447,18 +449,16 @@ ex.assign(cfg, {
         return cfg.pop_big('com-slide-iframe', { url: url, title: option.title });
     },
     show_load: function show_load() {
-        //Indicator.open(
-        //    {spinnerType: 'fading-circle'}
-        //)
-        vant.Toast.loading({
-            mask: true,
-            message: '加载中...',
-            duration: 0
-        });
+        MINT.Indicator.open({ spinnerType: 'fading-circle' });
+        //vant.Toast.loading({
+        //    mask: true,
+        //    message: '加载中...',
+        //    duration: 0,
+        //});
     },
     hide_load: function hide_load(delay, msg) {
-        //Indicator.close()
-        vant.Toast.clear();
+        //vant.Toast.clear()
+        MINT.Indicator.close();
         if (msg) {
             cfg.toast(msg);
         }
@@ -471,7 +471,7 @@ ex.assign(cfg, {
 });
 
 /***/ }),
-/* 5 */
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -484,17 +484,17 @@ var material_wave = _interopRequireWildcard(_material_wave);
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 /***/ }),
-/* 6 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _index_select = __webpack_require__(20);
+var _index_select = __webpack_require__(22);
 
 var index_select = _interopRequireWildcard(_index_select);
 
-var _linetext = __webpack_require__(21);
+var _linetext = __webpack_require__(24);
 
 var linetext = _interopRequireWildcard(_linetext);
 
@@ -502,23 +502,60 @@ var _blocktext = __webpack_require__(19);
 
 var blocktext = _interopRequireWildcard(_blocktext);
 
-var _phone = __webpack_require__(23);
+var _phone = __webpack_require__(26);
 
 var phone = _interopRequireWildcard(_phone);
 
-var _select = __webpack_require__(24);
+var _select = __webpack_require__(29);
 
 var select = _interopRequireWildcard(_select);
 
-var _multi_picture = __webpack_require__(22);
+var _multi_picture = __webpack_require__(25);
 
 var multi_picture = _interopRequireWildcard(_multi_picture);
 
-var _phone_code = __webpack_require__(59);
+var _phone_code = __webpack_require__(27);
 
 var phone_code = _interopRequireWildcard(_phone_code);
 
+var _field_number = __webpack_require__(21);
+
+var field_number = _interopRequireWildcard(_field_number);
+
+var _label_shower = __webpack_require__(23);
+
+var label_shower = _interopRequireWildcard(_label_shower);
+
+var _bool = __webpack_require__(20);
+
+var bool = _interopRequireWildcard(_bool);
+
+var _picture = __webpack_require__(28);
+
+var picture = _interopRequireWildcard(_picture);
+
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _com_date_range = __webpack_require__(30);
+
+var com_date_range = _interopRequireWildcard(_com_date_range);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+//import * as com_input_date from  './com_input_date.js'
+
 
 /***/ }),
 /* 7 */
@@ -527,19 +564,32 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 "use strict";
 
 
-var _com_date_range = __webpack_require__(25);
+var _span = __webpack_require__(32);
 
-var com_date_range = _interopRequireWildcard(_com_date_range);
+var span = _interopRequireWildcard(_span);
+
+var _label_shower = __webpack_require__(31);
+
+var label_shower = _interopRequireWildcard(_label_shower);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+__webpack_require__(69);
 
 /***/ }),
 /* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-//import * as com_input_date from  './com_input_date.js'
 
+
+var _arrow_cell = __webpack_require__(33);
+
+var arrow_cell = _interopRequireWildcard(_arrow_cell);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+__webpack_require__(70);
 
 /***/ }),
 /* 9 */
@@ -548,9 +598,13 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 "use strict";
 
 
-var _form_submit = __webpack_require__(26);
+var _form_submit = __webpack_require__(34);
 
 var form_submit = _interopRequireWildcard(_form_submit);
+
+var _van_btn = __webpack_require__(80);
+
+var van_btn = _interopRequireWildcard(_van_btn);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -561,13 +615,17 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 "use strict";
 
 
-var _slide_iframe = __webpack_require__(28);
+var _slide_iframe = __webpack_require__(36);
 
 var slide_iframe = _interopRequireWildcard(_slide_iframe);
 
-var _fields_panel = __webpack_require__(27);
+var _fields_panel = __webpack_require__(35);
 
 var fields_panel = _interopRequireWildcard(_fields_panel);
+
+var _layout_grid = __webpack_require__(79);
+
+var layout_grid = _interopRequireWildcard(_layout_grid);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -578,19 +636,19 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 "use strict";
 
 
-var _my_slide_win = __webpack_require__(31);
+var _my_slide_win = __webpack_require__(39);
 
 var my_slide_win = _interopRequireWildcard(_my_slide_win);
 
-var _com_slide_head = __webpack_require__(29);
+var _com_slide_head = __webpack_require__(37);
 
 var com_slide_head = _interopRequireWildcard(_com_slide_head);
 
-var _fiexed_scrll = __webpack_require__(30);
+var _fiexed_scrll = __webpack_require__(38);
 
 var fiexed_scrll = _interopRequireWildcard(_fiexed_scrll);
 
-var _pop_image_shower = __webpack_require__(32);
+var _pop_image_shower = __webpack_require__(40);
 
 var pop_image_shower = _interopRequireWildcard(_pop_image_shower);
 
@@ -617,7 +675,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-__webpack_require__(52);
+__webpack_require__(64);
 
 var PopMobileWin = function () {
     function PopMobileWin(_ref) {
@@ -829,17 +887,30 @@ window.pop_mobile_win = pop_mobile_win;
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-//import * as ele_table_bus_page from  './ele_table_bus_page'
 
+
+var _table_store = __webpack_require__(41);
+
+var table_store = _interopRequireWildcard(_table_store);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 /***/ }),
 /* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
+"use strict";
+//import * as ele_table_bus_page from  './ele_table_bus_page'
+
+
+/***/ }),
+/* 15 */
+/***/ (function(module, exports, __webpack_require__) {
+
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(38);
+var content = __webpack_require__(47);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -859,13 +930,13 @@ if(false) {
 }
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(39);
+var content = __webpack_require__(48);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -885,8 +956,32 @@ if(false) {
 }
 
 /***/ }),
-/* 16 */,
-/* 17 */,
+/* 17 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(58);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// add the styles to the DOM
+var update = __webpack_require__(1)(content, {});
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./list.styl", function() {
+			var newContent = require("!!../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./list.styl");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
 /* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -913,7 +1008,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 *
 * */
 
-__webpack_require__(47);
+__webpack_require__(59);
 
 var Wave = function () {
     function Wave() {
@@ -1103,7 +1198,116 @@ Vue.component('com-field-blocktext', {
 "use strict";
 
 
-__webpack_require__(48);
+__webpack_require__(65);
+
+Vue.component('com-field-bool', {
+    props: ['row', 'head'],
+    template: ' <van-cell class="com-field-bool" :title="head.label" >\n        <van-checkbox v-model="row[head.name]">\n        </van-checkbox>\n    </van-cell>',
+    data: function data() {
+        return {};
+    },
+
+    methods: {
+        on_change: function on_change(event) {
+            var new_selected_files = event.target.files;
+            this.uploadImage(new_selected_files);
+            $(this.$el).find('.my-file-input').val('');
+        },
+        uploadImage: function uploadImage(image_files) {
+            if (!image_files) {
+                return;
+            }
+            var self = this;
+            console.log('start upload');
+            //if(! self.validate(v)){
+            //    return
+            //}
+            var up_url = this.head.up_url || '/d/upload?path=general_upload/images';
+            cfg.show_load();
+            ex.uploads(image_files, up_url, function (url_list) {
+                cfg.hide_load();
+                if (!self.row[self.head.name]) {
+                    Vue.set(self.row, self.head.name, url_list);
+                    //self.row[self.head.name] = url_list
+                } else {
+                    self.row[self.head.name] = self.row[self.head.name].concat(url_list);
+                }
+            });
+        },
+        open_select_images: function open_select_images() {
+            console.log('before select');
+            var self = this;
+            if (!this.disable) {
+                $(this.$el).find('input[type=file]').click();
+                this.disable = true;
+                setTimeout(function () {
+                    self.disable = false;
+                }, 3000);
+            }
+            console.log('after select');
+        },
+        remove_image: function remove_image(index) {
+            var image_list = this.row[this.head.name];
+            image_list.splice(index, 1);
+        },
+        big_win: function big_win(imgsrc) {
+            var ctx = { imgsrc: imgsrc };
+            pop_layer(ctx, 'com-pop-image', function () {}, {
+                title: false,
+                area: ['90%', '90%'],
+                shade: 0.8,
+                skin: 'img-shower',
+                shadeClose: true
+            });
+        }
+    }
+});
+
+/***/ }),
+/* 21 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Vue.component('com-field-number', {
+    props: ['head', 'row'],
+    template: '<van-field class="com-field-linetext"  v-model="row[head.name]" :required="head.required"\n    :label="head.label"\n    type="number"\n    :placeholder="normed_placeholder"\n    :name="head.name"\n    autosize\n    :error-message="head.error"\n    :readonly="head.readonly"\n  >\n\n  </van-field>',
+    mounted: function mounted() {
+        if (!this.head.readonly) {
+            this.setup_validate_msg_router();
+        }
+    },
+    computed: {
+        normed_placeholder: function normed_placeholder() {
+            if (!this.head.readonly) {
+                return this.head.placeholder || '请输入' + this.head.label;
+            } else {
+                return '';
+            }
+        }
+    },
+    methods: {
+        setup_validate_msg_router: function setup_validate_msg_router() {
+            if (!this.head.validate_showError) {
+                Vue.set(this.head, 'error', '');
+                this.head.validate_showError = "scope.head.error=scope.msg";
+            }
+            if (!this.head.validate_clearError) {
+                this.head.validate_clearError = "scope.head.error=''";
+            }
+        }
+    }
+});
+
+/***/ }),
+/* 22 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+__webpack_require__(60);
 
 Vue.component('com-field-index-select', {
     props: ['row', 'head'],
@@ -1180,7 +1384,24 @@ Vue.component('com-index-select', {
 });
 
 /***/ }),
-/* 21 */
+/* 23 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Vue.component('com-field-label-shower', {
+    props: ['head', 'row'],
+    template: '<van-field class="com-field-label-shower"\n    v-model="label_text"\n    :label="head.label"\n    type="text"\n    :name="head.name"\n    autosize\n    readonly\n  >\n  </van-field>',
+    computed: {
+        label_text: function label_text() {
+            return this.row['_' + this.head.name + '_label'];
+        }
+    }
+});
+
+/***/ }),
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1188,36 +1409,40 @@ Vue.component('com-index-select', {
 
 Vue.component('com-field-linetext', {
     props: ['head', 'row'],
-    template: '<van-field class="com-field-linetext"  v-model="row[head.name]" :required="head.required"\n    :label="head.label"\n    type="text"\n    :placeholder="normed_placeholder"\n    :name="head.name"\n    autosize\n    :error-message="head.error"\n    :readonly="head.readonly"\n  >\n    <!--<template slot="left-icon">-->\n        <!--<input v-model="row[head.name]" type="text" :name="head.name" style="display: none">-->\n    <!--</template>-->\n\n  </van-field>',
+    template: '<van-field class="com-field-linetext"  v-model="row[head.name]" :required="head.required"\n    :label="head.label"\n    type="text"\n    :placeholder="normed_placeholder"\n    :name="head.name"\n    autosize\n    :error-message="head.error"\n    :readonly="head.readonly"\n  >\n  </van-field>',
     mounted: function mounted() {
-        if (!this.head.validate_showError) {
-            Vue.set(this.head, 'error', '');
-            this.head.validate_showError = "scope.head.error=scope.msg";
-        }
-        if (!this.head.validate_clearError) {
-            this.head.validate_clearError = "scope.head.error=''";
-        }
+        this.setup_validate_msg_router();
     },
     computed: {
         normed_placeholder: function normed_placeholder() {
             if (!this.head.readonly) {
-                return this.head.placeholder || '请选择' + this.head.label;
+                return this.head.placeholder || '请输入' + this.head.label;
             } else {
                 return '';
             }
         }
     },
-    methods: {}
+    methods: {
+        setup_validate_msg_router: function setup_validate_msg_router() {
+            if (!this.head.validate_showError) {
+                Vue.set(this.head, 'error', '');
+                this.head.validate_showError = "scope.head.error=scope.msg";
+            }
+            if (!this.head.validate_clearError) {
+                this.head.validate_clearError = "scope.head.error=''";
+            }
+        }
+    }
 });
 
 /***/ }),
-/* 22 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(53);
+__webpack_require__(66);
 
 Vue.component('com-field-multi-picture', {
     props: ['row', 'head'],
@@ -1283,7 +1508,7 @@ Vue.component('com-field-multi-picture', {
 });
 
 /***/ }),
-/* 23 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1295,7 +1520,185 @@ Vue.component('com-field-phone', {
 });
 
 /***/ }),
-/* 24 */
+/* 27 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+__webpack_require__(67);
+
+Vue.component('com-field-phone-code', {
+    /*
+     parStore.get_phone_code(callback){
+       }
+       * */
+    props: ['row', 'head'],
+    template: ' <div class="com-field-phone-code flex">\n         <input  type="text" class="form-control input-sm" v-model="row[head.name]"\n            :id="\'id_\'+head.name" :name="head.name"\n            :placeholder="head.placeholder" :autofocus="head.autofocus" :maxlength=\'head.maxlength\'>\n\n          <button type="button" class="btn btn-sm"\n              :disabled="vcode_count !=0"\n               @click="get_phone_code" v-text="vcodeLabel"></button>\n     </div>\n    ',
+    data: function data() {
+        var parStore = ex.vueParStore(this);
+        return {
+            parStore: parStore,
+            vcode_count: 0
+        };
+    },
+    computed: {
+        vcodeLabel: function vcodeLabel() {
+            if (this.vcode_count != 0) {
+                return '' + this.vcode_count + ' s';
+            } else {
+                return '获取验证码';
+            }
+        }
+    },
+    methods: {
+        get_phone_code: function get_phone_code() {
+            var self = this;
+            this.parStore.get_phone_code(function () {
+                self.vcode_count = self.head.vcode_count || 120;
+                self.countGetVCodeAgain();
+            });
+        },
+        //get_phone_code:function(){
+        //var phone = this.row[this.head.phone_field]
+        //var img_code = this.row[this.head.img_code_field]
+        ////var com_vcode =kws.com_vcode
+        //var ph =$(this.$el).find('#id_'+this.hea).trigger("validate")
+        //var image_code_input_element=$(this.$el).find('[name=image_code]')
+        //var image_code =image_code_input_element.trigger("validate")
+        //
+        //if(ph.isValid() && image_code.isValid()){
+        //    self.checkImageCode(this.row.Phone,this.row.image_key,this.row.image_code,image_code_input_element)
+        //}
+
+        //if(this.head.isValid()){
+        //    self.checkImageCode(self.row.Phone,self.row.image_key,self.row.image_code,image_code_input_element)
+        //}
+
+        //var self=this
+        //this.$emit('trigger-get-code',function(){
+        //    self.checkImageCode(self.row.Phone,self.row.image_key,self.row.image_code,image_code_input_element)
+        //})
+        //},
+
+        //sendGetCodeOrder:function(){
+        //    ex.vueParCall(this,'get_phone_code',{com_vcode:this})
+        //    //this.$emit('field-event',{fun:'get_phone_code'})
+        //
+        //},
+        //checkImageCode:function(phone,image_key,image_code,image_code_input_element){
+        //    var self=this
+        //    $(self.$el).find('input').trigger("hidemsg")
+        //
+        //    //if(this.row.image_code && this.hasValidPhone){
+        //    var data={
+        //        Phone:phone,
+        //        Key:image_key,
+        //        Answer:image_code,
+        //    }
+        //    cfg.show_load()
+        //    service_post('/anonymity/vcode/generate',data,function(resp){
+        //        if(resp.error_description){
+        //            image_code_input_element.trigger("showmsg", ["error", resp.error_description ])
+        //        }else if(resp.success){
+        //            setTimeout(function(){
+        //                self.countGetVCodeAgain()
+        //            },1000)
+        //        }
+        //        // else {
+        //        //    $(self.$el).find('.image_code').trigger("showmsg", ["error", resp.error_description ])
+        //        //}
+        //
+        //    },false)
+        //    //}
+        //},
+        countGetVCodeAgain: function countGetVCodeAgain() {
+            var self = this;
+            var idx = setInterval(function () {
+                self.vcode_count -= 1;
+                if (self.vcode_count <= 0) {
+                    clearInterval(idx);
+                    self.vcode_count = 0;
+                }
+            }, 1000);
+        }
+    }
+});
+
+/***/ }),
+/* 28 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+__webpack_require__(68);
+
+Vue.component('com-field-picture', {
+    props: ['row', 'head'],
+    template: ' <van-cell class="com-field-picture" :title="head.label" >\n        <img v-if=\'head.readonly\' :src=\'row[head.name]\'/>\n       <!--<textarea style="display: none;" :name="head.name" id="" cols="30" rows="10" v-model="row[head.name]"></textarea>-->\n        <!--<div class="picture-panel" style="vertical-align: top" >-->\n        <!--</div>-->\n        <input class="my-file-input" v-if="!head.readonly" style="display: none"\n            type=\'file\' accept=\'image/*\'   @change=\'on_change($event)\'>\n    </van-cell>',
+    data: function data() {
+        return {};
+    },
+
+    methods: {
+        on_change: function on_change(event) {
+            var new_selected_files = event.target.files;
+            this.uploadImage(new_selected_files);
+            $(this.$el).find('.my-file-input').val('');
+        },
+        uploadImage: function uploadImage(image_files) {
+            if (!image_files) {
+                return;
+            }
+            var self = this;
+            console.log('start upload');
+            //if(! self.validate(v)){
+            //    return
+            //}
+            var up_url = this.head.up_url || '/d/upload?path=general_upload/images';
+            cfg.show_load();
+            ex.uploads(image_files, up_url, function (url_list) {
+                cfg.hide_load();
+                if (!self.row[self.head.name]) {
+                    Vue.set(self.row, self.head.name, url_list);
+                    //self.row[self.head.name] = url_list
+                } else {
+                    self.row[self.head.name] = self.row[self.head.name].concat(url_list);
+                }
+            });
+        },
+        open_select_images: function open_select_images() {
+            console.log('before select');
+            var self = this;
+            if (!this.disable) {
+                $(this.$el).find('input[type=file]').click();
+                this.disable = true;
+                setTimeout(function () {
+                    self.disable = false;
+                }, 3000);
+            }
+            console.log('after select');
+        },
+        remove_image: function remove_image(index) {
+            var image_list = this.row[this.head.name];
+            image_list.splice(index, 1);
+        },
+        big_win: function big_win(imgsrc) {
+            var ctx = { imgsrc: imgsrc };
+            pop_layer(ctx, 'com-pop-image', function () {}, {
+                title: false,
+                area: ['90%', '90%'],
+                shade: 0.8,
+                skin: 'img-shower',
+                shadeClose: true
+            });
+        }
+    }
+});
+
+/***/ }),
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1368,7 +1771,7 @@ Vue.component('com-field-select', {
 });
 
 /***/ }),
-/* 25 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1400,7 +1803,58 @@ Vue.component('com-field-select', {
 
 
 /***/ }),
-/* 26 */
+/* 31 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Vue.component('com-table-label-shower', {
+    props: ['head', 'row'],
+    template: '<span class="com-item-span-label" v-text="label_text"></span>',
+    computed: {
+        label_text: function label_text() {
+            var key = '_' + this.head.name + '_label';
+            return this.row[key];
+        }
+    }
+});
+
+/***/ }),
+/* 32 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Vue.component('com-table-span', {
+    props: ['head', 'row'],
+    template: '<span class="com-item-span" v-text="row[head.name]"></span>'
+});
+
+/***/ }),
+/* 33 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Vue.component('com-listpanel-arrow-cell', {
+    props: ['heads', 'rows', 'option'],
+    template: '<div class="com-list-arrow-cell">\n    <van-cell v-for="row in rows" title="\u5355\u5143\u683C" is-link clickable>\n                <template slot="title">\n                    <div class="material-wave content"  @click="on_click(row)">\n                        <component :is="head.editor" v-for="head in heads"\n                            :class="head.class" :head="head" :row="row"></component>\n                    </div>\n                </template>\n            </van-cell>\n    </div>',
+    mounted: function mounted() {
+        ex.append_css(this.option.style);
+    },
+
+    methods: {
+        on_click: function on_click(row) {
+            this.$emit('select', row);
+        }
+    }
+});
+
+/***/ }),
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1428,13 +1882,13 @@ Vue.component('com-op-submit', {
 });
 
 /***/ }),
-/* 27 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(54);
+__webpack_require__(71);
 
 Vue.component('com-fields-panel', {
     props: ['ctx'],
@@ -1456,7 +1910,7 @@ Vue.component('com-fields-panel', {
         };
     },
     mixins: [mix_fields_data, mix_nice_validator],
-    template: '<div class="com-fileds-panel">\n\n    <template v-if="fields_group.length > 0">\n      <van-cell-group  v-for="group in grouped_heads_bucket" :title="group.label " >\n            <component v-for="head in group.heads" :is="head.editor" :head="head" :row="row"></component>\n        </van-cell-group>\n    </template>\n    <template v-else>\n     <van-cell-group   >\n        <component v-for="head in heads" :is="head.editor" :head="head" :row="row"></component>\n    </van-cell-group>\n    </template>\n\n\n    <div style="height: 2rem">\n    </div>\n    <van-cell-group v-if="ops.length>0" class="ops">\n       <component v-for="op in ops" :is="op.editor" :head="op"></component>\n    </van-cell-group>\n    </div>',
+    template: '<div class="com-fileds-panel">\n\n    <template v-if="fields_group.length > 0">\n      <van-cell-group  v-for="group in grouped_heads_bucket" :title="group.label " >\n            <component v-for="head in group.heads" :is="head.editor" :head="head" :row="row"></component>\n        </van-cell-group>\n    </template>\n    <template v-else>\n     <van-cell-group   >\n        <component v-for="head in heads" :is="head.editor" :head="head" :row="row"></component>\n    </van-cell-group>\n    </template>\n\n\n    <div style="height: .6rem">\n    </div>\n    <van-cell-group v-if="ops.length>0" class="ops">\n       <component v-for="op in ops" :is="op.editor" :head="op"></component>\n    </van-cell-group>\n    </div>',
     computed: {
         grouped_heads_bucket: function grouped_heads_bucket() {
             var _this = this;
@@ -1474,7 +1928,7 @@ Vue.component('com-fields-panel', {
 });
 
 /***/ }),
-/* 28 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1486,13 +1940,13 @@ Vue.component('com-slide-iframe', {
 });
 
 /***/ }),
-/* 29 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(51);
+__webpack_require__(63);
 
 Vue.component('com-slide-head', {
     props: ['title'],
@@ -1505,7 +1959,7 @@ Vue.component('com-slide-head', {
 });
 
 /***/ }),
-/* 30 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1515,7 +1969,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.fixed_body = fixed_body;
-__webpack_require__(49);
+__webpack_require__(61);
 
 function fixed_body() {
     //$('body').addClass('modal-open')
@@ -1546,13 +2000,13 @@ window.fixed_body = fixed_body;
 window.fixed_body_quit = fixed_body_quit;
 
 /***/ }),
-/* 31 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(50);
+__webpack_require__(62);
 
 /*
 * 因为没有遮挡层，可能造成多次打开窗口问题，所以使用mint-ui替代了这个组件
@@ -1666,7 +2120,7 @@ Vue.component('com-slide-win-1', {
 });
 
 /***/ }),
-/* 32 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1694,7 +2148,59 @@ Vue.component('com-pop-image', {
 });
 
 /***/ }),
-/* 33 */
+/* 41 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var table_store = {
+    data: function data() {
+        var search_args = ex.parseSearch();
+        search_args._page = search_args._page || 1;
+        return {
+            rows: [],
+            director_name: '',
+            search_args: search_args
+        };
+    },
+
+    methods: {
+        search: function search() {
+            this.search_args._page = 1;
+            return this.getRows();
+        },
+        getRows: function getRows() {
+            var _this = this;
+
+            var post_data = [{ fun: 'get_rows', director_name: this.director_name, search_args: this.search_args }];
+            return ex.post('/d/ajax', JSON.stringify(post_data)).then(function (resp) {
+                _this.rows = resp.get_rows.rows;
+            });
+        },
+        addNextPage: function addNextPage() {
+            var _this2 = this;
+
+            this.search_args._page += 1;
+            var post_data = [{ fun: 'get_rows', director_name: this.director_name, search_args: this.search_args }];
+            return ex.post('/d/ajax', JSON.stringify(post_data)).then(function (resp) {
+                var row_pages = resp.get_rows.row_pages;
+                var max_page = Math.ceil(row_pages.total / row_pages.perpage);
+                if (row_pages.crt_page < max_page) {
+                    _this2.rows = _this2.rows.concat(resp.get_rows.rows);
+                } else {
+                    var space = _this2.rows.length - (max_page - 1) * row_pages.perpage;
+                    _this2.rows = _this2.rows.concat(resp.get_rows.rows.slice(space));
+                }
+            });
+        }
+    }
+};
+
+window.table_store = table_store;
+
+/***/ }),
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -1708,7 +2214,7 @@ exports.push([module.i, ".material-wave {\n  position: relative; }\n\n.material-
 
 
 /***/ }),
-/* 34 */
+/* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -1722,7 +2228,7 @@ exports.push([module.i, ".com-index-select .mint-indexlist {\n  position: absolu
 
 
 /***/ }),
-/* 35 */
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -1736,7 +2242,7 @@ exports.push([module.i, "body.modal-open {\n  position: fixed;\n  width: 100%; }
 
 
 /***/ }),
-/* 36 */
+/* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -1750,7 +2256,7 @@ exports.push([module.i, ".list-enter-active, .list-leave-active {\n  transition:
 
 
 /***/ }),
-/* 37 */
+/* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -1758,13 +2264,13 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, ".com-slide-head {\n  height: .8rem;\n  font-size: .3rem;\n  flex-shrink: 0;\n  background-color: #393738;\n  color: white;\n  position: relative; }\n  .com-slide-head .go-back {\n    left: .3rem;\n    padding: .1rem; }\n", ""]);
+exports.push([module.i, ".com-slide-head {\n  height: .8rem;\n  font-size: .3rem;\n  /*flex-shrink:0;*/\n  /*background-color: #393738;*/\n  /*color: white;*/\n  position: relative;\n  border-bottom: 1px solid #d5d5d5; }\n  .com-slide-head .go-back {\n    left: .3rem;\n    padding: .1rem; }\n", ""]);
 
 // exports
 
 
 /***/ }),
-/* 38 */
+/* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -1778,7 +2284,7 @@ exports.push([module.i, "@charset \"UTF-8\";\n/**\r\n750px设计稿\r\n    取1r
 
 
 /***/ }),
-/* 39 */
+/* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -1792,7 +2298,7 @@ exports.push([module.i, ".el-table__body-wrapper.is-scrolling-middle {\n  overfl
 
 
 /***/ }),
-/* 40 */
+/* 49 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -1806,7 +2312,7 @@ exports.push([module.i, ".pop-moible-win .mint-popup {\n  background: none; }\n\
 
 
 /***/ }),
-/* 41 */
+/* 50 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -1814,13 +2320,83 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, ".com-field-multi-picture .van-cell__title {\n  max-width: 90px;\n}\n.com-field-multi-picture .van-cell__value {\n  text-align: left;\n}\n.com-field-multi-picture .add-btn {\n  width: 60px;\n  height: 60px;\n  position: relative;\n  display: inline-block;\n  margin: 10px;\n}\n.com-field-multi-picture .img-wrap {\n  vertical-align: top;\n  display: inline-block;\n  width: 60px;\n  height: 60px;\n  position: relative;\n  margin: 10px;\n}\n.com-field-multi-picture .img-wrap img {\n  height: 100%;\n  width: 100%;\n}\n.com-field-multi-picture .img-wrap .close {\n  position: absolute;\n  top: 0;\n  right: 1rem;\n}\n", ""]);
+exports.push([module.i, ".com-field-bool .van-cell__title {\n  max-width: 90px;\n}\n.com-field-bool .van-checkbox {\n  text-align: left;\n}\n", ""]);
 
 // exports
 
 
 /***/ }),
-/* 42 */
+/* 51 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(0)();
+// imports
+
+
+// module
+exports.push([module.i, ".com-field-multi-picture .van-cell__title {\n  max-width: 90px;\n}\n.com-field-multi-picture .van-cell__value {\n  text-align: left;\n}\n.com-field-multi-picture .add-btn {\n  width: 60px;\n  height: 60px;\n  position: relative;\n  display: inline-block;\n  margin: 10px;\n}\n.com-field-multi-picture .add-btn .inn-btn {\n  background-color: #e2e2e2;\n  border: 1px solid #e2e2e2;\n  width: 60px;\n  height: 60px;\n  position: relative;\n}\n.com-field-multi-picture .img-wrap {\n  vertical-align: top;\n  display: inline-block;\n  width: 60px;\n  height: 60px;\n  position: relative;\n  margin: 10px;\n}\n.com-field-multi-picture .img-wrap img {\n  height: 100%;\n  width: 100%;\n}\n.com-field-multi-picture .img-wrap .close {\n  position: absolute;\n  top: 0;\n  right: 0.3rem;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 52 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(0)();
+// imports
+
+
+// module
+exports.push([module.i, ".com-field-phone-code input {\n  flex-grow: 10;\n}\n.com-field-phone-code button {\n  flex-grow: 0;\n  width: 1.6rem;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 53 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(0)();
+// imports
+
+
+// module
+exports.push([module.i, ".com-field-picture .van-cell__title {\n  max-width: 90px;\n}\n.com-field-picture .van-cell__value {\n  text-align: left;\n}\n.com-field-picture .van-cell__value img {\n  max-width: 5rem;\n  max-height: 2rem;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 54 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(0)();
+// imports
+
+
+// module
+exports.push([module.i, ".com-item-span,\n.com-item-span-label {\n  display: inline-block;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 55 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(0)();
+// imports
+
+
+// module
+exports.push([module.i, ".com-list-arrow-cell .content {\n  display: flex;\n  justify-content: space-around;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 56 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -1834,7 +2410,7 @@ exports.push([module.i, ".com-fileds-panel .ops {\n  margin: 0.5rem 5vw;\n}\n", 
 
 
 /***/ }),
-/* 43 */
+/* 57 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -1848,16 +2424,27 @@ exports.push([module.i, ".mint-indicator .mint-indicator-wrapper {\n  z-index: 9
 
 
 /***/ }),
-/* 44 */,
-/* 45 */,
-/* 46 */,
-/* 47 */
+/* 58 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(0)();
+// imports
+
+
+// module
+exports.push([module.i, ".mobile-list-page .page-title {\n  height: 0.8rem;\n  text-align: center;\n  vertical-align: middle;\n  line-height: 0.7rem;\n  background-color: #00a7d0;\n  color: #fff;\n}\n.mobile-list-page .cube-scroll-wrapper {\n  height: calc(100vh - 0.8rem);\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 59 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(33);
+var content = __webpack_require__(42);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -1877,13 +2464,13 @@ if(false) {
 }
 
 /***/ }),
-/* 48 */
+/* 60 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(34);
+var content = __webpack_require__(43);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -1903,13 +2490,13 @@ if(false) {
 }
 
 /***/ }),
-/* 49 */
+/* 61 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(35);
+var content = __webpack_require__(44);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -1929,13 +2516,13 @@ if(false) {
 }
 
 /***/ }),
-/* 50 */
+/* 62 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(36);
+var content = __webpack_require__(45);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -1955,13 +2542,13 @@ if(false) {
 }
 
 /***/ }),
-/* 51 */
+/* 63 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(37);
+var content = __webpack_require__(46);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -1981,13 +2568,13 @@ if(false) {
 }
 
 /***/ }),
-/* 52 */
+/* 64 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(40);
+var content = __webpack_require__(49);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -2007,13 +2594,39 @@ if(false) {
 }
 
 /***/ }),
-/* 53 */
+/* 65 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(41);
+var content = __webpack_require__(50);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// add the styles to the DOM
+var update = __webpack_require__(1)(content, {});
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./bool.styl", function() {
+			var newContent = require("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./bool.styl");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 66 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(51);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -2033,13 +2646,117 @@ if(false) {
 }
 
 /***/ }),
-/* 54 */
+/* 67 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(42);
+var content = __webpack_require__(52);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// add the styles to the DOM
+var update = __webpack_require__(1)(content, {});
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./phone_code.styl", function() {
+			var newContent = require("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./phone_code.styl");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 68 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(53);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// add the styles to the DOM
+var update = __webpack_require__(1)(content, {});
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./picture.styl", function() {
+			var newContent = require("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./picture.styl");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 69 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(54);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// add the styles to the DOM
+var update = __webpack_require__(1)(content, {});
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./item_editor.styl", function() {
+			var newContent = require("!!../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./item_editor.styl");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 70 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(55);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// add the styles to the DOM
+var update = __webpack_require__(1)(content, {});
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./panel.styl", function() {
+			var newContent = require("!!../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./panel.styl");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 71 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(56);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -2059,13 +2776,13 @@ if(false) {
 }
 
 /***/ }),
-/* 55 */
+/* 72 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(43);
+var content = __webpack_require__(57);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -2085,15 +2802,13 @@ if(false) {
 }
 
 /***/ }),
-/* 56 */,
-/* 57 */,
-/* 58 */
+/* 73 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _config = __webpack_require__(4);
+var _config = __webpack_require__(2);
 
 var config = _interopRequireWildcard(_config);
 
@@ -2105,7 +2820,7 @@ var _main = __webpack_require__(11);
 
 var pop_main = _interopRequireWildcard(_main);
 
-var _main2 = __webpack_require__(13);
+var _main2 = __webpack_require__(14);
 
 var table_main = _interopRequireWildcard(_main2);
 
@@ -2113,19 +2828,19 @@ var _main3 = __webpack_require__(10);
 
 var panels_main = _interopRequireWildcard(_main3);
 
-var _main4 = __webpack_require__(7);
+var _main4 = __webpack_require__(5);
 
 var filters_main = _interopRequireWildcard(_main4);
 
-var _main5 = __webpack_require__(8);
+var _main5 = __webpack_require__(6);
 
 var input_main = _interopRequireWildcard(_main5);
 
-var _main6 = __webpack_require__(6);
+var _main6 = __webpack_require__(4);
 
 var field_edito_main = _interopRequireWildcard(_main6);
 
-var _main7 = __webpack_require__(5);
+var _main7 = __webpack_require__(3);
 
 var effect_main = _interopRequireWildcard(_main7);
 
@@ -2133,121 +2848,28 @@ var _main8 = __webpack_require__(9);
 
 var operation_main = _interopRequireWildcard(_main8);
 
+var _main9 = __webpack_require__(8);
+
+var list_panel_main = _interopRequireWildcard(_main9);
+
+var _main10 = __webpack_require__(13);
+
+var store_main = _interopRequireWildcard(_main10);
+
+var _main11 = __webpack_require__(7);
+
+var item_editor_main = _interopRequireWildcard(_main11);
+
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
-__webpack_require__(15);
-__webpack_require__(14); // 单位宽度等
+__webpack_require__(16);
+__webpack_require__(15); // 单位宽度等
+
+__webpack_require__(17);
 
 /***/ }),
-/* 59 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-__webpack_require__(63);
-
-Vue.component('com-field-phone-code', {
-    /*
-     parStore.get_phone_code(callback){
-       }
-       * */
-    props: ['row', 'head'],
-    template: ' <div class="com-field-phone-code flex">\n         <input  type="text" class="form-control input-sm" v-model="row[head.name]"\n            :id="\'id_\'+head.name" :name="head.name"\n            :placeholder="head.placeholder" :autofocus="head.autofocus" :maxlength=\'head.maxlength\'>\n\n          <button type="button" class="btn btn-sm"\n              :disabled="vcode_count !=0"\n               @click="get_phone_code" v-text="vcodeLabel"></button>\n     </div>\n    ',
-    data: function data() {
-        var parStore = ex.vueParStore(this);
-        return {
-            parStore: parStore,
-            vcode_count: 0
-        };
-    },
-    computed: {
-        vcodeLabel: function vcodeLabel() {
-            if (this.vcode_count != 0) {
-                return '' + this.vcode_count + ' s';
-            } else {
-                return '获取验证码';
-            }
-        }
-    },
-    methods: {
-        get_phone_code: function get_phone_code() {
-            var self = this;
-            this.parStore.get_phone_code(function () {
-                self.vcode_count = self.head.vcode_count || 120;
-                self.countGetVCodeAgain();
-            });
-        },
-        //get_phone_code:function(){
-        //var phone = this.row[this.head.phone_field]
-        //var img_code = this.row[this.head.img_code_field]
-        ////var com_vcode =kws.com_vcode
-        //var ph =$(this.$el).find('#id_'+this.hea).trigger("validate")
-        //var image_code_input_element=$(this.$el).find('[name=image_code]')
-        //var image_code =image_code_input_element.trigger("validate")
-        //
-        //if(ph.isValid() && image_code.isValid()){
-        //    self.checkImageCode(this.row.Phone,this.row.image_key,this.row.image_code,image_code_input_element)
-        //}
-
-        //if(this.head.isValid()){
-        //    self.checkImageCode(self.row.Phone,self.row.image_key,self.row.image_code,image_code_input_element)
-        //}
-
-        //var self=this
-        //this.$emit('trigger-get-code',function(){
-        //    self.checkImageCode(self.row.Phone,self.row.image_key,self.row.image_code,image_code_input_element)
-        //})
-        //},
-
-        //sendGetCodeOrder:function(){
-        //    ex.vueParCall(this,'get_phone_code',{com_vcode:this})
-        //    //this.$emit('field-event',{fun:'get_phone_code'})
-        //
-        //},
-        //checkImageCode:function(phone,image_key,image_code,image_code_input_element){
-        //    var self=this
-        //    $(self.$el).find('input').trigger("hidemsg")
-        //
-        //    //if(this.row.image_code && this.hasValidPhone){
-        //    var data={
-        //        Phone:phone,
-        //        Key:image_key,
-        //        Answer:image_code,
-        //    }
-        //    cfg.show_load()
-        //    service_post('/anonymity/vcode/generate',data,function(resp){
-        //        if(resp.error_description){
-        //            image_code_input_element.trigger("showmsg", ["error", resp.error_description ])
-        //        }else if(resp.success){
-        //            setTimeout(function(){
-        //                self.countGetVCodeAgain()
-        //            },1000)
-        //        }
-        //        // else {
-        //        //    $(self.$el).find('.image_code').trigger("showmsg", ["error", resp.error_description ])
-        //        //}
-        //
-        //    },false)
-        //    //}
-        //},
-        countGetVCodeAgain: function countGetVCodeAgain() {
-            var self = this;
-            var idx = setInterval(function () {
-                self.vcode_count -= 1;
-                if (self.vcode_count <= 0) {
-                    clearInterval(idx);
-                    self.vcode_count = 0;
-                }
-            }, 1000);
-        }
-    }
-});
-
-/***/ }),
-/* 60 */,
-/* 61 */,
-/* 62 */
+/* 74 */,
+/* 75 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -2255,19 +2877,19 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, ".com-field-phone-code input {\n  flex-grow: 10;\n}\n.com-field-phone-code button {\n  flex-grow: 0;\n  width: 1.6rem;\n}\n", ""]);
+exports.push([module.i, ".com-layout-grid {\n  position: relative;\n  overflow: hidden;\n}\n.com-layout-grid:before {\n  content: \" \";\n  position: absolute;\n  left: 0;\n  top: 0;\n  right: 0;\n  height: 1px;\n  border-top: 1px solid #d9d9d9;\n  color: #d9d9d9;\n  -webkit-transform-origin: 0 0;\n  transform-origin: 0 0;\n  -webkit-transform: scaleY(0.5);\n  transform: scaleY(0.5);\n}\n.com-layout-grid:after {\n  content: \" \";\n  position: absolute;\n  left: 0;\n  top: 0;\n  width: 1px;\n  bottom: 0;\n  border-left: 1px solid #d9d9d9;\n  color: #d9d9d9;\n  -webkit-transform-origin: 0 0;\n  transform-origin: 0 0;\n  -webkit-transform: scaleX(0.5);\n  transform: scaleX(0.5);\n}\n.grid-3 {\n  position: relative;\n  float: left;\n  padding: 20px 10px;\n  width: 33.33333333%;\n  box-sizing: border-box;\n  text-align: center;\n}\n.grid-3:before {\n  content: \" \";\n  position: absolute;\n  right: 0;\n  top: 0;\n  width: 1px;\n  bottom: 0;\n  border-right: 1px solid #d9d9d9;\n  color: #d9d9d9;\n  -webkit-transform-origin: 100% 0;\n  transform-origin: 100% 0;\n  -webkit-transform: scaleX(0.5);\n  transform: scaleX(0.5);\n}\n.grid-3:after {\n  content: \" \";\n  position: absolute;\n  left: 0;\n  bottom: 0;\n  right: 0;\n  height: 1px;\n  border-bottom: 1px solid #d9d9d9;\n  color: #d9d9d9;\n  -webkit-transform-origin: 0 100%;\n  transform-origin: 0 100%;\n  -webkit-transform: scaleY(0.5);\n  transform: scaleY(0.5);\n}\n.grid-3 img {\n  max-width: 50%;\n  height: 0.8rem;\n}\n.grid-3 .label {\n  padding-top: 0.2rem;\n}\n", ""]);
 
 // exports
 
 
 /***/ }),
-/* 63 */
+/* 76 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(62);
+var content = __webpack_require__(75);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -2276,8 +2898,102 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./phone_code.styl", function() {
-			var newContent = require("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./phone_code.styl");
+		module.hot.accept("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./layout_grid.styl", function() {
+			var newContent = require("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./layout_grid.styl");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 77 */,
+/* 78 */,
+/* 79 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+__webpack_require__(76);
+
+Vue.component('com-layout-grid', {
+    props: ['ctx'],
+    template: '<div class="com-layout-grid">\n        <component :is="head.editor" v-for="head in ctx.heads" :ctx="head"></component>\n    </div>'
+});
+
+Vue.component('com-grid-icon-btn', {
+    props: ['ctx'],
+    template: '<div class="grid-3" @click="on_click()">\n     <img :src="ctx.icon" alt="">\n     <div class="label" v-text="ctx.label"></div>\n    </div>',
+    methods: {
+        on_click: function on_click() {
+            ex.eval(this.ctx.action);
+        }
+    }
+});
+
+/***/ }),
+/* 80 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+__webpack_require__(82);
+
+Vue.component('com-op-van-btn', {
+    props: ['head'],
+    template: '<van-button class="com-op-van-btn" com-op-submit :type="head.type || \'primary\'" @click="on_click()" size="large ">\n            <span v-text="head.label || \'\u786E\u5B9A\'"></span>\n        </van-button>',
+    data: function data() {
+        var parStore = ex.vueParStore(this);
+        return {
+            parStore: parStore
+        };
+    },
+    methods: {
+        on_click: function on_click() {
+            if (this.head.action) {
+                ex.eval(this.head.action, { ps: this.parStore });
+            }
+        }
+    }
+
+});
+
+/***/ }),
+/* 81 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(0)();
+// imports
+
+
+// module
+exports.push([module.i, ".com-op-van-btn {\n  margin: 0.1rem 0;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 82 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(81);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// add the styles to the DOM
+var update = __webpack_require__(1)(content, {});
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./van_btn.styl", function() {
+			var newContent = require("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./van_btn.styl");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});

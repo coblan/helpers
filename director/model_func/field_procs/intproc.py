@@ -20,14 +20,9 @@ class IntProc(BaseFieldProc):
         if options:
             head['options']=options
             head['editor'] = 'com-field-select'
-    
-        #if hasattr(self.field, 'choices'): 
-            #head['editor'] = 'sim_select'
-            ##options = [{'value':x[0],'label':x[1]} for x in self.field.choices]
-            ##head['options'] = options
         else:
-            head['editor'] = 'number'
-            head['fv_rule'] = 'range(-2147483648~2147483647)'
+            head['editor'] = 'com-field-number'
+            head['fv_rule'] = 'integer'
         return head
     
     def filter_get_head(self, name, model):
@@ -48,7 +43,11 @@ class IntProc(BaseFieldProc):
     
     def filter_clean_search(self, q_str): 
         if re.search('^\d+$', q_str):
-            return q_str  
+            bb= int(q_str)
+            if -2147483648 < bb <2147483647:
+                return bb
+            else:
+                return None
         else:
             return None
 

@@ -58,7 +58,9 @@ var nice_validator={
             var validate_fields={}
             ex.each(this.heads,function(head){
                 var ls=[]
-
+                if(head.readonly){
+                    return
+                }
                 if(head.fv_rule){
                     ls.push(head.fv_rule)
                 }

@@ -41,10 +41,12 @@ from ..access.permit_data import get_model_permit, expand_permit_names
 
 
 def can_touch(model, user):
-    #def _func(user):
     validator = ModelPermit(model, user)
     return validator.can_access()
 
+def can_write(model,user):
+    validator = ModelPermit(model, user)
+    return len( validator.changeable_fields() ) >0
 
 def has_permit(user, perm_name):
     """
@@ -142,7 +144,8 @@ class ModelPermit(object):
     def get_rows(self):
         pass
     
-    
+    def can_write(self):
+        return  len( self.changeable_fields() ) >0
         
     def can_add(self):
         if self.nolimit or self.user.is_superuser:

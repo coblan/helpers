@@ -30,3 +30,4 @@ def director_view(name):
             return fun(*args, **kargs)
         return _fun2
     return _fun
+

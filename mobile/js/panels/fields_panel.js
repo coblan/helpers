@@ -34,7 +34,7 @@ Vue.component('com-fields-panel',{
     </template>
 
 
-    <div style="height: 2rem">
+    <div style="height: .6rem">
     </div>
     <van-cell-group v-if="ops.length>0" class="ops">
        <component v-for="op in ops" :is="op.editor" :head="op"></component>

@@ -9,13 +9,16 @@ class Command(BaseCommand):
     """
     """
     def handle(self, *args, **options):
-        options = site_cfg.get('permit.options')()
+        permit_options = site_cfg.get('permit.options')()
         depend_chain={}
-        for opt in options:
+        # 生成依赖dict
+        for opt in permit_options:
             for dc in self.parse_item(opt):
                 if dc['key'] in depend_chain:
                     raise UserWarning('%s 重复了，请检查 permit 设置'%dc['key'])
                 depend_chain[dc['key']] = dc['depend']
+                
+        # 根据依赖dict 去修正 PermitModel的每行数据
         for pg in PermitModel.objects.all():
             ls = pg.names.split(';')
             ls = [x for x in ls if x in depend_chain]
@@ -23,8 +26,9 @@ class Command(BaseCommand):
             last_out_len = 0
             while True:
                 for pname in ls:
-                    out_ls.append(pname)
-                    out_ls += depend_chain[pname]
+                    if pname in depend_chain:
+                        out_ls.append(pname)
+                        out_ls += depend_chain[pname]
                 out_ls = list( set(out_ls) )
                 ls = list( out_ls)
                 if len(out_ls) == last_out_len:
