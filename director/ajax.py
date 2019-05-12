@@ -26,7 +26,7 @@ except:
 def get_global():
     return globals()
 
-def director_call(director_name, kws): 
+def director_call(director_name, kws={}): 
     directorEnt= director.get(director_name)
     rt= directorEnt(**kws)
     if isinstance(rt,ModelFields):

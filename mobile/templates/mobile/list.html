@@ -35,10 +35,10 @@
 //    fields_ctx = {{ fields_ctx | jsonify }}
 //    list_panel = {{ list_panel | jsonify }}
     table_editor={{ table_editor | jsonify }}
-    table_option = {{ table_option | jsonify }}
+    table_option = {{ table_option | jsonify }} || {}
     detail_editor= {{ detail_editor | jsonify }}
     detail_ctx = {{ detail_ctx | jsonify }}
-
+    search_args = ex.parseSearch()
     $(function(){
         new Vue({
             el:'#there',
@@ -46,9 +46,11 @@
                 var childStore = new Vue(table_store)
                 childStore.rows=rows
                 childStore.director_name = director_name
+                table_option['nextlevel'] = detail_editor? true:false
                 return {
                     childStore:childStore,
                     page_label:page_label,
+                    search_args:search_args,
                     rows:rows,
                     heads:heads,
                     table_editor:table_editor,
@@ -74,8 +76,10 @@
                 open_detail:function(row){
 //                    fields_ctx.row = row
 //                    fields_ctx.title = '报修详情'
-                    detail_ctx.row = row
-                    cfg.pop_big( detail_editor,  detail_ctx)
+                    if(detail_ctx){
+                        detail_ctx.row = row
+                        cfg.pop_big( detail_editor,  detail_ctx)
+                    }
                 },
                 onPullingUp(){
                     this.childStore.addNextPage().then(()=>{
@@ -87,12 +91,20 @@
                         this.$refs.scroll.forceUpdate()
                     })
                  },
+                onClickLeft(){
+                    history.back()
+                }
             }
         })
     })
 </script>
 <div id="there" class="mobile-list-page">
-    <div class="page-title" v-text="page_label"></div>
+    <!--<div class="page-title" v-text="page_label"></div>-->
+    <van-nav-bar
+            :title="page_label"
+            :left-arrow="search_args.back"
+            @click-left="onClickLeft"
+    ></van-nav-bar>
 
     <cube-scroll :data="childStore.rows" ref="scroll"  :options="scrollOptions" @pulling-down="onPullingDown"
                   @pulling-up="onPullingUp">
