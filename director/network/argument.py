@@ -10,6 +10,7 @@ import json
 import hashlib
 from django.conf import settings
 import inspect
+import time
 
 def get_argument(request,outtype='obj'):
     """
@@ -51,11 +52,12 @@ def sign_args(kws,secret):
 def validate_argument(dc,validate_dict={},eliminate = False):
     if isinstance(dc,DotObj):
         dc=dc.__dict__
+    org_dc = dict(dc)
     for k,v in validate_dict.items():
         value = dc.get(k)
         for validator in v:
             if 'params' in inspect.getargspec(validator).args:
-                value = validator(value,k,params=dc)
+                value = validator(value,k,params=org_dc)
             else:
                 value=validator(value,k)
         dc[k]=value
@@ -96,6 +98,13 @@ def sign(src_field:list,secret=settings.SECRET_KEY):
             dc[i] = params[i]
         if sign_args(dc, secret) != value:
             raise UserWarning('sign not valid')
+    return _fun
+
+def timestamp_span(span):
+    def _fun(value,name):
+        fvalue = float(value)
+        if time.time() - fvalue > span:
+            raise UserWarning('%s has expired'%name)
     return _fun
 
 def default(def_value):
