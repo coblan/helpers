@@ -8,6 +8,8 @@ from ..data_format.dot_dict import DotObj
 import re
 import json
 import hashlib
+from django.conf import settings
+import inspect
 
 def get_argument(request,outtype='obj'):
     """
@@ -52,7 +54,10 @@ def validate_argument(dc,validate_dict={},eliminate = False):
     for k,v in validate_dict.items():
         value = dc.get(k)
         for validator in v:
-            value=validator(value,k)
+            if 'params' in inspect.getargspec(validator).args:
+                value = validator(value,k,params=dc)
+            else:
+                value=validator(value,k)
         dc[k]=value
     if eliminate:
         for k in dict(dc):
@@ -83,6 +88,15 @@ ls={
     'chepai':[model_instance(model)]
 }
 """
+
+def sign(src_field:list,secret=settings.SECRET_KEY):
+    def _fun(value,name,params):
+        dc ={}
+        for i in src_field:
+            dc[i] = params[i]
+        if sign_args(dc, secret) != value:
+            raise UserWarning('sign not valid')
+    return _fun
 
 def default(def_value):
     def _default(value,name):
