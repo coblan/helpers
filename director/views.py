@@ -16,7 +16,7 @@ from django.views.decorators.csrf import csrf_exempt
 from .network.ckeditor import Ckeditor
 from .base_data import director
 from django.db import transaction
-
+from helpers.director.network import argument
 import logging
 req_log = logging.getLogger('general_log')
 
@@ -85,24 +85,25 @@ def export_excel(request):
 def director_view(request,director_name):
     """将director函数以api的方式直接暴露出去"""
     directorEnt= director.get(director_name)
-    if request.method=='GET':
-        kws = request.GET.dict()
-    else:
-        CONTENT_TYPE = request.META.get('CONTENT_TYPE')
-        #print(CONTENT_TYPE)
-        is_text =False
-        for c_type in  [ 'text/plain','application/json','application/x-www-form-urlencoded']:
-            if c_type in CONTENT_TYPE.lower():
-                is_text=True
-                break
-        if is_text:
-            if isinstance(request.body,bytes):
-                text = request.body.decode('utf-8')
-            else:
-                text = request.body
-            kws = json.loads(text)
-        else:
-            kws = request.POST.dict()
+    kws = argument.get_argument(request,outtype='dict')
+    #if request.method=='GET':
+        #kws = request.GET.dict()
+    #else:
+        #CONTENT_TYPE = request.META.get('CONTENT_TYPE')
+        ##print(CONTENT_TYPE)
+        #is_text =False
+        #for c_type in  [ 'text/plain','application/json','application/x-www-form-urlencoded']:
+            #if c_type in CONTENT_TYPE.lower():
+                #is_text=True
+                #break
+        #if is_text:
+            #if isinstance(request.body,bytes):
+                #text = request.body.decode('utf-8')
+            #else:
+                #text = request.body
+            #kws = json.loads(text)
+        #else:
+            #kws = request.POST.dict()
     try:
         rt = directorEnt(**kws)
         if isinstance(rt,HttpResponse):
