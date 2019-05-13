@@ -445,6 +445,14 @@ ex.assign(cfg, {
         // 关闭窗口，窗口创建函数返回的，全部是一个关闭函数
         close_func();
     },
+    //slideIn(editor,ctx){
+    //   return new Promise((resolve,reject)=>{
+    //       function callback(e){
+    //           resolve(e,close_fun)
+    //       }
+    //        var close_fun = cfg.pop_big(editor,ctx,callback)
+    //    })
+    //},
     pop_iframe: function pop_iframe(url, option) {
         return cfg.pop_big('com-slide-iframe', { url: url, title: option.title });
     },
@@ -2245,6 +2253,29 @@ var table_store = {
                     _this2.rows = _this2.rows.concat(resp.get_rows.rows.slice(space));
                 }
             });
+        },
+        newRow: async function newRow(_director_name, pre_set) {
+            var self = this;
+            var director_name = _director_name || this.director_name + '.edit';
+            var dc = { fun: 'get_row', director_name: director_name };
+            if (pre_set) {
+                var pre_set = ex.eval(pre_set, { ps: self });
+                ex.assign(dc, pre_set);
+            }
+            var post_data = [dc];
+            cfg.show_load();
+            var resp = await ex.post('/d/ajax', JSON.stringify(post_data));
+            cfg.hide_load();
+            return resp.get_row;
+        },
+        update_or_insert: function update_or_insert(new_row) {
+            var table_row = ex.findone(this.rows, { pk: new_row.pk });
+            if (table_row) {
+                ex.vueAssign(table_row, new_row);
+            } else {
+                this.rows = [new_row].concat(this.rows);
+            }
+            this.$emit('row.update_or_insert', new_row);
         }
     }
 };

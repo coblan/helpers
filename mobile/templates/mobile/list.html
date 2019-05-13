@@ -31,6 +31,7 @@
 
     rows={{ rows | jsonify }}
     heads = {{ heads | jsonify }}
+    ops = {{ ops | jsonify }}
     page_label = '{{ page_label }}'
 //    fields_ctx = {{ fields_ctx | jsonify }}
 //    list_panel = {{ list_panel | jsonify }}
@@ -45,16 +46,22 @@
             data:function(){
                 var childStore = new Vue(table_store)
                 childStore.rows=rows
+                childStore.vc = this
                 childStore.director_name = director_name
                 table_option['nextlevel'] = detail_editor? true:false
+                ops.forEach(op=>{
+                    op.name = op.label
+                })
                 return {
                     childStore:childStore,
                     page_label:page_label,
                     search_args:search_args,
                     rows:rows,
+                    ops:ops || [],
                     heads:heads,
                     table_editor:table_editor,
                     table_option:table_option,
+                    actionVisible:false,
                     scrollOptions: {
                         /* lock x-direction when scrolling horizontally and  vertically at the same time */
                         directionLockThreshold: 0,
@@ -72,6 +79,7 @@
                     isLoading:false
                 }
             },
+
             methods:{
                 open_detail:function(row){
 //                    fields_ctx.row = row
@@ -93,6 +101,13 @@
                  },
                 onClickLeft(){
                     history.back()
+                },
+                onClickRight(){
+                    this.actionVisible = true
+                },
+                onSelectAction(action){
+                    ex.eval(action.action,{ps:this.childStore,})
+                    this.actionVisible =false
                 }
             }
         })
@@ -103,8 +118,21 @@
     <van-nav-bar
             :title="page_label"
             :left-arrow="search_args.back"
-            @click-left="onClickLeft"
-    ></van-nav-bar>
+            @click-right="onClickRight"
+            @click-left="onClickLeft">
+        <van-icon  name="bars" slot="right" />
+    </van-nav-bar>
+
+    <!--<mt-actionsheet v-if=""-->
+            <!--:actions="ops"-->
+            <!--v-model="actionVisible">-->
+    <!--</mt-actionsheet>-->
+    <van-actionsheet
+            v-model="actionVisible"
+            :actions="ops"
+            cancel-text="取消"
+            @select="onSelectAction"
+    ></van-actionsheet>
 
     <cube-scroll :data="childStore.rows" ref="scroll"  :options="scrollOptions" @pulling-down="onPullingDown"
                   @pulling-up="onPullingUp">
