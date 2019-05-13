@@ -46,7 +46,7 @@ def sign_args(kws,secret):
     for k,v in sorted(kws.items(),key=lambda p:p[0]):
         if v:
             sign_str += '{key}={value}&'.format(key=k,value=v)
-    sign_str = sign_str + 'key=' + secret
+    sign_str = sign_str + 'secret=' + secret
     return hashlib.md5(sign_str.encode('utf-8')).hexdigest().upper()   
 
 def validate_argument(dc,validate_dict={},eliminate = False):
