@@ -9,6 +9,9 @@ class TablePage(object):
     def __init__(self,request, engin):
         if request.GET.get('_accept')=='json' or 'json' in request.META.get('HTTP_ACCEPT'):
             self.accept = 'json'
+        else:
+            self.accept = ''
+            
         self.engin = engin
         if not self.tableCls:
             for k,v in self.__class__.__dict__.items():
