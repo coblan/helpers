@@ -7,10 +7,15 @@ from urllib import parse
 from ..data_format.dot_dict import DotObj
 import re
 import json
+import hashlib
+from django.conf import settings
+import inspect
+import time
 
-def get_argument(request):
+def get_argument(request,outtype='obj'):
     """
     """
+    
     if request.method=='POST':
         if request.body and re.match('{.+}|\[.+\]',request.body.decode('utf-8')):
             dc=json.loads(request.body)
@@ -20,17 +25,41 @@ def get_argument(request):
         for k,v in dc.items():
             if isinstance(v,list):
                 dc[k]=v[0]
-        return DotObj( dc )
     else:
-        return DotObj( request.GET.dict() )
+        dc =  request.GET.dict()
+    if outtype=='dict':
+        return dc
+    else:
+        return DotObj( dc )
+
+def dict2url(dc:dict) -> str:
+    outls =[]
+    for k,v in dc.items():
+        outls.append('%s=%s'%(k,v) )  
+    return '&'.join(outls)
+
+def url2dict(url:str) -> dict:
+    return dict(parse.parse_qsl(parse.urlsplit(url).query))
+
+def sign_args(kws,secret):
+    sign_str = ''
+    for k,v in sorted(kws.items(),key=lambda p:p[0]):
+        if v:
+            sign_str += '{key}={value}&'.format(key=k,value=v)
+    sign_str = sign_str + 'secret=' + secret
+    return hashlib.md5(sign_str.encode('utf-8')).hexdigest().upper()   
 
 def validate_argument(dc,validate_dict={},eliminate = False):
     if isinstance(dc,DotObj):
         dc=dc.__dict__
+    org_dc = dict(dc)
     for k,v in validate_dict.items():
         value = dc.get(k)
         for validator in v:
-            value=validator(value,k)
+            if 'params' in inspect.getargspec(validator).args:
+                value = validator(value,k,params=org_dc)
+            else:
+                value=validator(value,k)
         dc[k]=value
     if eliminate:
         for k in dict(dc):
@@ -61,6 +90,22 @@ ls={
     'chepai':[model_instance(model)]
 }
 """
+
+def sign(src_field:list,secret=settings.SECRET_KEY):
+    def _fun(value,name,params):
+        dc ={}
+        for i in src_field:
+            dc[i] = params[i]
+        if sign_args(dc, secret) != value:
+            raise UserWarning('sign not valid')
+    return _fun
+
+def timestamp_span(span):
+    def _fun(value,name):
+        fvalue = float(value)
+        if time.time() - fvalue > span:
+            raise UserWarning('%s has expired'%name)
+    return _fun
 
 def default(def_value):
     def _default(value,name):

@@ -4,6 +4,7 @@ from decimal import Decimal
 from .. .base_data import field_map
 
 class CusDecimalField(DecimalField):
+    "默认2位有效数字"
     def __init__(self, verbose_name=None, name=None, max_digits=None, decimal_places=None, **kwargs): 
         self.digits = kwargs.pop('digits', 2)
         
@@ -24,7 +25,7 @@ class CusDecimalProc(BaseFieldProc):
         name = head['name']
         field = self.instance.__class__._meta.get_field(name)
         head['fv_rule'] = 'digit(%s)' % field.digits
-        head['editor'] = 'number'
+        head['editor'] = 'com-field-number'
         return head
         
     

@@ -27,6 +27,9 @@ ex.assign(cfg,{
             return MINT.MessageBox(msg)
         }
     },
+    confirm(msg){
+        return MINT.MessageBox.confirm(msg)
+    },
     pop_edit_local:function(ctx,callback){
         ctx.fields_editor='com-sim-fields-local'
         return cfg.pop_big('com-fields-panel',ctx,callback)
@@ -58,6 +61,14 @@ ex.assign(cfg,{
         // 关闭窗口，窗口创建函数返回的，全部是一个关闭函数
         close_func()
     },
+    //slideIn(editor,ctx){
+    //   return new Promise((resolve,reject)=>{
+    //       function callback(e){
+    //           resolve(e,close_fun)
+    //       }
+    //        var close_fun = cfg.pop_big(editor,ctx,callback)
+    //    })
+    //},
     pop_iframe:function(url,option){
        return cfg.pop_big('com-slide-iframe',{url:url,title:option.title})
     },

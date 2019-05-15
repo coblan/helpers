@@ -110,7 +110,8 @@ def get_lib(request):
             'echarts':'https://cdn.jsdelivr.net/npm/echarts@4.2.1/dist/echarts.min.js',
             'chosen':'https://cdn.jsdelivr.net/npm/chosen-js@1.8.7/chosen.jquery.min.js',
             'chosen_css':'https://cdn.jsdelivr.net/npm/chosen-js@1.8.7/chosen.min.css',
-            'ckeditor':'https://cdn.jsdelivr.net/npm/ckeditor@4.11.4/ckeditor.min.js',
+            #'ckeditor':'https://cdn.jsdelivr.net/npm/ckeditor@4.11.4/ckeditor.js',
+            #'ckeditor':'https://cdn.jsdelivr.net/npm/ckeditor@4.11.4/ckeditor.min.js',
         })
   
     return dc

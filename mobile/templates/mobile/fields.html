@@ -1,0 +1,83 @@
+{% extends "wxweb/site_base.html" %}
+{% load static %}
+{% load jsonify %}
+
+{% block head-content2 %}
+<title>{{page_label}}</title>
+<script src="{{ js_config.js_lib.jquery }}"></script>
+<script src="{{ js_config.js_lib.md5 }}"></script>
+<link rel="stylesheet" href="{{ js_config.js_lib.font_awesome }}">
+<script src="{{ js_config.js_lib.vuejs }}"></script>
+<script src="{{ js_config.js_lib.nice_validator }}"></script>
+<link rel="stylesheet" href="{{ js_config.js_lib.nice_validator_css }}">
+
+<script src="{{ js_config.js_lib.cube_ui }}"></script>
+<link rel="stylesheet" href="{{ js_config.js_lib.cube_ui_css }}">
+<script src="{{ js_config.js_lib.mint_ui }}"></script>
+<link rel="stylesheet" href="{{ js_config.js_lib.mint_ui_css }}">
+<script src="{{ js_config.js_lib.vant }}"></script>
+<link rel="stylesheet" href="{{ js_config.js_lib.vant_css }}">
+
+<script src="{{ js_config.js_lib.exfun }}"></script>
+<script src="{{ js_config.js_lib.director }}"></script>
+<script src="{{ js_config.js_lib.jb_admin }}"></script>
+<script src="{{ js_config.js_lib.mobile }}"></script>
+{% endblock %}
+
+{% block page_body %}
+
+<script>
+    row={{ row | jsonify }}
+    heads = {{ heads | jsonify }}
+    page_label = '{{ page_label }}'
+    fields_ctx = {{ fields_ctx | jsonify }}
+
+    //    list_panel = {{ list_panel | jsonify }}
+//    table_editor={{ table_editor | jsonify }}
+//    table_option = {{ table_option | jsonify }}
+//    detail_editor= {{ detail_editor | jsonify }}
+//    detail_ctx = {{ detail_ctx | jsonify }}
+
+    $(function(){
+        new Vue({
+            el:'#there',
+            data:function(){
+                return {
+                    page_label:page_label,
+                    fields_ctx:fields_ctx,
+//                    form_ctx: {
+//                        heads:[
+//                            {name:'client_name',label:'你的姓名',editor:'com-field-linetext',required:true,},
+//                            {name:'desp',label:'详细描述',editor:'com-field-blocktext'},
+//                            {name:'phone',label:'手机号码',editor:'com-field-linetext',fv_rule:'mobile'},
+//                            {name:'desp_img',label:'上传图片',editor:'com-field-multi-picture'},
+//
+//                        ],
+//                        ops:[
+//                            {label:'提交',editor:'com-op-submit',action:`rt=scope.ps.vc.submit()
+//                            .then((res)=>{cfg.hide_load(); return cfg.showMsg("提交报修单成功,请不要重复提交!")})
+//                            .then(()=>scope.ps.vc.row={_director_name:'repair-submit'})`}
+//                        ],
+//                        fields_group:[{label:'报修信息',heads:['client_name','desp','phone','desp_img']}],
+//                        row:{
+//                            _director_name:'repair-submit',
+//                        }
+//                    },
+
+                }
+            },
+            methods:{
+            }
+        })
+    })
+</script>
+<div id="there" class="client-case-page">
+
+
+    <div class="page-title" v-text="page_label"></div>
+    <com-fields-panel :ctx="fields_ctx"></com-fields-panel>
+
+
+</div>
+
+{% endblock %}

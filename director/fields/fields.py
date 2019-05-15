@@ -85,8 +85,8 @@ class ModelFields(forms.ModelForm):
             elif pk != None:  # 很多时候，pk=0 是已经创建了
                 try:
                     form_kw['instance']= self._meta.model.objects.get(pk=pk)
-                except self._meta.model.DoseNotExist:
-                    raise Http404('Id that you request is not exist')
+                except self._meta.model.DoesNotExist:
+                    raise Http404('Id=%s that you request is not exist'%pk)
             else:
                 form_kw['instance'] = self._meta.model()
         else:
@@ -290,7 +290,7 @@ class ModelFields(forms.ModelForm):
                 dc['editor']='bool'
                 #dc['no_auto_label']=True
             elif v.__class__ in [forms.fields.IntegerField,forms.fields.FloatField]:
-                dc['editor']='number'
+                dc['editor']='com-field-number'
             elif v.__class__  == forms.fields.DateField:
                 dc['editor']='date'
             if v.__class__ ==forms.models.ModelMultipleChoiceField and \
