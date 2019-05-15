@@ -170,7 +170,7 @@
     {% endblock %}
 
     {% block tab-content %}
-    <div id="main-page" class="rows-block flex-v flex-grow" v-show="tabgroup.crt =='main'">
+    <div id="main-page" class="rows-block flex-v flex-grow" v-show="tabgroup.crt =='main'" style="max-height: calc( 100% - 20px);">
 
 
         <div  v-if="ops.length>0">
