@@ -33,6 +33,7 @@ from .model_func.field_procs import dateproc,datetimeproc,decimalproc,foreignpro
 from .model_func.field_procs import nullboolproc
 
 from . import js_cfg
+from . import dapi
 
 # 定制User表的显示方式
 def get_first_name(self):
