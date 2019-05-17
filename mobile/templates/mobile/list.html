@@ -117,10 +117,10 @@
     <!--<div class="page-title" v-text="page_label"></div>-->
     <van-nav-bar
             :title="page_label"
-            :left-arrow="search_args.back"
+            :left-arrow="search_args._back"
             @click-right="onClickRight"
             @click-left="onClickLeft">
-        <van-icon  name="bars" slot="right" />
+        <van-icon v-if="ops.length>0" name="bars" slot="right" />
     </van-nav-bar>
 
     <!--<mt-actionsheet v-if=""-->
@@ -138,6 +138,7 @@
                   @pulling-up="onPullingUp">
         <!--<van-pull-refresh v-model="isLoading" @refresh="onRefresh">-->
             <component :is="table_editor" :heads="heads" :rows="childStore.rows" :option="table_option" @select="open_detail($event)"></component>
+            <div v-if="childStore.rows.length == 0 " class="center-vh">暂无数据</div>
         <!--</van-pull-refresh>-->
     </cube-scroll>
 
