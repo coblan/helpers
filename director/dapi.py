@@ -1,6 +1,8 @@
 from helpers.director.ajax import save_row
 from helpers.director.decorator import get_request_cache
 from django.http import JsonResponse
+from .shortcut import director_view
+from helpers.director.base_data import director
 
 def director_save_row(row):
      request = get_request_cache()['request']
@@ -13,3 +15,9 @@ def director_save_row(row):
           return JsonResponse({'success':False,'msg':'字段验证错误','data':errors})
      else:
           return {}
+
+@director_view('d.get_row')
+def get_row(director_name,filter_kws):
+     fields_cls = director.get(director_name)
+     fields_obj = fields_cls(**filter_kws)
+     return fields_obj.get_row()

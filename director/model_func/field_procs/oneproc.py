@@ -20,6 +20,11 @@ class OneProc(BaseFieldProc):
                 '_%s_model'%name:model_to_name(related_model)
             }
     
+    def dict_table_head(self, head):
+        head['options']=[]
+        head['editor'] = 'com-table-label-shower'
+        return head
+    
     #def clean_field(self,dc,name):
         #model = name_to_model( dc.get('_%s_model'%name) )
         #return model.objects.get(pk=dc.get(name))  
