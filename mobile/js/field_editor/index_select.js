@@ -55,22 +55,29 @@ Vue.component('com-field-index-select',{
                 item_editor:this.head.item_editor,
                 bucket_list:this.head.bucket_list,
             }
-            cfg.show_cloak()
+            // cfg.show_cloak()
+            // setTimeout(()=>{
+            //     cfg.hide_cloak()
+            // },1000)
+
+            cfg.show_load()
             setTimeout(()=>{
-                cfg.hide_cloak()
-            },1000)
-           var  win_close = cfg.pop_big('com-index-select',ctx,function(resp){
+                cfg.hide_load()
+            },1500)
+
+            var  win_close = cfg.pop_big('com-index-select',ctx,function(resp){
                 Vue.set(self.row,self.head.name,resp.value)
-               win_close()
+                win_close()
                 self.$emit('input',resp.value)
             })
+
         }
     }
 })
 
 Vue.component('com-index-select',{
     props:['ctx'],
-    template:`<div class="com-index-select" v-cloak>
+    template:`<div class="com-index-select">
      <mt-index-list>
       <mt-index-section v-for="bucket in ctx.bucket_list" :index="bucket.index">
         <component v-for="item in bucket.items" :is="ctx.item_editor" :ctx="item" @click.native="select_this(item)"></component>

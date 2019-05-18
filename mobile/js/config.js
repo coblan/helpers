@@ -73,7 +73,7 @@ ex.assign(cfg,{
        return cfg.pop_big('com-slide-iframe',{url:url,title:option.title})
     },
     show_load(){
-        MINT.Indicator.open({spinnerType: 'fading-circle'})
+        return MINT.Indicator.open({spinnerType: 'fading-circle'})
         //vant.Toast.loading({
         //    mask: true,
         //    message: '加载中...',
