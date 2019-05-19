@@ -123,8 +123,6 @@ class BaseEngine(object):
                 return JsonResponse({'success':False,'msg':str(e)})
             else:
                 return HttpResponse(str(e))
-        except PermissionDenied as e:
-            print(e)
         # 如果返回的事 HttpResponse，表示已经处理完毕了，不需要附加其他属性。
         if isinstance(ctx, HttpResponse):
             return ctx
