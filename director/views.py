@@ -1,7 +1,7 @@
 #encoding:utf-8
 from django.shortcuts import render,redirect
 from django.http import HttpResponse,JsonResponse
-
+from django.core.exceptions import PermissionDenied
 import json
 
 from pydoc import locate
@@ -114,6 +114,8 @@ def director_view(request,director_name):
             rt = JsonResponse(dc,safe=False)
     except UserWarning as e:
         rt = JsonResponse({'success':False,'msg':str(e)})
+    except PermissionDenied as e:
+        rt = HttpResponse(str(e))
     #response.setHeader("Access-Control-Allow-Origin", "*");
     #rt["Access-Control-Allow-Origin"]='*'
     #rt['Access-Control-Allow-Headers']='Origin, X-Requested-With, Content-Type, Accept'
