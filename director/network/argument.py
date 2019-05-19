@@ -125,7 +125,7 @@ def is_list(value,name):
     if not value:
         return []
     if not isinstance(value,(list,tuple)):
-        raise UserWarning('%s 需要传入列表数据')
+        raise UserWarning('%s 需要传入列表数据'%name)
     else:
         return value
 
