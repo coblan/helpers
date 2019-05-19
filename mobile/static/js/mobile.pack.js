@@ -457,7 +457,7 @@ ex.assign(cfg, {
         return cfg.pop_big('com-slide-iframe', { url: url, title: option.title });
     },
     show_load: function show_load() {
-        MINT.Indicator.open({ spinnerType: 'fading-circle' });
+        return MINT.Indicator.open({ spinnerType: 'fading-circle' });
         //vant.Toast.loading({
         //    mask: true,
         //    message: '加载中...',
@@ -761,7 +761,7 @@ var SlideWin = function (_PopMobileWin) {
         key: 'appendHtml',
         value: function appendHtml() {
             this.pop_id = new Date().getTime();
-            $('body').append('<div id="pop-' + this.pop_id + '" class="pop-slide-win" v-cloak>\n            <mt-popup\n                  v-model=\'show\'\n                  :modal="true"\n                  :closeOnClickModal="false"\n                  position="right">\n                  <div class="flex-v content-wrap" style="height: 100%;width: 100%">\n                        <com-slide-head :title="ctx.title" ></com-slide-head>\n\n                        <component class="flex-grow" style="overflow: auto;position: relative" :is="editor" :ctx="ctx" @finish="on_finish($event)"></component>\n\n\n                  </div>\n\n\n            </mt-popup>\n            </div>');
+            $('body').append('<div id="pop-' + this.pop_id + '" class="pop-slide-win" v-cloak>\n            <mt-popup\n                  v-model=\'show\'\n                  :modal="true"\n                  :closeOnClickModal="false"\n                  position="right">\n                  <div class="flex-v content-wrap" style="height: 100vh;width: 100vw">\n                        <com-slide-head :title="ctx.title" ></com-slide-head>\n\n                        <component class="flex-grow" style="overflow: auto;position: relative" :is="editor" :ctx="ctx" @finish="on_finish($event)"></component>\n\n\n                  </div>\n\n\n            </mt-popup>\n            </div>');
         }
     }, {
         key: 'closeFun',
@@ -1367,11 +1367,16 @@ Vue.component('com-field-index-select', {
                 title: this.head.label,
                 item_editor: this.head.item_editor,
                 bucket_list: this.head.bucket_list
-            };
-            cfg.show_cloak();
+                // cfg.show_cloak()
+                // setTimeout(()=>{
+                //     cfg.hide_cloak()
+                // },1000)
+
+            };cfg.show_load();
             setTimeout(function () {
-                cfg.hide_cloak();
-            }, 1000);
+                cfg.hide_load();
+            }, 1500);
+
             var win_close = cfg.pop_big('com-index-select', ctx, function (resp) {
                 Vue.set(self.row, self.head.name, resp.value);
                 win_close();
@@ -1383,7 +1388,7 @@ Vue.component('com-field-index-select', {
 
 Vue.component('com-index-select', {
     props: ['ctx'],
-    template: '<div class="com-index-select" v-cloak>\n     <mt-index-list>\n      <mt-index-section v-for="bucket in ctx.bucket_list" :index="bucket.index">\n        <component v-for="item in bucket.items" :is="ctx.item_editor" :ctx="item" @click.native="select_this(item)"></component>\n      </mt-index-section>\n    </mt-index-list>\n    </div>',
+    template: '<div class="com-index-select">\n     <mt-index-list>\n      <mt-index-section v-for="bucket in ctx.bucket_list" :index="bucket.index">\n        <component v-for="item in bucket.items" :is="ctx.item_editor" :ctx="item" @click.native="select_this(item)"></component>\n      </mt-index-section>\n    </mt-index-list>\n    </div>',
     methods: {
         select_this: function select_this(event) {
             this.$emit('finish', event);
@@ -2529,7 +2534,7 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, ".mint-indicator .mint-indicator-wrapper {\n  z-index: 90000;\n}\n.mint-indicator .mint-indicator-mask {\n  z-index: 90000;\n}\n.mint-toast {\n  z-index: 9999999;\n}\n", ""]);
+exports.push([module.i, ".mint-indicator .mint-indicator-wrapper {\n  z-index: 90000;\n}\n.mint-indicator .mint-indicator-mask {\n  z-index: 90000;\n}\n.mint-toast {\n  z-index: 9999999;\n}\n[v-cloak] {\n  display: none;\n}\n", ""]);
 
 // exports
 
