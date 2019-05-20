@@ -204,6 +204,10 @@ var table_store={
             })
             self.$emit('row.update_or_insert',[rows])
         },
+        check_selected(head){
+            var row_match_fun = head.row_match || 'many_row'
+            return row_match[row_match_fun](this, head)
+        },
         selected_set_and_save:function(kws){
             /*
              这个是主力函数
