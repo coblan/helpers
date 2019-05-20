@@ -1,6 +1,8 @@
-Vue.component('com-listpanel-arrow-cell',{
+require('./styl/table_van_cell.styl')
+
+Vue.component('com-ctn-table-van-cell',{
     props:['heads','rows','option'],
-    template:`<div class="com-list-arrow-cell">
+    template:`<div class="com-ctn-table-van-cell">
     <van-cell v-for="row in rows" title="单元格" :is-link="option.nextlevel" clickable>
                 <template slot="title">
                     <div class="material-wave content"  @click="on_click(row)">
