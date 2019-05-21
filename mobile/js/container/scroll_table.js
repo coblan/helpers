@@ -1,22 +1,20 @@
 Vue.component('com-ctn-scroll-table',{
     props:['ctx'],
     template:`<div class="com-ctn-scroll-table">
-              <cube-scroll :data="rows" ref="scroll"  :options="scrollOptions" @pulling-down="onPullingDown"
+              <cube-scroll :data="parStore.rows" ref="scroll"  :options="scrollOptions" @pulling-down="onPullingDown"
                   @pulling-up="onPullingUp">
-            <component :is="table_editor" :heads="heads" :rows="childStore.rows" :option="table_option" @select="open_detail($event)"></component>
-            <div v-if="childStore.rows.length == 0 " class="center-vh">暂无数据</div>
+            <component :is="table_editor" :heads="ctx.heads" :rows="parStore.rows"></component>
+            <div v-if="parStore.rows.length == 0 " class="center-vh">
+                <van-icon name="search" size='1rem' color="#c9c9c9" />
+            </div>
     </cube-scroll>
     </div>`,
     data(){
-        var childStore = new Vue(table_store)
-        childStore.rows=[]
-        childStore.vc = this
-        childStore.director_name = this.ctx. director_name
-        table_option['nextlevel'] = this.ctx.detail_editor? true:false
+        var parStore = ex.vueParStore(this)
+        //table_option['nextlevel'] = this.ctx.detail_editor? true:false
         return {
-            rows:this.childStore.rows,
-            search_args: this.ctx.search_args || {},
-            table_editor:this.ctx.table_editor || '',
+            parStore:parStore,
+            table_editor:this.ctx.table_editor || 'com-ctn-table-van-cell',
             scrollOptions: {
                 /* lock x-direction when scrolling horizontally and  vertically at the same time */
                 directionLockThreshold: 0,
@@ -32,14 +30,18 @@ Vue.component('com-ctn-scroll-table',{
             },
         }
     },
-    onPullingUp(){
-        this.childStore.addNextPage().then(()=>{
-            this.$refs.scroll.forceUpdate()
-        })
-    },
-    onPullingDown(){
-        this.childStore.search().then(()=>{
-            this.$refs.scroll.forceUpdate()
-        })
-    },
+    methods:{
+        onPullingUp(){
+            this.parStore.addNextPage().then(()=>{
+                this.$refs.scroll.forceUpdate()
+            })
+        },
+        onPullingDown(){
+            this.parStore.search().then(()=>{
+                this.$refs.scroll.forceUpdate()
+            })
+        },
+
+    }
+
 })

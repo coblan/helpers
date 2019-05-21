@@ -66,14 +66,21 @@ Vue.component('com-field-multi-picture',{
             image_list.splice(index,1)
         },
         big_win(imgsrc){
-            var ctx = {imgsrc:imgsrc}
-            pop_layer(ctx,'com-pop-image',function(){},{
-                title:false,
-                area: ['90%', '90%'],
-                shade: 0.8,
-                skin: 'img-shower',
-                shadeClose: true,
-            })
+            var image_list = this.row[this.head.name]
+            var index = image_list.indexOf(imgsrc)
+            vant.ImagePreview({
+                    images:image_list,
+                    startPosition: index,
+            }
+            );
+            //var ctx = {imgsrc:imgsrc}
+            //pop_layer(ctx,'com-pop-image',function(){},{
+            //    title:false,
+            //    area: ['90%', '90%'],
+            //    shade: 0.8,
+            //    skin: 'img-shower',
+            //    shadeClose: true,
+            //})
         },
     }
 })

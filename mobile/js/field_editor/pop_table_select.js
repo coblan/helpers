@@ -1,6 +1,8 @@
+require('./styl/pop_table_select.styl')
+
 Vue.component('com-field-pop-table-select',{
     props:['head','row'],
-    template:`<van-field class="com-field-pop-table-select"  v-model="row[head.name]" :required="head.required"
+    template:`<van-field class="com-field-pop-table-select"  v-model="label_text" :required="head.required"
     :label="head.label"
     type="text"
     :placeholder="normed_placeholder"
@@ -15,6 +17,9 @@ Vue.component('com-field-pop-table-select',{
         this.setup_validate_msg_router()
     },
     computed:{
+        label_text(){
+            return this.row['_'+this.head.name+'_label']
+        },
         normed_placeholder:function(){
             if(! this.head.readonly){
                 return this.head.placeholder || '请输入'+this.head.label
@@ -25,7 +30,7 @@ Vue.component('com-field-pop-table-select',{
     },
     methods:{
         open_win(){
-            cfg.pop_big('com-field-pop-search',{table_ctx:this.head.table_ctx,placeholder:this.head.search_placeholder})
+            cfg.pop_big('com-field-pop-search',{table_ctx:this.head.table_ctx,placeholder:this.head.search_placeholder,par_row:this.row})
         },
         setup_validate_msg_router(){
             if(!this.head.validate_showError){
@@ -39,27 +44,51 @@ Vue.component('com-field-pop-table-select',{
     }
 })
 
-
 Vue.component('com-field-pop-search',{
     props:['ctx'],
     template:`<div class="com-field-pop-search">
-    <van-search
-    v-model="value"
-    :placeholder="this.ctx.placeholder || '请输入搜索关键词'"
-    show-action
-    @search="onSearch"
-    @cancel="onCancel"
-  />
-  <com-ctn-scroll-table :ctx="ctx"> </com-ctn-scroll-table>
+    <form action="/">
+          <van-search
+            v-model="childStore.search_args._q"
+            :placeholder="this.ctx.placeholder || '请输入搜索关键词'"
+            show-action
+            @search="onSearch"
+            @cancel="onCancel"
+          >
+          <div slot="left-icon" @click="onSearch">
+            <van-icon name="search" />
+          </div>
+          </van-search>
+    </form>
+    <!--<van-search-->
+    <!--v-model="childStore.search_args._q"-->
+    <!--:placeholder="this.ctx.placeholder || '请输入搜索关键词'"-->
+    <!--show-action-->
+    <!--@search="onSearch"-->
+    <!--@cancel="onCancel"-->
+  <!--&gt;-->
+   <!--<div slot="action" @click="onSearch">搜索</div>-->
+  <!--</van-search>-->
+  <com-ctn-scroll-table :ctx="ctx.table_ctx"> </com-ctn-scroll-table>
 
     </div>`,
     data(){
+        var childStore = new Vue(table_store)
+        childStore.rows=[]
+        childStore.vc = this
+        childStore.director_name = this.ctx.table_ctx.director_name
+        childStore.par_row = this.ctx.par_row,
+        childStore.search_args = {_q:''}
         return {
-            value:''
+            childStore:childStore,
         }
     },
     methods:{
         onSearch(){
+            cfg.show_load()
+            this.childStore.search().then(res=>{
+                cfg.hide_load()
+            })
 
         },
         onCancel(){

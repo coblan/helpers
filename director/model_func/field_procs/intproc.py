@@ -52,8 +52,20 @@ class IntProc(BaseFieldProc):
             return None
 
 
+class BigProc(IntProc):
+    def filter_clean_search(self, q_str): 
+        if re.search('^\d+$', q_str):
+            bb= int(q_str)
+            if (-10**19 +1 < bb < 10**19 -1 ):
+                return bb
+            else:
+                return None
+
+        else:
+            return None
+
 field_map.update({
     IntegerField:IntProc, 
     SmallIntegerField: IntProc,
-    BigIntegerField:IntProc,
+    BigIntegerField:BigProc,
 })

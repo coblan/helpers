@@ -19,12 +19,20 @@ def get_argument(request,outtype='obj'):
     if request.method=='POST':
         if request.body and re.match('{.+}|\[.+\]',request.body.decode('utf-8')):
             dc=json.loads(request.body)
+        #elif 'x-www-form-urlencoded' in request.META.get('CONTENT_TYPE') :
+            #dc = parse.parse_qs(request.body.decode('utf-8'))
+            #for k,v in dc.items():
+                #if isinstance(v,list):
+                    #dc[k]=','.join(v)
+        #elif 'form-data' in request.META.get('CONTENT_TYPE'):
         else:
-            dc =parse.parse_qs(request.body)
+            dc = request.POST.dict()
+        #else:
+            #dc =parse.parse_qs(request.body)
             
-        for k,v in dc.items():
-            if isinstance(v,list):
-                dc[k]=v[0]
+            #for k,v in dc.items():
+                #if isinstance(v,list):
+                    #dc[k]=v[0]
     else:
         dc =  request.GET.dict()
     if outtype=='dict':
@@ -125,7 +133,7 @@ def is_list(value,name):
     if not value:
         return []
     if not isinstance(value,(list,tuple)):
-        raise UserWarning('%s 需要传入列表数据')
+        raise UserWarning('%s 需要传入列表数据'%name)
     else:
         return value
 

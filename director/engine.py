@@ -117,7 +117,6 @@ class BaseEngine(object):
                 # 可以在这里检测权限，然后跳转
                 if isinstance(check_rt, HttpResponse):
                     return check_rt
-                
             ctx=page.get_context()
         except UserWarning as e:
             if  request.is_ajax():
