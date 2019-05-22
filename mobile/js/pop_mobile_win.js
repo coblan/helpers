@@ -63,7 +63,7 @@ class SlideWin extends PopMobileWin{
                   :closeOnClickModal="false"
                   position="right">
                   <div class="flex-v content-wrap" style="height: 100vh;width: 100vw">
-                        <com-slide-head :title="ctx.title" ></com-slide-head>
+                        <com-slide-head :title="ctx.title" v-if="ctx.title"></com-slide-head>
 
                         <component class="flex-grow" style="overflow: auto;position: relative" :is="editor" :ctx="ctx" @finish="on_finish($event)"></component>
 

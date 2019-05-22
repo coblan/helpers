@@ -350,6 +350,8 @@ class ModelTable(object):
         
         self.kw=kw
         self.crt_user=crt_user 
+        if not self.crt_user:
+            self.crt_user = get_request_cache()['request'].user
         self.page=_page
         
         self.custom_permit()

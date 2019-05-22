@@ -6,7 +6,14 @@ window.cfg={
         height:$(window).height(),
     },
     showMsg:function(msg){
-        layer.alert(msg);
+        return new Promise((resolve,reject)=>{
+            layer.alert(msg,function(index){
+                //do something
+                layer.close(index);
+                resolve()
+            });
+        })
+
     },
     warning:function(msg){
         layer.alert(msg,{title:['提示','color:white;background-color:#f0ad4e'],icon: 5})
