@@ -204,5 +204,8 @@ export var network ={
                 iframe.src = strPath;
             }
             return false;
+    },
+    upload(){
+        do
     }
 }
