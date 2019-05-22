@@ -17,4 +17,9 @@ class Migration(migrations.Migration):
             name='key',
             field=models.CharField(blank=True, max_length=200, unique=True, verbose_name='key'),
         ),
+        migrations.AlterField(
+            model_name='logmodel',
+            name='detail',
+            field=models.TextField(blank=True, verbose_name='详细'),
+        ),
     ]

@@ -206,6 +206,12 @@ export var network ={
             return false;
     },
     upload(){
-        do
+        if(window._director_uploadfile_input){
+            $(body).append('<input type="file" id="__director-upload-file-input" style="display: none">')
+            window._director_uploadfile_input=true
+        }else{
+            $('#__director-upload-file-input').click()
+        }
+
     }
 }
