@@ -205,13 +205,31 @@ export var network ={
             }
             return false;
     },
-    upload(){
-        if(window._director_uploadfile_input){
-            $(body).append('<input type="file" id="__director-upload-file-input" style="display: none">')
-            window._director_uploadfile_input=true
-        }else{
-            $('#__director-upload-file-input').click()
-        }
+    uploadfile({url,}={}){
+        this.__upload_url =url
+        return new Promise((resolve,reject)=>{
+            ex.__on_filechange=function(event){
+                let new_selected_files = event.target.files
+                var up_url = ex.__upload_url || '/d/upload?path=general_upload/userfile'
+                cfg.show_load()
+                ex.uploads(new_selected_files,up_url,function(url_list){
+                    cfg.hide_load()
+                    $('#__director-upload-file-input').val('')
+                    resolve(url_list)
+                })
+            }
 
-    }
+            if(!window._director_uploadfile_input){
+                $('body').append('<input type="file" id="__director-upload-file-input" style="display: none">')
+                $('#__director-upload-file-input').change(function(event){
+                    ex.__on_filechange(event)
+                })
+                window._director_uploadfile_input=true
+                $('#__director-upload-file-input').click()
+            }else{
+                $('#__director-upload-file-input').click()
+            }
+
+        })
+    },
 }
