@@ -39,15 +39,16 @@ export var network ={
                     msg = msg.concat(resp.msg)
                 }
             }
-            for(var k in resp){
-                if(resp[k] && resp[k].msg){
-                    if(typeof resp[k].msg == 'string'){
-                        msg.push(resp[k].msg)
-                    }else {
-                        msg=msg.concat(resp[k].msg)
-                    }
-                }
-            }
+            // 业务逻辑里面的msg 由正常函数去处理
+            //for(var k in resp){
+            //    if(resp[k] && resp[k].msg){
+            //        if(typeof resp[k].msg == 'string'){
+            //            msg.push(resp[k].msg)
+            //        }else {
+            //            msg=msg.concat(resp[k].msg)
+            //        }
+            //    }
+            //}
 
             var success=true
             if(resp.success ==false ){
@@ -81,9 +82,11 @@ export var network ={
             if(msg.length!=0){
                 if(!success){
                     cfg.showError(msg.join('\n'))
-                }else{
-                    cfg.showMsg(msg.join('\n'))
                 }
+                // 业务逻辑里面的msg 由正常函数去处理
+                //else{
+                //    cfg.showMsg(msg.join('\n'))
+                //}
             }
 
 
