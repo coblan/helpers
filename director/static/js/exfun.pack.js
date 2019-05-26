@@ -1082,18 +1082,27 @@ var network = exports.network = {
     get: function get(url, callback) {
         //replace $.get
         var self = this;
-        var wrap_callback = function wrap_callback(resp) {
-            if (resp.msg) {
-                self.show_msg(resp.msg);
-            }
-            if (resp.status && typeof resp.status == 'string' && resp.status != 'success') {
-                cfg.hide_load();
-                return;
-            } else {
-                callback(resp);
-            }
-        };
-        return $.get(url, wrap_callback);
+        if (callback) {
+            return $.get(url, callback);
+        } else {
+            return new Promise(function (resolve, reject) {
+                $.get(url, function (resp) {
+                    resolve(resp);
+                });
+            });
+        }
+        //var wrap_callback=function (resp) {
+        //    if (resp.msg) {
+        //        self.show_msg(resp.msg)
+        //    }
+        //    if (resp.status && typeof resp.status == 'string' && resp.status != 'success') {
+        //        cfg.hide_load()
+        //        return
+        //    } else {
+        //        callback(resp)
+        //    }
+        //}
+        //return $.get(url,wrap_callback)
     },
     post: function post(url, data, callback) {
         if (callback) {
