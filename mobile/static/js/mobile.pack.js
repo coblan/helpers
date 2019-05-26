@@ -422,6 +422,7 @@ ex.assign(cfg, {
         slide_mobile_win({ editor: editor, ctx: ctx, callback: callback });
         //window.slide_win.left_in_page({editor:editor,ctx:ctx,callback:callback})
         return function () {
+            cfg.hide_load();
             history.back();
         };
     },
