@@ -87,6 +87,7 @@ def get_lib(request):
 
         dc.update( {
             'vuejs': 'https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.min.js',
+            #'jquery':'https://cdn.jsdelivr.net/npm/jquery@2.2.4/dist/jquery.min.js',
             'jquery': 'https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js',
             'vuex': 'https://cdn.jsdelivr.net/npm/vuex@3.0.1/dist/vuex.min.js', 
     

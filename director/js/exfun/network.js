@@ -3,18 +3,27 @@ export var network ={
     get:function(url,callback){
         //replace $.get
         var self=this
-        var wrap_callback=function (resp) {
-            if (resp.msg) {
-                self.show_msg(resp.msg)
-            }
-            if (resp.status && typeof resp.status == 'string' && resp.status != 'success') {
-                cfg.hide_load()
-                return
-            } else {
-                callback(resp)
-            }
+        if(callback){
+            return $.get(url,callback)
+        }else{
+            return new Promise((resolve,reject)=>{
+                $.get(url,(resp)=>{
+                    resolve(resp)
+                })
+            })
         }
-        return $.get(url,wrap_callback)
+        //var wrap_callback=function (resp) {
+        //    if (resp.msg) {
+        //        self.show_msg(resp.msg)
+        //    }
+        //    if (resp.status && typeof resp.status == 'string' && resp.status != 'success') {
+        //        cfg.hide_load()
+        //        return
+        //    } else {
+        //        callback(resp)
+        //    }
+        //}
+        //return $.get(url,wrap_callback)
     },
     post:function(url,data,callback){
         if(callback){
