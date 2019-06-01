@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 149);
+/******/ 	return __webpack_require__(__webpack_require__.s = 148);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -388,7 +388,7 @@ function updateLink(linkElement, obj) {
 "use strict";
 
 
-__webpack_require__(139);
+__webpack_require__(138);
 
 window.cfg = {
     env: {
@@ -1904,59 +1904,27 @@ var rabbit = exports.rabbit = {
 "use strict";
 
 
-Object.defineProperty(exports, "__esModule", {
-        value: true
-});
-
-var u = navigator.userAgent,
-    app = navigator.appVersion;
-
-var sys = exports.sys = {
-        browser: {
-                trident: u.indexOf('Trident') > -1, //IE内核
-                presto: u.indexOf('Presto') > -1, //opera内核
-                webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
-                gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
-                mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
-                ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
-                android: u.indexOf('Android') > -1 || u.indexOf('Adr') > -1, //android终端
-                iPhone: u.indexOf('iPhone') > -1, //是否为iPhone或者QQHD浏览器
-                iPad: u.indexOf('iPad') > -1, //是否iPad
-                webApp: u.indexOf('Safari') == -1, //是否web应该程序，没有头部与底部
-                weixin: u.indexOf('MicroMessenger') > -1, //是否微信
-                qq: u.match(/\sQQ/i) == " qq" //是否QQ
-        }
-
-};
-
-/***/ }),
-/* 22 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _expand_menu = __webpack_require__(76);
+var _expand_menu = __webpack_require__(75);
 
 var f = _interopRequireWildcard(_expand_menu);
 
-var _page_tab = __webpack_require__(77);
+var _page_tab = __webpack_require__(76);
 
 var page = _interopRequireWildcard(_page_tab);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
-__webpack_require__(144);
+__webpack_require__(143);
 //import * as a from './modal.js'
 
-__webpack_require__(142);
-__webpack_require__(140);
 __webpack_require__(141);
-__webpack_require__(146);
+__webpack_require__(139);
+__webpack_require__(140);
 __webpack_require__(145);
+__webpack_require__(144);
 
 /***/ }),
-/* 23 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2059,7 +2027,7 @@ function para_encode(para_str) {
 }
 
 /***/ }),
-/* 24 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2248,6 +2216,7 @@ function cusParCall(self, fun, kws, rt) {
 }
 
 /***/ }),
+/* 24 */,
 /* 25 */,
 /* 26 */,
 /* 27 */,
@@ -2298,14 +2267,13 @@ function cusParCall(self, fun, kws, rt) {
 /* 72 */,
 /* 73 */,
 /* 74 */,
-/* 75 */,
-/* 76 */
+/* 75 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(143);
+__webpack_require__(142);
 var template_str = '\n<div class=\'_expand_menu\'>\n\t<ul>\n\t\t<li v-for=\'act in normed_menu\'>\n\t\t\t<a :class=\'["menu_item",{"selected":act.selected,"opened_submenu":opened_submenu==act.submenu}]\'\n\t\t\t\t:href=\'act.submenu?"javascript:void(0)":act.url\'\n\t\t\t\t@click=\'main_act_click(act)\'>\n\t\t\t\t<span v-html=\'act.icon\' class=\'_icon\'></span><span v-text=\'act.label\'></span>\n\t\t\t\t<span v-show="act.submenu">\n\t\t\t\t\t<span v-if="opened_submenu==act.submenu ||act.selected" style="float: right;margin-right: 1em;">\n\t\t\t\t\t\t<i class="fa fa-chevron-down"></i>\n\t\t\t\t\t</span>\n\t\t\t\t\t<span v-else style="float: right;margin-right: 1em;"><i class="fa fa-chevron-left"></i></span>\n\t\t\t\t</span>\n\t\t\t\t<!--<span class=\'left-arrow\' v-if=\'act.selected\'></span>-->\n\t\t\t</a>\n\n\t\t\t<ul class=\'submenu\' v-show=\'opened_submenu==act.submenu ||act.selected\' transition="expand">\n\t\t\t\t<li v-for=\'sub_act in act.submenu\' :class=\'{"active":sub_act.active}\'>\n\t\t\t\t\t<a :href=\'sub_act.url\' class=\'sub_item\'>\n\t\t\t\t\t\t<span v-text=\'sub_act.label\'></span>\n\t\t\t\t\t</a>\n\n\t\t\t\t</li>\n\t\t\t</ul>\n\t\t</li>\n\t</ul>\n</div>\n';
 
 Vue.component('expand_menu', {
@@ -2403,7 +2371,7 @@ Vue.component('expand_menu', {
 //})
 
 /***/ }),
-/* 77 */
+/* 76 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2417,6 +2385,7 @@ Vue.component('page-tab', {
 document.write('\n <style type="text/css" media="screen" id="test">\n.inst-menu{\n\t\tmargin: 30px auto;\n\t\tborder-bottom: 1px solid #DADCDE;\n\t}\n.inst-menu li{\n\tdisplay: inline-block;\n\tpadding: 10px 20px;\n\tfont-size: 16px;\n}\n.inst-menu li:hover{\n\tcursor: pointer;\n}\n.inst-menu .active{\n\tborder-bottom: 5px solid #0092F2;\n\tcolor: #0092F2;\n}\n</style>\n');
 
 /***/ }),
+/* 77 */,
 /* 78 */,
 /* 79 */,
 /* 80 */,
@@ -2444,8 +2413,7 @@ document.write('\n <style type="text/css" media="screen" id="test">\n.inst-menu{
 /* 102 */,
 /* 103 */,
 /* 104 */,
-/* 105 */,
-/* 106 */
+/* 105 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -2459,7 +2427,7 @@ exports.push([module.i, ".layui-layer-loading0 {\n  display: none; }\n", ""]);
 
 
 /***/ }),
-/* 107 */
+/* 106 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -2473,7 +2441,7 @@ exports.push([module.i, "template {\n  display: none; }\n\nhtml, body {\n  heigh
 
 
 /***/ }),
-/* 108 */
+/* 107 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -2487,7 +2455,7 @@ exports.push([module.i, "@charset \"UTF-8\";\n.center-vh {\n  position: absolute
 
 
 /***/ }),
-/* 109 */
+/* 108 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -2501,7 +2469,7 @@ exports.push([module.i, ".checkbox {\n  padding-left: 20px; }\n\n.checkbox label
 
 
 /***/ }),
-/* 110 */
+/* 109 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -2515,7 +2483,7 @@ exports.push([module.i, "._expand_menu {\n  background-color: #364150; }\n  ._ex
 
 
 /***/ }),
-/* 111 */
+/* 110 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -2529,7 +2497,7 @@ exports.push([module.i, ".flex {\n  display: flex; }\n\n.flex-v {\n  display: fl
 
 
 /***/ }),
-/* 112 */
+/* 111 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -2543,7 +2511,7 @@ exports.push([module.i, ".clickable {\n  cursor: pointer;\n  color: #4da8cd; }\n
 
 
 /***/ }),
-/* 113 */
+/* 112 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -2557,6 +2525,7 @@ exports.push([module.i, ".ellipsis {\n  white-space: nowrap;\n  text-overflow: e
 
 
 /***/ }),
+/* 113 */,
 /* 114 */,
 /* 115 */,
 /* 116 */,
@@ -2581,7 +2550,32 @@ exports.push([module.i, ".ellipsis {\n  white-space: nowrap;\n  text-overflow: e
 /* 135 */,
 /* 136 */,
 /* 137 */,
-/* 138 */,
+/* 138 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(105);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// add the styles to the DOM
+var update = __webpack_require__(1)(content, {});
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./cfg.scss", function() {
+			var newContent = require("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./cfg.scss");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
 /* 139 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -2597,8 +2591,8 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./cfg.scss", function() {
-			var newContent = require("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./cfg.scss");
+		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./adapt.scss", function() {
+			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./adapt.scss");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -2623,8 +2617,8 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./adapt.scss", function() {
-			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./adapt.scss");
+		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./aliagn.scss", function() {
+			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./aliagn.scss");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -2649,8 +2643,8 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./aliagn.scss", function() {
-			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./aliagn.scss");
+		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./button.scss", function() {
+			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./button.scss");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -2675,8 +2669,8 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./button.scss", function() {
-			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./button.scss");
+		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./expand_menu.scss", function() {
+			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./expand_menu.scss");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -2701,8 +2695,8 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./expand_menu.scss", function() {
-			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./expand_menu.scss");
+		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./flex.scss", function() {
+			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./flex.scss");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -2727,8 +2721,8 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./flex.scss", function() {
-			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./flex.scss");
+		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./link.scss", function() {
+			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./link.scss");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -2753,32 +2747,6 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./link.scss", function() {
-			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./link.scss");
-			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-			update(newContent);
-		});
-	}
-	// When the module is disposed, remove the <style> tags
-	module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 146 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(113);
-if(typeof content === 'string') content = [[module.i, content, '']];
-// add the styles to the DOM
-var update = __webpack_require__(1)(content, {});
-if(content.locals) module.exports = content.locals;
-// Hot Module Replacement
-if(false) {
-	// When the styles change, update the <style> tags
-	if(!content.locals) {
 		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./text.scss", function() {
 			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./text.scss");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
@@ -2790,9 +2758,9 @@ if(false) {
 }
 
 /***/ }),
+/* 146 */,
 /* 147 */,
-/* 148 */,
-/* 149 */
+/* 148 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2802,7 +2770,7 @@ var _old = __webpack_require__(17);
 
 var _network = __webpack_require__(15);
 
-var _urlparse = __webpack_require__(23);
+var _urlparse = __webpack_require__(22);
 
 var _collection = __webpack_require__(11);
 
@@ -2814,7 +2782,7 @@ var _cookie = __webpack_require__(12);
 
 var _obj = __webpack_require__(16);
 
-var _vuetools = __webpack_require__(24);
+var _vuetools = __webpack_require__(23);
 
 var _code = __webpack_require__(10);
 
@@ -2826,13 +2794,13 @@ var _file_proc = __webpack_require__(13);
 
 var _rabbit = __webpack_require__(20);
 
-var _sys = __webpack_require__(21);
+var _sys = __webpack_require__(149);
 
 var _cfg = __webpack_require__(9);
 
 var cfg = _interopRequireWildcard(_cfg);
 
-var _main = __webpack_require__(22);
+var _main = __webpack_require__(21);
 
 var uis = _interopRequireWildcard(_main);
 
@@ -2865,6 +2833,38 @@ ex.sortOrder = _order.sortOrder;
 
 //ex.md5=md5
 window.ex = ex;
+
+/***/ }),
+/* 149 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+        value: true
+});
+
+var u = navigator.userAgent,
+    app = navigator.appVersion;
+
+var sys = exports.sys = {
+        browser: {
+                trident: u.indexOf('Trident') > -1, //IE内核
+                presto: u.indexOf('Presto') > -1, //opera内核
+                webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+                gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+                mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+                ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+                android: u.indexOf('Android') > -1 || u.indexOf('Adr') > -1, //android终端
+                iPhone: u.indexOf('iPhone') > -1, //是否为iPhone或者QQHD浏览器
+                iPad: u.indexOf('iPad') > -1, //是否iPad
+                webApp: u.indexOf('Safari') == -1, //是否web应该程序，没有头部与底部
+                weixin: u.indexOf('MicroMessenger') > -1, //是否微信
+                qq: u.match(/\sQQ/i) == " qq" //是否QQ
+        }
+
+};
 
 /***/ })
 /******/ ]);
