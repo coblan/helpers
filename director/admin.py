@@ -29,7 +29,7 @@ from .log.logpage import LogPage
 from .base_data import page_dc, director
 from . import  admin_kv
 
-from .model_func.field_procs import dateproc,datetimeproc,decimalproc,foreignproc,manyproc,oneproc,charproc,intproc,boolproc
+from .model_func.field_procs import dateproc,datetimeproc,decimalproc,foreignproc,manyproc,oneproc,charproc,intproc,boolproc,textproc
 from .model_func.field_procs import nullboolproc
 
 from . import js_cfg
