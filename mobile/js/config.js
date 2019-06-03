@@ -93,5 +93,15 @@ ex.assign(cfg,{
         //MINT.Toast({duration:10000,message:'sdgdsggg'})
         //vant.Toast(msg,{zIndex:999999});
     }
-
 })
+
+//$(window).resize(function(){
+//    debugger
+//    $('.dyn-resize').each(function(){
+//        debugger
+//        var size_express = $(this).attr('data-size-express')
+//        var sizestr = ex.eval(size_express,{winheight:window.innerHeight,ele:$(this) })
+//        $(this).css(sizestr)
+//
+//    })
+//})
