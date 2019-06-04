@@ -38,6 +38,7 @@ ex.assign(cfg,{
         slide_mobile_win({editor:editor,ctx:ctx,callback:callback})
         //window.slide_win.left_in_page({editor:editor,ctx:ctx,callback:callback})
         return function (){
+            cfg.hide_load()
             history.back()
         }
     },
@@ -92,5 +93,15 @@ ex.assign(cfg,{
         //MINT.Toast({duration:10000,message:'sdgdsggg'})
         //vant.Toast(msg,{zIndex:999999});
     }
-
 })
+
+//$(window).resize(function(){
+//    debugger
+//    $('.dyn-resize').each(function(){
+//        debugger
+//        var size_express = $(this).attr('data-size-express')
+//        var sizestr = ex.eval(size_express,{winheight:window.innerHeight,ele:$(this) })
+//        $(this).css(sizestr)
+//
+//    })
+//})

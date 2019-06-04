@@ -3,18 +3,27 @@ export var network ={
     get:function(url,callback){
         //replace $.get
         var self=this
-        var wrap_callback=function (resp) {
-            if (resp.msg) {
-                self.show_msg(resp.msg)
-            }
-            if (resp.status && typeof resp.status == 'string' && resp.status != 'success') {
-                cfg.hide_load()
-                return
-            } else {
-                callback(resp)
-            }
+        if(callback){
+            return $.get(url,callback)
+        }else{
+            return new Promise((resolve,reject)=>{
+                $.get(url,(resp)=>{
+                    resolve(resp)
+                })
+            })
         }
-        return $.get(url,wrap_callback)
+        //var wrap_callback=function (resp) {
+        //    if (resp.msg) {
+        //        self.show_msg(resp.msg)
+        //    }
+        //    if (resp.status && typeof resp.status == 'string' && resp.status != 'success') {
+        //        cfg.hide_load()
+        //        return
+        //    } else {
+        //        callback(resp)
+        //    }
+        //}
+        //return $.get(url,wrap_callback)
     },
     post:function(url,data,callback){
         if(callback){
@@ -39,15 +48,16 @@ export var network ={
                     msg = msg.concat(resp.msg)
                 }
             }
-            for(var k in resp){
-                if(resp[k] && resp[k].msg){
-                    if(typeof resp[k].msg == 'string'){
-                        msg.push(resp[k].msg)
-                    }else {
-                        msg=msg.concat(resp[k].msg)
-                    }
-                }
-            }
+            // 业务逻辑里面的msg 由正常函数去处理
+            //for(var k in resp){
+            //    if(resp[k] && resp[k].msg){
+            //        if(typeof resp[k].msg == 'string'){
+            //            msg.push(resp[k].msg)
+            //        }else {
+            //            msg=msg.concat(resp[k].msg)
+            //        }
+            //    }
+            //}
 
             var success=true
             if(resp.success ==false ){
@@ -81,9 +91,11 @@ export var network ={
             if(msg.length!=0){
                 if(!success){
                     cfg.showError(msg.join('\n'))
-                }else{
-                    cfg.showMsg(msg.join('\n'))
                 }
+                // 业务逻辑里面的msg 由正常函数去处理
+                //else{
+                //    cfg.showMsg(msg.join('\n'))
+                //}
             }
 
 
@@ -204,5 +216,32 @@ export var network ={
                 iframe.src = strPath;
             }
             return false;
-    }
+    },
+    uploadfile({url,}={}){
+        this.__upload_url =url
+        return new Promise((resolve,reject)=>{
+            ex.__on_filechange=function(event){
+                let new_selected_files = event.target.files
+                var up_url = ex.__upload_url || '/d/upload?path=general_upload/userfile'
+                cfg.show_load()
+                ex.uploads(new_selected_files,up_url,function(url_list){
+                    cfg.hide_load()
+                    $('#__director-upload-file-input').val('')
+                    resolve(url_list)
+                })
+            }
+
+            if(!window._director_uploadfile_input){
+                $('body').append('<input type="file" id="__director-upload-file-input" style="display: none">')
+                $('#__director-upload-file-input').change(function(event){
+                    ex.__on_filechange(event)
+                })
+                window._director_uploadfile_input=true
+                $('#__director-upload-file-input').click()
+            }else{
+                $('#__director-upload-file-input').click()
+            }
+
+        })
+    },
 }

@@ -57,8 +57,8 @@ class UserFields(ModelFields):
         ls =[]
         if  'password' in self.permit.changeable_fields():
             ls.append({
-                'name': 'user_password', 'label': '用户密码', 'editor': 'password', 'required': '!scope.row.pk',
-                'fv_msg':'新建用户必须输入密码！'
+                'name': 'user_password', 'label': '用户密码', 'editor': 'com-field-linetext', 'required': '!scope.row.pk',
+                'fv_msg':'新建用户必须输入密码！','help_text':'如果填写,将会直接替换原来的用户密码'
             })
         return ls
     #def get_heads(self): 

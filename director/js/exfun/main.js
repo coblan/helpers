@@ -11,6 +11,8 @@ import {sortOrder} from  './order'
 import {layout} from  './layout'
 import {file_proc} from  './file_proc'
 import {rabbit} from  './rabbit'
+import {sys} from  './sys'
+
 var ex={
     assign:function (dst,src) {
         for(var key in src){
@@ -33,6 +35,7 @@ ex.assign(ex,code)
 ex.assign(ex,layout)
 ex.assign(ex,file_proc)
 ex.assign(ex,rabbit)
+ex.assign(ex,sys)
 
 ex.sortOrder=sortOrder
 

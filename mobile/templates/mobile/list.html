@@ -76,14 +76,12 @@
 //                        preventDefaultException:{className:/(^van-cell$)/},
 //                        preventDefault:false,
                     },
-                    isLoading:false
+//                    isLoading:false
                 }
             },
 
             methods:{
                 open_detail:function(row){
-//                    fields_ctx.row = row
-//                    fields_ctx.title = '报修详情'
                     if(detail_ctx){
                         detail_ctx.row = row
                         cfg.pop_big( detail_editor,  detail_ctx)

@@ -8,12 +8,13 @@ from .model_func.jsonfield import JsonField
 
 
 class LogModel(models.Model):
-    at = models.DateTimeField(auto_now=True)
-    user= models.ForeignKey(User,verbose_name=_('operator'),blank=True,null=True)
-    key =models.CharField('key',max_length=200,blank=True)
-    kind = models.CharField(_('kind'),max_length=100,blank=True)
-    detail =models.TextField(_('detail'),blank=True)
-    
+    "操作日志"
+    operation = models.CharField('操作类型',max_length=100,blank=True)
+    tag = models.CharField('标签',max_length=100,blank=True,help_text='用户快速查询')
+    detail =models.TextField('详细',blank=True)
+    creattime = models.DateTimeField('产生时间',auto_now=True)
+    user= models.ForeignKey(User,verbose_name="操作人",blank=True,null=True)
+
 # class PermitGroup(models.Model):
     # name = models.CharField('权限组名称',max_length=300)
     # permit=models.ManyToManyField('PermitModel',verbose_name="权限")
@@ -46,5 +47,6 @@ EDITOR_TYPE=(
 class KVModel(models.Model):
     key=models.CharField('key',max_length=200,blank=True,unique=True)
     value=models.TextField(verbose_name='value',blank=True)
+    update = models.DateTimeField(auto_now=True)
     #update=models.DateTimeField(auto_now=True)
     #editor_type=models.CharField('编辑器类型',max_length=30,default='blocktext',choices=EDITOR_TYPE)
