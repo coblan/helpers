@@ -1,5 +1,5 @@
 Vue.component('com-fields-table-block',{
-    props:['heads','row','metaHead'],
+    props:['heads','row','option'],
     template:`<div class="table-fields field-panel msg-bottom">
            <table >
             <tr v-for="heads_row in table_grid_heads">
@@ -28,8 +28,9 @@ Vue.component('com-fields-table-block',{
        </div>`,
     computed:{
         table_grid_heads:function(){
+            debugger
             var self=this
-            var table_grid = this.metaHead.table_grid
+            var table_grid = this.option.table_grid
             var heads_bucket =[]
             ex.each(table_grid,function(name_row){
                 let heads_row =[]
