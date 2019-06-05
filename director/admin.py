@@ -40,6 +40,8 @@ def get_first_name(self):
     return self.first_name  +'(%s)'%self.username
 
 User.add_to_class("__str__", get_first_name)
+User._meta.get_field('first_name').verbose_name = '用户名'
+User._meta.get_field('username').verbose_name = '账号'
 
 
 class UserGroupTable(ModelTable):
