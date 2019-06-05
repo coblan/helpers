@@ -11,11 +11,14 @@ var big_fields={
             }
         })
         var parStore = ex.vueParStore(this)
+        debugger
         return {
             head:this.ctx,
             par_row:this.ctx.par_row,
             heads:this.ctx.heads,
-            layout:this.ctx.layout,
+            //layout:this.ctx.layout,
+            fields_group:this.ctx.fields_group,
+            table_grid:this.ctx.table_grid,
             ops:this.ctx.ops,
             errors:{},
             row:data_row,
@@ -26,32 +29,33 @@ var big_fields={
         }
     },
     mixins:[mix_fields_data,mix_nice_validator],
-    template:`<div class="com-form-one flex-v">
+    template:`<div class="com-form-one flex-v" :class="head.class">
    <div class="oprations" v-if="ops_loc=='up'">
         <component v-for="op in ops" :is="op.editor" :ref="'op_'+op.name" :head="op" @operation="on_operation(op)"></component>
     </div>
     <div style="overflow: auto;" class="flex-grow fields-area">
-        <div v-if="! layout" class='field-panel suit' id="form" >
+            <!--有分组的情况-->
+           <div v-if="fields_group" >
+                <div v-for="group in grouped_heads_bucket" :class="'group_'+group.name" v-if="group.heads.length > 0">
+
+                         <div class="fields-group-title"  v-html="group.label"></div>
+                        <com-fields-table-block v-if="table_grid "
+                            :heads="group.heads" :row="row" :option="{table_grid:table_grid}">
+                         </com-fields-table-block>
+                         <div v-else class='field-panel suit' >
+                            <field  v-for='head in group.heads' :key="head.name" :head="head" :row='row'></field>
+                        </div>
+                </div>
+        </div>
+        <!--只有table分组-->
+         <div v-else-if="table_grid " >
+                    <com-fields-table-block
+                        :heads="normed_heads" :row="row" :option="{table_grid:table_grid}"></com-fields-table-block>
+         </div>
+         <!--没有分组-->
+        <div v-else class='field-panel suit' id="form" >
             <field  v-for='head in normed_heads' :key="head.name" :head="head" :row='row'></field>
         </div>
-        <template v-else>
-               <div class="" v-if="layout.fields_group" :class="layout.class">
-                    <div v-for="group in grouped_heads_bucket" :class="'group_'+group.name" v-if="group.heads.length > 0">
-
-                             <div class="fields-group-title"  v-html="group.label"></div>
-                            <com-fields-table-block v-if="layout.table_grid"
-                                :heads="group.heads" :meta-head="layout" :row="row">
-                             </com-fields-table-block>
-                             <div v-else class='field-panel suit' >
-                                <field  v-for='head in group.heads' :key="head.name" :head="head" :row='row'></field>
-                            </div>
-                    </div>
-                </div>
-                <div v-else :class="layout.class">
-                    <com-fields-table-block v-if="layout.table_grid"
-                        :heads="normed_heads" :row="row" :metaHead="layout"></com-fields-table-block>
-                </div>
-        </template>
     </div>
     <div class="oprations bottom" v-if="ops_loc=='bottom'">
         <component v-for="op in ops" :is="op.editor" :ref="'op_'+op.name" :head="op" @operation="on_operation(op)"></component>
@@ -75,9 +79,12 @@ var big_fields={
     computed:{
         grouped_heads_bucket:function(){
             var out_bucket = []
-            ex.each(this.layout.fields_group,(group)=>{
+            ex.each(this.fields_group,(group)=>{
+                if(group.show && ! ex.eval(group.show,{row:this.row,head:this.head})){
+                    return
+                }
                 var heads = ex.filter(this.normed_heads,function(head){
-                    return ex.isin(head.name,group.head_names)
+                    return ex.isin(head.name,group.heads)
                 })
                 out_bucket.push({name:group.name,label:group.label,heads:heads})
             })
@@ -89,7 +96,7 @@ var big_fields={
     methods:{
         group_filter_heads:function(group){
             return ex.filter(this.normed_heads,function(head){
-                return ex.isin(head.name,group.head_names)
+                return ex.isin(head.name,group.heads)
             })
         },
         data_getter:function(){

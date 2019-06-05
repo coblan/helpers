@@ -13,7 +13,10 @@ function pop_edit_local(row,fields_ctx,callback,layerConfig){
                 if(this.isValid()){
                     this.$emit('submit-success',this.row)
                 }
-                //cfg.hide_load(2000)
+                // 该组件应该会被移除掉。这里暂时补充返回一个 promise ,以免造成报错
+               return new Promise((resolve,reject)=>{
+                   resolve(this.row)
+               })
             }
         }
     }

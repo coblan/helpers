@@ -12,7 +12,9 @@ Vue.component('com-field-multi-picture',{
             </div>
             <div class="img-wrap" v-for="(imgsrc,index) in row[head.name]" @click="big_win(imgsrc)">
                 <img class="center-vh" :src="imgsrc" alt="图片不能加载">
-                <div v-if="!head.readonly" class="close" @click='remove_image(index)'><i class="fa fa-times-circle" aria-hidden="true" style="color:red;position:relative;left:30px;"></i></div>
+                <div class="close" >
+                    <i @click.stop='remove_image(index)' class="fa fa-times-circle" aria-hidden="true" style="color:red;position:relative;left:30px;"></i>
+                </div>
             </div>
         </div>
         <input class="my-file-input" v-if="!head.readonly" style="display: none"
@@ -73,14 +75,6 @@ Vue.component('com-field-multi-picture',{
                     startPosition: index,
             }
             );
-            //var ctx = {imgsrc:imgsrc}
-            //pop_layer(ctx,'com-pop-image',function(){},{
-            //    title:false,
-            //    area: ['90%', '90%'],
-            //    shade: 0.8,
-            //    skin: 'img-shower',
-            //    shadeClose: true,
-            //})
         },
     }
 })

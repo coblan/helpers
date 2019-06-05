@@ -28,6 +28,7 @@ Vue.component('com-fields-table-block',{
        </div>`,
     computed:{
         table_grid_heads:function(){
+            alert('jjy')
             var self=this
             var table_grid = this.layout.table_grid
             var heads_bucket =[]
