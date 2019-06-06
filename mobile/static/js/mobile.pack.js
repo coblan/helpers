@@ -2120,7 +2120,7 @@ Vue.component('com-table-span', {
 
 Vue.component('com-op-submit', {
     props: ['head'],
-    template: '<van-button com-op-submit type="primary" @click="on_click()" size="large">\n            <span v-text="head.label || \'\u786E\u5B9A\'"></span>\n        </van-button>',
+    template: '<van-button com-op-submit :type="head.type || \'primary\'" @click="on_click()" size="large">\n            <span v-text="head.label || \'\u786E\u5B9A\'"></span>\n        </van-button>',
     data: function data() {
         var parStore = ex.vueParStore(this);
         return {
@@ -2196,7 +2196,7 @@ Vue.component('com-fields-panel', {
         };
     },
     mixins: [mix_fields_data, mix_nice_validator],
-    template: '<div class="com-fileds-panel">\n\n    <template v-if="fields_group.length > 0">\n      <van-cell-group  v-for="group in grouped_heads_bucket" :title="group.label " >\n            <component v-for="head in group.heads" :is="head.editor" :head="head" :row="row"></component>\n        </van-cell-group>\n    </template>\n    <template v-else>\n     <van-cell-group   >\n        <component v-for="head in heads" :is="head.editor" :head="head" :row="row"></component>\n    </van-cell-group>\n    </template>\n\n\n    <div style="height: .6rem">\n    </div>\n    <van-cell-group v-if="ops.length>0" class="ops">\n       <component v-for="op in ops" :is="op.editor" :head="op"></component>\n    </van-cell-group>\n    </div>',
+    template: '<div class="com-fileds-panel">\n\n    <template v-if="fields_group.length > 0">\n      <van-cell-group  v-for="group in grouped_heads_bucket" :title="group.label " >\n            <component v-for="head in group.heads" :is="head.editor" :head="head" :row="row"></component>\n        </van-cell-group>\n    </template>\n    <template v-else>\n     <van-cell-group   >\n        <component v-for="head in heads" :is="head.editor" :head="head" :row="row"></component>\n    </van-cell-group>\n    </template>\n\n\n    <div style="height: .6rem">\n    </div>\n    <van-cell-group v-if="ops.length>0" class="ops">\n     <div v-for="op in ops" class="op-wrap">\n       <component :is="op.editor" :head="op"></component>\n       </div>\n    </van-cell-group>\n    </div>',
     computed: {
         grouped_heads_bucket: function grouped_heads_bucket() {
             var _this = this;
@@ -2801,7 +2801,7 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, ".com-fileds-panel {\n  background-color: #fafafa;\n}\n.com-fileds-panel .ops {\n  margin: 0.5rem 5vw;\n}\n", ""]);
+exports.push([module.i, ".com-fileds-panel {\n  background-color: #fafafa;\n}\n.com-fileds-panel .ops {\n  margin: 0.5rem 5vw;\n}\n.com-fileds-panel .ops .op-wrap {\n  margin: 8px 0;\n}\n", ""]);
 
 // exports
 
