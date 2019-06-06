@@ -9,6 +9,7 @@ class SelectSearch(object):
     names=[]
     exact_names = []
     model=''
+    field_sort=[]
     def __init__(self,q,user = None,allowed_names = [], kw = {}):
         self.valid_name=  self.names + self.exact_names  #[x for x in self.names if x in allowed_names]
         self.crt_user=user
@@ -19,9 +20,16 @@ class SelectSearch(object):
     def get_context(self):
         """
         """
-        if self.valid_name:
+        sorted_name = []
+        if self.field_sort:
+            for item in self.field_sort:
+                if item in self.valid_name:
+                    sorted_name.append(item)
+        else:
+            sorted_name = self.valid_name
+        if sorted_name:
             ls=[]
-            for name in self.valid_name:
+            for name in sorted_name:
                 ls.append( self.get_option(name) )
                 #ls.append({'value': name, 'label': _(self.model._meta.get_field(name).verbose_name) })
             dc = {

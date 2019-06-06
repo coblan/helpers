@@ -4,9 +4,12 @@ var label_shower = {
     template:`<span v-text="show_text"></span>`,
     computed:{
         show_text:function(){
-            if(this.rowData[this.field] == undefined){
+            var value = this.rowData[this.field]
+            if( value == undefined){
                 return ''
-            }else{
+            }else if(typeof value == 'object'){
+                return JSON.stringify(value)
+            } else{
                 return this.rowData[this.field]
             }
         }
