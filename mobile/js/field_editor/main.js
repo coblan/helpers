@@ -10,5 +10,6 @@ import * as field_number from './field_number.js'
 import * as label_shower from './label_shower.js'
 import * as bool from './bool.js'
 import * as date from './date.js'
+import * as tree_select from './tree_select.js'
 
 import * as pop_table_select from './pop_table_select.js'

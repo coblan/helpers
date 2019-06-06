@@ -6,6 +6,8 @@ var table_store={
             rows:[],
             director_name:'',
             search_args:search_args,
+            parents:[],
+
         }
     },
     methods:{
@@ -17,6 +19,7 @@ var table_store={
             var post_data=[{fun:'get_rows',director_name:this.director_name,search_args:this.search_args}]
             return ex.post('/d/ajax',JSON.stringify(post_data)).then(resp=> {
                 this.rows = resp.get_rows.rows
+                this.parents = resp.get_rows.parents
             })
         },
         addNextPage(){

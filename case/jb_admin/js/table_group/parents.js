@@ -12,8 +12,13 @@ var table_parents={
     </div>`,
     methods:{
         on_click:function(par){
-            this.parStore.$emit('parent_changed',par)
-            this.parStore.get_childs(par.value)
+            if(this.parStore.option.parent_click){
+                ex.eval(this.parStore.option.parent_click,{ps:this.parStore,parent:par})
+            }else{
+                this.parStore.$emit('parent_changed',par)
+                this.parStore.get_childs(par.value)
+            }
+           
         }
     }
 }

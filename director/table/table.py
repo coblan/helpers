@@ -424,6 +424,9 @@ class ModelTable(object):
                 break
         return director_name
     
+    def get_option(self):
+        return {}
+    
     def get_context(self):
         director_name =self.get_director_name()
         heads = self.get_heads()
@@ -444,6 +447,7 @@ class ModelTable(object):
             'ops' : ops,
             'search_args':self.search_args, 
             'parents': self.getParents(),
+            'option':self.get_option(),
             'footer': self.footer,
             'selectable': self.selectable,
             'event_slots':self.get_event_slots()
@@ -478,6 +482,7 @@ class ModelTable(object):
             'row_sort':self.row_sort.get_context(),
             'row_filters': self.getRowFilters() , #self.row_filter.get_context(),
             'search_args': {},
+            'option':self.get_option(),
             #'search_tip':self.row_search.get_context(),
             'director_name': self.get_director_name(),#model_to_name(self.model),
             'ops' : ops, 
