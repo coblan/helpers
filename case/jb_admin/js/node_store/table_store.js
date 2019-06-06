@@ -15,7 +15,8 @@ var table_store={
              crt_row:{},
              selectable:true,
              changed_rows:[],
-             event_slots:[]
+             event_slots:[],
+             option:{},
          }
     },
     mixins:[mix_ele_table_adapter],
