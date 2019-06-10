@@ -2720,7 +2720,7 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, ".com-slide-head {\n  height: .8rem;\n  font-size: .3rem;\n  /*flex-shrink:0;*/\n  /*background-color: #393738;*/\n  /*color: white;*/\n  position: relative;\n  border-bottom: 1px solid #d5d5d5; }\n  .com-slide-head .go-back {\n    left: .3rem;\n    padding: .1rem; }\n", ""]);
+exports.push([module.i, ".com-slide-head {\n  height: .8rem;\n  font-size: .3rem;\n  /*flex-shrink:0;*/\n  /*background-color: #393738;*/\n  /*color: white;*/\n  position: relative;\n  border-bottom: 1px solid #d5d5d5; }\n  .com-slide-head .go-back {\n    left: .3rem;\n    padding: .1rem; }\n  .com-slide-head .head-text {\n    width: 3rem;\n    text-align: center;\n    white-space: nowrap;\n    overflow: hidden;\n    text-overflow: ellipsis; }\n", ""]);
 
 // exports
 
