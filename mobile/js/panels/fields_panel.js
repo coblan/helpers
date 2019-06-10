@@ -37,7 +37,10 @@ Vue.component('com-fields-panel',{
     <div style="height: .6rem">
     </div>
     <van-cell-group v-if="ops.length>0" class="ops">
-       <component v-for="op in ops" :is="op.editor" :head="op"></component>
+    <div v-for="op in ops" class="op-wrap">
+        <component  :is="op.editor" :head="op"></component>
+    </div>
+
     </van-cell-group>
     </div>`,
     computed:{
