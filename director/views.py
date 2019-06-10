@@ -17,6 +17,8 @@ from .network.ckeditor import Ckeditor
 from .base_data import director
 from django.db import transaction
 from helpers.director.network import argument
+from django.conf import settings
+
 import logging
 req_log = logging.getLogger('general_log')
 
@@ -35,6 +37,24 @@ req_log = logging.getLogger('general_log')
     url(r'^_ajax/?$',director_views.ajax_views), 
 <-<
 """
+
+def wrap(fun,key):
+    def _fun(*arg,**kws):
+        with transaction.atomic(using= key):
+            return fun(*arg,**kws)
+    return _fun
+
+def transactionall(fun):
+    keys = settings.DATABASES.keys()
+    def _fun(*args,**kws):
+        _fun1 = fun
+        for key in keys:
+            _fun1 = wrap(_fun1, key)
+        return _fun1(*args,**kws)
+    return _fun
+
+
+
 @csrf_exempt
 def ajax_views(request,app=None):
     if not app:
@@ -44,8 +64,17 @@ def ajax_views(request,app=None):
         app_dot_path=conf.module.__name__
         ajax_module=locate('%(app)s.ajax'%{'app':app_dot_path})
     try:
-        with transaction.atomic():
-            rt = ajax_router(request, ajax_module.get_global())
+        #keys = settings.DATABASES.keys
+        
+        #def _fun(key,fun,*args,**kws):
+            #with transaction.atomic(using=key):
+                #fun(*args,**kws)
+        #for key in keys:
+            #fun = _fun()
+        #with transaction.atomic(using=maindb):
+        wraped_ajax_router = transactionall(ajax_router)
+        rt= wraped_ajax_router(request, ajax_module.get_global())
+        #rt = ajax_router(request, ajax_module.get_global())
             
     #except KeyError as e:
         #rt={'success':False,'msg':'key error '+str(e) +' \n may function name error'}
@@ -105,7 +134,8 @@ def director_view(request,director_name):
         #else:
             #kws = request.POST.dict()
     try:
-        rt = directorEnt(**kws)
+        wraped_directorEnt = transactionall(directorEnt)
+        rt = wraped_directorEnt(**kws)
         if isinstance(rt,HttpResponse):
             # 直接返回
             pass
@@ -116,9 +146,7 @@ def director_view(request,director_name):
         rt = JsonResponse({'success':False,'msg':str(e)})
     except PermissionDenied as e:
         rt = HttpResponse(str(e))
-    #response.setHeader("Access-Control-Allow-Origin", "*");
-    #rt["Access-Control-Allow-Origin"]='*'
-    #rt['Access-Control-Allow-Headers']='Origin, X-Requested-With, Content-Type, Accept'
+
     return rt
     
 
