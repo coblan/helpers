@@ -145,7 +145,7 @@ class BaseEngine(object):
                 ctx['root_page']=self.root_page(self.url_name)
             
             if hasattr(page,'get_template'):
-                template=page.get_template(prefer=self.prefer)
+                template=page.get_template()
             else:
                 template=page.template
             #ctx=self.get_ctx(ctx)

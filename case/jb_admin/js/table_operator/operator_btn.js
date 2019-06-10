@@ -25,6 +25,9 @@ var op_a = {
     methods:{
         operation_call:function(){
             if (this.head.action) {
+                if(this.head.row_match && !this.parStore.check_selected(this.head)){
+                    return
+                }
                 ex.eval(this.head.action, {ps: this.parStore, head: this.head,self:this})
             }else{
                 this.$emit('operation',this.head.name || this.head.fun)

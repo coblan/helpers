@@ -37,8 +37,16 @@ window.cfg={
     hide_cloak:function(){
         layer.close(this._cloak_index)
     },
-    show_load:function(){
-        this._loader_index = layer.load(1)
+    show_load:function(msg){
+        if(msg){
+            this._loader_index =layer.msg(msg, {
+                icon: 16
+                ,shade: 0.01,
+                time:0
+            });
+        }else{
+            this._loader_index = layer.load(1)
+        }
     },
     hide_load:function(delay,msg){
         if(! this._loader_index){
