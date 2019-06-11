@@ -20,9 +20,6 @@ field_map={
 site_cfg = {
 }
 
-#permit_dc = {
-#}
-
 def director_view(name): 
     def _fun(fun): 
         director[name] = fun
