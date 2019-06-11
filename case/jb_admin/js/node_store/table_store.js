@@ -285,22 +285,18 @@ var table_store={
                 ex.post('/d/ajax',JSON.stringify(post_data),function(resp){
                     if( !resp.save_rows.errors){
                         if(kws.after_save){
-                            ex.eval(kws.after_save,{rows:resp.save_rows,ps:self})
-                        }else{
-                            ex.each(resp.save_rows,function(new_row){
-                                // [1]  这里还原回去
-                                if(new_row._cache_director_name){
-                                    new_row._director_name = new_row._cache_director_name
-                                }
-                                //if(kws.after_save){
-                                //    ex.eval(kws.after_save,{new_row:new_row,ts:self,ps:self})
-                                //}
-                                else{
-                                    self.update_or_insert(new_row)
-                                }
-
-                            })
+                            if(ex.eval(kws.after_save,{rows:resp.save_rows,ps:self}) == 'stop'){
+                                return
+                            }
                         }
+                        ex.each(resp.save_rows,function(new_row){
+                            // [1]  这里还原回去
+                            if(new_row._cache_director_name){
+                                new_row._director_name = new_row._cache_director_name
+                            }
+                            self.update_or_insert(new_row)
+                        })
+
                         self.clearSelection()
                         if(pop_fields_win_index){
                             layer.close(pop_fields_win_index)
