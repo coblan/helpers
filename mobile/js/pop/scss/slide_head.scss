@@ -11,4 +11,11 @@
     left: .3rem;
     padding: .1rem
   }
+  .head-text{
+    width:3rem;
+    text-align:center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 }

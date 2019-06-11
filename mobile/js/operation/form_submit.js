@@ -1,4 +1,4 @@
-Vue.component('com-op-submit',{
+var submit_btn = {
     props:['head'],
     template:`<van-button com-op-submit :type="head.type || 'primary'" @click="on_click()" size="large">
             <span v-text="head.label || '确定'"></span>
@@ -20,4 +20,6 @@ Vue.component('com-op-submit',{
         }
     }
 
-})
+}
+
+Vue.component('com-op-submit',submit_btn)
