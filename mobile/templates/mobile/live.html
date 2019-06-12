@@ -1,0 +1,132 @@
+{% extends "mobile/base.html" %}
+
+{% load static %}
+{% load jsonify %}
+
+
+{% block head-content %}
+
+{% block head-content2 %}
+<title></title>
+{% endblock %}
+
+<script src="{{ js_config.js_lib.jquery }}"></script>
+<script src="{{ js_config.js_lib.md5 }}"></script>
+<link rel="stylesheet" href="{{ js_config.js_lib.font_awesome }}">
+<script src="{{ js_config.js_lib.vuejs }}"></script>
+<script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+
+<script src="{{ js_config.js_lib.nice_validator }}"></script>
+<link rel="stylesheet" href="{{ js_config.js_lib.nice_validator_css }}">
+
+<script src="{{ js_config.js_lib.cube_ui }}"></script>
+<link rel="stylesheet" href="{{ js_config.js_lib.cube_ui_css }}">
+<script src="{{ js_config.js_lib.mint_ui }}"></script>
+<link rel="stylesheet" href="{{ js_config.js_lib.mint_ui_css }}">
+<script src="{{ js_config.js_lib.vant }}"></script>
+<link rel="stylesheet" href="{{ js_config.js_lib.vant_css }}">
+<script src="{{ js_config.js_lib.exfun }}"></script>
+<script src="{{ js_config.js_lib.director }}"></script>
+<script src="{{ js_config.js_lib.jb_admin }}"></script>
+<script src="{{ js_config.js_lib.mobile }}"></script>
+<script src="{{ js_config.js_lib.wechat }}"></script>
+<script src="{{ js_config.js_lib.wxfront }}"></script>
+<script src="{{ js_config.js_lib.mylbs }}"></script>
+
+<script src="{{ js_config.js_lib.enterprise }}"></script>
+
+{% endblock %}
+
+
+{% block page_body %}
+
+<script>
+    Vue.config.devtools = true
+
+    page_editor ={{ page_editor | jsonify }}
+    ctx = {{ ctx | jsonify }}
+
+//    function openVueCom(com,ctx){
+//        var com_name = 'com-dyn'+ Date.now()
+//        var big_com = {
+//            mixins:[com],
+//            name:com_name,
+//        }
+//        Vue.set( gb.$options.components,com_name,big_com)
+//        gb.stack.push({editor:com_name,ctx:ctx})
+//    }
+
+    $(function(){
+
+        gb = new Vue({
+            el:'#main-panel',
+            data: function(){
+                var search_args = ex.parseSearch()
+                return {
+                    stack:[{editor:page_editor,ctx:ctx}],
+                }
+            },
+            components:{},
+            computed:{
+                current_com(){
+                  return this. stack[this.stack.length -1 ]
+                },
+                alive_list(){
+                    return this.stack.map((item)=>{
+                                return item.editor
+                            })
+                }
+            },
+            methods:{
+                open_live(com,ctx,label){
+                    if (com.basename){
+                        var com_name = 'dyn-'+com.basename +'-'+ Date.now()
+                    }else{
+                        var com_name = 'dyn-'+ Date.now()
+                    }
+                    var big_com = {
+                        mixins:[com],
+                        name:com_name,
+                    }
+                    Vue.set( this.$options.components,com_name,big_com)
+                    this.stack.push({editor:com_name,ctx:ctx,label:label || com.label  })
+
+                    var  self =this
+                    var fun_id =Date.now()
+                    named_hub[fun_id] = function(){
+                        self.back()
+                    }
+                    history.replaceState({callback:fun_id},'')
+                    history.pushState({},'')
+
+                },
+                back(){
+                    var com = this.stack.pop()
+                    Vue.delete(this.$options.components,com)
+                }
+            }
+        })
+    })
+
+
+</script>
+
+<div id="main-panel">
+
+    <transition name="slide">
+        <keep-alive :include="alive_list">
+            <component :is="current_com.editor" :ctx="current_com.ctx" ></component>
+        </keep-alive>
+    </transition>
+
+
+
+</div>
+
+
+
+{% block page_content %}
+
+{% endblock %}
+
+{% endblock %}
