@@ -37,6 +37,13 @@ var table_store={
         },
     },
     methods:{
+        row_has_field(name){
+            if(this.rows.length ==0){
+                return false
+            }else{
+                return this.rows[0][name] != undefined
+            }
+        },
         express:function(kws){
             var self=this
             var row_match_fun = kws.row_match

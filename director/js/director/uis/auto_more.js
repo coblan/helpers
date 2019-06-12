@@ -21,15 +21,26 @@ Vue.component('com-auto-more',{
     </div>`,
     mounted:function(){
         var self=this
-        setTimeout(function(){
-            if( $(self.$el).find('.inn-wrap').height() > $(self.$el).height()+10){ // 10是为了去噪
-                $(self.$el).addClass('has-overflow')
-
-            }
-        },100)
+        setInterval(function(){
+            self.update_size()
+        },2000)
 
     },
     methods:{
+        update_size(){
+            var self=this
+            if(!self.height){
+                self.height = $(self.$el).height()+10 // 10是为了去噪
+                self.outdom = $(self.$el).find('.inn-wrap')
+            }
+            if(!this.expanded){
+                if( self.outdom.height() > self.height){
+                    $(self.$el).addClass('has-overflow')
+                }else{
+                    $(self.$el).removeClass('has-overflow')
+                }
+            }
+        },
         on_scroll:function(){
             return false
         },
@@ -37,11 +48,9 @@ Vue.component('com-auto-more',{
             if(this.expanded){
                 $(this.$el).find('.outer-wrap').css('height',this.orgHeight )
                 $(this.$el).removeClass('expanded')
-
             }else{
                 $(this.$el).find('.outer-wrap').css( 'height',$(this.$el).find('.inn-wrap').height()+2 +'px' )
                 $(this.$el).addClass('expanded')
-
             }
             this.expanded = !this.expanded
 

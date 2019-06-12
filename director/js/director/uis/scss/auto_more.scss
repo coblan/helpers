@@ -1,10 +1,11 @@
 .com-auto-more{
-    //height: 3.4rem;
-    //overflow: hidden;
     position: relative;
     flex-shrink: 0;
     flex-grow: 10;
 
+    .el-date-editor.el-input{
+        width: 180px;
+    }
 
     .outer-wrap{
       padding: 0.2rem;

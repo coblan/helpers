@@ -843,6 +843,12 @@ class PlainTable(ModelTable):
         
         self.kw=kw
         self.crt_user=crt_user 
+        
+        #allowed_names = []
+        #self.row_sort=self.sort(row_sort,crt_user,allowed_names,kw)
+        #self.row_filter=self.filters(row_filter, crt_user, allowed_names,kw) 
+        #self.row_search = self.search( row_search,crt_user,allowed_names,kw)
+        
         self.page=_page
         self.footer = []
         self.custom_permit()

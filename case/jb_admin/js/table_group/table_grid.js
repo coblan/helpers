@@ -39,6 +39,18 @@ var ele_table= {
 
 
     computed: {
+        normed_heads(){
+            var out_ls =[]
+            ex.each(this.parStore.heads,(head)=>{
+                if(head.show) {
+                    if(! ex.eval(head.show,{ps:this.parStore,vc:this})  ){
+                        return
+                    }
+                }
+                out_ls.push(head)
+            })
+            return out_ls
+        },
         rows:function(){
             return this.parStore.rows
         },
@@ -109,7 +121,7 @@ var ele_table= {
                                 type="selection"
                                 width="55">
                         </el-table-column>
-                        <template v-for="head in parStore.heads">
+                        <template v-for="head in normed_heads">
                              <el-table-column v-if="head.children"
                                 :label="head.label"
                                  :class-name="head.class">
