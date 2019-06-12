@@ -1,7 +1,8 @@
 require('./styl/multi_picture.styl')
-
-Vue.component('com-field-multi-picture',{
+import {com_picture} from  './picture'
+var com_milti_picture = {
     props:['row','head'],
+    mixins:[com_picture],
     template:` <van-cell class="com-field-multi-picture" :title="head.label" >
        <textarea style="display: none;" :name="head.name" id="" cols="30" rows="10" v-model="row[head.name]"></textarea>
         <div class="picture-panel" style="vertical-align: top" >
@@ -25,11 +26,11 @@ Vue.component('com-field-multi-picture',{
         }
     },
     methods:{
-        on_change(event){
-            let new_selected_files = event.target.files
-            this.uploadImage( new_selected_files )
-            $(this.$el).find('.my-file-input').val('')
-        },
+        //on_change(event){
+        //    let new_selected_files = event.target.files
+        //    this.uploadImage( new_selected_files )
+        //    $(this.$el).find('.my-file-input').val('')
+        //},
         uploadImage(image_files){
             if(!image_files){
                 return
@@ -77,4 +78,10 @@ Vue.component('com-field-multi-picture',{
             );
         },
     }
+}
+
+Vue.component('com-field-multi-picture',function(resolve,reject){
+    ex.load_js('https://cdn.jsdelivr.net/npm/exif-js').then(()=>{
+        resolve(com_milti_picture)
+    })
 })

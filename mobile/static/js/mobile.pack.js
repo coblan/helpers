@@ -1650,21 +1650,24 @@ Vue.component('com-field-linetext', {
 "use strict";
 
 
+var _picture = __webpack_require__(32);
+
 __webpack_require__(81);
 
-Vue.component('com-field-multi-picture', {
+var com_milti_picture = {
     props: ['row', 'head'],
+    mixins: [_picture.com_picture],
     template: ' <van-cell class="com-field-multi-picture" :title="head.label" >\n       <textarea style="display: none;" :name="head.name" id="" cols="30" rows="10" v-model="row[head.name]"></textarea>\n        <div class="picture-panel" style="vertical-align: top" >\n            <div v-if="!head.readonly" class="add-btn" @click="open_select_images()">\n                <div class="inn-btn"  style="">\n                    <span class="center-vh" style="font-size: 300%;">+</span>\n                </div>\n            </div>\n            <div class="img-wrap" v-for="(imgsrc,index) in row[head.name]" @click="big_win(imgsrc)">\n                <img class="center-vh" :src="imgsrc" alt="\u56FE\u7247\u4E0D\u80FD\u52A0\u8F7D">\n                <div class="close" >\n                    <i @click.stop=\'remove_image(index)\' class="fa fa-times-circle" aria-hidden="true" style="color:red;position:relative;left:30px;"></i>\n                </div>\n            </div>\n        </div>\n        <input class="my-file-input" v-if="!head.readonly" style="display: none"\n            type=\'file\' accept=\'image/*\'  multiple  @change=\'on_change($event)\'>\n    </van-cell>',
     data: function data() {
         return {};
     },
 
     methods: {
-        on_change: function on_change(event) {
-            var new_selected_files = event.target.files;
-            this.uploadImage(new_selected_files);
-            $(this.$el).find('.my-file-input').val('');
-        },
+        //on_change(event){
+        //    let new_selected_files = event.target.files
+        //    this.uploadImage( new_selected_files )
+        //    $(this.$el).find('.my-file-input').val('')
+        //},
         uploadImage: function uploadImage(image_files) {
             if (!image_files) {
                 return;
@@ -1711,6 +1714,12 @@ Vue.component('com-field-multi-picture', {
             });
         }
     }
+};
+
+Vue.component('com-field-multi-picture', function (resolve, reject) {
+    ex.load_js('https://cdn.jsdelivr.net/npm/exif-js').then(function () {
+        resolve(com_milti_picture);
+    });
 });
 
 /***/ }),
@@ -1838,9 +1847,12 @@ Vue.component('com-field-phone-code', {
 "use strict";
 
 
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
 __webpack_require__(83);
 
-Vue.component('com-field-picture', {
+var com_picture = exports.com_picture = {
     props: ['row', 'head'],
     template: ' <van-cell class="com-field-picture" :title="head.label" >\n        <template v-if="!head.readonly">\n             <textarea style="display: none;" :name="head.name" id="" cols="30" rows="10" v-model="row[head.name]"></textarea>\n            <div class="picture-panel" style="vertical-align: top" >\n              <div v-if="!row[head.name]" class="center-vh choose-btn" @click="open_select_images()">Choose</div>\n\n               <div class="picture-content" v-else\n               :style="{backgroundImage:\'url(\'+ row[head.name]  +\')\'}"\n               @click="big_win(row[head.name])">\n                    <!--<img :src="row[head.name]" alt="">-->\n                    <div v-if="!head.readonly" class="close" @click.stop=\'remove_image()\'><i class="fa fa-times-circle" aria-hidden="true" style="color:red;position:relative;left:30px;"></i></div>\n               </div>\n\n            </div>\n            <input class="my-file-input"  style="display: none"\n                type=\'file\' accept=\'image/*\'  @change=\'on_change($event)\'>\n\n        </template>\n           <div class="picture-content" v-else\n               :style="{backgroundImage:\'url(\'+ row[head.name]  +\')\'}"\n               @click="big_win(row[head.name])">\n               </div>\n\n    </van-cell>',
     data: function data() {
@@ -1849,9 +1861,34 @@ Vue.component('com-field-picture', {
 
     methods: {
         on_change: function on_change(event) {
-            var new_selected_files = event.target.files;
-            this.uploadImage(new_selected_files);
-            $(this.$el).find('.my-file-input').val('');
+            var _this = this;
+
+            //let new_selected_files = event.target.files
+            var self = this;
+            var ls = ex.map(event.target.files, function (file) {
+                return new Promise(function (resolve_outer, reject_outer) {
+                    new Promise(function (resolve, reject) {
+                        EXIF.getData(file, function () {
+                            var Orientation = EXIF.getTag(this, 'Orientation');
+                            resolve(Orientation);
+                        });
+                    }).then(function (Orientation) {
+                        if (self.head.option && self.head.option.maxsize) {
+                            return compressImage(file, self.head.option, Orientation);
+                        } else {
+                            return file;
+                        }
+                    }).then(function (rt) {
+                        resolve_outer(rt);
+                    });
+                });
+            });
+
+            Promise.all(ls).then(function (results) {
+                var new_selected_files = results;
+                _this.uploadImage(new_selected_files);
+                $(_this.$el).find('.my-file-input').val('');
+            });
         },
         uploadImage: function uploadImage(image_files) {
             if (!image_files) {
@@ -1893,7 +1930,128 @@ Vue.component('com-field-picture', {
             });
         }
     }
+};
+
+Vue.component('com-field-picture', function (resolve, reject) {
+    ex.load_js('https://cdn.jsdelivr.net/npm/exif-js').then(function () {
+        resolve(com_picture);
+    });
 });
+
+//this.compressImage(files[0], (file)=>{
+//    console.log(file);
+//    const formData = new FormData();
+//    formData.append('file', file, file.name || '上传图片.jpeg');
+//}, $.noop);
+////压缩图片
+function compressImage(file, option, Orientation) {
+    // 图片小于1M不压缩
+    //if (file.size < Math.pow(1024, 2)) {
+    //    return success(file);
+    //}
+
+    return new Promise(function (resolve, reject) {
+        var name = file.name; //文件名
+        var reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = function (e) {
+            var src = e.target.result;
+
+            var img = new Image();
+            img.src = src;
+            img.onload = function (e) {
+                var w = img.width;
+                var h = img.height;
+                var span = Math.max(w, h);
+                if (option.maxsize > span) {
+                    resolve(file);
+                    return;
+                }
+                var ratio = option.maxsize / span;
+                var real_w = w * ratio;
+                var real_h = h * ratio;
+                var quality = 0.92; // 默认图片质量为0.92
+                //生成canvas
+                var canvas = document.createElement('canvas');
+                var ctx = canvas.getContext('2d');
+                // 创建属性节点
+                var anw = document.createAttribute("width");
+                anw.nodeValue = real_w; // w;
+                var anh = document.createAttribute("height");
+                anh.nodeValue = real_h; //h;
+                canvas.setAttributeNode(anw);
+                canvas.setAttributeNode(anh);
+
+                // 旋转图像方向
+                var width = real_w;
+                var height = real_h;
+                var drawWidth = width;
+                var drawHeight = height;
+                var degree = 0;
+                switch (Orientation) {
+                    //iphone横屏拍摄，此时home键在左侧
+                    case 3:
+                        degree = 180;
+                        drawWidth = -width;
+                        drawHeight = -height;
+                        break;
+                    //iphone竖屏拍摄，此时home键在下方(正常拿手机的方向)
+                    case 6:
+                        canvas.width = height;
+                        canvas.height = width;
+                        degree = 90;
+                        drawWidth = width;
+                        drawHeight = -height;
+                        break;
+                    //iphone竖屏拍摄，此时home键在上方
+                    case 8:
+                        canvas.width = height;
+                        canvas.height = width;
+                        degree = 270;
+                        drawWidth = -width;
+                        drawHeight = height;
+                        break;
+                }
+                //使用canvas旋转校正
+                ctx.rotate(degree * Math.PI / 180);
+
+                //铺底色 PNG转JPEG时透明区域会变黑色
+                ctx.fillStyle = "#fff";
+                ctx.fillRect(0, 0, drawWidth, drawHeight);
+
+                //ctx.drawImage(img, 0, 0, w, h);
+                ctx.drawImage(img, 0, 0, drawWidth, drawHeight);
+                // quality值越小，所绘制出的图像越模糊
+                var base64 = canvas.toDataURL('image/jpeg', quality); //图片格式jpeg或webp可以选0-1质量区间
+
+                // 返回base64转blob的值
+                console.log('\u539F\u56FE' + (src.length / 1024).toFixed(2) + 'kb', '\u65B0\u56FE' + (base64.length / 1024).toFixed(2) + 'kb');
+                if (src.length < base64.length) {
+                    resolve(file);
+                    return;
+                }
+                //去掉url的头，并转换为byte
+                var bytes = window.atob(base64.split(',')[1]);
+                //处理异常,将ascii码小于0的转换为大于0
+                var ab = new ArrayBuffer(bytes.length);
+                var ia = new Uint8Array(ab);
+                for (var i = 0; i < bytes.length; i++) {
+                    ia[i] = bytes.charCodeAt(i);
+                }
+                file = new Blob([ab], { type: 'image/jpeg' });
+                file.name = name;
+
+                resolve(file);
+            };
+            img.onerror = function (e) {
+                reject(e);
+            };
+        };
+        reader.onerror = function (e) {
+            reject(e);
+        };
+    });
+}
 
 /***/ }),
 /* 33 */
@@ -2846,7 +3004,7 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, ".com-field-picture .picture-panel {\n  position: relative;\n  border: 2px dashed #ddd;\n  border-radius: 0.1rem;\n}\n.com-field-picture .picture-panel .choose-btn {\n  color: #46a3c8;\n  border: 1px solid #46a3c8;\n  border-radius: 0.1rem;\n  padding: 0.2rem 0.5rem;\n}\n.com-field-picture .picture-content {\n  width: 4rem;\n  height: 2.2rem;\n  background-size: contain;\n  background-position: center;\n  background-repeat: no-repeat;\n}\n.com-field-picture .van-cell__title {\n  max-width: 90px;\n}\n.com-field-picture .van-cell__value {\n  text-align: left;\n}\n.com-field-picture .van-cell__value img {\n  max-width: 5rem;\n  max-height: 2rem;\n}\n", ""]);
+exports.push([module.i, ".com-field-picture .picture-panel {\n  position: relative;\n  border: 2px dashed #ddd;\n  border-radius: 0.1rem;\n  height: 2rem;\n  width: 3rem;\n}\n.com-field-picture .picture-panel .choose-btn {\n  color: #46a3c8;\n  border: 1px solid #46a3c8;\n  border-radius: 0.1rem;\n  padding: 0.2rem 0.5rem;\n}\n.com-field-picture .picture-content {\n  width: 3rem;\n  height: 2rem;\n  background-size: contain;\n  background-position: center;\n  background-repeat: no-repeat;\n}\n.com-field-picture .van-cell__title {\n  max-width: 90px;\n}\n.com-field-picture .van-cell__value {\n  text-align: left;\n}\n.com-field-picture .van-cell__value img {\n  max-width: 5rem;\n  max-height: 2rem;\n}\n", ""]);
 
 // exports
 
