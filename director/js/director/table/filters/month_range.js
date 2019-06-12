@@ -1,5 +1,5 @@
 
-var com_datetime_range={
+var month_range={
     props:['head','search_args'],
     data:function(){
 
@@ -14,18 +14,18 @@ var com_datetime_range={
                 <span v-text="head.label" style="white-space: nowrap"></span>:
                     <input class="start form-control input-sm " v-model="start" readonly
                         style="background-color: white;width: 12em"
-                        placeholder="开始日期">
+                        placeholder="开始月份">
                     <div style="display: inline-block;margin: 0 2px;" >-</div>
                     <input class="end form-control input-sm"  v-model="end"  readonly
                      style="background-color: white;width: 12em"
-                     placeholder="结束日期">
+                     placeholder="结束月份">
                 </div>`,
     mounted:function(){
         var self=this
         ex.load_js('/static/lib/laydate/laydate.js',function(){
             laydate.render({
                 elem: $(self.$el).find('.start')[0],
-                type: 'date',
+                type: 'month',
                 done: function(value, date, endDate){
                     //self.search_args['_start_'+self.head.name]=value
                     self.start = value
@@ -36,7 +36,7 @@ var com_datetime_range={
             });
             laydate.render({
                 elem: $(self.$el).find('.end')[0],
-                type: 'date',
+                type: 'month',
                 done: function(value, date, endDate){
                     self.end=value
                     //console.log(value); //得到日期生成的值，如：2017-08-18
@@ -93,31 +93,4 @@ var com_datetime_range={
 
 }
 
-Vue.component('com-filter-date-range',com_datetime_range)
-
-
-//require('./scss/com_date_range_filter.scss')
-//
-//var com_date_range={
-//    props:['head','search_args'],
-//    data:function(){
-//        if(! this.search_args['_start_'+this.head.name]){
-//            Vue.set(this.search_args,'_start_'+this.head.name,'')
-//        }
-//        if(! this.search_args['_end_'+this.head.name]){
-//            Vue.set(this.search_args,'_end_'+this.head.name,'')
-//        }
-//        return {
-//
-//        }
-//    },
-//    template:`<div  class="com-date-range-filter flex flex-ac">
-//                    <date v-model="search_args['_start_'+head.name]" :placeholder="head.label"></date>
-//                    <div style="display: inline-block;margin: 0 2px;" >-</div>
-//                    <date  v-model="search_args['_end_'+head.name]" :placeholder="head.label"></date>
-//                </div>`,
-//
-//}
-//window.com_filter_date_range=com_date_range
-//Vue.component('com-date-range-filter',com_date_range)
-
+Vue.component('com-filter-month-range',month_range)

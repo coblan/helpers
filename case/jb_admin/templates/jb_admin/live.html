@@ -1,0 +1,120 @@
+{% extends "jb_admin/base.html" %}
+{% load static %}
+{% load jsonify %}
+
+{% block page_content %}
+
+<script type="text/javascript">
+
+editor= {{ editor | jsonify }}
+editor_ctx = {{ editor_ctx | jsonify }}
+
+$(function() {
+
+    gb = new Vue({
+        el: '#there',
+        data: function () {
+            var search_args = ex.parseSearch()
+            return {
+                page_label:page_label,
+                stack: [{editor: editor, ctx: editor_ctx,label: ''}],
+            }
+        },
+        methods:{
+            pop_stack(){
+                var com = this.stack.pop()
+                Vue.delete(this.$options.components,com)
+            },
+             open_live(com,ctx,label){
+                 if (com.basename){
+                     var com_name = 'dyn-'+com.basename +'-'+ Date.now()
+                 }else{
+                     var com_name = 'dyn-'+ Date.now()
+                 }
+                var big_com = {
+                    mixins:[com],
+                    name:com_name,
+                }
+                Vue.set( this.$options.components,com_name,big_com)
+                this.stack.push({editor:com_name,ctx:ctx,label:label || com.label  })
+            }
+        },
+        components:{},
+        computed:{
+            current_com(){
+                return this. stack[this.stack.length -1 ]
+            },
+            alive_list(){
+                return this.stack.map((item)=>{
+                            return item.editor
+                        })
+            },
+            pathable_tab_names(){
+                var names =[]
+                ex.each(this.stack.slice(1),function(editor){
+                    if(editor){
+                        names.push(editor.label)
+//                        var last_crt_tab = ex.findone(stack.tabs,{name:stack.crt_tab_name})
+////                        names.push(last_crt_tab.label)
+//                        if(stack.par_row._label){
+//                            names.push(last_crt_tab.label+"("+stack.par_row._label+")")
+//                        }else{
+//                            names.push(last_crt_tab.label)
+//                        }
+                    }
+//                    last_stack = stack
+                })
+                return names
+            }
+        }
+    })
+})
+
+
+</script>
+
+{% block extra_head %}
+{% endblock %}
+<style>
+    a[disabled] {
+        color: gray;
+        pointer-events: none;
+    }
+</style>
+<div id='there' class="flex-v">
+
+    {% block flag %}
+    <div v-if="page_label" style="border-left: 3px solid #3e8ebd;padding-left: 1em;margin-bottom: 5px;">
+        <b v-text="page_label"></b>
+        <span style="display: inline-block;width: 2em;"></span>
+        <ol class="breadcrumb" style="display: inline-block;background-color: inherit;margin-bottom: 0;padding: 0"  v-show="pathable_tab_names.length >0 ">
+            <li v-for="name in pathable_tab_names"><span v-text="name"></span></li>
+        </ol>
+        <button type="button"
+                class="btn btn-warning btn-xs"
+                v-show="stack.length > 1"
+                @click="pop_stack()">
+            <i class="fa fa-arrow-circle-o-left fa-lg"></i><span>返回</span></button>
+    </div>
+
+
+    {% endblock %}
+
+    {% block tab-content %}
+    <div id="main-page" class="rows-block flex-v flex-grow"  style="position: relative;height: calc( 100vh - 110px )">
+        <transition name="slide">
+            <keep-alive :include="alive_list">
+                <component :is="current_com.editor" :ctx="current_com.ctx" ></component>
+            </keep-alive>
+        </transition>
+
+    </div>
+
+
+    {% endblock %}
+
+</div>
+
+{% block extra %}
+{% endblock %}
+{% endblock %}

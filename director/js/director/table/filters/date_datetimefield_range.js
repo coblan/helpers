@@ -53,7 +53,27 @@ var com_date_datetimefield_range={
             });
         })
     },
+    computed:{
+        start_value(){
+            return this.search_args['_start_'+this.head.name]
+        },
+        end_value(){
+            return this.search_args['_end_'+this.head.name]
+        }
+    },
     watch:{
+        start_value(v){
+            debugger
+            if(this.start != v){
+                this.start = v
+            }
+        },
+        end_value(v){
+            debugger
+            if(this.end != v){
+                this.end=v
+            }
+        },
         start:function(nv,ov){
             if(nv && this.end){
                 if(nv>this.end){
@@ -65,7 +85,8 @@ var com_date_datetimefield_range={
                     return
                 }
             }
-            if(nv){
+            if(nv && nv.length <19){
+
                 Vue.set(this.search_args,'_start_'+this.head.name ,nv+' 00:00:00')
             }else{
                 Vue.set(this.search_args,'_start_'+this.head.name,nv)
@@ -82,7 +103,7 @@ var com_date_datetimefield_range={
                     return
                 }
             }
-            if(nv){
+            if(nv && nv.length <19){
                 Vue.set(this.search_args,'_end_'+this.head.name,nv+' 23:59:59')
             }else{
                 Vue.set(this.search_args,'_end_'+this.head.name,nv)
