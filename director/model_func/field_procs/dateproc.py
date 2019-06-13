@@ -22,7 +22,8 @@ class DateProc(BaseFieldProc):
         f = model._meta.get_field(name)
         return {'name':name,
                 'label':_(f.verbose_name),
-                'editor':'com-date-range-filter'
+                #'editor':'com-date-range-filter'
+                'editor':'com-filter-date-range'
                 }
 
 field_map.update({
