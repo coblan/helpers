@@ -18,13 +18,7 @@ def get_argument(request,outtype='obj'):
     
     if request.method=='POST':
         if request.body and re.match('{.+}|\[.+\]',request.body.decode('utf-8')):
-            dc=json.loads(request.body)
-        #elif 'x-www-form-urlencoded' in request.META.get('CONTENT_TYPE') :
-            #dc = parse.parse_qs(request.body.decode('utf-8'))
-            #for k,v in dc.items():
-                #if isinstance(v,list):
-                    #dc[k]=','.join(v)
-        #elif 'form-data' in request.META.get('CONTENT_TYPE'):
+            dc=json.loads(request.body.decode('utf-8'))
         else:
             dc = request.POST.dict()
         #else:
