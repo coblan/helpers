@@ -18,6 +18,10 @@ director={
 field_map={
 }
 site_cfg = {
+    'inspect_dict':{
+        'page_dc':page_dc,
+        'director':director,
+    }
 }
 
 def director_view(name): 
