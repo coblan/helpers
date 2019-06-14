@@ -22,7 +22,7 @@ class BasicReciever(object):
         file_url_list=[]
         for name, fl in file_dict.items():
             file_data= self.readFile(fl)
-            file_url = self.procFile(file_data,fl.name)
+            file_url = self.procFile(file_data,fl)
             file_url_list.append(file_url)
         return HttpResponse(json.dumps(file_url_list),content_type="application/json")
     
@@ -33,9 +33,9 @@ class BasicReciever(object):
         catch.flush()
         return catch.getvalue()
     
-    def procFile(self,file_data,name):
+    def procFile(self,file_data,fl):
         par_dir = self.getParDir()
-        file_name = self.getFileName(file_data,name)
+        file_name = self.getFileName(file_data,fl)
         file_path = os.path.join(par_dir,file_name)
         
         absolut_par_path = os.path.join( settings.MEDIA_ROOT, par_dir)
@@ -51,8 +51,8 @@ class BasicReciever(object):
             return self.getFileUrl(file_path)
         
 
-    def getFileName(self,file_data,name):
-        sufix = self.getSufix(name)
+    def getFileName(self,file_data,fl):
+        sufix = self.getSufix(fl)
         m = hashlib.md5()   
         m.update(file_data)  
         mid_name = m.hexdigest()
@@ -68,12 +68,12 @@ class BasicReciever(object):
             #pass   
         #return par_path
     
-    def getSufix(self,name):
-        mt_name=re.search('\.(\w+)$',name)
+    def getSufix(self,fl):
+        mt_name=re.search('\.(\w+)$',fl.name)
         if mt_name:
             return mt_name.group(1)
         else:
-            return ''
+            return fl.content_type.split('/')[-1]
     def getFileUrl(self,file_name):
         file_url=urljoin(settings.MEDIA_URL, 'general_upload/{file_name}'.format(file_name=file_name))
         return  file_url

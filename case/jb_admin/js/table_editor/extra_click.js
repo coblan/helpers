@@ -13,6 +13,7 @@ var extra_click={
     template:`<span class="clickable" v-text="head.label" @click="on_click()"></span>`,
     created:function(){
         // find head from parent table
+        this.parStore = ex.vueParStore(this)
         var table_par = this.$parent
         while (true){
             if (table_par.heads){
@@ -29,7 +30,11 @@ var extra_click={
 
     methods:{
         on_click:function(){
-            this.$emit('on-custom-comp',{name:this.head.fun,row:this.rowData,head:this.head})
+            if(this.head.action){
+                ex.eval(this.head.action,{row:this.rowData,head:this.head,ps:this.parStore})
+            }else{
+                this.$emit('on-custom-comp',{name:this.head.fun,row:this.rowData,head:this.head})
+            }
         }
 
     }

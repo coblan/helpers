@@ -27,7 +27,9 @@ var pop_table_select =  {
             //    Vue.set(self.row,'_'+self.head.name+'_label',foreign_row._label)
             //})
             var win_close = cfg.pop_middle('com-table-panel',this.head.table_ctx,function(foreign_row){
-                if(self.head.select_field){
+                if(self.head.action){
+                    ex.eval(self.head.action,{new_row:foreign_row,row:self.row})
+                }else if(self.head.select_field){
                     Vue.set(self.row,self.head.name,foreign_row[self.head.select_field])
                 }else{
                     Vue.set(self.row,self.head.name,foreign_row[self.head.name])

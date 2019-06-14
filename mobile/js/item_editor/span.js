@@ -1,10 +1,15 @@
 Vue.component('com-table-span',{
     props:['head','row'],
-    template:`<span class="com-item-span" v-text="row[head.name]" @click="on_click()"></span>`,
+    template:`<span class="com-item-span" :class="head.class" v-text="row[head.name]" @click="on_click()"></span>`,
     data(){
         var parStore = ex.vueParStore(this)
         return {
             parStore:parStore
+        }
+    },
+    mounted(){
+        if(this.head.css){
+            ex.append_css(this.head.css)
         }
     },
     methods:{

@@ -13,12 +13,17 @@ class DateProc(BaseFieldProc):
             return {name:date.isoformat()}
         else:
             return {}
-        
+    
+    def dict_field_head(self, head):
+        head['editor']='com-field-date'
+        return head
+    
     def filter_get_range_head(self,name,model):
         f = model._meta.get_field(name)
         return {'name':name,
                 'label':_(f.verbose_name),
-                'editor':'com-date-range-filter'
+                #'editor':'com-date-range-filter'
+                'editor':'com-filter-date-range'
                 }
 
 field_map.update({

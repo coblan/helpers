@@ -1,8 +1,8 @@
-{% extends "wxweb/site_base.html" %}
+{% extends "mobile/base.html" %}
 {% load static %}
 {% load jsonify %}
 
-{% block head-content2 %}
+{% block head-content %}
 <title>{{page_label}}</title>
 <script src="{{ js_config.js_lib.jquery }}"></script>
 <script src="{{ js_config.js_lib.md5 }}"></script>
@@ -31,7 +31,6 @@
     heads = {{ heads | jsonify }}
     page_label = '{{ page_label }}'
     fields_ctx = {{ fields_ctx | jsonify }}
-
     //    list_panel = {{ list_panel | jsonify }}
 //    table_editor={{ table_editor | jsonify }}
 //    table_option = {{ table_option | jsonify }}
@@ -45,6 +44,7 @@
                 return {
                     page_label:page_label,
                     fields_ctx:fields_ctx,
+                    search_args:ex.parseSearch()
 //                    form_ctx: {
 //                        heads:[
 //                            {name:'client_name',label:'你的姓名',editor:'com-field-linetext',required:true,},
@@ -67,14 +67,23 @@
                 }
             },
             methods:{
+                onClickLeft(){
+                    history.back()
+                },
             }
         })
     })
 </script>
 <div id="there" class="client-case-page">
+    <!--<div class="page-title" v-text="page_label"></div>-->
 
-
-    <div class="page-title" v-text="page_label"></div>
+    <van-nav-bar
+            :title="page_label"
+            :left-arrow=" Boolean( search_args._back )"
+            @click-left="onClickLeft">
+        <!--<van-icon v-if="fields_ctx.ops.length>0" name="bars" slot="right" />-->
+    </van-nav-bar>
+    <!--@click-right="onClickRight"-->
     <com-fields-panel :ctx="fields_ctx"></com-fields-panel>
 
 

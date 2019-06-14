@@ -15,7 +15,8 @@ var table_store={
              crt_row:{},
              selectable:true,
              changed_rows:[],
-             event_slots:[]
+             event_slots:[],
+             option:{},
          }
     },
     mixins:[mix_ele_table_adapter],
@@ -36,6 +37,13 @@ var table_store={
         },
     },
     methods:{
+        row_has_field(name){
+            if(this.rows.length ==0){
+                return false
+            }else{
+                return this.rows[0][name] != undefined
+            }
+        },
         express:function(kws){
             var self=this
             var row_match_fun = kws.row_match
@@ -283,18 +291,19 @@ var table_store={
                 cfg.show_load()
                 ex.post('/d/ajax',JSON.stringify(post_data),function(resp){
                     if( !resp.save_rows.errors){
+                        if(kws.after_save){
+                            if(ex.eval(kws.after_save,{rows:resp.save_rows,ps:self}) == 'stop'){
+                                return
+                            }
+                        }
                         ex.each(resp.save_rows,function(new_row){
                             // [1]  这里还原回去
                             if(new_row._cache_director_name){
                                 new_row._director_name = new_row._cache_director_name
                             }
-                            if(kws.after_save){
-                                ex.eval(kws.after_save,{new_row:new_row,ts:self})
-                            }else{
-                                self.update_or_insert(new_row)
-                            }
-
+                            self.update_or_insert(new_row)
                         })
+
                         self.clearSelection()
                         if(pop_fields_win_index){
                             layer.close(pop_fields_win_index)
@@ -308,23 +317,7 @@ var table_store={
                             cfg.showError(JSON.stringify( resp.save_rows.errors))
                         }
 
-                        // 留到下面的field弹出框，按照nicevalidator的方式去显示错误
-                        //if(!after_save_callback){
-                        //    if(resp.save_rows.msg){
-                        //        cfg.showError(resp.save_rows.msg)
-                        //    }else{
-                        //        cfg.showError(JSON.stringify(resp.save_rows.errors) )
-                        //    }
-                        //}
-                        //
                     }
-
-
-                    //self.op_funs.update_or_insert_rows({rows:resp.save_rows} )
-
-                    //if(after_save_callback){
-                    //    after_save_callback(resp)
-                    //}
 
                 })
             }

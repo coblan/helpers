@@ -1,7 +1,8 @@
 require('./styl/multi_picture.styl')
-
-Vue.component('com-field-multi-picture',{
+import {com_picture} from  './picture'
+var com_milti_picture = {
     props:['row','head'],
+    mixins:[com_picture],
     template:` <van-cell class="com-field-multi-picture" :title="head.label" >
        <textarea style="display: none;" :name="head.name" id="" cols="30" rows="10" v-model="row[head.name]"></textarea>
         <div class="picture-panel" style="vertical-align: top" >
@@ -12,7 +13,9 @@ Vue.component('com-field-multi-picture',{
             </div>
             <div class="img-wrap" v-for="(imgsrc,index) in row[head.name]" @click="big_win(imgsrc)">
                 <img class="center-vh" :src="imgsrc" alt="图片不能加载">
-                <div v-if="!head.readonly" class="close" @click='remove_image(index)'><i class="fa fa-times-circle" aria-hidden="true" style="color:red;position:relative;left:30px;"></i></div>
+                <div class="close" >
+                    <i @click.stop='remove_image(index)' class="fa fa-times-circle" aria-hidden="true" style="color:red;position:relative;left:30px;"></i>
+                </div>
             </div>
         </div>
         <input class="my-file-input" v-if="!head.readonly" style="display: none"
@@ -23,11 +26,11 @@ Vue.component('com-field-multi-picture',{
         }
     },
     methods:{
-        on_change(event){
-            let new_selected_files = event.target.files
-            this.uploadImage( new_selected_files )
-            $(this.$el).find('.my-file-input').val('')
-        },
+        //on_change(event){
+        //    let new_selected_files = event.target.files
+        //    this.uploadImage( new_selected_files )
+        //    $(this.$el).find('.my-file-input').val('')
+        //},
         uploadImage(image_files){
             if(!image_files){
                 return
@@ -73,14 +76,12 @@ Vue.component('com-field-multi-picture',{
                     startPosition: index,
             }
             );
-            //var ctx = {imgsrc:imgsrc}
-            //pop_layer(ctx,'com-pop-image',function(){},{
-            //    title:false,
-            //    area: ['90%', '90%'],
-            //    shade: 0.8,
-            //    skin: 'img-shower',
-            //    shadeClose: true,
-            //})
         },
     }
+}
+
+Vue.component('com-field-multi-picture',function(resolve,reject){
+    ex.load_js('https://cdn.jsdelivr.net/npm/exif-js').then(()=>{
+        resolve(com_milti_picture)
+    })
 })

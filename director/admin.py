@@ -29,7 +29,7 @@ from .log.logpage import LogPage
 from .base_data import page_dc, director
 from . import  admin_kv
 
-from .model_func.field_procs import dateproc,datetimeproc,decimalproc,foreignproc,manyproc,oneproc,charproc,intproc,boolproc
+from .model_func.field_procs import dateproc,datetimeproc,decimalproc,foreignproc,manyproc,oneproc,charproc,intproc,boolproc,textproc
 from .model_func.field_procs import nullboolproc
 
 from . import js_cfg
@@ -40,6 +40,8 @@ def get_first_name(self):
     return self.first_name  +'(%s)'%self.username
 
 User.add_to_class("__str__", get_first_name)
+User._meta.get_field('first_name').verbose_name = '用户名'
+User._meta.get_field('username').verbose_name = '账号'
 
 
 class UserGroupTable(ModelTable):

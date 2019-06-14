@@ -119,13 +119,14 @@ class RowFilter(object):
     @names : 普通字段，用于过滤用.
     @range_fields: span字段，例如时间段
     
+    
      #range_fields=[{'name':'create_time','type':'date'}]
     """
-    names=[]
-    range_fields=[]
+    names=[]   # 该list中的字段，会经过 map cls 正常流程，进行映射。  除了 extrahead中的字段
+    range_fields=[]   
     model=''
     fields_sort = []
-    icontains=[]
+    icontains=[]   #  该list中的字段，会处理为 com-filter-text类型
     def __init__(self,dc,user,allowed_names,kw={}):
         # 为了让前端不显示
         self.model_allowed_names =  allowed_names
@@ -194,11 +195,11 @@ class RowFilter(object):
         
         extraHead= self.getExtraHead()
         normal_heads = []
-        dc = {x['name']: x  for x in extraHead }
+        extrahead_dict = {x['name']: x  for x in extraHead }
         valid_model_names = [x for x in self.names if x in self.model_allowed_names]
         send_to_front_names = valid_model_names + [x['name'] for x in extraHead]
         for proc_cls,name in zip(self.get_proc_list() ,self.valid_name):
-            if name in dc:
+            if name in extrahead_dict:
                 # 为了性能考虑，如果有head了，就不进行自动生成head了，并且排除掉那些不在model里面的字段
                 #normal_heads.append(dc[name])
                 continue
@@ -423,6 +424,9 @@ class ModelTable(object):
                 break
         return director_name
     
+    def get_option(self):
+        return {}
+    
     def get_context(self):
         director_name =self.get_director_name()
         heads = self.get_heads()
@@ -443,6 +447,7 @@ class ModelTable(object):
             'ops' : ops,
             'search_args':self.search_args, 
             'parents': self.getParents(),
+            'option':self.get_option(),
             'footer': self.footer,
             'selectable': self.selectable,
             'event_slots':self.get_event_slots()
@@ -477,6 +482,7 @@ class ModelTable(object):
             'row_sort':self.row_sort.get_context(),
             'row_filters': self.getRowFilters() , #self.row_filter.get_context(),
             'search_args': {},
+            'option':self.get_option(),
             #'search_tip':self.row_search.get_context(),
             'director_name': self.get_director_name(),#model_to_name(self.model),
             'ops' : ops, 
@@ -715,12 +721,15 @@ class ModelTable(object):
         """
         return {}
     
+    def init_query(self):
+        return self.model.objects.all()
+    
     def get_query(self):
         if not self.crt_user.is_authenticated:
             raise PermissionDenied('no permission to browse %s ,Please login first' % self.model._meta.model_name)
         elif not self.crt_user.is_superuser and not self.permit.readable_fields():
             raise PermissionDenied('user %s ,no permission to browse %s'% ( self.crt_user.username, self.model._meta.model_name))
-        query =  self.model.objects.all()
+        query =  self.init_query()
         
         # 优化速度
         if self.exclude:
@@ -777,9 +786,9 @@ class ModelTable(object):
                  'fields_ctx':fieldobj.get_head_context(),
                  'visible': self.permit.can_add(),
                  },
-                {'name':'save_changed_rows','editor':'com-op-btn','label':'保存', 
-                 'class':'btn btn-info btn-sm',
-                 'show': 'scope.changed','hide':'!changed','icon':'fa-save', 'visible': self.permit.can_edit()},
+                #{'name':'save_changed_rows','editor':'com-op-btn','label':'保存', 
+                 #'class':'btn btn-info btn-sm',
+                 #'show': 'scope.changed','hide':'!changed','icon':'fa-save', 'visible': self.permit.can_edit()},
                 {'name':'delete_selected','editor':'com-op-btn','label':'删除','style': 'color:red','icon': 'fa-times','disabled':'!scope.ts.has_select', 'visible': self.permit.can_del(),},
                 ]      
     
@@ -834,6 +843,12 @@ class PlainTable(ModelTable):
         
         self.kw=kw
         self.crt_user=crt_user 
+        
+        #allowed_names = []
+        #self.row_sort=self.sort(row_sort,crt_user,allowed_names,kw)
+        #self.row_filter=self.filters(row_filter, crt_user, allowed_names,kw) 
+        #self.row_search = self.search( row_search,crt_user,allowed_names,kw)
+        
         self.page=_page
         self.footer = []
         self.custom_permit()

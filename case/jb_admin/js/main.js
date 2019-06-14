@@ -116,3 +116,4 @@ import * as tabs_main from  './tabs/main'
 
 import * as operator_main from  './operator/main.js'
 import * as filter_editor_main from  './filter_editor/main.js'
+import * as livepage_main from  './livepage/main.js'

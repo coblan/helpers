@@ -17,13 +17,13 @@ def director_save_row(row):
      else:
           return {}
 
-@director_view('d.get_row')
+@director_view('get_row')
 def get_row(director_name,filter_kws):
      fields_cls = director.get(director_name)
      fields_obj = fields_cls(**filter_kws)
      return fields_obj.get_row()
 
-@director_view('d.save_rows')
+@director_view('save_rows')
 def save_rows(rows):
      request = get_request_cache()['request']
      user = request.user
