@@ -15,7 +15,7 @@ class Command(BaseCommand):
         inspect_dict = site_cfg.get('inspect_dict')
         out_ls = []
         out_str = "\n=========%s==========\n"%timezone.now()
-        with open( settings.STATIC_DICT,'r',encoding='utf-8') as f:
+        with open( settings.INSPECT_DICT_STATIC,'r',encoding='utf-8') as f:
             org_str = f.read()
             gb_dict,local_dict={},{}
             if org_str:
@@ -39,7 +39,7 @@ class Command(BaseCommand):
                 if out_ls:
                     out_str += "\n%s = {\n%s\n}" %(dc_name , '\n'.join(out_ls)  )
                 
-        with open( settings.STATIC_DICT,'a+',encoding='utf-8') as f:
+        with open( settings.INSPECT_DICT_STATIC,'a+',encoding='utf-8') as f:
             f.write(out_str)
         
         
