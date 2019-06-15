@@ -15,7 +15,7 @@ class FilterForm(object):
     def get_operations(self):
         ops =  [
             {'label':'查询','editor':'com-op-submit','action':'''
-            var vc = ex.vueParStore(scope.ps.vc,{basename:"live-list"}).vc; 
+            var vc = ex.vueParStore(scope.ps.vc,function(vc){return vc.basename && vc.basename.startsWith("live-")}).vc; 
             var table = vc.$root.lastsibe(vc) ;
             ex.vueAssign(table.childStore.search_args,scope.ps.vc.row)
             table.childStore.search();
