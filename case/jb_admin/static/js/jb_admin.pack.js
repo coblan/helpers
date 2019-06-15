@@ -5634,7 +5634,6 @@ Vue.component('com-fields-table-block', {
     template: '<div class="table-fields field-panel msg-bottom">\n           <table >\n            <tr v-for="heads_row in table_grid_heads">\n                <template v-for="head in heads_row">\n                    <td class="field-label-td"  >\n                        <div class="field-label">\n                            <span class="label-content">\n                                 <span v-text="head.label"></span>\n                                 <span class="req_star" v-if=\'head.required\'>*</span>\n                            </span>\n                        </div>\n                    </td>\n                    <td class="field-input-td" :colspan="head.colspan" :rowspan="head.rowspan">\n                        <div class="field-input">\n                            <component v-if="head.editor" :is="head.editor"\n                                 @field-event="$emit(\'field-event\',$event)"\n                                 :head="head" :row="row"></component>\n                            <span v-if="head.help_text" class="help-text clickable">\n                                 <i style="color: #3780af;position: relative;top:10px;"   @click="show_msg(head.help_text,$event)" class="fa fa-question-circle" ></i>\n                            </span>\n                        </div>\n                    </td>\n                </template>\n            </tr>\n        </table>\n       </div>',
     computed: {
         table_grid_heads: function table_grid_heads() {
-            debugger;
             var self = this;
             var table_grid = this.option.table_grid;
             var heads_bucket = [];
@@ -6082,7 +6081,6 @@ var big_fields = {
             }
         });
         var parStore = ex.vueParStore(this);
-        debugger;
         return {
             head: this.ctx,
             par_row: this.ctx.par_row,

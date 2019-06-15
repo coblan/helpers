@@ -63,13 +63,11 @@ var com_date_datetimefield_range={
     },
     watch:{
         start_value(v){
-            debugger
             if(this.start != v){
                 this.start = v
             }
         },
         end_value(v){
-            debugger
             if(this.end != v){
                 this.end=v
             }
