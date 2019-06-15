@@ -34,11 +34,21 @@ export var  vuetool = {
     vueBroadcase:function(){
 
     },
-    vueParStore:function(self){
+    vueParStore:function(self,filter){
         var parent = self.$parent
         while (parent){
             if(parent.childStore){
-                return parent.childStore
+                if(filter){
+                    if(typeof filter =='function' && filter(parent)){
+                        return parent.childStore
+                    }else{
+                        if(ex.objContain(parent,filter) ){
+                            return parent.childStore
+                        }
+                    }
+                }else{
+                    return parent.childStore
+                }
             }else {
                 parent = parent.$parent
             }

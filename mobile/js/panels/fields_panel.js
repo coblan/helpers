@@ -5,11 +5,11 @@ Vue.component('com-fields-panel',{
     data:function(){
         var childStore = new Vue({})
         childStore.vc = this
-
         var row = this.ctx.row?ex.copy(this.ctx.row):{}
         return {
             head:this.ctx,
             childStore:childStore,
+            parStore:ex.vueParStore(this),
             heads:this.ctx.heads,
             par_row:this.ctx.row, // 外面的row 缓存起来
             row:row,

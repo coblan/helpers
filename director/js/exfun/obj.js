@@ -6,5 +6,15 @@ export var obj_control={
             }
         }
         return true
+    },
+    objContain(par,child){
+        var is_contain = true
+        for(var k in child){
+            if(child[k] != par[k]){
+                is_contain=false
+                break
+            }
+        }
+        return is_contain
     }
 }

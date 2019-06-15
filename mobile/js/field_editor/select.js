@@ -78,7 +78,8 @@ Vue.component('com-field-select',{
 
         },
         onConfirm:function(v,index){
-            this.row[this.head.name] = v.value
+            Vue.set( this.row,this.head.name,v.value)
+            //this.row[this.head.name] = v.value
             this.show=false
         }
     }

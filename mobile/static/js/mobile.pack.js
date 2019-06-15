@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 91);
+/******/ 	return __webpack_require__(__webpack_require__.s = 96);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -381,12 +381,225 @@ function updateLink(linkElement, obj) {
 "use strict";
 
 
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+__webpack_require__(88);
+
+var com_picture = exports.com_picture = {
+    props: ['row', 'head'],
+    template: ' <van-cell class="com-field-picture" :title="head.label" >\n        <template v-if="!head.readonly">\n             <textarea style="display: none;" :name="head.name" id="" cols="30" rows="10" v-model="row[head.name]"></textarea>\n            <div class="picture-panel" style="vertical-align: top" >\n              <div v-if="!row[head.name]" class="center-vh choose-btn" @click="open_select_images()">Choose</div>\n\n               <div class="picture-content" v-else\n               :style="{backgroundImage:\'url(\'+ row[head.name]  +\')\'}"\n               @click="big_win(row[head.name])">\n                    <!--<img :src="row[head.name]" alt="">-->\n                    <div v-if="!head.readonly" class="close" @click.stop=\'remove_image()\'><i class="fa fa-times-circle" aria-hidden="true" style="color:red;position:relative;left:30px;"></i></div>\n               </div>\n\n            </div>\n            <input class="my-file-input"  style="display: none"\n                type=\'file\' accept=\'image/*\'  @change=\'on_change($event)\'>\n\n        </template>\n           <div class="picture-content" v-else\n               :style="{backgroundImage:\'url(\'+ row[head.name]  +\')\'}"\n               @click="big_win(row[head.name])">\n               </div>\n\n    </van-cell>',
+    data: function data() {
+        return {};
+    },
+
+    methods: {
+        on_change: function on_change(event) {
+            var _this = this;
+
+            //let new_selected_files = event.target.files
+            var self = this;
+            var ls = ex.map(event.target.files, function (file) {
+                return new Promise(function (resolve_outer, reject_outer) {
+                    new Promise(function (resolve, reject) {
+                        EXIF.getData(file, function () {
+                            var Orientation = EXIF.getTag(this, 'Orientation');
+                            resolve(Orientation);
+                        });
+                    }).then(function (Orientation) {
+                        if (self.head.option && self.head.option.maxsize) {
+                            return compressImage(file, self.head.option, Orientation);
+                        } else {
+                            return file;
+                        }
+                    }).then(function (rt) {
+                        resolve_outer(rt);
+                    });
+                });
+            });
+
+            Promise.all(ls).then(function (results) {
+                var new_selected_files = results;
+                _this.uploadImage(new_selected_files);
+                $(_this.$el).find('.my-file-input').val('');
+            });
+        },
+        uploadImage: function uploadImage(image_files) {
+            if (!image_files) {
+                return;
+            }
+            var self = this;
+            console.log('start upload');
+
+            var up_url = this.head.up_url || '/d/upload?path=general_upload/images';
+            cfg.show_load();
+            ex.uploads(image_files, up_url, function (url_list) {
+                cfg.hide_load();
+                Vue.set(self.row, self.head.name, url_list[0]);
+            });
+        },
+        open_select_images: function open_select_images() {
+            console.log('before select');
+            var self = this;
+            if (!this.disable) {
+                $(this.$el).find('input[type=file]').click();
+                this.disable = true;
+                setTimeout(function () {
+                    self.disable = false;
+                }, 3000);
+            }
+            console.log('after select');
+        },
+        remove_image: function remove_image() {
+            this.row[this.head.name] = "";
+            //var image_list = this.row[this.head.name]
+            //image_list.splice(index,1)
+        },
+        big_win: function big_win(imgsrc) {
+            //var image_list = this.row[this.head.name]
+            //var index = image_list.indexOf(imgsrc)
+            vant.ImagePreview({
+                images: [imgsrc],
+                startPosition: 0
+            });
+        }
+    }
+};
+
+Vue.component('com-field-picture', function (resolve, reject) {
+    ex.load_js('https://cdn.jsdelivr.net/npm/exif-js').then(function () {
+        resolve(com_picture);
+    });
+});
+
+//this.compressImage(files[0], (file)=>{
+//    console.log(file);
+//    const formData = new FormData();
+//    formData.append('file', file, file.name || '上传图片.jpeg');
+//}, $.noop);
+////压缩图片
+function compressImage(file, option, Orientation) {
+    // 图片小于1M不压缩
+    //if (file.size < Math.pow(1024, 2)) {
+    //    return success(file);
+    //}
+
+    return new Promise(function (resolve, reject) {
+        var name = file.name; //文件名
+        var reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = function (e) {
+            var src = e.target.result;
+
+            var img = new Image();
+            img.src = src;
+            img.onload = function (e) {
+                var w = img.width;
+                var h = img.height;
+                var span = Math.max(w, h);
+                if (option.maxsize > span) {
+                    resolve(file);
+                    return;
+                }
+                var ratio = option.maxsize / span;
+                var real_w = w * ratio;
+                var real_h = h * ratio;
+                var quality = 0.92; // 默认图片质量为0.92
+                //生成canvas
+                var canvas = document.createElement('canvas');
+                var ctx = canvas.getContext('2d');
+                // 创建属性节点
+                var anw = document.createAttribute("width");
+                anw.nodeValue = real_w; // w;
+                var anh = document.createAttribute("height");
+                anh.nodeValue = real_h; //h;
+                canvas.setAttributeNode(anw);
+                canvas.setAttributeNode(anh);
+
+                // 旋转图像方向
+                var width = real_w;
+                var height = real_h;
+                var drawWidth = width;
+                var drawHeight = height;
+                var degree = 0;
+                switch (Orientation) {
+                    //iphone横屏拍摄，此时home键在左侧
+                    case 3:
+                        degree = 180;
+                        drawWidth = -width;
+                        drawHeight = -height;
+                        break;
+                    //iphone竖屏拍摄，此时home键在下方(正常拿手机的方向)
+                    case 6:
+                        canvas.width = height;
+                        canvas.height = width;
+                        degree = 90;
+                        drawWidth = width;
+                        drawHeight = -height;
+                        break;
+                    //iphone竖屏拍摄，此时home键在上方
+                    case 8:
+                        canvas.width = height;
+                        canvas.height = width;
+                        degree = 270;
+                        drawWidth = -width;
+                        drawHeight = height;
+                        break;
+                }
+                //使用canvas旋转校正
+                ctx.rotate(degree * Math.PI / 180);
+
+                //铺底色 PNG转JPEG时透明区域会变黑色
+                ctx.fillStyle = "#fff";
+                ctx.fillRect(0, 0, drawWidth, drawHeight);
+
+                //ctx.drawImage(img, 0, 0, w, h);
+                ctx.drawImage(img, 0, 0, drawWidth, drawHeight);
+                // quality值越小，所绘制出的图像越模糊
+                var base64 = canvas.toDataURL('image/jpeg', quality); //图片格式jpeg或webp可以选0-1质量区间
+
+                // 返回base64转blob的值
+                console.log('\u539F\u56FE' + (src.length / 1024).toFixed(2) + 'kb', '\u65B0\u56FE' + (base64.length / 1024).toFixed(2) + 'kb');
+                if (src.length < base64.length) {
+                    resolve(file);
+                    return;
+                }
+                //去掉url的头，并转换为byte
+                var bytes = window.atob(base64.split(',')[1]);
+                //处理异常,将ascii码小于0的转换为大于0
+                var ab = new ArrayBuffer(bytes.length);
+                var ia = new Uint8Array(ab);
+                for (var i = 0; i < bytes.length; i++) {
+                    ia[i] = bytes.charCodeAt(i);
+                }
+                file = new Blob([ab], { type: 'image/jpeg' });
+                file.name = name;
+
+                resolve(file);
+            };
+            img.onerror = function (e) {
+                reject(e);
+            };
+        };
+        reader.onerror = function (e) {
+            reject(e);
+        };
+    });
+}
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
 //import { Dialog } from 'vant';
 //
 //Vue.use(Dialog);
 //import { MessageBox } from 'mint-ui';
 //import { Indicator } from 'mint-ui';
-__webpack_require__(90);
+__webpack_require__(95);
 
 ex.assign(cfg, {
     fields_editor: 'com-sim-fields',
@@ -491,32 +704,19 @@ ex.assign(cfg, {
 //})
 
 /***/ }),
-/* 3 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _scroll_table = __webpack_require__(19);
-
-var scroll_table = _interopRequireWildcard(_scroll_table);
-
-var _table_van_cell = __webpack_require__(20);
-
-var table_van_cell = _interopRequireWildcard(_table_van_cell);
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-/***/ }),
 /* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _material_wave = __webpack_require__(21);
+var _scroll_table = __webpack_require__(22);
 
-var material_wave = _interopRequireWildcard(_material_wave);
+var scroll_table = _interopRequireWildcard(_scroll_table);
+
+var _table_van_cell = __webpack_require__(23);
+
+var table_van_cell = _interopRequireWildcard(_table_van_cell);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -527,61 +727,9 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 "use strict";
 
 
-var _index_select = __webpack_require__(26);
+var _material_wave = __webpack_require__(24);
 
-var index_select = _interopRequireWildcard(_index_select);
-
-var _linetext = __webpack_require__(28);
-
-var linetext = _interopRequireWildcard(_linetext);
-
-var _blocktext = __webpack_require__(22);
-
-var blocktext = _interopRequireWildcard(_blocktext);
-
-var _phone = __webpack_require__(30);
-
-var phone = _interopRequireWildcard(_phone);
-
-var _select = __webpack_require__(34);
-
-var select = _interopRequireWildcard(_select);
-
-var _picture = __webpack_require__(32);
-
-var picture = _interopRequireWildcard(_picture);
-
-var _multi_picture = __webpack_require__(29);
-
-var multi_picture = _interopRequireWildcard(_multi_picture);
-
-var _phone_code = __webpack_require__(31);
-
-var phone_code = _interopRequireWildcard(_phone_code);
-
-var _field_number = __webpack_require__(25);
-
-var field_number = _interopRequireWildcard(_field_number);
-
-var _label_shower = __webpack_require__(27);
-
-var label_shower = _interopRequireWildcard(_label_shower);
-
-var _bool = __webpack_require__(23);
-
-var bool = _interopRequireWildcard(_bool);
-
-var _date = __webpack_require__(24);
-
-var date = _interopRequireWildcard(_date);
-
-var _tree_select = __webpack_require__(35);
-
-var tree_select = _interopRequireWildcard(_tree_select);
-
-var _pop_table_select = __webpack_require__(33);
-
-var pop_table_select = _interopRequireWildcard(_pop_table_select);
+var material_wave = _interopRequireWildcard(_material_wave);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -592,9 +740,61 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 "use strict";
 
 
-var _com_date_range = __webpack_require__(36);
+var _index_select = __webpack_require__(29);
 
-var com_date_range = _interopRequireWildcard(_com_date_range);
+var index_select = _interopRequireWildcard(_index_select);
+
+var _linetext = __webpack_require__(31);
+
+var linetext = _interopRequireWildcard(_linetext);
+
+var _blocktext = __webpack_require__(25);
+
+var blocktext = _interopRequireWildcard(_blocktext);
+
+var _phone = __webpack_require__(33);
+
+var phone = _interopRequireWildcard(_phone);
+
+var _select = __webpack_require__(36);
+
+var select = _interopRequireWildcard(_select);
+
+var _picture = __webpack_require__(2);
+
+var picture = _interopRequireWildcard(_picture);
+
+var _multi_picture = __webpack_require__(32);
+
+var multi_picture = _interopRequireWildcard(_multi_picture);
+
+var _phone_code = __webpack_require__(34);
+
+var phone_code = _interopRequireWildcard(_phone_code);
+
+var _field_number = __webpack_require__(28);
+
+var field_number = _interopRequireWildcard(_field_number);
+
+var _label_shower = __webpack_require__(30);
+
+var label_shower = _interopRequireWildcard(_label_shower);
+
+var _bool = __webpack_require__(26);
+
+var bool = _interopRequireWildcard(_bool);
+
+var _date = __webpack_require__(27);
+
+var date = _interopRequireWildcard(_date);
+
+var _tree_select = __webpack_require__(37);
+
+var tree_select = _interopRequireWildcard(_tree_select);
+
+var _pop_table_select = __webpack_require__(35);
+
+var pop_table_select = _interopRequireWildcard(_pop_table_select);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -603,27 +803,21 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-//import * as com_input_date from  './com_input_date.js'
 
+
+var _com_date_range = __webpack_require__(38);
+
+var com_date_range = _interopRequireWildcard(_com_date_range);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 /***/ }),
 /* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
+//import * as com_input_date from  './com_input_date.js'
 
-
-var _span = __webpack_require__(38);
-
-var span = _interopRequireWildcard(_span);
-
-var _label_shower = __webpack_require__(37);
-
-var label_shower = _interopRequireWildcard(_label_shower);
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-__webpack_require__(86);
 
 /***/ }),
 /* 9 */
@@ -632,15 +826,17 @@ __webpack_require__(86);
 "use strict";
 
 
-var _form_submit = __webpack_require__(39);
+var _span = __webpack_require__(40);
 
-var form_submit = _interopRequireWildcard(_form_submit);
+var span = _interopRequireWildcard(_span);
 
-var _van_btn = __webpack_require__(40);
+var _label_shower = __webpack_require__(39);
 
-var van_btn = _interopRequireWildcard(_van_btn);
+var label_shower = _interopRequireWildcard(_label_shower);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+__webpack_require__(91);
 
 /***/ }),
 /* 10 */
@@ -649,17 +845,13 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 "use strict";
 
 
-var _slide_iframe = __webpack_require__(43);
+var _live_list = __webpack_require__(42);
 
-var slide_iframe = _interopRequireWildcard(_slide_iframe);
+var live_list = _interopRequireWildcard(_live_list);
 
-var _fields_panel = __webpack_require__(41);
+var _live_fields = __webpack_require__(41);
 
-var fields_panel = _interopRequireWildcard(_fields_panel);
-
-var _layout_grid = __webpack_require__(42);
-
-var layout_grid = _interopRequireWildcard(_layout_grid);
+var live_fields = _interopRequireWildcard(_live_fields);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -670,26 +862,64 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 "use strict";
 
 
-var _my_slide_win = __webpack_require__(46);
+var _form_submit = __webpack_require__(43);
+
+var form_submit = _interopRequireWildcard(_form_submit);
+
+var _van_btn = __webpack_require__(44);
+
+var van_btn = _interopRequireWildcard(_van_btn);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+/***/ }),
+/* 12 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _slide_iframe = __webpack_require__(47);
+
+var slide_iframe = _interopRequireWildcard(_slide_iframe);
+
+var _fields_panel = __webpack_require__(45);
+
+var fields_panel = _interopRequireWildcard(_fields_panel);
+
+var _layout_grid = __webpack_require__(46);
+
+var layout_grid = _interopRequireWildcard(_layout_grid);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+/***/ }),
+/* 13 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _my_slide_win = __webpack_require__(50);
 
 var my_slide_win = _interopRequireWildcard(_my_slide_win);
 
-var _com_slide_head = __webpack_require__(44);
+var _com_slide_head = __webpack_require__(48);
 
 var com_slide_head = _interopRequireWildcard(_com_slide_head);
 
-var _fiexed_scrll = __webpack_require__(45);
+var _fiexed_scrll = __webpack_require__(49);
 
 var fiexed_scrll = _interopRequireWildcard(_fiexed_scrll);
 
-var _pop_image_shower = __webpack_require__(47);
+var _pop_image_shower = __webpack_require__(51);
 
 var pop_image_shower = _interopRequireWildcard(_pop_image_shower);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 /***/ }),
-/* 12 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -709,7 +939,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-__webpack_require__(77);
+__webpack_require__(82);
 
 var PopMobileWin = function () {
     function PopMobileWin(_ref) {
@@ -917,36 +1147,15 @@ window.slide_mobile_win = slide_mobile_win;
 window.pop_mobile_win = pop_mobile_win;
 
 /***/ }),
-/* 13 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _table_store = __webpack_require__(48);
-
-var table_store = _interopRequireWildcard(_table_store);
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-/***/ }),
-/* 14 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-//import * as ele_table_bus_page from  './ele_table_bus_page'
-
-
-/***/ }),
 /* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _mapper = __webpack_require__(49);
+var _table_store = __webpack_require__(52);
 
-var mapper = _interopRequireWildcard(_mapper);
+var table_store = _interopRequireWildcard(_table_store);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -954,10 +1163,44 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 /* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
+"use strict";
+//import * as ele_table_bus_page from  './ele_table_bus_page'
+
+
+/***/ }),
+/* 17 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _mapper = __webpack_require__(53);
+
+var mapper = _interopRequireWildcard(_mapper);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+/***/ }),
+/* 18 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _nav_bar = __webpack_require__(54);
+
+var nav_bar = _interopRequireWildcard(_nav_bar);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+/***/ }),
+/* 19 */
+/***/ (function(module, exports, __webpack_require__) {
+
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(55);
+var content = __webpack_require__(60);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -977,13 +1220,13 @@ if(false) {
 }
 
 /***/ }),
-/* 17 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(56);
+var content = __webpack_require__(61);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -1003,13 +1246,13 @@ if(false) {
 }
 
 /***/ }),
-/* 18 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(71);
+var content = __webpack_require__(76);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -1029,7 +1272,7 @@ if(false) {
 }
 
 /***/ }),
-/* 19 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1080,13 +1323,13 @@ Vue.component('com-ctn-scroll-table', {
 });
 
 /***/ }),
-/* 20 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(78);
+__webpack_require__(83);
 
 Vue.component('com-ctn-table-van-cell', {
     props: ['heads', 'rows', 'option'],
@@ -1120,7 +1363,7 @@ Vue.component('com-ctn-table-van-cell', {
 });
 
 /***/ }),
-/* 21 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1146,7 +1389,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 *
 * */
 
-__webpack_require__(72);
+__webpack_require__(77);
 
 var Wave = function () {
     function Wave() {
@@ -1309,7 +1552,7 @@ function map_from_client(canvas, cx, cy) {
 }
 
 /***/ }),
-/* 22 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1330,13 +1573,13 @@ Vue.component('com-field-blocktext', {
 });
 
 /***/ }),
-/* 23 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(79);
+__webpack_require__(84);
 
 Vue.component('com-field-bool', {
     props: ['row', 'head'],
@@ -1402,13 +1645,13 @@ Vue.component('com-field-bool', {
 });
 
 /***/ }),
-/* 24 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(80);
+__webpack_require__(85);
 
 Vue.component('com-field-date', {
     props: ['head', 'row'],
@@ -1467,7 +1710,7 @@ Date.prototype.Format = function (fmt) {
 };
 
 /***/ }),
-/* 25 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1504,13 +1747,13 @@ Vue.component('com-field-number', {
 });
 
 /***/ }),
-/* 26 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(73);
+__webpack_require__(78);
 
 Vue.component('com-field-index-select', {
     props: ['row', 'head'],
@@ -1592,7 +1835,7 @@ Vue.component('com-index-select', {
 });
 
 /***/ }),
-/* 27 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1609,7 +1852,7 @@ Vue.component('com-field-label-shower', {
 });
 
 /***/ }),
-/* 28 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1644,15 +1887,15 @@ Vue.component('com-field-linetext', {
 });
 
 /***/ }),
-/* 29 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _picture = __webpack_require__(32);
+var _picture = __webpack_require__(2);
 
-__webpack_require__(81);
+__webpack_require__(86);
 
 var com_milti_picture = {
     props: ['row', 'head'],
@@ -1723,7 +1966,7 @@ Vue.component('com-field-multi-picture', function (resolve, reject) {
 });
 
 /***/ }),
-/* 30 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1735,13 +1978,13 @@ Vue.component('com-field-phone', {
 });
 
 /***/ }),
-/* 31 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(82);
+__webpack_require__(87);
 
 Vue.component('com-field-phone-code', {
     /*
@@ -1841,226 +2084,13 @@ Vue.component('com-field-phone-code', {
 });
 
 /***/ }),
-/* 32 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-__webpack_require__(83);
-
-var com_picture = exports.com_picture = {
-    props: ['row', 'head'],
-    template: ' <van-cell class="com-field-picture" :title="head.label" >\n        <template v-if="!head.readonly">\n             <textarea style="display: none;" :name="head.name" id="" cols="30" rows="10" v-model="row[head.name]"></textarea>\n            <div class="picture-panel" style="vertical-align: top" >\n              <div v-if="!row[head.name]" class="center-vh choose-btn" @click="open_select_images()">Choose</div>\n\n               <div class="picture-content" v-else\n               :style="{backgroundImage:\'url(\'+ row[head.name]  +\')\'}"\n               @click="big_win(row[head.name])">\n                    <!--<img :src="row[head.name]" alt="">-->\n                    <div v-if="!head.readonly" class="close" @click.stop=\'remove_image()\'><i class="fa fa-times-circle" aria-hidden="true" style="color:red;position:relative;left:30px;"></i></div>\n               </div>\n\n            </div>\n            <input class="my-file-input"  style="display: none"\n                type=\'file\' accept=\'image/*\'  @change=\'on_change($event)\'>\n\n        </template>\n           <div class="picture-content" v-else\n               :style="{backgroundImage:\'url(\'+ row[head.name]  +\')\'}"\n               @click="big_win(row[head.name])">\n               </div>\n\n    </van-cell>',
-    data: function data() {
-        return {};
-    },
-
-    methods: {
-        on_change: function on_change(event) {
-            var _this = this;
-
-            //let new_selected_files = event.target.files
-            var self = this;
-            var ls = ex.map(event.target.files, function (file) {
-                return new Promise(function (resolve_outer, reject_outer) {
-                    new Promise(function (resolve, reject) {
-                        EXIF.getData(file, function () {
-                            var Orientation = EXIF.getTag(this, 'Orientation');
-                            resolve(Orientation);
-                        });
-                    }).then(function (Orientation) {
-                        if (self.head.option && self.head.option.maxsize) {
-                            return compressImage(file, self.head.option, Orientation);
-                        } else {
-                            return file;
-                        }
-                    }).then(function (rt) {
-                        resolve_outer(rt);
-                    });
-                });
-            });
-
-            Promise.all(ls).then(function (results) {
-                var new_selected_files = results;
-                _this.uploadImage(new_selected_files);
-                $(_this.$el).find('.my-file-input').val('');
-            });
-        },
-        uploadImage: function uploadImage(image_files) {
-            if (!image_files) {
-                return;
-            }
-            var self = this;
-            console.log('start upload');
-
-            var up_url = this.head.up_url || '/d/upload?path=general_upload/images';
-            cfg.show_load();
-            ex.uploads(image_files, up_url, function (url_list) {
-                cfg.hide_load();
-                Vue.set(self.row, self.head.name, url_list[0]);
-            });
-        },
-        open_select_images: function open_select_images() {
-            console.log('before select');
-            var self = this;
-            if (!this.disable) {
-                $(this.$el).find('input[type=file]').click();
-                this.disable = true;
-                setTimeout(function () {
-                    self.disable = false;
-                }, 3000);
-            }
-            console.log('after select');
-        },
-        remove_image: function remove_image() {
-            this.row[this.head.name] = "";
-            //var image_list = this.row[this.head.name]
-            //image_list.splice(index,1)
-        },
-        big_win: function big_win(imgsrc) {
-            //var image_list = this.row[this.head.name]
-            //var index = image_list.indexOf(imgsrc)
-            vant.ImagePreview({
-                images: [imgsrc],
-                startPosition: 0
-            });
-        }
-    }
-};
-
-Vue.component('com-field-picture', function (resolve, reject) {
-    ex.load_js('https://cdn.jsdelivr.net/npm/exif-js').then(function () {
-        resolve(com_picture);
-    });
-});
-
-//this.compressImage(files[0], (file)=>{
-//    console.log(file);
-//    const formData = new FormData();
-//    formData.append('file', file, file.name || '上传图片.jpeg');
-//}, $.noop);
-////压缩图片
-function compressImage(file, option, Orientation) {
-    // 图片小于1M不压缩
-    //if (file.size < Math.pow(1024, 2)) {
-    //    return success(file);
-    //}
-
-    return new Promise(function (resolve, reject) {
-        var name = file.name; //文件名
-        var reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = function (e) {
-            var src = e.target.result;
-
-            var img = new Image();
-            img.src = src;
-            img.onload = function (e) {
-                var w = img.width;
-                var h = img.height;
-                var span = Math.max(w, h);
-                if (option.maxsize > span) {
-                    resolve(file);
-                    return;
-                }
-                var ratio = option.maxsize / span;
-                var real_w = w * ratio;
-                var real_h = h * ratio;
-                var quality = 0.92; // 默认图片质量为0.92
-                //生成canvas
-                var canvas = document.createElement('canvas');
-                var ctx = canvas.getContext('2d');
-                // 创建属性节点
-                var anw = document.createAttribute("width");
-                anw.nodeValue = real_w; // w;
-                var anh = document.createAttribute("height");
-                anh.nodeValue = real_h; //h;
-                canvas.setAttributeNode(anw);
-                canvas.setAttributeNode(anh);
-
-                // 旋转图像方向
-                var width = real_w;
-                var height = real_h;
-                var drawWidth = width;
-                var drawHeight = height;
-                var degree = 0;
-                switch (Orientation) {
-                    //iphone横屏拍摄，此时home键在左侧
-                    case 3:
-                        degree = 180;
-                        drawWidth = -width;
-                        drawHeight = -height;
-                        break;
-                    //iphone竖屏拍摄，此时home键在下方(正常拿手机的方向)
-                    case 6:
-                        canvas.width = height;
-                        canvas.height = width;
-                        degree = 90;
-                        drawWidth = width;
-                        drawHeight = -height;
-                        break;
-                    //iphone竖屏拍摄，此时home键在上方
-                    case 8:
-                        canvas.width = height;
-                        canvas.height = width;
-                        degree = 270;
-                        drawWidth = -width;
-                        drawHeight = height;
-                        break;
-                }
-                //使用canvas旋转校正
-                ctx.rotate(degree * Math.PI / 180);
-
-                //铺底色 PNG转JPEG时透明区域会变黑色
-                ctx.fillStyle = "#fff";
-                ctx.fillRect(0, 0, drawWidth, drawHeight);
-
-                //ctx.drawImage(img, 0, 0, w, h);
-                ctx.drawImage(img, 0, 0, drawWidth, drawHeight);
-                // quality值越小，所绘制出的图像越模糊
-                var base64 = canvas.toDataURL('image/jpeg', quality); //图片格式jpeg或webp可以选0-1质量区间
-
-                // 返回base64转blob的值
-                console.log('\u539F\u56FE' + (src.length / 1024).toFixed(2) + 'kb', '\u65B0\u56FE' + (base64.length / 1024).toFixed(2) + 'kb');
-                if (src.length < base64.length) {
-                    resolve(file);
-                    return;
-                }
-                //去掉url的头，并转换为byte
-                var bytes = window.atob(base64.split(',')[1]);
-                //处理异常,将ascii码小于0的转换为大于0
-                var ab = new ArrayBuffer(bytes.length);
-                var ia = new Uint8Array(ab);
-                for (var i = 0; i < bytes.length; i++) {
-                    ia[i] = bytes.charCodeAt(i);
-                }
-                file = new Blob([ab], { type: 'image/jpeg' });
-                file.name = name;
-
-                resolve(file);
-            };
-            img.onerror = function (e) {
-                reject(e);
-            };
-        };
-        reader.onerror = function (e) {
-            reject(e);
-        };
-    });
-}
-
-/***/ }),
-/* 33 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-__webpack_require__(84);
+__webpack_require__(89);
 
 Vue.component('com-field-pop-table-select', {
     props: ['head', 'row'],
@@ -2125,7 +2155,7 @@ Vue.component('com-field-pop-search', {
 });
 
 /***/ }),
-/* 34 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2191,20 +2221,21 @@ Vue.component('com-field-select', {
             }
         },
         onConfirm: function onConfirm(v, index) {
-            this.row[this.head.name] = v.value;
+            Vue.set(this.row, this.head.name, v.value);
+            //this.row[this.head.name] = v.value
             this.show = false;
         }
     }
 });
 
 /***/ }),
-/* 35 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(85);
+__webpack_require__(90);
 
 Vue.component('com-field-tree-select', {
     props: ['head', 'row'],
@@ -2285,7 +2316,7 @@ Vue.component('com-field-tree-shower', {
 });
 
 /***/ }),
-/* 36 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2317,7 +2348,7 @@ Vue.component('com-field-tree-shower', {
 
 
 /***/ }),
-/* 37 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2325,17 +2356,24 @@ Vue.component('com-field-tree-shower', {
 
 Vue.component('com-table-label-shower', {
     props: ['head', 'row'],
-    template: '<span class="com-item-span-label" v-text="label_text"></span>',
+    template: '<span class="com-item-span-label" :class="cssclass" v-text="label_text"></span>',
     computed: {
         label_text: function label_text() {
             var key = '_' + this.head.name + '_label';
             return this.row[key];
+        },
+        cssclass: function cssclass() {
+            if (this.head.class_express) {
+                return ex.eval(this.head.class_express, { row: this.row, head: this.head });
+            } else {
+                return this.head.class;
+            }
         }
     }
 });
 
 /***/ }),
-/* 38 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2343,7 +2381,7 @@ Vue.component('com-table-label-shower', {
 
 Vue.component('com-table-span', {
     props: ['head', 'row'],
-    template: '<span class="com-item-span" :class="head.class" v-text="row[head.name]" @click="on_click()"></span>',
+    template: '<span class="com-item-span" :class="cssclass" v-text="row[head.name]" @click="on_click()"></span>',
     data: function data() {
         var parStore = ex.vueParStore(this);
         return {
@@ -2356,6 +2394,15 @@ Vue.component('com-table-span', {
         }
     },
 
+    computed: {
+        cssclass: function cssclass() {
+            if (this.head.class_express) {
+                return ex.eval(this.head.class_express, { row: this.row, head: this.head });
+            } else {
+                return this.head.class;
+            }
+        }
+    },
     methods: {
         on_click: function on_click() {
             if (this.head.action) {
@@ -2366,7 +2413,104 @@ Vue.component('com-table-span', {
 });
 
 /***/ }),
-/* 39 */
+/* 41 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var live_fields = {
+    props: ['ctx'],
+    basename: 'live-fields',
+    template: '<div class="com-live-fields">\n        <com-uis-nav-bar :title="ctx.title" :back="can_back" ></com-uis-nav-bar>\n        <com-fields-panel :ctx="ctx"></com-fields-panel>\n    </div>',
+    data: function data() {
+        var childStore = new Vue();
+        childStore.vc = this;
+        return {
+            childStore: childStore
+        };
+    },
+
+    computed: {
+        can_back: function can_back() {
+            return this.$root.stack.length > 1;
+        }
+    }
+};
+
+window.live_fields = live_fields;
+
+/***/ }),
+/* 42 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+__webpack_require__(98);
+
+var live_list = {
+    props: ['ctx'],
+    basename: 'live-list',
+    template: '<div class="com-live-list">\n        <com-uis-nav-bar :title="ctx.title" :back="can_back" :ops="ctx.ops"></com-uis-nav-bar>\n            <cube-scroll :data="childStore.rows" ref="scroll"  :options="scrollOptions" @pulling-down="onPullingDown"\n                  @pulling-up="onPullingUp">\n            <component :is="table_editor" :heads="ctx.heads" :rows="childStore.rows"  @select="on_block_click($event)"></component>\n            <div v-if="childStore.rows.length == 0 " class="center-vh">\u6682\u65E0\u6570\u636E</div>\n    </cube-scroll>\n    </div>',
+    data: function data() {
+        var childStore = new Vue(table_store);
+        childStore.rows = this.ctx.rows || [];
+        childStore.vc = this;
+        childStore.director_name = this.ctx.director_name;
+
+        return {
+            childStore: childStore,
+            table_editor: this.ctx.table_editor || 'com-ctn-table-van-cell',
+            scrollOptions: {
+                /* lock x-direction when scrolling horizontally and  vertically at the same time */
+                directionLockThreshold: 0,
+                click: true,
+                pullDownRefresh: {
+                    txt: '刷新成功!'
+                },
+                pullUpLoad: {
+                    txt: { more: '', noMore: '没有更多了!' }
+                }
+
+            }
+        };
+    },
+
+    computed: {
+        can_back: function can_back() {
+            return this.$root.stack.length > 1;
+        }
+    },
+    methods: {
+        on_block_click: function on_block_click(row) {
+            if (this.ctx.block_click) {
+                ex.eval(this.ctx.block_click, { row: row, ps: this.childStore });
+            }
+        },
+        onPullingUp: function onPullingUp() {
+            var _this = this;
+
+            this.childStore.addNextPage().then(function () {
+                _this.$refs.scroll.forceUpdate();
+            });
+        },
+        onPullingDown: function onPullingDown() {
+            var _this2 = this;
+
+            this.childStore.search().then(function () {
+                _this2.$refs.scroll.forceUpdate();
+            });
+        }
+    }
+};
+
+Vue.component('com-list-list', live_list);
+
+window.live_list = live_list;
+
+/***/ }),
+/* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2396,13 +2540,13 @@ var submit_btn = {
 Vue.component('com-op-submit', submit_btn);
 
 /***/ }),
-/* 40 */
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(87);
+__webpack_require__(92);
 
 Vue.component('com-op-van-btn', {
     props: ['head'],
@@ -2424,24 +2568,24 @@ Vue.component('com-op-van-btn', {
 });
 
 /***/ }),
-/* 41 */
+/* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(88);
+__webpack_require__(93);
 
 Vue.component('com-fields-panel', {
     props: ['ctx'],
     data: function data() {
         var childStore = new Vue({});
         childStore.vc = this;
-
         var row = this.ctx.row ? ex.copy(this.ctx.row) : {};
         return {
             head: this.ctx,
             childStore: childStore,
+            parStore: ex.vueParStore(this),
             heads: this.ctx.heads,
             par_row: this.ctx.row, // 外面的row 缓存起来
             row: row,
@@ -2470,13 +2614,13 @@ Vue.component('com-fields-panel', {
 });
 
 /***/ }),
-/* 42 */
+/* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(89);
+__webpack_require__(94);
 
 Vue.component('com-layout-grid', {
     props: ['ctx'],
@@ -2494,7 +2638,7 @@ Vue.component('com-grid-icon-btn', {
 });
 
 /***/ }),
-/* 43 */
+/* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2506,13 +2650,13 @@ Vue.component('com-slide-iframe', {
 });
 
 /***/ }),
-/* 44 */
+/* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(76);
+__webpack_require__(81);
 
 Vue.component('com-slide-head', {
     props: ['title'],
@@ -2525,7 +2669,7 @@ Vue.component('com-slide-head', {
 });
 
 /***/ }),
-/* 45 */
+/* 49 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2535,7 +2679,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.fixed_body = fixed_body;
-__webpack_require__(74);
+__webpack_require__(79);
 
 function fixed_body() {
     //$('body').addClass('modal-open')
@@ -2566,13 +2710,13 @@ window.fixed_body = fixed_body;
 window.fixed_body_quit = fixed_body_quit;
 
 /***/ }),
-/* 46 */
+/* 50 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(75);
+__webpack_require__(80);
 
 /*
 * 因为没有遮挡层，可能造成多次打开窗口问题，所以使用mint-ui替代了这个组件
@@ -2686,7 +2830,7 @@ Vue.component('com-slide-win-1', {
 });
 
 /***/ }),
-/* 47 */
+/* 51 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2714,7 +2858,7 @@ Vue.component('com-pop-image', {
 });
 
 /***/ }),
-/* 48 */
+/* 52 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2792,7 +2936,7 @@ var table_store = {
 window.table_store = table_store;
 
 /***/ }),
-/* 49 */
+/* 53 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2814,7 +2958,53 @@ Vue.component('com-table-mapper', {
 });
 
 /***/ }),
-/* 50 */
+/* 54 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Vue.component('com-uis-nav-bar', {
+    props: {
+        title: '',
+        back: '',
+        ops: { default: function _default() {
+                return [];
+            } } },
+    template: '<div><van-nav-bar\n            :title="title"\n            :left-arrow="back"\n            @click-right="onClickRight"\n            @click-left="onClickLeft">\n        <van-icon v-if="ops.length>0" name="bars" slot="right" />\n    </van-nav-bar>\n        <van-actionsheet\n            v-model="actionVisible"\n            :actions="ops"\n            cancel-text="\u53D6\u6D88"\n            @select="onSelectAction"\n    ></van-actionsheet>\n    </div>',
+    data: function data() {
+        this.ops = this.ops || [];
+        return {
+            parStore: ex.vueParStore(this),
+            actionVisible: false
+        };
+    },
+
+    computed: {
+        //normed_ops(){
+        //    var myops=[]
+        //    this.ops.forEach(item=>{
+        //        myops.push({name:item.label,action:item.action})
+        //    })
+        //    return myops
+        //}
+    },
+    methods: {
+        onClickLeft: function onClickLeft() {
+            history.back();
+        },
+        onClickRight: function onClickRight() {
+            this.actionVisible = true;
+        },
+        onSelectAction: function onSelectAction(action) {
+            ex.eval(action.action, { ps: this.parStore, head: action });
+            this.actionVisible = false;
+        }
+    }
+});
+
+/***/ }),
+/* 55 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -2828,7 +3018,7 @@ exports.push([module.i, ".material-wave {\n  position: relative; }\n\n.material-
 
 
 /***/ }),
-/* 51 */
+/* 56 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -2842,7 +3032,7 @@ exports.push([module.i, ".com-index-select .mint-indexlist {\n  position: absolu
 
 
 /***/ }),
-/* 52 */
+/* 57 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -2856,7 +3046,7 @@ exports.push([module.i, "body.modal-open {\n  position: fixed;\n  width: 100%; }
 
 
 /***/ }),
-/* 53 */
+/* 58 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -2870,7 +3060,7 @@ exports.push([module.i, ".list-enter-active, .list-leave-active {\n  transition:
 
 
 /***/ }),
-/* 54 */
+/* 59 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -2884,7 +3074,7 @@ exports.push([module.i, ".com-slide-head {\n  height: .8rem;\n  font-size: .3rem
 
 
 /***/ }),
-/* 55 */
+/* 60 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -2898,7 +3088,7 @@ exports.push([module.i, "@charset \"UTF-8\";\n/**\r\n750px设计稿\r\n    取1r
 
 
 /***/ }),
-/* 56 */
+/* 61 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -2912,7 +3102,7 @@ exports.push([module.i, ".el-table__body-wrapper.is-scrolling-middle {\n  overfl
 
 
 /***/ }),
-/* 57 */
+/* 62 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -2926,7 +3116,7 @@ exports.push([module.i, ".pop-moible-win .mint-popup {\n  background: none; }\n\
 
 
 /***/ }),
-/* 58 */
+/* 63 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -2940,7 +3130,7 @@ exports.push([module.i, ".com-ctn-table-van-cell .content {\n  display: flex;\n 
 
 
 /***/ }),
-/* 59 */
+/* 64 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -2954,7 +3144,7 @@ exports.push([module.i, ".com-field-bool .van-cell__title {\n  max-width: 90px;\
 
 
 /***/ }),
-/* 60 */
+/* 65 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -2968,7 +3158,7 @@ exports.push([module.i, ".com-field-date .van-cell__title {\n  max-width: 90px;\
 
 
 /***/ }),
-/* 61 */
+/* 66 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -2982,7 +3172,7 @@ exports.push([module.i, ".com-field-multi-picture .van-cell__title {\n  max-widt
 
 
 /***/ }),
-/* 62 */
+/* 67 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -2996,7 +3186,7 @@ exports.push([module.i, ".com-field-phone-code input {\n  flex-grow: 10;\n}\n.co
 
 
 /***/ }),
-/* 63 */
+/* 68 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -3010,7 +3200,7 @@ exports.push([module.i, ".com-field-picture .picture-panel {\n  position: relati
 
 
 /***/ }),
-/* 64 */
+/* 69 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -3024,7 +3214,7 @@ exports.push([module.i, ".com-field-pop-search .cube-scroll-wrapper {\n  height:
 
 
 /***/ }),
-/* 65 */
+/* 70 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -3038,7 +3228,7 @@ exports.push([module.i, ".com-field-tree-shower .cube-scroll-wrapper {\n  height
 
 
 /***/ }),
-/* 66 */
+/* 71 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -3052,7 +3242,7 @@ exports.push([module.i, ".com-item-span,\n.com-item-span-label {\n  display: inl
 
 
 /***/ }),
-/* 67 */
+/* 72 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -3066,7 +3256,7 @@ exports.push([module.i, ".com-op-van-btn {\n  margin: 0.1rem 0;\n}\n", ""]);
 
 
 /***/ }),
-/* 68 */
+/* 73 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -3080,7 +3270,7 @@ exports.push([module.i, ".com-fileds-panel {\n  background-color: #fafafa;\n}\n.
 
 
 /***/ }),
-/* 69 */
+/* 74 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -3094,7 +3284,7 @@ exports.push([module.i, ".com-layout-grid {\n  position: relative;\n  overflow: 
 
 
 /***/ }),
-/* 70 */
+/* 75 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -3108,7 +3298,7 @@ exports.push([module.i, ".mint-indicator .mint-indicator-wrapper {\n  z-index: 9
 
 
 /***/ }),
-/* 71 */
+/* 76 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -3122,13 +3312,13 @@ exports.push([module.i, ".mobile-list-page .page-title {\n  height: 0.8rem;\n  t
 
 
 /***/ }),
-/* 72 */
+/* 77 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(50);
+var content = __webpack_require__(55);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -3148,13 +3338,13 @@ if(false) {
 }
 
 /***/ }),
-/* 73 */
+/* 78 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(51);
+var content = __webpack_require__(56);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -3174,13 +3364,13 @@ if(false) {
 }
 
 /***/ }),
-/* 74 */
+/* 79 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(52);
+var content = __webpack_require__(57);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -3200,13 +3390,13 @@ if(false) {
 }
 
 /***/ }),
-/* 75 */
+/* 80 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(53);
+var content = __webpack_require__(58);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -3226,85 +3416,7 @@ if(false) {
 }
 
 /***/ }),
-/* 76 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(54);
-if(typeof content === 'string') content = [[module.i, content, '']];
-// add the styles to the DOM
-var update = __webpack_require__(1)(content, {});
-if(content.locals) module.exports = content.locals;
-// Hot Module Replacement
-if(false) {
-	// When the styles change, update the <style> tags
-	if(!content.locals) {
-		module.hot.accept("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./slide_head.scss", function() {
-			var newContent = require("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./slide_head.scss");
-			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-			update(newContent);
-		});
-	}
-	// When the module is disposed, remove the <style> tags
-	module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 77 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(57);
-if(typeof content === 'string') content = [[module.i, content, '']];
-// add the styles to the DOM
-var update = __webpack_require__(1)(content, {});
-if(content.locals) module.exports = content.locals;
-// Hot Module Replacement
-if(false) {
-	// When the styles change, update the <style> tags
-	if(!content.locals) {
-		module.hot.accept("!!../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./pop_mobile_win.scss", function() {
-			var newContent = require("!!../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./pop_mobile_win.scss");
-			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-			update(newContent);
-		});
-	}
-	// When the module is disposed, remove the <style> tags
-	module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 78 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(58);
-if(typeof content === 'string') content = [[module.i, content, '']];
-// add the styles to the DOM
-var update = __webpack_require__(1)(content, {});
-if(content.locals) module.exports = content.locals;
-// Hot Module Replacement
-if(false) {
-	// When the styles change, update the <style> tags
-	if(!content.locals) {
-		module.hot.accept("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./table_van_cell.styl", function() {
-			var newContent = require("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./table_van_cell.styl");
-			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-			update(newContent);
-		});
-	}
-	// When the module is disposed, remove the <style> tags
-	module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 79 */
+/* 81 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
@@ -3319,60 +3431,8 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./bool.styl", function() {
-			var newContent = require("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./bool.styl");
-			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-			update(newContent);
-		});
-	}
-	// When the module is disposed, remove the <style> tags
-	module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 80 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(60);
-if(typeof content === 'string') content = [[module.i, content, '']];
-// add the styles to the DOM
-var update = __webpack_require__(1)(content, {});
-if(content.locals) module.exports = content.locals;
-// Hot Module Replacement
-if(false) {
-	// When the styles change, update the <style> tags
-	if(!content.locals) {
-		module.hot.accept("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./field_date.styl", function() {
-			var newContent = require("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./field_date.styl");
-			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-			update(newContent);
-		});
-	}
-	// When the module is disposed, remove the <style> tags
-	module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 81 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(61);
-if(typeof content === 'string') content = [[module.i, content, '']];
-// add the styles to the DOM
-var update = __webpack_require__(1)(content, {});
-if(content.locals) module.exports = content.locals;
-// Hot Module Replacement
-if(false) {
-	// When the styles change, update the <style> tags
-	if(!content.locals) {
-		module.hot.accept("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./multi_picture.styl", function() {
-			var newContent = require("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./multi_picture.styl");
+		module.hot.accept("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./slide_head.scss", function() {
+			var newContent = require("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./slide_head.scss");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -3397,8 +3457,8 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./phone_code.styl", function() {
-			var newContent = require("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./phone_code.styl");
+		module.hot.accept("!!../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./pop_mobile_win.scss", function() {
+			var newContent = require("!!../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../coblan/webcode/node_modules/sass-loader/lib/loader.js!./pop_mobile_win.scss");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -3423,8 +3483,8 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./picture.styl", function() {
-			var newContent = require("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./picture.styl");
+		module.hot.accept("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./table_van_cell.styl", function() {
+			var newContent = require("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./table_van_cell.styl");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -3449,8 +3509,8 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./pop_table_select.styl", function() {
-			var newContent = require("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./pop_table_select.styl");
+		module.hot.accept("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./bool.styl", function() {
+			var newContent = require("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./bool.styl");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -3475,8 +3535,8 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./tree_select.styl", function() {
-			var newContent = require("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./tree_select.styl");
+		module.hot.accept("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./field_date.styl", function() {
+			var newContent = require("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./field_date.styl");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -3501,8 +3561,8 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./item_editor.styl", function() {
-			var newContent = require("!!../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./item_editor.styl");
+		module.hot.accept("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./multi_picture.styl", function() {
+			var newContent = require("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./multi_picture.styl");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -3527,8 +3587,8 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./van_btn.styl", function() {
-			var newContent = require("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./van_btn.styl");
+		module.hot.accept("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./phone_code.styl", function() {
+			var newContent = require("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./phone_code.styl");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -3553,8 +3613,8 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./fields_panel.styl", function() {
-			var newContent = require("!!../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./fields_panel.styl");
+		module.hot.accept("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./picture.styl", function() {
+			var newContent = require("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./picture.styl");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -3579,8 +3639,8 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./layout_grid.styl", function() {
-			var newContent = require("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./layout_grid.styl");
+		module.hot.accept("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./pop_table_select.styl", function() {
+			var newContent = require("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./pop_table_select.styl");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -3605,8 +3665,8 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./config.styl", function() {
-			var newContent = require("!!../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./config.styl");
+		module.hot.accept("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./tree_select.styl", function() {
+			var newContent = require("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./tree_select.styl");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -3619,71 +3679,249 @@ if(false) {
 /* 91 */
 /***/ (function(module, exports, __webpack_require__) {
 
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(71);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// add the styles to the DOM
+var update = __webpack_require__(1)(content, {});
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./item_editor.styl", function() {
+			var newContent = require("!!../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./item_editor.styl");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 92 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(72);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// add the styles to the DOM
+var update = __webpack_require__(1)(content, {});
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./van_btn.styl", function() {
+			var newContent = require("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./van_btn.styl");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 93 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(73);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// add the styles to the DOM
+var update = __webpack_require__(1)(content, {});
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./fields_panel.styl", function() {
+			var newContent = require("!!../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./fields_panel.styl");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 94 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(74);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// add the styles to the DOM
+var update = __webpack_require__(1)(content, {});
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./layout_grid.styl", function() {
+			var newContent = require("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./layout_grid.styl");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 95 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(75);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// add the styles to the DOM
+var update = __webpack_require__(1)(content, {});
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./config.styl", function() {
+			var newContent = require("!!../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./config.styl");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 96 */
+/***/ (function(module, exports, __webpack_require__) {
+
 "use strict";
 
 
-var _config = __webpack_require__(2);
+var _config = __webpack_require__(3);
 
 var config = _interopRequireWildcard(_config);
 
-var _pop_mobile_win = __webpack_require__(12);
+var _pop_mobile_win = __webpack_require__(14);
 
 var pop_win = _interopRequireWildcard(_pop_mobile_win);
 
-var _main = __webpack_require__(11);
+var _main = __webpack_require__(13);
 
 var pop_main = _interopRequireWildcard(_main);
 
-var _main2 = __webpack_require__(14);
+var _main2 = __webpack_require__(16);
 
 var table_main = _interopRequireWildcard(_main2);
 
-var _main3 = __webpack_require__(15);
+var _main3 = __webpack_require__(17);
 
 var table_editor_main = _interopRequireWildcard(_main3);
 
-var _main4 = __webpack_require__(10);
+var _main4 = __webpack_require__(12);
 
 var panels_main = _interopRequireWildcard(_main4);
 
-var _main5 = __webpack_require__(6);
+var _main5 = __webpack_require__(7);
 
 var filters_main = _interopRequireWildcard(_main5);
 
-var _main6 = __webpack_require__(7);
+var _main6 = __webpack_require__(8);
 
 var input_main = _interopRequireWildcard(_main6);
 
-var _main7 = __webpack_require__(5);
+var _main7 = __webpack_require__(6);
 
 var field_edito_main = _interopRequireWildcard(_main7);
 
-var _main8 = __webpack_require__(4);
+var _main8 = __webpack_require__(5);
 
 var effect_main = _interopRequireWildcard(_main8);
 
-var _main9 = __webpack_require__(9);
+var _main9 = __webpack_require__(11);
 
 var operation_main = _interopRequireWildcard(_main9);
 
-var _main10 = __webpack_require__(13);
+var _main10 = __webpack_require__(15);
 
 var store_main = _interopRequireWildcard(_main10);
 
-var _main11 = __webpack_require__(8);
+var _main11 = __webpack_require__(9);
 
 var item_editor_main = _interopRequireWildcard(_main11);
 
-var _main12 = __webpack_require__(3);
+var _main12 = __webpack_require__(4);
 
 var container_main = _interopRequireWildcard(_main12);
 
+var _main13 = __webpack_require__(10);
+
+var live_main = _interopRequireWildcard(_main13);
+
+var _main14 = __webpack_require__(18);
+
+var uis_main = _interopRequireWildcard(_main14);
+
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
-__webpack_require__(17);
-__webpack_require__(16); // 单位宽度等
+__webpack_require__(20);
+__webpack_require__(19); // 单位宽度等
 
-__webpack_require__(18);
+__webpack_require__(21);
+
+/***/ }),
+/* 97 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(0)();
+// imports
+
+
+// module
+exports.push([module.i, ".com-live-list .cube-scroll-wrapper {\n  height: calc(100vh - 0.6rem);\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 98 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(97);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// add the styles to the DOM
+var update = __webpack_require__(1)(content, {});
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./live_list.styl", function() {
+			var newContent = require("!!../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./live_list.styl");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
 
 /***/ })
 /******/ ]);

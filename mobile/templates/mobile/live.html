@@ -43,42 +43,42 @@
 <script>
     Vue.config.devtools = true
 
-    page_editor ={{ page_editor | jsonify }}
-    ctx = {{ ctx | jsonify }}
+//    page_editor ={{ page_editor | jsonify }}
+//    ctx = {{ ctx | jsonify }}
 
-//    function openVueCom(com,ctx){
-//        var com_name = 'com-dyn'+ Date.now()
-//        var big_com = {
-//            mixins:[com],
-//            name:com_name,
-//        }
-//        Vue.set( gb.$options.components,com_name,big_com)
-//        gb.stack.push({editor:com_name,ctx:ctx})
-//    }
+    editor= {{ editor | jsonify }}
+    editor_ctx = {{ editor_ctx | jsonify }}
 
     $(function(){
 
-        gb = new Vue({
+        live_root = new Vue({
             el:'#main-panel',
             data: function(){
                 var search_args = ex.parseSearch()
                 return {
-                    stack:[{editor:page_editor,ctx:ctx}],
+//                    stack:[{editor:page_editor,ctx:ctx}],
+                    stack: [],
                 }
             },
             components:{},
+            created(){
+                this.open_live(window[editor],editor_ctx)
+            },
             computed:{
                 current_com(){
-                  return this. stack[this.stack.length -1 ]
+                    return this. stack[this.stack.length -1 ]
                 },
                 alive_list(){
                     return this.stack.map((item)=>{
                                 return item.editor
                             })
-                }
+                },
             },
             methods:{
                 open_live(com,ctx,label){
+                    if(typeof com =='string'){
+                        com = window[com]
+                    }
                     if (com.basename){
                         var com_name = 'dyn-'+com.basename +'-'+ Date.now()
                     }else{
@@ -103,6 +103,12 @@
                 back(){
                     var com = this.stack.pop()
                     Vue.delete(this.$options.components,com)
+                },
+                lastsibe(vc){
+                    var index = this.$children.indexOf(vc)
+                    if(index >0){
+                        return this.$children[index-1]
+                    }
                 }
             }
         })
