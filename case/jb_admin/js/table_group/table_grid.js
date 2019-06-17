@@ -12,6 +12,7 @@ var ele_table= {
             keyed_heads[head.name]=head
         })
         return {
+            dirty_layout:false,
             heads: this.parStore.heads,
             keyed_heads:keyed_heads,
             //rows:this.parStore.rows,
@@ -59,6 +60,9 @@ var ele_table= {
         },
         footer:function(){
             return this.parStore.footer
+        },
+        head_length(){
+            return this.normed_heads.length
         }
         //bus_serarch_count:function(){
         //    return this.bus.search_count
@@ -93,7 +97,29 @@ var ele_table= {
             if(newvalue.length==0 && old.length !=0){
                 this.$refs.e_table.clearSelection()
             }
-        }
+        },
+        normed_heads:{
+            deep:true,
+            handler(v){
+                //Vue.nextTick(()=>{
+                //    this.$refs.e_table.doLayout()
+                //})
+                new Promise((resolve,reject)=>{
+                    Vue.nextTick(()=>{
+                        this.dirty_layout=true
+                        resolve()
+                    })
+                }).then(()=>{
+                    Vue.nextTick(()=>{
+                        this.dirty_layout=false
+                    })
+                })
+
+                //setTimeout(()=>{
+                //    this.dirty_layout = false
+                //},200)
+            }
+         }
     },
     //         :cell-class-name="get_td_class"
 //:header-cell-class-name="get_class"
@@ -101,7 +127,7 @@ var ele_table= {
     //style="width: 100%"
     // :row-class-name="tableRowClassName"  行标记颜色，效果不好，暂时不用
     mixins: [mix_table_data, mix_ele_table_adapter],
-    template: `  <div class="com-table-grid" style="position: absolute;top:0;left:0;bottom: 0;right:0;">
+    template: `<div class="com-table-grid" style="position: absolute;top:0;left:0;bottom: 0;right:0;">
         <el-table class="table flat-head" ref="e_table"
                               :data="rows"
                                border
@@ -121,7 +147,7 @@ var ele_table= {
                                 type="selection"
                                 width="55">
                         </el-table-column>
-                        <template v-for="head in normed_heads">
+                        <template v-for="head in dirty_layout?[]:normed_heads">
                              <el-table-column v-if="head.children"
                                 :label="head.label"
                                  :class-name="head.class">
@@ -171,8 +197,7 @@ var ele_table= {
 
                         </template>
                     </el-table>
-                    </div>
-`,
+                    </div>`,
     methods: {
         name2head:function(name_list){
             return ex.map(name_list,(name)=>{
@@ -206,11 +231,6 @@ var ele_table= {
             }
         }
     },
-    //watch:{
-    //    bus_serarch_count:function(){
-    //        this.search()
-    //    }
-    //},
 }
 Vue.component('com-table-grid',ele_table)
 
