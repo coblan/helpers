@@ -43,7 +43,7 @@ var ele_table= {
             var out_ls =[]
             ex.each(this.parStore.heads,(head)=>{
                 if(head.show) {
-                    if(! ex.eval(head.show,{ps:this.parStore,vc:this})  ){
+                    if(! ex.eval(head.show,{ps:this.parStore,vc:this,head:head})  ){
                         return
                     }
                 }
