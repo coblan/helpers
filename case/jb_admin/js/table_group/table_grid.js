@@ -61,8 +61,10 @@ var ele_table= {
         footer:function(){
             return this.parStore.footer
         },
-        head_length(){
-            return this.normed_heads.length
+        headname_list(){
+            return this.normed_heads.map(item=>{
+                return item.name
+            })
         }
         //bus_serarch_count:function(){
         //    return this.bus.search_count
@@ -98,12 +100,9 @@ var ele_table= {
                 this.$refs.e_table.clearSelection()
             }
         },
-        normed_heads:{
-            deep:true,
+        headname_list:{
+            //deep:true,
             handler(v){
-                //Vue.nextTick(()=>{
-                //    this.$refs.e_table.doLayout()
-                //})
                 new Promise((resolve,reject)=>{
                     Vue.nextTick(()=>{
                         this.dirty_layout=true
@@ -114,18 +113,9 @@ var ele_table= {
                         this.dirty_layout=false
                     })
                 })
-
-                //setTimeout(()=>{
-                //    this.dirty_layout = false
-                //},200)
             }
          }
     },
-    //         :cell-class-name="get_td_class"
-//:header-cell-class-name="get_class"
-    // height="100%"
-    //style="width: 100%"
-    // :row-class-name="tableRowClassName"  行标记颜色，效果不好，暂时不用
     mixins: [mix_table_data, mix_ele_table_adapter],
     template: `<div class="com-table-grid" style="position: absolute;top:0;left:0;bottom: 0;right:0;">
         <el-table class="table flat-head" ref="e_table"
