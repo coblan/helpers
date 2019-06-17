@@ -63,16 +63,10 @@ var com_date_datetimefield_range={
     },
     watch:{
         start_value(v){
-            debugger
-            if(this.start != v){
-                this.start = v
-            }
+            this.start = v.slice(0,10)
         },
         end_value(v){
-            debugger
-            if(this.end != v){
-                this.end=v
-            }
+            this.end=v.slice(0,10)
         },
         start:function(nv,ov){
             if(nv && this.end){
