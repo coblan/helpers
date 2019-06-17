@@ -28,7 +28,6 @@ Vue.component('com-fields-table-block',{
        </div>`,
     computed:{
         table_grid_heads:function(){
-            debugger
             var self=this
             var table_grid = this.option.table_grid
             var heads_bucket =[]

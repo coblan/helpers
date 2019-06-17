@@ -11,7 +11,6 @@ var big_fields={
             }
         })
         var parStore = ex.vueParStore(this)
-        debugger
         return {
             head:this.ctx,
             par_row:this.ctx.par_row,
