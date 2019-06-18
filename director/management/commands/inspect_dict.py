@@ -7,6 +7,7 @@ from helpers.director.models import PermitModel
 from django.utils import timezone
 import inspect
 import os
+import re
 
 class Command(BaseCommand):
     """
@@ -50,7 +51,11 @@ class Command(BaseCommand):
        
 def value_str(v):
     if inspect.isfunction(v):
-        return 'function: %s'%v.__name__
+        fun_repre = repr(v)
+        mt = re.search('^(.*) at ',fun_repre)
+        return mt.group(1)+'>'
+    elif isinstance(v,(list,tuple)):
+        return [value_str(x) for x in v]
     else:
         return str(v)
     
