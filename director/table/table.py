@@ -725,7 +725,9 @@ class ModelTable(object):
         return self.model.objects.all()
     
     def get_query(self):
-        if not self.crt_user.is_authenticated:
+        if self.nolimit:
+            pass
+        elif not self.crt_user.is_authenticated:
             raise PermissionDenied('no permission to browse %s ,Please login first' % self.model._meta.model_name)
         elif not self.crt_user.is_superuser and not self.permit.readable_fields():
             raise PermissionDenied('user %s ,no permission to browse %s'% ( self.crt_user.username, self.model._meta.model_name))

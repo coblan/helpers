@@ -4,7 +4,8 @@ Vue.component('com-field-select',{
     <div style="position: relative">
         <van-popup  v-model="show" position="bottom">
                 <van-picker :columns="head.options" :default-index="crt_index"
-                @confirm="onConfirm" @cancel="show=false" value-key="label" show-toolbar></van-picker>
+                cancel-button-text="清空"
+                @confirm="onConfirm" @cancel="clear()" value-key="label" show-toolbar></van-picker>
           </van-popup>
     </div>
 
@@ -17,7 +18,9 @@ Vue.component('com-field-select',{
         readonly
         :error-message="head.error"
         :name="head.name"
-      ></van-field>
+      >
+       <!--<van-icon v-if="row[head.name]" slot="right-icon" name="cross" @click.stop="clear()" class="custom-icon" />-->
+      </van-field>
     </div>
 `,
     data:function(){
@@ -71,6 +74,10 @@ Vue.component('com-field-select',{
         }
     },
     methods:{
+        clear(){
+            this.show=false
+            Vue.set( this.row,this.head.name,'')
+        },
         on_click:function(){
             if( ! this.head.readonly){
                 this.show=true
