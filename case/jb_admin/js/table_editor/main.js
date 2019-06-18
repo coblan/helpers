@@ -9,6 +9,7 @@ import * as my_json from  './json.js'
 import * as multi_image from  './multi_image.js'
 import * as map_html from  './map_html.js'
 import * as link from  './link.js'
+import * as rich_span from  './rich_span.js'
 
 /*
 
