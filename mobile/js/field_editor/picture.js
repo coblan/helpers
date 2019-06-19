@@ -42,8 +42,8 @@ export var com_picture = {
                             resolve(Orientation)
                         })
                     }).then((Orientation)=>{
-                        if(self.head.option && self.head.option.maxsize){
-                            return compressImage(file,self.head.option,Orientation)
+                        if( self.head.maxspan ){
+                            return compressImage(file,self.head ,Orientation)
                         }else{
                             return file
                         }
@@ -118,7 +118,7 @@ Vue.component('com-field-picture',function(resolve,reject){
 ////压缩图片
  function compressImage  (file,option,Orientation)  {
     // 图片小于1M不压缩
-    //if (file.size < Math.pow(1024, 2)) {
+    //if ( file.size < Math.pow(1024, 2)) {
     //    return success(file);
     //}
 
@@ -135,11 +135,11 @@ Vue.component('com-field-picture',function(resolve,reject){
                 const w = img.width;
                 const h = img.height;
                var span =  Math.max(w,h)
-                if(option.maxsize > span){
+                if(option.maxspan > span){
                     resolve(file)
                     return
                 }
-                var ratio = option.maxsize / span
+                var ratio = option.maxspan / span
                 var real_w = w * ratio
                 var real_h = h * ratio
                 const quality = 0.92;  // 默认图片质量为0.92
