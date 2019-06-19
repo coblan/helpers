@@ -7,6 +7,7 @@ var table_store={
             director_name:'',
             search_args:search_args,
             parents:[],
+            row_pages:{},
 
         }
     },
@@ -17,9 +18,12 @@ var table_store={
         },
         getRows(){
             var post_data=[{fun:'get_rows',director_name:this.director_name,search_args:this.search_args}]
+            cfg.show_load()
             return ex.post('/d/ajax',JSON.stringify(post_data)).then(resp=> {
+                cfg.hide_load()
                 this.rows = resp.get_rows.rows
                 this.parents = resp.get_rows.parents
+                ex.vueAssign( this.row_pages,resp.get_rows.row_pages)
             })
         },
         addNextPage(){

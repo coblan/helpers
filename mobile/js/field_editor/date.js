@@ -20,13 +20,16 @@ Vue.component('com-field-date',{
         }
     },
     template:`<van-cell class="com-field-date" :title="head.label">
-     <span :class="{empty_value:!row[head.name]}" v-text="row[head.name] || '请输入'+head.label"  style="width: 4rem;display: inline-block;min-height: .4rem;text-align: left"  @click.stop="open()"></span>
+     <span :class="{empty_value:!row[head.name]}" v-text="row[head.name] || '请输入'+head.label"
+        style="width: 5rem;display: inline-block;min-height: .4rem;text-align: left"  @click.stop="open()"></span>
+        <!--<van-icon v-if="row[head.name]" slot="right-icon" name="cross" @click.stop="clear()" class="custom-icon" />-->
    <van-popup v-model="show" position="bottom" overlay>
     <van-datetime-picker
       v-model="inn_value"
       type="date"
        :min-date="minDate"
        :max-date="maxDate"
+       cancel-button-text="清空"
       @confirm="on_confirm"
       @cancel = "on_cancel"
     />
@@ -37,17 +40,23 @@ Vue.component('com-field-date',{
         open(){
             this.show =true
         },
+        clear(){
+            Vue.set(this.row,this.head.name,'')
+        },
         on_confirm(){
             this.show =false
             if(this.inn_value){
-                this.row[this.head.name] = this.inn_value.Format('yyyy-MM-dd')
+                Vue.set(this.row,this.head.name,this.inn_value.Format('yyyy-MM-dd'))
+                //this.row[this.head.name] = this.inn_value.Format('yyyy-MM-dd')
             }else {
-                this.row[this.head.name] = ''
+                Vue.set(this.row,this.head.name,'')
+                //this.row[this.head.name] = ''
             }
 
         },
         on_cancel(){
             this.show =false
+            Vue.set(this.row,this.head.name,'')
         }
 
     }
