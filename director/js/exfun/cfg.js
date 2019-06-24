@@ -28,7 +28,7 @@ window.cfg={
         layer.msg(msg,...parm)
     },
     tr:{
-        'picture_size_excceed':'图片尺寸不能超过{maxsize}'
+        'picture_size_excceed':'图片大小不能超过{maxsize}'
     },
 
     show_cloak:function(){

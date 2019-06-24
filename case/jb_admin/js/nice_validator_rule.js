@@ -5,7 +5,7 @@ $.validator.config({
         digit: function(element, params) {
             var digits = params[0]
             var pattern = `\\.\\d{0,${digits}}$|^[\\d]+$`
-            return RegExp(pattern).test(element.value) || '请确定有效位数为'+digits;
+            return RegExp(pattern).test(element.value) || '请输入有效位数为'+digits+'的数字';
         },
         dot_split_int:function(element,params){
             return /^(\d+[,])*(\d+)$/.test(element.value) || '请输入逗号分隔的整数'

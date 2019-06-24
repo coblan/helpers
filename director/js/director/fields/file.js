@@ -328,7 +328,14 @@ var img_uploader={
 
             if(this.cfg.maxsize){
                 if(img_fl.size > this.cfg.maxsize){
-                    var msg = ex.template(cfg.tr.picture_size_excceed,{maxsize:this.cfg.maxsize})
+                    if(this.cfg.maxsize > 1024*1024){
+                        var num_msg = (this.cfg.maxsize /(1024*1024) ).toFixed(2) + 'M'
+                    }else  if(this.cfg.maxsize > 1024){
+                        var num_msg = (this.cfg.maxsize /(1024) ).toFixed(2) + 'k'
+                    }else{
+                        var num_msg = this.cfg.maxsize
+                    }
+                    var msg = ex.template(cfg.tr.picture_size_excceed,{maxsize:num_msg})
                     cfg.showMsg(msg)
                     this.clear()
                     return false

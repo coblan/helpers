@@ -23,7 +23,7 @@ class DecimalProc(BaseFieldProc):
     
     def dict_field_head(self,head):   
         head['editor'] = 'com-field-number'
-        head['fv_rule']='digit(2)'
+        head['fv_rule']='digit(%s)'%self.digit
         return head    
     
 field_map.update({

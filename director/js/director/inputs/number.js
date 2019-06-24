@@ -6,6 +6,11 @@ var number = {
             		    :name="head.name" :step="head.step"
             		     @keypress="isNumber($event)"
                         :placeholder="head.placeholder" :autofocus="head.autofocus"></div>`,
+    created(){
+        if(this.head.fv_rule==undefined){
+            Vue.set(this.head,'fv_rule','digit(4)')
+        }
+    },
         methods:{
             isNumber:function(evt){
                 evt = (evt) ? evt : window.event;
