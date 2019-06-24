@@ -111,7 +111,7 @@ window.cfg={
             layer.close(winindex)
         }
     },
-    pop_vue_com:function({ctx,editor,option}){
+    pop_vue_com:function(editor,ctx,option){
         return new Promise(function(resolve,reject){
             var callback = function(e){
                 close_fun()
