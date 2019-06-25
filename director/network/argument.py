@@ -131,6 +131,15 @@ def is_list(value,name):
     else:
         return value
 
+def failmsg(fun,msg):
+    "定制自定义的消息"
+    def _fun(value,name):
+        try :
+            return fun(value,name)
+        except UserWarning:
+            raise UserWarning(msg)
+    return _fun
+
 def int_str(value,name):
     """确保可以 转换为int"""
     try:
