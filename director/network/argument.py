@@ -142,11 +142,18 @@ def failmsg(fun,msg):
 
 def int_str(value,name):
     """确保可以 转换为int"""
-    try:
-        if value is not None:
+    if value:
+        try:
             return int(value)
-    except ValueError as e:
-        raise UserWarning('%(name)s=%(value)s could not be covert to int'%{'name':name,'value':value})
+        except ValueError as e:
+            raise UserWarning('%(name)s=%(value)s could not be covert to int'%{'name':name,'value':value})
+    else:
+        return value
+    #try:
+        #if value is not None:
+            #return int(value)
+    #except ValueError as e:
+        #raise UserWarning('%(name)s=%(value)s could not be covert to int'%{'name':name,'value':value})
 
 def choice_in(choices):
     def _choice_in(value,name):
