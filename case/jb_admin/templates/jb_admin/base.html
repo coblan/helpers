@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 {% load static %}
 {% load jsonify %}
-{% load rpdot %}
+{% load ctxvalue %}
 <!--
 This is a starter template page. Use this page to start your new project from
 scratch. This page gets rid of all links and provides the needed markup only.
@@ -709,6 +709,5 @@ desired effect
 
 
 {% for lib in extra_js %}
-    <script src='{{ lib }}'></script>
+    <script src='{{ lib | ctxvalue:js_config.js_lib }}'></script>
 {% endfor %}
-</html>
