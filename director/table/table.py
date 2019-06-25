@@ -337,6 +337,7 @@ class ModelTable(object):
     pagenator=PageNum
     fields_sort=[]
     pop_edit_field=""
+    pop_edit_fields=[]
     has_sequence = False
     selectable = True
     nolimit = False
@@ -645,6 +646,22 @@ class ModelTable(object):
                     }
                     #head['ops']=form_obj.get_operations()
                     #head['extra_mixins']=form_obj.extra_mixins
+        if self.pop_edit_fields:
+            model_form = director.get(self.get_edit_director_name())
+            form_obj = model_form(crt_user=self.crt_user)
+            for head in heads:
+                if head['name'] in self.pop_edit_fields:
+                    head['editor'] = 'com-table-click'
+                    head['fields_ctx'] =form_obj.get_head_context()
+                    head['fields_ctx'].update({
+                        #'init_express':'ex.director_call(scope.vc.ctx.director_name,{car_no:scope.vc.par_row.car_no}).then(res=>ex.vueAssign(scope.row,res))',
+                        #'after_save':'scope.vc.par_row.car_no =scope.row.car_no; scope.vc.par_row.has_washed=scope.row.has_washed ',
+                        'init_express':'cfg.show_load(),ex.director_call(scope.vc.ctx.director_name,{pk:scope.vc.par_row.pk}).then((res)=>{cfg.hide_load();ex.vueAssign(scope.row,res)})',
+                        'after_save':'ex.vueAssign( scope.vc.par_row,scope.row)',
+                        'ops_loc':'bottom'
+                    })
+                    head['action'] = 'scope.head.fields_ctx.par_row=scope.row;cfg.pop_vue_com("com-form-one",scope.head.fields_ctx)'
+                    
         return heads
     
     def dict_head(self,head):
