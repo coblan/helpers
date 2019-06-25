@@ -109,11 +109,11 @@ $(function() {
 
     {% block tab-content %}
     <div id="main-page" class="rows-block flex-v flex-grow"  style="position: relative;height: calc( 100vh - 110px )">
-        <transition name="slide">
+        <!--<transition name="slide">-->
             <keep-alive :include="alive_list">
                 <component :is="current_com.editor" :ctx="current_com.ctx" ></component>
             </keep-alive>
-        </transition>
+        <!--</transition>-->
 
     </div>
 
