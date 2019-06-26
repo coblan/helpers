@@ -12,7 +12,7 @@ def ctxvalue(key,ctx):
     if key is None:
         return ''
     else:
-        outstr=ctx.get(key)
+        outstr=ctx.get(key,key)
         return mark_safe( outstr )
 
     #if isinstance(object, ValuesListQuerySet):
