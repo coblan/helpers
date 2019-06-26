@@ -656,7 +656,8 @@ class ModelTable(object):
                     head['fields_ctx'].update({
                         #'init_express':'ex.director_call(scope.vc.ctx.director_name,{car_no:scope.vc.par_row.car_no}).then(res=>ex.vueAssign(scope.row,res))',
                         #'after_save':'scope.vc.par_row.car_no =scope.row.car_no; scope.vc.par_row.has_washed=scope.row.has_washed ',
-                        'init_express':'cfg.show_load(),ex.director_call(scope.vc.ctx.director_name,{pk:scope.vc.par_row.pk}).then((res)=>{cfg.hide_load();ex.vueAssign(scope.row,res)})',
+                        #'init_express':'cfg.show_load(),ex.director_call(scope.vc.ctx.director_name,{pk:scope.vc.par_row.pk}).then((res)=>{cfg.hide_load();ex.vueAssign(scope.row,res)})',
+                        'init_express':'ex.vueAssign(scope.row,scope.vc.par_row)',
                         'after_save':'ex.vueAssign( scope.vc.par_row,scope.row)',
                         'ops_loc':'bottom'
                     })
