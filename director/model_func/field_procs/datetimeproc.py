@@ -29,6 +29,11 @@ class DateTimeProc(BaseFieldProc):
     def dict_field_head(self, head):
         head['editor']='com-field-datetime'
         return head
+    
+    def dict_table_head(self, head):
+        head = super().dict_table_head(head)
+        head['width'] = 140
+        return head
         
     def filter_get_range_head(self,name,model):
         f = model._meta.get_field(name)
