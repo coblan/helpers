@@ -30,12 +30,18 @@ Vue.component('com-field-tree-select',{
     },
     methods:{
         open_win(){
-            cfg.pop_big('com-field-tree-shower',{title:this.head.title,
-                table_ctx:this.head.table_ctx,
-                placeholder:this.head.search_placeholder,
-                par_row:this.row,
-                parent_click:this.head.parent_click
-            })
+            //cfg.pop_big('com-field-tree-shower',{title:this.head.title,
+            //    table_ctx:this.head.table_ctx,
+            //    placeholder:this.head.search_placeholder,
+            //    par_row:this.row,
+            //    parent_click:this.head.parent_click
+            //})
+            live_root.open_live('live_field_tree_shower',{title:this.head.title,
+                        table_ctx:this.head.table_ctx,
+                        placeholder:this.head.search_placeholder,
+                        par_row:this.row,
+                        parent_click:this.head.parent_click
+                    })
         },
         setup_validate_msg_router(){
             if(!this.head.validate_showError){
@@ -49,14 +55,15 @@ Vue.component('com-field-tree-select',{
     }
 })
 
-Vue.component('com-field-tree-shower',{
+window.live_field_tree_shower = {
     props:['ctx'],
+    basename:'live-field-tree-shower',
     template:`<div class="com-field-tree-shower">
+    <com-uis-nav-bar :title="ctx.title" :back="true" ></com-uis-nav-bar>
  <div class="path">
     <span class="parent-node clickable" v-for="par in childStore.parents" v-text="par.label" @click="on_par_click(par)"></span>
  </div>
   <com-ctn-scroll-table :ctx="ctx.table_ctx"> </com-ctn-scroll-table>
-
     </div>`,
     data(){
         var childStore = new Vue(table_store)
@@ -92,4 +99,4 @@ Vue.component('com-field-tree-shower',{
             history.back()
         }
     }
-})
+}

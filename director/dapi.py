@@ -18,7 +18,7 @@ def director_save_row(row):
           return {}
 
 @director_view('get_row')
-def get_row(director_name,filter_kws):
+def get_row(director_name,filter_kws={}):
      fields_cls = director.get(director_name)
      fields_obj = fields_cls(**filter_kws)
      return fields_obj.get_row()

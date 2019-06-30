@@ -37,6 +37,15 @@ class DateTimeProc(BaseFieldProc):
                 'editor': 'com-date-datetimefield-range-filter'#'com-date-range-filter'
                 }
     
+    def filter_clean_filter_arg(self, name,search_args):
+        v= search_args.get('%s__lte'%name)
+        if v and len(v) ==10:
+            v+= ' 23:59:59'
+            return {'%s__lte'%name:v}
+        else:
+            return super().filter_clean_filter_arg(name,search_args)
+
+    
     def _filter_dict_query_args(self, dc, name):
         """
         * 这个函数无用了，现在用date 筛选datetime的 23:59:59问题，交由前端控件去补齐去了。*

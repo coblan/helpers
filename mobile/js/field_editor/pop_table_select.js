@@ -30,7 +30,10 @@ Vue.component('com-field-pop-table-select',{
     },
     methods:{
         open_win(){
-            cfg.pop_big('com-field-pop-search',{table_ctx:this.head.table_ctx,placeholder:this.head.search_placeholder,par_row:this.row})
+            this.head.table_ctx.title = '选择'+this.head.label
+            this.head.table_ctx.par_row= this.row
+            live_root.open_live('live_list',this.head.table_ctx)
+            //cfg.pop_big('com-field-pop-search',{table_ctx:this.head.table_ctx,placeholder:this.head.search_placeholder,par_row:this.row})
         },
         setup_validate_msg_router(){
             if(!this.head.validate_showError){

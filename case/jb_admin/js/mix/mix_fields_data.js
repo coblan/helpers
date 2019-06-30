@@ -18,8 +18,12 @@ var mix_fields_data ={
         })
         self.setErrors({})
         if(this.head){
+            // TODO 以后吧 style 代码去掉
             if(this.head.style){
                 ex.append_css(this.head.style)
+            }
+            if(this.head.css){
+                ex.append_css(this.head.css)
             }
             if(this.head.init_express){
                 ex.eval(this.head.init_express,{row:this.row,ps:this.parStore,cs:this.childStore,vc:this})

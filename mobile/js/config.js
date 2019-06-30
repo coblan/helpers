@@ -105,3 +105,8 @@ ex.assign(cfg,{
 //
 //    })
 //})
+
+//window.onbeforeunload = function() {
+//
+//    alert('退出页面')
+//}

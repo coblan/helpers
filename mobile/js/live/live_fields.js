@@ -1,3 +1,5 @@
+require('./styl/live_fields.styl')
+
 var live_fields={
     props:['ctx'],
     basename:'live-fields',
@@ -17,6 +19,29 @@ var live_fields={
             return this.$root.stack.length >1
         }
     },
+    deactivated(){
+       this.scroll = $(this.$el).find('.com-fileds-panel').scrollTop()
+    },
+    activated() {
+        if( this.scroll){
+         var count =0
+         var index =  setInterval(()=>{
+              $(this.$el).find('.com-fileds-panel').scrollTop( this.scroll)
+              count+=30
+              if(count > 160){
+                  clearInterval(index)
+              }
+            },30)
+        }
+    },
+    //methods:{
+    //    onAfterEnter(){
+    //        if( this.scroll){
+    //            $(window).scrollTop( this.scroll)
+    //        }
+    //    }
+    //}
+
 }
 
 

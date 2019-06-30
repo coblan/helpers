@@ -13,7 +13,7 @@ var com_milti_picture = {
             </div>
             <div class="img-wrap" v-for="(imgsrc,index) in row[head.name]" @click="big_win(imgsrc)">
                 <img class="center-vh" :src="imgsrc" alt="图片不能加载">
-                <div class="close" >
+                <div class="close" v-if="!head.readonly">
                     <i @click.stop='remove_image(index)' class="fa fa-times-circle" aria-hidden="true" style="color:red;position:relative;left:30px;"></i>
                 </div>
             </div>

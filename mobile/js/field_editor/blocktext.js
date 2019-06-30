@@ -11,10 +11,17 @@ Vue.component('com-field-blocktext',{
     computed:{
         normed_placeholder:function(){
             if(! this.head.readonly){
-                return this.head.placeholder || '请选择'+this.head.label
+                return this.head.placeholder || '请输入'+this.head.label
             }else{
                 return ''
             }
         }
+    },
+    mounted(){
+        var org = this.row[this.head.name]
+        this.row[this.head.name] +='.'
+        setTimeout(()=>{
+            this.row[this.head.name]= org
+        },100)
     }
 })

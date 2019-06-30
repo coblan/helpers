@@ -3,7 +3,7 @@ Vue.component('com-uis-nav-bar',{
         title:'',
         back:'',
         ops:{default:()=>{return []}}},
-    template:`<div><van-nav-bar
+    template:`<div class="com-uis-nav-bar"><van-nav-bar
             :title="title"
             :left-arrow="back"
             @click-right="onClickRight"

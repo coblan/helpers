@@ -186,14 +186,11 @@ class ModelFields(forms.ModelForm):
     def get_context(self):
         """
         """
-        return {
-            'heads':self.get_heads(),
+        ctx = self.get_head_context()
+        ctx.update({
             'row': self.get_row(),
-            #'permit':self.get_permit(),
-            'director_name':self.get_director_name(),
-            'ops':self.get_operations(),
-            'extra_mixins':self.extra_mixins
-        } 
+        })
+        return ctx
     
     @request_cache
     def get_head_context(self):
@@ -206,6 +203,7 @@ class ModelFields(forms.ModelForm):
             #'model_name':model_to_name(self._meta.model),
             'extra_mixins':self.extra_mixins
         }         
+    
     
     def get_del_info(self):
         return {'%(model)s:%(inst)s <id=%(pk)s>'%{'model':self.instance.__class__.__name__,'inst':str(self.instance),'pk':self.instance.pk}:delete_related_query(self.instance)}

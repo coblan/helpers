@@ -24,9 +24,12 @@ site_cfg = {
     }
 }
 
+from functools import wraps
+
 def director_view(name): 
     def _fun(fun): 
         director[name] = fun
+        @wraps(fun)
         def _fun2(*args, **kargs): 
             return fun(*args, **kargs)
         return _fun2

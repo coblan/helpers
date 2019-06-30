@@ -15,7 +15,7 @@ Vue.component('com-grid-icon-btn',{
     </div>`,
     methods:{
         on_click(){
-            ex.eval(this.ctx.action)
+            ex.eval(this.ctx.action,{head:this.ctx})
         }
     }
 })

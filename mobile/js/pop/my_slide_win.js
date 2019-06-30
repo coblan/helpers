@@ -47,6 +47,8 @@ if(window.named_hub==undefined){
             callback()
             delete named_hub[event.state.callback]
         }
+        //event.preventDefault();
+        //return false
     })
 
 }

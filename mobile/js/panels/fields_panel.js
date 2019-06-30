@@ -15,8 +15,6 @@ Vue.component('com-fields-panel',{
             row:row,
             ops:this.ctx.ops || [],
             fields_group:this.ctx.fields_group || [],
-            //layout:this.ctx.layout,
-            // layout.fields_group
         }
     },
     mixins:[mix_fields_data,mix_nice_validator],

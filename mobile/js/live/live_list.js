@@ -5,9 +5,9 @@ var live_list={
     basename:'live-list',
     template:`<div class="com-live-list">
         <com-uis-nav-bar :title="ctx.title" :back="can_back" :ops="ctx.ops"></com-uis-nav-bar>
-            <cube-scroll :data="childStore.rows" ref="scroll"  :options="scrollOptions" @pulling-down="onPullingDown"
+       <cube-scroll :data="childStore.rows" ref="scroll"  :options="scrollOptions" @pulling-down="onPullingDown"
                   @pulling-up="onPullingUp">
-            <component :is="table_editor" :heads="ctx.heads" :rows="childStore.rows"  @select="on_block_click($event)"></component>
+            <component :is="table_editor" :heads="ctx.heads" :rows="childStore.rows"  @select="triggerBlockClick($event)"></component>
             <div v-if="childStore.rows.length == 0 " class="center-vh">暂无数据</div>
     </cube-scroll>
     </div>`,
@@ -34,13 +34,18 @@ var live_list={
             },
         }
     },
+    mounted(){
+        if(this.ctx.rows.length==0){
+            this.childStore.search()
+        }
+    },
     computed:{
         can_back(){
             return this.$root.stack.length >1
         }
     },
     methods:{
-        on_block_click(row){
+        triggerBlockClick(row){
             if(this.ctx.block_click){
                 ex.eval(this.ctx.block_click,{row:row,ps:this.childStore})
             }

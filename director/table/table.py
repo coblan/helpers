@@ -428,46 +428,6 @@ class ModelTable(object):
     def get_option(self):
         return {}
     
-    def get_context(self):
-        director_name =self.get_director_name()
-        heads = self.get_heads()
-        rows = self.get_rows()
-        #row_sort = self.row_sort.get_context()
-        model_name = model_to_name(self.model)
-        ops = self.get_operation()
-        ops = evalue_container(ops)
-        return {
-            'heads':heads,
-            'rows': rows,
-            'row_pages' : self.getRowPages(),
-            'row_sort': self.getRowSort(),#row_sort,
-            'row_filters':  self.getRowFilters(), #ls,
-            #'search_tip':self.row_search.get_context(),
-            'director_name':director_name,
-            'model_name':model_name,
-            'ops' : ops,
-            'search_args':self.search_args, 
-            'parents': self.getParents(),
-            'option':self.get_option(),
-            'footer': self.footer,
-            'selectable': self.selectable,
-            'event_slots':self.get_event_slots()
-        }
-    
-    def get_event_slots(self):
-        return []
-    
-    def getRowFilters(self): 
-        ls=[]
-        search_head = self.row_search.get_context()
-        row_filters = self.row_filter.get_context()
-        # 合并search和rowfilter 为rowfilter
-        if search_head:
-            ls.append( search_head)
-        if row_filters:
-            ls.extend(row_filters)
-        return ls
-    
     @request_cache
     def get_head_context(self):
         """
@@ -489,7 +449,34 @@ class ModelTable(object):
             'ops' : ops, 
             'selectable': self.selectable,
             'event_slots':self.get_event_slots()
-        }        
+        }  
+    
+    def get_context(self):
+        head_ctx = self.get_head_context()
+        rows = self.get_rows()
+        head_ctx.update({
+            'rows': rows,
+            'row_pages' : self.getRowPages(),
+            'row_sort': self.getRowSort(),#row_sort,
+            'model_name':model_to_name(self.model),
+            'parents': self.getParents(),
+            'footer': self.footer,
+        })
+        return head_ctx
+    
+    def get_event_slots(self):
+        return []
+    
+    def getRowFilters(self): 
+        ls=[]
+        search_head = self.row_search.get_context()
+        row_filters = self.row_filter.get_context()
+        # 合并search和rowfilter 为rowfilter
+        if search_head:
+            ls.append( search_head)
+        if row_filters:
+            ls.extend(row_filters)
+        return ls
     
     def getParents(self): 
         return []
@@ -790,11 +777,6 @@ class ModelTable(object):
         fieldCls = director.get(director_name+'.edit')     
         if not fieldCls:
             return []
-        #if not model_dc.get(self.model) or not model_dc.get(self.model).get('fields'):
-            #return []
-        #model_name =model_to_name(self.model)
-           
-        #fieldCls=model_dc[self.model].get('fields')
         fieldobj=fieldCls(crt_user=self.crt_user)
         return [{'name':'add_new',
                  'editor':'com-op-btn',

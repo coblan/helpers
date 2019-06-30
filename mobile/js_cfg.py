@@ -18,7 +18,7 @@ js_tr_list.append(get_tr)
 
 def get_lib(request): 
     dc = {
-        'mobile': '/static/js/mobile.pack.js?t=%s&v=7'%js_stamp_dc.get('mobile_pack_js'), 
+        'mobile': '/static/js/mobile.pack.js?t=%s&v=13'%js_stamp_dc.get('mobile_pack_js'), 
         'mint_ui':'https://cdn.jsdelivr.net/npm/mint-ui@2.2.13/lib/index.js',
         'mint_ui_css':'https://cdn.jsdelivr.net/npm/mint-ui@2.2.13/lib/style.min.css',
         'vant':'https://cdn.jsdelivr.net/npm/vant@1.6/lib/vant.min.js',
