@@ -52,7 +52,6 @@ export var com_picture = {
                     })
                 })
             })
-
             Promise.all(ls) .then((results)=>{
                 var new_selected_files= results
                 this.uploadImage( new_selected_files )
@@ -128,7 +127,6 @@ Vue.component('com-field-picture',function(resolve,reject){
         reader.readAsDataURL(file);
         reader.onload = (e) => {
             const src = e.target.result;
-
             const img = new Image();
             img.src = src;
             img.onload = (e) => {
@@ -136,6 +134,7 @@ Vue.component('com-field-picture',function(resolve,reject){
                 const h = img.height;
                var span =  Math.max(w,h)
                 if(option.maxspan > span){
+                    alert(span )
                     resolve(file)
                     return
                 }
@@ -197,7 +196,7 @@ Vue.component('com-field-picture',function(resolve,reject){
                 const base64 = canvas.toDataURL('image/jpeg', quality); //图片格式jpeg或webp可以选0-1质量区间
 
                 // 返回base64转blob的值
-                console.log(`原图${(src.length/1024).toFixed(2)}kb`, `新图${(base64.length/1024).toFixed(2)}kb`);
+                console.log(`原图${(src.length/1024).toFixed(2)}kb`+ `新图${(base64.length/1024).toFixed(2)}kb`);
                 if(src.length < base64.length){
                     resolve(file)
                     return

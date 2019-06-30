@@ -1,4 +1,16 @@
+//.com-live-list
+//  background-color #f8f8f8
+//  .cube-scroll-wrapper
+//    height calc( 100vh - 1rem )
+
 .com-live-list
+  display flex
+  flex-direction column
   background-color #f8f8f8
-  .cube-scroll-wrapper
+  height 100vh
+
+  .van-list
     height calc( 100vh - 1rem )
+    flex-grow 10
+    overflow auto
+    -webkit-overflow-scrolling: touch;

@@ -37,9 +37,6 @@ var com_milti_picture = {
             }
             var self=this
             console.log('start upload')
-            //if(! self.validate(v)){
-            //    return
-            //}
             var up_url = this.head.up_url || '/d/upload?path=general_upload/images'
             cfg.show_load()
             ex.uploads(image_files,up_url,function(url_list){

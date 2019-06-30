@@ -32,6 +32,8 @@ var table_store={
             return ex.post('/d/ajax',JSON.stringify(post_data)).then(resp=> {
                 var row_pages =  resp.get_rows.row_pages
                 var max_page = Math.ceil(row_pages.total / row_pages.perpage)
+                ex.vueAssign( this.row_pages,resp.get_rows.row_pages)
+                this.search_args._page = this.row_pages.crt_page
                 if(row_pages.crt_page< max_page){
                     this.rows = this.rows.concat(resp.get_rows.rows)
                 }else{
@@ -40,7 +42,7 @@ var table_store={
                 }
             })
         },
-        async newRow(_director_name,pre_set){
+        newRow(_director_name,pre_set){
             var self = this
             let director_name = _director_name || this.director_name+'.edit'
             var dc = {fun:'get_row',director_name:director_name}
@@ -50,9 +52,15 @@ var table_store={
             }
             var post_data=[dc]
             cfg.show_load()
-            var resp = await ex.post('/d/ajax',JSON.stringify(post_data))
-            cfg.hide_load()
-            return resp.get_row
+            return new Promise((resolve,reject)=>{
+                ex.post('/d/ajax',JSON.stringify(post_data)).then(resp=>{
+                    cfg.hide_load()
+                    resolve(resp.get_row)
+                })
+            })
+            //var resp = await ex.post('/d/ajax',JSON.stringify(post_data))
+            //cfg.hide_load()
+            //return resp.get_row
         },
         update_or_insert(new_row){
             var table_row = ex.findone(this.rows,{pk:new_row.pk})

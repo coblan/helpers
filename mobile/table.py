@@ -59,14 +59,14 @@ class ModelTableMobile(ModelTable):
             return ctx
 
     def get_operation(self):
+        ops=[]
         director_name = self.get_director_name()
         fieldCls = director.get(director_name+'.edit')     
-        if not fieldCls:
-            return []
-        fieldobj=fieldCls(crt_user=self.crt_user)
-        ops = [
-            {'name':'新建','basename':'add_new','action':'scope.ps.newRow().then((row)=>{scope.ps.vc.ctx.fields_ctx.row=row;scope.ps.vc.ctx.fields_ctx.table_par=scope.ps; live_root.open_live("live_fields",scope.ps.vc.ctx.fields_ctx)   }) '}
-        ]
+        if  fieldCls:
+            fieldobj=fieldCls(crt_user=self.crt_user)
+            ops = [
+                {'name':'新建','basename':'add_new','action':'scope.ps.newRow().then((row)=>{scope.ps.vc.ctx.fields_ctx.row=row;scope.ps.vc.ctx.fields_ctx.table_par=scope.ps; live_root.open_live("live_fields",scope.ps.vc.ctx.fields_ctx)   }) '}
+            ]
         
         filter_obj = self.filterForm()
         filter_obj.set_filter(self.row_filter)

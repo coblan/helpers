@@ -5,27 +5,11 @@ var live_list={
     basename:'live-list',
     template:`<div class="com-live-list">
         <com-uis-nav-bar :title="ctx.title" :back="can_back" :ops="ctx.ops"></com-uis-nav-bar>
-       <!--<cube-scroll :data="childStore.rows" ref="scroll"  :options="scrollOptions" @pulling-down="onPullingDown"-->
-                  <!--@pulling-up="onPullingUp">-->
-            <!--<component :is="table_editor" :heads="ctx.heads" :rows="childStore.rows"  @select="triggerBlockClick($event)"></component>-->
-            <!--<div v-if="childStore.rows.length == 0 " class="center-vh">暂无数据</div>-->
-    <!--</cube-scroll>-->
-
-
-    <van-list
-      v-model="loading"
-      :finished="finished"
-      finished-text="没有更多了"
-      :immediate-check="false"
-      @load="onLoad"
-    >
-    <van-pull-refresh v-model="freshing" @refresh="onRefresh">
-        <component :is="table_editor" :heads="ctx.heads" :rows="childStore.rows"  @select="triggerBlockClick($event)"></component>
-    </van-pull-refresh>
-    </van-list>
-
-
-
+       <cube-scroll :data="childStore.rows" ref="scroll"  :options="scrollOptions" @pulling-down="onPullingDown"
+                  @pulling-up="onPullingUp">
+            <component :is="table_editor" :heads="ctx.heads" :rows="childStore.rows"  @select="triggerBlockClick($event)"></component>
+            <div v-if="childStore.rows.length == 0 " class="center-vh">暂无数据</div>
+    </cube-scroll>
     </div>`,
     data(){
         var childStore = new Vue(table_store)
@@ -34,9 +18,6 @@ var live_list={
         childStore.director_name = this.ctx.director_name
 
         return {
-            freshing:false,
-            loading:false,
-            finished:false,
             childStore:childStore,
             table_editor: this.ctx.table_editor || 'com-ctn-table-van-cell',
             scrollOptions: {
@@ -64,25 +45,6 @@ var live_list={
         }
     },
     methods:{
-        onRefresh(){
-            console.log('刷新')
-            this.childStore.search().then(()=>{
-                this.freshing = false
-                this.finished=false
-            })
-
-        },
-        onLoad(){
-            console.log('加载')
-            this.childStore.addNextPage().then(()=>{
-                this.loading = false
-                if(this.childStore.search_args._page > ( this.childStore.row_pages.total / this.childStore.row_pages.perpage)  ){
-                    this.finished=true
-                }else{
-                    this.finished=false
-                }
-            })
-        },
         triggerBlockClick(row){
             if(this.ctx.block_click){
                 ex.eval(this.ctx.block_click,{row:row,ps:this.childStore})
