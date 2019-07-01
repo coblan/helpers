@@ -92,7 +92,7 @@
                     Vue.set( this.$options.components,com_name,big_com)
 //                    this.stack.push({editor:com_name,ctx:ctx,label:label || com.label  })
                     this.stack.push({editor:com_name,ctx:ctx  })
-                    if(option && !option.first_screen){
+                    if(option && option.first_screen){
                         return
                     }
                     var  self =this
