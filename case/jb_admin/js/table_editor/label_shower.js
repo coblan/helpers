@@ -1,7 +1,7 @@
 
 var label_shower = {
     props:['rowData','field','index'],
-    template:`<span v-text="show_text"></span>`,
+    template:`<div class="com-table-label-shower" v-html="show_text"></div>`,
     data:function(){
         return {
             label:'_'+this.field+'_label'

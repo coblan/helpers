@@ -50,10 +50,10 @@ export  function pop_fields_layer (row,fields_ctx,callback,layerConfig){
     }
 
     var pop_id =new Date().getTime()
-
+    var psize = get_proper_size()
     var layer_config = {
         type: 1,
-        area: ['800px', '500px'],
+        area: psize, //['800px', '500px'],
         title: '详细',
         resize:true,
         resizing: function(layero){
@@ -139,3 +139,18 @@ export  function pop_fields_layer (row,fields_ctx,callback,layerConfig){
 }
 
 window.pop_fields_layer = pop_fields_layer
+
+export function get_proper_size(){
+    var ww= $(window).width()
+    var wh=$(window).height()
+    var width = 0
+    var height = 0
+    if(ww>1400){width = '1000px'}
+    else if(ww>900){ width ='800px'}
+    else {width=ww*0.9+'px'}
+
+    if(wh>1200){height ='800px' }
+    else if(wh>700){height = '600px'}
+    else {height=wh*0.9+'px'}
+    return [width,height]
+}
