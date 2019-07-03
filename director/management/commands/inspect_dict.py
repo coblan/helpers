@@ -43,8 +43,15 @@ class Command(BaseCommand):
                         out_ls.append('    #-"%s"\t:%s,'%(k,value_str(v)))
             else:
                 for k,v in dc.items():
-                    used_module.append(value_mod(v))
-                    out_ls.append('    "%s"\t:%s,'%(k,value_str(v)))
+                    if isinstance(v,(list,tuple)):
+                        temp_ls=[]
+                        for v_item in v:
+                            used_module.append(value_mod(v_item))
+                            temp_ls.append(value_str(v_item))
+                        out_ls.append('    "%s"\t:[%s],'%(k,','.join(temp_ls)))
+                    else:
+                        used_module.append(value_mod(v))
+                        out_ls.append('    "%s"\t:%s,'%(k,value_str(v)))
             
             if out_ls:
                 dc_str += "\n%s = {\n%s\n}" %(dc_name+'_1' , '\n'.join(out_ls)  )

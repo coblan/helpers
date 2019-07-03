@@ -12,7 +12,7 @@ def jsonify(obj):
     if obj is None:
         return ''
     else:
-        outstr=json.dumps(obj,cls=DirectorEncoder)
+        outstr=json.dumps(obj,cls=DirectorEncoder,ensure_ascii=False)
         return mark_safe( outstr )
 
     #if isinstance(object, ValuesListQuerySet):

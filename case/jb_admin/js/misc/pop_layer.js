@@ -1,13 +1,13 @@
-
+import {get_proper_size} from  './pop_fields_layer'
 export  function pop_layer (com_ctx,component_name,callback,layerConfig){
     // row,head ->//model_name,relat_field
 
 
     var pop_id =new Date().getTime()
-
+    var psize = get_proper_size()
     var layer_config = {
         type: 1,
-        area: ['800px', '500px'],
+        area: psize,// ['800px', '500px'],
         title: '详细',
         resize:true,
         resizing: function(layero){

@@ -6,8 +6,10 @@ from django.http import HttpResponse
 import json
 from django.core.exceptions import ObjectDoesNotExist
 from .middleware.request_cache import get_request_cache
+from functools import wraps
 
 def need_login(fun):
+    @wraps(fun)
     def _fun(*args,**kw):
         request = get_request_cache().get('request')
         if request.user.is_authenticated():

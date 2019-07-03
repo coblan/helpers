@@ -12,5 +12,54 @@ $.validator.config({
         },
         ip: [/^((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){3}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})$/i, '请填写有效的 IP 地址'],
 
+        regexp:function(element, param) {
+            var exp = new RegExp(param)
+            return exp.test(element.value) || '不满足规则'
+        },
+        express:function(element, param) {
+            return ex.eval(param[0],{value:element.value}) ||  '不满足规则'
+        },
+        // com-field-table-list
+        key_unique:function(elem, param) {
+            //return /^1[3458]\d{9}$/.test($(elem).val()) || '请检查手机号格式';
+            var keys = param
+            var value = $(elem).val()
+            if(!value) return true
+            var rows = JSON.parse(value)
+            var dc={}
+            ex.each(keys,key=>{dc[key]=[]})
+            for(var i=0;i<rows.length;i++){
+                var row = rows[i]
+                for(var j=0;j<keys.length;j++){
+                    var key = keys[j]
+                    if(ex.isin(row[key],dc[key])){
+                        return  key+"重复了"
+                    }else{
+                        dc[key].push(row[key])
+                    }
+                }
+            }
+            return true
+        },
+        group_unique:function(elem, param) {
+            var keys = param
+            var value = $(elem).val()
+            if(!value) return true
+            var rows = JSON.parse(value)
+            var ls=[]
+            for(var i=0;i<rows.length;i++){
+                var row = rows[i]
+                var group_value = ''
+                ex.each(keys,key=>{
+                    group_value+= row[key]
+                })
+                if(ex.isin(group_value,ls)){
+                    return  group_value+"重复了"
+                }else{
+                    ls.push(group_value)
+                }
+            }
+            return true
+        },
     }
 });

@@ -38,6 +38,7 @@ msg-bottom  nice validator的位置在下面，默认在右侧
   //border-radius:6px;
   position: relative;
   border: 1px solid #D9D9D9;
+  min-width: 600px;
   //overflow: auto;
 
   &:after{

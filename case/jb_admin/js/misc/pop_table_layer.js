@@ -1,15 +1,16 @@
 /*
  * root 层面创建Vue组件，形成弹出框
  * */
-
+import {get_proper_size} from  './pop_fields_layer'
 export  function pop_table_layer (row,table_ctx,callback,layer_config){
     // row,head ->//model_name,relat_field
 
 
     var pop_id =new Date().getTime()
+    var psize = get_proper_size()
     var inn_config = {
         type: 1,
-        area: ['800px', '500px'],
+        area: psize , //['800px', '500px'],
         title: '列表',
         resize:true,
         resizing: function(layero){

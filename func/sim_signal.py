@@ -1,3 +1,5 @@
+from functools import wraps
+
 class SimSignal(object):
     def __init__(self): 
         self.map_dict = {}
@@ -15,10 +17,11 @@ class SimSignal(object):
         return ls
     
     def recieve(self, msg): 
-        def decorator(func):
-            self.connect(msg, func)
+        def decorator(fun):
+            self.connect(msg, fun)
+            @wraps(fun)
             def wrapper(*args, **kw):
-                return func(*args, **kw)
+                return fun(*args, **kw)
             return wrapper
         return decorator        
 
