@@ -86,6 +86,8 @@ ex.assign(cfg,{
         MINT.Indicator.close()
         if(msg){
             cfg.toast(msg)
+        }else if(delay){
+            cfg.toast('操作成功！')
         }
     },
     toast(msg){
