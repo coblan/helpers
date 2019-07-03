@@ -98,7 +98,22 @@ var live_list={
                 this.$refs.scroll.forceUpdate()
             })
         },
-    }
+    },
+    deactivated(){
+        this.scroll = $(this.$el).find('.van-list').scrollTop()
+    },
+    activated() {
+        if( this.scroll){
+            var count =0
+            var index =  setInterval(()=>{
+                $(this.$el).find('.van-list').scrollTop( this.scroll)
+                count+=30
+                if(count > 160){
+                    clearInterval(index)
+                }
+            },30)
+        }
+    },
 }
 
 Vue.component('com-list-list',live_list)

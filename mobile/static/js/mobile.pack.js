@@ -2663,6 +2663,23 @@ var live_list = {
                 _this4.$refs.scroll.forceUpdate();
             });
         }
+    },
+    deactivated: function deactivated() {
+        this.scroll = $(this.$el).find('.van-list').scrollTop();
+    },
+    activated: function activated() {
+        var _this5 = this;
+
+        if (this.scroll) {
+            var count = 0;
+            var index = setInterval(function () {
+                $(_this5.$el).find('.van-list').scrollTop(_this5.scroll);
+                count += 30;
+                if (count > 160) {
+                    clearInterval(index);
+                }
+            }, 30);
+        }
     }
 };
 

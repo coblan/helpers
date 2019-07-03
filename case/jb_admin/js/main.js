@@ -10,8 +10,8 @@ import * as config from  './config.js'
 //table mix
 import * as mix_table_data from  './mix/mix_table_data.js'
 import * as mix_v_table_adapter from './mix/mix_v_table_adapter.js'
-import * as mix_nice_validator from './mix/mix_nice_validator.js'
-import * as mix_fields_data from './mix/mix_fields_data.js'
+//import * as mix_nice_validator from './mix/mix_nice_validator.js'
+//import * as mix_fields_data from './mix/mix_fields_data.js'
 import * as mix_ele_table_adapter from './mix/mix_ele_table_adapter.js'
 
 import * as ajax_fields from './tabs/ajax_fields.js'
