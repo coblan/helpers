@@ -17,6 +17,9 @@ module.exports =
 
     watch: true,
     resolve:{
+        alias: {
+            jb_admin: path.resolve(__dirname,"../../case/jb_admin/js")
+        },
         modules:["D:/coblan/webcode/node_modules"],
     },
     resolveLoader: {
@@ -73,13 +76,13 @@ module.exports =
 
     },
     plugins: [
-        //new webpack.optimize.UglifyJsPlugin({  //压缩包
-        //    compress: {
-        //        warnings: false
-        //    },
-        //    sourceMap: true,
-        //    mangle: false
-        //}),
+        new webpack.optimize.UglifyJsPlugin({  //压缩包
+            compress: {
+                warnings: false
+            },
+            sourceMap: true,
+            mangle: false
+        }),
 
 
 

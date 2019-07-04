@@ -13,6 +13,7 @@ import * as mix_v_table_adapter from './mix/mix_v_table_adapter.js'
 //import * as mix_nice_validator from './mix/mix_nice_validator.js'
 //import * as mix_fields_data from './mix/mix_fields_data.js'
 import * as mix_ele_table_adapter from './mix/mix_ele_table_adapter.js'
+import * as mix_main from './mix/main'
 
 import * as ajax_fields from './tabs/ajax_fields.js'
 import * as ajax_table from './tabs/ajax_table.js'

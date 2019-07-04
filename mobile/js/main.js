@@ -3,6 +3,11 @@ require('./scss/base.scss')   // 单位宽度等
 
 require('./styl/list.styl')
 
+//------------------
+import *  as  mix_fields_data from 'jb_admin/mix/mix_fields_data'
+import *  as  mix_nice_validator from 'jb_admin/mix/mix_nice_validator'
+//
+
 import * as config from  './config.js'
 
 import * as pop_win from  './pop_mobile_win'
@@ -25,3 +30,4 @@ import * as item_editor_main from './item_editor/main.js'
 import * as container_main from './container/main.js'
 import * as live_main from './live/main.js'
 import * as uis_main from './uis/main.js'
+
