@@ -39,7 +39,8 @@ class DateTimeProc(BaseFieldProc):
         f = model._meta.get_field(name)
         return {'name':name,
                 'label':_(f.verbose_name),
-                'editor': 'com-date-datetimefield-range-filter'#'com-date-range-filter'
+                'editor':'com-filter-datetime-range',
+                #'editor': 'com-date-datetimefield-range-filter'#'com-date-range-filter'
                 }
     
     def filter_clean_filter_arg(self, name,search_args):

@@ -442,7 +442,7 @@ class ModelTable(object):
             'row_pages':{}, # self.pagenum.get_context(),
             'row_sort':self.row_sort.get_context(),
             'row_filters': self.getRowFilters() , #self.row_filter.get_context(),
-            'search_args': {},
+            'search_args': self.search_args,
             'option':self.get_option(),
             #'search_tip':self.row_search.get_context(),
             'director_name': self.get_director_name(),#model_to_name(self.model),
