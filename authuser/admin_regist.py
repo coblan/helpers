@@ -68,6 +68,7 @@ class RegistFormPage(FieldsPage):
             return username
 
         def clean(self):
+            super().clean()
             if 'pswd2' in self.cleaned_data:
                 del self.cleaned_data['pswd2']
             try:

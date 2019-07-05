@@ -39,6 +39,7 @@ class AuthForm(ModelFields):
         return username
     
     def clean(self):
+        super().clean()
         if 'pas2' in self.cleaned_data:
             del self.cleaned_data['pas2']
         return self.cleaned_data
@@ -50,6 +51,7 @@ class LoginForm(forms.ModelForm):
         fields = ['username', 'password']
     
     def clean(self):
+        super().clean()
         username=self.cleaned_data.get('username')
         password=self.cleaned_data.get('password')
         user= auth.authenticate(username=username,password=password)

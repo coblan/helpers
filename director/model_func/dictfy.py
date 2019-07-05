@@ -38,8 +38,10 @@ def to_dict(instance,filt_attr=None,include=None,exclude=None,hash_keys=None,for
     out['_class']= instance._meta.app_label+'.'+instance._meta.model_name
     if '_label' not in out.keys():
         out['_label']=str(instance)
-    if '_hash' not in out.keys():
-        out['_hash']=hash_dict(out,hash_keys)
+    if 'meta_hash' not in out.keys():
+        fields_name = [x.name for x in instance._meta.get_fields()]
+        valide_name_list = [x for x in fields_name if x in out.keys()]
+        out['meta_hash']=hash_dict(instance.__dict__,valide_name_list)
         #out['_md5']=md5(out).hexdigest() 
     return out
 

@@ -11,7 +11,7 @@ def hash_dict(dc,keys=None):
         if keys:
             if k not in keys:
                 continue
-        if k.startswith('_'):
+        if k.startswith('_') or k.startswith('meta_'):
             continue
         if v is True:
             v= 'true'

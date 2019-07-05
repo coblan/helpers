@@ -138,6 +138,7 @@ class WorkRecordForm(ModelFields):
         return heads  
 
     def clean(self):
+        super().clean()
         cleaned_data = super(WorkRecordForm,self).clean()
         if not has_permit(self.crt_user,'workrecord.check_all'):
             if self.instance.status!='waiting': 

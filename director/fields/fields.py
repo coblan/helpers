@@ -22,6 +22,8 @@ from helpers.func.collection.container import evalue_container
 from django.db import transaction
 import logging
 from helpers.director.decorator import get_request_cache
+from ..model_func.hash_dict import hash_dict
+
 # sql_log 可能没有什么用
 #sql_log = logging.getLogger('director.sql_op')
 
@@ -116,8 +118,20 @@ class ModelFields(forms.ModelForm):
         
         # 有事直接利用table的rows，而table进行了一定的修改显示，这些字段都是readonly的，所以要过滤掉这些字段，否则会造成严重后果。
         #self.changed_data = [x for x in self.changed_data if x not in self.readonly]
-        # 保留下instance的原始值
+        # 保留下instance的原始值,用于记录日志 
         self.before_changed_data = sim_dict(self.instance, include= self.changed_data)
+        
+    
+    def clean(self):
+        super().clean()
+        if self.kw.get('meta_hash'):
+            fields_name = [x.name for x in self.instance._meta.get_fields()]
+            valide_name_list = [x for x in fields_name if x in self.kw.keys()]
+            meta_hash = hash_dict(self.instance.__dict__,valide_name_list)
+            if meta_hash != self.kw.get('meta_hash'):
+                raise UserWarning('此项数据发生了变化，请刷新后再进行后续操作!')
+            
+       
         
     def _clean_dict(self,dc):
         """利用field_map字典，查找前端传来的dc中，某个字段的转换方式"""
@@ -411,7 +425,6 @@ class ModelFields(forms.ModelForm):
 
     def dict_row(self,inst):
         return {}
-    
     
     def dict_head(self,head):
         return head      
