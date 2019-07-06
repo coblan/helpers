@@ -122,14 +122,14 @@ class ModelFields(forms.ModelForm):
         self.before_changed_data = sim_dict(self.instance, include= self.changed_data)
         
     
-    def clean(self):
-        super().clean()
-        if self.kw.get('meta_hash'):
-            fields_name = [x.name for x in self.instance._meta.get_fields()]
-            valide_name_list = [x for x in fields_name if x in self.kw.keys()]
-            meta_hash = hash_dict(self.instance.__dict__,valide_name_list)
-            if meta_hash != self.kw.get('meta_hash'):
-                raise UserWarning('此项数据发生了变化，请刷新后再进行后续操作!')
+    #def clean(self):
+        #super().clean()
+        #if self.kw.get('meta_hash'):
+            #fields_name = [x.name for x in self.instance._meta.get_fields()]
+            #valide_name_list = [x for x in fields_name if x in self.kw.keys()]
+            #meta_hash = hash_dict(self.instance.__dict__,valide_name_list)
+            #if meta_hash != self.kw.get('meta_hash'):
+                #raise UserWarning('此项数据发生了变化，请刷新后再进行后续操作!')
             
        
         
