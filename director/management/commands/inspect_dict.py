@@ -33,14 +33,24 @@ class Command(BaseCommand):
             org_dc = local_dict.get(dc_name)
             if org_dc:
                 for k,v in dc.items():
-                    used_module.append(value_mod(v))
-                    if k not in org_dc:
-                        out_ls.append('    "%s"\t:%s,'%(k,value_str(v)))
-                    elif value_str(v) != value_str( org_dc[k] ):
-                        out_ls.append('    "#?%s"\t:%s,'%(k,value_str(v)))
+                    if isinstance(v,(list,tuple)):
+                        used_module += list_valude_mod(v)
+                        list_str = list_value_str(v)
+          
+                        if k not in org_dc:
+                            out_ls.append('    "%s"\t:[%s],'%(k,list_str))
+                        elif not isinstance(org_dc[k],(list,tuple))  or list_str != list_value_str( org_dc[k] ):
+                            out_ls.append('    "#?%s"\t:[%s],'%(k,list_str))
+                    else:
+                        used_module.append(value_mod(v))
+                        if k not in org_dc:
+                            out_ls.append('    "%s"\t:%s,'%(k,value_str(v)))
+                        elif value_str(v) != value_str( org_dc[k] ):
+                            out_ls.append('    "#?%s"\t:%s,'%(k,value_str(v)))
                 for k,v in org_dc.items():
                     if k not in dc:
-                        out_ls.append('    #-"%s"\t:%s,'%(k,value_str(v)))
+                        # 去掉的 行，没必要 对象化
+                        out_ls.append('    #-"%s"\t:%s,'%(k,str(v)))
             else:
                 for k,v in dc.items():
                     if isinstance(v,(list,tuple)):
@@ -76,14 +86,21 @@ def value_str(v):
     
     return '%s.%s'%(module.__name__,v.__qualname__)
 
+def list_value_str(v):
+    temp_ls =[]
+    for v_item in v:
+        temp_ls.append(value_str(v_item))
+    return ','.join(temp_ls)
+
+
 def value_mod(v):
     module = inspect.getmodule(v)
     return module.__name__.split('.')[0]
-        #fun_repre = repr(v)
-        #mt = re.search('^(.*) at ',fun_repre)
-        #return mt.group(1)+'>'
-    #elif isinstance(v,(list,tuple)):
-        #return [value_str(x) for x in v]
-    #else:
-        #return str(v)
+
+def list_valude_mod(v):
+    temp_ls=[]
+    for v_item in v:
+        temp_ls.append(value_mod(v_item))
+    return temp_ls
+    
     

@@ -79,13 +79,13 @@ var mix_fields_data ={
         }
     },
     methods:{
-        get_row:function(director_name,data){
+        updateRowBk:function(director_name,data){
             // 后端可以控制，直接更新row数据
             cfg.show_load()
-            ex.director_call(director_name,data).then(resp=>{
+            ex.director_call(director_name,data).then(row=>{
                 cfg.hide_load()
-                ex.vueAssign(this.org_row,resp)
-                ex.vueAssign(this.row,resp)
+                ex.vueAssign(this.par_row,row)
+                ex.vueAssign(this.row,row)
             })
         },
         on_operation:function(op){

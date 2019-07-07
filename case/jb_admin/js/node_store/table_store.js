@@ -27,6 +27,12 @@ var table_store={
                 ex.eval(router.express,{event:e,ts:self})
             })
         })
+        if(this.head){
+            if(this.head.init_express){
+                ex.eval(this.head.init_express,{row:this.row,ps:this.parStore,cs:this,vc:this.vc})
+            }
+        }
+
     },
     computed:{
         changed:function(){
@@ -99,7 +105,7 @@ var table_store={
             var dc = {fun:'get_row',director_name:fields_ctx.director_name}
 
             if(kws.pre_set){
-                var pre_set = ex.eval(kws.pre_set,{vc:self,search_args:self.search_args})
+                var pre_set = ex.eval(kws.pre_set,{vc:self.vc,ps:self,search_args:self.search_args})
                 ex.assign(dc,pre_set)
             }else if(kws.init_fields){ // 老的的调用，准备移除
                 ex.assign(dc,kws.init_fields)

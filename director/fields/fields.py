@@ -90,7 +90,7 @@ class ModelFields(forms.ModelForm):
                 except self._meta.model.DoesNotExist:
                     raise Http404('Id=%s that you request is not exist'%pk)
             else:
-                form_kw['instance'] = self._meta.model()
+                form_kw['instance'] = self._meta.model(**self.kw)
         else:
             form_kw['instance']=kw.pop('instance')
         
@@ -122,14 +122,13 @@ class ModelFields(forms.ModelForm):
         self.before_changed_data = sim_dict(self.instance, include= self.changed_data)
         
     
-    #def clean(self):
-        #super().clean()
-        #if self.kw.get('meta_hash'):
-            #fields_name = [x.name for x in self.instance._meta.get_fields()]
-            #valide_name_list = [x for x in fields_name if x in self.kw.keys()]
-            #meta_hash = hash_dict(self.instance.__dict__,valide_name_list)
-            #if meta_hash != self.kw.get('meta_hash'):
-                #raise UserWarning('此项数据发生了变化，请刷新后再进行后续操作!')
+    def clean(self):
+        super().clean()
+        if self.kw.get('meta_hash') and self.kw.get('meta_hash_fields'):
+            fields_name =  self.kw.get('meta_hash_fields').split(',') #[x.name for x in self.instance._meta.get_fields()]
+            meta_hash = hash_dict(self.instance.__dict__,fields_name)
+            if meta_hash != self.kw.get('meta_hash'):
+                raise UserWarning('与读取时数据比对，当前数据库发生了变化，本变化字段包含在%s中，请刷新同步数据后后再进行操作!'%self.changed_data)
             
        
         

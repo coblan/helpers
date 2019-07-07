@@ -8,6 +8,7 @@ var tab_table={
         var my_table_store ={
             data:function(){
                 return {
+                    head:heads_ctx,
                     heads:heads_ctx.heads,
                     row_filters:heads_ctx.row_filters,
                     row_sort:heads_ctx.row_sort,
@@ -36,7 +37,7 @@ var tab_table={
                 },
                 getRows:function(){
                     if(vc.tab_head.pre_set){
-                        var pre_set = ex.eval(vc.tab_head.pre_set,{par_row:vc.par_row})
+                        var pre_set = ex.eval(vc.tab_head.pre_set,{par_row:vc.par_row,vc:vc,ps:this})
                         ex.assign(this.search_args,pre_set)
                     }else if(vc.tab_head.tab_field){ // 下面是老的调用，
                         this.search_args[vc.tab_head.tab_field] = vc.par_row[vc.tab_head.par_field]
@@ -54,15 +55,24 @@ var tab_table={
             loaded:false,
         }
     },
-    mounted:function(){
+    mounted(){
         ex.vueEventRout(this,this.tab_head.event_slots)
+        // 如果有复杂的需求，则被 table_store.init_express接管
+        if(!this.childStore.head.init_express){
+            this.childStore.search()
+        }
     },
     methods:{
         on_show:function (){
-            if(! this.loaded){
-                this.childStore.search()
-                this.loaded=true
-            }
+            // 如果有复杂的需求，则被 table_store.init_express接管
+            //if(this.childStore.head.init_express){
+            //    return
+            //}
+            //// TODO 下面的加载方式可能不需要了，因为tab是lazy加载,在mounted hook函数中可以达到同样功能，后面需要花时间移除该函数
+            //if(! this.loaded ){
+            //    this.childStore.search()
+            //    this.loaded=true
+            //}
         }
     },
 
