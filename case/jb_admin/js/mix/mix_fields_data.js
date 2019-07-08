@@ -173,6 +173,24 @@ var mix_fields_data ={
                         self.setErrors(rt.errors)
                         self.showErrors(rt.errors)
                         //reject(rt.errors)
+                    }else if(rt._outdate){
+                        cfg.hide_load()
+                        layer.confirm(rt._outdate, {
+                            icon:3,
+                            title:'提示',
+                            btn: ['刷新', '保存', '取消'] //可以无限个按钮
+                            ,btn3: function(index, layero){
+                               layer.close(index)
+                            }
+                        }, function(index, layero){
+                            layer.close(index)
+                            self.updateRowBk(self.row._director_name,{pk:self.row.pk})
+                        }, function(index){
+                            layer.close(index)
+                            self.row.meta_hash_fields=''
+                            self.submit()
+                        });
+                        //cfg.showMsg(rt._outdate)
                     }else{
                         ex.vueAssign(self.row,rt.row)
                         if(this.head && this.head.after_save && typeof this.head.after_save =='string'){

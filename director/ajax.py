@@ -15,7 +15,7 @@ import io
 from helpers.director.base_data import director
 from django.http import HttpResponse
 from django.utils.timezone import datetime
-from .fields.fields import ModelFields
+from .fields.fields import ModelFields,OutDateException
 from .network import argument
 
 try:
@@ -49,6 +49,8 @@ def save_row(row,user,request):
         return {'status':'success','row':dc}
     except ValidationError as e:
         return {'errors':dict(e)}
+    except OutDateException as e:
+        return {'_outdate':str(e)}
 
 
 def get_new_row_ctx(model_name,user):

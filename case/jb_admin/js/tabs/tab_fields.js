@@ -98,10 +98,9 @@ var tab_fields={
                     self.childStore.$emit('row.update_or_insert',row)
                 },kws)
             }
-            if(self.tab_head.get_row){
-                ex.eval(self.tab_head.get_row,{vc:self})
-                //ex.vueAssign(self.row,row_dc)
-            }
+            //if(self.tab_head.get_row){
+            //    ex.eval(self.tab_head.get_row,{vc:self})
+            //}
         },
         after_save:function(new_row){
             // 为了兼容 老的 版本，才留下 这个 after-save TODO 移除老系统调用后，删除这个函数

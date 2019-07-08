@@ -18,6 +18,7 @@ from .base_data import director
 from django.db import transaction
 from helpers.director.network import argument
 from django.conf import settings
+from helpers.func.exception import JsonException
 
 import logging
 req_log = logging.getLogger('general_log')
@@ -83,7 +84,7 @@ def ajax_views(request,app=None):
     if isinstance(rt, HttpResponse):
         return rt
     else:
-        return HttpResponse(json.dumps(rt),content_type="application/json")  
+        return HttpResponse(json.dumps(rt,ensure_ascii=False),content_type="application/json")  
     
 @csrf_exempt
 def general_upload(request):

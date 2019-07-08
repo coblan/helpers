@@ -251,8 +251,11 @@ var table_store={
                         var one_row={}
                         if(kws.field){ // 兼容老的，新的采用eval形式，
                             one_row[kws.field]=kws.value
+                            one_row.meta_change_fields =kws.field
                         }else{
-                            ex.assign(one_row,ex.eval(kws.pre_set))
+                            var dc = ex.eval(kws.pre_set)
+                            ex.assign(one_row,dc)
+                            one_row.meta_change_fields = Object.keys(dc).join(',')
                         }
 
                         if(kws.fields_ctx){
