@@ -18,7 +18,6 @@ from .base_data import director
 from django.db import transaction
 from helpers.director.network import argument
 from django.conf import settings
-from helpers.func.exception import JsonException
 
 import logging
 req_log = logging.getLogger('general_log')

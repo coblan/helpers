@@ -23,7 +23,7 @@ from django.db import transaction
 import logging
 from helpers.director.decorator import get_request_cache
 from ..model_func.hash_dict import hash_dict,mark_dict,dif_mark_dict
-from helpers.func.exception import JsonException
+
 
 # sql_log 可能没有什么用
 #sql_log = logging.getLogger('director.sql_op')
