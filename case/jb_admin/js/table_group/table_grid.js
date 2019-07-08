@@ -198,13 +198,15 @@ var ele_table= {
             //})
         },
         tableRowClassName:function({row, rowIndex}){
+            var class_list =[]
             if(row._css_class){
-                return row._css_class
-            }else{
-                if(ex.isin(row,this.selected)){
-                    return 'row-select'
-                }
+                clss_list.push( row._css_class)
             }
+            if(ex.isin(row,this.selected)){
+                class_list.push('row-select')
+            }
+            return class_list.join(' ')
+
         },
         bus_search: function (search_args) {
             ex.assign(this.search_args, search_args)

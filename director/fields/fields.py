@@ -47,6 +47,7 @@ class ModelFields(forms.ModelForm):
     field_sort=[]
     extra_mixins=[]
     hide_fields = []
+    overlap_fields=[]  # 这些字段不会被同步检查
     show_pk=False
     nolimit=False
     @classmethod
@@ -149,6 +150,7 @@ class ModelFields(forms.ModelForm):
             ls = self.permit.changeable_fields()
             ls = [x for x in ls if x in self.fields.keys()]
             ls =[x for x in ls if x not in self.readonly]
+            ls = [x for x in ls if x not in self.overlap_fields]
             dif_dc = dif_mark_dict(crt_mark_dc, self.kw.get('meta_org_dict'),keys=ls)
             
             if dif_dc:
