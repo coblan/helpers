@@ -141,9 +141,12 @@ def director_view(request,director_name):
             pass
         else:
             dc ={'success':True,'data':rt}
-            rt = JsonResponse(dc,safe=False)
+            #rt = JsonResponse(dc,safe=False,ensure_ascii=False)
+            rt = HttpResponse(json.dumps(dc,ensure_ascii=False),content_type="application/json") 
     except UserWarning as e:
-        rt = JsonResponse({'success':False,'msg':str(e)})
+        dc = {'success':False,'msg':str(e)}
+        rt = HttpResponse(json.dumps(dc,ensure_ascii=False),content_type="application/json") 
+        #rt = JsonResponse({'success':False,'msg':str(e)})
     except PermissionDenied as e:
         rt = HttpResponse(str(e))
 

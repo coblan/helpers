@@ -131,7 +131,7 @@ class BaseEngine(object):
         if  request.is_ajax() and not request.GET.get('_ajax_html') : #and not getattr(page,'ajax_html',False):
             resp= HttpResponse(json.dumps(ctx),content_type="application/json")
         if request.GET.get('_accept')=='json' or 'json' in request.META.get('HTTP_ACCEPT',''):
-            resp= HttpResponse(json.dumps(ctx),content_type="application/json") 
+            resp= HttpResponse(json.dumps(ctx,ensure_ascii=False),content_type="application/json") 
         else:
             ctx['brand'] = self.brand
             ctx['title'] = self.title
