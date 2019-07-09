@@ -433,7 +433,8 @@ class ModelFields(forms.ModelForm):
             raise PermissionDenied('you have no Permission access %s'%self.instance._meta.model_name)
 
         # self.fields 是经过 权限 处理了的。可读写的字段
-        self.instance.refresh_from_db()
+        if self.instance.pk:
+            self.instance.refresh_from_db()
         row = to_dict(self.instance,include=self.fields.keys())
         row.update( self.dict_row(self.instance) )
         
