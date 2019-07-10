@@ -9,7 +9,7 @@ export var rabbit={
     * */
     rabbit_regist:function(ctx){
     var p =new Promise(function(resolve,reject) {
-            ex.load_js('https://cdn.bootcss.com/stomp.js/2.3.2/stomp.min.js', function () {
+            ex.load_js(js_config.js_lib.stompjs, function () {
                 // Stomp.js boilerplate
                 //var client = Stomp.client('ws://' + rabbit.url + ':15674/ws');
                 var client = Stomp.client(ctx.url);
@@ -45,8 +45,93 @@ export var rabbit={
             })
         })
         return p
+    },
+    stompInit(ctx){
+        ex.load_js(js_config.js_lib.stompjs, ()=> {
+            this._stomp_client = Stomp.client(ctx.url);
+            var on_connect = (x)=> {
+                //gb.toast("websocket 链接成功")
+                ex.each(this._stomp_socket_list,(socket)=>{
+                    socket.peekListen()
+                })
+            };
 
+            var on_error =  (e)=> {
+                console.log(e)
+
+                setTimeout(function () {
+                    this._stomp_client = Stomp.client(ctx.url);
+                    this._stomp_client.connect(ctx.user, ctx.pswd, on_connect, on_error, '/');
+                }, 10000)
+            };
+            this._stomp_client.connect(ctx.user, ctx.pswd, on_connect, on_error, '/');
+        })
+    },
+    _stomp_client:null,
+    _stomp_socket_list:[],
+    stompListen(url,callback){
+        var socket = new ListenTool(this, ele => {
+            return this._stomp_client.subscribe(url, callback);
+        });
+        socket.addListen(url)
+        this._stomp_socket_list.push(socket)
     }
+}
+
+
+class ListenTool {
+    constructor(par, sub_fun) {
+        this.needListen = [];
+        this.listened = [];
+        this.sub_fun = sub_fun;
+        this.par = par;
+        this.listenedSocket = {};
+    }
+    addListen(ele) {
+        // ele的核心作用是标识该 订阅对象， 以便在初始，出错重连等情况下的 排队，
+        if (ex.isin(ele, this.listened) || ex.isin(ele, this.needListen)) {
+            this.listened.push(ele);
+        } else {
+            this.needListen.push(ele);
+            this.peekListen();
+        }
+    }
+    peekListen() {
+        if (!this.needListen || !this.par._stomp_client || !this.par._stomp_client.connected) {
+            return;
+        }
+        let self = this;
+        this.needListen.forEach(ele => {
+            this.listened.push(ele);
+            if (!this.listenedSocket[ele]) {
+                this.listenedSocket[ele] = this.sub_fun(ele);
+            }
+        });
+        this.needListen = [];
+    }
+    unListen(ele) {
+        if (gb.is_in(ele, this.listened)) {
+            gb.removeOne(this.listened, ele);
+        } else {
+            gb.removeOne(this.needListen);
+        }
+        if (
+            !gb.is_in(ele, this.listened) &&
+            !gb.is_in(ele, this.needListen) &&
+            this.listenedSocket[ele]
+        ) {
+            this.listenedSocket[ele].unsubscribe();
+            delete this.listenedSocket[ele];
+        }
+    }
+    cacheListened() {
+        if (this.listened.length > 0) {
+            this.needListen = this.needListen.concat(this.listened);
+            this.listened = [];
+        }
+        this.listenedSocket = {};
+    }
+
 }
 
 

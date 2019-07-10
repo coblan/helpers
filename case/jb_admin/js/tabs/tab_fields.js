@@ -80,7 +80,9 @@ var tab_fields={
     },
 
     methods:{
-
+        back(){
+            this.parStore.pop_tab_stack()
+        },
         group_filter_heads:function(group){
             return ex.filter(this.normed_heads,function(head){
                 return ex.isin(head.name,group.head_names)

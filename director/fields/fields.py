@@ -249,10 +249,17 @@ class ModelFields(forms.ModelForm):
     def get_operations(self):
         ls=[]
         if self.permit.changeable_fields():
-            ls.append({
+            ls += [
+                {
                 'name':'save','editor':'com-field-op-btn','label':'保存', 'icon': 'fa-save',
                 'class':'btn btn-info btn-sm',
-            })
+            },
+                # 暂时屏蔽，需要考虑清楚 页面兼容性问题
+                #{
+                #'name':'save_and_return','editor':'com-field-op-btn','label':'保存后返回','icon':'fa-share-square','show':'scope.vc.back',
+                #'class':'btn btn-sm','action':'scope.vc.submit().then((row)=>{ scope.vc.back()})'
+                #}
+            ]
         return ls
     
     def get_permit(self):
