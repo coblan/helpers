@@ -20,11 +20,12 @@ class DateTimeProc(BaseFieldProc):
             }
         
     def clean_field(self, dc, name):
-        if dc[name]:
+        value = dc.get('name')
+        if value and isinstance(value,str):
             value = dc[name][0:19]
             return timezone.datetime.strptime(value,'%Y-%m-%d %H:%M:%S')
         else:
-            return dc[name]
+            return value
     
     def dict_field_head(self, head):
         head['editor']='com-field-datetime'

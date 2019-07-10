@@ -80,8 +80,6 @@ class ModelFields(forms.ModelForm):
         else:
             self.crt_user = crt_user
             
-        dc = self._clean_dict(dc)
-        dc=self.clean_dict(dc)
         # if pk is None:
         if dc.get('pk') != None:
             pk=dc.get('pk')
@@ -112,16 +110,20 @@ class ModelFields(forms.ModelForm):
                 dc[k] =  getattr(form_kw['instance'] , k)  
             
         # 强制保存字段，不验证是否改变,并且其他字段都不能改变
-        if dc.get('meta_change_fields'):
-            force_change_fields = dc.get('meta_change_fields').split(',')
-            for k in self.permit.changeable_fields():
-                if k not in force_change_fields:
-                    fieldcls = inst.__class__._meta.get_field(k)
-                    if isinstance(fieldcls, models.ForeignKey):
-                        dc[k] = getattr(inst, "%s_id" % k)
-                        continue
-                    dc[k] = getattr(form_kw['instance'] , k)  
-                        
+        #if dc.get('meta_change_fields'):
+            #force_change_fields = dc.get('meta_change_fields').split(',')
+            #force_change_fields += self.overlap_fields
+            #for k in self.permit.changeable_fields():
+                #if k not in force_change_fields:
+                    #fieldcls = inst.__class__._meta.get_field(k)
+                    #if isinstance(fieldcls, models.ForeignKey):
+                        #dc[k] = getattr(inst, "%s_id" % k)
+                        #continue
+                    #dc[k] = getattr(form_kw['instance'] , k)  
+                    
+        dc = self._clean_dict(dc)
+        dc=self.clean_dict(dc)        
+        
         if nolimit is not None:
             self.nolimit = nolimit
         self.kw.update(dc)
@@ -143,9 +145,14 @@ class ModelFields(forms.ModelForm):
     
     def clean(self):
         super().clean()
-        if not self.kw.get('meta_change_fields') and self.changed_data \
-           and self.kw.get('meta_org_dict') and self.kw.get('meta_hash_fields'):
-            fields_name =  self.kw.get('meta_hash_fields').split(',') #[x.name for x in self.instance._meta.get_fields()]
+        overlaped_fields = []
+        if self.kw.get('meta_overlap_fields'):
+            overlaped_fields+= self.kw.get('meta_overlap_fields').split(',')
+        if self.overlap_fields:
+            overlaped_fields += self.overlap_fields
+            
+        if  self.changed_data  and self.kw.get('meta_org_dict') and self.kw.get('meta_hash_fields'):
+            fields_name =  self.kw.get('meta_hash_fields').split(',') 
             crt_mark_dc = mark_dict(self.instance.__dict__,fields_name)
             ls = self.permit.changeable_fields()
             ls = [x for x in ls if x in self.fields.keys()]
