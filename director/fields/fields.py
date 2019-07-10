@@ -540,6 +540,17 @@ class ModelFields(forms.ModelForm):
     def save_log(self, dc): 
         modelfields_log.info(json.dumps(dc, cls=DirectorEncoder))
     
+    def get_pop_edit_ctx(self,getrow='{pk:scope.vc.par_row.pk}',):
+        ctx = self.get_head_context()
+        ctx.update({
+            'init_express':'ex.director_call("%(director_name)s",%(getrow)s).then(row=>{ex.vueAssign(scope.vc.row,row)})'%{'director_name':self.get_director_name(),'getrow':getrow},
+            'ops_loc':'bottom',
+            'action':'''var fctx=scope.head.fields_ctx;fctx.par_row=scope.row;cfg.pop_vue_com("com-form-one",scope.head.fields_ctx)''' 
+        })
+        return ctx
+
+         
+    
 
 class Fields(ModelFields):
     """
