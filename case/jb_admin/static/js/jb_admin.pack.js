@@ -6023,6 +6023,7 @@ var mix_fields_data = {
         }
     },
     created: function created() {
+        var self = this;
         ex.each(this.heads, function (head) {
             if (typeof head.readonly == 'string') {
                 head._org_readonly = head.readonly;
@@ -6064,7 +6065,6 @@ var mix_fields_data = {
                     ex.vueAssign(head, ex.eval(head.express, { row: self.row }));
                 }
             });
-
             return heads;
         }
     },
@@ -6239,6 +6239,27 @@ window.mix_fields_data = mix_fields_data;
 var nice_validator = {
     mounted: function mounted() {
         this.update_nice();
+    },
+    computed: {
+        head_fv_rules: function head_fv_rules() {
+            var ls = [];
+            ex.each(this.heads, function (head) {
+                var tmp = '';
+                if (head.required) {
+                    tmp += 'required';
+                }
+                if (head.fv_rule) {
+                    tmp += head.fv_rule;
+                }
+                ls.push(head.name + tmp);
+            });
+            return ls.join(';');
+        }
+    },
+    watch: {
+        head_fv_rules: function head_fv_rules() {
+            this.update_nice();
+        }
     },
     //watch:{
     //    heads:function(new_heads,old_heads){

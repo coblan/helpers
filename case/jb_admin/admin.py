@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 
 from django.contrib import admin
 from django.contrib.auth.models import Group,User
-from helpers.director.shortcut import TablePage,ModelTable,page_dc,model_dc,ModelFields, director
+from helpers.director.shortcut import TablePage,ModelTable,page_dc,model_dc,ModelFields, director,RowFilter
 from helpers.director.models import PermitModel 
 from helpers.director.base_data import site_cfg
 import re
@@ -22,11 +22,18 @@ class UserPage(TablePage):
         model = User
         exclude=['password', 'last_name', 'user_permissions']
         pop_edit_field = 'username'
-        #fields_sort = ['username']
+        fields_sort = ['id','username','first_name','groups','is_superuser','is_staff','is_active','last_login']
         
         def dict_head(self, head): 
+            width={
+                'username':120,
+                'first_name':130,
+                'groups':120,
+            }
+            if head['name'] in width:
+                head['width'] = width.get(head['name'])
             if head['name'] == 'groups':
-                head['label']='权限组'
+                head['label']='权限分组'
                 head['editor'] = 'com-table-array-mapper'
                 head['options'] = [{'value': group.pk, 'label': str(group),} for group in Group.objects.all()]
                 #head['parse_method'] = 'dotSplit'
@@ -36,6 +43,15 @@ class UserPage(TablePage):
         
         class search(RowSearch):
             names=['username']
+        class filters(RowFilter):
+            names=['first_name','groups__name','is_superuser','is_staff','is_active']
+            icontains=['first_name','groups__name']
+            
+            def getExtraHead(self):
+                return [
+                    {'name':'groups__name','label':'权限分组'}
+                ]
+            
 
 class UserFields(ModelFields):
     hide_fields = ['date_joined']
@@ -46,7 +62,7 @@ class UserFields(ModelFields):
     
     def dict_head(self, head):
         if head['name']=='groups':
-            head['label']='权限组'
+            head['label']='权限分组'
             #head['editor']='field_multi_chosen'
             head['editor'] = 'com-field-multi-chosen'
         if head['name'] == 'username':
@@ -82,7 +98,7 @@ class GroupPage(TablePage):
     template='jb_admin/table.html'
     
     def get_label(self): 
-        return '用户角色组'
+        return '权限分组'
     
     class tableCls(ModelTable):
         model=Group

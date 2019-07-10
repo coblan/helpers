@@ -32,6 +32,7 @@ var mix_fields_data ={
         }
     },
     created:function(){
+        var self=this
         ex.each(this.heads,function(head){
             if(typeof head.readonly=='string'){
                 head._org_readonly=head.readonly
@@ -73,9 +74,7 @@ var mix_fields_data ={
                     ex.vueAssign(head, ex.eval(head.express,{row:self.row}) )
                 }
             })
-
             return heads
-
         }
     },
     methods:{
