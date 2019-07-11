@@ -35,12 +35,13 @@ export var notify={
     },
     _layerNofity(title,options){
         layer.open({
-            title: '通知'
-            ,content: title,
+            title: '通知',
+            content: title,
             icon:0,
             shade:false,
             offset:'rb',
             yes:function(index,layero){
+                layer.close(index)
                 if(options.data && options.data.url){
                     location = options.data.url
                 }
