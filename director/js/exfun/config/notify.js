@@ -44,6 +44,11 @@ export var notify={
                 if(options.data && options.data.url){
                     location = options.data.url
                 }
+            },
+            end: function () {
+                if(options.onclose){
+                    options.onclose()
+                }
             }
         });
     }
