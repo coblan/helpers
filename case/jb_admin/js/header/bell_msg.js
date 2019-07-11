@@ -4,7 +4,7 @@ Vue.component('com-head-bell-msg',{
     template:` <li  class="com-head-bell-msg dropdown notifications-menu" @click="on_click()">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
             <i class="fa fa-bell-o"></i>
-            <span class="label label-warning" v-text="head.count"></span>
+            <span v-if="head.count !=0 " class="label label-warning" v-text="head.count"></span>
         </a>
     </li>`,
     mounted(){
