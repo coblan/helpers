@@ -29,7 +29,7 @@ var table_store={
         })
         if(this.head){
             if(this.head.init_express){
-                ex.eval(this.head.init_express,{row:this.row,ps:this.parStore,cs:this,vc:this.vc})
+                ex.eval(this.head.init_express,{par_row:this.par_row,ps:this,vc:this.vc})
             }
         }
 
@@ -251,7 +251,7 @@ var table_store={
                         if(kws.field){ // 兼容老的，新的采用eval形式，
                             one_row[kws.field]=kws.value
                             one_row.meta_overlap_fields =kws.field
-                        }else{
+                        }else if(kws.pre_set){
                             var dc = ex.eval(kws.pre_set)
                             ex.assign(one_row,dc)
                             one_row.meta_overlap_fields = Object.keys(dc).join(',')

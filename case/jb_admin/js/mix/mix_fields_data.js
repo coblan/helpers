@@ -148,7 +148,7 @@ var mix_fields_data ={
                         }).then(()=>{
                             // 如果所有流程都没处理load框，再隐藏load框
                             //cfg.hide_load(2000)
-                            cfg.toast('保存成功!')
+                            //cfg.toast('保存成功!')
                         })
                     }
                 })
