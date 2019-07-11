@@ -272,17 +272,14 @@ class RowSort(object):
         self.valid_name=[x for x in self.names]
         ls=[]
         
-        if not row_sort:
-            row_sort = self.get_default()
         for x in row_sort:
             if x.lstrip('-') in self.valid_name:
                 ls.append(x)
         self.sort_str=','.join(ls)
-        if 'search_args' in self.kw:
-            self.kw['search_args']['_sort']=self.sort_str
+        self.clean_search_args()
     
-    def get_default(self):
-        return []
+    def clean_search_args(self):
+        pass
         
     def get_context(self):
         return {'sortable':self.valid_name,'sort_str':self.sort_str}
