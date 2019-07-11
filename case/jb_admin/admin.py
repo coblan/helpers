@@ -54,10 +54,9 @@ class UserPage(TablePage):
             icontains=['first_name','groups__name']
             
             def getExtraHead(self):
-                ls =[]
-                if not self.kw.get('groups_id'):
-                    ls.append({'name':'groups__name','label':'权限分组'})
-                return ls
+                return [
+                    {'name':'groups__name','label':'权限分组','show':'!scope.ps.search_args.groups_id'}
+                ]
                 
             
             
@@ -145,6 +144,11 @@ class GroupPage(TablePage):
             #return head
             
         def dict_head(self, head):
+            width = {
+                'name':300
+            }
+            if head['name'] in width:
+                head['width'] = width.get(head['name'])
             if head['name'] =='user_count':
                 head['editor'] = 'com-table-click'
                 head['table_ctx'] =UserPage.tableCls().get_head_context()
