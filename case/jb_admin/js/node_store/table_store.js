@@ -85,7 +85,6 @@ var table_store={
 
             var post_data=[{fun:'get_rows',director_name:self.director_name,search_args:self.search_args}]
             ex.post('/d/ajax',JSON.stringify(post_data),function(resp){
-
                 self.rows = resp.get_rows.rows
                 ex.vueAssign( self.row_pages,resp.get_rows.row_pages)
                 //self.row_pages = resp.get_rows.row_pages

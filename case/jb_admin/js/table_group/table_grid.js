@@ -28,18 +28,30 @@ var ele_table= {
         //this.bus.eventBus.$on('operation', this.on_operation)
         //this.bus.eventBus.$on('perpage-change', this.on_perpage_change)
         this.parStore.e_table = this.$refs.e_table
-
         ex.each(this.parStore.heads,(head)=>{
             if(head.style){
                 ex.append_css(head.style)
             }
         })
-
-
     },
 
 
     computed: {
+        default_sort(){
+            var sort_str = this.parStore.row_sort.sort_str
+            if(!sort_str){
+                return {}
+            }
+
+            if(sort_str.startsWith('-') ){
+                var prop=sort_str.slice(1)
+                var order = 'descending'
+            }else{
+                var prop = sort_str
+                var order = 'ascending'
+            }
+            return {prop: prop, order: order}
+        },
         normed_heads(){
             var out_ls =[]
             ex.each(this.parStore.heads,(head)=>{
@@ -116,6 +128,7 @@ var ele_table= {
             }
          }
     },
+
     mixins: [mix_table_data, mix_ele_table_adapter],
     template: `<div class="com-table-grid" style="position: absolute;top:0;left:0;bottom: 0;right:0;">
         <el-table class="table flat-head" ref="e_table"
@@ -126,6 +139,7 @@ var ele_table= {
                               :span-method="parStore.arraySpanMethod"
                               :fit="false"
                               :stripe="true"
+                              :default-sort='default_sort'
                               size="mini"
                               height="100%"
                               style="width: 100%"
@@ -148,6 +162,7 @@ var ele_table= {
                                              :label="head2.label"
                                              :prop="head2.name.toString()"
                                              :sortable="parStore.is_sort(head2)"
+                                             :sort-orders="['ascending', 'descending']"
                                              :width="head2.width">
                                         <template  slot-scope="scope">
                                             <component :is="head2.editor"
@@ -166,6 +181,7 @@ var ele_table= {
                                              :label="head.label"
                                              :prop="head.name.toString()"
                                              :sortable="parStore.is_sort(head)"
+                                             :sort-orders="['ascending', 'descending']"
                                              :width="head.width">
                                 <template  slot-scope="scope">
                                     <component :is="head.editor"
@@ -182,6 +198,7 @@ var ele_table= {
                                              :prop="head.name.toString()"
                                              :label="head.label"
                                              :sortable="parStore.is_sort(head)"
+                                             :sort-orders="['ascending', 'descending']"
                                              :width="head.width">
                             </el-table-column>
 
@@ -248,6 +265,7 @@ Vue.component('com-element-table-colomu',{
                                              :label="head.label"
                                              :prop="head.name.toString()"
                                              :sortable="parStore.is_sort(head)"
+                                             :sort-orders="['ascending', 'descending']"
                                              :width="head.width">
                                 <template slot-scope="scope">
                                     <component :is="head.editor"
@@ -265,6 +283,7 @@ Vue.component('com-element-table-colomu',{
                                              :prop="head.name.toString()"
                                              :label="head.label"
                                              :sortable="parStore.is_sort(head)"
+                                             :sort-orders="['ascending', 'descending']"
                                              :width="head.width">
                             </el-table-column>
 
