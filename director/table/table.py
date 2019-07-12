@@ -306,7 +306,7 @@ class RowSort(object):
                         # mysql 按照拼音排序
                         query= query.extra(select={'converted_%s'%norm_name: 'CONVERT(%s USING gbk)'%norm_name},order_by=['%sconverted_%s'%(direction,norm_name)])                        
                 else:
-                    query= query.order_by(name)
+                    query= query.order_by(name,'-pk')
         else:
             if not query._fields: # 如果这个为空，才能弄一个默认排序，否则造成聚合函数无效
                 query = query.order_by('-pk')
