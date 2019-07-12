@@ -22,21 +22,27 @@ var pop_table_select =  {
     methods:{
         open_win:function(){
             var self=this
-            //pop_table_layer(this.row,this.head.table_ctx,function(foreign_row){
-            //    Vue.set(self.row,self.head.name,foreign_row[self.head.name])
-            //    Vue.set(self.row,'_'+self.head.name+'_label',foreign_row._label)
-            //})
-            var win_close = cfg.pop_middle('com-table-panel',this.head.table_ctx,function(foreign_row){
-                if(self.head.action){
-                    ex.eval(self.head.action,{new_row:foreign_row,row:self.row})
-                }else if(self.head.select_field){
-                    Vue.set(self.row,self.head.name,foreign_row[self.head.select_field])
-                }else{
-                    Vue.set(self.row,self.head.name,foreign_row[self.head.name])
-                }
+            cfg.pop_vue_com('com-table-panel',this.head.table_ctx).then(foreign_row=>{
+                    if(self.head.after_select){
+                        ex.eval(self.head.after_select,{selected_row:foreign_row,row:self.row})
+                    }else if(self.head.select_field){
+                        Vue.set(self.row,self.head.name,foreign_row[self.head.select_field])
+                    }else{
+                        Vue.set(self.row,self.head.name,foreign_row.pk)
+                    }
                     Vue.set(self.row,'_'+self.head.name+'_label',foreign_row._label)
-                win_close()
             })
+            //var win_close = cfg.pop_middle('com-table-panel',this.head.table_ctx,function(foreign_row){
+            //    if(self.head.action){
+            //        ex.eval(self.head.action,{new_row:foreign_row,row:self.row})
+            //    }else if(self.head.select_field){
+            //        Vue.set(self.row,self.head.name,foreign_row[self.head.select_field])
+            //    }else{
+            //        Vue.set(self.row,self.head.name,foreign_row[self.head.name])
+            //    }
+            //        Vue.set(self.row,'_'+self.head.name+'_label',foreign_row._label)
+            //    win_close()
+            //})
         },
         //isValid:function(){
         //    return this.validator.isValid()
