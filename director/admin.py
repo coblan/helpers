@@ -248,6 +248,7 @@ class PermitFormPage(FieldsPage):
     ajax_scope=ajax.get_global()
     
 class UserFields(ModelFields):
+    overlap_fields=['date_joined']
     class Meta:
         model=User
         fields=['username','first_name','is_active','is_staff','is_superuser','email','groups']
