@@ -80,8 +80,6 @@ class ModelFields(forms.ModelForm):
         else:
             self.crt_user = crt_user
             
-        dc = self._clean_dict(dc)
-        dc=self.clean_dict(dc)
         # if pk is None:
         if dc.get('pk') != None:
             pk=dc.get('pk')
@@ -112,16 +110,20 @@ class ModelFields(forms.ModelForm):
                 dc[k] =  getattr(form_kw['instance'] , k)  
             
         # 强制保存字段，不验证是否改变,并且其他字段都不能改变
-        if dc.get('meta_change_fields'):
-            force_change_fields = dc.get('meta_change_fields').split(',')
-            for k in self.permit.changeable_fields():
-                if k not in force_change_fields:
-                    fieldcls = inst.__class__._meta.get_field(k)
-                    if isinstance(fieldcls, models.ForeignKey):
-                        dc[k] = getattr(inst, "%s_id" % k)
-                        continue
-                    dc[k] = getattr(form_kw['instance'] , k)  
-                        
+        #if dc.get('meta_change_fields'):
+            #force_change_fields = dc.get('meta_change_fields').split(',')
+            #force_change_fields += self.overlap_fields
+            #for k in self.permit.changeable_fields():
+                #if k not in force_change_fields:
+                    #fieldcls = inst.__class__._meta.get_field(k)
+                    #if isinstance(fieldcls, models.ForeignKey):
+                        #dc[k] = getattr(inst, "%s_id" % k)
+                        #continue
+                    #dc[k] = getattr(form_kw['instance'] , k)  
+                    
+        dc = self._clean_dict(dc)
+        dc=self.clean_dict(dc)        
+        
         if nolimit is not None:
             self.nolimit = nolimit
         self.kw.update(dc)
@@ -143,9 +145,14 @@ class ModelFields(forms.ModelForm):
     
     def clean(self):
         super().clean()
-        if not self.kw.get('meta_change_fields') and self.changed_data \
-           and self.kw.get('meta_org_dict') and self.kw.get('meta_hash_fields'):
-            fields_name =  self.kw.get('meta_hash_fields').split(',') #[x.name for x in self.instance._meta.get_fields()]
+        overlaped_fields = []
+        if self.kw.get('meta_overlap_fields'):
+            overlaped_fields+= self.kw.get('meta_overlap_fields').split(',')
+        if self.overlap_fields:
+            overlaped_fields += self.overlap_fields
+            
+        if  self.changed_data  and self.kw.get('meta_org_dict') and self.kw.get('meta_hash_fields'):
+            fields_name =  self.kw.get('meta_hash_fields').split(',') 
             crt_mark_dc = mark_dict(self.instance.__dict__,fields_name)
             ls = self.permit.changeable_fields()
             ls = [x for x in ls if x in self.fields.keys()]
@@ -174,8 +181,7 @@ class ModelFields(forms.ModelForm):
                     field = model._meta.get_field(k)
                     if field_map.get(field.__class__):
                         mapper_cls = field_map.get(field.__class__)
-                        if hasattr(mapper_cls,'clean_field'):
-                            dc[k] =  mapper_cls().clean_field(dc,k)
+                        dc[k] =  mapper_cls().clean_field(dc,k)
                         
                 field_path = model_name+'.'+k
                 if field_map.get(field_path):
@@ -249,10 +255,17 @@ class ModelFields(forms.ModelForm):
     def get_operations(self):
         ls=[]
         if self.permit.changeable_fields():
-            ls.append({
+            ls += [
+                {
                 'name':'save','editor':'com-field-op-btn','label':'保存', 'icon': 'fa-save',
                 'class':'btn btn-info btn-sm',
-            })
+            },
+                # 暂时屏蔽，需要考虑清楚 页面兼容性问题
+                #{
+                #'name':'save_and_return','editor':'com-field-op-btn','label':'保存后返回','icon':'fa-share-square','show':'scope.vc.back',
+                #'class':'btn btn-sm','action':'scope.vc.submit().then((row)=>{ scope.vc.back()})'
+                #}
+            ]
         return ls
     
     def get_permit(self):
@@ -539,6 +552,17 @@ class ModelFields(forms.ModelForm):
     
     def save_log(self, dc): 
         modelfields_log.info(json.dumps(dc, cls=DirectorEncoder))
+    
+    def get_pop_edit_ctx(self,getrow='{pk:scope.vc.par_row.pk}',):
+        ctx = self.get_head_context()
+        ctx.update({
+            'init_express':'ex.director_call("%(director_name)s",%(getrow)s).then(row=>{ex.vueAssign(scope.vc.row,row)})'%{'director_name':self.get_director_name(),'getrow':getrow},
+            'ops_loc':'bottom',
+            'action':'''var fctx=scope.head.fields_ctx;fctx.par_row=scope.row;cfg.pop_vue_com("com-form-one",scope.head.fields_ctx)''' 
+        })
+        return ctx
+
+         
     
 
 class Fields(ModelFields):

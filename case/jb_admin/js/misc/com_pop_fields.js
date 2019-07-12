@@ -41,7 +41,7 @@ export var  com_pop_field= {
       </div>
     </div>
      <div style="text-align: right;padding: 8px 3em;">
-        <component v-for="op in ops" :is="op.editor" @operation="on_operation(op)" :head="op"></component>
+        <component v-for="op in normed_ops" :is="op.editor" @operation="on_operation(op)" :head="op"></component>
     </div>
      </div>`,
         data:function(){
@@ -52,6 +52,17 @@ export var  com_pop_field= {
             errors:{},
         },
      }
+    },
+    computed:{
+        normed_ops(){
+            return ex.filter(this.ops,(op)=>{
+                if(op.show){
+                    return ex.eval(op.show,{row:this.row,vc:this})
+                }else{
+                    return true
+                }
+            })
+        }
     }
 }
 

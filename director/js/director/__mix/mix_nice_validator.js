@@ -8,6 +8,29 @@ var nice_validator={
     mounted:function(){
             this.update_nice()
     },
+    computed:{
+        head_fv_rules(){
+            var ls=[]
+            ex.each(this.heads,head=>{
+                var tmp=''
+                if(head.required){
+                    tmp+='required'
+                }
+                if(head.fv_rule){
+                    tmp += head.fv_rule
+                }
+                ls.push(head.name+ tmp)
+            })
+            return ls.join(';')
+        }
+    },
+    watch:{
+      head_fv_rules(){
+          debugger
+
+          this.update_nice()
+      }
+    },
     //watch:{
     //    heads:function(new_heads,old_heads){
     //        for(let i=0;i<new_heads.length;i++){

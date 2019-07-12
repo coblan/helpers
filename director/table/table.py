@@ -268,12 +268,18 @@ class RowSort(object):
     def __init__(self,row_sort=[],user=None,allowed_names=[],kw={}):
         #final_allowd_names = allowed_names + self.extra_allowd_names
         #self.valid_name=[x for x in self.names if x in final_allowd_names]
+        self.kw=kw
         self.valid_name=[x for x in self.names]
         ls=[]
+        
         for x in row_sort:
             if x.lstrip('-') in self.valid_name:
                 ls.append(x)
         self.sort_str=','.join(ls)
+        self.clean_search_args()
+    
+    def clean_search_args(self):
+        pass
         
     def get_context(self):
         return {'sortable':self.valid_name,'sort_str':self.sort_str}

@@ -98,7 +98,9 @@ def save_rows(rows,user,request):
         return ls
     
     except ValidationError as e:
-        return {'errors':dict(e),}    
+        return {'errors':dict(e),}   
+    except OutDateException as e:
+        return {'_outdate':str(e)}
 
 def del_rows(rows,user):
     for row in rows:

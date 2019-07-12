@@ -29,7 +29,7 @@ var table_store={
         })
         if(this.head){
             if(this.head.init_express){
-                ex.eval(this.head.init_express,{row:this.row,ps:this.parStore,cs:this,vc:this.vc})
+                ex.eval(this.head.init_express,{par_row:this.par_row,ps:this,vc:this.vc})
             }
         }
 
@@ -85,7 +85,6 @@ var table_store={
 
             var post_data=[{fun:'get_rows',director_name:self.director_name,search_args:self.search_args}]
             ex.post('/d/ajax',JSON.stringify(post_data),function(resp){
-
                 self.rows = resp.get_rows.rows
                 ex.vueAssign( self.row_pages,resp.get_rows.row_pages)
                 //self.row_pages = resp.get_rows.row_pages
@@ -222,7 +221,7 @@ var table_store={
             var row_match_fun = head.row_match || 'many_row'
             return row_match[row_match_fun](this, head)
         },
-        selected_set_and_save:function(kws){
+        selected_set_and_save:function(kws,resend){
             /*
              这个是主力函数
              // 路线：弹出->编辑->update前端（缓存的）row->保存->后台->成功->update前端row->关闭窗口
@@ -238,7 +237,7 @@ var table_store={
                 弹框确认
                 * */
                 new Promise(function(resolve,reject){
-                    if(kws.confirm_msg){
+                    if(kws.confirm_msg && !resend){
                         layer.confirm(kws.confirm_msg, {icon: 3, title:'提示'}, function(index){
                             layer.close(index);
                            resolve()
@@ -251,11 +250,11 @@ var table_store={
                         var one_row={}
                         if(kws.field){ // 兼容老的，新的采用eval形式，
                             one_row[kws.field]=kws.value
-                            one_row.meta_change_fields =kws.field
-                        }else{
+                            one_row.meta_overlap_fields =kws.field
+                        }else if(kws.pre_set){
                             var dc = ex.eval(kws.pre_set)
                             ex.assign(one_row,dc)
-                            one_row.meta_change_fields = Object.keys(dc).join(',')
+                            one_row.meta_overlap_fields = Object.keys(dc).join(',')
                         }
 
                         if(kws.fields_ctx){
@@ -265,17 +264,6 @@ var table_store={
                                 }
                             })
                             var win_index = pop_edit_local(one_row,kws.fields_ctx,function(new_row,store){
-                                //resolve(new_row,function(resp){
-                                //    if(resp.save_rows.errors){
-                                //        if(kws.after_error){
-                                //            ex.eval(kws.after_error,{fs:store,errors:resp.save_rows.errors})
-                                //        }else{
-                                //            cfg.showError(JSON.stringify( resp.save_rows.errors))
-                                //        }
-                                //    }else{
-                                //        layer.close(win_index)
-                                //    }
-                                //})
                                 var dc = {new_row:new_row,field_store:store,pop_fields_win_index:win_index}
                                 after_proc(dc)
                             })
@@ -299,6 +287,26 @@ var table_store={
                 var post_data=[{fun:'save_rows',rows:cache_rows}]
                 cfg.show_load()
                 ex.post('/d/ajax',JSON.stringify(post_data),function(resp){
+                    if(resp.save_rows._outdate){
+                        layer.confirm(resp.save_rows._outdate, {
+                            icon:3,
+                            title:'提示',
+                            btn: ['刷新', '保存', '取消'] //可以无限个按钮
+                            ,btn3: function(index, layero){
+                                layer.close(index)
+                            }
+                        }, function(index, layero){
+                            layer.close(index)
+                            self.search()
+                        }, function(index){
+                            layer.close(index)
+                            ex.each(self.selected,row=>{
+                                row.meta_hash_fields=''
+                            })
+                            self.selected_set_and_save(kws,true)
+                        });
+                        return
+                    }
                     if( !resp.save_rows.errors){
                         if(kws.after_save){
                             if(ex.eval(kws.after_save,{rows:resp.save_rows,ps:self}) == 'stop'){

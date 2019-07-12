@@ -57,7 +57,7 @@ var big_fields={
         </div>
     </div>
     <div class="oprations bottom" v-if="ops_loc=='bottom'">
-        <component v-for="op in ops" :is="op.editor" :ref="'op_'+op.name" :head="op" @operation="on_operation(op)"></component>
+        <component v-for="op in normed_ops" :is="op.editor" :ref="'op_'+op.name" :head="op" @operation="on_operation(op)"></component>
     </div>
     </div>`,
 
@@ -76,6 +76,15 @@ var big_fields={
     //    this.table_par = table_par
     //},
     computed:{
+        normed_ops(){
+            return ex.filter(this.ops,(op)=>{
+                if(op.show){
+                    return ex.eval(op.show,{row:this.row,vc:this})
+                }else{
+                    return true
+                }
+            })
+        },
         grouped_heads_bucket:function(){
             var out_bucket = []
             ex.each(this.fields_group,(group)=>{

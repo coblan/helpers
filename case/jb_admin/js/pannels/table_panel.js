@@ -14,6 +14,8 @@ var table_panel={
             },
             data:function(){
                 return {
+                    head:self.ctx,
+                    vc:self,
                     par_row:self.ctx.par_row || {},
                     heads:self.ctx.heads || [],
                     selectable:self.ctx.selectable,
@@ -44,7 +46,13 @@ var table_panel={
 
     mounted:function(){
         this.childStore.$on('finish',this.emit_finish)
-        this.childStore.search()
+        if(this.ctx.event_slots){
+            ex.vueEventRout(this,this.ctx.event_slots)
+        }
+        // 如果有复杂的需求，则被 table_store.init_express接管
+        if(!this.childStore.head.init_express){
+            this.childStore.search()
+        }
     },
     methods:{
         get_custom_store:function(base_table_panel_store){
@@ -65,7 +73,8 @@ var table_panel={
 
                </div>
 
-               <div  v-if="childStore.ops.length>0 && childStore.tab_stack.length ==0">
+               <!--<div  v-if="childStore.ops.length>0 && childStore.tab_stack.length ==0">-->
+               <div  v-if="childStore.ops.length>0">
                         <com-table-operations></com-table-operations>
                </div>
 
@@ -84,7 +93,7 @@ var table_panel={
 }
 
 window.com_table_panel=table_panel
-Vue.component('com-table-editor',table_panel)
+//Vue.component('com-table-editor',table_panel)
 
 //window.com_table_panel=table_panel
 Vue.component('com-table-panel',table_panel)
