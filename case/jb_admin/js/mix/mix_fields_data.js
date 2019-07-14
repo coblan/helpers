@@ -179,7 +179,7 @@ var mix_fields_data ={
                         layer.confirm(rt._outdate, {
                             icon:3,
                             title:'提示',
-                            btn: ['刷新', '保存', '取消'] //可以无限个按钮
+                            btn: ['刷新数据', '仍然保存', '取消'] //可以无限个按钮
                             ,btn3: function(index, layero){
                                layer.close(index)
                             }
