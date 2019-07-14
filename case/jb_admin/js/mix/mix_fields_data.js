@@ -32,6 +32,7 @@ var mix_fields_data ={
         }
     },
     created:function(){
+        var self=this
         ex.each(this.heads,function(head){
             if(typeof head.readonly=='string'){
                 head._org_readonly=head.readonly
@@ -73,9 +74,7 @@ var mix_fields_data ={
                     ex.vueAssign(head, ex.eval(head.express,{row:self.row}) )
                 }
             })
-
             return heads
-
         }
     },
     methods:{
@@ -148,7 +147,8 @@ var mix_fields_data ={
                             resolve(res)
                         }).then(()=>{
                             // 如果所有流程都没处理load框，再隐藏load框
-                            cfg.hide_load(2000)
+                            //cfg.hide_load(2000)
+                            //cfg.toast('保存成功!')
                         })
                     }
                 })
@@ -167,12 +167,31 @@ var mix_fields_data ={
             this.old_row=ex.copy(this.row)
             var p = new Promise((resolve,reject)=>{
                 ex.post('/d/ajax',JSON.stringify(post_data), (resp) =>{
+                    cfg.hide_load()
                     var rt = resp.save_row
                     if(rt.errors){
-                        cfg.hide_load()
+                        //cfg.hide_load()
                         self.setErrors(rt.errors)
                         self.showErrors(rt.errors)
                         //reject(rt.errors)
+                    }else if(rt._outdate){
+                        //cfg.hide_load()
+                        layer.confirm(rt._outdate, {
+                            icon:3,
+                            title:'提示',
+                            btn: ['刷新数据', '仍然保存', '取消'] //可以无限个按钮
+                            ,btn3: function(index, layero){
+                               layer.close(index)
+                            }
+                        }, function(index, layero){
+                            layer.close(index)
+                            self.updateRowBk(self.row._director_name,{pk:self.row.pk})
+                        }, function(index){
+                            layer.close(index)
+                            self.row.meta_hash_fields=''
+                            self.submit()
+                        });
+                        //cfg.showMsg(rt._outdate)
                     }else{
                         ex.vueAssign(self.row,rt.row)
                         if(this.head && this.head.after_save && typeof this.head.after_save =='string'){
@@ -182,7 +201,7 @@ var mix_fields_data ={
                             self.after_save(rt.row)
                         }
                         if(resp.msg){
-                            cfg.hide_load()
+                            //cfg.hide_load()
                         }
                         self.setErrors({})
                         self.$emit('finish',rt.row)

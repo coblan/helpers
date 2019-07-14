@@ -2,6 +2,7 @@ from threading import currentThread
 #from django.core.cache.backends.locmem import LocMemCache
 import json
 from django.utils.deprecation import MiddlewareMixin
+from functools import wraps
 
 _request_cache = {}
 _installed_middleware = False
@@ -11,6 +12,7 @@ def get_request_cache():
     return _request_cache[currentThread()]
 
 def request_cache(fun): 
+    @wraps(fun)
     def _fun(*args, **kws):
         cache = get_request_cache()
         key = str( hash(fun))

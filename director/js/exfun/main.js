@@ -43,6 +43,5 @@ ex.sortOrder=sortOrder
 window.ex = ex
 
 
-
-import * as cfg from './cfg.js'
 import * as uis from  './uis/main.js'
+import * as cfg from './cfg.js'

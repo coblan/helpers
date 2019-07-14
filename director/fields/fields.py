@@ -22,13 +22,17 @@ from helpers.func.collection.container import evalue_container
 from django.db import transaction
 import logging
 from helpers.director.decorator import get_request_cache
-from ..model_func.hash_dict import hash_dict
+from ..model_func.hash_dict import hash_dict,mark_dict,dif_mark_dict
+
 
 # sql_log 可能没有什么用
 #sql_log = logging.getLogger('director.sql_op')
 
 modelfields_log = logging.getLogger('ModelFields.save_form')
 
+
+class OutDateException(UserWarning):
+    pass
 
 class ModelFields(forms.ModelForm):
     """
@@ -43,6 +47,7 @@ class ModelFields(forms.ModelForm):
     field_sort=[]
     extra_mixins=[]
     hide_fields = []
+    overlap_fields=[]  # 这些字段不会被同步检查
     show_pk=False
     nolimit=False
     @classmethod
@@ -75,8 +80,6 @@ class ModelFields(forms.ModelForm):
         else:
             self.crt_user = crt_user
             
-        dc = self._clean_dict(dc)
-        dc=self.clean_dict(dc)
         # if pk is None:
         if dc.get('pk') != None:
             pk=dc.get('pk')
@@ -94,9 +97,10 @@ class ModelFields(forms.ModelForm):
         else:
             form_kw['instance']=kw.pop('instance')
         
+        self.custom_permit()
+         # 强制 readonly的字段，不能修改
+        inst =  form_kw['instance']
         for k in dict(dc):
-            # 强制 readonly的字段，不能修改
-            inst =  form_kw['instance']
             if k in self.readonly:
                 if hasattr(inst, "%s_id" % k):  # 如果是ForeignKey，必须要pk值才能通过 form验证
                     fieldcls = inst.__class__._meta.get_field(k)
@@ -104,12 +108,28 @@ class ModelFields(forms.ModelForm):
                         dc[k] = getattr(inst, "%s_id" % k)
                         continue
                 dc[k] =  getattr(form_kw['instance'] , k)  
+            
+        # 强制保存字段，不验证是否改变,并且其他字段都不能改变
+        #if dc.get('meta_change_fields'):
+            #force_change_fields = dc.get('meta_change_fields').split(',')
+            #force_change_fields += self.overlap_fields
+            #for k in self.permit.changeable_fields():
+                #if k not in force_change_fields:
+                    #fieldcls = inst.__class__._meta.get_field(k)
+                    #if isinstance(fieldcls, models.ForeignKey):
+                        #dc[k] = getattr(inst, "%s_id" % k)
+                        #continue
+                    #dc[k] = getattr(form_kw['instance'] , k)  
+                    
+        dc = self._clean_dict(dc)
+        dc=self.clean_dict(dc)        
+        
         if nolimit is not None:
             self.nolimit = nolimit
         self.kw.update(dc)
 
         super(ModelFields,self).__init__(dc,*args,**form_kw)
-        self.custom_permit()
+        
         
         self.pop_fields()
         self.init_value()
@@ -120,17 +140,29 @@ class ModelFields(forms.ModelForm):
         #self.changed_data = [x for x in self.changed_data if x not in self.readonly]
         # 保留下instance的原始值,用于记录日志 
         self.before_changed_data = sim_dict(self.instance, include= self.changed_data)
+        #self.org_db_dict = mark_dict(self.instance.__dict__,keys= self.fields.keys())
         
     
     def clean(self):
         super().clean()
-        if self.kw.get('meta_hash') and self.kw.get('meta_hash_fields'):
-            fields_name =  self.kw.get('meta_hash_fields').split(',') #[x.name for x in self.instance._meta.get_fields()]
-            meta_hash = hash_dict(self.instance.__dict__,fields_name)
-            if meta_hash != self.kw.get('meta_hash'):
-                raise UserWarning('与读取时数据比对，当前数据库发生了变化，本变化字段包含在%s中，请刷新同步数据后后再进行操作!'%self.changed_data)
+        overlaped_fields = []
+        if self.kw.get('meta_overlap_fields'):
+            overlaped_fields+= self.kw.get('meta_overlap_fields').split(',')
+        if self.overlap_fields:
+            overlaped_fields += self.overlap_fields
             
-       
+        if  self.changed_data  and self.kw.get('meta_org_dict') and self.kw.get('meta_hash_fields'):
+            fields_name =  self.kw.get('meta_hash_fields').split(',') 
+            crt_mark_dc = mark_dict(self.instance.__dict__,fields_name)
+            ls = self.permit.changeable_fields()
+            ls = [x for x in ls if x in self.fields.keys()]
+            ls =[x for x in ls if x not in self.readonly]
+            ls = [x for x in ls if x not in self.overlap_fields]
+            dif_dc = dif_mark_dict(crt_mark_dc, self.kw.get('meta_org_dict'),keys=ls)
+            
+            if dif_dc:
+                keys = [self.fields.get(key).label for key in dif_dc.keys()]
+                raise OutDateException('(%s)的%s已经被其他用户改变,请确认后再进行操作!'%(self.instance,keys) )
         
     def _clean_dict(self,dc):
         """利用field_map字典，查找前端传来的dc中，某个字段的转换方式"""
@@ -149,8 +181,7 @@ class ModelFields(forms.ModelForm):
                     field = model._meta.get_field(k)
                     if field_map.get(field.__class__):
                         mapper_cls = field_map.get(field.__class__)
-                        if hasattr(mapper_cls,'clean_field'):
-                            dc[k] =  mapper_cls().clean_field(dc,k)
+                        dc[k] =  mapper_cls().clean_field(dc,k)
                         
                 field_path = model_name+'.'+k
                 if field_map.get(field_path):
@@ -224,10 +255,17 @@ class ModelFields(forms.ModelForm):
     def get_operations(self):
         ls=[]
         if self.permit.changeable_fields():
-            ls.append({
+            ls += [
+                {
                 'name':'save','editor':'com-field-op-btn','label':'保存', 'icon': 'fa-save',
                 'class':'btn btn-info btn-sm',
-            })
+            },
+                # 暂时屏蔽，需要考虑清楚 页面兼容性问题
+                #{
+                #'name':'save_and_return','editor':'com-field-op-btn','label':'保存后返回','icon':'fa-share-square','show':'scope.vc.back',
+                #'class':'btn btn-sm','action':'scope.vc.submit().then((row)=>{ scope.vc.back()})'
+                #}
+            ]
         return ls
     
     def get_permit(self):
@@ -408,7 +446,10 @@ class ModelFields(forms.ModelForm):
             raise PermissionDenied('you have no Permission access %s'%self.instance._meta.model_name)
 
         # self.fields 是经过 权限 处理了的。可读写的字段
-        row = to_dict(self.instance,filt_attr=self.dict_row,include=self.fields)
+        if self.instance.pk:
+            self.instance.refresh_from_db()
+        row = to_dict(self.instance,include=self.fields.keys())
+        row.update( self.dict_row(self.instance) )
         
         ls=[]
         ls.extend(self.permit.readable_fields())
@@ -440,7 +481,7 @@ class ModelFields(forms.ModelForm):
  
             for data in self.changed_data:
                 if data in self.get_readonly_fields():
-                    raise PermissionDenied("Can't change {data}".format(data=data))
+                    raise PermissionDenied(" {data} is readonly".format(data=data))
         
         op=None
         if self.changed_data:
@@ -511,6 +552,17 @@ class ModelFields(forms.ModelForm):
     
     def save_log(self, dc): 
         modelfields_log.info(json.dumps(dc, cls=DirectorEncoder))
+    
+    def get_pop_edit_ctx(self,getrow='{pk:scope.vc.par_row.pk}',):
+        ctx = self.get_head_context()
+        ctx.update({
+            'init_express':'ex.director_call("%(director_name)s",%(getrow)s).then(row=>{ex.vueAssign(scope.vc.row,row)})'%{'director_name':self.get_director_name(),'getrow':getrow},
+            'ops_loc':'bottom',
+            'action':'''var fctx=scope.head.fields_ctx;fctx.par_row=scope.row;cfg.pop_vue_com("com-form-one",scope.head.fields_ctx)''' 
+        })
+        return ctx
+
+         
     
 
 class Fields(ModelFields):

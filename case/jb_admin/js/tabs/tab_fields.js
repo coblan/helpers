@@ -80,7 +80,9 @@ var tab_fields={
     },
 
     methods:{
-
+        back(){
+            this.parStore.pop_tab_stack()
+        },
         group_filter_heads:function(group){
             return ex.filter(this.normed_heads,function(head){
                 return ex.isin(head.name,group.head_names)
@@ -98,10 +100,9 @@ var tab_fields={
                     self.childStore.$emit('row.update_or_insert',row)
                 },kws)
             }
-            if(self.tab_head.get_row){
-                ex.eval(self.tab_head.get_row,{vc:self})
-                //ex.vueAssign(self.row,row_dc)
-            }
+            //if(self.tab_head.get_row){
+            //    ex.eval(self.tab_head.get_row,{vc:self})
+            //}
         },
         after_save:function(new_row){
             // 为了兼容 老的 版本，才留下 这个 after-save TODO 移除老系统调用后，删除这个函数

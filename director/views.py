@@ -83,7 +83,7 @@ def ajax_views(request,app=None):
     if isinstance(rt, HttpResponse):
         return rt
     else:
-        return HttpResponse(json.dumps(rt),content_type="application/json")  
+        return HttpResponse(json.dumps(rt,ensure_ascii=False),content_type="application/json")  
     
 @csrf_exempt
 def general_upload(request):

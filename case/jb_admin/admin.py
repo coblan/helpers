@@ -3,14 +3,14 @@ from __future__ import unicode_literals
 
 from django.contrib import admin
 from django.contrib.auth.models import Group,User
-from helpers.director.shortcut import TablePage,ModelTable,page_dc,model_dc,ModelFields, director
+from helpers.director.shortcut import TablePage,ModelTable,page_dc,model_dc,ModelFields, director,RowFilter
 from helpers.director.models import PermitModel 
 from helpers.director.base_data import site_cfg
 import re
 from . import  js_cfg
 from django.utils.translation import ugettext as _
 from helpers.director.shortcut import model_to_name, model_full_permit, add_permits, model_read_permit,RowSearch
-
+from django.db.models import Count
 import json
 # Register your models here.
 class UserPage(TablePage):
@@ -22,11 +22,18 @@ class UserPage(TablePage):
         model = User
         exclude=['password', 'last_name', 'user_permissions']
         pop_edit_field = 'username'
-        #fields_sort = ['username']
+        fields_sort = ['id','username','first_name','groups','is_superuser','is_staff','is_active','last_login']
         
         def dict_head(self, head): 
+            width={
+                'username':120,
+                'first_name':130,
+                'groups':120,
+            }
+            if head['name'] in width:
+                head['width'] = width.get(head['name'])
             if head['name'] == 'groups':
-                head['label']='权限组'
+                head['label']='权限分组'
                 head['editor'] = 'com-table-array-mapper'
                 head['options'] = [{'value': group.pk, 'label': str(group),} for group in Group.objects.all()]
                 #head['parse_method'] = 'dotSplit'
@@ -34,8 +41,25 @@ class UserPage(TablePage):
                 head['label']='账号'
             return head
         
+        def inn_filter(self, query):
+            if self.kw.get('groups_id'):
+                return query.filter(groups__id =self.kw.get('groups_id'))
+            else:
+                return query
+        
         class search(RowSearch):
             names=['username']
+        class filters(RowFilter):
+            names=['first_name','groups__name','is_superuser','is_staff','is_active']
+            icontains=['first_name','groups__name']
+            
+            def getExtraHead(self):
+                return [
+                    {'name':'groups__name','label':'权限分组','show':'!scope.ps.search_args.groups_id'}
+                ]
+                
+            
+            
 
 class UserFields(ModelFields):
     hide_fields = ['date_joined']
@@ -46,7 +70,7 @@ class UserFields(ModelFields):
     
     def dict_head(self, head):
         if head['name']=='groups':
-            head['label']='权限组'
+            head['label']='权限分组'
             #head['editor']='field_multi_chosen'
             head['editor'] = 'com-field-multi-chosen'
         if head['name'] == 'username':
@@ -82,32 +106,60 @@ class GroupPage(TablePage):
     template='jb_admin/table.html'
     
     def get_label(self): 
-        return '用户角色组'
+        return '权限分组'
     
     class tableCls(ModelTable):
         model=Group
         exclude=['permissions']
+        pop_edit_fields=['name']
         #pop_edit_field = 'name'
-    
-        def dict_head(self, head):
+        
+        def inn_filter(self, query):
+            return query.annotate(user_count = Count('user') )
+        
+        def getExtraHead(self):
+            return [
+                {'name':'user_count','label':'用户数'},
+            ]
+        
+        #def dict_head(self, head):
             
-            if head['name']=='name':
-                groupform = GroupForm(crt_user=self.crt_user)
-                head['editor']='com-table-pop-fields'
-                head['get_row']={
-                    "fun":'use_table_row'
-                }
-                head['fields_ctx']=groupform.get_head_context()
-                head['after_save']={
-                    #'fun':'do_nothing'
-                    'fun':'update_or_insert'
-                }  
-                head['width'] = 200
-                #head['ops']=groupform.get_operations()
+            #if head['name']=='name':
+                #groupform = GroupForm(crt_user=self.crt_user)
+                #head['editor']='com-table-pop-fields'
+                #head['get_row']={
+                    #"fun":'use_table_row'
+                #}
+                #head['fields_ctx']=groupform.get_head_context()
+                #head['after_save']={
+                    ##'fun':'do_nothing'
+                    #'fun':'update_or_insert'
+                #}  
+                #head['width'] = 200
+                ##head['ops']=groupform.get_operations()
 
-            #if head['name']=='permissions':
-                #head['editor'] = 'com-field-ele-tree-name-layer'
+            ##if head['name']=='permissions':
+                ##head['editor'] = 'com-field-ele-tree-name-layer'
                 
+            #return head
+            
+        def dict_head(self, head):
+            width = {
+                'name':300
+            }
+            if head['name'] in width:
+                head['width'] = width.get(head['name'])
+            if head['name'] =='user_count':
+                head['editor'] = 'com-table-click'
+                head['table_ctx'] =UserPage.tableCls().get_head_context()
+                head['table_ctx'].update({
+                    #'init_express':'ex.director_call(scope.vc.ctx.director_name,{car_no:scope.vc.par_row.car_no}).then(res=>ex.vueAssign(scope.row,res))',
+                    #'after_save':'scope.vc.par_row.car_no =scope.row.car_no; scope.vc.par_row.has_washed=scope.row.has_washed ',
+                    #'init_express':'cfg.show_load(),ex.director_call(scope.vc.ctx.director_name,{pk:scope.vc.par_row.pk}).then((res)=>{cfg.hide_load();ex.vueAssign(scope.row,res)})',
+                    'init_express':'scope.ps.search_args.groups_id=scope.ps.par_row.pk;scope.ps.search()',
+                    'ops_loc':'bottom'
+                })
+                head['action'] = 'scope.head.table_ctx.par_row=scope.row;cfg.pop_vue_com("com-table-panel",scope.head.table_ctx)'
             return head
     
         def dict_row(self, inst):
@@ -116,6 +168,9 @@ class GroupPage(TablePage):
                 dc['permit']=[x for x in inst.permitmodel.names.split(';')]
             else:
                 dc['permit']=[]
+            dc.update({
+                'user_count':inst.user_count
+            })
             return dc
         
 

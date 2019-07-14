@@ -82,6 +82,7 @@ def get_lib(request):
         'chosen': '/static/lib/chosen_v1.8.7/chosen.jquery.min.js',
         'chosen_css': '/static/lib/chosen_v1.8.7/chosen.min.css',  
         'ckeditor': '/static/lib/ckeditor_4.10.1/ckeditor/ckeditor.js', 
+        'notify':'https://cdn.jsdelivr.net/npm/@wcjiang/notify@2.0.12/dist/notify.min.js',
     }
     if request.META['ACCESS_FROM_INTERNET']:
 
@@ -104,8 +105,8 @@ def get_lib(request):
             'adminlte_blue_css': 'https://cdn.jsdelivr.net/npm/admin-lte@2.4.10/dist/css/skins/skin-blue.min.css',            
             'nprogress': 'https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js',
             'nprogress_css': 'https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.css',        
-            'element': 'https://cdn.jsdelivr.net/npm/element-ui@2.8.2/lib/index.js',
-            'element_css':'https://cdn.jsdelivr.net/npm/element-ui@2.8.2/lib/theme-chalk/index.css', 
+            'element': 'https://cdn.jsdelivr.net/npm/element-ui@2.10.0/lib/index.js',
+            'element_css':'https://cdn.jsdelivr.net/npm/element-ui@2.10.0/lib/theme-chalk/index.css',  #2.8.2
             'md5': 'https://cdn.jsdelivr.net/npm/blueimp-md5@2.10.0/js/md5.min.js',
             'swiper': 'https://cdn.jsdelivr.net/npm/swiper@4.5.0/dist/js/swiper.min.js',
             'swiper_css': 'https://cdn.jsdelivr.net/npm/swiper@4.5.0/dist/css/swiper.min.css',  

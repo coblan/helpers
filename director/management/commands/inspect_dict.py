@@ -11,6 +11,7 @@ import re
 
 root_module=[]
 
+used_module =[]
 class Command(BaseCommand):
     """
     """
@@ -27,41 +28,41 @@ class Command(BaseCommand):
                 if org_str:
                     exec(org_str,gb_dict,local_dict)
         
-        used_module =[]
+        global used_module
         for dc_name,dc in inspect_dict.items():
             out_ls = []
             org_dc = local_dict.get(dc_name)
             if org_dc:
                 for k,v in dc.items():
                     if isinstance(v,(list,tuple)):
-                        used_module += list_valude_mod(v)
+                        #used_module += list_valude_mod(v)
                         list_str = list_value_str(v)
           
                         if k not in org_dc:
-                            out_ls.append('    "%s"\t:[%s],'%(k,list_str))
+                            out_ls.append('    %s\t:[%s],'%(value_str(k),list_str))
                         elif not isinstance(org_dc[k],(list,tuple))  or list_str != list_value_str( org_dc[k] ):
-                            out_ls.append('    "#?%s"\t:[%s],'%(k,list_str))
+                            out_ls.append('    #?%s\t:[%s],'%(value_str(k),list_str))
                     else:
-                        used_module.append(value_mod(v))
+                        #used_module.append(value_mod(v))
                         if k not in org_dc:
-                            out_ls.append('    "%s"\t:%s,'%(k,value_str(v)))
+                            out_ls.append('    %s\t:%s,'%(value_str(k),value_str(v)))
                         elif value_str(v) != value_str( org_dc[k] ):
-                            out_ls.append('    "#?%s"\t:%s,'%(k,value_str(v)))
+                            out_ls.append('    #?%s\t:%s,'%(value_str(k),value_str(v)))
                 for k,v in org_dc.items():
                     if k not in dc:
                         # 去掉的 行，没必要 对象化
-                        out_ls.append('    #-"%s"\t:%s,'%(k,str(v)))
+                        out_ls.append('    #-%s\t:%s,'%(value_str(k),str(v)))
             else:
                 for k,v in dc.items():
                     if isinstance(v,(list,tuple)):
                         temp_ls=[]
                         for v_item in v:
-                            used_module.append(value_mod(v_item))
+                            #used_module.append(value_mod(v_item))
                             temp_ls.append(value_str(v_item))
-                        out_ls.append('    "%s"\t:[%s],'%(k,','.join(temp_ls)))
+                        out_ls.append('    %s\t:[%s],'%(value_str(k),','.join(temp_ls)))
                     else:
-                        used_module.append(value_mod(v))
-                        out_ls.append('    "%s"\t:%s,'%(k,value_str(v)))
+                        #used_module.append(value_mod(v))
+                        out_ls.append('    %s\t:%s,'%(value_str(k),value_str(v)))
             
             if out_ls:
                 dc_str += "\n%s = {\n%s\n}" %(dc_name+'_1' , '\n'.join(out_ls)  )
@@ -82,9 +83,14 @@ class Command(BaseCommand):
         
 def value_str(v):
     #if inspect.isfunction(v):
-    module = inspect.getmodule(v)
-    
-    return '%s.%s'%(module.__name__,v.__qualname__)
+    global used_module
+    if isinstance(v,str):
+        return '"%s"'%v
+    else:
+        used_module.append(value_mod(v))
+        
+        module = inspect.getmodule(v)
+        return '%s.%s'%(module.__name__,v.__qualname__)
 
 def list_value_str(v):
     temp_ls =[]

@@ -1,6 +1,7 @@
 require('./scss/cfg.scss')
 
-window.cfg={
+
+var cfg={
     env:{
         width:$(window).width(),
         height:$(window).height(),
@@ -156,3 +157,15 @@ $(window).resize(function(){
     cfg.env.width=$(window).width()
     cfg.env.height=$(window).height()
 })
+
+function assign(dst,src) {
+    for(var key in src){
+        dst[key]=src[key]
+    }
+    return dst
+}
+
+import {notify} from  './config/notify'
+assign(cfg,notify)
+
+window.cfg=cfg

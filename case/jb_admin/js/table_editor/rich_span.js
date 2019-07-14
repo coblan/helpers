@@ -1,7 +1,13 @@
 
 var label_shower = {
     props:['rowData','field','index'],
-    template:`<span class="com-table-rich-span" :class="myclass" v-text="show_text"></span>`,
+//:class="myclass"
+template:`<div :class="['com-table-rich-span',myclass]" >
+ <component v-if="head.inn_editor"
+            :is="head.inn_editor"
+            :row-data="rowData" :field="field" :index="index"></component>
+            <span v-else v-text="show_text"></span>
+</div>`,
     created(){
         // find head from parent table
         var table_par = this.$parent
@@ -23,6 +29,22 @@ var label_shower = {
         if(this.head.css){
             ex.append_css(this.head.css)
         }
+        this.on_row_change()
+    },
+    watch:{
+        rowData:{
+            handler(v){
+                this.on_row_change()
+            },
+            deep:true
+        }
+    },
+    methods:{
+        on_row_change(){
+            if(this.head.row_change_express){
+                ex.eval(this.head.row_change_express,{row:this.rowData,head:this.head,td:$(this.$el).parents('td').first()})
+            }
+        }
     },
     computed:{
         show_text:function(){
@@ -36,8 +58,8 @@ var label_shower = {
             }
         },
         myclass(){
-            if(this.head.class){
-                return ex.eval(this.head.class,{row:this.rowData,head:this.head})
+            if(this.head.cell_class){
+                return ex.eval(this.head.cell_class,{row:this.rowData,head:this.head})
             }else{
                 return ''
             }

@@ -13,14 +13,14 @@ class MultiChoiceField(CharField):
 class MultiChoiceProc(CharProc):
     def to_dict(self, inst, name):
         value = getattr(inst,name)
-        ls = value.split(';')
+        ls = [x for x in value.split(';') if x!='']
         return { name :ls}
     
     def clean_field(self, dc, name):
         return  ';'.join( dc[name])
     
     def dict_table_head(self, head):
-        head['editor']='com-table-array-shower'
+        head['editor']='com-table-array-mapper'
         head['options'] = self.get_options()
         return head
     

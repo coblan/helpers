@@ -238,28 +238,28 @@ desired effect
                     <!-- /.messages-menu -->
 
                     <!-- Notifications Menu -->
-                    <li v-if="user_msg.length>0"  class="dropdown notifications-menu">
-                        <!-- Menu toggle button -->
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            <i class="fa fa-bell-o"></i>
-                            <span class="label label-warning" v-text="user_msg.length"></span>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <!--<li class="header">You have 10 notifications</li>-->
-                            <li>
-                                <!-- Inner Menu: contains the notifications -->
-                                <ul class="menu">
-                                    <li v-for="msg in user_msg"><!-- start notification -->
-                                        <a :href="msg.url">
-                                            <i class="fa fa-users text-aqua"></i><span v-text="msg.title"></span>
-                                        </a>
-                                    </li>
-                                    <!-- end notification -->
-                                </ul>
-                            </li>
-                            <!--<li class="footer"><a href="#">View all</a></li>-->
-                        </ul>
-                    </li>
+                    <!--<li v-if="user_msg.length>0"  class="dropdown notifications-menu">-->
+                        <!--&lt;!&ndash; Menu toggle button &ndash;&gt;-->
+                        <!--<a href="#" class="dropdown-toggle" data-toggle="dropdown">-->
+                            <!--<i class="fa fa-bell-o"></i>-->
+                            <!--<span class="label label-warning" v-text="user_msg.length"></span>-->
+                        <!--</a>-->
+                        <!--<ul class="dropdown-menu">-->
+                            <!--&lt;!&ndash;<li class="header">You have 10 notifications</li>&ndash;&gt;-->
+                            <!--<li>-->
+                                <!--&lt;!&ndash; Inner Menu: contains the notifications &ndash;&gt;-->
+                                <!--<ul class="menu">-->
+                                    <!--<li v-for="msg in user_msg">&lt;!&ndash; start notification &ndash;&gt;-->
+                                        <!--<a :href="msg.url">-->
+                                            <!--<i class="fa fa-users text-aqua"></i><span v-text="msg.title"></span>-->
+                                        <!--</a>-->
+                                    <!--</li>-->
+                                    <!--&lt;!&ndash; end notification &ndash;&gt;-->
+                                <!--</ul>-->
+                            <!--</li>-->
+                            <!--&lt;!&ndash;<li class="footer"><a href="#">View all</a></li>&ndash;&gt;-->
+                        <!--</ul>-->
+                    <!--</li>-->
 
                     <component :is="widget.editor" :head="widget" v-for="widget in header_bar_widgets">
 
@@ -568,7 +568,7 @@ desired effect
 </body>
 <script>
 
-    eventBus=new Vue()
+    rootStore = new Vue()
 
         new Vue({
             el: '#main-sidebar',//'.sidebar-menu',
@@ -654,12 +654,12 @@ desired effect
         mounted:function(){
             $('.sidebar-toggle').click(function(){
                 Vue.nextTick(function(){
-                    eventBus.$emit('content_resize')
+                    rootStore.$emit('content_resize')
                 })
             })
             $(window).resize(function(){
                 Vue.nextTick(function(){
-                    eventBus.$emit('content_resize')
+                    rootStore.$emit('content_resize')
                 })
             })
         },
@@ -693,4 +693,12 @@ desired effect
 {% for lib in extra_js %}
     <script src='{{ lib | ctxvalue:js_config.js_lib }}'></script>
 {% endfor %}
+
+<script>
+    init_express={{ init_express | jsonify }}
+    if(init_express){
+        ex.eval(init_express)
+    }
+</script>
+
 </html>

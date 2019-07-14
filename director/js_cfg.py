@@ -5,6 +5,7 @@ def get_lib(request):
         'exfun': '/static/js/exfun.pack.js?t=%s&v=6'%js_stamp_dc.get('exfun_pack_js'),
         'director': '/static/js/director.pack.js?t=%s&v=2'%js_stamp_dc.get('director_pack_js'),
         'moment': '/static/lib/moment2.17.1.min.js',
+        'stompjs':'https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js'
         
     }
     if request.META.get('ACCESS_FROM_INTERNET'):
