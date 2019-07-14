@@ -7,7 +7,7 @@ import json
 from django.db.models import Q,fields
 from django.core.exceptions import PermissionDenied
 from ..access.permit import ModelPermit
-from ..model_func.dictfy import model_to_name,to_dict,model_to_head,model_to_name,model_dc,field_map
+from ..model_func.dictfy import model_to_name,to_dict,model_to_head,model_to_name,model_dc,field_map,sim_dict
 from django.db import models
 import math
 import time
@@ -341,6 +341,7 @@ class ModelTable(object):
     has_sequence = False
     selectable = True
     nolimit = False
+    simple_dict = False
     def __init__(self,_page=1,row_sort=[],row_filter={},row_search= '',crt_user=None,perpage=None,**kw):
         """
         kw['search_args']只是一个记录，在获取到rows时，一并返回前端页面，便于显示。
@@ -694,7 +695,10 @@ class ModelTable(object):
             # 遇到一种情况，聚合时，这里的queryset返回的item是dict。所以下面做一个判断
             if isinstance(inst,models.Model):
                 cus_dict = self.dict_row( inst)
-                dc= to_dict(inst, include=permit_fields,filt_attr=cus_dict)
+                if self.simple_dict:
+                    dc = sim_dict(inst, include=permit_fields,filt_attr=cus_dict)
+                else:
+                    dc= to_dict(inst, include=permit_fields,filt_attr=cus_dict)
                 # 再赋值一次，以免被默认dictfy替换掉了，例如 _x_label等值
                 dc.update(cus_dict)
             else:
