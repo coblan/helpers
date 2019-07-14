@@ -4,7 +4,7 @@ require('./scss/tab.scss')
 require('./scss/table.scss')
 require('./scss/table_page.scss')
 require('./scss/element_ex.scss')
-
+require('./styl/adminlte.styl')
 
 import * as config from  './config.js'
 //table mix
@@ -119,3 +119,5 @@ import * as operator_main from  './operator/main.js'
 import * as filter_editor_main from  './filter_editor/main.js'
 import * as livepage_main from  './livepage/main.js'
 import * as table_operator_main from  './table_operator/main'
+
+import * as table_filter_main from './table_filter/main'

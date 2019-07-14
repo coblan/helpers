@@ -131,13 +131,17 @@ var table_store={
                     //self.switch_to_tab({tab_name:kws.tab_name,row:crt_row})
 
                 }else{
-                    var win=pop_fields_layer(crt_row,fields_ctx,function(new_row){
-                        self.update_or_insert(new_row, crt_row)
-                        layer.close(win)
-                        if(kws.after_save){
-                            ex.eval(kws.after_save,{ts:self})
-                        }
+                    fields_ctx.row=crt_row
+                    cfg.pop_vue_com('com-form-one',fields_ctx).then(row=>{
+                        self.update_or_insert(row)
                     })
+                    //var win=pop_fields_layer(crt_row,fields_ctx,function(new_row){
+                    //    self.update_or_insert(new_row, crt_row)
+                    //    layer.close(win)
+                    //    if(kws.after_save){
+                    //        ex.eval(kws.after_save,{ts:self})
+                    //    }
+                    //})
                 }
             })
         },

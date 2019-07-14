@@ -306,7 +306,7 @@ class RowSort(object):
                         # mysql 按照拼音排序
                         query= query.extra(select={'converted_%s'%norm_name: 'CONVERT(%s USING gbk)'%norm_name},order_by=['%sconverted_%s'%(direction,norm_name)])                        
                 else:
-                    query= query.order_by(name)
+                    query= query.order_by(name,'-pk')
         else:
             if not query._fields: # 如果这个为空，才能弄一个默认排序，否则造成聚合函数无效
                 query = query.order_by('-pk')
@@ -642,10 +642,11 @@ class ModelTable(object):
         if self.pop_edit_fields:
             model_form = director.get(self.get_edit_director_name())
             form_obj = model_form(crt_user=self.crt_user)
+            fields_ctx = form_obj.get_head_context()
             for head in heads:
                 if head['name'] in self.pop_edit_fields:
                     head['editor'] = 'com-table-click'
-                    head['fields_ctx'] =form_obj.get_head_context()
+                    head['fields_ctx'] = fields_ctx
                     head['fields_ctx'].update({
                         #'init_express':'ex.director_call(scope.vc.ctx.director_name,{car_no:scope.vc.par_row.car_no}).then(res=>ex.vueAssign(scope.row,res))',
                         #'after_save':'scope.vc.par_row.car_no =scope.row.car_no; scope.vc.par_row.has_washed=scope.row.has_washed ',
@@ -654,7 +655,7 @@ class ModelTable(object):
                         'after_save':'ex.vueAssign( scope.vc.par_row,scope.row)',
                         'ops_loc':'bottom'
                     })
-                    head['action'] = 'scope.head.fields_ctx.par_row=scope.row;cfg.pop_vue_com("com-form-one",scope.head.fields_ctx)'
+                    head['action'] = 'scope.head.fields_ctx.title=scope.row._label;scope.head.fields_ctx.par_row=scope.row;cfg.pop_vue_com("com-form-one",scope.head.fields_ctx)'
                     
         return heads
     

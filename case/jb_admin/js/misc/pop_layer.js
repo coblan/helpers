@@ -8,7 +8,8 @@ export  function pop_layer (com_ctx,component_name,callback,layerConfig){
     var layer_config = {
         type: 1,
         area: psize,// ['800px', '500px'],
-        title: '详细',
+        title: com_ctx.title || '详细',
+        zIndex:1000,
         resize:true,
         resizing: function(layero){
             var total_height= $('#fields-pop-'+pop_id).parents('.layui-layer').height()
