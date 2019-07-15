@@ -151,7 +151,7 @@ class ModelFields(forms.ModelForm):
         if self.overlap_fields:
             overlaped_fields += self.overlap_fields
             
-        if  self.changed_data  and self.kw.get('meta_org_dict') and self.kw.get('meta_hash_fields'):
+        if self.instance.pk and self.changed_data  and self.kw.get('meta_org_dict') and self.kw.get('meta_hash_fields'):
             fields_name =  self.kw.get('meta_hash_fields').split(',') 
             crt_mark_dc = mark_dict(self.instance.__dict__,fields_name)
             ls = self.permit.changeable_fields()
