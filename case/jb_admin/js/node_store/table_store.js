@@ -131,13 +131,17 @@ var table_store={
                     //self.switch_to_tab({tab_name:kws.tab_name,row:crt_row})
 
                 }else{
-                    var win=pop_fields_layer(crt_row,fields_ctx,function(new_row){
-                        self.update_or_insert(new_row, crt_row)
-                        layer.close(win)
-                        if(kws.after_save){
-                            ex.eval(kws.after_save,{ts:self})
-                        }
+                    fields_ctx.row=crt_row
+                    cfg.pop_vue_com('com-form-one',fields_ctx).then(row=>{
+                        self.update_or_insert(row)
                     })
+                    //var win=pop_fields_layer(crt_row,fields_ctx,function(new_row){
+                    //    self.update_or_insert(new_row, crt_row)
+                    //    layer.close(win)
+                    //    if(kws.after_save){
+                    //        ex.eval(kws.after_save,{ts:self})
+                    //    }
+                    //})
                 }
             })
         },
@@ -291,7 +295,7 @@ var table_store={
                         layer.confirm(resp.save_rows._outdate, {
                             icon:3,
                             title:'提示',
-                            btn: ['刷新', '保存', '取消'] //可以无限个按钮
+                            btn: ['刷新数据', '仍然保存', '取消'] //可以无限个按钮
                             ,btn3: function(index, layero){
                                 layer.close(index)
                             }

@@ -481,7 +481,7 @@ class ModelFields(forms.ModelForm):
  
             for data in self.changed_data:
                 if data in self.get_readonly_fields():
-                    raise PermissionDenied("Can't change {data}".format(data=data))
+                    raise PermissionDenied(" {data} is readonly".format(data=data))
         
         op=None
         if self.changed_data:

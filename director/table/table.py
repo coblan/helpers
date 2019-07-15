@@ -7,7 +7,7 @@ import json
 from django.db.models import Q,fields
 from django.core.exceptions import PermissionDenied
 from ..access.permit import ModelPermit
-from ..model_func.dictfy import model_to_name,to_dict,model_to_head,model_to_name,model_dc,field_map
+from ..model_func.dictfy import model_to_name,to_dict,model_to_head,model_to_name,model_dc,field_map,sim_dict
 from django.db import models
 import math
 import time
@@ -306,7 +306,7 @@ class RowSort(object):
                         # mysql 按照拼音排序
                         query= query.extra(select={'converted_%s'%norm_name: 'CONVERT(%s USING gbk)'%norm_name},order_by=['%sconverted_%s'%(direction,norm_name)])                        
                 else:
-                    query= query.order_by(name)
+                    query= query.order_by(name,'-pk')
         else:
             if not query._fields: # 如果这个为空，才能弄一个默认排序，否则造成聚合函数无效
                 query = query.order_by('-pk')
@@ -347,6 +347,7 @@ class ModelTable(object):
     has_sequence = False
     selectable = True
     nolimit = False
+    simple_dict = False
     def __init__(self,_page=1,row_sort=[],row_filter={},row_search= '',crt_user=None,perpage=None,**kw):
         """
         kw['search_args']只是一个记录，在获取到rows时，一并返回前端页面，便于显示。
@@ -642,10 +643,11 @@ class ModelTable(object):
         if self.pop_edit_fields:
             model_form = director.get(self.get_edit_director_name())
             form_obj = model_form(crt_user=self.crt_user)
+            fields_ctx = form_obj.get_head_context()
             for head in heads:
                 if head['name'] in self.pop_edit_fields:
                     head['editor'] = 'com-table-click'
-                    head['fields_ctx'] =form_obj.get_head_context()
+                    head['fields_ctx'] = fields_ctx
                     head['fields_ctx'].update({
                         #'init_express':'ex.director_call(scope.vc.ctx.director_name,{car_no:scope.vc.par_row.car_no}).then(res=>ex.vueAssign(scope.row,res))',
                         #'after_save':'scope.vc.par_row.car_no =scope.row.car_no; scope.vc.par_row.has_washed=scope.row.has_washed ',
@@ -654,7 +656,7 @@ class ModelTable(object):
                         'after_save':'ex.vueAssign( scope.vc.par_row,scope.row)',
                         'ops_loc':'bottom'
                     })
-                    head['action'] = 'scope.head.fields_ctx.par_row=scope.row;cfg.pop_vue_com("com-form-one",scope.head.fields_ctx)'
+                    head['action'] = 'scope.head.fields_ctx.title=scope.row._label;scope.head.fields_ctx.par_row=scope.row;cfg.pop_vue_com("com-form-one",scope.head.fields_ctx)'
                     
         return heads
     
@@ -700,7 +702,10 @@ class ModelTable(object):
             # 遇到一种情况，聚合时，这里的queryset返回的item是dict。所以下面做一个判断
             if isinstance(inst,models.Model):
                 cus_dict = self.dict_row( inst)
-                dc= to_dict(inst, include=permit_fields,filt_attr=cus_dict)
+                if self.simple_dict:
+                    dc = sim_dict(inst, include=permit_fields,filt_attr=cus_dict)
+                else:
+                    dc= to_dict(inst, include=permit_fields,filt_attr=cus_dict)
                 # 再赋值一次，以免被默认dictfy替换掉了，例如 _x_label等值
                 dc.update(cus_dict)
             else:

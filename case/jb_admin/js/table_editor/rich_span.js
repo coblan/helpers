@@ -2,7 +2,12 @@
 var label_shower = {
     props:['rowData','field','index'],
 //:class="myclass"
-template:`<span :class="['com-table-rich-span',myclass]" v-text="show_text"></span>`,
+template:`<div :class="['com-table-rich-span',myclass]" >
+ <component v-if="head.inn_editor"
+            :is="head.inn_editor"
+            :row-data="rowData" :field="field" :index="index"></component>
+            <span v-else v-text="show_text"></span>
+</div>`,
     created(){
         // find head from parent table
         var table_par = this.$parent
