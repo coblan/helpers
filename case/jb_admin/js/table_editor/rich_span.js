@@ -1,3 +1,4 @@
+require('./styl/rich_span.styl')
 
 var label_shower = {
     props:['rowData','field','index'],
