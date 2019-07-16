@@ -93,6 +93,7 @@ var table_store={
                 self.parents=resp.get_rows.parents
                 self.table_layout=resp.get_rows.table_layout
                 cfg.hide_load()
+                self.$emit('data-updated')
             })
         },
         add_new:function(kws){
