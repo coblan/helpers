@@ -25,7 +25,7 @@ var ele_operations={
             if(op.disabled==undefined){
                 return false
             }else{
-                return ex.eval(op.disabled,{ts:this.parStore})
+                return ex.eval(op.disabled,{ps:this.parStore})
             }
 
         },
@@ -36,7 +36,7 @@ var ele_operations={
             if(op.show==undefined){
                 return true
             }else{
-                return ex.eval(op.show,{ts:this.parStore})
+                return ex.eval(op.show,{ps:this.parStore})
             }
         },
         eval:function (express){

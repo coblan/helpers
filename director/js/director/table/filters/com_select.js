@@ -38,7 +38,7 @@ var com_select = {
             //    this.parStore.$emit(this.head.changed_emit,v)
             //}
             //if(this.head.on_changed_express){
-            //    ex.eval(this.head.on_changed_express,{ts:this.parStore,value:v})
+            //    ex.eval(this.head.on_changed_express,{ps:this.parStore,value:v})
             //}
         },
         options:function(v){
@@ -70,12 +70,12 @@ var com_select = {
                 ex.each(this.head.event_slots,function(router){
                     if(router.event){
                         self.$on(router.event,function(e){
-                            ex.eval(router.express,{event:e,ts:self.parStore,vc:self})
+                            ex.eval(router.express,{event:e,ps:self.parStore,vc:self})
                         })
                     }
                     if(router.par_event){
                         self.parStore.$on(router.par_event,function(e){
-                            ex.eval(router.express,{event:e,ts:self.parStore,vc:self})
+                            ex.eval(router.express,{event:e,ps:self.parStore,vc:self})
                         })
                     }
 

@@ -144,7 +144,7 @@ var ele_table= {
                               size="mini"
                               height="100%"
                               style="width: 100%"
-                              @sort-change="parStore.sortChange($event)"
+                              @sort-change="on_sort_change($event)"
                               @selection-change="parStore.handleSelectionChange"
                               :summary-method="getSum">
 
@@ -207,6 +207,11 @@ var ele_table= {
                     </el-table>
                     </div>`,
     methods: {
+        on_sort_change(event){
+            if(! ex.objContain(event,this.default_sort)){
+                this.parStore.sortChange(event)
+            }
+        },
         name2head:function(name_list){
             return ex.map(name_list,(name)=>{
                 return this.keyed_heads[name]
