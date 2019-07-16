@@ -208,7 +208,7 @@ var ele_table= {
                     </div>`,
     methods: {
         on_sort_change(event){
-            if(! ex.objContain(event,this.default_sort)){
+            if( event.order != this.default_sort.order || event.prop != this.default_sort.prop) {
                 this.parStore.sortChange(event)
             }
         },
