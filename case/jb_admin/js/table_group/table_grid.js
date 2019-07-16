@@ -42,7 +42,8 @@ var ele_table= {
             if(!sort_str){
                 return {}
             }
-
+            var sort_list = sort_str.split(',')
+            sort_str = sort_list[0]
             if(sort_str.startsWith('-') ){
                 var prop=sort_str.slice(1)
                 var order = 'descending'
