@@ -164,7 +164,13 @@ export var network ={
             return
         }
         window['__src_'+name]=true
-        $('head').append('<link rel="stylesheet" href="'+src+'" type="text/css" />')
+        var domScript = document.createElement('link');
+        domScript.href = src;
+        domScript.type='text/css'
+        domScript.rel='stylesheet'
+        document.getElementsByTagName('head')[0].appendChild(domScript);
+
+        //$('head').append('<link rel="stylesheet" href="'+src+'" type="text/css" />')
     },
     append_css:function(style){
         if(!window.md5){
@@ -176,6 +182,7 @@ export var network ={
                 let key = md5(style)
                 if(!window['__css_'+key]){
                     $("<style type='text/css'> "+style + " </style>").appendTo("head");
+                    window['__css_'+key]=true
                 }
         })
 

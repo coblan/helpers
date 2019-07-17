@@ -24,7 +24,7 @@ var table_store={
         var self=this
         ex.each(this.event_slots,function(router){
             self.$on(router.event,function(e){
-                ex.eval(router.express,{event:e,ts:self})
+                ex.eval(router.express,{event:e,ps:self})
             })
         })
         if(this.head){
@@ -64,9 +64,9 @@ var table_store={
             }else {
                 var real_kws = ex.copy(kws)
                 if(kws.update_kws){
-                    ex.assign(real_kws,ex.eval(real_kws,{ts:self,kws:kws}))
+                    ex.assign(real_kws,ex.eval(real_kws,{ps:self,kws:kws}))
                 }
-                ex.eval(real_kws.express,{ts:self,kws:real_kws})
+                ex.eval(real_kws.express,{ps:self,kws:real_kws})
             }
 
         },
@@ -82,7 +82,6 @@ var table_store={
 
             cfg.show_load()
             //self.rows=[]
-
             var post_data=[{fun:'get_rows',director_name:self.director_name,search_args:self.search_args}]
             ex.post('/d/ajax',JSON.stringify(post_data),function(resp){
                 self.rows = resp.get_rows.rows
@@ -94,6 +93,7 @@ var table_store={
                 self.parents=resp.get_rows.parents
                 self.table_layout=resp.get_rows.table_layout
                 cfg.hide_load()
+                self.$emit('data-updated')
             })
         },
         add_new:function(kws){
@@ -118,7 +118,7 @@ var table_store={
                     crt_row.meta_par=self.search_args._par
                 }
                 if(head.preset){
-                    ex.vueAssign(crt_row,ex.eval(head.preset,{ts:self}))
+                    ex.vueAssign(crt_row,ex.eval(head.preset,{ps:self}))
                 }
                 self.crt_row= crt_row
                 if(kws.tab_name){
@@ -139,7 +139,7 @@ var table_store={
                     //    self.update_or_insert(new_row, crt_row)
                     //    layer.close(win)
                     //    if(kws.after_save){
-                    //        ex.eval(kws.after_save,{ts:self})
+                    //        ex.eval(kws.after_save,{ps:self})
                     //    }
                     //})
                 }
@@ -388,7 +388,7 @@ var table_store={
                         cfg.hide_load()
                     }
                     if(kws.after_save){
-                        ex.eval(kws.after_save,{resp:resp,ts:self})
+                        ex.eval(kws.after_save,{resp:resp,ps:self})
                     }else{
                         // 兼容老的调用
                         // 返回rows ，默认更新
@@ -465,16 +465,16 @@ var table_store={
             if(kws.panel){
                 var panel = kws.panel
             }else{
-                var panel = ex.eval(kws.panel_express,{ts:self,kws:kws})
+                var panel = ex.eval(kws.panel_express,{ps:self,kws:kws})
             }
             var ctx = ex.copy(kws)
             if(kws.ctx_express){
-                var cus_ctx = ex.eval(kws.ctx_express,{ts:self,kws:kws})
+                var cus_ctx = ex.eval(kws.ctx_express,{ps:self,kws:kws})
                 ex.assign(ctx, cus_ctx )
             }
             var winclose = cfg.pop_middle(panel,ctx,function(resp){
                 if(ctx.after_express){
-                    ex.eval(ctx.after_express,{ts:self,resp:resp})
+                    ex.eval(ctx.after_express,{ps:self,resp:resp})
                 }else{
                     self.update_or_insert(resp)
                 }

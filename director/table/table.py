@@ -265,6 +265,7 @@ class RowSort(object):
     """
     names=[]
     chinese_words=[]
+    general_sort='-pk'
     def __init__(self,row_sort=[],user=None,allowed_names=[],kw={}):
         #final_allowd_names = allowed_names + self.extra_allowd_names
         #self.valid_name=[x for x in self.names if x in final_allowd_names]
@@ -305,11 +306,15 @@ class RowSort(object):
                     else:
                         # mysql 按照拼音排序
                         query= query.extra(select={'converted_%s'%norm_name: 'CONVERT(%s USING gbk)'%norm_name},order_by=['%sconverted_%s'%(direction,norm_name)])                        
-                else:
-                    query= query.order_by(name,'-pk')
+                #else:
+                    #query = query.order_by(name)
+            if self.general_sort:
+                ls.append(self.general_sort)
+            if ls:
+                query = query.order_by(*ls)
         else:
-            if not query._fields: # 如果这个为空，才能弄一个默认排序，否则造成聚合函数无效
-                query = query.order_by('-pk')
+            if not query._fields and self.general_sort: # 如果这个为空，才能弄一个默认排序，否则造成聚合函数无效
+                query = query.order_by(self.general_sort)
 
         return query
 
@@ -802,7 +807,7 @@ class ModelTable(object):
                 #{'name':'save_changed_rows','editor':'com-op-btn','label':'保存', 
                  #'class':'btn btn-info btn-sm',
                  #'show': 'scope.changed','hide':'!changed','icon':'fa-save', 'visible': self.permit.can_edit()},
-                {'name':'delete_selected','editor':'com-op-btn','label':'删除','style': 'color:red','icon': 'fa-times','disabled':'!scope.ts.has_select', 'visible': self.permit.can_del(),},
+                {'name':'delete_selected','editor':'com-op-btn','label':'删除','style': 'color:red','icon': 'fa-times','disabled':'!scope.ps.has_select', 'visible': self.permit.can_del(),},
                 ]      
     
     def get_excel(self): 

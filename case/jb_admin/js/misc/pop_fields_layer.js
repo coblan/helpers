@@ -56,6 +56,7 @@ export  function pop_fields_layer (row,fields_ctx,callback,layerConfig){
         area: psize, //['800px', '500px'],
         title: '详细',
         resize:true,
+        zIndex:1000,
         resizing: function(layero){
             var total_height= $('#fields-pop-'+pop_id).parents('.layui-layer').height()
             $('#fields-pop-'+pop_id).parents('.layui-layer-content').height(total_height-42)
