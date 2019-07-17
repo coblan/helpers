@@ -193,6 +193,7 @@ var mix_fields_data ={
                         });
                         //cfg.showMsg(rt._outdate)
                     }else{
+                        cfg.toast('操作成功！',{time: 1000})
                         ex.vueAssign(self.row,rt.row)
                         if(this.head && this.head.after_save && typeof this.head.after_save =='string'){
                             ex.eval(this.head.after_save,{ps:self.parStore,vc:self,row:rt.row})

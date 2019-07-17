@@ -291,6 +291,7 @@ var table_store={
                 var post_data=[{fun:'save_rows',rows:cache_rows}]
                 cfg.show_load()
                 ex.post('/d/ajax',JSON.stringify(post_data),function(resp){
+                    cfg.hide_load()
                     if(resp.save_rows._outdate){
                         layer.confirm(resp.save_rows._outdate, {
                             icon:3,
@@ -310,8 +311,8 @@ var table_store={
                             self.selected_set_and_save(kws,true)
                         });
                         return
-                    }
-                    if( !resp.save_rows.errors){
+                    }else  if( !resp.save_rows.errors){
+                        cfg.toast('操作成功！',{time:1000})
                         if(kws.after_save){
                             if(ex.eval(kws.after_save,{rows:resp.save_rows,ps:self}) == 'stop'){
                                 return
@@ -329,9 +330,8 @@ var table_store={
                         if(pop_fields_win_index){
                             layer.close(pop_fields_win_index)
                         }
-                        cfg.hide_load(2000)
+
                     }else{
-                        cfg.hide_load()
                         if(kws.after_error){
                             ex.eval(kws.after_error,{fs:field_store,errors:resp.save_rows.errors})
                         }else{
