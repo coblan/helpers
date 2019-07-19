@@ -867,7 +867,8 @@ class PlainTable(ModelTable):
         #self.row_filter=self.filters(row_filter, crt_user, allowed_names,kw) 
         #self.row_search = self.search( row_search,crt_user,allowed_names,kw)
         
-        self.page=_page
+        self.page= int( _page or 1 )
+        self.perpage= int( perpage or 20 )
         self.footer = []
         self.custom_permit()
     
