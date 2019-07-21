@@ -28,6 +28,8 @@ def get_global():
 
 def director_call(director_name, kws={}): 
     directorEnt= director_views.get(director_name)
+    if not directorEnt:
+        directorEnt = director.get(director_name)
     rt= directorEnt(**kws)
     if isinstance(rt,ModelFields):
         return rt.get_row()

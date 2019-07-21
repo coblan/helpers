@@ -115,6 +115,8 @@ def export_excel(request):
 def director_view(request,director_name):
     """将director函数以api的方式直接暴露出去"""
     directorEnt= director_views.get(director_name)
+    if not directorEnt:
+        directorEnt = director.get(director_name)
     kws = argument.get_argument(request,outtype='dict')
     try:
         if inspect.isfunction(directorEnt):

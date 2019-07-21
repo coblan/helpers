@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 
 from django.contrib import admin
 from django.contrib.auth.models import Group,User
-from helpers.director.shortcut import TablePage,ModelTable,page_dc,model_dc,ModelFields, director,RowFilter
+from helpers.director.shortcut import TablePage,ModelTable,page_dc,model_dc,ModelFields, director,RowFilter,director_view
 from helpers.director.models import PermitModel 
 from helpers.director.base_data import site_cfg
 import re
@@ -59,8 +59,6 @@ class UserPage(TablePage):
                 ]
                 
             
-            
-
 class UserFields(ModelFields):
     hide_fields = ['date_joined']
     class Meta:
@@ -85,13 +83,6 @@ class UserFields(ModelFields):
                 'fv_msg':'新建用户必须输入密码！','help_text':'如果填写,将会直接替换原来的用户密码'
             })
         return ls
-    #def get_heads(self): 
-        #heads = ModelFields.get_heads(self)
-        #if  'password' in self.permit.changeable_fields():
-            #heads.append({
-                #'name': 'user_password', 'label': '用户密码', 'editor': 'password', 'required': '!scope.row.pk',
-            #})
-        #return heads
     
     def clean_save(self): 
         if self.kw.get('user_password'):
