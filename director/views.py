@@ -116,7 +116,6 @@ def director_view(request,director_name):
     """将director函数以api的方式直接暴露出去"""
     directorEnt= director.get(director_name)
     kws = argument.get_argument(request,outtype='dict')
-    kws['request'] = request
     try:
         if inspect.isfunction(directorEnt):
             wraped_directorEnt = transactionall(directorEnt)
