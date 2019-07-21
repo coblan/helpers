@@ -12,7 +12,7 @@ from helpers.func.network.download_response import downloadfy_response
 from .model_func.wirtedb import permit_save_model
 from .model_func.dictfy import name_to_model,model_to_name,to_dict
 import io
-from helpers.director.base_data import director
+from helpers.director.base_data import director,director_views
 from django.http import HttpResponse
 from django.utils.timezone import datetime
 from .fields.fields import ModelFields,OutDateException
@@ -27,7 +27,7 @@ def get_global():
     return globals()
 
 def director_call(director_name, kws={}): 
-    directorEnt= director.get(director_name)
+    directorEnt= director_views.get(director_name)
     rt= directorEnt(**kws)
     if isinstance(rt,ModelFields):
         return rt.get_row()

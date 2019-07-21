@@ -14,7 +14,7 @@ from .network.ajax_router import ajax_router
 from .recv_file import GeneralUpload
 from django.views.decorators.csrf import csrf_exempt
 from .network.ckeditor import Ckeditor
-from .base_data import director
+from .base_data import director,director_views
 from django.db import transaction
 from helpers.director.network import argument
 from django.conf import settings
@@ -114,7 +114,7 @@ def export_excel(request):
 @csrf_exempt
 def director_view(request,director_name):
     """将director函数以api的方式直接暴露出去"""
-    directorEnt= director.get(director_name)
+    directorEnt= director_views.get(director_name)
     kws = argument.get_argument(request,outtype='dict')
     try:
         if inspect.isfunction(directorEnt):

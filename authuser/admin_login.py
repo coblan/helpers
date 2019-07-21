@@ -1,4 +1,4 @@
-from helpers.director.shortcut import FieldsPage, ModelFields, director
+from helpers.director.shortcut import FieldsPage, ModelFields, director,director_view
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext as _
 from .validate_code import faseGetDataUrl
@@ -37,23 +37,24 @@ class LoginFormPage(FieldsPage):
         ctx.update(dc)
         return ctx
     
-    @staticmethod
-    def do_login(username,password,auto_login=False):
-        """
-        登录函数：
-        """
-        cache = get_request_cache()
-        request = cache.get('request')
-        form=LoginForm({'username':username,'password':password})
-        
-        if form.is_valid():
-            user= auth.authenticate(username=username,password=password)
-            if not auto_login:
-                request.session.set_expiry(0)
-            auth.login(request, user)
-            return {'success':True,'token':request.session.session_key}
-        else:
-            return {'errors':form.errors}
+    
+@director_view('do_login')
+def do_login(username,password,auto_login=False):
+    """
+    登录函数：
+    """
+    cache = get_request_cache()
+    request = cache.get('request')
+    form=LoginForm({'username':username,'password':password})
+    
+    if form.is_valid():
+        user= auth.authenticate(username=username,password=password)
+        if not auto_login:
+            request.session.set_expiry(0)
+        auth.login(request, user)
+        return {'success':True,'token':request.session.session_key}
+    else:
+        return {'errors':form.errors}
         
     
     #class fieldsCls(ModelFields):
@@ -127,9 +128,9 @@ class LogOutPage(object):
         return redirect(next) 
 
 
-director.update({
-    'do_login': LoginFormPage.do_login,
-})
+#director.update({
+    #'do_login': LoginFormPage.do_login,
+#})
 
 auth_page_dc .update({
     'login': LoginFormPage,

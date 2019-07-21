@@ -63,7 +63,7 @@ class ModelFields(forms.ModelForm):
         pk=dc.pop('pk',None)
         return cls(pk=pk,crt_user=request.user,**dc) 
     
-    def __init__(self,dc={},pk=None,crt_user=None,nolimit=None,*args,**kw):
+    def __init__(self,dc={},pk=None,crt_user=None,*args,**kw):
         """
         调用情况：
         1. ajax save 时
@@ -123,9 +123,6 @@ class ModelFields(forms.ModelForm):
                     
         dc = self._clean_dict(dc)
         dc=self.clean_dict(dc)        
-        
-        if nolimit is not None:
-            self.nolimit = nolimit
         self.kw.update(dc)
 
         super(ModelFields,self).__init__(dc,*args,**form_kw)

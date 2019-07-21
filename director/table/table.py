@@ -353,7 +353,7 @@ class ModelTable(object):
     selectable = True
     nolimit = False
     simple_dict = False
-    def __init__(self,_page=1,row_sort=[],row_filter={},row_search= '',crt_user=None,perpage=None,**kw):
+    def __init__(self,page=1,row_sort=[],row_filter={},row_search= '',crt_user=None,perpage=None,**kw):
         """
         kw['search_args']只是一个记录，在获取到rows时，一并返回前端页面，便于显示。
         而真正的查询参数已经被路由到各个查询组件中，具体参见 cls.parse_request / gen_from_search_args 函数
@@ -366,7 +366,7 @@ class ModelTable(object):
         self.crt_user=crt_user 
         if not self.crt_user:
             self.crt_user = get_request_cache()['request'].user
-        self.page=_page
+        self.page=page
         
         self.custom_permit()
         allowed_names=self.permited_fields()
