@@ -4,6 +4,7 @@ from django.http import JsonResponse
 from .shortcut import director_view
 from helpers.director.base_data import director
 from .model_func.wirtedb import permit_save_model
+from django.core.exceptions import ValidationError
 
 def director_save_row(row):
      request = get_request_cache()['request']

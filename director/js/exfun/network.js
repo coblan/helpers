@@ -182,6 +182,7 @@ export var network ={
                 let key = md5(style)
                 if(!window['__css_'+key]){
                     $("<style type='text/css'> "+style + " </style>").appendTo("head");
+                    window['__css_'+key]=true
                 }
         })
 

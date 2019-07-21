@@ -12,7 +12,6 @@ var ele_table= {
             keyed_heads[head.name]=head
         })
         return {
-            dirty_layout:false,
             heads: this.parStore.heads,
             keyed_heads:keyed_heads,
             //rows:this.parStore.rows,
@@ -28,6 +27,7 @@ var ele_table= {
         //this.bus.eventBus.$on('operation', this.on_operation)
         //this.bus.eventBus.$on('perpage-change', this.on_perpage_change)
         this.parStore.e_table = this.$refs.e_table
+        this.parStore.$on('data-updated',this.on_data_updated)
         ex.each(this.parStore.heads,(head)=>{
             if(head.style){
                 ex.append_css(head.style)
@@ -42,7 +42,8 @@ var ele_table= {
             if(!sort_str){
                 return {}
             }
-
+            var sort_list = sort_str.split(',')
+            sort_str = sort_list[0]
             if(sort_str.startsWith('-') ){
                 var prop=sort_str.slice(1)
                 var order = 'descending'
@@ -73,11 +74,7 @@ var ele_table= {
         footer:function(){
             return this.parStore.footer
         },
-        headname_list(){
-            return this.normed_heads.map(item=>{
-                return item.name
-            })
-        }
+
         //bus_serarch_count:function(){
         //    return this.bus.search_count
         //},
@@ -112,21 +109,7 @@ var ele_table= {
                 this.$refs.e_table.clearSelection()
             }
         },
-        headname_list:{
-            //deep:true,
-            handler(v){
-                new Promise((resolve,reject)=>{
-                    Vue.nextTick(()=>{
-                        this.dirty_layout=true
-                        resolve()
-                    })
-                }).then(()=>{
-                    Vue.nextTick(()=>{
-                        this.dirty_layout=false
-                    })
-                })
-            }
-         }
+
     },
 
     mixins: [mix_table_data, mix_ele_table_adapter],
@@ -143,7 +126,7 @@ var ele_table= {
                               size="mini"
                               height="100%"
                               style="width: 100%"
-                              @sort-change="parStore.sortChange($event)"
+                              @sort-change="on_sort_change($event)"
                               @selection-change="parStore.handleSelectionChange"
                               :summary-method="getSum">
 
@@ -151,12 +134,14 @@ var ele_table= {
                                 type="selection"
                                 width="55">
                         </el-table-column>
-                        <template v-for="head in dirty_layout?[]:normed_heads">
+                        <template v-for="head in normed_heads">
                              <el-table-column v-if="head.children"
                                 :label="head.label"
+                                :key="head.name"
                                  :class-name="head.class">
                                    <el-table-column v-for="head2 in name2head(head.children)"
                                             :class-name="head2.class"
+                                            :key="head2.name"
                                              :show-overflow-tooltip="parStore.is_show_tooltip(head2) "
                                               :fixed="head2.fixed"
                                              :label="head2.label"
@@ -176,6 +161,7 @@ var ele_table= {
                              </el-table-column>
                             <el-table-column v-else-if="! head.sublevel && head.editor"
                                               :class-name="head.class"
+                                              :key="head.name"
                                              :show-overflow-tooltip="parStore.is_show_tooltip(head) "
                                               :fixed="head.fixed"
                                              :label="head.label"
@@ -195,6 +181,8 @@ var ele_table= {
                               <el-table-column v-else-if="! head.sublevel"
                                              :show-overflow-tooltip="parStore.is_show_tooltip(head) "
                                              :fixed="head.fixed"
+                                             :key="head.name"
+                                             :class-name="head.class"
                                              :prop="head.name.toString()"
                                              :label="head.label"
                                              :sortable="parStore.is_sort(head)"
@@ -206,6 +194,16 @@ var ele_table= {
                     </el-table>
                     </div>`,
     methods: {
+        on_data_updated(){
+            Vue.nextTick(()=>{
+                this.$refs.e_table.doLayout()
+            })
+        },
+        on_sort_change(event){
+            if( event.order != this.default_sort.order || event.prop != this.default_sort.prop) {
+                this.parStore.sortChange(event)
+            }
+        },
         name2head:function(name_list){
             return ex.map(name_list,(name)=>{
                 return this.keyed_heads[name]

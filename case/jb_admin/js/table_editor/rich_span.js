@@ -1,3 +1,4 @@
+require('./styl/rich_span.styl')
 
 var label_shower = {
     props:['rowData','field','index'],
@@ -22,7 +23,6 @@ template:`<div :class="['com-table-rich-span',myclass]" >
         }
         this.table_par = table_par
         this. head  = ex.findone(this.table_par.heads,{name:this.field})
-
         this.parStore = ex.vueParStore(this)
     },
     mounted(){

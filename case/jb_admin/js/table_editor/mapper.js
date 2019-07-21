@@ -6,7 +6,7 @@ options:{
 * */
 var mapper = {
     props:['rowData','field','index'],
-    template:`<span :class="['com-table-mapper',myclass]" v-text="show_data"></span>`,
+    template:`<span class="com-table-mapper" v-text="show_data"></span>`,
     created:function(){
         // find head from parent table
         var table_par = this.$parent
@@ -22,19 +22,19 @@ var mapper = {
         this.table_par = table_par
         this.head= ex.findone(this.table_par.heads,{name:this.field})
     },
-    mounted(){
-        if(this.head.css){
-            ex.append_css(this.head.css)
-        }
-    },
+    //mounted(){
+    //    if(this.head.css){
+    //        ex.append_css(this.head.css)
+    //    }
+    //},
     computed:{
-        myclass(){
-            if(this.head.class){
-                return ex.eval(this.head.class,{head:this.head,row:this.rowData})
-            }else{
-                return ''
-            }
-        },
+        //myclass(){
+        //    if(this.head.class){
+        //        return ex.eval(this.head.class,{head:this.head,row:this.rowData})
+        //    }else{
+        //        return ''
+        //    }
+        //},
         show_data:function(){
             if(this.table_par){
                 var value = this.rowData[this.field]
