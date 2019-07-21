@@ -356,7 +356,7 @@ class ModelTable(object):
         
         """
         self.search_args = kw.get('search_args', {})
-        
+        self.nolimit = kw.get('nolimit',self.__class__.nolimit)
         self.kw=kw
         self.crt_user=crt_user 
         if not self.crt_user:
@@ -393,7 +393,7 @@ class ModelTable(object):
         return cls.gen_from_search_args(kw,request.user)
 
     @classmethod
-    def gen_from_search_args(cls,search_args,user =None):
+    def gen_from_search_args(cls,search_args,user =None,**kws):
         args = cls.clean_search_args(search_args)
         kw = dict(args)
         kw['search_args'] = args
@@ -408,6 +408,7 @@ class ModelTable(object):
             #if arg is not None:
             row_filter[k]=arg
         user = user or get_request_cache()['request'].user
+        kw.update(kws)
         return cls(page,row_sort,row_filter,q,user,perpage=perpage,**kw)
     
     @classmethod
@@ -490,15 +491,29 @@ class ModelTable(object):
     
     def get_data_context(self):
         rows =  self.get_rows()
-        table_layout = self.getTableLayout(rows)
-        return {
-            'rows': rows,
-            'table_layout': table_layout,
-            'row_pages' : self.getRowPages(), #self.pagenum.get_context(),  
-            'search_args':self.search_args, 
-            'footer': self.footer,
-            'parents': self.getParents(),
-        }
+        if self.only_simple_data():
+            out_dc ={
+                'rows':rows,
+                'footer': self.footer,
+                'parents': self.getParents(),
+                'row_pages' : self.getRowPages(),
+            }
+            if not out_dc['footer']:
+                out_dc.pop('footer')
+            if not out_dc['parents']:
+                out_dc.pop('parents')
+            return out_dc
+        else:
+            table_layout = self.getTableLayout(rows)
+            dc = {
+                'rows': rows,
+                'table_layout': table_layout,
+                'row_pages' : self.getRowPages(), #self.pagenum.get_context(),  
+                'search_args':self.search_args, 
+                'footer': self.footer,
+                'parents': self.getParents(),
+             }
+            return dc
     
     def getTableLayout(self, rows): 
         return {}
@@ -702,28 +717,23 @@ class ModelTable(object):
             # 遇到一种情况，聚合时，这里的queryset返回的item是dict。所以下面做一个判断
             if isinstance(inst,models.Model):
                 cus_dict = self.dict_row( inst)
-                if self.simple_dict:
+                if self.only_simple_data():
                     dc = sim_dict(inst, include=permit_fields,filt_attr=cus_dict)
                 else:
                     dc= to_dict(inst, include=permit_fields,filt_attr=cus_dict)
+                    dc['_director_name'] = self.get_edit_director_name()
                 # 再赋值一次，以免被默认dictfy替换掉了，例如 _x_label等值
                 dc.update(cus_dict)
             else:
                 dc = inst
-            dc['_director_name'] = self.get_edit_director_name()
+                dc['_director_name'] = self.get_edit_director_name()
             out.append(dc)
         #out = self.append_sequence(out)
         return out
     
-    #def append_sequence(self, rows): 
-        #page = self.kw['search_args'].get('_page', 1)
-        #perPage = self.pagenator.perPage
-        #start = (page - 1) * perPage
-        #for row in rows:
-            #start += 1
-            #row['_sequence'] = start
-            
-        #return rows
+    def only_simple_data(self):
+        return self.simple_dict or self.kw.get('_accept')=='json'
+    
     
     @classmethod
     def get_edit_director_name(cls): 

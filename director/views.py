@@ -18,6 +18,7 @@ from .base_data import director
 from django.db import transaction
 from helpers.director.network import argument
 from django.conf import settings
+import inspect
 
 import logging
 req_log = logging.getLogger('general_log')
@@ -115,27 +116,16 @@ def director_view(request,director_name):
     """将director函数以api的方式直接暴露出去"""
     directorEnt= director.get(director_name)
     kws = argument.get_argument(request,outtype='dict')
-    #if request.method=='GET':
-        #kws = request.GET.dict()
-    #else:
-        #CONTENT_TYPE = request.META.get('CONTENT_TYPE')
-        ##print(CONTENT_TYPE)
-        #is_text =False
-        #for c_type in  [ 'text/plain','application/json','application/x-www-form-urlencoded']:
-            #if c_type in CONTENT_TYPE.lower():
-                #is_text=True
-                #break
-        #if is_text:
-            #if isinstance(request.body,bytes):
-                #text = request.body.decode('utf-8')
-            #else:
-                #text = request.body
-            #kws = json.loads(text)
-        #else:
-            #kws = request.POST.dict()
+    kws['request'] = request
     try:
-        wraped_directorEnt = transactionall(directorEnt)
-        rt = wraped_directorEnt(**kws)
+        if inspect.isfunction(directorEnt):
+            wraped_directorEnt = transactionall(directorEnt)
+            rt = wraped_directorEnt(**kws)
+        else:
+            # directorEnt is class
+            obj = directorEnt(**kws)
+            wraped_directorEnt = transactionall(obj.get_context)
+            rt = wraped_directorEnt()
         if isinstance(rt,HttpResponse):
             # 直接返回
             pass
