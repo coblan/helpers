@@ -125,7 +125,10 @@ def director_view(request,director_name):
         else:
             # directorEnt is class
             obj = directorEnt(**kws)
-            wraped_directorEnt = transactionall(obj.get_context)
+            if hasattr(obj,'get_data_context'):
+                wraped_directorEnt = transactionall(obj.get_data_context)
+            else:
+                wraped_directorEnt = transactionall(obj.get_context)
             rt = wraped_directorEnt()
         if isinstance(rt,HttpResponse):
             # 直接返回

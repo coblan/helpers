@@ -190,6 +190,9 @@ class ModelFields(forms.ModelForm):
     def clean_dict(self,dc):   
         return dc
     
+    def get_data_context(self):
+        return self.get_row()
+    
     def is_valid(self): 
         rt = super().is_valid()
         extra_errors = self.extra_valid()

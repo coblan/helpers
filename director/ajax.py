@@ -17,6 +17,7 @@ from django.http import HttpResponse
 from django.utils.timezone import datetime
 from .fields.fields import ModelFields,OutDateException
 from .network import argument
+import inspect
 
 try:
     os.makedirs(os.path.join(settings.MEDIA_ROOT, 'gen_files'))
@@ -27,14 +28,27 @@ def get_global():
     return globals()
 
 def director_call(director_name, kws={}): 
+    #directorEnt= director_views.get(director_name)
+    #if not directorEnt:
+        #directorEnt = director.get(director_name)
+    #rt= directorEnt(**kws)
+    #if isinstance(rt,ModelFields):
+        #return rt.get_row()
+    #else:
+        #return rt
     directorEnt= director_views.get(director_name)
     if not directorEnt:
         directorEnt = director.get(director_name)
-    rt= directorEnt(**kws)
-    if isinstance(rt,ModelFields):
-        return rt.get_row()
+    if inspect.isfunction(directorEnt):
+        rt = directorEnt(**kws)
     else:
-        return rt
+        # directorEnt is class
+        obj = directorEnt(**kws)
+        if hasattr(obj,'get_data_context'):
+            rt = obj.get_data_context()
+        else:
+            rt = obj.get_context()
+    return rt
 
 def save(row,user,request):
     """
