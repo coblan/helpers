@@ -41,3 +41,11 @@ def director_view(name):
         return _fun2
     return _fun
 
+def director_element(name): 
+    def _fun(fun): 
+        director[name] = fun
+        @wraps(fun)
+        def _fun2(*args, **kargs): 
+            return fun(*args, **kargs)
+        return _fun2
+    return _fun

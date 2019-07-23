@@ -115,6 +115,8 @@ def export_excel(request):
 def director_view(request,director_name):
     """将director函数以api的方式直接暴露出去"""
     directorEnt= director_views.get(director_name)
+    if not directorEnt:
+        directorEnt = director.get(director_name)
     kws = argument.get_argument(request,outtype='dict')
     try:
         if inspect.isfunction(directorEnt):
@@ -123,7 +125,10 @@ def director_view(request,director_name):
         else:
             # directorEnt is class
             obj = directorEnt(**kws)
-            wraped_directorEnt = transactionall(obj.get_context)
+            if hasattr(obj,'get_data_context'):
+                wraped_directorEnt = transactionall(obj.get_data_context)
+            else:
+                wraped_directorEnt = transactionall(obj.get_context)
             rt = wraped_directorEnt()
         if isinstance(rt,HttpResponse):
             # 直接返回
