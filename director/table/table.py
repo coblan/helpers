@@ -285,8 +285,6 @@ class RowSort(object):
     def get_context(self):
         return {'sortable':self.valid_name,'sort_str':self.sort_str}
     
-  
-    
     def get_query(self,query):
         if self.sort_str:
             ls=self.sort_str.split(',')

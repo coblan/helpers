@@ -378,14 +378,15 @@ var table_store={
                 return
             }
 
-
             function do_director_call(new_row,callback){
                 cfg.show_load()
                 ex.director_call(kws.director_name,{rows:self.selected,new_row:new_row},function(resp){
+                    debugger
                     if(!resp.msg){
                         cfg.hide_load(2000)
                     }else{
                         cfg.hide_load()
+                        cfg.toast(resp.msg,{time:1500})
                     }
                     if(kws.after_save){
                         ex.eval(kws.after_save,{resp:resp,ps:self})
