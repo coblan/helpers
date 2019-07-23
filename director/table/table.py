@@ -803,13 +803,17 @@ class ModelTable(object):
         if not fieldCls:
             return []
         fieldobj=fieldCls(crt_user=self.crt_user)
+        fields_ctx = fieldobj.get_head_context()
+        fields_ctx.update({
+            'ops_loc':'bottom'
+        })
         return [{'name':'add_new',
                  'editor':'com-op-btn',
                  'icon': 'fa-plus',
                  'class':'btn btn-primary btn-sm',
                  'label':'创建',
                  'pre_set':'', # 预先设置的字段,一般用于com-tab-table下的创建
-                 'fields_ctx':fieldobj.get_head_context(),
+                 'fields_ctx':fields_ctx,
                  'visible': self.permit.can_add(),
                  },
                 #{'name':'save_changed_rows','editor':'com-op-btn','label':'保存', 
