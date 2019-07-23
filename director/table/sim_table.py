@@ -3,6 +3,7 @@ from .table import ModelTable, PageNum
 class SimTable(ModelTable):
     """
     一般用于，与model不相关的table
+    现在又plaintable了，这个模块无用了。
     """
     def __init__(self, _page=1, row_sort=[], row_filter={}, row_search='', crt_user=None, perpage=None, **kw): 
         self.search_args = kw.get('search_args')
