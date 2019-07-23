@@ -29,6 +29,7 @@ $.validator.config({
         // com-field-table-list
         key_unique:function(elem, param) {
             //return /^1[3458]\d{9}$/.test($(elem).val()) || '请检查手机号格式';
+            debugger;
             var keys = param
             var value = $(elem).val()
             if(!value) return true
