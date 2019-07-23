@@ -860,7 +860,7 @@ class ModelTable(object):
         return wb
 
 class PlainTable(ModelTable):
-    def __init__(self,_page=1,row_sort=[],row_filter={},row_search= '',crt_user=None,perpage=None,**kw):
+    def __init__(self,page=1,row_sort=[],row_filter={},row_search= '',crt_user=None,perpage=None,**kw):
         """
         kw['search_args']只是一个记录，在获取到rows时，一并返回前端页面，便于显示。
         而真正的查询参数已经被路由到各个查询组件中，具体参见 cls.parse_request / gen_from_search_args 函数
@@ -877,7 +877,7 @@ class PlainTable(ModelTable):
         #self.row_filter=self.filters(row_filter, crt_user, allowed_names,kw) 
         #self.row_search = self.search( row_search,crt_user,allowed_names,kw)
         
-        self.page= int( _page or 1 )
+        self.page= int( page or 1 )
         self.perpage= int( perpage or 20 )
         self.footer = []
         self.custom_permit()
