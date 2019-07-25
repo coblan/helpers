@@ -88,7 +88,7 @@ def get_lib(request):
 
         dc.update( {
             #'vuejs': 'https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.min.js',
-            'vuejs': 'https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js',
+            'vuejs':   'https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js',
             #'jquery':'https://cdn.jsdelivr.net/npm/jquery@2.2.4/dist/jquery.min.js',
             'jquery': 'https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js',
             'vuex': 'https://cdn.jsdelivr.net/npm/vuex@3.0.1/dist/vuex.min.js', 
@@ -116,6 +116,11 @@ def get_lib(request):
             #'ckeditor':'https://cdn.jsdelivr.net/npm/ckeditor@4.11.4/ckeditor.js',
             #'ckeditor':'https://cdn.jsdelivr.net/npm/ckeditor@4.11.4/ckeditor.min.js',
         })
+        
+        if not settings.DEBUG:
+            dc.update({
+                'vue':'https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.min.js'
+            })
   
     return dc
 
