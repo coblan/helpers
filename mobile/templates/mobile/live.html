@@ -41,7 +41,9 @@
 {% block page_body %}
 
 <script>
-    Vue.config.devtools = true
+    if(js_config.is_debug){
+        Vue.config.devtools = true
+    }
 
 //    page_editor ={{ page_editor | jsonify }}
 //    ctx = {{ ctx | jsonify }}
