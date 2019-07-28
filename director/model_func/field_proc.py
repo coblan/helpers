@@ -12,7 +12,8 @@ class BaseFieldProc(object):
         
         self.form_field=None
         self.field=None
-        
+        if instance and name:
+            self.field = instance.__class__._meta.get_field(name)
         catch = get_request_cache()
         self.request = catch.get('request')
         self.crt_user= self.request.user

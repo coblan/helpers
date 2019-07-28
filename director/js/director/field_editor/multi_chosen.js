@@ -104,8 +104,8 @@ var multi_chosen= {
                 })
             }
         },
-        get_label:function(options,value){
-            var option = ex.findone(options,{value:value})
+        get_label:function(value){
+            var option = ex.findone(this.head.options,{value:value})
             if(!option){
                 return '---'
             }else{
