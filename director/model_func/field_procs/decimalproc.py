@@ -10,16 +10,16 @@ class DecimalProc(BaseFieldProc):
     digit=2
     def to_dict(self,inst,name):
         data = getattr(inst,name)
-        if data is None:
-            return {name: None,}
+        if not data and data !=0:
+            return {name: data,}
         else:
             return {name:str(round(data,self.digit))}
     
     def clean_field(self,dc,name):
-        if dc.get(name): 
+        if dc.get(name) or dc.get(name) ==0: 
             return Decimal(dc.get(name))
         else:
-            return Decimal(0)
+            return dc.get(name)
     
     def dict_field_head(self,head):   
         head['editor'] = 'com-field-number'
