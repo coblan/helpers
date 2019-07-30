@@ -27,7 +27,7 @@ var ele_table= {
         //this.bus.eventBus.$on('operation', this.on_operation)
         //this.bus.eventBus.$on('perpage-change', this.on_perpage_change)
         this.parStore.e_table = this.$refs.e_table
-        this.parStore.$on('data-updated',this.on_data_updated)
+        this.parStore.$on('data-updated-backend',this.on_data_updated)
         ex.each(this.parStore.heads,(head)=>{
             if(head.style){
                 ex.append_css(head.style)

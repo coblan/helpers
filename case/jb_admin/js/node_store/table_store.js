@@ -91,8 +91,7 @@ var table_store={
                 self.footer=resp.get_rows.footer
                 self.parents=resp.get_rows.parents
                 self.table_layout=resp.get_rows.table_layout
-
-                //self.$emit('data-updated')
+                self.$emit('data-updated-backend')
             })
         },
         add_new:function(kws){
