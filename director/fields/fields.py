@@ -609,10 +609,16 @@ class Fields(ModelFields):
             'name':'save','editor':'com-field-op-btn','label':'保存', 'icon': 'fa-save','class':'btn btn-info'
         })
         return ls 
+    
+    def dict_row(self):
+        return {}
+    
     def get_row(self): 
-        return {
+        row= self.dict_row()
+        row.update( {
             '_director_name': self.get_director_name(),
-        }
+        })
+        return row
 
 class FieldsSet(object):
     template=''
