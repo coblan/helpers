@@ -97,7 +97,7 @@ var order_list =  {
                     Vue.set(this.row,this.head.name,JSON.stringify(v))
                     //this.row[this.head.name] = JSON.stringify(v)
                 }else{
-                    Vue.set(this.row,this.head.name,'[]')
+                    Vue.set(this.row,this.head.name,'')
                     //this.row[this.head.name] = ''
                 }
 
@@ -119,19 +119,22 @@ var order_list =  {
 
             var fields_ctx={
                 heads:self.head.fields_heads,
-                extra_mixin:[],
+                ops_loc:'bottom',
+                //extra_mixin:[],
+                save_express:'scope.vc.$emit("finish",scope.vc.row);rt=Promise.resolve(scope.vc.row)',
                 ops:[{
                     'name':'save','editor':'com-field-op-btn','label':'确定', 'icon': 'fa-save',
-                }]
+                }],
+                genPar:self,
             }
-           var win= pop_edit_local(self.crt_row,fields_ctx,function(resp) {
-                //ex.assign(self.row,new_row)
-                var new_row=resp
-                ex.vueAssign(self.crt_row,new_row)
-               self.rows.push(self.crt_row)
-                //self.crt_row.append(resp.new_row)
-                //self.row[self.head.name] = JSON.stringify(self.rows)
-               layer.close(win)
+           //var win= pop_edit_local(self.crt_row,fields_ctx,function(resp) {
+           //     var new_row=resp
+           //     ex.vueAssign(self.crt_row,new_row)
+           //    self.rows.push(self.crt_row)
+           //    layer.close(win)
+           // })
+            cfg.pop_vue_com('com-form-one',fields_ctx).then((row)=>{
+                self.rows.push(row)
             })
         },
         delete_rows:function(){

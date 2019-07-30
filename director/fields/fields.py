@@ -54,10 +54,7 @@ class ModelFields(forms.ModelForm):
     def parse_request(cls,request):
         """
         传入参数的形式：
-        row_search: key=value&..
-        row_sort: _sort=key1,-key2
-        page: _page=1
-        row_filter:key=value&..
+        {pk:xxx}
         """
         dc=request.GET.dict()
         pk=dc.pop('pk',None)

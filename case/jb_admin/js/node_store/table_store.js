@@ -84,16 +84,14 @@ var table_store={
             //self.rows=[]
             var post_data=[{fun:'get_rows',director_name:self.director_name,search_args:self.search_args}]
             ex.post('/d/ajax',JSON.stringify(post_data),function(resp){
+                cfg.hide_load()
                 self.rows = resp.get_rows.rows
                 ex.vueAssign( self.row_pages,resp.get_rows.row_pages)
-                //self.row_pages = resp.get_rows.row_pages
-                //self.search_args=resp.get_rows.search_args
                 ex.vueAssign(self.search_args,resp.get_rows.search_args)
                 self.footer=resp.get_rows.footer
                 self.parents=resp.get_rows.parents
                 self.table_layout=resp.get_rows.table_layout
-                cfg.hide_load()
-                self.$emit('data-updated')
+                self.$emit('data-updated-backend')
             })
         },
         add_new:function(kws){
@@ -378,14 +376,15 @@ var table_store={
                 return
             }
 
-
             function do_director_call(new_row,callback){
                 cfg.show_load()
                 ex.director_call(kws.director_name,{rows:self.selected,new_row:new_row},function(resp){
+                    debugger
                     if(!resp.msg){
                         cfg.hide_load(2000)
                     }else{
                         cfg.hide_load()
+                        cfg.toast(resp.msg,{time:1500})
                     }
                     if(kws.after_save){
                         ex.eval(kws.after_save,{resp:resp,ps:self})
@@ -481,7 +480,29 @@ var table_store={
                 self.clearSelection()
                 winclose()
             })
-        }
+        },
+        switch_to_tab:function(kws){
+            // 从 table_page_store 移过来的。因为 live_table 可能有这个需求
+            var self=this
+            var tabs=named_ctx[kws.ctx_name]
+            if(!tabs){
+                throw `named_ctx. ${kws.ctx_name} 不存在，检查是否传入`
+            }
+            if(window.root_live){
+                // keeplive 页面
+                root_live.open_live(live_el_tab,{tabs:tabs,title:kws.par_row._label,crt_tab_name:kws.tab_name,par_row:kws.par_row})
+            }else{
+                // 传统 页面
+                self.tab_stack.push( {
+                    widget:'com-widget-el-tab' ,
+                    tabs:tabs,
+                    crt_tab_name:kws.tab_name,
+                    par_row:kws.par_row,
+
+                })
+            }
+            //self.crt_row=kws.par_row
+        },
     }
 
 }

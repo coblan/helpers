@@ -224,6 +224,7 @@ class BaseEngine(object):
             'crt_lan': crt_lan,
             'tr':tr_dc ,
             'js_lib':lib_dc,
+            'is_debug':settings.DEBUG,
         }
     
 

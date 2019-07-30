@@ -20,7 +20,7 @@ var live_table={
                     selectable:vc.ctx.selectable==undefined? true:vc.ctx.selectable,
                     selected:[],
                     del_info:[],
-                    search_args: {},
+                    search_args: vc.ctx.search_args || {},
                     vc:vc,
                     parStore:ex.vueParStore(vc)
                 }

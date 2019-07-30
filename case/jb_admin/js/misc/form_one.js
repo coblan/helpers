@@ -120,9 +120,15 @@ export  var fields_all_in_one={
             }
             if(self.tab_head.get_row){
                 ex.eval(self.tab_head.get_row,{vc:self})
-                //ex.vueAssign(self.row,row_dc)
             }
         },
+        save(){
+            if(this.head.save_express){
+                return ex.eval(this.head.save_express,{vc:this})
+            }else{
+                return  mix_fields_data.methods.save.call(this)
+            }
+        }
     }
     // data_getter  回调函数，获取数据,
 
