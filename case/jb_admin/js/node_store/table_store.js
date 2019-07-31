@@ -17,6 +17,7 @@ var table_store={
              changed_rows:[],
              event_slots:[],
              option:{},
+             table_layout:{},
          }
     },
     mixins:[mix_ele_table_adapter],
@@ -437,7 +438,11 @@ var table_store={
         arraySpanMethod:function({ row, column, rowIndex, columnIndex }){
             // 计算布局
             if(this.table_layout){
-                return this.table_layout[`${rowIndex},${columnIndex}`] || [1,1]
+                if(typeof  this.table_layout =='object'){
+                    return this.table_layout[`${rowIndex},${columnIndex}`] || [1,1]
+                }else{
+                    return ex.eval(this.table_layout,{row:row,column:column,rowIndex:rowIndex,columnIndex:columnIndex})
+                }
             }else{
                 return [1,1]
             }

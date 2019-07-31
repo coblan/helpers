@@ -464,16 +464,22 @@ class ModelTable(object):
     
     def get_context(self):
         head_ctx = self.get_head_context()
-        rows = self.get_rows()
+        data_ctx = self.get_data_context()
+        head_ctx.update(data_ctx)
         head_ctx.update({
-            'rows': rows,
-            'row_pages' : self.getRowPages(),
-            'row_sort': self.getRowSort(),#row_sort,
-            'model_name':model_to_name(self.model),
-            'parents': self.getParents(),
-            'footer': self.footer,
+            'row_sort': self.getRowSort()
         })
         return head_ctx
+        #rows = self.get_rows()
+        #head_ctx.update({
+            #'rows': rows,
+            #'row_pages' : self.getRowPages(),
+            #'row_sort': self.getRowSort(),#row_sort,
+            #'model_name':model_to_name(self.model),
+            #'parents': self.getParents(),
+            #'footer': self.footer,
+        #})
+        #return head_ctx
     
     def get_event_slots(self):
         return []
