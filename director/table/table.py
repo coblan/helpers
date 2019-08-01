@@ -569,10 +569,14 @@ class ModelTable(object):
             heads = [x for x in heads if x['name'] in self.include]
             
         heads += self.getExtraHead() 
-        heads = self.fields_sort_heads(heads)   
+         
+        for head in heads:
+            if 'editor' not in head:
+                head['editor'] = 'com-table-span'
+                
         heads= self.make_pop_edit_field(heads)  
         heads = [self.dict_head(head) for head in heads]
-
+        heads = self.fields_sort_heads(heads)  
         # 需要使用form.field才能提取到choices
         #form_fields = fields_for_model(self.model)
         #for head in model_heads:
@@ -588,6 +592,7 @@ class ModelTable(object):
                 #head['options']=catch.get(options_name)
                 
         heads=evalue_container(heads)
+  
         return heads
     
     def get_model_heads(self): 
@@ -632,6 +637,8 @@ class ModelTable(object):
         heads= self.get_light_heads()
         footer = []
         for head in heads:
+            if head.get('children'):
+                continue
             footer.append(dc.get(head['name'], ''))
         return footer
     
