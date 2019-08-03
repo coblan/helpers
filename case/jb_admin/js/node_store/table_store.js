@@ -380,7 +380,6 @@ var table_store={
             function do_director_call(new_row,callback){
                 cfg.show_load()
                 ex.director_call(kws.director_name,{rows:self.selected,new_row:new_row},function(resp){
-                    debugger
                     if(!resp.msg){
                         cfg.hide_load(2000)
                     }else{
@@ -409,7 +408,7 @@ var table_store={
 
             function judge_pop_fun(){
                 var one_row={}
-                ex.assign(one_row,ex.eval(kws.pre_set,{head:kws,ps:self.parStore}))
+                ex.assign(one_row,ex.eval(kws.pre_set,{head:kws,ps:self.parStore,self:self}))
                 if(kws.fields_ctx){
                     ex.map(kws.fields_ctx.heads,function(head){
                         if(!head.name.startsWith('_') && one_row[head.name]==undefined){
