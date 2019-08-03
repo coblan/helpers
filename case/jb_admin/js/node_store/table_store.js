@@ -506,7 +506,8 @@ var table_store={
 
                 })
             }
-            //self.crt_row=kws.par_row
+            // 这里暂时打开，以后移除
+            self.crt_row=kws.par_row
         },
     }
 
