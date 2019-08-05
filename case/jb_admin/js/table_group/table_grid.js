@@ -200,7 +200,10 @@ var ele_table= {
             })
         },
         on_sort_change(event){
-            if( event.order != this.default_sort.order || event.prop != this.default_sort.prop) {
+            if(this._sort_has_changed ){
+                this.parStore.sortChange(event)
+            }else if( event.order != this.default_sort.order || event.prop != this.default_sort.prop ) {
+                this._sort_has_changed = true
                 this.parStore.sortChange(event)
             }
         },

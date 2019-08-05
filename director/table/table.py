@@ -285,8 +285,6 @@ class RowSort(object):
     def get_context(self):
         return {'sortable':self.valid_name,'sort_str':self.sort_str}
     
-  
-    
     def get_query(self,query):
         if self.sort_str:
             ls=self.sort_str.split(',')
@@ -353,7 +351,7 @@ class ModelTable(object):
     selectable = True
     nolimit = False
     simple_dict = False
-    def __init__(self,_page=1,row_sort=[],row_filter={},row_search= '',crt_user=None,perpage=None,**kw):
+    def __init__(self,page=1,row_sort=[],row_filter={},row_search= '',crt_user=None,perpage=None,**kw):
         """
         kw['search_args']只是一个记录，在获取到rows时，一并返回前端页面，便于显示。
         而真正的查询参数已经被路由到各个查询组件中，具体参见 cls.parse_request / gen_from_search_args 函数
@@ -361,12 +359,12 @@ class ModelTable(object):
         
         """
         self.search_args = kw.get('search_args', {})
-        
+        self.nolimit = kw.get('nolimit',self.__class__.nolimit)
         self.kw=kw
         self.crt_user=crt_user 
         if not self.crt_user:
             self.crt_user = get_request_cache()['request'].user
-        self.page=_page
+        self.page=page
         
         self.custom_permit()
         allowed_names=self.permited_fields()
@@ -398,7 +396,7 @@ class ModelTable(object):
         return cls.gen_from_search_args(kw,request.user)
 
     @classmethod
-    def gen_from_search_args(cls,search_args,user =None):
+    def gen_from_search_args(cls,search_args,user =None,**kws):
         args = cls.clean_search_args(search_args)
         kw = dict(args)
         kw['search_args'] = args
@@ -413,6 +411,7 @@ class ModelTable(object):
             #if arg is not None:
             row_filter[k]=arg
         user = user or get_request_cache()['request'].user
+        kw.update(kws)
         return cls(page,row_sort,row_filter,q,user,perpage=perpage,**kw)
     
     @classmethod
@@ -495,15 +494,29 @@ class ModelTable(object):
     
     def get_data_context(self):
         rows =  self.get_rows()
-        table_layout = self.getTableLayout(rows)
-        return {
-            'rows': rows,
-            'table_layout': table_layout,
-            'row_pages' : self.getRowPages(), #self.pagenum.get_context(),  
-            'search_args':self.search_args, 
-            'footer': self.footer,
-            'parents': self.getParents(),
-        }
+        if self.only_simple_data():
+            out_dc ={
+                'rows':rows,
+                'footer': self.footer,
+                'parents': self.getParents(),
+                'row_pages' : self.getRowPages(),
+            }
+            if not out_dc['footer']:
+                out_dc.pop('footer')
+            if not out_dc['parents']:
+                out_dc.pop('parents')
+            return out_dc
+        else:
+            table_layout = self.getTableLayout(rows)
+            dc = {
+                'rows': rows,
+                'table_layout': table_layout,
+                'row_pages' : self.getRowPages(), #self.pagenum.get_context(),  
+                'search_args':self.search_args, 
+                'footer': self.footer,
+                'parents': self.getParents(),
+             }
+            return dc
     
     def getTableLayout(self, rows): 
         return {}
@@ -707,28 +720,23 @@ class ModelTable(object):
             # 遇到一种情况，聚合时，这里的queryset返回的item是dict。所以下面做一个判断
             if isinstance(inst,models.Model):
                 cus_dict = self.dict_row( inst)
-                if self.simple_dict:
+                if self.only_simple_data():
                     dc = sim_dict(inst, include=permit_fields,filt_attr=cus_dict)
                 else:
                     dc= to_dict(inst, include=permit_fields,filt_attr=cus_dict)
+                    dc['_director_name'] = self.get_edit_director_name()
                 # 再赋值一次，以免被默认dictfy替换掉了，例如 _x_label等值
                 dc.update(cus_dict)
             else:
                 dc = inst
-            dc['_director_name'] = self.get_edit_director_name()
+                dc['_director_name'] = self.get_edit_director_name()
             out.append(dc)
         #out = self.append_sequence(out)
         return out
     
-    #def append_sequence(self, rows): 
-        #page = self.kw['search_args'].get('_page', 1)
-        #perPage = self.pagenator.perPage
-        #start = (page - 1) * perPage
-        #for row in rows:
-            #start += 1
-            #row['_sequence'] = start
-            
-        #return rows
+    def only_simple_data(self):
+        return self.simple_dict or self.kw.get('_accept')=='json'
+    
     
     @classmethod
     def get_edit_director_name(cls): 
@@ -795,13 +803,17 @@ class ModelTable(object):
         if not fieldCls:
             return []
         fieldobj=fieldCls(crt_user=self.crt_user)
+        fields_ctx = fieldobj.get_head_context()
+        fields_ctx.update({
+            'ops_loc':'bottom'
+        })
         return [{'name':'add_new',
                  'editor':'com-op-btn',
                  'icon': 'fa-plus',
                  'class':'btn btn-primary btn-sm',
                  'label':'创建',
                  'pre_set':'', # 预先设置的字段,一般用于com-tab-table下的创建
-                 'fields_ctx':fieldobj.get_head_context(),
+                 'fields_ctx':fields_ctx,
                  'visible': self.permit.can_add(),
                  },
                 #{'name':'save_changed_rows','editor':'com-op-btn','label':'保存', 
@@ -850,7 +862,7 @@ class ModelTable(object):
         return wb
 
 class PlainTable(ModelTable):
-    def __init__(self,_page=1,row_sort=[],row_filter={},row_search= '',crt_user=None,perpage=None,**kw):
+    def __init__(self,page=1,row_sort=[],row_filter={},row_search= '',crt_user=None,perpage=None,**kw):
         """
         kw['search_args']只是一个记录，在获取到rows时，一并返回前端页面，便于显示。
         而真正的查询参数已经被路由到各个查询组件中，具体参见 cls.parse_request / gen_from_search_args 函数
@@ -867,7 +879,7 @@ class PlainTable(ModelTable):
         #self.row_filter=self.filters(row_filter, crt_user, allowed_names,kw) 
         #self.row_search = self.search( row_search,crt_user,allowed_names,kw)
         
-        self.page= int( _page or 1 )
+        self.page= int( page or 1 )
         self.perpage= int( perpage or 20 )
         self.footer = []
         self.custom_permit()

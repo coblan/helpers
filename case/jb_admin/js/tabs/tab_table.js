@@ -33,7 +33,11 @@ var tab_table={
             },
             methods:{
                 switch_to_tab:function(kws){
-                    this.parStore.switch_to_tab(kws)
+                    if(window.root_live){
+                        table_store.methods.switch_to_tab(kws)
+                    }else{
+                        this.parStore.switch_to_tab(kws)
+                    }
                 },
                 getRows:function(){
                     if(vc.tab_head.pre_set){

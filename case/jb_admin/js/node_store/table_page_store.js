@@ -29,22 +29,7 @@ var table_page_store={
                 named_ctx[kws.ctx_name] = resp
             })
         },
-        switch_to_tab:function(kws){
-            var self=this
-            var tabs=named_ctx[kws.ctx_name]
-            if(!tabs){
-                throw `named_ctx. ${kws.ctx_name} 不存在，检查是否传入`
-            }
-            self.tab_stack.push( {
-                widget:'com-widget-el-tab' ,
-                tabs:tabs,
-                crt_tab_name:kws.tab_name,
-                par_row:kws.par_row,
 
-            })
-            self.crt_row=kws.par_row
-            //self.crt_row= kws.row
-        },
         pop_tab_stack:function(){
 
             if( this.tab_stack.length != 0){
