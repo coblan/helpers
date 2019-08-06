@@ -54,7 +54,6 @@ class ModelFields(forms.ModelForm):
     def parse_request(cls,request):
         """
         传入参数的形式：
-        {pk:xxx}
         """
         dc=request.GET.dict()
         pk=dc.pop('pk',None)
@@ -66,8 +65,12 @@ class ModelFields(forms.ModelForm):
         1. ajax save 时
         2. ajax get 时，获取数据，或者获取一个新的row数据。
         
-        @dc: 当post save时 ,dc是前端传来的row字典
-             当get 时，dc是前端传来的url参数，排除pk后的额外的字典
+        @dc: 当post save时 ,dc是前端传来的row字典。可以看到dc被传入了super函数,既传入了django.form中当做row参数。
+                如果要设置instance的默认值，可以在kw中传入，这样第一次返回前端的时候就有值。
+                如果在dc中传入默认值，第一次返回前端时，没有值，因为初始化时，不会调用 save_form 函数。
+                
+             当get 时，dc是前端传来的url参数，排除pk后的额外的字典。（用处不大）
+             
         """
         self.kw = kw.copy()
         

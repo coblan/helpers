@@ -31,6 +31,9 @@ var el_tab = {
        //     this.show_tab(v)
        // }
    },
+    created(){
+
+    },
     mounted:function(){
         this.show_tab(this.ctx.crt_tab_name)
     },

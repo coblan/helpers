@@ -493,6 +493,12 @@ var table_store={
             if(!tabs){
                 throw `named_ctx. ${kws.ctx_name} 不存在，检查是否传入`
             }
+
+            var canfind = ex.findone(tabs,{name:kws.tab_name})
+            if(!kws.tab_name || !canfind ){
+                kws.tab_name = tabs[0].name
+            }
+
             if(window.root_live){
                 // keeplive 页面
                 root_live.open_live(live_el_tab,{tabs:tabs,title:kws.par_row._label,crt_tab_name:kws.tab_name,par_row:kws.par_row})
