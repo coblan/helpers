@@ -1,6 +1,6 @@
 //require('./scss/tab_fields.scss')
 require('./scss/form_one.scss')
-var big_fields={
+export  var fields_all_in_one={
     props:['ctx'],
     data:function(){
         var data_row = ex.copy(this.ctx.row  || {} )
@@ -135,7 +135,7 @@ var big_fields={
 
 }
 
-Vue.component('com-form-one',big_fields)
+Vue.component('com-form-one',fields_all_in_one)
 
 var get_data={
     get_row:function(self,callback,kws){

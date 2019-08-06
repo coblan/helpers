@@ -464,16 +464,22 @@ class ModelTable(object):
     
     def get_context(self):
         head_ctx = self.get_head_context()
-        rows = self.get_rows()
+        data_ctx = self.get_data_context()
+        head_ctx.update(data_ctx)
         head_ctx.update({
-            'rows': rows,
-            'row_pages' : self.getRowPages(),
-            'row_sort': self.getRowSort(),#row_sort,
-            'model_name':model_to_name(self.model),
-            'parents': self.getParents(),
-            'footer': self.footer,
+            'row_sort': self.getRowSort()
         })
         return head_ctx
+        #rows = self.get_rows()
+        #head_ctx.update({
+            #'rows': rows,
+            #'row_pages' : self.getRowPages(),
+            #'row_sort': self.getRowSort(),#row_sort,
+            #'model_name':model_to_name(self.model),
+            #'parents': self.getParents(),
+            #'footer': self.footer,
+        #})
+        #return head_ctx
     
     def get_event_slots(self):
         return []
@@ -563,10 +569,14 @@ class ModelTable(object):
             heads = [x for x in heads if x['name'] in self.include]
             
         heads += self.getExtraHead() 
-        heads = self.fields_sort_heads(heads)   
+         
+        for head in heads:
+            if 'editor' not in head:
+                head['editor'] = 'com-table-span'
+                
         heads= self.make_pop_edit_field(heads)  
         heads = [self.dict_head(head) for head in heads]
-
+        heads = self.fields_sort_heads(heads)  
         # 需要使用form.field才能提取到choices
         #form_fields = fields_for_model(self.model)
         #for head in model_heads:
@@ -582,6 +592,7 @@ class ModelTable(object):
                 #head['options']=catch.get(options_name)
                 
         heads=evalue_container(heads)
+  
         return heads
     
     def get_model_heads(self): 
@@ -626,6 +637,8 @@ class ModelTable(object):
         heads= self.get_light_heads()
         footer = []
         for head in heads:
+            if head.get('children'):
+                continue
             footer.append(dc.get(head['name'], ''))
         return footer
     

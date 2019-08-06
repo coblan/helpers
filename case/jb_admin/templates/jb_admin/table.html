@@ -11,6 +11,7 @@
     search_args={{ search_args | jsonify | default:'{}'  }}
     parents = {{ parents | jsonify | default:'[]' }}
     option= {{ option | jsonify }}
+    table_layout={{ table_layout | jsonify }}
 
     // 这个变量留着，兼容老的调用。。准备把它移除
 //    tabs={{ tabs | jsonify | default:'[]' }}
@@ -44,6 +45,7 @@
                 named_ctx:named_ctx,
                 event_slots:event_slots,
                 option:option,
+                table_layout:table_layout,
             }
         },
         mixins:[table_store,table_page_store],

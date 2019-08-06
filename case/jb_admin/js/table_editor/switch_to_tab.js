@@ -1,7 +1,7 @@
 
 var switch_to_tab = {
     props:['rowData','field','index'],
-    template:`<span @click="goto_tab()" class="clickable">
+    template:`<span @click="goto_tab()" class="com-table-switch-to-tab clickable">
      <component v-if="head.inn_editor" :is="head.inn_editor" :rowData="rowData" :field="field" :index="index"></component>
     <span v-else v-text="rowData[field]"></span>
     </span>`,

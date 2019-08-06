@@ -27,7 +27,7 @@ var ele_table= {
         //this.bus.eventBus.$on('operation', this.on_operation)
         //this.bus.eventBus.$on('perpage-change', this.on_perpage_change)
         this.parStore.e_table = this.$refs.e_table
-        this.parStore.$on('data-updated',this.on_data_updated)
+        this.parStore.$on('data-updated-backend',this.on_data_updated)
         ex.each(this.parStore.heads,(head)=>{
             if(head.style){
                 ex.append_css(head.style)
@@ -126,6 +126,7 @@ var ele_table= {
                               size="mini"
                               height="100%"
                               style="width: 100%"
+                              @header-dragend="on_header_dragend"
                               @sort-change="on_sort_change($event)"
                               @selection-change="parStore.handleSelectionChange"
                               :summary-method="getSum">
@@ -194,6 +195,9 @@ var ele_table= {
                     </el-table>
                     </div>`,
     methods: {
+        on_header_dragend(newWidth, oldWidth, column, event){
+            this.parStore.$emit('header-dragend',{newWidth:newWidth, oldWidth:oldWidth, column:column, event:event})
+        },
         on_data_updated(){
             Vue.nextTick(()=>{
                 this.$refs.e_table.doLayout()
@@ -208,12 +212,14 @@ var ele_table= {
             }
         },
         name2head:function(name_list){
-            return ex.map(name_list,(name)=>{
+            var bb =  ex.map(name_list,(name)=>{
                 return this.keyed_heads[name]
             })
-            //return ex.filter(this.parStore.heads,function(head){
-            //    return ex.isin(head.name,name_list)
-            //})
+
+            return ex.filter(bb,(item)=>{
+                return Boolean(item)
+            })
+
         },
         tableRowClassName:function({row, rowIndex}){
             var class_list =[]

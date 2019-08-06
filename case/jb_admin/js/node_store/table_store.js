@@ -17,6 +17,7 @@ var table_store={
              changed_rows:[],
              event_slots:[],
              option:{},
+             table_layout:{},
          }
     },
     mixins:[mix_ele_table_adapter],
@@ -91,8 +92,7 @@ var table_store={
                 self.footer=resp.get_rows.footer
                 self.parents=resp.get_rows.parents
                 self.table_layout=resp.get_rows.table_layout
-
-                //self.$emit('data-updated')
+                self.$emit('data-updated-backend')
             })
         },
         add_new:function(kws){
@@ -380,7 +380,6 @@ var table_store={
             function do_director_call(new_row,callback){
                 cfg.show_load()
                 ex.director_call(kws.director_name,{rows:self.selected,new_row:new_row},function(resp){
-                    debugger
                     if(!resp.msg){
                         cfg.hide_load(2000)
                     }else{
@@ -409,7 +408,7 @@ var table_store={
 
             function judge_pop_fun(){
                 var one_row={}
-                ex.assign(one_row,ex.eval(kws.pre_set,{head:kws,ps:self.parStore}))
+                ex.assign(one_row,ex.eval(kws.pre_set,{head:kws,ps:self.parStore,self:self}))
                 if(kws.fields_ctx){
                     ex.map(kws.fields_ctx.heads,function(head){
                         if(!head.name.startsWith('_') && one_row[head.name]==undefined){
@@ -438,7 +437,11 @@ var table_store={
         arraySpanMethod:function({ row, column, rowIndex, columnIndex }){
             // 计算布局
             if(this.table_layout){
-                return this.table_layout[`${rowIndex},${columnIndex}`] || [1,1]
+                if(typeof  this.table_layout =='object'){
+                    return this.table_layout[`${rowIndex},${columnIndex}`] || [1,1]
+                }else{
+                    return ex.eval(this.table_layout,{row:row,column:column,rowIndex:rowIndex,columnIndex:columnIndex})
+                }
             }else{
                 return [1,1]
             }
@@ -508,7 +511,8 @@ var table_store={
 
                 })
             }
-            //self.crt_row=kws.par_row
+            // 这里暂时打开，以后移除
+            self.crt_row=kws.par_row
         },
     }
 
