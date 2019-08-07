@@ -724,8 +724,9 @@ class ModelTable(object):
         return: [{"name": "heyul0", "age": "32", "user": null, "pk": 1, "_class": "user_admin.BasicInfo", "id": 1}]
         """
         query=self.get_query()
+        query = self.pagenum.get_query(query)  
         out=[]
-        director_name = self.get_director_name()
+        #director_name = self.get_director_name()
         permit_fields =  self.permited_fields()
         #used_head_names= self.hide_fields +  [x['name'] for x in self.get_light_heads()] 
         
@@ -795,7 +796,7 @@ class ModelTable(object):
                 if f.name in head_nams and isinstance(f, models.ForeignKey):
                     query = query.select_related(f.name)        
 
-        query = self.pagenum.get_query(query)  
+        
         return query
     
     def statistics(self,query):
@@ -835,17 +836,25 @@ class ModelTable(object):
                 {'name':'delete_selected','editor':'com-op-btn','label':'删除','style': 'color:red','icon': 'fa-times','disabled':'!scope.ps.has_select', 'visible': self.permit.can_del(),},
                 ]      
     
+    def getExcelRows(self):
+        return self.get_rows()
+    
+    def getExcelHead(self):
+        return self.get_heads()
+    
     def get_excel(self): 
         from openpyxl import Workbook
         
         #self.search_args['_perpage'] = 5000
-        ctx = self.get_context()
-        heads = ctx['heads']
-        rows = ctx['rows']
+        #ctx = self.get_context()
+        heads = self.getExcelHead() #ctx['heads']
+        rows =  self.getExcelRows() #ctx['rows']
         out_rows = []
-        
         excel_row = []
+        # 第一行是 头
         for head in heads:
+            if head.get('children'):
+                continue
             excel_row.append(head['label'])
             if 'options' in head and head['options']:
                 head['options_dict'] = {}
@@ -853,9 +862,12 @@ class ModelTable(object):
                     head['options_dict'][opt['value']] = opt['label']
         out_rows.append(excel_row)
         
+        # 这里开始写数据
         for row in rows:
             excel_row = []
             for head in heads:
+                if head.get('children'):
+                    continue
                 label = '_%s_label' % head['name']
                 if label in row:
                     excel_row.append( row.get(label) )

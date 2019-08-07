@@ -380,15 +380,16 @@ var table_store={
             function do_director_call(new_row,callback){
                 cfg.show_load()
                 ex.director_call(kws.director_name,{rows:self.selected,new_row:new_row},function(resp){
-                    if(!resp.msg){
+                    debugger
+                    if( !resp || !resp.msg){
                         cfg.hide_load(2000)
                     }else{
                         cfg.hide_load()
                         cfg.toast(resp.msg,{time:1500})
                     }
                     if(kws.after_save){
-                        ex.eval(kws.after_save,{resp:resp,ps:self})
-                    }else{
+                        ex.eval(kws.after_save,{resp:resp,ps:self,rows:self.selected})
+                    }else if(resp){
                         // 兼容老的调用
                         // 返回rows ，默认更新
                         if(resp.rows){
