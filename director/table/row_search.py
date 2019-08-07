@@ -77,8 +77,11 @@ class SelectSearch(object):
     
     def get_express(self, q_str): 
         exp = None
-        if self.qf in self.names:
-            exp = {'%s__icontains'%self.qf: q_str,}
-        elif self.qf in self.exact_names:
-            exp = {self.qf : q_str}
+        if self.qf:
+            if self.qf in self.exact_names:
+                exp = {self.qf : q_str}
+            else:
+                exp = {'%s__icontains'%self.qf: q_str,}
+        else:
+            raise UserWarning('没有指定查询字段')
         return Q(**exp)
