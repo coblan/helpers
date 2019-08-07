@@ -20,6 +20,10 @@ class ChoiceDecimalProc(BaseFieldProc):
         #else:
             #return {name:data}
     
+    def dict_table_head(self, head):
+        head['editor'] = 'com-table-mapper'
+        head['options'] = self.get_options()
+    
     def dict_field_head(self, head):
         name = head['name']
         field = self.instance.__class__._meta.get_field(name)
@@ -28,7 +32,9 @@ class ChoiceDecimalProc(BaseFieldProc):
             'options':[{'value':x[0],'label':x[1]} for x in field.choice]
         })
         return head
-        
+    
+    def get_options(self):
+        return [{'value':x[0],'label':x[1]} for x in self.field.choice]
     
     def clean_field(self,dc,name):
         if dc.get(name):

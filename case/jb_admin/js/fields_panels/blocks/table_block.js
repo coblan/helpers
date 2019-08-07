@@ -4,7 +4,7 @@ Vue.component('com-fields-table-block',{
            <table >
             <tr v-for="heads_row in table_grid_heads">
                 <template v-for="head in heads_row">
-                    <td class="field-label-td"  >
+                    <td class="field-label-td"  :colspan="head.label_colspan" :rowspan="head.label_rowspan">
                         <div class="field-label">
                             <span class="label-content">
                                  <span v-text="head.label"></span>
@@ -17,8 +17,8 @@ Vue.component('com-fields-table-block',{
                             <component v-if="head.editor" :is="head.editor"
                                  @field-event="$emit('field-event',$event)"
                                  :head="head" :row="row"></component>
-                            <span v-if="head.help_text" class="help-text clickable">
-                                 <i style="color: #3780af;position: relative;top:10px;"   @click="show_msg(head.help_text,$event)" class="fa fa-question-circle" ></i>
+                            <span v-if="head.help_text" class="help-text clickable" @mouseenter="show_msg(head.help_text,$event)" @mouseleave="hide_msg()">
+                                 <i style="color: #3780af;position: relative;top:10px;"   class="fa fa-question-circle" ></i>
                             </span>
                         </div>
                     </td>
@@ -45,4 +45,14 @@ Vue.component('com-fields-table-block',{
             return heads_bucket
         },
     },
+    methods:{
+        show_msg:function(msg,event){
+            this.msg_index = layer.tips(msg, event.target,{
+                time:0,
+            });
+        },
+        hide_msg:function(){
+            layer.close(this.msg_index)
+        }
+    }
 })

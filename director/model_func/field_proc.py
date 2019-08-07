@@ -5,15 +5,17 @@ from django.forms.models import fields_for_model
 from django.core import exceptions
 
 class BaseFieldProc(object):
-    def __init__(self, instance = None, name = None,model=None): 
+    def __init__(self, instance = None, name = None,model=None,field = None): 
         self.instance = instance
         self.name=name
         self.model=model
+        if not self.model and self.instance:
+            self.model = self.instance . __class__
         
         self.form_field=None
-        self.field=None
-        if instance and name:
-            self.field = instance.__class__._meta.get_field(name)
+        self.field=field
+        if not self.field and self.model and name:
+            self.field = self.model._meta.get_field(name)
         catch = get_request_cache()
         self.request = catch.get('request')
         self.crt_user= self.request.user

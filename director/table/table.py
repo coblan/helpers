@@ -611,7 +611,7 @@ class ModelTable(object):
                 elif field.__class__ in field_map:
                     mapper = field_map.get(field.__class__)
                     if hasattr(mapper,'dict_table_head'):
-                        mapper(name=field.name,model=self.model).dict_table_head(dc)
+                        mapper(name=field.name,model=self.model,field=field).dict_table_head(dc)
                 #elif isinstance(field,models.ForeignKey):
                     #dc['editor']='com-table-label-shower'            
                     

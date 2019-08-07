@@ -1,7 +1,11 @@
+require('./styl/pop_tree_select.styl')
+
 var pop_tree_select =  {
     props:['row','head'],
-    template:`<div>
-        <span  v-text="label"></span>
+    template:`<div class="com-field-pop-tree-select" style="white-space: nowrap">
+        <!--<span  v-text="label"></span>-->
+       <input type="text" :class="['form-control input-sm label-shower',head.input_class]" v-model="label"
+                     readonly  :placeholder="head.placeholder" >
         <input type="text" v-model="row[head.name]" style="display: none;" :id="'id_'+head.name" :name="head.name">
         <span v-if="!head.readonly" class="clickable" @click="open_win"><i class="fa fa-search"></i></span>
     </div>`,
