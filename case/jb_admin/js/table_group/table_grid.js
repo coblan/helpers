@@ -6,33 +6,42 @@ var ele_table= {
 
     },
     data: function () {
-        this.parStore=ex.vueParStore(this)
+        var parStore=ex.vueParStore(this)
         var keyed_heads ={}
-        ex.each(this.parStore.heads,function(head){
+        ex.each(parStore.heads,function(head){
             keyed_heads[head.name]=head
         })
-        debugger
-        if(this.parStore.advise_heads){
-            var key = '_table_settings_'+this.parStore.director_name
+
+        if(parStore.advise_heads){
+            var key = '_table_settings_'+parStore.director_name
             var setting_str = localStorage.getItem(key)
             if(setting_str){
                 var setting_obj = JSON.parse(setting_str)
-            }else{
+                setting_obj.advise_width  = setting_obj.advise_width || {}
+                ex.each(parStore.heads,(head)=>{
+                    if( setting_obj.advise_width[head.name]){
+                        head.width = setting_obj.advise_width[head.name]
+                    }
+                })
+            }
+            else{
                 var setting_obj ={
-                    advise_heads:this.parStore.advise_heads,
-                    width:{}
+                    advise_heads:parStore.advise_heads,
+                    advise_width:{}
                 }
                 localStorage.setItem(key,JSON.stringify(setting_obj))
             }
-            this.parStore.setting_obj = setting_obj
+            parStore.advise_heads = setting_obj.advise_heads
+            parStore.advise_width = setting_obj.advise_width || {}
         }
 
         return {
-            heads: this.parStore.heads,
+            parStore:parStore,
+            heads: parStore.heads,
             keyed_heads:keyed_heads,
             //rows:this.parStore.rows,
-            search_args: this.parStore.search_args,
-            row_sort: this.parStore.row_sort,
+            search_args: parStore.search_args,
+            row_sort: parStore.row_sort,
             //selectable:this.parStore.selectable,
 
         }
@@ -71,14 +80,15 @@ var ele_table= {
         },
         normed_heads(){
             var out_ls =[]
+            if(this.parStore.advise_heads.length > 0){
+                var left_heads = ex.filter(this.parStore.heads,(head)=>{
+                    return ex.isin(head.name,this.parStore.advise_heads)
+                })
+            }else{
+                var left_heads = this.parStore.heads
+            }
 
-            //if(this.parStore.setting_obj){
-            //    var left_heads = ex.filter(this.parStore.heads,(head)=>{
-            //        return ex.isin(head.name,this.parStore.setting_obj.)
-            //    })
-            //}
-
-            ex.each(this.parStore.heads,(head)=>{
+            ex.each(left_heads,(head)=>{
                 if(head.show) {
                     if(! ex.eval(head.show,{ps:this.parStore,vc:this,head:head})  ){
                         return
@@ -147,6 +157,7 @@ var ele_table= {
                                              :width="head2.width">
                                         <template  slot-scope="scope">
                                             <component :is="head2.editor"
+                                                        :key="head2.name"
                                                        @on-custom-comp="on_td_event($event)"
                                                        :row-data="scope.row" :field="head2.name" :index="scope.$index">
                                             </component>
@@ -192,6 +203,15 @@ var ele_table= {
     methods: {
         on_header_dragend(newWidth, oldWidth, column, event){
             this.parStore.$emit('header-dragend',{newWidth:newWidth, oldWidth:oldWidth, column:column, event:event})
+
+            if(this.parStore.advise_width){
+                var key = '_table_settings_'+ this.parStore.director_name
+                var setting_str = localStorage.getItem(key)
+                var setting_obj = JSON.parse(setting_str)
+                setting_obj.advise_width = setting_obj.advise_width || {}
+                setting_obj.advise_width[column.property] = newWidth
+                localStorage.setItem(key,JSON.stringify(setting_obj))
+            }
         },
         on_data_updated(){
             Vue.nextTick(()=>{
@@ -207,14 +227,15 @@ var ele_table= {
             }
         },
         name2head:function(name_list){
-            var bb =  ex.map(name_list,(name)=>{
+            var heads_list = ex.filter(name_list,(name)=>{
+               return ex.findone(this.normed_heads,{name:name})
+            })
+            var bb =  ex.map(heads_list,(name)=>{
                 return this.keyed_heads[name]
             })
-
             return ex.filter(bb,(item)=>{
                 return Boolean(item)
             })
-
         },
         tableRowClassName:function({row, rowIndex}){
             var class_list =[]

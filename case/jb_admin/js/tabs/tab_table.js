@@ -18,6 +18,7 @@ var tab_table={
                     rows:[],
                     row_pages:{},
                     selectable:heads_ctx.selectable==undefined? true:heads_ctx.selectable,
+                    advise_heads:heads_ctx.advise_heads || [],
                     selected:[],
                     del_info:[],
                     search_args: {},
