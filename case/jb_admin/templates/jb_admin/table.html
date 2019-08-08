@@ -10,7 +10,8 @@
     footer={{ footer |jsonify }}
     search_args={{ search_args | jsonify | default:'{}'  }}
     parents = {{ parents | jsonify | default:'[]' }}
-    heads_editable = {{ heads_editable | jsonify }}
+    advise_heads = {{ advise_heads | jsonify | default:'[]' }}
+
     option= {{ option | jsonify }}
     table_layout={{ table_layout | jsonify }}
 
@@ -45,7 +46,7 @@
                 //-------------------
                 named_ctx:named_ctx,
                 event_slots:event_slots,
-                heads_editable:heads_editable,
+                advise_heads:advise_heads,
                 option:option,
                 table_layout:table_layout,
             }

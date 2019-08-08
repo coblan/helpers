@@ -11,10 +11,22 @@ var ele_table= {
         ex.each(this.parStore.heads,function(head){
             keyed_heads[head.name]=head
         })
-        //debugger
-        //if(this.parStore.heads_editable){
-        //    alert('jj')
-        //}
+        debugger
+        if(this.parStore.advise_heads){
+            var key = '_table_settings_'+this.parStore.director_name
+            var setting_str = localStorage.getItem(key)
+            if(setting_str){
+                var setting_obj = JSON.parse(setting_str)
+            }else{
+                var setting_obj ={
+                    advise_heads:this.parStore.advise_heads,
+                    width:{}
+                }
+                localStorage.setItem(key,JSON.stringify(setting_obj))
+            }
+            this.parStore.setting_obj = setting_obj
+        }
+
         return {
             heads: this.parStore.heads,
             keyed_heads:keyed_heads,
@@ -59,6 +71,13 @@ var ele_table= {
         },
         normed_heads(){
             var out_ls =[]
+
+            //if(this.parStore.setting_obj){
+            //    var left_heads = ex.filter(this.parStore.heads,(head)=>{
+            //        return ex.isin(head.name,this.parStore.setting_obj.)
+            //    })
+            //}
+
             ex.each(this.parStore.heads,(head)=>{
                 if(head.show) {
                     if(! ex.eval(head.show,{ps:this.parStore,vc:this,head:head})  ){
@@ -78,34 +97,6 @@ var ele_table= {
         footer:function(){
             return this.parStore.footer
         },
-
-        //bus_serarch_count:function(){
-        //    return this.bus.search_count
-        //},
-        //rows: {
-        //    get: function () {
-        //        return this.bus.rows
-        //    },
-        //    set: function (v) {
-        //        this.bus.rows = v
-        //    }
-        //},
-        //footer: {
-        //    get: function () {
-        //        return this.bus.footer
-        //    },
-        //    set: function (v) {
-        //        this.bus.footer = v
-        //    }
-        //}
-        //search_args:{
-        //    get:function(){
-        //        return this.bus.search_args
-        //    },
-        //    set:function(v){
-        //        this.bus.search_args=v
-        //    }
-        //}
     },
     watch:{
         selected:function(newvalue,old){
