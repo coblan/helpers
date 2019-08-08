@@ -1,6 +1,6 @@
 require('./scss/table_grid.scss')
 var ele_table= {
-    props: ['bus'],
+    props: ['ctx'],
     created: function () {
         //this.bus.table = this
 
@@ -11,6 +11,10 @@ var ele_table= {
         ex.each(this.parStore.heads,function(head){
             keyed_heads[head.name]=head
         })
+        debugger
+        if(this.parStore.heads_editable){
+            alert('jj')
+        }
         return {
             heads: this.parStore.heads,
             keyed_heads:keyed_heads,
