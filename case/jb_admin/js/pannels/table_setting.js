@@ -11,7 +11,7 @@ Vue.component('com-panel-table-setting',{
           </el-checkbox-group>
     </div>
     <div class="mybtn-panel">
-         <el-button size="small" @click="clear_format()">回复默认</el-button>
+         <el-button size="small" @click="clear_format()">恢复默认</el-button>
          <el-button type="primary" size="small" @click="make_catch()">确定</el-button>
     </div>
 

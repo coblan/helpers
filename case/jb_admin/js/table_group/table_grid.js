@@ -33,6 +33,9 @@ var ele_table= {
             }
             parStore.advise_heads = setting_obj.advise_heads
             parStore.advise_width = setting_obj.advise_width || {}
+        }else{
+            parStore.advise_heads = []
+            parStore.advise_width = {}
         }
 
         return {
@@ -80,7 +83,7 @@ var ele_table= {
         },
         normed_heads(){
             var out_ls =[]
-            if(this.parStore.advise_heads.length > 0){
+            if( this.parStore.advise_heads.length > 0){
                 var left_heads = ex.filter(this.parStore.heads,(head)=>{
                     return ex.isin(head.name,this.parStore.advise_heads)
                 })
