@@ -115,6 +115,17 @@ var ele_table= {
         selected:function(newvalue,old){
             if(newvalue.length==0 && old.length !=0){
                 this.$refs.e_table.clearSelection()
+            }else{
+                ex.each(old,(row)=>{
+                    if(newvalue.indexOf(row)==-1){
+                        this.$refs.e_table.toggleRowSelection(row,false)
+                    }
+                })
+                ex.each(newvalue,(row)=>{
+                    if(old.indexOf(row)==-1){
+                        this.$refs.e_table.toggleRowSelection(row,true)
+                    }
+                })
             }
         },
 
@@ -141,7 +152,7 @@ var ele_table= {
 
                         <el-table-column v-if="parStore.selectable"
                                 type="selection"
-                                width="55">
+                                width="50">
                         </el-table-column>
                         <template v-for="head in normed_heads">
                              <el-table-column v-if="head.children"
