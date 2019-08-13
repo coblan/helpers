@@ -6,21 +6,11 @@ var table_setting_panel = {
 
     <div class="head-panel">
          <el-checkbox-group class="mygroup" v-model="advise_heads">
-                <el-checkbox v-for="head in myheads" :data-id="head.name" :label="head.name">
+            <el-checkbox v-for="head in myheads" :data-id="head.name" :label="head.name" size="small" border>
                     <span v-text="head.label"></span>
-                </el-checkbox>
+            </el-checkbox>
           </el-checkbox-group>
     </div>
-
-    <!--<div class="head-panel">-->
-        <!--<draggable v-model="advise_heads" group="people" @start="drag=true" @end="drag=false">-->
-            <!--<el-checkbox v-for="head in myheads" :label="head.name">-->
-                        <!--<span v-text="head.label"></span>-->
-            <!--</el-checkbox>-->
-        <!--</draggable >-->
-
-    <!--</div>-->
-
     <div class="mybtn-panel">
          <el-button size="small" @click="clear_format()">恢复默认</el-button>
          <el-button type="primary" size="small" @click="make_catch()">确定</el-button>
@@ -37,6 +27,7 @@ var table_setting_panel = {
         var ddom= $(this.$el).find('.mygroup')[0]
         var self = this
          new Sortable(ddom ,{
+             animation: 150,
              store: {
                  /**
                   * Get the order of elements. Called once during initialization.
@@ -85,15 +76,6 @@ var table_setting_panel = {
                     advise_order:this.advise_order,
                 }
             }
-
-            //var key = '_table_settings_'+ self.ctx.table_ps.director_name
-            //var setting_str = localStorage.getItem(key)
-            //if(setting_str){
-            //    var setting_obj = JSON.parse(setting_str)
-            //    setting_obj.advise_order = sortable.toArray()
-            //    self.ctx.table_ps.heads = ex.sort_by_names(self.ctx.table_ps.heads,setting_obj.advise_order,true)
-            //    localStorage.setItem(key,JSON.stringify(setting_obj))
-            //}
 
             localStorage.setItem(key,JSON.stringify(setting_obj))
 

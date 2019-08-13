@@ -39,12 +39,10 @@ def to_dict(instance,filt_attr=None,include=None,exclude=None,hash_keys=None,for
     if '_label' not in out.keys():
         out['_label']=str(instance)
 
-    fields_name = [x.name for x in instance._meta.get_fields()]
-    valide_name_list = [x for x in fields_name if x in out.keys()]
-    #out['meta_hash']=hash_dict(instance.__dict__,valide_name_list)
-    out['meta_hash_fields'] = ','.join(valide_name_list)
-    out['meta_org_dict'] = make_mark_dict(instance.__dict__,valide_name_list)
-        #out['_md5']=md5(out).hexdigest() 
+    #fields_name = [x.name for x in instance._meta.get_fields()]
+    #valide_name_list = [x for x in fields_name if x in out.keys()]
+    #out['meta_hash_fields'] = ','.join(valide_name_list)
+    #out['meta_org_dict'] = make_mark_dict(instance.__dict__,valide_name_list)
     return out
 
 
