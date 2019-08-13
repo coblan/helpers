@@ -22,7 +22,7 @@ from helpers.func.collection.container import evalue_container
 from django.db import transaction
 import logging
 from helpers.director.decorator import get_request_cache
-from ..model_func.hash_dict import hash_dict,mark_dict,dif_mark_dict
+from ..model_func.hash_dict import hash_dict,make_mark_dict,dif_mark_dict
 
 
 # sql_log 可能没有什么用
@@ -150,7 +150,7 @@ class ModelFields(forms.ModelForm):
             
         if self.instance.pk and self.changed_data  and self.kw.get('meta_org_dict') and self.kw.get('meta_hash_fields'):
             fields_name =  self.kw.get('meta_hash_fields').split(',') 
-            crt_mark_dc = mark_dict(self.instance.__dict__,fields_name)
+            crt_mark_dc = make_mark_dict(self.instance.__dict__,fields_name)
             ls = self.permit.changeable_fields()
             ls = [x for x in ls if x in self.fields.keys()]
             ls =[x for x in ls if x not in self.readonly]
@@ -586,8 +586,21 @@ class Fields(ModelFields):
     
     def get_errors(self):
         return self._errors
+    
     def clean(self):
-        pass
+        if self.kw.get('meta_org_dict'):
+            crt_mark_dc = self.get_org_dict()
+            dif_dc = dif_mark_dict(crt_mark_dc, self.kw.get('meta_org_dict'))
+            
+            if dif_dc:
+                heads = self.get_heads()
+                head_names =[]
+                for head in heads:
+                    if head['name'] in dif_dc:
+                        head_names.append(head['label'])
+                        
+                raise OutDateException('%s已经被其他用户改变,请确认后再进行操作!'%';'.join(head_names) )
+            
     def is_valid(self):
         self.clean()
         if self._errors:
@@ -599,6 +612,10 @@ class Fields(ModelFields):
         "overwrite this method"
         print('here')
     
+    def get_org_dict(self,row=None):
+        if not row:
+            row= self.dict_row()
+        return make_mark_dict(row)
     
     def clean_dict(self, dc): 
         return dc
@@ -617,6 +634,7 @@ class Fields(ModelFields):
         row= self.dict_row()
         row.update( {
             '_director_name': self.get_director_name(),
+            'meta_org_dict':self.get_org_dict(row),
         })
         return row
 

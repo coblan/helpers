@@ -24,7 +24,7 @@ def hash_dict(dc,keys=None):
     code= ';'.join(ls)
     return md5(code.encode('utf-8')).hexdigest() 
 
-def mark_dict(dc,keys=None):
+def make_mark_dict(dc,keys=None):
     out_dc = {}
     for k,v in dc.items():
         if keys:
