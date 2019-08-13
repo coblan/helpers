@@ -927,31 +927,41 @@ class PlainTable(ModelTable):
             'search_args': {},
             #'search_tip':self.row_search.get_context(),
             'director_name': self.get_director_name(),#model_to_name(self.model),
-            'ops' : ops
-        }  
-    
-    def get_context(self):
-        director_name =self.get_director_name()
-        heads = self.get_heads()
-        rows = self.get_rows()
-
-        ops = self.get_operation()
-        ops = evalue_container(ops)
-        return {
-            'heads':heads,
-            'rows': rows,
-            'row_pages' : self.getRowPages(),
-            'row_sort': self.getRowSort(),#row_sort,
-            'row_filters':  self.getRowFilters(), #ls,
-            #'search_tip':self.row_search.get_context(),
-            'director_name':director_name,
             'ops' : ops,
-            'search_args':self.search_args, 
-            'parents': self.getParents(),
-            'footer': self.footer,
             'selectable': self.selectable,
             'event_slots':self.get_event_slots()
-        }    
+        }  
+    
+    #def get_data_context(self):
+        #return {
+            #'rows': rows,
+            #'row_pages' : self.getRowPages(),
+            #'row_sort': self.getRowSort(),#row_sort,
+            #'row_filters':  self.getRowFilters(), #ls,
+        #}
+    
+    def get_context(self):
+        out_dict = self.get_head_context()
+        out_dict.update(
+            self.get_data_context()
+        )
+        return out_dict
+        
+        #return {
+            #'heads':heads,
+            #'rows': rows,
+            #'row_pages' : self.getRowPages(),
+            #'row_sort': self.getRowSort(),#row_sort,
+            #'row_filters':  self.getRowFilters(), #ls,
+            ##'search_tip':self.row_search.get_context(),
+            #'director_name':director_name,
+            #'ops' : ops,
+            #'search_args':self.search_args, 
+            #'parents': self.getParents(),
+            #'footer': self.footer,
+            #'selectable': self.selectable,
+            #'event_slots':self.get_event_slots()
+        #}    
     
     def getRowSort(self): 
         return {

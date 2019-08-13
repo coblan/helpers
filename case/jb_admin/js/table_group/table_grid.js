@@ -18,6 +18,7 @@ var ele_table= {
             if(setting_str){
                 var setting_obj = JSON.parse(setting_str)
                 setting_obj.advise_width  = setting_obj.advise_width || {}
+                setting_obj.advise_order = setting_obj.advise_order || []
                 ex.each(parStore.heads,(head)=>{
                     if( setting_obj.advise_width[head.name]){
                         head.width = setting_obj.advise_width[head.name]
@@ -27,15 +28,21 @@ var ele_table= {
             else{
                 var setting_obj ={
                     advise_heads:parStore.advise_heads,
-                    advise_width:{}
+                    advise_width:{},
+                    advise_order:[],
                 }
                 localStorage.setItem(key,JSON.stringify(setting_obj))
             }
             parStore.advise_heads = setting_obj.advise_heads
             parStore.advise_width = setting_obj.advise_width || {}
+            parStore.advise_order= setting_obj.advise_order ||[]
         }else{
             parStore.advise_heads = []
             parStore.advise_width = {}
+            parStore.advise_order = []
+        }
+        if(parStore.advise_order.length > 0 ){
+            parStore.heads = ex.sort_by_names(parStore.heads , parStore.advise_order,true)
         }
 
         return {
@@ -99,6 +106,7 @@ var ele_table= {
                 }
                 out_ls.push(head)
             })
+
             return out_ls
         },
         rows:function(){
@@ -154,12 +162,12 @@ var ele_table= {
                                 type="selection"
                                 width="50">
                         </el-table-column>
-                        <template v-for="head in normed_heads">
+                        <template v-for="(head,index) in normed_heads">
                              <el-table-column v-if="head.children"
                                 :label="head.label"
                                 :key="head.name"
                                  :class-name="head.class">
-                                   <el-table-column v-for="head2 in name2head(head.children)"
+                                   <el-table-column v-for="head2 in name_in_list(head.children)"
                                             :class-name="head2.class"
                                             :key="head2.name"
                                              :show-overflow-tooltip="parStore.is_show_tooltip(head2) "
@@ -240,16 +248,20 @@ var ele_table= {
                 this.parStore.sortChange(event)
             }
         },
-        name2head:function(name_list){
-            var heads_list = ex.filter(name_list,(name)=>{
-               return ex.findone(this.normed_heads,{name:name})
+        name_in_list:function(name_list){
+
+             return ex.filter(this.normed_heads,(head)=>{
+                return ex.isin(head.name,name_list)
             })
-            var bb =  ex.map(heads_list,(name)=>{
-                return this.keyed_heads[name]
-            })
-            return ex.filter(bb,(item)=>{
-                return Boolean(item)
-            })
+            //var heads_list = ex.filter(name_list,(name)=>{
+            //   return ex.findone(this.normed_heads,{name:name})
+            //})
+            //var bb =  ex.map(heads_list,(name)=>{
+            //    return this.keyed_heads[name]
+            //})
+            //return ex.filter(bb,(item)=>{
+            //    return Boolean(item)
+            //})
         },
         tableRowClassName:function({row, rowIndex}){
             var class_list =[]

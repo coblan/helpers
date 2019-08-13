@@ -83,6 +83,7 @@ def get_lib(request):
         'chosen_css': '/static/lib/chosen_v1.8.7/chosen.min.css',  
         'ckeditor': '/static/lib/ckeditor_4.10.1/ckeditor/ckeditor.js', 
         'notify':'https://cdn.jsdelivr.net/npm/@wcjiang/notify@2.0.12/dist/notify.min.js',
+        'sortablejs':'https://cdn.jsdelivr.net/npm/sortablejs@1.8.4/Sortable.min.js'
     }
     if request.META['ACCESS_FROM_INTERNET']:
 
