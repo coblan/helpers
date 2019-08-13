@@ -57,24 +57,9 @@ def get_lib(request):
         
         'md5': 'https://cdn.staticfile.org/blueimp-md5/2.10.0/js/md5.min.js',
         
-        # 下面是bootcss 的cdn ，但是 不是很稳定
-        #'nice_validator': 'https://cdn.bootcss.com/nice-validator/1.1.3/jquery.validator.min.js?local=zh-CN',
-        #'nice_validator_css': 'https://cdn.bootcss.com/nice-validator/1.1.3/jquery.validator.min.css',
-
-        #'adminlte': 'https://cdn.bootcss.com/admin-lte/2.4.3/js/adminlte.min.js',
-        #'adminlte_css': 'https://cdn.bootcss.com/admin-lte/2.4.3/css/AdminLTE.min.css',
-        #'adminlte_blue_css': 'https://cdn.bootcss.com/admin-lte/2.4.3/css/skins/skin-blue.min.css',
-        
-        #'nprogress': 'https://cdn.bootcss.com/nprogress/0.2.0/nprogress.min.js',
-        #'nprogress_css': 'https://cdn.bootcss.com/nprogress/0.2.0/nprogress.min.css',
-        
-        #'element': 'https://cdn.bootcss.com/element-ui/2.4.0/index.js',  #'https://unpkg.com/element-ui/lib/index.js',
-        #'element_css':'https://cdn.bootcss.com/element-ui/2.4.0/theme-chalk/index.css',  # 'https://unpkg.com/element-ui/lib/theme-chalk/index.css',
-        #'md5': 'https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.min.js',
-        
         'jb_admin_pack_js': '/static/js/jb_admin.pack.js?t=%s&t2=123'%js_stamp_dc.get('jb_admin_pack_js'),
-        'swiper': 'https://cdn.bootcss.com/Swiper/4.3.0/js/swiper.min.js',
-        'swiper_css': 'https://cdn.bootcss.com/Swiper/4.3.0/css/swiper.min.css',    
+        'swiper': 'https://cdn.jsdelivr.net/npm/swiper@4.5.0/dist/js/swiper.min.js',
+        'swiper_css': 'https://cdn.jsdelivr.net/npm/swiper@4.5.0/dist/css/swiper.min.css',  
     }
     return dc
 
