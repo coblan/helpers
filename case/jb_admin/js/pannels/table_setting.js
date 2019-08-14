@@ -28,20 +28,31 @@ var table_setting_panel = {
     <!--</div>-->
 
     <div class="head-panel">
-         <el-checkbox-group class="mygroup" v-model="heads_bucket._first_layer">
-            <el-checkbox v-for="head in first_layer_field" :data-id="head.name" :label="head.name" size="small" border>
-                    <span v-text="head.label"></span>
-            </el-checkbox>
-          </el-checkbox-group>
-
-         <div v-for="field_group in group_field_list">
-         <span v-text="field_group.label"></span>
-               <el-checkbox-group class="mygroup" v-model="heads_bucket[field_group.name]">
-                <el-checkbox v-for="head in field_list(field_group.children)" :data-id="head.name" :label="head.name" size="small" border>
+        <div class="panel panel-info">
+            <div class="panel-heading">顶层字段</div>
+            <div style="padding: 10px">
+             <el-checkbox-group class="mygroup" v-model="heads_bucket._first_layer">
+                <el-checkbox v-for="head in first_layer_field" :data-id="head.name" :label="head.name" size="small" border>
+                    <i class="fa fa-level-down" aria-hidden="true" v-if="head.children"></i>
                         <span v-text="head.label"></span>
                 </el-checkbox>
-              </el-checkbox-group>
-         </div>
+             </el-checkbox-group>
+            </div>
+
+        </div>
+
+        <div class="panel panel-warning" v-for="field_group in group_field_list">
+             <div class="panel-heading"> <span v-text="field_group.label"></span></div>
+             <div style="padding: 10px">
+                  <el-checkbox-group class="mygroup" v-model="heads_bucket[field_group.name]">
+                    <el-checkbox v-for="head in field_list(field_group.children)" :data-id="head.name" :label="head.name" size="small" border>
+                            <span v-text="head.label"></span>
+                    </el-checkbox>
+                  </el-checkbox-group>
+             </div>
+
+        </div>
+
     </div>
 
 
