@@ -3,11 +3,18 @@ require('./styl/pop_tree_select.styl')
 var pop_tree_select =  {
     props:['row','head'],
     template:`<div class="com-field-pop-tree-select" style="white-space: nowrap">
-        <!--<span  v-text="label"></span>-->
-       <input type="text" :class="['form-control input-sm label-shower',head.input_class]" v-model="label"
-                     readonly  :placeholder="head.placeholder" >
-        <input type="text" v-model="row[head.name]" style="display: none;" :id="'id_'+head.name" :name="head.name">
-        <span v-if="!head.readonly" class="clickable" @click="open_win"><i class="fa fa-search"></i></span>
+        <!--<span  v-text="label" style="display: inline-block;background-color: white;border-bottom: 1px solid grey"></span>-->
+       <!--<input type="text" :class="['form-control input-sm label-shower',head.input_class]" v-model="label"-->
+                     <!--readonly  :placeholder="head.placeholder" @click="open_win" />-->
+       <el-input
+    :placeholder="head.placeholder"
+    readonly
+    size="small"
+   v-model="label">
+    <el-button slot="append" icon="el-icon-search" @click="open_win"></el-button>
+  </el-input>
+        <input type="text" v-model="row[head.name]" style="display: none;" :id="'id_'+head.name" :name="head.name" />
+        <!--<span v-if="!head.readonly" class="clickable" @click="open_win"><i class="fa fa-search"></i></span>-->
     </div>`,
 
     computed:{
