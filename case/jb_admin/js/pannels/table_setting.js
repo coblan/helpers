@@ -99,7 +99,7 @@ var table_setting_panel = {
                      */
                     set: function (sortable) {
                         //self.advise_order = sortable.toArray()
-                        order_list.splice(0,order_list,...sortable.toArray())
+                        order_list.splice(0,order_list.length,...sortable.toArray())
                     }
                 }
             } )
