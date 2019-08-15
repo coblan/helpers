@@ -311,7 +311,7 @@ class RowSort(object):
             if ls:
                 query = query.order_by(*ls)
         else:
-            if not query._fields and self.general_sort: # 如果这个为空，才能弄一个默认排序，否则造成聚合函数无效
+            if not query.ordered and not query._fields and self.general_sort: # 如果这个为空，才能弄一个默认排序，否则造成聚合函数无效
                 query = query.order_by(self.general_sort)
 
         return query
