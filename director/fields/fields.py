@@ -148,19 +148,25 @@ class ModelFields(forms.ModelForm):
         if self.overlap_fields:
             overlaped_fields += self.overlap_fields
             
-        if self.instance.pk and self.changed_data  and self.kw.get('meta_org_dict') and self.kw.get('meta_hash_fields'):
-            fields_name =  self.kw.get('meta_hash_fields').split(',') 
-            crt_mark_dc = make_mark_dict(self.instance.__dict__,fields_name)
-            ls = self.permit.changeable_fields()
-            ls = [x for x in ls if x in self.fields.keys()]
-            ls =[x for x in ls if x not in self.readonly]
-            ls = [x for x in ls if x not in self.overlap_fields]
-            dif_dc = dif_mark_dict(crt_mark_dc, self.kw.get('meta_org_dict'),keys=ls)
+        if self.instance.pk and self.changed_data  and self.kw.get('meta_org_dict') : #and self.kw.get('meta_hash_fields'):
+            #fields_name =  self.kw.get('meta_hash_fields').split(',') 
+            #crt_mark_dc = make_mark_dict(self.instance.__dict__,fields_name)
+            crt_mark_dc= self.get_org_dict()
+            #ls = self.permit.changeable_fields()
+            #ls = [x for x in ls if x in self.fields.keys()]
+            #ls =[x for x in ls if x not in self.readonly]
+            #ls = [x for x in ls if x not in self.overlap_fields]
+            dif_dc = dif_mark_dict(crt_mark_dc, self.kw.get('meta_org_dict'),exclude= overlaped_fields)
             
             if dif_dc:
                 keys = [self.fields.get(key).label for key in dif_dc.keys()]
                 raise OutDateException('(%s)的%s已经被其他用户改变,请确认后再进行操作!'%(self.instance,keys) )
-        
+    
+    def get_org_dict(self,row=None):
+        if not row:
+            row = self.get_row()
+        return make_mark_dict(row)
+    
     def _clean_dict(self,dc):
         """利用field_map字典，查找前端传来的dc中，某个字段的转换方式"""
 
@@ -461,6 +467,7 @@ class ModelFields(forms.ModelForm):
                    field.name not in row:
                     row[field.name]=getattr(self.instance,field.name)
         row['_director_name']=self.get_director_name()
+        row['meta_org_dict'] = self.get_org_dict(row)
         return row
 
     def dict_row(self,inst):
@@ -590,8 +597,10 @@ class Fields(ModelFields):
     def clean(self):
         if self.kw.get('meta_org_dict'):
             crt_mark_dc = self.get_org_dict()
-            dif_dc = dif_mark_dict(crt_mark_dc, self.kw.get('meta_org_dict'))
-            
+            if crt_mark_dc:
+                dif_dc = dif_mark_dict(crt_mark_dc, self.kw.get('meta_org_dict'))
+            else:
+                dif_dc ={}
             if dif_dc:
                 heads = self.get_heads()
                 head_names =[]

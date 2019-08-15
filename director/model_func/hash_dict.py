@@ -41,11 +41,13 @@ def make_mark_dict(dc,keys=None):
         out_dc[k] = str(v)
     return out_dc
 
-def dif_mark_dict(dc,mark,keys=None):
+def dif_mark_dict(dc,mark,keys=None,exclude=[]):
     dif_dc = {}
     for k,v in mark.items():
         if keys and k not in keys:
             continue
-        if str(dc[k]) != v:
+        if k in exclude:
+            continue
+        if k in dc and str(dc[k]) != v:
             dif_dc[k] = v
     return dif_dc
