@@ -22,6 +22,9 @@ var pop_table_select =  {
     methods:{
         open_win:function(){
             var self=this
+            if(this.head.init_express){
+                ex.eval(this.head.init_express,{head:this.head,row:this.row})
+            }
             cfg.pop_vue_com('com-table-panel',this.head.table_ctx).then(foreign_row=>{
                     if(self.head.after_select){
                         ex.eval(self.head.after_select,{selected_row:foreign_row,row:self.row})
