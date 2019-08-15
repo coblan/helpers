@@ -1,6 +1,8 @@
+require('./styl/fields_table_block.styl')
+
 Vue.component('com-fields-table-block',{
     props:['heads','row','option'],
-    template:`<div class="table-fields field-panel msg-bottom">
+    template:`<div class="com-fields-table-block field-panel msg-bottom">
            <table >
             <tr v-for="heads_row in table_grid_heads">
                 <template v-for="head in heads_row">
@@ -18,7 +20,7 @@ Vue.component('com-fields-table-block',{
                                  @field-event="$emit('field-event',$event)"
                                  :head="head" :row="row"></component>
                             <span v-if="head.help_text" class="help-text clickable" @mouseenter="show_msg(head.help_text,$event)" @mouseleave="hide_msg()">
-                                 <i style="color: #3780af;position: relative;top:10px;"   class="fa fa-question-circle" ></i>
+                                 <i style="color: #3780af;"   class="fa fa-question-circle" ></i>
                             </span>
                         </div>
                     </td>
