@@ -6,5 +6,10 @@ var line_text={
             		 	    :id="'id_'+head.name" :name="head.name" data-
                         	:placeholder="head.placeholder" :autofocus="head.autofocus" :maxlength='head.maxlength'>
                        </div>`,
+    mounted(){
+        if(this.head.css){
+            ex.append_css(this.head.css)
+        }
+    }
 }
 Vue.component('com-field-linetext',line_text)

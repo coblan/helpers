@@ -10,6 +10,8 @@
     footer={{ footer |jsonify }}
     search_args={{ search_args | jsonify | default:'{}'  }}
     parents = {{ parents | jsonify | default:'[]' }}
+    advise_heads = {{ advise_heads | jsonify | default:'[]' }}
+
     option= {{ option | jsonify }}
     table_layout={{ table_layout | jsonify }}
 
@@ -44,6 +46,7 @@
                 //-------------------
                 named_ctx:named_ctx,
                 event_slots:event_slots,
+                advise_heads:advise_heads,
                 option:option,
                 table_layout:table_layout,
             }
@@ -70,40 +73,14 @@
 
             parents:parents,
             page_label:page_label,
-//            heads:heads,
-//            rows:rows,
-//            row_filters:row_filters,
-//            row_sort:row_sort,
-//            row_pages:row_pages,
-//            director_name:director_name,
-//            footer:footer,
-////            model_name:model_name,
-//            selected:[],
-//            search_args:search_args, //ex.parseSearch(),
-//            ops:ops,
-//            crt_row:{},
-//
-//            tab_stack:[],
-//            tabs:tabs,
-//            named_tabs:named_tabs,
-
             tr:cfg.tr
 
 
         },
         mixins:[mix_table_data,mix_ele_table_adapter],
 
-//        created:function(){
-//            var store_name='table_'+ex.get_uid()
-//            this.$store.registerModule(store_name, table_store)
-//            this.store_name = store_name
-//        },
         mounted:function(){
             var self=this
-
-//            this.$store.state[store_name].childbus.$on('update_or_insert',function(){
-//                console.log('jjyy')
-//            })
             this.childStore.vc=this
             ex.assign(this.op_funs,{
                 row_changed:function(kws){

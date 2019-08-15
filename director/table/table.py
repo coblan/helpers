@@ -17,6 +17,7 @@ from django.core.exceptions import FieldDoesNotExist
 from helpers.director.middleware.request_cache import get_request_cache,request_cache
 from helpers.director.model_func.field_proc import BaseFieldProc
 from helpers.func.collection.container import evalue_container
+from helpers.director.model_func.hash_dict import make_mark_dict
 
 from django.core.paginator import Paginator
 from django.forms.models import fields_for_model
@@ -311,7 +312,7 @@ class RowSort(object):
             if ls:
                 query = query.order_by(*ls)
         else:
-            if not query._fields and self.general_sort: # 如果这个为空，才能弄一个默认排序，否则造成聚合函数无效
+            if not query.ordered and not query._fields and self.general_sort: # 如果这个为空，才能弄一个默认排序，否则造成聚合函数无效
                 query = query.order_by(self.general_sort)
 
         return query
@@ -738,15 +739,31 @@ class ModelTable(object):
                     dc = sim_dict(inst, include=permit_fields,filt_attr=cus_dict)
                 else:
                     dc= to_dict(inst, include=permit_fields,filt_attr=cus_dict)
-                    dc['_director_name'] = self.get_edit_director_name()
+                    dc .update({
+                        '_director_name':self.get_edit_director_name(),
+                        'meta_org_dict':self.get_org_dict(dc,inst)
+                        })
                 # 再赋值一次，以免被默认dictfy替换掉了，例如 _x_label等值
                 dc.update(cus_dict)
             else:
                 dc = inst
-                dc['_director_name'] = self.get_edit_director_name()
+                if not self.only_simple_data():
+                    dc .update({
+                       '_director_name':self.get_edit_director_name(),
+                       'meta_org_dict':self.get_org_dict(dc,inst)
+                       })
             out.append(dc)
         #out = self.append_sequence(out)
         return out
+    
+    def get_org_dict(self,row,inst=None):
+        #keys = self.permit.readable_fields()
+        #fields_name = [x.name for x in inst._meta.get_fields()]
+        #valide_name_list = [x for x in fields_name if x in out.keys()]
+        ##out['meta_hash']=hash_dict(instance.__dict__,valide_name_list)
+        #out['meta_hash_fields'] = ','.join(valide_name_list)
+        org_row = make_mark_dict(row)
+        return org_row
     
     def only_simple_data(self):
         return self.simple_dict or self.kw.get('_accept')=='json'
@@ -927,31 +944,41 @@ class PlainTable(ModelTable):
             'search_args': {},
             #'search_tip':self.row_search.get_context(),
             'director_name': self.get_director_name(),#model_to_name(self.model),
-            'ops' : ops
-        }  
-    
-    def get_context(self):
-        director_name =self.get_director_name()
-        heads = self.get_heads()
-        rows = self.get_rows()
-
-        ops = self.get_operation()
-        ops = evalue_container(ops)
-        return {
-            'heads':heads,
-            'rows': rows,
-            'row_pages' : self.getRowPages(),
-            'row_sort': self.getRowSort(),#row_sort,
-            'row_filters':  self.getRowFilters(), #ls,
-            #'search_tip':self.row_search.get_context(),
-            'director_name':director_name,
             'ops' : ops,
-            'search_args':self.search_args, 
-            'parents': self.getParents(),
-            'footer': self.footer,
             'selectable': self.selectable,
             'event_slots':self.get_event_slots()
-        }    
+        }  
+    
+    #def get_data_context(self):
+        #return {
+            #'rows': rows,
+            #'row_pages' : self.getRowPages(),
+            #'row_sort': self.getRowSort(),#row_sort,
+            #'row_filters':  self.getRowFilters(), #ls,
+        #}
+    
+    def get_context(self):
+        out_dict = self.get_head_context()
+        out_dict.update(
+            self.get_data_context()
+        )
+        return out_dict
+        
+        #return {
+            #'heads':heads,
+            #'rows': rows,
+            #'row_pages' : self.getRowPages(),
+            #'row_sort': self.getRowSort(),#row_sort,
+            #'row_filters':  self.getRowFilters(), #ls,
+            ##'search_tip':self.row_search.get_context(),
+            #'director_name':director_name,
+            #'ops' : ops,
+            #'search_args':self.search_args, 
+            #'parents': self.getParents(),
+            #'footer': self.footer,
+            #'selectable': self.selectable,
+            #'event_slots':self.get_event_slots()
+        #}    
     
     def getRowSort(self): 
         return {

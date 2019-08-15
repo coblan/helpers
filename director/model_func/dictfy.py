@@ -11,7 +11,7 @@ from django.utils.timezone import localtime,datetime
 from django.utils.translation import ugettext as _
 #from md5 import md5
 from .field_proc import BaseFieldProc
-from .hash_dict import hash_dict,mark_dict
+from .hash_dict import hash_dict,make_mark_dict
 from ..base_data import field_map
 
 
@@ -38,13 +38,11 @@ def to_dict(instance,filt_attr=None,include=None,exclude=None,hash_keys=None,for
     out['_class']= instance._meta.app_label+'.'+instance._meta.model_name
     if '_label' not in out.keys():
         out['_label']=str(instance)
-    #if org_dict : #'meta_org_dict' not in out.keys():
-    fields_name = [x.name for x in instance._meta.get_fields()]
-    valide_name_list = [x for x in fields_name if x in out.keys()]
-    #out['meta_hash']=hash_dict(instance.__dict__,valide_name_list)
-    out['meta_hash_fields'] = ','.join(valide_name_list)
-    out['meta_org_dict'] = mark_dict(instance.__dict__,valide_name_list)
-        #out['_md5']=md5(out).hexdigest() 
+
+    #fields_name = [x.name for x in instance._meta.get_fields()]
+    #valide_name_list = [x for x in fields_name if x in out.keys()]
+    #out['meta_hash_fields'] = ','.join(valide_name_list)
+    #out['meta_org_dict'] = make_mark_dict(instance.__dict__,valide_name_list)
     return out
 
 

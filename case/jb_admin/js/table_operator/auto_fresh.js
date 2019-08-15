@@ -1,6 +1,6 @@
 var op_a = {
     props:['head','disabled'],
-    template:` <div class="com-op-table-refresh" style="display: inline-block;">
+    template:` <div class="com-op-table-refresh" style="display: inline-block;margin: 0 1px 0 3px">
         <select v-model='myvalue' class="form-control input-sm com-filter-select" >
          <option class="fake-placeholder"  value="" v-text='head.label' ></option>
         <option v-for='option in head.options' :value="option.value" v-text='option.label'></option>

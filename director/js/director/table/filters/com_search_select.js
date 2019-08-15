@@ -3,6 +3,7 @@ require('./scss/com_search_select.scss')
 var com_search = {
     props:['head','search_args'],
     data:function(){
+        debugger
         if(! this.search_args._q){
             Vue.set(this.search_args,'_q','')
         }
@@ -10,6 +11,7 @@ var com_search = {
             Vue.set(this.search_args,'_qf',this.head.options[0].value)
         }
         return {
+            myvalue:this.search_args._q
         }
     },
     template:`<div class="search-select">
@@ -20,13 +22,13 @@ var com_search = {
              <!--:placeholder='head.search_tip'-->
              <!--@keyup.13="$emit('submit')"-->
              <!--class='form-control input-sm'/>-->
+
              <el-input class="input-with-select"
                 :placeholder="normed_placeholder"
-                prefix-icon="el-icon-search"
                 @keyup.native.13="$emit('submit')"
                 size="small"
                 maxlength="200"
-                v-model="search_args._q">
+                v-model="myvalue">
                  <!--<el-select v-model="search_args.qf" slot="append" placeholder="请选择">-->
                       <!--<el-option label="餐厅名" value="1"></el-option>-->
                       <!--<el-option label="订单号" value="2"></el-option>-->
@@ -45,6 +47,11 @@ var com_search = {
                     </el-dropdown>
               </el-input>
     </div> `,
+    watch:{
+        myvalue(v){
+            this.search_args._q = v
+        }
+    },
     computed:{
         normed_placeholder:function(){
             var crt = ex.findone(this.head.options,{value:this.search_args._qf})
