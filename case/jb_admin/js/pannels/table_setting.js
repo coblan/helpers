@@ -3,33 +3,9 @@ require('./styl/table_setting.styl')
 var table_setting_panel = {
     props:['ctx'],
     template:`<div class="com-panel-table-setting">
-
-    <!--<div class="head-panel">-->
-         <!--<el-checkbox-group  v-model="advise_heads">-->
-             <!--<div class="mygroup">-->
-                <!--<el-checkbox v-for="head in first_layer_field" :data-id="head.name" :label="head.name" size="small" border>-->
-                        <!--<span v-text="head.label"></span>-->
-                <!--</el-checkbox>-->
-             <!--</div>-->
-
-             <!--<div class="mygroup" v-for="field_group in group_field_list">-->
-                <!--<span v-text="field_group.label"></span>-->
-
-                    <!--<el-checkbox v-for="head in field_list(field_group.children)" :data-id="head.name" :label="head.name" size="small" border>-->
-                            <!--<span v-text="head.label"></span>-->
-                    <!--</el-checkbox>-->
-
-             <!--</div>-->
-
-        <!--</el-checkbox-group>-->
-
-
-
-    <!--</div>-->
-
     <div class="head-panel">
         <div class="panel panel-info">
-            <div class="panel-heading">顶层字段</div>
+            <div class="panel-heading">普通列</div>
             <div style="padding: 10px">
              <el-checkbox-group class="mygroup" v-model="heads_bucket._first_layer">
                 <el-checkbox v-for="head in first_layer_field" :data-id="head.name" :label="head.name" size="small" border>
