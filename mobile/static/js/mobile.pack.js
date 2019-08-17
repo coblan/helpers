@@ -705,7 +705,9 @@ var mix_fields_data = {
             cfg.show_load();
             ex.director_call(director_name, data).then(function (row) {
                 cfg.hide_load();
-                ex.vueAssign(_this.par_row, row);
+                if (_this.par_row) {
+                    ex.vueAssign(_this.par_row, row);
+                }
                 ex.vueAssign(_this.row, row);
             });
         },
