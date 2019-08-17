@@ -10,7 +10,10 @@ class DateProc(BaseFieldProc):
     def to_dict(self,inst,name):
         date=getattr(inst,name)
         if date:
-            return {name:date.isoformat()}
+            if isinstance(date,str):
+                return {name:date}
+            else:
+                return {name:date.isoformat()}
         else:
             return {}
     

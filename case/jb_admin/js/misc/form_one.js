@@ -1,6 +1,6 @@
 //require('./scss/tab_fields.scss')
 require('./scss/form_one.scss')
-var big_fields={
+export  var fields_all_in_one={
     props:['ctx'],
     data:function(){
         var data_row = ex.copy(this.ctx.row  || {} )
@@ -120,16 +120,22 @@ var big_fields={
             }
             if(self.tab_head.get_row){
                 ex.eval(self.tab_head.get_row,{vc:self})
-                //ex.vueAssign(self.row,row_dc)
             }
         },
+        save(){
+            if(this.head.save_express){
+                return ex.eval(this.head.save_express,{vc:this})
+            }else{
+                return  mix_fields_data.methods.save.call(this)
+            }
+        }
     }
     // data_getter  回调函数，获取数据,
 
 
 }
 
-Vue.component('com-form-one',big_fields)
+Vue.component('com-form-one',fields_all_in_one)
 
 var get_data={
     get_row:function(self,callback,kws){

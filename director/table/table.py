@@ -17,6 +17,7 @@ from django.core.exceptions import FieldDoesNotExist
 from helpers.director.middleware.request_cache import get_request_cache,request_cache
 from helpers.director.model_func.field_proc import BaseFieldProc
 from helpers.func.collection.container import evalue_container
+from helpers.director.model_func.hash_dict import make_mark_dict
 
 from django.core.paginator import Paginator
 from django.forms.models import fields_for_model
@@ -285,8 +286,6 @@ class RowSort(object):
     def get_context(self):
         return {'sortable':self.valid_name,'sort_str':self.sort_str}
     
-  
-    
     def get_query(self,query):
         if self.sort_str:
             ls=self.sort_str.split(',')
@@ -313,7 +312,7 @@ class RowSort(object):
             if ls:
                 query = query.order_by(*ls)
         else:
-            if not query._fields and self.general_sort: # 如果这个为空，才能弄一个默认排序，否则造成聚合函数无效
+            if not query.ordered and not query._fields and self.general_sort: # 如果这个为空，才能弄一个默认排序，否则造成聚合函数无效
                 query = query.order_by(self.general_sort)
 
         return query
@@ -353,7 +352,7 @@ class ModelTable(object):
     selectable = True
     nolimit = False
     simple_dict = False
-    def __init__(self,_page=1,row_sort=[],row_filter={},row_search= '',crt_user=None,perpage=None,**kw):
+    def __init__(self,page=1,row_sort=[],row_filter={},row_search= '',crt_user=None,perpage=None,**kw):
         """
         kw['search_args']只是一个记录，在获取到rows时，一并返回前端页面，便于显示。
         而真正的查询参数已经被路由到各个查询组件中，具体参见 cls.parse_request / gen_from_search_args 函数
@@ -361,12 +360,12 @@ class ModelTable(object):
         
         """
         self.search_args = kw.get('search_args', {})
-        
+        self.nolimit = kw.get('nolimit',self.__class__.nolimit)
         self.kw=kw
         self.crt_user=crt_user 
         if not self.crt_user:
             self.crt_user = get_request_cache()['request'].user
-        self.page=_page
+        self.page=page
         
         self.custom_permit()
         allowed_names=self.permited_fields()
@@ -398,7 +397,7 @@ class ModelTable(object):
         return cls.gen_from_search_args(kw,request.user)
 
     @classmethod
-    def gen_from_search_args(cls,search_args,user =None):
+    def gen_from_search_args(cls,search_args,user =None,**kws):
         args = cls.clean_search_args(search_args)
         kw = dict(args)
         kw['search_args'] = args
@@ -413,6 +412,7 @@ class ModelTable(object):
             #if arg is not None:
             row_filter[k]=arg
         user = user or get_request_cache()['request'].user
+        kw.update(kws)
         return cls(page,row_sort,row_filter,q,user,perpage=perpage,**kw)
     
     @classmethod
@@ -465,16 +465,22 @@ class ModelTable(object):
     
     def get_context(self):
         head_ctx = self.get_head_context()
-        rows = self.get_rows()
+        data_ctx = self.get_data_context()
+        head_ctx.update(data_ctx)
         head_ctx.update({
-            'rows': rows,
-            'row_pages' : self.getRowPages(),
-            'row_sort': self.getRowSort(),#row_sort,
-            'model_name':model_to_name(self.model),
-            'parents': self.getParents(),
-            'footer': self.footer,
+            'row_sort': self.getRowSort()
         })
         return head_ctx
+        #rows = self.get_rows()
+        #head_ctx.update({
+            #'rows': rows,
+            #'row_pages' : self.getRowPages(),
+            #'row_sort': self.getRowSort(),#row_sort,
+            #'model_name':model_to_name(self.model),
+            #'parents': self.getParents(),
+            #'footer': self.footer,
+        #})
+        #return head_ctx
     
     def get_event_slots(self):
         return []
@@ -495,15 +501,29 @@ class ModelTable(object):
     
     def get_data_context(self):
         rows =  self.get_rows()
-        table_layout = self.getTableLayout(rows)
-        return {
-            'rows': rows,
-            'table_layout': table_layout,
-            'row_pages' : self.getRowPages(), #self.pagenum.get_context(),  
-            'search_args':self.search_args, 
-            'footer': self.footer,
-            'parents': self.getParents(),
-        }
+        if self.only_simple_data():
+            out_dc ={
+                'rows':rows,
+                'footer': self.footer,
+                'parents': self.getParents(),
+                'row_pages' : self.getRowPages(),
+            }
+            if not out_dc['footer']:
+                out_dc.pop('footer')
+            if not out_dc['parents']:
+                out_dc.pop('parents')
+            return out_dc
+        else:
+            table_layout = self.getTableLayout(rows)
+            dc = {
+                'rows': rows,
+                'table_layout': table_layout,
+                'row_pages' : self.getRowPages(), #self.pagenum.get_context(),  
+                'search_args':self.search_args, 
+                'footer': self.footer,
+                'parents': self.getParents(),
+             }
+            return dc
     
     def getTableLayout(self, rows): 
         return {}
@@ -550,10 +570,14 @@ class ModelTable(object):
             heads = [x for x in heads if x['name'] in self.include]
             
         heads += self.getExtraHead() 
-        heads = self.fields_sort_heads(heads)   
+         
+        for head in heads:
+            if 'editor' not in head:
+                head['editor'] = 'com-table-span'
+                
         heads= self.make_pop_edit_field(heads)  
         heads = [self.dict_head(head) for head in heads]
-
+        heads = self.fields_sort_heads(heads)  
         # 需要使用form.field才能提取到choices
         #form_fields = fields_for_model(self.model)
         #for head in model_heads:
@@ -569,6 +593,7 @@ class ModelTable(object):
                 #head['options']=catch.get(options_name)
                 
         heads=evalue_container(heads)
+  
         return heads
     
     def get_model_heads(self): 
@@ -587,7 +612,7 @@ class ModelTable(object):
                 elif field.__class__ in field_map:
                     mapper = field_map.get(field.__class__)
                     if hasattr(mapper,'dict_table_head'):
-                        mapper(name=field.name,model=self.model).dict_table_head(dc)
+                        mapper(name=field.name,model=self.model,field=field).dict_table_head(dc)
                 #elif isinstance(field,models.ForeignKey):
                     #dc['editor']='com-table-label-shower'            
                     
@@ -613,6 +638,8 @@ class ModelTable(object):
         heads= self.get_light_heads()
         footer = []
         for head in heads:
+            if head.get('children'):
+                continue
             footer.append(dc.get(head['name'], ''))
         return footer
     
@@ -698,8 +725,9 @@ class ModelTable(object):
         return: [{"name": "heyul0", "age": "32", "user": null, "pk": 1, "_class": "user_admin.BasicInfo", "id": 1}]
         """
         query=self.get_query()
+        query = self.pagenum.get_query(query)  
         out=[]
-        director_name = self.get_director_name()
+        #director_name = self.get_director_name()
         permit_fields =  self.permited_fields()
         #used_head_names= self.hide_fields +  [x['name'] for x in self.get_light_heads()] 
         
@@ -707,28 +735,39 @@ class ModelTable(object):
             # 遇到一种情况，聚合时，这里的queryset返回的item是dict。所以下面做一个判断
             if isinstance(inst,models.Model):
                 cus_dict = self.dict_row( inst)
-                if self.simple_dict:
+                if self.only_simple_data():
                     dc = sim_dict(inst, include=permit_fields,filt_attr=cus_dict)
                 else:
                     dc= to_dict(inst, include=permit_fields,filt_attr=cus_dict)
+                    dc .update({
+                        '_director_name':self.get_edit_director_name(),
+                        'meta_org_dict':self.get_org_dict(dc,inst)
+                        })
                 # 再赋值一次，以免被默认dictfy替换掉了，例如 _x_label等值
                 dc.update(cus_dict)
             else:
                 dc = inst
-            dc['_director_name'] = self.get_edit_director_name()
+                if not self.only_simple_data():
+                    dc .update({
+                       '_director_name':self.get_edit_director_name(),
+                       'meta_org_dict':self.get_org_dict(dc,inst)
+                       })
             out.append(dc)
         #out = self.append_sequence(out)
         return out
     
-    #def append_sequence(self, rows): 
-        #page = self.kw['search_args'].get('_page', 1)
-        #perPage = self.pagenator.perPage
-        #start = (page - 1) * perPage
-        #for row in rows:
-            #start += 1
-            #row['_sequence'] = start
-            
-        #return rows
+    def get_org_dict(self,row,inst=None):
+        #keys = self.permit.readable_fields()
+        #fields_name = [x.name for x in inst._meta.get_fields()]
+        #valide_name_list = [x for x in fields_name if x in out.keys()]
+        ##out['meta_hash']=hash_dict(instance.__dict__,valide_name_list)
+        #out['meta_hash_fields'] = ','.join(valide_name_list)
+        org_row = make_mark_dict(row)
+        return org_row
+    
+    def only_simple_data(self):
+        return self.simple_dict or self.kw.get('_accept')=='json'
+    
     
     @classmethod
     def get_edit_director_name(cls): 
@@ -774,7 +813,7 @@ class ModelTable(object):
                 if f.name in head_nams and isinstance(f, models.ForeignKey):
                     query = query.select_related(f.name)        
 
-        query = self.pagenum.get_query(query)  
+        
         return query
     
     def statistics(self,query):
@@ -795,13 +834,17 @@ class ModelTable(object):
         if not fieldCls:
             return []
         fieldobj=fieldCls(crt_user=self.crt_user)
+        fields_ctx = fieldobj.get_head_context()
+        fields_ctx.update({
+            'ops_loc':'bottom'
+        })
         return [{'name':'add_new',
                  'editor':'com-op-btn',
                  'icon': 'fa-plus',
                  'class':'btn btn-primary btn-sm',
                  'label':'创建',
                  'pre_set':'', # 预先设置的字段,一般用于com-tab-table下的创建
-                 'fields_ctx':fieldobj.get_head_context(),
+                 'fields_ctx':fields_ctx,
                  'visible': self.permit.can_add(),
                  },
                 #{'name':'save_changed_rows','editor':'com-op-btn','label':'保存', 
@@ -810,17 +853,25 @@ class ModelTable(object):
                 {'name':'delete_selected','editor':'com-op-btn','label':'删除','style': 'color:red','icon': 'fa-times','disabled':'!scope.ps.has_select', 'visible': self.permit.can_del(),},
                 ]      
     
+    def getExcelRows(self):
+        return self.get_rows()
+    
+    def getExcelHead(self):
+        return self.get_heads()
+    
     def get_excel(self): 
         from openpyxl import Workbook
         
         #self.search_args['_perpage'] = 5000
-        ctx = self.get_context()
-        heads = ctx['heads']
-        rows = ctx['rows']
+        #ctx = self.get_context()
+        heads = self.getExcelHead() #ctx['heads']
+        rows =  self.getExcelRows() #ctx['rows']
         out_rows = []
-        
         excel_row = []
+        # 第一行是 头
         for head in heads:
+            if head.get('children'):
+                continue
             excel_row.append(head['label'])
             if 'options' in head and head['options']:
                 head['options_dict'] = {}
@@ -828,9 +879,12 @@ class ModelTable(object):
                     head['options_dict'][opt['value']] = opt['label']
         out_rows.append(excel_row)
         
+        # 这里开始写数据
         for row in rows:
             excel_row = []
             for head in heads:
+                if head.get('children'):
+                    continue
                 label = '_%s_label' % head['name']
                 if label in row:
                     excel_row.append( row.get(label) )
@@ -850,7 +904,7 @@ class ModelTable(object):
         return wb
 
 class PlainTable(ModelTable):
-    def __init__(self,_page=1,row_sort=[],row_filter={},row_search= '',crt_user=None,perpage=None,**kw):
+    def __init__(self,page=1,row_sort=[],row_filter={},row_search= '',crt_user=None,perpage=None,**kw):
         """
         kw['search_args']只是一个记录，在获取到rows时，一并返回前端页面，便于显示。
         而真正的查询参数已经被路由到各个查询组件中，具体参见 cls.parse_request / gen_from_search_args 函数
@@ -867,7 +921,8 @@ class PlainTable(ModelTable):
         #self.row_filter=self.filters(row_filter, crt_user, allowed_names,kw) 
         #self.row_search = self.search( row_search,crt_user,allowed_names,kw)
         
-        self.page=_page
+        self.page= int( page or 1 )
+        self.perpage= int( perpage or 20 )
         self.footer = []
         self.custom_permit()
     
@@ -889,31 +944,41 @@ class PlainTable(ModelTable):
             'search_args': {},
             #'search_tip':self.row_search.get_context(),
             'director_name': self.get_director_name(),#model_to_name(self.model),
-            'ops' : ops
-        }  
-    
-    def get_context(self):
-        director_name =self.get_director_name()
-        heads = self.get_heads()
-        rows = self.get_rows()
-
-        ops = self.get_operation()
-        ops = evalue_container(ops)
-        return {
-            'heads':heads,
-            'rows': rows,
-            'row_pages' : self.getRowPages(),
-            'row_sort': self.getRowSort(),#row_sort,
-            'row_filters':  self.getRowFilters(), #ls,
-            #'search_tip':self.row_search.get_context(),
-            'director_name':director_name,
             'ops' : ops,
-            'search_args':self.search_args, 
-            'parents': self.getParents(),
-            'footer': self.footer,
             'selectable': self.selectable,
             'event_slots':self.get_event_slots()
-        }    
+        }  
+    
+    #def get_data_context(self):
+        #return {
+            #'rows': rows,
+            #'row_pages' : self.getRowPages(),
+            #'row_sort': self.getRowSort(),#row_sort,
+            #'row_filters':  self.getRowFilters(), #ls,
+        #}
+    
+    def get_context(self):
+        out_dict = self.get_head_context()
+        out_dict.update(
+            self.get_data_context()
+        )
+        return out_dict
+        
+        #return {
+            #'heads':heads,
+            #'rows': rows,
+            #'row_pages' : self.getRowPages(),
+            #'row_sort': self.getRowSort(),#row_sort,
+            #'row_filters':  self.getRowFilters(), #ls,
+            ##'search_tip':self.row_search.get_context(),
+            #'director_name':director_name,
+            #'ops' : ops,
+            #'search_args':self.search_args, 
+            #'parents': self.getParents(),
+            #'footer': self.footer,
+            #'selectable': self.selectable,
+            #'event_slots':self.get_event_slots()
+        #}    
     
     def getRowSort(self): 
         return {

@@ -87,6 +87,8 @@ class BaseEngine(object):
             return True
         if request.user.is_anonymous(): 
             return False
+        elif not request.user.is_active:
+            raise PermissionDenied('Your account have been Deactive!')
         #elif not request.user.is_active or not request.user.is_staff:
             #raise PermissionDenied('No permit! You should be Active User OR staff to access this System,')
         else:
@@ -222,6 +224,7 @@ class BaseEngine(object):
             'crt_lan': crt_lan,
             'tr':tr_dc ,
             'js_lib':lib_dc,
+            'is_debug':settings.DEBUG,
         }
     
 

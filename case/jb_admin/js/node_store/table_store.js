@@ -17,6 +17,7 @@ var table_store={
              changed_rows:[],
              event_slots:[],
              option:{},
+             table_layout:{},
          }
     },
     mixins:[mix_ele_table_adapter],
@@ -84,16 +85,14 @@ var table_store={
             //self.rows=[]
             var post_data=[{fun:'get_rows',director_name:self.director_name,search_args:self.search_args}]
             ex.post('/d/ajax',JSON.stringify(post_data),function(resp){
+                cfg.hide_load()
                 self.rows = resp.get_rows.rows
                 ex.vueAssign( self.row_pages,resp.get_rows.row_pages)
-                //self.row_pages = resp.get_rows.row_pages
-                //self.search_args=resp.get_rows.search_args
                 ex.vueAssign(self.search_args,resp.get_rows.search_args)
                 self.footer=resp.get_rows.footer
                 self.parents=resp.get_rows.parents
                 self.table_layout=resp.get_rows.table_layout
-                cfg.hide_load()
-                self.$emit('data-updated')
+                self.$emit('data-updated-backend')
             })
         },
         add_new:function(kws){
@@ -378,18 +377,19 @@ var table_store={
                 return
             }
 
-
             function do_director_call(new_row,callback){
                 cfg.show_load()
                 ex.director_call(kws.director_name,{rows:self.selected,new_row:new_row},function(resp){
-                    if(!resp.msg){
+                    debugger
+                    if( !resp || !resp.msg){
                         cfg.hide_load(2000)
                     }else{
                         cfg.hide_load()
+                        cfg.toast(resp.msg,{time:1500})
                     }
                     if(kws.after_save){
-                        ex.eval(kws.after_save,{resp:resp,ps:self})
-                    }else{
+                        ex.eval(kws.after_save,{resp:resp,ps:self,rows:self.selected})
+                    }else if(resp){
                         // 兼容老的调用
                         // 返回rows ，默认更新
                         if(resp.rows){
@@ -409,7 +409,7 @@ var table_store={
 
             function judge_pop_fun(){
                 var one_row={}
-                ex.assign(one_row,ex.eval(kws.pre_set,{head:kws,ps:self.parStore}))
+                ex.assign(one_row,ex.eval(kws.pre_set,{head:kws,ps:self.parStore,self:self}))
                 if(kws.fields_ctx){
                     ex.map(kws.fields_ctx.heads,function(head){
                         if(!head.name.startsWith('_') && one_row[head.name]==undefined){
@@ -438,7 +438,11 @@ var table_store={
         arraySpanMethod:function({ row, column, rowIndex, columnIndex }){
             // 计算布局
             if(this.table_layout){
-                return this.table_layout[`${rowIndex},${columnIndex}`] || [1,1]
+                if(typeof  this.table_layout =='object'){
+                    return this.table_layout[`${rowIndex},${columnIndex}`] || [1,1]
+                }else{
+                    return ex.eval(this.table_layout,{row:row,column:column,rowIndex:rowIndex,columnIndex:columnIndex})
+                }
             }else{
                 return [1,1]
             }
@@ -481,7 +485,36 @@ var table_store={
                 self.clearSelection()
                 winclose()
             })
-        }
+        },
+        switch_to_tab:function(kws){
+            // 从 table_page_store 移过来的。因为 live_table 可能有这个需求
+            var self=this
+            var tabs=named_ctx[kws.ctx_name]
+            if(!tabs){
+                throw `named_ctx. ${kws.ctx_name} 不存在，检查是否传入`
+            }
+
+            var canfind = ex.findone(tabs,{name:kws.tab_name})
+            if(!kws.tab_name || !canfind ){
+                kws.tab_name = tabs[0].name
+            }
+
+            if(window.root_live){
+                // keeplive 页面
+                root_live.open_live(live_el_tab,{tabs:tabs,title:kws.par_row._label,crt_tab_name:kws.tab_name,par_row:kws.par_row})
+            }else{
+                // 传统 页面
+                self.tab_stack.push( {
+                    widget:'com-widget-el-tab' ,
+                    tabs:tabs,
+                    crt_tab_name:kws.tab_name,
+                    par_row:kws.par_row,
+
+                })
+            }
+            // 这里暂时打开，以后移除
+            self.crt_row=kws.par_row
+        },
     }
 
 }

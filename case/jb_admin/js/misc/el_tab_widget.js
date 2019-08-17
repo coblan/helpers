@@ -1,4 +1,5 @@
-Vue.component('com-widget-el-tab',{
+
+var el_tab = {
     props:['ctx'],
     template:`<div class="tab-full active-tab-hightlight-top" style="position: absolute;bottom: 0;top: 0;left: 0;right: 0;" >
      <el-tabs  v-if="ctx.tabs.length >1" type="border-card"
@@ -30,6 +31,9 @@ Vue.component('com-widget-el-tab',{
        //     this.show_tab(v)
        // }
    },
+    created(){
+
+    },
     mounted:function(){
         this.show_tab(this.ctx.crt_tab_name)
     },
@@ -67,4 +71,6 @@ Vue.component('com-widget-el-tab',{
             this.$emit('win-event',event)
         }
     }
-})
+}
+Vue.component('com-widget-el-tab',el_tab)
+window.live_el_tab = el_tab

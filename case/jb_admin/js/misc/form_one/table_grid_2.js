@@ -4,7 +4,7 @@ Vue.component('com-fields-table-block',{
            <table >
             <tr v-for="heads_row in table_grid_heads">
                 <template v-for="head in heads_row">
-                    <td class="field-label-td"  >
+                    <td class="field-label-td"  :class="head.class" >
                         <div class="field-label">
                             <span class="label-content">
                                  <span v-text="head.label"></span>
@@ -12,7 +12,7 @@ Vue.component('com-fields-table-block',{
                             </span>
                         </div>
                     </td>
-                    <td class="field-input-td" :colspan="head.colspan" :rowspan="head.rowspan">
+                    <td class="field-input-td" :class="head.class" :colspan="head.colspan" :rowspan="head.rowspan">
                         <div class="field-input">
                             <component v-if="head.editor" :is="head.editor"
                                  @field-event="$emit('field-event',$event)"

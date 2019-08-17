@@ -88,7 +88,6 @@ def value_str(v):
         return '"%s"'%v
     else:
         used_module.append(value_mod(v))
-        
         module = inspect.getmodule(v)
         return '%s.%s'%(module.__name__,v.__qualname__)
 

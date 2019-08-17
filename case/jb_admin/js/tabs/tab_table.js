@@ -18,6 +18,7 @@ var tab_table={
                     rows:[],
                     row_pages:{},
                     selectable:heads_ctx.selectable==undefined? true:heads_ctx.selectable,
+                    advise_heads:heads_ctx.advise_heads || [],
                     selected:[],
                     del_info:[],
                     search_args: {},
@@ -33,7 +34,11 @@ var tab_table={
             },
             methods:{
                 switch_to_tab:function(kws){
-                    this.parStore.switch_to_tab(kws)
+                    if(window.root_live){
+                        table_store.methods.switch_to_tab(kws)
+                    }else{
+                        this.parStore.switch_to_tab(kws)
+                    }
                 },
                 getRows:function(){
                     if(vc.tab_head.pre_set){

@@ -22,7 +22,7 @@ from helpers.func.collection.container import evalue_container
 from django.db import transaction
 import logging
 from helpers.director.decorator import get_request_cache
-from ..model_func.hash_dict import hash_dict,mark_dict,dif_mark_dict
+from ..model_func.hash_dict import hash_dict,make_mark_dict,dif_mark_dict
 
 
 # sql_log 可能没有什么用
@@ -54,23 +54,23 @@ class ModelFields(forms.ModelForm):
     def parse_request(cls,request):
         """
         传入参数的形式：
-        row_search: key=value&..
-        row_sort: _sort=key1,-key2
-        page: _page=1
-        row_filter:key=value&..
         """
         dc=request.GET.dict()
         pk=dc.pop('pk',None)
         return cls(pk=pk,crt_user=request.user,**dc) 
     
-    def __init__(self,dc={},pk=None,crt_user=None,nolimit=None,*args,**kw):
+    def __init__(self,dc={},pk=None,crt_user=None,*args,**kw):
         """
         调用情况：
         1. ajax save 时
         2. ajax get 时，获取数据，或者获取一个新的row数据。
         
-        @dc: 当post save时 ,dc是前端传来的row字典
-             当get 时，dc是前端传来的url参数，排除pk后的额外的字典
+        @dc: 当post save时 ,dc是前端传来的row字典。可以看到dc被传入了super函数,既传入了django.form中当做row参数。
+                如果要设置instance的默认值，可以在kw中传入，这样第一次返回前端的时候就有值。
+                如果在dc中传入默认值，第一次返回前端时，没有值，因为初始化时，不会调用 save_form 函数。
+                
+             当get 时，dc是前端传来的url参数，排除pk后的额外的字典。（用处不大）
+             
         """
         self.kw = kw.copy()
         
@@ -123,9 +123,6 @@ class ModelFields(forms.ModelForm):
                     
         dc = self._clean_dict(dc)
         dc=self.clean_dict(dc)        
-        
-        if nolimit is not None:
-            self.nolimit = nolimit
         self.kw.update(dc)
 
         super(ModelFields,self).__init__(dc,*args,**form_kw)
@@ -151,19 +148,25 @@ class ModelFields(forms.ModelForm):
         if self.overlap_fields:
             overlaped_fields += self.overlap_fields
             
-        if self.instance.pk and self.changed_data  and self.kw.get('meta_org_dict') and self.kw.get('meta_hash_fields'):
-            fields_name =  self.kw.get('meta_hash_fields').split(',') 
-            crt_mark_dc = mark_dict(self.instance.__dict__,fields_name)
-            ls = self.permit.changeable_fields()
-            ls = [x for x in ls if x in self.fields.keys()]
-            ls =[x for x in ls if x not in self.readonly]
-            ls = [x for x in ls if x not in self.overlap_fields]
-            dif_dc = dif_mark_dict(crt_mark_dc, self.kw.get('meta_org_dict'),keys=ls)
+        if self.instance.pk and self.changed_data  and self.kw.get('meta_org_dict') : #and self.kw.get('meta_hash_fields'):
+            #fields_name =  self.kw.get('meta_hash_fields').split(',') 
+            #crt_mark_dc = make_mark_dict(self.instance.__dict__,fields_name)
+            crt_mark_dc= self.get_org_dict()
+            #ls = self.permit.changeable_fields()
+            #ls = [x for x in ls if x in self.fields.keys()]
+            #ls =[x for x in ls if x not in self.readonly]
+            #ls = [x for x in ls if x not in self.overlap_fields]
+            dif_dc = dif_mark_dict(crt_mark_dc, self.kw.get('meta_org_dict'),exclude= overlaped_fields)
             
             if dif_dc:
                 keys = [self.fields.get(key).label for key in dif_dc.keys()]
                 raise OutDateException('(%s)的%s已经被其他用户改变,请确认后再进行操作!'%(self.instance,keys) )
-        
+    
+    def get_org_dict(self,row=None):
+        if not row:
+            row = self.get_row()
+        return make_mark_dict(row)
+    
     def _clean_dict(self,dc):
         """利用field_map字典，查找前端传来的dc中，某个字段的转换方式"""
 
@@ -192,6 +195,9 @@ class ModelFields(forms.ModelForm):
     
     def clean_dict(self,dc):   
         return dc
+    
+    def get_data_context(self):
+        return self.get_row()
     
     def is_valid(self): 
         rt = super().is_valid()
@@ -461,6 +467,7 @@ class ModelFields(forms.ModelForm):
                    field.name not in row:
                     row[field.name]=getattr(self.instance,field.name)
         row['_director_name']=self.get_director_name()
+        row['meta_org_dict'] = self.get_org_dict(row)
         return row
 
     def dict_row(self,inst):
@@ -586,8 +593,23 @@ class Fields(ModelFields):
     
     def get_errors(self):
         return self._errors
+    
     def clean(self):
-        pass
+        if self.kw.get('meta_org_dict'):
+            crt_mark_dc = self.get_org_dict()
+            if crt_mark_dc:
+                dif_dc = dif_mark_dict(crt_mark_dc, self.kw.get('meta_org_dict'))
+            else:
+                dif_dc ={}
+            if dif_dc:
+                heads = self.get_heads()
+                head_names =[]
+                for head in heads:
+                    if head['name'] in dif_dc:
+                        head_names.append(head['label'])
+                        
+                raise OutDateException('%s已经被其他用户改变,请确认后再进行操作!'%';'.join(head_names) )
+            
     def is_valid(self):
         self.clean()
         if self._errors:
@@ -599,6 +621,10 @@ class Fields(ModelFields):
         "overwrite this method"
         print('here')
     
+    def get_org_dict(self,row=None):
+        if not row:
+            row= self.dict_row()
+        return make_mark_dict(row)
     
     def clean_dict(self, dc): 
         return dc
@@ -609,10 +635,17 @@ class Fields(ModelFields):
             'name':'save','editor':'com-field-op-btn','label':'保存', 'icon': 'fa-save','class':'btn btn-info'
         })
         return ls 
+    
+    def dict_row(self):
+        return {}
+    
     def get_row(self): 
-        return {
+        row= self.dict_row()
+        row.update( {
             '_director_name': self.get_director_name(),
-        }
+            'meta_org_dict':self.get_org_dict(row),
+        })
+        return row
 
 class FieldsSet(object):
     template=''

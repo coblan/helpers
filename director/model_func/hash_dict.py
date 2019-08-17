@@ -24,7 +24,7 @@ def hash_dict(dc,keys=None):
     code= ';'.join(ls)
     return md5(code.encode('utf-8')).hexdigest() 
 
-def mark_dict(dc,keys=None):
+def make_mark_dict(dc,keys=None):
     out_dc = {}
     for k,v in dc.items():
         if keys:
@@ -41,11 +41,13 @@ def mark_dict(dc,keys=None):
         out_dc[k] = str(v)
     return out_dc
 
-def dif_mark_dict(dc,mark,keys=None):
+def dif_mark_dict(dc,mark,keys=None,exclude=[]):
     dif_dc = {}
     for k,v in mark.items():
         if keys and k not in keys:
             continue
-        if str(dc[k]) != v:
+        if k in exclude:
+            continue
+        if k in dc and str(dc[k]) != v:
             dif_dc[k] = v
     return dif_dc

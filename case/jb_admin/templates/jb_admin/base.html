@@ -138,6 +138,8 @@ desired effect
 <script>
     if(js_config.is_debug){
         Vue.config.devtools = true
+    }else{
+        Vue.config.devtools = false
     }
 
     menu= {{menu| jsonify}}

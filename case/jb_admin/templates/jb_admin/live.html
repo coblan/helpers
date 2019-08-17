@@ -11,7 +11,7 @@ editor_ctx = {{ editor_ctx | jsonify }}
 
 $(function() {
 
-    gb = new Vue({
+    root_live = new Vue({
         el: '#there',
         data: function () {
             var search_args = ex.parseSearch()
@@ -39,7 +39,7 @@ $(function() {
                     name:com_name,
                 }
                 Vue.set( this.$options.components,com_name,big_com)
-                this.stack.push({editor:com_name,ctx:ctx,label:label || com.label  })
+                this.stack.push({editor:com_name,ctx:ctx,label:label || com.label || ctx.title  })
             }
         },
         components:{},
@@ -56,7 +56,7 @@ $(function() {
                 var names =[]
                 ex.each(this.stack.slice(1),function(editor){
                     if(editor){
-                        names.push(editor.label)
+                        names.push(editor.label )
 //                        var last_crt_tab = ex.findone(stack.tabs,{name:stack.crt_tab_name})
 ////                        names.push(last_crt_tab.label)
 //                        if(stack.par_row._label){

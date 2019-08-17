@@ -62,7 +62,12 @@ def validate_argument(dc,validate_dict={},eliminate = False):
                 value = validator(value,k,params=org_dc)
             else:
                 value=validator(value,k)
-        dc[k]=value
+        # 确保不会给 dc 增加 值为none的字段
+        if value ==None:
+            if k in dc:
+                dc[k] = None
+        else:
+            dc[k]=value
     if eliminate:
         for k in dict(dc):
             if k not in validate_dict:

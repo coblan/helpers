@@ -83,12 +83,13 @@ def get_lib(request):
         'chosen_css': '/static/lib/chosen_v1.8.7/chosen.min.css',  
         'ckeditor': '/static/lib/ckeditor_4.10.1/ckeditor/ckeditor.js', 
         'notify':'https://cdn.jsdelivr.net/npm/@wcjiang/notify@2.0.12/dist/notify.min.js',
+        'sortablejs':'https://cdn.jsdelivr.net/npm/sortablejs@1.8.4/Sortable.min.js'
     }
     if request.META['ACCESS_FROM_INTERNET']:
 
         dc.update( {
             #'vuejs': 'https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.min.js',
-            'vuejs': 'https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js',
+            'vuejs':   'https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js',
             #'jquery':'https://cdn.jsdelivr.net/npm/jquery@2.2.4/dist/jquery.min.js',
             'jquery': 'https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js',
             'vuex': 'https://cdn.jsdelivr.net/npm/vuex@3.0.1/dist/vuex.min.js', 
@@ -116,6 +117,11 @@ def get_lib(request):
             #'ckeditor':'https://cdn.jsdelivr.net/npm/ckeditor@4.11.4/ckeditor.js',
             #'ckeditor':'https://cdn.jsdelivr.net/npm/ckeditor@4.11.4/ckeditor.min.js',
         })
+        
+        if not settings.DEBUG:
+            dc.update({
+                'vue':'https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.min.js'
+            })
   
     return dc
 

@@ -11,10 +11,11 @@ var tab_fields={
             }
         })
         var parStore = ex.vueParStore(this)
+
         return {
             head:this.tab_head,
-            heads:this.tab_head.heads,
-            ops:this.tab_head.ops,
+            heads:this.tab_head.heads || this.tab_head.fields_ctx.heads,
+            ops:this.tab_head.ops || this.tab_head.fields_ctx.ops,
             errors:{},
             row:data_row,
             org_row:data_row,

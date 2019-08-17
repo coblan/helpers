@@ -1,22 +1,57 @@
 require('./scss/table_grid.scss')
 var ele_table= {
-    props: ['bus'],
+    props: ['ctx'],
     created: function () {
         //this.bus.table = this
 
     },
     data: function () {
-        this.parStore=ex.vueParStore(this)
+        var parStore=ex.vueParStore(this)
         var keyed_heads ={}
-        ex.each(this.parStore.heads,function(head){
+        ex.each(parStore.heads,function(head){
             keyed_heads[head.name]=head
         })
+
+        if(parStore.advise_heads){
+            var key = '_table_settings_'+parStore.director_name
+            var setting_str = localStorage.getItem(key)
+            if(setting_str){
+                var setting_obj = JSON.parse(setting_str)
+                setting_obj.advise_width  = setting_obj.advise_width || {}
+                setting_obj.advise_order = setting_obj.advise_order || []
+                ex.each(parStore.heads,(head)=>{
+                    if( setting_obj.advise_width[head.name]){
+                        head.width = setting_obj.advise_width[head.name]
+                    }
+                })
+            }
+            else{
+                var setting_obj ={
+                    advise_heads:parStore.advise_heads,
+                    advise_width:{},
+                    advise_order:[],
+                }
+                localStorage.setItem(key,JSON.stringify(setting_obj))
+            }
+            parStore.advise_heads = setting_obj.advise_heads
+            parStore.advise_width = setting_obj.advise_width || {}
+            parStore.advise_order= setting_obj.advise_order ||[]
+        }else{
+            parStore.advise_heads = []
+            parStore.advise_width = {}
+            parStore.advise_order = []
+        }
+        if(parStore.advise_order.length > 0 ){
+            parStore.heads = ex.sort_by_names(parStore.heads , parStore.advise_order,true)
+        }
+
         return {
-            heads: this.parStore.heads,
+            parStore:parStore,
+            heads: parStore.heads,
             keyed_heads:keyed_heads,
             //rows:this.parStore.rows,
-            search_args: this.parStore.search_args,
-            row_sort: this.parStore.row_sort,
+            search_args: parStore.search_args,
+            row_sort: parStore.row_sort,
             //selectable:this.parStore.selectable,
 
         }
@@ -27,7 +62,7 @@ var ele_table= {
         //this.bus.eventBus.$on('operation', this.on_operation)
         //this.bus.eventBus.$on('perpage-change', this.on_perpage_change)
         this.parStore.e_table = this.$refs.e_table
-        this.parStore.$on('data-updated',this.on_data_updated)
+        this.parStore.$on('data-updated-backend',this.on_data_updated)
         ex.each(this.parStore.heads,(head)=>{
             if(head.style){
                 ex.append_css(head.style)
@@ -55,7 +90,15 @@ var ele_table= {
         },
         normed_heads(){
             var out_ls =[]
-            ex.each(this.parStore.heads,(head)=>{
+            if( this.parStore.advise_heads.length > 0){
+                var left_heads = ex.filter(this.parStore.heads,(head)=>{
+                    return ex.isin(head.name,this.parStore.advise_heads)
+                })
+            }else{
+                var left_heads = this.parStore.heads
+            }
+
+            ex.each(left_heads,(head)=>{
                 if(head.show) {
                     if(! ex.eval(head.show,{ps:this.parStore,vc:this,head:head})  ){
                         return
@@ -63,6 +106,7 @@ var ele_table= {
                 }
                 out_ls.push(head)
             })
+
             return out_ls
         },
         rows:function(){
@@ -74,39 +118,22 @@ var ele_table= {
         footer:function(){
             return this.parStore.footer
         },
-
-        //bus_serarch_count:function(){
-        //    return this.bus.search_count
-        //},
-        //rows: {
-        //    get: function () {
-        //        return this.bus.rows
-        //    },
-        //    set: function (v) {
-        //        this.bus.rows = v
-        //    }
-        //},
-        //footer: {
-        //    get: function () {
-        //        return this.bus.footer
-        //    },
-        //    set: function (v) {
-        //        this.bus.footer = v
-        //    }
-        //}
-        //search_args:{
-        //    get:function(){
-        //        return this.bus.search_args
-        //    },
-        //    set:function(v){
-        //        this.bus.search_args=v
-        //    }
-        //}
     },
     watch:{
         selected:function(newvalue,old){
             if(newvalue.length==0 && old.length !=0){
                 this.$refs.e_table.clearSelection()
+            }else{
+                ex.each(old,(row)=>{
+                    if(newvalue.indexOf(row)==-1){
+                        this.$refs.e_table.toggleRowSelection(row,false)
+                    }
+                })
+                ex.each(newvalue,(row)=>{
+                    if(old.indexOf(row)==-1){
+                        this.$refs.e_table.toggleRowSelection(row,true)
+                    }
+                })
             }
         },
 
@@ -126,20 +153,21 @@ var ele_table= {
                               size="mini"
                               height="100%"
                               style="width: 100%"
+                              @header-dragend="on_header_dragend"
                               @sort-change="on_sort_change($event)"
                               @selection-change="parStore.handleSelectionChange"
                               :summary-method="getSum">
 
                         <el-table-column v-if="parStore.selectable"
                                 type="selection"
-                                width="55">
+                                width="50">
                         </el-table-column>
-                        <template v-for="head in normed_heads">
+                        <template v-for="(head,index) in normed_heads">
                              <el-table-column v-if="head.children"
                                 :label="head.label"
                                 :key="head.name"
                                  :class-name="head.class">
-                                   <el-table-column v-for="head2 in name2head(head.children)"
+                                   <el-table-column v-for="head2 in name_in_list(head.children)"
                                             :class-name="head2.class"
                                             :key="head2.name"
                                              :show-overflow-tooltip="parStore.is_show_tooltip(head2) "
@@ -151,6 +179,7 @@ var ele_table= {
                                              :width="head2.width">
                                         <template  slot-scope="scope">
                                             <component :is="head2.editor"
+                                                        :key="head2.name"
                                                        @on-custom-comp="on_td_event($event)"
                                                        :row-data="scope.row" :field="head2.name" :index="scope.$index">
                                             </component>
@@ -194,22 +223,44 @@ var ele_table= {
                     </el-table>
                     </div>`,
     methods: {
+        on_header_dragend(newWidth, oldWidth, column, event){
+            this.parStore.$emit('header-dragend',{newWidth:newWidth, oldWidth:oldWidth, column:column, event:event})
+
+            if(this.parStore.advise_width){
+                var key = '_table_settings_'+ this.parStore.director_name
+                var setting_str = localStorage.getItem(key)
+                var setting_obj = JSON.parse(setting_str)
+                setting_obj.advise_width = setting_obj.advise_width || {}
+                setting_obj.advise_width[column.property] = newWidth
+                localStorage.setItem(key,JSON.stringify(setting_obj))
+            }
+        },
         on_data_updated(){
             Vue.nextTick(()=>{
                 this.$refs.e_table.doLayout()
             })
         },
         on_sort_change(event){
-            if( event.order != this.default_sort.order || event.prop != this.default_sort.prop) {
+            if(this._sort_has_changed ){
+                this.parStore.sortChange(event)
+            }else if( event.order != this.default_sort.order || event.prop != this.default_sort.prop ) {
+                this._sort_has_changed = true
                 this.parStore.sortChange(event)
             }
         },
-        name2head:function(name_list){
-            return ex.map(name_list,(name)=>{
-                return this.keyed_heads[name]
+        name_in_list:function(name_list){
+
+             return ex.filter(this.normed_heads,(head)=>{
+                return ex.isin(head.name,name_list)
             })
-            //return ex.filter(this.parStore.heads,function(head){
-            //    return ex.isin(head.name,name_list)
+            //var heads_list = ex.filter(name_list,(name)=>{
+            //   return ex.findone(this.normed_heads,{name:name})
+            //})
+            //var bb =  ex.map(heads_list,(name)=>{
+            //    return this.keyed_heads[name]
+            //})
+            //return ex.filter(bb,(item)=>{
+            //    return Boolean(item)
             //})
         },
         tableRowClassName:function({row, rowIndex}){
