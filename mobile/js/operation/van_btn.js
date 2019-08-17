@@ -13,8 +13,9 @@ Vue.component('com-op-van-btn',{
     },
     methods:{
         on_click:function(){
+            debugger
             if(this.head.action){
-                ex.eval(this.head.action,{ps:this.parStore})
+                ex.eval(this.head.action,{ps:this.parStore,head:this.head})
             }
         }
     }

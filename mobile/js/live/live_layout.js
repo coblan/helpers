@@ -4,7 +4,7 @@ var live_layout = {
     props:['ctx'],
     basename:'live-layout',
     template:`<div class="com-live-layout">
-        <!--<com-uis-nav-bar :title="ctx.title" :back="can_back" ></com-uis-nav-bar>-->
+     <com-uis-nav-bar v-if="ctx.title" :title="ctx.title" :back="can_back" :ops="ctx.ops"></com-uis-nav-bar>
         <component :is="head.editor" v-for="head in ctx.layout_editors" :ctx="head"></component>
     </div>`,
     data(){

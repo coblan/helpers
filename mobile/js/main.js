@@ -31,3 +31,5 @@ import * as container_main from './container/main.js'
 import * as live_main from './live/main.js'
 import * as uis_main from './uis/main.js'
 
+import * as layout_editor_main from './layout_editor/main.js'
+
