@@ -12,7 +12,7 @@ var submit_btn = {
     methods:{
         on_click:function(){
             if(this.head.action){
-                ex.eval(this.head.action,{ps:this.parStore})
+                ex.eval(this.head.action,{ps:this.parStore,head:this.head})
             }else{
                 this.$emit('action')
             }
