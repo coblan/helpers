@@ -66,12 +66,12 @@ export var  vuetool = {
         ex.each(event_slots,function(router){
             if(router.event){
                 self.$on(router.event,function(e){
-                    ex.eval(router.express,{event:e,ps:self.parStore,vc:self,ps:self.parStore})
+                    ex.eval(router.express,{event:e,ps:self.parStore,vc:self,})
                 })
             }
             if(router.par_event){
                 self.parStore.$on(router.par_event,function(e){
-                    ex.eval(router.express,{event:e,ps:self.parStore,vc:self,ps:self.parStore})
+                    ex.eval(router.express,{event:e,ps:self.parStore,vc:self,})
                 })
             }
 

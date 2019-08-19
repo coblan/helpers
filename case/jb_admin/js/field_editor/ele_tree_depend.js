@@ -1,4 +1,5 @@
 require('./scss/ele_tree_name_layer.scss')
+
 var label_shower =  {
     props:['row','head'],
 
@@ -72,135 +73,76 @@ var label_shower =  {
             ls =ex.filter(ls,function(itm){
                 return itm!=undefined
             })
-            this.row[this.head.name] = ls
-
-
-
-            //var self=this
-            //if(ex.isin(data,e.halfCheckedNodes)){
-            //
-            //    if(data.children){
-            //
-            //        var grand_childrens=[]
-            //        ex.walk(data.children,function(opt){
-            //            grand_childrens.push(opt)
-            //        })
-            //
-            //        //self.update_checked(data)
-            //        ex.walk(data.children,function(opt){
-            //            self.update_checked(opt,grand_childrens)
-            //        })
-            //    }
-            //}
-            //
-            //
-            //var ls =this.$refs.et.getCheckedKeys()
-            //
-            //ls =ex.filter(ls,function(itm){
-            //    return itm!=undefined
-            //})
-            //
-            //var org_ls = self.row[self.head.name]
-            //
-            //var added_item = ex.filter(ls,function(item){
-            //    return ! ex.isin(item,org_ls)
-            //})
-            //
-            //ex.each(added_item,function(value){
-            //    if(self.depend[value]){
-            //        ex.each(self.depend[value],function(opt){
-            //            ex.remove(opt.depend,value)
-            //        })
-            //    }
-            //})
-            //
-            //var subtract_item = ex.filter(org_ls,function(item){
-            //    return ! ex.isin(item,ls)
-            //})
-            //ex.each(subtract_item,function(value){
-            //    if(self.depend[value]){
-            //        ex.each(self.depend[value],function(opt){
-            //            if(!ex.isin(value,opt.depend)){
-            //                opt.depend.push(value)
-            //            }
-            //        })
-            //    }
-            //})
-            //var final_list = ex.filter(ls,function(value){
-            //    for(var i=0;i<self.has_depend_list.length;i++){
-            //        var depend_opt = self.has_depend_list[i]
-            //        if(depend_opt.value==value && depend_opt.depend.length>0){
-            //            return false
-            //        }
-            //    }
-            //    return true
-            //})
-            //
-            //
-            //this.update_disable()
-            //self.$refs.et.setCheckedKeys(final_list)
-            //self.row[self.head.name] = final_list
-
+            var namelist =[]
+            ex.walk(this.inn_head.options,(option)=>{
+                if(option.value){
+                    namelist.push(option.value)
+                }
+            })
+            if(this.row[this.head.name] && this.row[this.head.name].length >0){
+                this.row[this.head.name] = ex.filter(this.row[this.head.name],(item)=>{return ! ex.isin(item,namelist)})
+                this.row[this.head.name] = this.row[this.head.name].concat( ls )
+            }else{
+                this.row[this.head.name] = ls
+            }
         },
-        //update_disable:function(){
-        //    var self=this
-        //    ex.each(this.has_depend_list,function(opt){
-        //        if(opt.depend.length >0){
-        //            Vue.set(opt,'disabled',true)
-        //            //self.$refs.et.getCheckedKeys().
-        //            //opt.disableb=true
-        //        }else{
-        //            Vue.set(opt,'disabled',false)
-        //        }
-        //    })
-        //},
-        //update_checked:function(node,valid_node_list){
-        //    var self=this
-        //    var depend_node_list=self.depend[node.value]
-        //    if(depend_node_list){
-        //        ex.each(depend_node_list,function(depend_node){
-        //            if(ex.isin(depend_node,valid_node_list) && self.is_depend_full_checked(depend_node)){
-        //                self.$refs.et.setChecked(depend_node.value,true,true)
-        //            }
-        //        })
-        //    }
-        //    this.update_disable()
-        //},
+        filterNode(value, data) {
+            if (!value) return true;
+            return data.label.indexOf(value) !== -1;
+        },
+        init(){
+            var self=this
+            self.depend={}
+            self.has_depend_list=[]
+
+            var options_dict ={}
+            ex.walk(this.inn_head.options,function(opt){
+                if(opt.value){
+                    options_dict[opt.value] = opt
+                }
+            })
+
+            ex.walk(this.inn_head.options,function(opt){
+                if(!opt.depend){
+                    return
+                }
+                opt.depend_list=[]
+
+                ex.each( opt.depend,function(item_name){
+                    var item = options_dict[item_name]
+                    if(!item){
+                        cfg.showError(`${item_name}不存在，而被 ${opt.label} 依赖!`)
+                    }
+                    opt.depend_list.push(item)
+                    if(!item.depended_list){
+                        item.depended_list = []
+                    }
+                    item.depended_list.push(opt)
+                })
+            })
+        },
+        refresh(options){
+            this.inn_head.options =[]
+            setTimeout(()=>{
+                this.inn_head.options= options
+                this.init()
+            },300)
+        }
     },
     mounted:function(){
-        var self=this
-        self.depend={}
-        self.has_depend_list=[]
-
-        var options_dict ={}
-        ex.walk(this.inn_head.options,function(opt){
-            if(opt.value){
-                options_dict[opt.value] = opt
-            }
-        })
-
-        ex.walk(this.inn_head.options,function(opt){
-            if(!opt.depend){
-                return
-            }
-            opt.depend_list=[]
-
-            ex.each( opt.depend,function(item_name){
-                var item = options_dict[item_name]
-                if(!item){
-                    cfg.showError(`${item_name}不存在，而被 ${opt.label} 依赖!`)
-                }
-                opt.depend_list.push(item)
-                if(!item.depended_list){
-                    item.depended_list = []
-                }
-                item.depended_list.push(opt)
-            })
-        })
+        this.init()
+        ex.vueEventRout(this)
+    },
+    watch: {
+        filterText(val) {
+            this.$refs.et.filter(val);
+        },
     },
     data:function(){
         var inn_head=ex.copy(this.head)
         return {
+            parStore:ex.vueParStore(this),
+            filterText:'',
             inn_head:inn_head,
             defaultProps: {
                 children: 'children',
@@ -209,6 +151,10 @@ var label_shower =  {
         }
     },
     template:`<div class="com-field-ele-tree-name-layer">
+    <el-input
+      placeholder="输入关键字进行过滤"
+      v-model="filterText">
+    </el-input>
         <el-tree ref="et" :data="inn_head.options" :props="defaultProps"
              @node-click="handleNodeClick"
              @check="handleCheck"
@@ -216,6 +162,7 @@ var label_shower =  {
              @check-change="handleCheckChange"
              :default-checked-keys="row[head.name]"
              node-key="value"
+             :filter-node-method="filterNode"
     >
       <span class="custom-tree-node" slot-scope="{ node, data }">
         <span :title="data.help_text" v-text="node.label"></span>
