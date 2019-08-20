@@ -10,8 +10,8 @@ Vue.component('com-fields-table-block',{
                         <div class="field-label">
                             <span class="label-content">
                                  <span v-text="head.label"></span>
-                                 <span class="req_star" v-if='head.required'>*</span>
                             </span>
+                             <span class="req_star" v-if='head.required'>*</span>
                         </div>
                     </td>
                     <td class="field-input-td" :class="head.class" :colspan="head.colspan" :rowspan="head.rowspan">

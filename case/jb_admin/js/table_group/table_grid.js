@@ -12,7 +12,7 @@ var ele_table= {
             keyed_heads[head.name]=head
         })
 
-        if(parStore.advise_heads){
+        if(parStore.advise_heads && parStore.advise_heads.length > 0){
             var key = '_table_settings_'+parStore.director_name
             var setting_str = localStorage.getItem(key)
             if(setting_str){
