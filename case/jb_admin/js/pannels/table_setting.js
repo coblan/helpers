@@ -67,7 +67,7 @@ var table_setting_panel = {
         return {
             table_heads:table_heads,
             advise_heads: advise_heads,
-            advise_order: [],
+            advise_order: advise_order,
             heads_bucket:heads_bucket,
             order_bucket:[],
             first_layer_field:first_layer_field,
@@ -134,6 +134,7 @@ var table_setting_panel = {
             })
 
             this.ctx.table_ps.advise_heads = this.advise_heads
+            this.ctx.table_ps.advise_order = this.advise_order
             var key = '_table_settings_'+ this.ctx.table_ps.director_name
             var setting_str = localStorage.getItem(key)
             if(setting_str){
