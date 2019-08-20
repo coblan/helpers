@@ -184,11 +184,31 @@ class GroupForm(ModelFields):
         #options = permit_dc.get('__root__')
         #options = [{'value':x.pk,'label':str(x)} for x in PermitModel.objects.all()]
         #options = list2tree(options)
+        if director.get('permit.ui_options'):
+            heads.append({
+                'name':'ui',
+                'editor':'com-field-select',
+                'label':'权限视图',
+                'options':director.get('permit.ui_options'),
+                'help_text':'鉴于权限选择的复杂性和重要性，对权限进行了不同侧重点的整理，不同视图对应不同侧重点。',
+                'event_slots':[
+                    {'event':'input','express':'''cfg.show_load();
+                     ex.director_call("permit.options",{ui:scope.event}).then((res)=>{cfg.hide_load();scope.ps.$emit("permit_options_changed", res)}) ''' },
+                     #{'event':'input','express':'''
+                     #var permit_head = ex.findone( scope.ps.vc.heads,{name:"permit"});
+                     #cfg.show_load();
+                     #ex.director_call("permit.options",{ui:scope.event}).then((res)=>{cfg.hide_load();permit_head.options=res}) ''' },
+                    #{'event':'changed','express':'scope.ps.$emit("group-changed")'},
+                ]
+            })
         heads.append({
             'name':'permit',
             'editor':'com-field-ele-tree-depend',
             'label':'权限选择',
-            'options':options
+            'options':options,
+            'event_slots':[
+                {'par_event':'permit_options_changed','express':'scope.vc.refresh(scope.event)'},
+            ]
         })
         return heads    
     

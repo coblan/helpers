@@ -4,4 +4,9 @@
   & .el-tree{
     min-height:20em;
   }
+
+  .el-input input.el-input__inner[type=text]{
+    width: inherit !important;
+  }
+
 }
