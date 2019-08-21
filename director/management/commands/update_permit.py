@@ -2,14 +2,15 @@
 from __future__ import unicode_literals
 from django.core.management.base import BaseCommand
 from django.conf import settings
-from helpers.director.base_data import site_cfg
+from helpers.director.base_data import site_cfg,director
 from helpers.director.models import PermitModel
 
 class Command(BaseCommand):
     """
     """
     def handle(self, *args, **options):
-        permit_options = site_cfg.get('permit.options')()
+        #permit_options = site_cfg.get('permit.options')()
+        permit_options = director.get('permit.options')()
         depend_chain={}
         # 生成依赖dict
         for opt in permit_options:

@@ -180,10 +180,11 @@ class GroupForm(ModelFields):
     
     def get_heads(self):
         heads= super(self.__class__,self).get_heads()
-        options = site_cfg.get('permit.options')()
-        #options = permit_dc.get('__root__')
-        #options = [{'value':x.pk,'label':str(x)} for x in PermitModel.objects.all()]
-        #options = list2tree(options)
+        #options = site_cfg.get('permit.options')()
+        options = director.get('permit.options')()
+        ##options = permit_dc.get('__root__')
+        ##options = [{'value':x.pk,'label':str(x)} for x in PermitModel.objects.all()]
+        ##options = list2tree(options)
         if director.get('permit.ui_options'):
             heads.append({
                 'name':'ui',
