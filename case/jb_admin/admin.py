@@ -5,7 +5,6 @@ from django.contrib import admin
 from django.contrib.auth.models import Group,User
 from helpers.director.shortcut import TablePage,ModelTable,page_dc,model_dc,ModelFields, director,RowFilter,director_view
 from helpers.director.models import PermitModel 
-from helpers.director.base_data import site_cfg
 import re
 from . import  js_cfg
 from django.utils.translation import ugettext as _
@@ -180,7 +179,6 @@ class GroupForm(ModelFields):
     
     def get_heads(self):
         heads= super(self.__class__,self).get_heads()
-        #options = site_cfg.get('permit.options')()
         options = director.get('permit.options')()
         ##options = permit_dc.get('__root__')
         ##options = [{'value':x.pk,'label':str(x)} for x in PermitModel.objects.all()]

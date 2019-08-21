@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 from django.core.management.base import BaseCommand
 from django.conf import settings
-from helpers.director.base_data import site_cfg
+from helpers.director.base_data import inspect_dict
 from helpers.director.models import PermitModel
 from django.utils import timezone
 import inspect
@@ -16,9 +16,6 @@ class Command(BaseCommand):
     """
     """
     def handle(self, *args, **options):
-        
-        inspect_dict = site_cfg.get('inspect_dict')
-        
         out_str = "\n=========%s==========\n"%timezone.now()
         dc_str = ''
         gb_dict,local_dict={},{}
@@ -34,8 +31,10 @@ class Command(BaseCommand):
             org_dc = local_dict.get(dc_name)
             if org_dc:
                 for k,v in dc.items():
+                    # 防止 k的model没被记录到
+                    value_str(k)
+                    
                     if isinstance(v,(list,tuple)):
-                        #used_module += list_valude_mod(v)
                         list_str = list_value_str(v)
           
                         if k not in org_dc:
@@ -43,7 +42,6 @@ class Command(BaseCommand):
                         elif not isinstance(org_dc[k],(list,tuple))  or list_str != list_value_str( org_dc[k] ):
                             out_ls.append('    #?%s\t:[%s],'%(value_str(k),list_str))
                     else:
-                        #used_module.append(value_mod(v))
                         if k not in org_dc:
                             out_ls.append('    %s\t:%s,'%(value_str(k),value_str(v)))
                         elif value_str(v) != value_str( org_dc[k] ):
@@ -57,11 +55,9 @@ class Command(BaseCommand):
                     if isinstance(v,(list,tuple)):
                         temp_ls=[]
                         for v_item in v:
-                            #used_module.append(value_mod(v_item))
                             temp_ls.append(value_str(v_item))
                         out_ls.append('    %s\t:[%s],'%(value_str(k),','.join(temp_ls)))
                     else:
-                        #used_module.append(value_mod(v))
                         out_ls.append('    %s\t:%s,'%(value_str(k),value_str(v)))
             
             if out_ls:
