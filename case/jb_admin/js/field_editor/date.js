@@ -1,6 +1,7 @@
 var lay_datetime={
     props:['row','head'],
-    template:`<div><span v-show='head.readonly' v-text='row[head.name]'></span>
+    template:`<div class="com-field-date">
+        <span class="readonly-info" v-show='head.readonly' v-text='row[head.name]'></span>
 
                     <input v-show="!head.readonly" type="text" :id="'id_'+head.name" v-model="row[head.name]"  :placeholder="head.placeholder" readonly>
 
