@@ -2,7 +2,7 @@ var lay_datetime={
     props:['row','head'],
     template:`<div class="com-field-datetime">
     <span v-show='head.readonly' v-text='row[head.name]'></span>
-        <el-date-picker
+      <el-date-picker
         v-if="!head.readonly"
       v-model="row[head.name]"
       type="datetime"

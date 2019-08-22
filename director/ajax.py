@@ -61,8 +61,12 @@ def save_row(row,user,request):
     try:
         kw = request.GET.dict()
         field_obj = permit_save_model(user, row,**kw)
-        dc = field_obj.get_row()
-        return {'status':'success','row':dc}
+        data_ctx  = field_obj.get_data_context()
+        data_ctx.update({
+            'status':'success',
+            'success':True
+        })
+        return data_ctx #{'status':'success','row':dc}
     except ValidationError as e:
         return {'errors':dict(e)}
     except OutDateException as e:

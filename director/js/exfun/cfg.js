@@ -118,6 +118,7 @@ var cfg={
                 close_fun()
                 resolve(e)
             }
+            ctx.ops_loc = ctx.ops_loc || 'bottom'
             var winindex = pop_layer(ctx,editor,callback,option)
             var close_fun = function (){
                 layer.close(winindex)
