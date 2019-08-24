@@ -115,9 +115,9 @@ var ele_table= {
         selected:function(){
             return this.parStore.selected
         },
-        footer:function(){
-            return this.parStore.footer
-        },
+        //footer:function(){
+        //    return this.parStore.footer
+        //},
     },
     watch:{
         selected:function(newvalue,old){
@@ -223,6 +223,19 @@ var ele_table= {
                     </el-table>
                     </div>`,
     methods: {
+        getSum:function(param){
+            var footer =[]
+            if(this.parStore.selectable){
+                footer.push(this.parStore.footer.meta_footer_label || '')
+            }
+            ex.each(this.normed_heads,(head)=>{
+                if(head.children){
+                }else{
+                    footer.push(this.parStore.footer[head.name] || '')
+                }
+            })
+            return  footer
+        },
         on_header_dragend(newWidth, oldWidth, column, event){
             this.parStore.$emit('header-dragend',{newWidth:newWidth, oldWidth:oldWidth, column:column, event:event})
 

@@ -53,9 +53,9 @@ var mix_ele_table_adapter = {
 //                })
 
         },
-        getSum:function(param){
-            return this.footer
-        },
+        //getSum:function(param){
+        //    return this.footer
+        //},
         on_perpage_change:function(perpage){
             this.search_args._perpage=perpage
             this.search_args._page=1

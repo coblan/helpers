@@ -8,7 +8,7 @@ var table_store={
              row_sort:{},
              row_pages:{},
              director_name:'',
-             footer:[],
+             footer:{},
              selected:[],
              search_args:{}, //ex.parseSearch(),
              ops:[],

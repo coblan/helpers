@@ -471,16 +471,6 @@ class ModelTable(object):
             'row_sort': self.getRowSort()
         })
         return head_ctx
-        #rows = self.get_rows()
-        #head_ctx.update({
-            #'rows': rows,
-            #'row_pages' : self.getRowPages(),
-            #'row_sort': self.getRowSort(),#row_sort,
-            #'model_name':model_to_name(self.model),
-            #'parents': self.getParents(),
-            #'footer': self.footer,
-        #})
-        #return head_ctx
     
     def get_event_slots(self):
         return []

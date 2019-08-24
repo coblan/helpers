@@ -7,7 +7,7 @@ var table_setting_panel = {
         <div class="panel panel-info">
             <div class="panel-heading">普通列</div>
             <div style="padding: 10px">
-             <el-checkbox-group class="mygroup" v-model="heads_bucket._first_layer">
+             <el-checkbox-group class="mygroup" v-model="heads_bucket._first_layer" data-name="_first_layer">
                 <el-checkbox v-for="head in first_layer_field" :data-id="head.name" :label="head.name" size="small" border>
                     <i class="fa fa-level-down" aria-hidden="true" v-if="head.children"></i>
                         <span v-text="head.label"></span>
@@ -20,7 +20,7 @@ var table_setting_panel = {
         <div class="panel panel-warning" v-for="field_group in group_field_list">
              <div class="panel-heading"> <span v-text="field_group.label"></span></div>
              <div style="padding: 10px">
-                  <el-checkbox-group class="mygroup" v-model="heads_bucket[field_group.name]">
+                  <el-checkbox-group class="mygroup" v-model="heads_bucket[field_group.name]" :data-name="field_group.name">
                     <el-checkbox v-for="head in field_list(field_group.children)" :data-id="head.name" :label="head.name" size="small" border>
                             <span v-text="head.label"></span>
                     </el-checkbox>
@@ -69,7 +69,7 @@ var table_setting_panel = {
             advise_heads: advise_heads,
             advise_order: advise_order,
             heads_bucket:heads_bucket,
-            order_bucket:[],
+            order_bucket:{},
             first_layer_field:first_layer_field,
             group_field_list:group_field_list,
         }
@@ -78,8 +78,9 @@ var table_setting_panel = {
         var self = this
         var ddom= $(this.$el).find('.mygroup')
        ex.each(ddom,function(mydom){
+           var name = $(mydom).attr('data-name')
            var order_list =[]
-           self.order_bucket.push(order_list)
+           self.order_bucket[name] = order_list
             new Sortable(mydom ,{
                 animation: 150,
                 store: {
@@ -125,16 +126,34 @@ var table_setting_panel = {
         make_catch(){
             this.advise_heads = []
             this.advise_order = []
+            debugger
+
             for(var key in this.heads_bucket){
                 var mylist = this.heads_bucket[key]
                 this.advise_heads = this.advise_heads.concat(mylist)
             }
-            ex.each(this.order_bucket,(mylist)=>{
-                this.advise_order = this.advise_order.concat(mylist)
+
+            this.advise_order = this.order_bucket._first_layer
+
+            ex.each(this.group_field_list,(head)=>{
+                var index = this.advise_order.indexOf(head.name)
+                var mylist = this.order_bucket[head.name]
+                this.advise_order.splice(index,0,...mylist)
             })
 
+            //ex.each(this.order_bucket,(mylist)=>{
+            //
+            //    this.advise_order = this.advise_order.concat(mylist)
+            //})
+
+
+
+
             this.ctx.table_ps.advise_heads = this.advise_heads
-            this.ctx.table_ps.advise_order = this.advise_order
+            if(this.advise_order.length >0){
+                this.ctx.table_ps.advise_order = this.advise_order
+            }
+
             var key = '_table_settings_'+ this.ctx.table_ps.director_name
             var setting_str = localStorage.getItem(key)
             if(setting_str){
