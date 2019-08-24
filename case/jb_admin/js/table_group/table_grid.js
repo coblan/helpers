@@ -243,7 +243,7 @@ var ele_table= {
         on_header_dragend(newWidth, oldWidth, column, event){
             this.parStore.$emit('header-dragend',{newWidth:newWidth, oldWidth:oldWidth, column:column, event:event})
 
-            if(this.parStore.advise_width){
+            if(this.parStore.advise_heads && this.parStore.advise_heads.length >0){
                 var key = '_table_settings_'+ this.parStore.director_name
                 var setting_str = localStorage.getItem(key)
                 var setting_obj = JSON.parse(setting_str)

@@ -197,7 +197,9 @@ class ModelFields(forms.ModelForm):
         return dc
     
     def get_data_context(self):
-        return self.get_row()
+        return {
+            'row':self.get_row()
+           }
     
     def is_valid(self): 
         rt = super().is_valid()
@@ -237,9 +239,7 @@ class ModelFields(forms.ModelForm):
         """
         """
         ctx = self.get_head_context()
-        ctx.update({
-            'row': self.get_row(),
-        })
+        ctx.update(self.get_data_context())
         return ctx
     
     @request_cache
