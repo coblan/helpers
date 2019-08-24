@@ -126,15 +126,11 @@ var table_setting_panel = {
         make_catch(){
             this.advise_heads = []
             this.advise_order = []
-            debugger
-
             for(var key in this.heads_bucket){
                 var mylist = this.heads_bucket[key]
                 this.advise_heads = this.advise_heads.concat(mylist)
             }
-
             this.advise_order = this.order_bucket._first_layer
-
             ex.each(this.group_field_list,(head)=>{
                 var index = this.advise_order.indexOf(head.name)
                 var mylist = this.order_bucket[head.name]
@@ -175,9 +171,13 @@ var table_setting_panel = {
 
             if(this.advise_order.length >0){
                 var tmp =ex.sort_by_names(this.ctx.table_ps.heads,this.advise_order,true)
+                var tmp_rows = this.ctx.table_ps.rows
+
                 this.ctx.table_ps.heads = []
+                this.ctx.table_ps.rows=[]
                 setTimeout(()=>{
                     this.ctx.table_ps.heads =tmp
+                    this.ctx.table_ps.rows= tmp_rows
                     this.ctx.table_ps.$emit('data-updated-backend')
                 },200)
             }

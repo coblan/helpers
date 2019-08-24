@@ -230,7 +230,11 @@ var ele_table= {
             }
             ex.each(this.normed_heads,(head)=>{
                 if(head.children){
-                }else{
+                    var subheads = this.name_in_list(head.children)
+                    ex.each(subheads,(subhead)=>{
+                        footer.push(this.parStore.footer[subhead.name] || '')
+                    })
+                }else if(! head.sublevel){
                     footer.push(this.parStore.footer[head.name] || '')
                 }
             })
