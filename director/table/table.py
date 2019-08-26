@@ -378,7 +378,7 @@ class ModelTable(object):
         if not self.row_search.model:
             self.row_search.model=self.model
         self.pagenum = self.pagenator(pageNumber=self.page,perpage=perpage)
-        self.footer = []
+        self.footer = {}
         
     
     def custom_permit(self):
@@ -913,7 +913,7 @@ class PlainTable(ModelTable):
         
         self.page= int( page or 1 )
         self.perpage= int( perpage or 20 )
-        self.footer = []
+        self.footer = {}
         self.custom_permit()
     
     def custom_permit(self):

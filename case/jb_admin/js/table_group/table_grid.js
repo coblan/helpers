@@ -226,7 +226,7 @@ var ele_table= {
         getSum:function(param){
             var footer =[]
             if(this.parStore.selectable){
-                footer.push(this.parStore.footer.meta_footer_label || '')
+                footer.push(this.parStore.footer._label || '')
             }
             ex.each(this.normed_heads,(head)=>{
                 if(head.children){
