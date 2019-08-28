@@ -61,6 +61,14 @@ export var code ={
         this._count++
         return this._count
     },
+    // 使用utf-8字符集进行base64编码
+    utoa(str) {
+    return window.btoa(unescape(encodeURIComponent(str)));
+},
+// 使用utf-8字符集解析base64字符串
+atou(str) {
+    return decodeURIComponent(escape(window.atob(str)));
+},
     //hashCode: function (input){
     //    var I64BIT_TABLE =
     //        'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-'.split('');
