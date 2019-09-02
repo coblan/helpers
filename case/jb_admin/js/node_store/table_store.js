@@ -373,9 +373,20 @@ var table_store={
         director_call:function(kws){
             var self =this
             var row_match_fun = kws.row_match
-            if(row_match_fun && ! row_match[row_match_fun](self,kws)){
-                return
+            if(row_match_fun){
+                // 如果匹配不了，就说明是express
+                if( row_match[row_match_fun] && ! row_match[row_match_fun](self,kws)){
+                        return
+                }else{
+                    if(! ex.eval(row_match_fun,{ps:self})){
+                        if(kws.match_msg){
+                            ex.eval(kws.match_msg,{ps:self})
+                        }
+                        return
+                    }
+                }
             }
+
 
             function do_director_call(new_row,callback){
                 cfg.show_load()
