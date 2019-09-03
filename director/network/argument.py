@@ -151,7 +151,7 @@ def int_str(value,name):
         try:
             return int(value)
         except ValueError as e:
-            raise UserWarning('%(name)s=%(value)s could not be covert to int'%{'name':name,'value':value})
+            raise UserWarning('%(name)s=%(value)s 不能转换为 int'%{'name':name,'value':value})
     else:
         return value
     #try:

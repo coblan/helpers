@@ -24,7 +24,13 @@ $.validator.config({
             return exp.test(element.value) || '不满足规则'
         },
         express:function(element, param) {
-            return ex.eval(param[0],{value:element.value}) ||  '不满足规则'
+            var real_param = ex.atou(param[0])
+            if (param[1]){
+                var msg = ex.atou( param[1] )
+            }else{
+                var msg =  '不满足规则'
+            }
+            return ex.eval(real_param,{value:element.value}) ||  msg
         },
         // com-field-table-list
         key_unique:function(elem, param) {

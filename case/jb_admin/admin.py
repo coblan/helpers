@@ -20,7 +20,7 @@ class UserPage(TablePage):
     class tableCls(ModelTable):
         model = User
         exclude=['password', 'last_name', 'user_permissions']
-        pop_edit_field = 'username'
+        #pop_edit_field = 'username'
         fields_sort = ['id','username','first_name','groups','is_superuser','is_staff','is_active','last_login']
         
         def dict_head(self, head): 
@@ -38,6 +38,8 @@ class UserPage(TablePage):
                 #head['parse_method'] = 'dotSplit'
             if head['name'] == 'username':
                 head['label']='账号'
+                head['editor'] = 'com-table-click'
+                head['action'] = ''
             return head
         
         def inn_filter(self, query):

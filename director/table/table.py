@@ -139,8 +139,18 @@ class RowFilter(object):
         #self._names=[x for x in self.names if x in allowed_names]        
         self.filter_args={}
         for k in self.names:
+            compare_name = '_%s_compare'%k
             v = dc.pop(k,'')
-            self.filter_args[k] = v
+            if compare_name in kw:
+                cv = str( kw.get(compare_name) )
+                if cv == '0':
+                    self.filter_args[k] =v
+                elif cv == '1':
+                    self.filter_args['%s__gte'%k] =v
+                elif cv == '-1':
+                    self.filter_args['%s__lte'%k] =v
+            else:
+                self.filter_args[k] = v
             #if v != None:
                 #self.filter_args[k]=v   
             #if v=='0':
@@ -378,7 +388,7 @@ class ModelTable(object):
         if not self.row_search.model:
             self.row_search.model=self.model
         self.pagenum = self.pagenator(pageNumber=self.page,perpage=perpage)
-        self.footer = []
+        self.footer = {}
         
     
     def custom_permit(self):
@@ -913,7 +923,7 @@ class PlainTable(ModelTable):
         
         self.page= int( page or 1 )
         self.perpage= int( perpage or 20 )
-        self.footer = []
+        self.footer = {}
         self.custom_permit()
     
     def custom_permit(self):

@@ -8,8 +8,11 @@ var label_shower =  {
             var self=this
             if(node.depend_list){
                 ex.each(node.depend_list,function(dep_node){
-                    self.$refs.et.setChecked(dep_node.value,true)
-                    self.check_depend(dep_node)
+                    var node = self.$refs.et.getNode(dep_node.value)
+                    if(node && !node.checked){
+                        self.$refs.et.setChecked(dep_node.value,true)
+                        self.check_depend(dep_node)
+                    }
                 })
             }
         },
@@ -27,8 +30,11 @@ var label_shower =  {
             var self=this
             if(node.depended_list){
                 ex.each(node.depended_list,function(dep_node){
-                    self.$refs.et.setChecked(dep_node.value,false)
-                    self.uncheck_depended(dep_node)
+                    var node = self.$refs.et.getNode(dep_node.value)
+                    if(node && node.checked){
+                        self.$refs.et.setChecked(dep_node.value,false)
+                        self.uncheck_depended(dep_node)
+                    }
                 })
             }
         },
@@ -98,6 +104,9 @@ var label_shower =  {
             var options_dict ={}
             ex.walk(this.inn_head.options,function(opt){
                 if(opt.value){
+                    if(options_dict[opt.value]){
+                        cfg.showError(opt.value +'重复了，请检查备选项！')
+                    }
                     options_dict[opt.value] = opt
                 }
             })

@@ -14,7 +14,7 @@
 
     option= {{ option | jsonify }}
     table_layout={{ table_layout | jsonify }}
-
+    selectable = {{ selectable | jsonify }}
     // 这个变量留着，兼容老的调用。。准备把它移除
 //    tabs={{ tabs | jsonify | default:'[]' }}
 //    named_tabs={{ named_tabs | jsonify | default:'{}' }}
@@ -28,6 +28,7 @@
     var base_table_store = {
         data:function(){
             return {
+                selectable:selectable,
                 parents:parents,
                 page_label:page_label,
                 heads:heads,
