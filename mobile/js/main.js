@@ -2,6 +2,7 @@ require('./scss/element_table.scss')
 require('./scss/base.scss')   // 单位宽度等
 
 require('./styl/list.styl')
+require('./styl/vant_conf.styl')
 
 //------------------
 import *  as  mix_fields_data from 'jb_admin/mix/mix_fields_data'

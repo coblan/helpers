@@ -8,16 +8,29 @@ Vue.component('com-field-phone-code',{
 
      * */
     props:['row','head'],
-    template:` <div class="com-field-phone-code flex">
-         <input  type="text" class="form-control input-sm" v-model="row[head.name]"
-            :id="'id_'+head.name" :name="head.name"
-            :placeholder="head.placeholder" :autofocus="head.autofocus" :maxlength='head.maxlength'>
-
-          <button type="button" class="btn btn-sm"
-              :disabled="vcode_count !=0"
-               @click="get_phone_code" v-text="vcodeLabel"></button>
-     </div>
-    `,
+    template:`<div>
+    <van-cell-group>
+      <van-field
+        v-model="row[head.name]"
+        center
+        clearable
+        label="短信验证码"
+        placeholder="请输入短信验证码"
+      >
+    <van-button slot="button" size="small" type="primary">发送验证码</van-button>
+    </van-field>
+    </van-cell-group>
+    </div>`,
+    //template:` <div class="com-field-phone-code flex">
+    //     <input  type="text" class="form-control input-sm" v-model="row[head.name]"
+    //        :id="'id_'+head.name" :name="head.name"
+    //        :placeholder="head.placeholder" :autofocus="head.autofocus" :maxlength='head.maxlength'>
+    //
+    //      <button type="button" class="btn btn-sm"
+    //          :disabled="vcode_count !=0"
+    //           @click="get_phone_code" v-text="vcodeLabel"></button>
+    // </div>
+    //`,
     data:function(){
         var parStore=ex.vueParStore(this)
         return {

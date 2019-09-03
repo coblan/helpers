@@ -3,8 +3,8 @@ require('./styl/live_list.styl')
 var live_list={
     props:['ctx'],
     basename:'live-list',
-    template:`<div class="com-live-list">
-        <com-uis-nav-bar :title="ctx.title" :back="can_back" :ops="ctx.ops"></com-uis-nav-bar>
+    template:`<div class="com-live-list" :class="ctx.class">
+        <com-uis-nav-bar v-if="is_page" :title="ctx.title" :back="can_back" :ops="ctx.ops"></com-uis-nav-bar>
        <!--<cube-scroll :data="childStore.rows" ref="scroll"  :options="scrollOptions" @pulling-down="onPullingDown"-->
                   <!--@pulling-up="onPullingUp">-->
             <!--<component :is="table_editor" :heads="ctx.heads" :rows="childStore.rows"  @select="triggerBlockClick($event)"></component>-->
@@ -32,6 +32,9 @@ var live_list={
         childStore.rows= this.ctx. rows || []
         childStore.vc = this
         childStore.director_name = this.ctx.director_name
+        if(this.ctx.search_args){
+            ex.vueAssign(childStore.search_args,this.ctx.search_args)
+        }
 
         return {
             freshing:false,
@@ -54,11 +57,24 @@ var live_list={
         }
     },
     mounted(){
-        if(this.ctx.rows.length==0){
+        if(this.ctx.css){
+            ex.append_css(this.ctx.css)
+        }
+        if(this.ctx.init_express){
+            ex.eval(this.ctx.init_express,{self:this,cs:this.childStore})
+        }else  if(!this.ctx.rows || this.ctx.rows.length==0){
             this.childStore.search()
         }
     },
     computed:{
+        is_page(){
+            if(this.ctx.is_page ==undefined){
+                return true
+            }else{
+                return this.ctx.is_page
+            }
+
+        },
         can_back(){
             return this.$root.stack.length >1
         }
@@ -76,7 +92,7 @@ var live_list={
             console.log('加载')
             this.childStore.addNextPage().then(()=>{
                 this.loading = false
-                if(this.childStore.search_args._page > ( this.childStore.row_pages.total / this.childStore.row_pages.perpage)  ){
+                if(this.childStore.search_args._page * this.childStore.row_pages.perpage >=  this.childStore.row_pages.total   ){
                     this.finished=true
                 }else{
                     this.finished=false
@@ -117,5 +133,6 @@ var live_list={
 }
 
 Vue.component('com-list-list',live_list)
+Vue.component('com-live-list',live_list)
 
 window.live_list = live_list

@@ -62,13 +62,16 @@ var mix_fields_data ={
 
             // 准备用下面两个替换前面所有逻辑
             var heads = ex.filter(self.heads,function(head){
-                if(head.show){
+                if (head.sublevel){
+                    return false
+                }else if(head.show){
                     return ex.eval(head.show,{row:self.row})
                 }else{
                     return true
                 }
             })
 
+            // head.express  用来干啥?
             ex.each(self.heads,function(head){
                 if(head.express){
                     ex.vueAssign(head, ex.eval(head.express,{row:self.row}) )
@@ -196,24 +199,25 @@ var mix_fields_data ={
                         //cfg.showMsg(rt._outdate)
                     }else{
                         ex.vueAssign(self.row,rt.row)
-                        if(this.head && this.head.after_save && typeof this.head.after_save =='string'){
-                            ex.eval(this.head.after_save,{ps:self.parStore,vc:self,row:rt.row})
+                        if(!resolve){
+                            if(this.head && this.head.after_save && typeof this.head.after_save =='string'){
+                                ex.eval(this.head.after_save,{ps:self.parStore,vc:self,row:rt.row})
+                            }else{
+                                // 调用组件默认的
+                                self.after_save(rt.row)
+                                if(resp.msg || rt.msg){
+                                    //cfg.hide_load()
+                                    cfg.showMsg(resp.msg || rt.msg)
+                                }else{
+                                    cfg.toast('操作成功！',{time: 1000})
+                                }
+                            }
                         }else{
-                            // 调用组件默认的
-                            self.after_save(rt.row)
+                            resolve(rt.row)
                         }
-                        if(this.head && this.head.save_msg){
-                            ex.eval(this.head.save_msg,{ps:self.parStore,vc:self,resp:resp})
-                        }else if(resp.msg || rt.msg){
-                            //cfg.hide_load()
-                            cfg.showMsg(resp.msg || rt.msg)
-                        }else{
-                            cfg.toast('操作成功！',{time: 1000})
-                        }
-
                         self.setErrors({})
                         self.$emit('finish',rt.row)
-                        resolve(rt.row)
+
                     }
                 })
             })

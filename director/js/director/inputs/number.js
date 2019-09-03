@@ -1,15 +1,29 @@
 var number = {
     props:['row','head'],
 
-        template: `<div><span v-if='head.readonly' v-text='row[head.name]'></span>
-            		<input v-else type="text" class="form-control input-sm" v-model="row[head.name]" :id="'id_'+head.name"
+        template: `<div :class="['com-field-number','field-'+head.name,head.class]">
+        <!--<span v-if='head.readonly' v-text='row[head.name]'></span>-->
+      <div class="input-group" >
+      <div class="input-group-addon" v-if="head.prefix" v-html="head.prefix"></div>
+    	<input  type="text" class="form-control input-sm" v-model="row[head.name]" :id="'id_'+head.name"
             		    :name="head.name" :step="head.step"
             		     @keypress="isNumber($event)"
-                        :placeholder="head.placeholder" :autofocus="head.autofocus"></div>`,
+            		    :readonly="head.readonly"
+                        :placeholder="head.placeholder" :autofocus="head.autofocus">
+      <div class="input-group-addon" v-if="head.suffix" v-html="head.suffix"></div>
+    </div>
+         </div>`,
     created(){
         //if(this.head.fv_rule==undefined){
         //    Vue.set(this.head,'fv_rule','digit(4)')
         //}
+    },
+    mounted(){
+        if(this.head.width){
+            var width = this.head.width
+            var myclass ='.com-field-number.field-'+this.head.name
+            ex.append_css(`${myclass} input{width:${width} !important`)
+        }
     },
         methods:{
             isNumber:function(evt){

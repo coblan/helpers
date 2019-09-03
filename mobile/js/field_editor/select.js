@@ -1,7 +1,7 @@
 Vue.component('com-field-select',{
     props:['head','row'],
-    template:`<div class="van-cell com-field-select">
-    <div style="position: relative">
+    template:`<div class="com-field-select van-cell" :class="{'van-cell--required':head.required}">
+       <div style="position: relative">
         <van-popup  v-model="show" position="bottom">
                 <van-picker :columns="head.options" :default-index="crt_index"
                 cancel-button-text="清空"
@@ -21,6 +21,9 @@ Vue.component('com-field-select',{
       >
        <!--<van-icon v-if="row[head.name]" slot="right-icon" name="cross" @click.stop="clear()" class="custom-icon" />-->
       </van-field>
+
+
+
     </div>
 `,
     data:function(){
@@ -42,6 +45,9 @@ Vue.component('com-field-select',{
     },
     watch:{
         my_value:function(v){
+            Vue.nextTick(()=>{
+                $(this.$el).find('input').isValid()
+            })
             this.$emit('input',v)
         }
     },

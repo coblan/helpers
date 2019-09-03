@@ -93,7 +93,8 @@ class ModelFields(forms.ModelForm):
                 except self._meta.model.DoesNotExist:
                     raise Http404('Id=%s that you request is not exist'%pk)
             else:
-                form_kw['instance'] = self._meta.model(**self.kw)
+                init_dc = {k:v for k in self.kw if k in self._meta.fields}
+                form_kw['instance'] = self._meta.model(**init_dc) #(**self.kw)
         else:
             form_kw['instance']=kw.pop('instance')
         
@@ -452,7 +453,7 @@ class ModelFields(forms.ModelForm):
             raise PermissionDenied('you have no Permission access %s'%self.instance._meta.model_name)
 
         # self.fields 是经过 权限 处理了的。可读写的字段
-        if self.instance.pk:
+        if self.instance.pk: # not self.instance._state.adding #
             self.instance.refresh_from_db()
         row = to_dict(self.instance,include=self.fields.keys())
         row.update( self.dict_row(self.instance) )
