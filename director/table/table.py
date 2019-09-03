@@ -139,8 +139,18 @@ class RowFilter(object):
         #self._names=[x for x in self.names if x in allowed_names]        
         self.filter_args={}
         for k in self.names:
+            compare_name = '_%s_compare'%k
             v = dc.pop(k,'')
-            self.filter_args[k] = v
+            if compare_name in kw:
+                cv = str( kw.get(compare_name) )
+                if cv == '0':
+                    self.filter_args[k] =v
+                elif cv == '1':
+                    self.filter_args['%s__gte'%k] =v
+                elif cv == '-1':
+                    self.filter_args['%s__lte'%k] =v
+            else:
+                self.filter_args[k] = v
             #if v != None:
                 #self.filter_args[k]=v   
             #if v=='0':
