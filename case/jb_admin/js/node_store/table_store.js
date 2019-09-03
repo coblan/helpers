@@ -374,10 +374,11 @@ var table_store={
             var self =this
             var row_match_fun = kws.row_match
             if(row_match_fun){
-                // 如果匹配不了，就说明是express
-                if( row_match[row_match_fun] && ! row_match[row_match_fun](self,kws)){
+                if( row_match[row_match_fun]){
+                    if(! row_match[row_match_fun](self,kws)){
                         return
-                }else{
+                    }
+                } else{// 如果匹配不了，就说明是express
                     if(! ex.eval(row_match_fun,{ps:self})){
                         if(kws.match_msg){
                             ex.eval(kws.match_msg,{ps:self})
