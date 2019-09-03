@@ -10,8 +10,8 @@ var filter_compare={
                 <!--<span v-text="head.label" style="white-space: nowrap"></span>:-->
                    <select name="" id="" class="form-control input-sm" style="width: 50px" v-model="search_args['_'+head.name+'_compare']">
                         <option value="0">=</option>
-                         <option value="1">></option>
-                         <option value="-1"><</option>
+                         <option value="1">≥</option>
+                         <option value="-1">≤</option>
                    </select>
                    <input @keyup.enter="parStore.search()" type="text" v-model='search_args[head.name]' class="form-control input-sm" :placeholder="head.label">
                 </div>`,
