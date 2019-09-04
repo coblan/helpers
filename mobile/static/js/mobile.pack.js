@@ -3937,7 +3937,7 @@ Vue.component('com-uis-nav-bar', {
         ops: { default: function _default() {
                 return [];
             } } },
-    template: '<div class="com-uis-nav-bar"><van-nav-bar\n            :title="title"\n            :left-arrow="back"\n            @click-right="onClickRight"\n            @click-left="onClickLeft">\n        <van-icon v-if="ops.length>0" name="bars" slot="right" />\n    </van-nav-bar>\n        <van-actionsheet\n            v-model="actionVisible"\n            :actions="ops"\n            cancel-text="\u53D6\u6D88"\n            @select="onSelectAction"\n    ></van-actionsheet>\n    </div>',
+    template: '<div class="com-uis-many-ops">\n <!--@click-right="onClickRight"-->\n    <van-nav-bar\n            :title="title"\n            :left-arrow="back"\n            @click-left="onClickLeft">\n     <div slot="right">\n         <component v-for="op in right_top"  :is="op.icon_editor" :ctx="op.icon_ctx"\n         @click.native="on_click(op)"></component>\n          <van-icon @click.native="actionVisible=true" v-if="rigth_down.length > 0"  name="bars" slot="right" />\n    </div>\n\n    </van-nav-bar>\n        <van-actionsheet\n            v-model="actionVisible"\n            :actions="rigth_down"\n            cancel-text="\u53D6\u6D88"\n            @select="onSelectAction"\n    ></van-actionsheet>\n    </div>',
     data: function data() {
         this.ops = this.ops || [];
         return {
@@ -3947,26 +3947,49 @@ Vue.component('com-uis-nav-bar', {
     },
 
     computed: {
-        //normed_ops(){
-        //    var myops=[]
-        //    this.ops.forEach(item=>{
-        //        myops.push({name:item.label,action:item.action})
-        //    })
-        //    return myops
-        //}
+        right_top: function right_top() {
+            var myops = ex.filter(this.ops, function (item) {
+                return item.level == 'rigth-top';
+            });
+            return myops;
+        },
+        rigth_down: function rigth_down() {
+            var myops = [];
+            var left_ops = ex.filter(this.ops, function (item) {
+                return !item.level;
+            });
+            ex.each(left_ops, function (item) {
+                myops.push({ name: item.label, action: item.action });
+            });
+            return myops;
+        }
     },
     methods: {
         onClickLeft: function onClickLeft() {
             history.back();
         },
-        onClickRight: function onClickRight() {
-            this.actionVisible = true;
+        on_click: function on_click(op) {
+            ex.eval(op.action, { ps: this.parStore, head: op });
         },
+
+        //onClickRight(){
+        //    if(this.ops.length==1){
+        //        let head = this.ops[0]
+        //        ex.eval(head.action,{ps:this.parStore,head:head})
+        //    }else if(this.ops.length>1){
+        //        this.actionVisible = true
+        //    }
+        //},
         onSelectAction: function onSelectAction(action) {
             ex.eval(action.action, { ps: this.parStore, head: action });
             this.actionVisible = false;
         }
     }
+});
+
+Vue.component('com-nav-vant-icon', {
+    props: ['ctx'],
+    template: '<div class="com-nav-vant-icon">\n      <van-icon  :name="ctx.name" />\n    </div>'
 });
 
 /***/ }),

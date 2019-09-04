@@ -68,15 +68,26 @@ class ModelTableMobile(ModelTable):
         fieldCls = director.get(director_name+'.edit')     
         if  fieldCls:
             #fieldobj=fieldCls(crt_user=self.crt_user)
+            # 这里用name是逼不得已，因为vant只接受name作为其label
             ops = [
-                {'name':'新建','basename':'add_new','action':'scope.ps.newRow().then((row)=>{var fields_ctx = named_ctx["%(editor_director_name)s"]; fields_ctx.row=row;fields_ctx.table_par=scope.ps; live_root.open_live("live_fields",fields_ctx)   })'%{'editor_director_name':director_name+'.edit'}}
+                {'name':'add_new',
+                 'label':'新增',
+                 'icon_editor':'com-nav-vant-icon',
+                 'icon_ctx':{'name':'plus'},
+                 'level':'rigth-top',
+                 'action':'scope.ps.newRow().then((row)=>{var fields_ctx = named_ctx["%(editor_director_name)s"]; fields_ctx.row=row;fields_ctx.table_par=scope.ps; live_root.open_live("live_fields",fields_ctx)   })'%{'editor_director_name':director_name+'.edit'}}
             ]
         
         filter_obj = self.filterForm()
         filter_obj.set_filter(self.row_filter)
         if self.row_filter.names and self.filterForm:
             ops += [
-                 {'name':'查询','action':'scope.head.filter_ctx.title="查询条件";scope.head.filter_ctx.row=scope.ps.search_args;live_root.open_live("live_fields",scope.head.filter_ctx)',
+                 {'name':'search',
+                  'label':'查询',
+                  'icon_editor':'com-nav-vant-icon',
+                 'icon_ctx':{'name':'search'},
+                 'level':'rigth-top',
+                  'action':'scope.head.filter_ctx.title="查询条件";scope.head.filter_ctx.row=scope.ps.search_args;live_root.open_live("live_fields",scope.head.filter_ctx)',
                      'filter_ctx':filter_obj.get_head_context()}
             ]
         return ops
