@@ -81,17 +81,19 @@ var mix_fields_data ={
         }
     },
     methods:{
-        updateRowBk:function(director_name,data){
-            // 后端可以控制，直接更新row数据
-            cfg.show_load()
-            ex.director_call(director_name,data).then(row=>{
-                cfg.hide_load()
-                if(this.par_row){
-                    ex.vueAssign(this.par_row,row)
-                }
-                ex.vueAssign(this.row,row)
-            })
-        },
+        //updateRowBk:function(director_name,data){
+        //    // 后端可以控制，直接更新row数据
+        //    // 该函数废弃，替换为 直接调用 ex.director_call .then
+        //
+        //    cfg.show_load()
+        //    ex.director_call(director_name,data).then(resp=>{
+        //        cfg.hide_load()
+        //        if(this.par_row){
+        //            ex.vueAssign(this.par_row,resp.row)
+        //        }
+        //        ex.vueAssign(this.row,resp.row)
+        //    })
+        //},
         on_operation:function(op){
             if(op.action){
                 ex.eval(op.action,{vc:this,row:this.row,head:this.head})
@@ -190,7 +192,10 @@ var mix_fields_data ={
                             }
                         }, function(index, layero){
                             layer.close(index)
-                            self.updateRowBk(self.row._director_name,{pk:self.row.pk})
+                            ex.director_call(self.row._director_name,{pk:self.row.pk}).then(resp=>{
+                                ex.vueAssign(self.row,resp.row)
+                            })
+                            //self.updateRowBk(self.row._director_name,{pk:self.row.pk})
                         }, function(index){
                             layer.close(index)
                             self.row.meta_hash_fields=''
