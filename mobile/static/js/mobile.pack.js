@@ -701,19 +701,19 @@ var mix_fields_data = {
         }
     },
     methods: {
-        updateRowBk: function updateRowBk(director_name, data) {
-            var _this = this;
-
-            // 后端可以控制，直接更新row数据
-            cfg.show_load();
-            ex.director_call(director_name, data).then(function (row) {
-                cfg.hide_load();
-                if (_this.par_row) {
-                    ex.vueAssign(_this.par_row, row);
-                }
-                ex.vueAssign(_this.row, row);
-            });
-        },
+        //updateRowBk:function(director_name,data){
+        //    // 后端可以控制，直接更新row数据
+        //    // 该函数废弃，替换为 直接调用 ex.director_call .then
+        //
+        //    cfg.show_load()
+        //    ex.director_call(director_name,data).then(resp=>{
+        //        cfg.hide_load()
+        //        if(this.par_row){
+        //            ex.vueAssign(this.par_row,resp.row)
+        //        }
+        //        ex.vueAssign(this.row,resp.row)
+        //    })
+        //},
         on_operation: function on_operation(op) {
             if (op.action) {
                 ex.eval(op.action, { vc: this, row: this.row, head: this.head });
@@ -779,7 +779,7 @@ var mix_fields_data = {
             });
         },
         save: function save() {
-            var _this2 = this;
+            var _this = this;
 
             /*三种方式设置after_save
             * 1. ps.submit().then((new_row)=>{ps.update_or_insert(new_row)})
@@ -810,7 +810,10 @@ var mix_fields_data = {
                             }
                         }, function (index, layero) {
                             layer.close(index);
-                            self.updateRowBk(self.row._director_name, { pk: self.row.pk });
+                            ex.director_call(self.row._director_name, { pk: self.row.pk }).then(function (resp) {
+                                ex.vueAssign(self.row, resp.row);
+                            });
+                            //self.updateRowBk(self.row._director_name,{pk:self.row.pk})
                         }, function (index) {
                             layer.close(index);
                             self.row.meta_hash_fields = '';
@@ -819,8 +822,8 @@ var mix_fields_data = {
                         //cfg.showMsg(rt._outdate)
                     } else {
                         ex.vueAssign(self.row, rt.row);
-                        if (_this2.head && _this2.head.after_save && typeof _this2.head.after_save == 'string') {
-                            ex.eval(_this2.head.after_save, { ps: self.parStore, vc: self, row: rt.row });
+                        if (_this.head && _this.head.after_save && typeof _this.head.after_save == 'string') {
+                            ex.eval(_this.head.after_save, { ps: self.parStore, vc: self, row: rt.row });
                         } else {
                             // 调用组件默认的
                             self.after_save(rt.row);
