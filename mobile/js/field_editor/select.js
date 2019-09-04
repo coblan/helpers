@@ -45,9 +45,6 @@ Vue.component('com-field-select',{
     },
     watch:{
         my_value:function(v){
-            Vue.nextTick(()=>{
-                $(this.$el).find('input').isValid()
-            })
             this.$emit('input',v)
         }
     },
@@ -94,6 +91,9 @@ Vue.component('com-field-select',{
             Vue.set( this.row,this.head.name,v.value)
             //this.row[this.head.name] = v.value
             this.show=false
+            Vue.nextTick(()=>{
+                $(this.$el).find('input').isValid()
+            })
         }
     }
 })

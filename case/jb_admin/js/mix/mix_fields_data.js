@@ -199,25 +199,22 @@ var mix_fields_data ={
                         //cfg.showMsg(rt._outdate)
                     }else{
                         ex.vueAssign(self.row,rt.row)
-                        if(!resolve){
-                            if(this.head && this.head.after_save && typeof this.head.after_save =='string'){
-                                ex.eval(this.head.after_save,{ps:self.parStore,vc:self,row:rt.row})
-                            }else{
-                                // 调用组件默认的
-                                self.after_save(rt.row)
-                                if(resp.msg || rt.msg){
-                                    //cfg.hide_load()
-                                    cfg.showMsg(resp.msg || rt.msg)
-                                }else{
-                                    cfg.toast('操作成功！',{time: 1000})
-                                }
-                            }
+                        if(this.head && this.head.after_save && typeof this.head.after_save =='string'){
+                            ex.eval(this.head.after_save,{ps:self.parStore,vc:self,row:rt.row})
                         }else{
-                            resolve(rt.row)
+                            // 调用组件默认的
+                            self.after_save(rt.row)
+                            if(resp.msg || rt.msg){
+                                //cfg.hide_load()
+                                cfg.showMsg(resp.msg || rt.msg)
+                            }else{
+                                cfg.toast('操作成功！',{time: 1000})
+                            }
                         }
+
                         self.setErrors({})
                         self.$emit('finish',rt.row)
-
+                        resolve(rt.row)
                     }
                 })
             })

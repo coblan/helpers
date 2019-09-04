@@ -20,7 +20,7 @@ var live_list={
       @load="onLoad"
     >
     <van-pull-refresh v-model="freshing" @refresh="onRefresh">
-        <component :is="table_editor" :heads="ctx.heads" :rows="childStore.rows"  @select="triggerBlockClick($event)"></component>
+        <component class="content-wrap" :is="table_editor" :heads="ctx.heads" :rows="childStore.rows"  @select="triggerBlockClick($event)"></component>
     </van-pull-refresh>
     </van-list>
 

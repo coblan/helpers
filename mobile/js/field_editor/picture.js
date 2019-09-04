@@ -2,7 +2,7 @@ require('./styl/picture.styl')
 
 export var com_picture = {
     props:['row','head'],
-    template:` <van-cell class="com-field-picture" :title="head.label" >
+    template:` <van-cell class="com-field-picture" :class="{'van-cell--required':head.required}" :title="head.label" >
         <template v-if="!head.readonly">
              <textarea style="display: none;" :name="head.name" id="" cols="30" rows="10" v-model="row[head.name]"></textarea>
             <div class="picture-panel" style="vertical-align: top" >
