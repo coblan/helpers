@@ -7,6 +7,8 @@ require('./styl/vant_conf.styl')
 //------------------
 import *  as  mix_fields_data from 'jb_admin/mix/mix_fields_data'
 import *  as  mix_nice_validator from 'jb_admin/mix/mix_nice_validator'
+import *  as  nice_validator_rul from 'jb_admin/nice_validator_rule'
+
 //
 
 import * as config from  './config.js'
