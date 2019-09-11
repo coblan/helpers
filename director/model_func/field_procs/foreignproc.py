@@ -1,6 +1,6 @@
 # encoding:utf-8
 from ..field_proc  import BaseFieldProc
-from django.db.models import ForeignKey
+from django.db.models import ForeignKey,OneToOneField
 from django.core.exceptions import ObjectDoesNotExist
 from .. .base_data import field_map
 from django.utils.translation import ugettext as _
@@ -64,5 +64,6 @@ class ForeignProc(BaseFieldProc):
 
 
 field_map.update({
-    ForeignKey:ForeignProc
+    ForeignKey:ForeignProc,
+    OneToOneField:ForeignProc
 })

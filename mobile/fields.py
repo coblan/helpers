@@ -8,13 +8,19 @@ class ModelFieldsMobile(ModelFields):
         if self.permit.changeable_fields():
             return [
                 { 'name':'save','editor':'com-op-submit','label':'确定', 
-                  'action':''' scope.ps.vc.submit()
-                  .then(row=>{
-                       cfg.toast("保存成功"); 
-                       if(scope.ps.vc.par_row){
+                  'default_after_save':'''cfg.toast("保存成功");
+                  if(scope.ps.vc.par_row){
                             ex.vueAssign(scope.ps.vc.par_row,row)
                             } 
-                       }) '''}
+                            ''',
+                  'action':'''if(!scope.ps.vc.ctx.after_save){scope.ps.vc.ctx.after_save=scope.head.default_after_save}; scope.ps.vc.submit()'''}
+                
+                #.then(row=>{
+                       #cfg.toast("保存成功"); 
+                       #if(scope.ps.vc.par_row){
+                            #ex.vueAssign(scope.ps.vc.par_row,row)
+                            #} 
+                       #})
             ]
         else:
             return []
@@ -23,5 +29,10 @@ class FieldsMobile(Fields):
     def get_operations(self):
         return [
             { 'name':'save','editor':'com-op-submit','label':'确定', 
-              'action':'scope.ps.vc.submit().then(row=>{cfg.toast("保存成功"); ex.vueAssign(scope.ps.vc.par_row,row)})'}
+              'default_after_save':'''cfg.toast("保存成功");
+              if(scope.ps.vc.par_row){
+                    ex.vueAssign(scope.ps.vc.par_row,row)
+                    } 
+              ''',
+              'action':'if(!scope.ps.vc.ctx.after_save){scope.ps.vc.ctx.after_save=scope.head.default_after_save}; scope.ps.vc.submit()'}
         ]

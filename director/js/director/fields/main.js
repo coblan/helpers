@@ -49,7 +49,7 @@
 //import {load_js,load_css} from '../dosome/pkg.js'
 require('./scss/fields_panel.scss')
 
-import {hook_ajax_msg,hook_ajax_csrf,show_upload,hide_upload} from './ajax_fun.js'
+//import {hook_ajax_msg,hook_ajax_csrf,show_upload,hide_upload} from './ajax_fun.js'
 import * as f from './file.js'
 import * as ck from './ckeditor.js'
 import * as multi from './multi_sel.js'
@@ -65,8 +65,8 @@ import  {order_by_key} from './order.js'
 import  table_fields from  './table_fields.js'
 
 
-hook_ajax_msg()
-hook_ajax_csrf()
+//hook_ajax_msg()
+//hook_ajax_csrf()
 
 
 

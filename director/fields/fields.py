@@ -70,7 +70,10 @@ class ModelFields(forms.ModelForm):
                 如果在dc中传入默认值，第一次返回前端时，没有值，因为初始化时，不会调用 save_form 函数。
                 
              当get 时，dc是前端传来的url参数，排除pk后的额外的字典。（用处不大）
-             
+        
+        * 后端设置默认值:    1. 在clean_dict 中设置 ; 
+                            2. 在clean_save中设置时，但是经历了 clean函数，可能验证不能通过
+        
         """
         self.kw = kw.copy()
         

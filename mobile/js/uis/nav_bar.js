@@ -8,7 +8,7 @@ Vue.component('com-uis-nav-bar',{
  <!--@click-right="onClickRight"-->
     <van-nav-bar
             :title="title"
-            :left-arrow="back"
+            :left-arrow="can_back"
             @click-left="onClickLeft">
      <div slot="right">
          <component v-for="op in right_top"  :is="op.icon_editor" :ctx="op.icon_ctx"
@@ -32,6 +32,13 @@ Vue.component('com-uis-nav-bar',{
         }
     },
     computed:{
+        can_back(){
+            if(this.back){
+                return this.back
+            }else{
+                return  this.$root.stack.length >1
+            }
+        },
         right_top(){
             var myops = ex.filter(this.ops,(item)=>{
                 return item.level=='rigth-top'

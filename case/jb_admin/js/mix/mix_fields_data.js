@@ -128,9 +128,10 @@ var mix_fields_data ={
             })
 
             if(!ex.isEmpty(errors)){
-                layer.alert(
-                    JSON.stringify(errors)
-                )
+                cfg.showMsg(  JSON.stringify(errors)  )
+                //layer.alert(
+                //    JSON.stringify(errors)
+                //)
             }
 
         },
@@ -230,6 +231,7 @@ var mix_fields_data ={
 
             //ex.assign(this.row,new_row)
             //TODO 配合 table_pop_fields ，tab-fields 统一处理 after_save的问题
+
 
 
         },
