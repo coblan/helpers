@@ -30,7 +30,7 @@ class MobileLogin(FieldsPage):
             
         def get_heads(self):
             return [
-                 {'name':'username','label':'用户名','editor':'com-field-linetext','required':True},
+                 {'name':'username','label':'账号','editor':'com-field-linetext','required':True},
                  {'name':'password','label':'密码','editor':'com-field-password','required':True},
             ]
         
@@ -48,7 +48,7 @@ class MobileLogin(FieldsPage):
             password=self.kw.get('password')
 
             if not username or not password:
-                raise UserWarning('必须输入用户名和密码') 
+                raise UserWarning('必须输入账号和密码') 
             user= auth.authenticate(username=username,password=password)  
             if user: 
                 if user.is_active:

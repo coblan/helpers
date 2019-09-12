@@ -53,7 +53,8 @@ class ModelTableMobile(ModelTable):
         if not editor_director in director_name:
             fom = fieldCls()
             form_ctx = fom.get_head_context()
-            form_ctx['after_save']='scope.vc.ctx.table_par.update_or_insert(scope.row)'
+            if 'after_save' not in form_ctx:
+                form_ctx['after_save']='cfg.toast("保存成功"); scope.vc.ctx.table_par.update_or_insert(scope.row);'
             named_ctx[editor_director] = form_ctx
 
         ctx.update( {

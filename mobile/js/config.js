@@ -102,9 +102,12 @@ ex.assign(cfg,{
         }
     },
     toast(msg){
-        MINT.Toast(msg)
+        return MINT.Toast(msg)
         //MINT.Toast({duration:10000,message:'sdgdsggg'})
         //vant.Toast(msg,{zIndex:999999});
+    },
+    toast_success(msg){
+        vant.Toast.success(msg)
     }
 })
 

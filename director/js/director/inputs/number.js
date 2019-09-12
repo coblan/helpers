@@ -1,11 +1,12 @@
 var number = {
     props:['row','head'],
 
-        template: `<div :class="['com-field-number','field-'+head.name,head.class]">
+        template: `<div :class="['com-field-number','field-'+head.name,head.class]" >
         <!--<span v-if='head.readonly' v-text='row[head.name]'></span>-->
       <div class="input-group" >
       <div class="input-group-addon" v-if="head.prefix" v-html="head.prefix"></div>
     	<input  type="text" class="form-control input-sm" v-model="row[head.name]" :id="'id_'+head.name"
+    	                :style="{width:head.width}"
             		    :name="head.name" :step="head.step"
             		     @keypress="isNumber($event)"
             		    :readonly="head.readonly"
@@ -19,11 +20,11 @@ var number = {
         //}
     },
     mounted(){
-        if(this.head.width){
-            var width = this.head.width
-            var myclass ='.com-field-number.field-'+this.head.name
-            ex.append_css(`${myclass} input{width:${width} !important`)
-        }
+        //if(this.head.width){
+        //    var width = this.head.width
+        //    var myclass ='.com-field-number.field-'+this.head.name
+        //    ex.append_css(`${myclass} input{width:${width} !important`)
+        //}
     },
         methods:{
             isNumber:function(evt){
