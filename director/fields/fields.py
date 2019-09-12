@@ -93,7 +93,14 @@ class ModelFields(forms.ModelForm):
                 except self._meta.model.DoesNotExist:
                     raise Http404('Id=%s that you request is not exist'%pk)
             else:
-                init_dc = {k:v for k in self.kw if k in self._meta.fields}
+                # 前端初始化字段值，在 add_new opertions里面添加 pre_set:'rt={}'
+                field_names = []
+                for field in self._meta.model._meta.get_fields():
+                    if isinstance(field,models.ForeignKey):
+                        field_names.append('%s_id'%field.name)
+                    else:
+                        field_names.append(field.name)
+                init_dc = {k:v for k,v in self.kw.items() if k in field_names}
                 form_kw['instance'] = self._meta.model(**init_dc) #(**self.kw)
         else:
             form_kw['instance']=kw.pop('instance')

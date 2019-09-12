@@ -14,7 +14,7 @@ var el_tab = {
                                  :name="tab.name">
                         <span slot="label" v-text="tab.label" ></span>
 
-                        <component :is="tab.com" :tab_head="tab"
+                        <component :is="tab.com || tab.editor" :tab_head="tab"
                                    :par_row="ctx.par_row"
                                    :ref="'_tab_'+tab.name" @tab-event="up_event($event)"></component>
 
@@ -26,6 +26,11 @@ var el_tab = {
                            :par_row="ctx.par_row"
                            :ref="'_tab_'+tab.name" @tab-event="up_event($event)"></component>
     </div>`,
+    data(){
+        return {
+            is_mounted:false
+        }
+    },
    watch:{
        //'ctx.crt_tab_name':function (v){
        //     this.show_tab(v)
@@ -35,6 +40,7 @@ var el_tab = {
 
     },
     mounted:function(){
+        this.is_mounted  = true
         this.show_tab(this.ctx.crt_tab_name)
     },
     computed:{
@@ -58,11 +64,13 @@ var el_tab = {
             //this.crt_tab_name = name
             // 当tab页面点击进入时
             var self =this
-            Vue.nextTick(function(){
-                if(self.$refs['_tab_'+name][0].on_show){
-                    self.$refs['_tab_'+name][0].on_show()
-                }
-            })
+            if(this.is_mounted){
+                Vue.nextTick(function(){
+                    if(self.$refs['_tab_'+name][0].on_show){
+                        self.$refs['_tab_'+name][0].on_show()
+                    }
+                })
+            }
         },
         handleClick(tab, event) {
             this.show_tab(tab.name)
