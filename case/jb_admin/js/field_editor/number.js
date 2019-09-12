@@ -2,16 +2,16 @@ var number = {
     props:['row','head'],
 
         template: `<div :class="['com-field-number','field-'+head.name,head.class]" >
-        <!--<span v-if='head.readonly' v-text='row[head.name]'></span>-->
-      <div class="input-group" >
-      <div class="input-group-addon" v-if="head.prefix" v-html="head.prefix"></div>
-    	<input  type="text" class="form-control input-sm" v-model="row[head.name]" :id="'id_'+head.name"
-    	                :style="{width:head.width}"
-            		    :name="head.name" :step="head.step"
-            		     @keypress="isNumber($event)"
-            		    :readonly="head.readonly"
-                        :placeholder="head.placeholder" :autofocus="head.autofocus">
-      <div class="input-group-addon" v-if="head.suffix" v-html="head.suffix"></div>
+       <span v-if='head.readonly && !head.prefix && !head.suffix' v-text='row[head.name]'></span>
+      <div v-else class="input-group" >
+          <div class="input-group-addon" v-if="head.prefix" v-html="head.prefix"></div>
+            <input  type="text" class="form-control input-sm" v-model="row[head.name]" :id="'id_'+head.name"
+                            :style="{width:head.width}"
+                            :name="head.name" :step="head.step"
+                             @keypress="isNumber($event)"
+                            :readonly="head.readonly"
+                            :placeholder="head.placeholder" :autofocus="head.autofocus">
+          <div class="input-group-addon" v-if="head.suffix" v-html="head.suffix"></div>
     </div>
          </div>`,
     created(){
