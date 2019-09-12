@@ -112,13 +112,9 @@ Vue.component('field',field)
 
 
 window.field_fun=field_fun
-window.hook_ajax_msg=hook_ajax_msg
-//window.update_vue_obj=update_vue_obj
-//window.use_ckeditor= ck.use_ckeditor
-window.show_upload =show_upload
-window.hide_upload =hide_upload
-//window.merge=merge;
-//window.BackOps=BackOps
-//window.back_ops=back_ops
+//window.hook_ajax_msg=hook_ajax_msg
+
+//window.show_upload =show_upload
+//window.hide_upload =hide_upload
 window.order_by_key=order_by_key
 

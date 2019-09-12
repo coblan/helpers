@@ -641,7 +641,9 @@ class Fields(ModelFields):
         return ls 
     
     def dict_row(self):
-        return {}
+        return {
+            '_director_name':self.get_director_name()
+        }
     
     def get_row(self): 
         row= self.dict_row()

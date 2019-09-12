@@ -1439,6 +1439,10 @@ var _image_editor = __webpack_require__(48);
 
 var image_editor = _interopRequireWildcard(_image_editor);
 
+var _layout_grid = __webpack_require__(118);
+
+var layout_grid = _interopRequireWildcard(_layout_grid);
+
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 /***/ }),
@@ -1503,10 +1507,6 @@ var slide_iframe = _interopRequireWildcard(_slide_iframe);
 var _fields_panel = __webpack_require__(56);
 
 var fields_panel = _interopRequireWildcard(_fields_panel);
-
-var _layout_grid = __webpack_require__(57);
-
-var layout_grid = _interopRequireWildcard(_layout_grid);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -3635,30 +3635,7 @@ Vue.component('com-fields-panel', {
 });
 
 /***/ }),
-/* 57 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-__webpack_require__(115);
-
-Vue.component('com-layout-grid', {
-    props: ['ctx'],
-    template: '<div class="com-layout-grid">\n        <component :is="head.editor" v-for="head in ctx.heads" :ctx="head"></component>\n    </div>'
-});
-
-Vue.component('com-grid-icon-btn', {
-    props: ['ctx'],
-    template: '<div class="grid-3" @click="on_click()">\n     <img :src="ctx.icon" alt="">\n     <div class="label" v-text="ctx.label"></div>\n    </div>',
-    methods: {
-        on_click: function on_click() {
-            ex.eval(this.ctx.action, { head: this.ctx });
-        }
-    }
-});
-
-/***/ }),
+/* 57 */,
 /* 58 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -4418,20 +4395,7 @@ exports.push([module.i, ".com-fileds-panel {\n  background-color: #f8f8f8;\n}\n.
 
 
 /***/ }),
-/* 90 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(0)();
-// imports
-
-
-// module
-exports.push([module.i, ".com-layout-grid {\n  position: relative;\n  overflow: hidden;\n}\n.com-layout-grid:before {\n  content: \" \";\n  position: absolute;\n  left: 0;\n  top: 0;\n  right: 0;\n  height: 1px;\n  border-top: 1px solid #d9d9d9;\n  color: #d9d9d9;\n  -webkit-transform-origin: 0 0;\n  transform-origin: 0 0;\n  -webkit-transform: scaleY(0.5);\n  transform: scaleY(0.5);\n}\n.com-layout-grid:after {\n  content: \" \";\n  position: absolute;\n  left: 0;\n  top: 0;\n  width: 1px;\n  bottom: 0;\n  border-left: 1px solid #d9d9d9;\n  color: #d9d9d9;\n  -webkit-transform-origin: 0 0;\n  transform-origin: 0 0;\n  -webkit-transform: scaleX(0.5);\n  transform: scaleX(0.5);\n}\n.grid-3 {\n  position: relative;\n  float: left;\n  padding: 20px 10px;\n  width: 33.33333333%;\n  box-sizing: border-box;\n  text-align: center;\n}\n.grid-3:before {\n  content: \" \";\n  position: absolute;\n  right: 0;\n  top: 0;\n  width: 1px;\n  bottom: 0;\n  border-right: 1px solid #d9d9d9;\n  color: #d9d9d9;\n  -webkit-transform-origin: 100% 0;\n  transform-origin: 100% 0;\n  -webkit-transform: scaleX(0.5);\n  transform: scaleX(0.5);\n}\n.grid-3:after {\n  content: \" \";\n  position: absolute;\n  left: 0;\n  bottom: 0;\n  right: 0;\n  height: 1px;\n  border-bottom: 1px solid #d9d9d9;\n  color: #d9d9d9;\n  -webkit-transform-origin: 0 100%;\n  transform-origin: 0 100%;\n  -webkit-transform: scaleY(0.5);\n  transform: scaleY(0.5);\n}\n.grid-3 img {\n  max-width: 50%;\n  height: 0.8rem;\n}\n.grid-3 .label {\n  padding-top: 0.2rem;\n}\n", ""]);
-
-// exports
-
-
-/***/ }),
+/* 90 */,
 /* 91 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -5020,32 +4984,7 @@ if(false) {
 }
 
 /***/ }),
-/* 115 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(90);
-if(typeof content === 'string') content = [[module.i, content, '']];
-// add the styles to the DOM
-var update = __webpack_require__(1)(content, {});
-if(content.locals) module.exports = content.locals;
-// Hot Module Replacement
-if(false) {
-	// When the styles change, update the <style> tags
-	if(!content.locals) {
-		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./layout_grid.styl", function() {
-			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./layout_grid.styl");
-			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-			update(newContent);
-		});
-	}
-	// When the module is disposed, remove the <style> tags
-	module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
+/* 115 */,
 /* 116 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -5170,6 +5109,76 @@ __webpack_require__(27);
 
 
 //
+
+/***/ }),
+/* 118 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+__webpack_require__(120);
+
+Vue.component('com-layout-grid', {
+    props: ['ctx'],
+    template: '<div class="com-layout-grid">\n        <component :is="head.editor" v-for="head in ctx.heads" :ctx="head"></component>\n    </div>'
+});
+
+Vue.component('com-grid-icon-btn', {
+    props: ['ctx'],
+    template: '<div class="grid-3" @click="on_click()">\n     <img :src="ctx.icon" alt="">\n     <div class="label" v-text="ctx.label"></div>\n    </div>',
+    data: function data() {
+        return {
+            parStore: ex.vueParStore(this)
+        };
+    },
+
+    methods: {
+        on_click: function on_click() {
+            ex.eval(this.ctx.action, { head: this.ctx, ps: this.parStore });
+        }
+    }
+});
+
+/***/ }),
+/* 119 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(0)();
+// imports
+
+
+// module
+exports.push([module.i, ".com-layout-grid {\n  position: relative;\n  overflow: hidden;\n}\n.com-layout-grid:before {\n  content: \" \";\n  position: absolute;\n  left: 0;\n  top: 0;\n  right: 0;\n  height: 1px;\n  border-top: 1px solid #d9d9d9;\n  color: #d9d9d9;\n  -webkit-transform-origin: 0 0;\n  transform-origin: 0 0;\n  -webkit-transform: scaleY(0.5);\n  transform: scaleY(0.5);\n}\n.com-layout-grid:after {\n  content: \" \";\n  position: absolute;\n  left: 0;\n  top: 0;\n  width: 1px;\n  bottom: 0;\n  border-left: 1px solid #d9d9d9;\n  color: #d9d9d9;\n  -webkit-transform-origin: 0 0;\n  transform-origin: 0 0;\n  -webkit-transform: scaleX(0.5);\n  transform: scaleX(0.5);\n}\n.grid-3 {\n  position: relative;\n  float: left;\n  padding: 20px 10px;\n  width: 33.33333333%;\n  box-sizing: border-box;\n  text-align: center;\n}\n.grid-3:before {\n  content: \" \";\n  position: absolute;\n  right: 0;\n  top: 0;\n  width: 1px;\n  bottom: 0;\n  border-right: 1px solid #d9d9d9;\n  color: #d9d9d9;\n  -webkit-transform-origin: 100% 0;\n  transform-origin: 100% 0;\n  -webkit-transform: scaleX(0.5);\n  transform: scaleX(0.5);\n}\n.grid-3:after {\n  content: \" \";\n  position: absolute;\n  left: 0;\n  bottom: 0;\n  right: 0;\n  height: 1px;\n  border-bottom: 1px solid #d9d9d9;\n  color: #d9d9d9;\n  -webkit-transform-origin: 0 100%;\n  transform-origin: 0 100%;\n  -webkit-transform: scaleY(0.5);\n  transform: scaleY(0.5);\n}\n.grid-3 img {\n  max-width: 50%;\n  height: 0.8rem;\n}\n.grid-3 .label {\n  padding-top: 0.2rem;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 120 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(119);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// add the styles to the DOM
+var update = __webpack_require__(1)(content, {});
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./layout_grid.styl", function() {
+			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./layout_grid.styl");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
 
 /***/ })
 /******/ ]);
