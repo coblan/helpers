@@ -139,7 +139,7 @@ class BaseEngine(object):
             named_ctx = get_request_cache()['named_ctx']
             if ctx.get('named_ctx'):
                 named_ctx.update(ctx.get('named_ctx'))
-            ctx['named_ctx'] = named_ctx
+            ctx['named_ctx'] = evalue_container( named_ctx)
             
             ctx['brand'] = self.brand
             ctx['title'] = self.title
