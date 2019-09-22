@@ -111,6 +111,7 @@ var mix_fields_data ={
         },
         setErrors:function(errors){
             // errors:{field:['xxx','bbb']}
+            var self=this
             var errors=ex.copy(errors)
             if(!this.heads){
                 return
@@ -119,10 +120,12 @@ var mix_fields_data ={
                 if(errors[head.name]){
                     Vue.set(head,'error',errors[head.name].join(';'))
                     delete errors[head.name]
+
                 }else if(head.error){
                     //delete head.error
                     //Vue.delete(head,'error')
                     Vue.set(head,'error','')
+                    $(self.$el).find(`[name=${head.name}]`).trigger("hidemsg")
                     //Vue.set(head,'error',null)
                 }
             })
