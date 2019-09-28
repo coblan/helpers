@@ -123,6 +123,7 @@ var mix_fields_data ={
         },
         setErrors:function(errors){
             // errors:{field:['xxx','bbb']}
+            var self=this
             var errors=ex.copy(errors)
             if(!this.heads){
                 return
@@ -131,10 +132,12 @@ var mix_fields_data ={
                 if(errors[head.name]){
                     Vue.set(head,'error',errors[head.name].join(';'))
                     delete errors[head.name]
+
                 }else if(head.error){
                     //delete head.error
                     //Vue.delete(head,'error')
                     Vue.set(head,'error','')
+                    $(self.$el).find(`[name=${head.name}]`).trigger("hidemsg")
                     //Vue.set(head,'error',null)
                 }
             })
@@ -243,8 +246,11 @@ var mix_fields_data ={
 
             //ex.assign(this.row,new_row)
             //TODO 配合 table_pop_fields ，tab-fields 统一处理 after_save的问题
-
-
+            if(this.par_row){
+                if(this.par_row._director_name == new_row._director_name && this.par_row.pk == new_row.pk){
+                    ex.vueAssign(this.par_row,new_row)
+                }
+            }
 
         },
         showErrors:function(errors){

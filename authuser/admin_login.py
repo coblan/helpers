@@ -56,6 +56,10 @@ def do_login(username,password,auto_login=False):
     else:
         return {'errors':form.errors}
         
+@director_view('do_logout')
+def do_logout(**kw):
+    request = get_request_cache()['request']
+    auth.logout(request)
     
     #class fieldsCls(ModelFields):
         #field_sort = ['username', 'password', 'pswd2', 'validate_code', 'email']

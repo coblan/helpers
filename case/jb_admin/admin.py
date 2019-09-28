@@ -92,7 +92,32 @@ class UserFields(ModelFields):
             target_user.set_password(pswd)
             #target_user.save()            
             
-        
+class UserPicker(ModelTable):
+    model = User
+    exclude = []
+    fields_sort=['id','username','first_name']
+    def dict_head(self, head):
+        width = {
+            'username':160,
+            'first_name':230
+        }
+        if head['name'] in width:
+            head['width'] = width[head['name']]
+        if head['name'] =='username':
+            head['editor'] = 'com-table-foreign-click-select'
+        return head
+    
+    def get_head_context(self):
+        ctx = super().get_head_context()
+        ctx.update({
+            'init_express':'scope.ps.search()',
+            'ops_loc':'bottom'
+        })
+        return ctx
+    
+    class filters(RowFilter):
+        names=['username','first_name']
+        icontains = ['username','first_name']
 
 class GroupPage(TablePage):
     template='jb_admin/table.html'
@@ -258,6 +283,7 @@ def list2tree(ls):
 director.update({
     'jb_user': UserPage.tableCls,
     'jb_user.edit': UserFields,
+    'user.picker':UserPicker,
     'jb_group': GroupPage.tableCls,
     'jb_group.edit': GroupForm,
 })
