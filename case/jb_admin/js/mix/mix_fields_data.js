@@ -36,7 +36,9 @@ var mix_fields_data ={
         ex.each(this.heads,function(head){
             if(typeof head.readonly=='string'){
                 head._org_readonly=head.readonly
-                head.readonly=ex.eval(head._org_readonly,{row:self.row})
+                var is_readonly = ex.eval(head._org_readonly,{row:self.row})
+                Vue.set(head,'readonly',is_readonly)
+                //head.readonly=ex.eval(head._org_readonly,{row:self.row})
             }
             if(typeof head.required=='string'){
                 head._org_required=head.required
@@ -53,7 +55,8 @@ var mix_fields_data ={
             var self=this
             ex.each(self.heads,function(head){
                 if( head._org_readonly){
-                    head.readonly=ex.eval(head._org_readonly,{row:self.row})
+                    var is_readonly = ex.eval(head._org_readonly,{row:self.row})
+                    Vue.set(head,'readonly',is_readonly)
                 }
                 if( head._org_required){
                     head.required=ex.eval(head._org_required,{row:self.row})
@@ -78,6 +81,15 @@ var mix_fields_data ={
                 }
             })
             return heads
+        },
+        normed_ops(){
+            return ex.filter(this.ops,op=>{
+                if(op.show){
+                    return ex.eval(op.show,{vc:this})
+                }else{
+                    return true
+                }
+            })
         }
     },
     methods:{

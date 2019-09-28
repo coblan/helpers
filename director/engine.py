@@ -36,7 +36,7 @@ from django.shortcuts import render
 from django.core.urlresolvers import reverse
 from django.shortcuts import redirect
 from django.conf import settings
-from django.http import HttpResponse,JsonResponse
+from django.http import HttpResponse,JsonResponse,Http404
 #from .model_admin import ajax
 from helpers.func.collection.container import evalue_container,find_one_r
 from .access.permit import ModelPermit,has_permit
@@ -100,6 +100,8 @@ class BaseEngine(object):
         self.engin_url =  reverse(self.url_name,args=('aa',))[:-3]
         
         page_cls = self.get_page_cls(name)
+        #if not page_cls:
+            #raise Http404()
 
         if hasattr(page_cls, 'need_login'):
             need_login = page_cls.need_login

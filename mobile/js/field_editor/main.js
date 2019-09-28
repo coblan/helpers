@@ -1,3 +1,5 @@
+require('./styl/main.styl')
+
 import * as index_select from './index_select.js'
 import * as linetext from './linetext.js'
 import * as password from './password.js'

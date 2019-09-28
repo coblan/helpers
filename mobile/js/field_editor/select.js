@@ -1,6 +1,6 @@
 Vue.component('com-field-select',{
     props:['head','row'],
-    template:`<div class="com-field-select van-cell" :class="{'van-cell--required':head.required}">
+    template:`<div class="com-field-select van-cell" :class="{'van-cell--required':head.required && !head.readonly,'readonly':head.readonly}">
        <div style="position: relative">
         <van-popup  v-model="show" position="bottom">
                 <van-picker :columns="head.options" :default-index="crt_index"

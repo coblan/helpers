@@ -2,16 +2,15 @@ require('./styl/picture.styl')
 
 export var com_picture = {
     props:['row','head'],
-    template:` <van-cell class="com-field-picture" :class="{'van-cell--required':head.required}" :title="head.label" >
+    template:` <van-cell class="com-field-picture" :class="{'van-cell--required':head.required && !head.readonly,}" :title="head.label" >
         <template v-if="!head.readonly">
              <textarea style="display: none;" :name="head.name" id="" cols="30" rows="10" v-model="row[head.name]"></textarea>
             <div class="picture-panel" style="vertical-align: top" >
-              <div v-if="!row[head.name]" class="center-vh choose-btn" @click="open_select_images()">Choose</div>
+              <div v-if="!row[head.name]" class="center-vh choose-btn" @click="open_select_images()" v-text="head.placeholder || 'Choose'"></div>
 
                <div class="picture-content" v-else
                :style="{backgroundImage:'url('+ row[head.name]  +')'}"
                @click="big_win(row[head.name])">
-                    <!--<img :src="row[head.name]" alt="">-->
                     <div v-if="!head.readonly" class="close" @click.stop='remove_image()'><i class="fa fa-times-circle" aria-hidden="true" style="color:red;position:relative;left:30px;"></i></div>
                </div>
 
@@ -20,10 +19,10 @@ export var com_picture = {
                 type='file' accept='image/*'  @change='on_change($event)'>
 
         </template>
-           <div class="picture-content" v-else
+           <div class="picture-content" v-else-if="row[head.name]"
                :style="{backgroundImage:'url('+ row[head.name]  +')'}"
                @click="big_win(row[head.name])">
-               </div>
+           </div>
 
     </van-cell>`,
     data(){

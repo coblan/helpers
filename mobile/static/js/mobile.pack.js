@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 117);
+/******/ 	return __webpack_require__(__webpack_require__.s = 119);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -384,11 +384,11 @@ function updateLink(linkElement, obj) {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-__webpack_require__(105);
+__webpack_require__(107);
 
 var com_picture = exports.com_picture = {
     props: ['row', 'head'],
-    template: ' <van-cell class="com-field-picture" :class="{\'van-cell--required\':head.required}" :title="head.label" >\n        <template v-if="!head.readonly">\n             <textarea style="display: none;" :name="head.name" id="" cols="30" rows="10" v-model="row[head.name]"></textarea>\n            <div class="picture-panel" style="vertical-align: top" >\n              <div v-if="!row[head.name]" class="center-vh choose-btn" @click="open_select_images()">Choose</div>\n\n               <div class="picture-content" v-else\n               :style="{backgroundImage:\'url(\'+ row[head.name]  +\')\'}"\n               @click="big_win(row[head.name])">\n                    <!--<img :src="row[head.name]" alt="">-->\n                    <div v-if="!head.readonly" class="close" @click.stop=\'remove_image()\'><i class="fa fa-times-circle" aria-hidden="true" style="color:red;position:relative;left:30px;"></i></div>\n               </div>\n\n            </div>\n            <input class="my-file-input"  style="display: none"\n                type=\'file\' accept=\'image/*\'  @change=\'on_change($event)\'>\n\n        </template>\n           <div class="picture-content" v-else\n               :style="{backgroundImage:\'url(\'+ row[head.name]  +\')\'}"\n               @click="big_win(row[head.name])">\n               </div>\n\n    </van-cell>',
+    template: ' <van-cell class="com-field-picture" :class="{\'van-cell--required\':head.required && !head.readonly,}" :title="head.label" >\n        <template v-if="!head.readonly">\n             <textarea style="display: none;" :name="head.name" id="" cols="30" rows="10" v-model="row[head.name]"></textarea>\n            <div class="picture-panel" style="vertical-align: top" >\n              <div v-if="!row[head.name]" class="center-vh choose-btn" @click="open_select_images()" v-text="head.placeholder || \'Choose\'"></div>\n\n               <div class="picture-content" v-else\n               :style="{backgroundImage:\'url(\'+ row[head.name]  +\')\'}"\n               @click="big_win(row[head.name])">\n                    <div v-if="!head.readonly" class="close" @click.stop=\'remove_image()\'><i class="fa fa-times-circle" aria-hidden="true" style="color:red;position:relative;left:30px;"></i></div>\n               </div>\n\n            </div>\n            <input class="my-file-input"  style="display: none"\n                type=\'file\' accept=\'image/*\'  @change=\'on_change($event)\'>\n\n        </template>\n           <div class="picture-content" v-else-if="row[head.name]"\n               :style="{backgroundImage:\'url(\'+ row[head.name]  +\')\'}"\n               @click="big_win(row[head.name])">\n           </div>\n\n    </van-cell>',
     data: function data() {
         return {};
     },
@@ -593,7 +593,7 @@ function compressImage(file, option, Orientation) {
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(85);
+var content = __webpack_require__(87);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -656,7 +656,9 @@ var mix_fields_data = {
         ex.each(this.heads, function (head) {
             if (typeof head.readonly == 'string') {
                 head._org_readonly = head.readonly;
-                head.readonly = ex.eval(head._org_readonly, { row: self.row });
+                var is_readonly = ex.eval(head._org_readonly, { row: self.row });
+                Vue.set(head, 'readonly', is_readonly);
+                //head.readonly=ex.eval(head._org_readonly,{row:self.row})
             }
             if (typeof head.required == 'string') {
                 head._org_required = head.required;
@@ -673,7 +675,8 @@ var mix_fields_data = {
             var self = this;
             ex.each(self.heads, function (head) {
                 if (head._org_readonly) {
-                    head.readonly = ex.eval(head._org_readonly, { row: self.row });
+                    var is_readonly = ex.eval(head._org_readonly, { row: self.row });
+                    Vue.set(head, 'readonly', is_readonly);
                 }
                 if (head._org_required) {
                     head.required = ex.eval(head._org_required, { row: self.row });
@@ -698,6 +701,17 @@ var mix_fields_data = {
                 }
             });
             return heads;
+        },
+        normed_ops: function normed_ops() {
+            var _this = this;
+
+            return ex.filter(this.ops, function (op) {
+                if (op.show) {
+                    return ex.eval(op.show, { vc: _this });
+                } else {
+                    return true;
+                }
+            });
         }
     },
     methods: {
@@ -782,7 +796,7 @@ var mix_fields_data = {
             });
         },
         save: function save() {
-            var _this = this;
+            var _this2 = this;
 
             /*三种方式设置after_save
             * 1. ps.submit().then((new_row)=>{ps.update_or_insert(new_row)})
@@ -825,8 +839,8 @@ var mix_fields_data = {
                         //cfg.showMsg(rt._outdate)
                     } else {
                         ex.vueAssign(self.row, rt.row);
-                        if (_this.head && _this.head.after_save && typeof _this.head.after_save == 'string') {
-                            ex.eval(_this.head.after_save, { ps: self.parStore, vc: self, row: rt.row });
+                        if (_this2.head && _this2.head.after_save && typeof _this2.head.after_save == 'string') {
+                            ex.eval(_this2.head.after_save, { ps: self.parStore, vc: self, row: rt.row });
                         } else {
                             // 调用组件默认的
                             self.after_save(rt.row);
@@ -1165,7 +1179,7 @@ $.validator.config({
 //Vue.use(Dialog);
 //import { MessageBox } from 'mint-ui';
 //import { Indicator } from 'mint-ui';
-__webpack_require__(116);
+__webpack_require__(118);
 
 // 下面的代码是为了解决移动端，ios浏览器 100vh包含navbar的高度，造成无法定位foot吸底问题。
 // 原理是声明一个css变量，--app-height 来记录 window.innerHeight,用它替代 100vh
@@ -1388,6 +1402,8 @@ var pop_table_select = _interopRequireWildcard(_pop_table_select);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
+__webpack_require__(104);
+
 /***/ }),
 /* 11 */
 /***/ (function(module, exports, __webpack_require__) {
@@ -1426,7 +1442,7 @@ var label_shower = _interopRequireWildcard(_label_shower);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
-__webpack_require__(108);
+__webpack_require__(110);
 
 /***/ }),
 /* 14 */
@@ -1439,7 +1455,7 @@ var _image_editor = __webpack_require__(48);
 
 var image_editor = _interopRequireWildcard(_image_editor);
 
-var _layout_grid = __webpack_require__(118);
+var _layout_grid = __webpack_require__(49);
 
 var layout_grid = _interopRequireWildcard(_layout_grid);
 
@@ -1452,29 +1468,29 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 "use strict";
 
 
-var _live_list = __webpack_require__(51);
+var _live_list = __webpack_require__(52);
 
 var live_list = _interopRequireWildcard(_live_list);
 
-var _live_fields = __webpack_require__(49);
+var _live_fields = __webpack_require__(50);
 
 var live_fields = _interopRequireWildcard(_live_fields);
 
-var _live_list_page = __webpack_require__(52);
+var _live_list_page = __webpack_require__(53);
 
 var live_list_page = _interopRequireWildcard(_live_list_page);
 
-var _live_layout = __webpack_require__(50);
+var _live_layout = __webpack_require__(51);
 
 var live_layout = _interopRequireWildcard(_live_layout);
 
-var _live_swip_tab = __webpack_require__(53);
+var _live_swip_tab = __webpack_require__(54);
 
 var live_swip_tab = _interopRequireWildcard(_live_swip_tab);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
-__webpack_require__(110);
+__webpack_require__(113);
 
 /***/ }),
 /* 16 */
@@ -1483,11 +1499,11 @@ __webpack_require__(110);
 "use strict";
 
 
-var _form_submit = __webpack_require__(54);
+var _form_submit = __webpack_require__(55);
 
 var form_submit = _interopRequireWildcard(_form_submit);
 
-var _van_btn = __webpack_require__(55);
+var _van_btn = __webpack_require__(56);
 
 var van_btn = _interopRequireWildcard(_van_btn);
 
@@ -1504,7 +1520,7 @@ var _slide_iframe = __webpack_require__(58);
 
 var slide_iframe = _interopRequireWildcard(_slide_iframe);
 
-var _fields_panel = __webpack_require__(56);
+var _fields_panel = __webpack_require__(57);
 
 var fields_panel = _interopRequireWildcard(_fields_panel);
 
@@ -1556,7 +1572,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-__webpack_require__(99);
+__webpack_require__(100);
 
 var PopMobileWin = function () {
     function PopMobileWin(_ref) {
@@ -1869,7 +1885,7 @@ if(false) {
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(92);
+var content = __webpack_require__(93);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -1895,7 +1911,7 @@ if(false) {
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(93);
+var content = __webpack_require__(94);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -1972,7 +1988,7 @@ Vue.component('com-ctn-scroll-table', {
 "use strict";
 
 
-__webpack_require__(100);
+__webpack_require__(101);
 
 Vue.component('com-ctn-table-van-cell', {
     props: ['heads', 'rows', 'option'],
@@ -2032,7 +2048,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 *
 * */
 
-__webpack_require__(94);
+__webpack_require__(95);
 
 var Wave = function () {
     function Wave() {
@@ -2253,7 +2269,7 @@ Vue.component('com-field-blocktext', {
 "use strict";
 
 
-__webpack_require__(101);
+__webpack_require__(102);
 
 Vue.component('com-field-bool', {
     props: ['row', 'head'],
@@ -2325,7 +2341,7 @@ Vue.component('com-field-bool', {
 "use strict";
 
 
-__webpack_require__(102);
+__webpack_require__(103);
 
 Vue.component('com-field-date', {
     props: ['head', 'row'],
@@ -2433,7 +2449,7 @@ Vue.component('com-field-number', {
 "use strict";
 
 
-__webpack_require__(95);
+__webpack_require__(96);
 
 Vue.component('com-field-index-select', {
     props: ['row', 'head'],
@@ -2540,7 +2556,7 @@ Vue.component('com-field-label-shower', {
 
 Vue.component('com-field-linetext', {
     props: ['head', 'row'],
-    template: '<van-field class="com-field-linetext"  v-model="row[head.name]" :required="head.required"\n    :label="head.label"\n    type="text"\n    :placeholder="normed_placeholder"\n    :name="head.name"\n    autosize\n    :error-message="head.error"\n    :readonly="head.readonly"\n  >\n  </van-field>',
+    template: '<van-field class="com-field-linetext" :class="{\'readonly\':head.readonly}"  v-model="row[head.name]" :required="head.required"\n    :label="head.label"\n    type="text"\n    :placeholder="normed_placeholder"\n    :name="head.name"\n    autosize\n    :error-message="head.error"\n    :readonly="head.readonly"\n  >\n  </van-field>',
     mounted: function mounted() {
         this.setup_validate_msg_router();
     },
@@ -2575,7 +2591,7 @@ Vue.component('com-field-linetext', {
 
 var _picture = __webpack_require__(2);
 
-__webpack_require__(103);
+__webpack_require__(105);
 
 var com_milti_picture = {
     props: ['row', 'head'],
@@ -2696,7 +2712,7 @@ Vue.component('com-field-phone', {
 "use strict";
 
 
-__webpack_require__(104);
+__webpack_require__(106);
 
 Vue.component('com-field-phone-code', {
     /*
@@ -2784,7 +2800,7 @@ Vue.component('com-field-phone-code', {
 "use strict";
 
 
-__webpack_require__(106);
+__webpack_require__(108);
 
 Vue.component('com-field-pop-table-select', {
     props: ['head', 'row'],
@@ -2860,7 +2876,7 @@ Vue.component('com-field-pop-search', {
 
 Vue.component('com-field-select', {
     props: ['head', 'row'],
-    template: '<div class="com-field-select van-cell" :class="{\'van-cell--required\':head.required}">\n       <div style="position: relative">\n        <van-popup  v-model="show" position="bottom">\n                <van-picker :columns="head.options" :default-index="crt_index"\n                cancel-button-text="\u6E05\u7A7A"\n                @confirm="onConfirm" @cancel="clear()" value-key="label" show-toolbar></van-picker>\n          </van-popup>\n    </div>\n\n    <van-field v-model="show_label" style="padding: 0"\n        :label="head.label"\n        type="text"\n        :placeholder="normed_placeholder"\n        @click.native="on_click()"\n        autosize\n        readonly\n        :error-message="head.error"\n        :name="head.name"\n      >\n       <!--<van-icon v-if="row[head.name]" slot="right-icon" name="cross" @click.stop="clear()" class="custom-icon" />-->\n      </van-field>\n\n\n\n    </div>\n',
+    template: '<div class="com-field-select van-cell" :class="{\'van-cell--required\':head.required && !head.readonly,\'readonly\':head.readonly}">\n       <div style="position: relative">\n        <van-popup  v-model="show" position="bottom">\n                <van-picker :columns="head.options" :default-index="crt_index"\n                cancel-button-text="\u6E05\u7A7A"\n                @confirm="onConfirm" @cancel="clear()" value-key="label" show-toolbar></van-picker>\n          </van-popup>\n    </div>\n\n    <van-field v-model="show_label" style="padding: 0"\n        :label="head.label"\n        type="text"\n        :placeholder="normed_placeholder"\n        @click.native="on_click()"\n        autosize\n        readonly\n        :error-message="head.error"\n        :name="head.name"\n      >\n       <!--<van-icon v-if="row[head.name]" slot="right-icon" name="cross" @click.stop="clear()" class="custom-icon" />-->\n      </van-field>\n\n\n\n    </div>\n',
     data: function data() {
         return {
             parStore: ex.vueParStore(this),
@@ -2942,7 +2958,7 @@ Vue.component('com-field-select', {
 "use strict";
 
 
-__webpack_require__(107);
+__webpack_require__(109);
 
 Vue.component('com-field-tree-select', {
     props: ['head', 'row'],
@@ -3133,7 +3149,7 @@ Vue.component('com-table-span', {
 "use strict";
 
 
-__webpack_require__(109);
+__webpack_require__(111);
 
 Vue.component('com-live-layout-image', {
     props: ['ctx'],
@@ -3142,6 +3158,36 @@ Vue.component('com-live-layout-image', {
 
 /***/ }),
 /* 49 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+__webpack_require__(112);
+
+Vue.component('com-layout-grid', {
+    props: ['ctx'],
+    template: '<div class="com-layout-grid">\n        <component :is="head.editor" v-for="head in ctx.heads" :ctx="head"></component>\n    </div>'
+});
+
+Vue.component('com-grid-icon-btn', {
+    props: ['ctx'],
+    template: '<div class="grid-3" @click="on_click()">\n     <img :src="ctx.icon" alt="">\n     <div class="label" v-text="ctx.label"></div>\n    </div>',
+    data: function data() {
+        return {
+            parStore: ex.vueParStore(this)
+        };
+    },
+
+    methods: {
+        on_click: function on_click() {
+            ex.eval(this.ctx.action, { head: this.ctx, ps: this.parStore });
+        }
+    }
+});
+
+/***/ }),
+/* 50 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3188,7 +3234,7 @@ var live_fields = {
 window.live_fields = live_fields;
 
 /***/ }),
-/* 50 */
+/* 51 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3235,13 +3281,13 @@ var live_layout = {
 window.live_layout = live_layout;
 
 /***/ }),
-/* 51 */
+/* 52 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(111);
+__webpack_require__(114);
 
 var live_list = {
     props: ['ctx'],
@@ -3367,13 +3413,13 @@ Vue.component('com-live-list', live_list);
 window.live_list = live_list;
 
 /***/ }),
-/* 52 */
+/* 53 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(112);
+__webpack_require__(115);
 
 var live_list_page = {
     props: ['ctx'],
@@ -3438,7 +3484,7 @@ Vue.component('com-list-list-page', live_list_page);
 window.live_list_page = live_list_page;
 
 /***/ }),
-/* 53 */
+/* 54 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3532,7 +3578,7 @@ window.live_swip_tab = {
 };
 
 /***/ }),
-/* 54 */
+/* 55 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3562,13 +3608,13 @@ var submit_btn = {
 Vue.component('com-op-submit', submit_btn);
 
 /***/ }),
-/* 55 */
+/* 56 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(113);
+__webpack_require__(116);
 
 Vue.component('com-op-van-btn', {
     props: ['head'],
@@ -3591,13 +3637,13 @@ Vue.component('com-op-van-btn', {
 });
 
 /***/ }),
-/* 56 */
+/* 57 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(114);
+__webpack_require__(117);
 
 Vue.component('com-fields-panel', {
     props: ['ctx'],
@@ -3617,7 +3663,7 @@ Vue.component('com-fields-panel', {
         };
     },
     mixins: [mix_fields_data, mix_nice_validator],
-    template: '<div class="com-fileds-panel">\n\n    <template v-if="fields_group.length > 0">\n      <van-cell-group  v-for="group in grouped_heads_bucket" :title="group.label " >\n            <component v-for="head in group.heads" :is="head.editor" :head="head" :row="row"></component>\n        </van-cell-group>\n    </template>\n    <template v-else>\n     <van-cell-group   >\n        <component v-for="head in heads" :is="head.editor" :head="head" :row="row"></component>\n    </van-cell-group>\n    </template>\n\n\n    <div style="height: .6rem">\n    </div>\n    <van-cell-group v-if="ops.length>0" class="ops">\n     <div v-for="op in ops" class="op-wrap">\n       <component :is="op.editor" :head="op"></component>\n       </div>\n    </van-cell-group>\n    </div>',
+    template: '<div class="com-fileds-panel">\n\n    <template v-if="fields_group.length > 0">\n      <van-cell-group  v-for="group in grouped_heads_bucket" :title="group.label " >\n            <component v-for="head in group.heads" :is="head.editor" :head="head" :row="row"></component>\n        </van-cell-group>\n    </template>\n    <template v-else>\n     <van-cell-group   >\n        <component v-for="head in heads" :is="head.editor" :head="head" :row="row"></component>\n    </van-cell-group>\n    </template>\n\n\n    <div style="height: .6rem">\n    </div>\n    <van-cell-group v-if="ops.length>0" class="ops">\n     <div v-for="op in normed_ops" class="op-wrap">\n       <component :is="op.editor" :head="op"></component>\n       </div>\n    </van-cell-group>\n    </div>',
     computed: {
         grouped_heads_bucket: function grouped_heads_bucket() {
             var _this = this;
@@ -3635,7 +3681,6 @@ Vue.component('com-fields-panel', {
 });
 
 /***/ }),
-/* 57 */,
 /* 58 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -3654,7 +3699,7 @@ Vue.component('com-slide-iframe', {
 "use strict";
 
 
-__webpack_require__(98);
+__webpack_require__(99);
 
 Vue.component('com-slide-head', {
     props: ['title'],
@@ -3677,7 +3722,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.fixed_body = fixed_body;
-__webpack_require__(96);
+__webpack_require__(97);
 
 function fixed_body() {
     //$('body').addClass('modal-open')
@@ -3714,7 +3759,7 @@ window.fixed_body_quit = fixed_body_quit;
 "use strict";
 
 
-__webpack_require__(97);
+__webpack_require__(98);
 
 /*
 * 因为没有遮挡层，可能造成多次打开窗口问题，所以使用mint-ui替代了这个组件
@@ -3756,7 +3801,7 @@ if (window.named_hub == undefined) {
         if (event.state && event.state.callback) {
             var callback = named_hub[event.state.callback];
             callback();
-            delete named_hub[event.state.callback];
+            //delete named_hub[event.state.callback]
         }
         //event.preventDefault();
         //return false
@@ -4221,7 +4266,7 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, ".com-field-multi-picture .van-cell__title {\n  max-width: 90px;\n}\n.com-field-multi-picture .van-cell__value {\n  text-align: left;\n}\n.com-field-multi-picture .add-btn {\n  width: 60px;\n  height: 60px;\n  position: relative;\n  display: inline-block;\n  margin: 10px;\n}\n.com-field-multi-picture .add-btn .inn-btn {\n  background-color: #e2e2e2;\n  border: 1px solid #e2e2e2;\n  width: 60px;\n  height: 60px;\n  position: relative;\n}\n.com-field-multi-picture .img-wrap {\n  vertical-align: top;\n  display: inline-block;\n  width: 60px;\n  height: 60px;\n  position: relative;\n  margin: 10px;\n}\n.com-field-multi-picture .img-wrap img {\n  height: 100%;\n  width: 100%;\n}\n.com-field-multi-picture .img-wrap .close {\n  position: absolute;\n  top: 0;\n  right: 0.3rem;\n}\n", ""]);
+exports.push([module.i, ".van-cell.readonly .van-field__label {\n  color: #808080;\n}\n", ""]);
 
 // exports
 
@@ -4235,7 +4280,7 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, ".com-field-phone-code input {\n  flex-grow: 10;\n}\n.com-field-phone-code button {\n  flex-grow: 0;\n  width: 1.6rem;\n}\n.com-field-phone-code .msg-box.hide {\n  display: none;\n}\n", ""]);
+exports.push([module.i, ".com-field-multi-picture .van-cell__title {\n  max-width: 90px;\n}\n.com-field-multi-picture .van-cell__value {\n  text-align: left;\n}\n.com-field-multi-picture .add-btn {\n  width: 60px;\n  height: 60px;\n  position: relative;\n  display: inline-block;\n  margin: 10px;\n}\n.com-field-multi-picture .add-btn .inn-btn {\n  background-color: #e2e2e2;\n  border: 1px solid #e2e2e2;\n  width: 60px;\n  height: 60px;\n  position: relative;\n}\n.com-field-multi-picture .img-wrap {\n  vertical-align: top;\n  display: inline-block;\n  width: 60px;\n  height: 60px;\n  position: relative;\n  margin: 10px;\n}\n.com-field-multi-picture .img-wrap img {\n  height: 100%;\n  width: 100%;\n}\n.com-field-multi-picture .img-wrap .close {\n  position: absolute;\n  top: 0;\n  right: 0.3rem;\n}\n", ""]);
 
 // exports
 
@@ -4249,7 +4294,7 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, ".com-field-picture .picture-panel {\n  position: relative;\n  border: 2px dashed #ddd;\n  border-radius: 0.1rem;\n  height: 2rem;\n  width: 3rem;\n}\n.com-field-picture .picture-panel .choose-btn {\n  color: #46a3c8;\n  border: 1px solid #46a3c8;\n  border-radius: 0.1rem;\n  padding: 0.2rem 0.5rem;\n}\n.com-field-picture .picture-content {\n  width: 3rem;\n  height: 2rem;\n  background-size: contain;\n  background-position: center;\n  background-repeat: no-repeat;\n}\n.com-field-picture .van-cell__title {\n  max-width: 90px;\n}\n.com-field-picture .van-cell__value {\n  text-align: left;\n}\n.com-field-picture .van-cell__value img {\n  max-width: 5rem;\n  max-height: 2rem;\n}\n", ""]);
+exports.push([module.i, ".com-field-phone-code input {\n  flex-grow: 10;\n}\n.com-field-phone-code button {\n  flex-grow: 0;\n  width: 1.6rem;\n}\n.com-field-phone-code .msg-box.hide {\n  display: none;\n}\n", ""]);
 
 // exports
 
@@ -4263,7 +4308,7 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, ".com-field-pop-search .cube-scroll-wrapper {\n  height: calc(100vh - 0.8rem);\n}\n", ""]);
+exports.push([module.i, ".com-field-picture .picture-panel {\n  position: relative;\n  border: 2px dashed #ddd;\n  border-radius: 0.1rem;\n  height: 2rem;\n  width: 3rem;\n}\n.com-field-picture .picture-panel .choose-btn {\n  color: #46a3c8;\n  border: 1px solid #46a3c8;\n  border-radius: 0.1rem;\n  padding: 0.2rem 0.1rem;\n  min-width: 2rem;\n  white-space: nowrap;\n  text-align: center;\n}\n.com-field-picture .picture-panel .close {\n  float: right;\n}\n.com-field-picture .picture-content {\n  width: 3rem;\n  height: 2rem;\n  background-size: contain;\n  background-position: center;\n  background-repeat: no-repeat;\n}\n.com-field-picture .van-cell__title {\n  max-width: 90px;\n}\n.com-field-picture .van-cell__value {\n  text-align: left;\n}\n.com-field-picture .van-cell__value img {\n  max-width: 5rem;\n  max-height: 2rem;\n}\n", ""]);
 
 // exports
 
@@ -4277,7 +4322,7 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, ".com-field-tree-shower .cube-scroll-wrapper {\n  height: calc(100vh - 2rem);\n}\n.com-field-tree-shower .path {\n  background-color: #f3f3f3;\n  padding: 0.1rem;\n  border-bottom: 1px solid #ddd;\n}\n.com-field-tree-shower .parent-node {\n  display: inline-block;\n  font-size: 0.36rem;\n  padding: 0.2rem;\n}\n", ""]);
+exports.push([module.i, ".com-field-pop-search .cube-scroll-wrapper {\n  height: calc(100vh - 0.8rem);\n}\n", ""]);
 
 // exports
 
@@ -4291,7 +4336,7 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, ".com-item-span,\n.com-item-span-label {\n  display: inline-block;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  flex-grow: 10;\n}\n", ""]);
+exports.push([module.i, ".com-field-tree-shower .cube-scroll-wrapper {\n  height: calc(100vh - 2rem);\n}\n.com-field-tree-shower .path {\n  background-color: #f3f3f3;\n  padding: 0.1rem;\n  border-bottom: 1px solid #ddd;\n}\n.com-field-tree-shower .parent-node {\n  display: inline-block;\n  font-size: 0.36rem;\n  padding: 0.2rem;\n}\n", ""]);
 
 // exports
 
@@ -4305,7 +4350,7 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, ".com-live-layout-image {\n  text-align: center;\n}\n", ""]);
+exports.push([module.i, ".com-item-span,\n.com-item-span-label {\n  display: inline-block;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  flex-grow: 10;\n}\n", ""]);
 
 // exports
 
@@ -4319,7 +4364,7 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, ".live-content {\n  height: calc(var(--app-height) - 50px);\n}\n", ""]);
+exports.push([module.i, ".com-live-layout-image {\n  text-align: center;\n}\n", ""]);
 
 // exports
 
@@ -4333,7 +4378,7 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, ".com-live-fields {\n  display: flex;\n  flex-direction: column;\n  height: 100vh;\n}\n.com-live-fields .com-uis-nav-bar {\n  flex-grow: 0;\n}\n.com-live-fields .com-fileds-panel {\n  flex-grow: 10;\n  overflow: auto;\n  -webkit-overflow-scrolling: touch;\n}\n", ""]);
+exports.push([module.i, ".com-layout-grid {\n  position: relative;\n  overflow: hidden;\n}\n.com-layout-grid:before {\n  content: \" \";\n  position: absolute;\n  left: 0;\n  top: 0;\n  right: 0;\n  height: 1px;\n  border-top: 1px solid #d9d9d9;\n  color: #d9d9d9;\n  -webkit-transform-origin: 0 0;\n  transform-origin: 0 0;\n  -webkit-transform: scaleY(0.5);\n  transform: scaleY(0.5);\n}\n.com-layout-grid:after {\n  content: \" \";\n  position: absolute;\n  left: 0;\n  top: 0;\n  width: 1px;\n  bottom: 0;\n  border-left: 1px solid #d9d9d9;\n  color: #d9d9d9;\n  -webkit-transform-origin: 0 0;\n  transform-origin: 0 0;\n  -webkit-transform: scaleX(0.5);\n  transform: scaleX(0.5);\n}\n.grid-3 {\n  position: relative;\n  float: left;\n  padding: 20px 10px;\n  width: 33.33333333%;\n  box-sizing: border-box;\n  text-align: center;\n}\n.grid-3:before {\n  content: \" \";\n  position: absolute;\n  right: 0;\n  top: 0;\n  width: 1px;\n  bottom: 0;\n  border-right: 1px solid #d9d9d9;\n  color: #d9d9d9;\n  -webkit-transform-origin: 100% 0;\n  transform-origin: 100% 0;\n  -webkit-transform: scaleX(0.5);\n  transform: scaleX(0.5);\n}\n.grid-3:after {\n  content: \" \";\n  position: absolute;\n  left: 0;\n  bottom: 0;\n  right: 0;\n  height: 1px;\n  border-bottom: 1px solid #d9d9d9;\n  color: #d9d9d9;\n  -webkit-transform-origin: 0 100%;\n  transform-origin: 0 100%;\n  -webkit-transform: scaleY(0.5);\n  transform: scaleY(0.5);\n}\n.grid-3 img {\n  max-width: 50%;\n  height: 0.8rem;\n}\n.grid-3 .label {\n  padding-top: 0.2rem;\n}\n", ""]);
 
 // exports
 
@@ -4347,7 +4392,7 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, ".com-live-list {\n  display: flex;\n  flex-direction: column;\n  background-color: #f8f8f8;\n  height: 100vh;\n}\n.com-live-list .van-list {\n  height: calc(100vh - 1rem);\n  flex-grow: 10;\n  overflow: auto;\n  -webkit-overflow-scrolling: touch;\n}\n", ""]);
+exports.push([module.i, ".live-content {\n  height: calc(var(--app-height) - 50px);\n}\n", ""]);
 
 // exports
 
@@ -4361,7 +4406,7 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, ".com-live-list-page .van-nav-bar {\n  position: fixed;\n  top: 0;\n  left: 0;\n  right: 0;\n}\n.com-live-list-page .footer {\n  position: fixed;\n  bottom: 0;\n  left: 0;\n  right: 0;\n  height: 0.82rem;\n  background-color: #fff;\n}\n.com-live-list-page .van-pagination__page-desc {\n  position: relative;\n  left: -0.6rem;\n  flex: 2;\n}\n.com-live-list-page .total-count {\n  color: #808080;\n  position: absolute;\n  top: 0.26rem;\n  right: 2.7rem;\n}\n", ""]);
+exports.push([module.i, ".com-live-fields {\n  display: flex;\n  flex-direction: column;\n  height: 100vh;\n}\n.com-live-fields .com-uis-nav-bar {\n  flex-grow: 0;\n}\n.com-live-fields .com-fileds-panel {\n  flex-grow: 10;\n  overflow: auto;\n  -webkit-overflow-scrolling: touch;\n}\n", ""]);
 
 // exports
 
@@ -4375,7 +4420,7 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, ".com-op-van-btn {\n  margin: 0.1rem 0;\n}\n", ""]);
+exports.push([module.i, ".com-live-list {\n  display: flex;\n  flex-direction: column;\n  background-color: #f8f8f8;\n  height: 100vh;\n}\n.com-live-list .van-list {\n  height: calc(100vh - 1rem);\n  flex-grow: 10;\n  overflow: auto;\n  -webkit-overflow-scrolling: touch;\n}\n", ""]);
 
 // exports
 
@@ -4389,13 +4434,26 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, ".com-fileds-panel {\n  background-color: #f8f8f8;\n}\n.com-fileds-panel .ops {\n  margin: 0.5rem 5vw;\n}\n.com-fileds-panel .ops .op-wrap {\n  margin: 8px 0;\n}\n.com-fileds-panel .van-cell-group__title {\n  padding-top: 35px;\n}\n", ""]);
+exports.push([module.i, ".com-live-list-page .van-nav-bar {\n  position: fixed;\n  top: 0;\n  left: 0;\n  right: 0;\n}\n.com-live-list-page .footer {\n  position: fixed;\n  bottom: 0;\n  left: 0;\n  right: 0;\n  height: 0.82rem;\n  background-color: #fff;\n}\n.com-live-list-page .van-pagination__page-desc {\n  position: relative;\n  left: -0.6rem;\n  flex: 2;\n}\n.com-live-list-page .total-count {\n  color: #808080;\n  position: absolute;\n  top: 0.26rem;\n  right: 2.7rem;\n}\n", ""]);
 
 // exports
 
 
 /***/ }),
-/* 90 */,
+/* 90 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(0)();
+// imports
+
+
+// module
+exports.push([module.i, ".com-op-van-btn {\n  margin: 0.1rem 0;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
 /* 91 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -4404,7 +4462,7 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, ".mint-indicator .mint-indicator-wrapper {\n  z-index: 90000;\n}\n.mint-indicator .mint-indicator-mask {\n  z-index: 90000;\n}\n.mint-toast {\n  z-index: 9999999;\n}\n[v-cloak] {\n  display: none;\n}\n.van-image-preview__overlay {\n  z-index: 9000 !important;\n}\n.van-image-preview {\n  z-index: 9010 !important;\n}\nhtml {\n  height: 100%;\n}\nbody {\n  height: 100%;\n}\n:root {\n  --app-height: 100%;\n}\n", ""]);
+exports.push([module.i, ".com-fileds-panel {\n  background-color: #f8f8f8;\n}\n.com-fileds-panel .ops {\n  margin: 0.5rem 5vw;\n}\n.com-fileds-panel .ops .op-wrap {\n  margin: 8px 0;\n}\n.com-fileds-panel .van-cell-group__title {\n  padding-top: 35px;\n}\n", ""]);
 
 // exports
 
@@ -4418,7 +4476,7 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, ".mobile-list-page .page-title {\n  height: 0.8rem;\n  text-align: center;\n  vertical-align: middle;\n  line-height: 0.7rem;\n  background-color: #00a7d0;\n  color: #fff;\n}\n.mobile-list-page .cube-scroll-wrapper {\n  height: calc(100vh - 0.8rem);\n}\n", ""]);
+exports.push([module.i, ".mint-indicator .mint-indicator-wrapper {\n  z-index: 90000;\n}\n.mint-indicator .mint-indicator-mask {\n  z-index: 90000;\n}\n.mint-toast {\n  z-index: 9999999;\n}\n[v-cloak] {\n  display: none;\n}\n.van-image-preview__overlay {\n  z-index: 9000 !important;\n}\n.van-image-preview {\n  z-index: 9010 !important;\n}\nhtml {\n  height: 100%;\n}\nbody {\n  height: 100%;\n}\n:root {\n  --app-height: 100%;\n}\n", ""]);
 
 // exports
 
@@ -4432,13 +4490,27 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, "", ""]);
+exports.push([module.i, ".mobile-list-page .page-title {\n  height: 0.8rem;\n  text-align: center;\n  vertical-align: middle;\n  line-height: 0.7rem;\n  background-color: #00a7d0;\n  color: #fff;\n}\n.mobile-list-page .cube-scroll-wrapper {\n  height: calc(100vh - 0.8rem);\n}\n", ""]);
 
 // exports
 
 
 /***/ }),
 /* 94 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(0)();
+// imports
+
+
+// module
+exports.push([module.i, "", ""]);
+
+// exports
+
+
+/***/ }),
+/* 95 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
@@ -4464,7 +4536,7 @@ if(false) {
 }
 
 /***/ }),
-/* 95 */
+/* 96 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
@@ -4490,7 +4562,7 @@ if(false) {
 }
 
 /***/ }),
-/* 96 */
+/* 97 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
@@ -4516,7 +4588,7 @@ if(false) {
 }
 
 /***/ }),
-/* 97 */
+/* 98 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
@@ -4542,7 +4614,7 @@ if(false) {
 }
 
 /***/ }),
-/* 98 */
+/* 99 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
@@ -4568,7 +4640,7 @@ if(false) {
 }
 
 /***/ }),
-/* 99 */
+/* 100 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
@@ -4594,7 +4666,7 @@ if(false) {
 }
 
 /***/ }),
-/* 100 */
+/* 101 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
@@ -4620,7 +4692,7 @@ if(false) {
 }
 
 /***/ }),
-/* 101 */
+/* 102 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
@@ -4646,7 +4718,7 @@ if(false) {
 }
 
 /***/ }),
-/* 102 */
+/* 103 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
@@ -4672,13 +4744,39 @@ if(false) {
 }
 
 /***/ }),
-/* 103 */
+/* 104 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
 var content = __webpack_require__(77);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// add the styles to the DOM
+var update = __webpack_require__(1)(content, {});
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./main.styl", function() {
+			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./main.styl");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 105 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(78);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -4698,13 +4796,13 @@ if(false) {
 }
 
 /***/ }),
-/* 104 */
+/* 106 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(78);
+var content = __webpack_require__(79);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -4724,13 +4822,13 @@ if(false) {
 }
 
 /***/ }),
-/* 105 */
+/* 107 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(79);
+var content = __webpack_require__(80);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -4750,13 +4848,13 @@ if(false) {
 }
 
 /***/ }),
-/* 106 */
+/* 108 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(80);
+var content = __webpack_require__(81);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -4776,13 +4874,13 @@ if(false) {
 }
 
 /***/ }),
-/* 107 */
+/* 109 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(81);
+var content = __webpack_require__(82);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -4802,13 +4900,13 @@ if(false) {
 }
 
 /***/ }),
-/* 108 */
+/* 110 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(82);
+var content = __webpack_require__(83);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -4828,13 +4926,13 @@ if(false) {
 }
 
 /***/ }),
-/* 109 */
+/* 111 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(83);
+var content = __webpack_require__(84);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -4854,13 +4952,39 @@ if(false) {
 }
 
 /***/ }),
-/* 110 */
+/* 112 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(84);
+var content = __webpack_require__(85);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// add the styles to the DOM
+var update = __webpack_require__(1)(content, {});
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./layout_grid.styl", function() {
+			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./layout_grid.styl");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 113 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(86);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -4880,13 +5004,13 @@ if(false) {
 }
 
 /***/ }),
-/* 111 */
+/* 114 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(86);
+var content = __webpack_require__(88);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -4906,13 +5030,13 @@ if(false) {
 }
 
 /***/ }),
-/* 112 */
+/* 115 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(87);
+var content = __webpack_require__(89);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -4932,13 +5056,13 @@ if(false) {
 }
 
 /***/ }),
-/* 113 */
+/* 116 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(88);
+var content = __webpack_require__(90);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -4958,13 +5082,13 @@ if(false) {
 }
 
 /***/ }),
-/* 114 */
+/* 117 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(89);
+var content = __webpack_require__(91);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -4984,14 +5108,13 @@ if(false) {
 }
 
 /***/ }),
-/* 115 */,
-/* 116 */
+/* 118 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(91);
+var content = __webpack_require__(92);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -5011,7 +5134,7 @@ if(false) {
 }
 
 /***/ }),
-/* 117 */
+/* 119 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5109,76 +5232,6 @@ __webpack_require__(27);
 
 
 //
-
-/***/ }),
-/* 118 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-__webpack_require__(120);
-
-Vue.component('com-layout-grid', {
-    props: ['ctx'],
-    template: '<div class="com-layout-grid">\n        <component :is="head.editor" v-for="head in ctx.heads" :ctx="head"></component>\n    </div>'
-});
-
-Vue.component('com-grid-icon-btn', {
-    props: ['ctx'],
-    template: '<div class="grid-3" @click="on_click()">\n     <img :src="ctx.icon" alt="">\n     <div class="label" v-text="ctx.label"></div>\n    </div>',
-    data: function data() {
-        return {
-            parStore: ex.vueParStore(this)
-        };
-    },
-
-    methods: {
-        on_click: function on_click() {
-            ex.eval(this.ctx.action, { head: this.ctx, ps: this.parStore });
-        }
-    }
-});
-
-/***/ }),
-/* 119 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(0)();
-// imports
-
-
-// module
-exports.push([module.i, ".com-layout-grid {\n  position: relative;\n  overflow: hidden;\n}\n.com-layout-grid:before {\n  content: \" \";\n  position: absolute;\n  left: 0;\n  top: 0;\n  right: 0;\n  height: 1px;\n  border-top: 1px solid #d9d9d9;\n  color: #d9d9d9;\n  -webkit-transform-origin: 0 0;\n  transform-origin: 0 0;\n  -webkit-transform: scaleY(0.5);\n  transform: scaleY(0.5);\n}\n.com-layout-grid:after {\n  content: \" \";\n  position: absolute;\n  left: 0;\n  top: 0;\n  width: 1px;\n  bottom: 0;\n  border-left: 1px solid #d9d9d9;\n  color: #d9d9d9;\n  -webkit-transform-origin: 0 0;\n  transform-origin: 0 0;\n  -webkit-transform: scaleX(0.5);\n  transform: scaleX(0.5);\n}\n.grid-3 {\n  position: relative;\n  float: left;\n  padding: 20px 10px;\n  width: 33.33333333%;\n  box-sizing: border-box;\n  text-align: center;\n}\n.grid-3:before {\n  content: \" \";\n  position: absolute;\n  right: 0;\n  top: 0;\n  width: 1px;\n  bottom: 0;\n  border-right: 1px solid #d9d9d9;\n  color: #d9d9d9;\n  -webkit-transform-origin: 100% 0;\n  transform-origin: 100% 0;\n  -webkit-transform: scaleX(0.5);\n  transform: scaleX(0.5);\n}\n.grid-3:after {\n  content: \" \";\n  position: absolute;\n  left: 0;\n  bottom: 0;\n  right: 0;\n  height: 1px;\n  border-bottom: 1px solid #d9d9d9;\n  color: #d9d9d9;\n  -webkit-transform-origin: 0 100%;\n  transform-origin: 0 100%;\n  -webkit-transform: scaleY(0.5);\n  transform: scaleY(0.5);\n}\n.grid-3 img {\n  max-width: 50%;\n  height: 0.8rem;\n}\n.grid-3 .label {\n  padding-top: 0.2rem;\n}\n", ""]);
-
-// exports
-
-
-/***/ }),
-/* 120 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(119);
-if(typeof content === 'string') content = [[module.i, content, '']];
-// add the styles to the DOM
-var update = __webpack_require__(1)(content, {});
-if(content.locals) module.exports = content.locals;
-// Hot Module Replacement
-if(false) {
-	// When the styles change, update the <style> tags
-	if(!content.locals) {
-		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./layout_grid.styl", function() {
-			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./layout_grid.styl");
-			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-			update(newContent);
-		});
-	}
-	// When the module is disposed, remove the <style> tags
-	module.hot.dispose(function() { update(); });
-}
 
 /***/ })
 /******/ ]);
