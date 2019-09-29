@@ -37,17 +37,16 @@ class PageNum(object):
         #self.totalpage = max(totalpage,1)
         
         # 需要研究下，为什么有时 len(query) != query.count()  ，例如 jb.maindb.ticket_admin.TicketparlayTable
-        self.count =  query.count() #len(query) #
+        #self.count =  query.count() #len(query) #
+        #crt_page= max(1,int( self.pageNumber))
+        #start = (crt_page -1)*self.perPage
+        #end = min(crt_page*self.perPage, self.count)
+        #return query[start:end]
         
-        crt_page= max(1,int( self.pageNumber))
-        start = (crt_page -1)*self.perPage
-        end = min(crt_page*self.perPage, self.count)
-        return query[start:end]
-        
-        #self.pagenator = Paginator(query,self.perPage)
-        #self.pageNumber = min(self.pagenator.num_pages,abs(int( self.pageNumber)))
-        #self.count = self.pagenator.count
-        #return self.pagenator.page(self.pageNumber)
+        self.pagenator = Paginator(query,self.perPage)
+        self.pageNumber = min(self.pagenator.num_pages,abs(int( self.pageNumber)))
+        self.count = self.pagenator.count
+        return self.pagenator.page(self.pageNumber)
  
         
         
