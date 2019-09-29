@@ -55,3 +55,8 @@ def save_rows(rows):
      
      except ValidationError as e:
           return {'errors':dict(e),}   
+
+@director_view('d.get_head_context')
+def get_head_context(director_name):
+     dcls = director.get(director_name)
+     return dcls().get_head_context()

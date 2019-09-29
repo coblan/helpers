@@ -753,15 +753,9 @@ class ModelTable(object):
                        'meta_org_dict':self.get_org_dict(dc,inst)
                        })
             out.append(dc)
-        #out = self.append_sequence(out)
         return out
     
     def get_org_dict(self,row,inst=None):
-        #keys = self.permit.readable_fields()
-        #fields_name = [x.name for x in inst._meta.get_fields()]
-        #valide_name_list = [x for x in fields_name if x in out.keys()]
-        ##out['meta_hash']=hash_dict(instance.__dict__,valide_name_list)
-        #out['meta_hash_fields'] = ','.join(valide_name_list)
         org_row = make_mark_dict(row)
         return org_row
     

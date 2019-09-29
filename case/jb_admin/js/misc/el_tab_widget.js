@@ -13,8 +13,8 @@ var el_tab = {
                                  :key="tab.name"
                                  :name="tab.name">
                         <span slot="label" v-text="tab.label" ></span>
-
-                        <component :is="tab.com || tab.editor" :tab_head="tab"
+                        <span v-if="!tab._loaded"></span>
+                        <component v-if="tab._loaded" :is="tab.com || tab.editor" :tab_head="tab"
                                    :par_row="ctx.par_row"
                                    :ref="'_tab_'+tab.name" @tab-event="up_event($event)"></component>
 
@@ -27,6 +27,11 @@ var el_tab = {
                            :ref="'_tab_'+tab.name" @tab-event="up_event($event)"></component>
     </div>`,
     data(){
+        ex.each(this.ctx.tabs,tab=>{
+            if(tab.lazy_init){
+                Vue.set(tab,'_loaded',false)
+            }
+        })
         return {
             is_mounted:false
         }
@@ -59,18 +64,29 @@ var el_tab = {
         }
     },
     methods:{
-        show_tab:function(name){
-            this.ctx.crt_tab_name=name
-            //this.crt_tab_name = name
-            // 当tab页面点击进入时
-            var self =this
-            if(this.is_mounted){
-                Vue.nextTick(function(){
-                    if(self.$refs['_tab_'+name][0].on_show){
-                        self.$refs['_tab_'+name][0].on_show()
-                    }
-                })
+        show_tab(name){
+            var tab_head = ex.findone(this.normed_tab,{name:name})
+            if(tab_head.lazy_init){
+                 ex.eval(tab_head.lazy_init,{head:tab_head}).then(()=>{
+                     delete tab_head.lazy_init
+                     Vue.set(tab_head,'_loaded',true)
+                     this.ctx.crt_tab_name=name
+                 })
+
+            }else{
+                Vue.set(tab_head,'_loaded',true)
+                this.ctx.crt_tab_name=name
             }
+
+
+            //var self =this
+            //if(this.is_mounted){
+            //    Vue.nextTick(function(){
+            //        if(self.$refs['_tab_'+name][0].on_show){
+            //            self.$refs['_tab_'+name][0].on_show()
+            //        }
+            //    })
+            //}
         },
         handleClick(tab, event) {
             this.show_tab(tab.name)

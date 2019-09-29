@@ -15,12 +15,15 @@ def request_cache(fun):
     @wraps(fun)
     def _fun(*args, **kws):
         cache = get_request_cache()
-        key = str( hash(fun))
-        if args:
-            for item in args:
-                key += '%s_%s'%(item.__class__.__name__, id(item) )
-        if kws:
-            key += str( hash(json.dumps(kws, sort_keys=True)) )
+        if kws.get('cache_key'):
+            key = kws.get('cache_key')
+        else:
+            key = str( hash(fun))
+            if args:
+                for item in args:
+                    key += '%s_%s'%(item.__class__.__name__, id(item) )
+            if kws:
+                key += str( hash(json.dumps(kws, sort_keys=True)) )
             
         if cache.get(key):
             return cache.get(key)

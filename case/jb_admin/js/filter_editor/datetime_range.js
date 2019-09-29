@@ -67,7 +67,6 @@ var com_datetime_range={
         //    this.end=v
         //},
         start:function(nv,ov){
-            debugger
             if(nv && this.end){
                 if(nv>this.end){
                     cfg.showError('开始时间必须小于结束时间')
