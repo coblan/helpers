@@ -650,7 +650,7 @@ class Fields(ModelFields):
     
     def dict_row(self):
         return {
-            '_director_name':self.get_director_name()
+            #'_director_name':self.get_director_name()
         }
     
     def get_row(self): 

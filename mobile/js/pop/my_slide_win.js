@@ -45,7 +45,7 @@ if(window.named_hub==undefined){
         if(event.state && event.state.callback){
             var callback = named_hub[event.state.callback]
             callback()
-            delete named_hub[event.state.callback]
+            //delete named_hub[event.state.callback]
         }
         //event.preventDefault();
         //return false
