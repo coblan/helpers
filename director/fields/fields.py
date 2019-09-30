@@ -112,14 +112,19 @@ class ModelFields(forms.ModelForm):
         self.custom_permit()
          # 强制 readonly的字段，不能修改
         inst =  form_kw['instance']
+        
+        meta_change_fields=[]
+        if dc.get('meta_change_fields'):
+            meta_change_fields = dc.get('meta_change_fields').split(',')
         for k in dict(dc):
-            if k in self.readonly:
+            if k in self.readonly or (meta_change_fields and k not in meta_change_fields ):
                 if hasattr(inst, "%s_id" % k):  # 如果是ForeignKey，必须要pk值才能通过 form验证
                     fieldcls = inst.__class__._meta.get_field(k)
                     if isinstance(fieldcls, models.ForeignKey):
                         dc[k] = getattr(inst, "%s_id" % k)
                         continue
-                dc[k] =  getattr(form_kw['instance'] , k)  
+                if hasattr(inst,k):
+                    dc[k] =  getattr(inst , k)  
             
         # 强制保存字段，不验证是否改变,并且其他字段都不能改变
         #if dc.get('meta_change_fields'):
@@ -138,7 +143,6 @@ class ModelFields(forms.ModelForm):
         self.kw.update(dc)
 
         super(ModelFields,self).__init__(dc,*args,**form_kw)
-        
         
         self.pop_fields()
         self.init_value()
@@ -168,11 +172,15 @@ class ModelFields(forms.ModelForm):
             #ls = [x for x in ls if x in self.fields.keys()]
             #ls =[x for x in ls if x not in self.readonly]
             #ls = [x for x in ls if x not in self.overlap_fields]
-            dif_dc = dif_mark_dict(crt_mark_dc, self.kw.get('meta_org_dict'),exclude= overlaped_fields)
+            if self.kw.get('meta_change_fields'):
+                meta_change_fields = self.kw.get('meta_change_fields').split(',')
+                dif_dc = dif_mark_dict(crt_mark_dc,self.kw.get('meta_org_dict'),include= meta_change_fields)
+            else:
+                dif_dc = dif_mark_dict(crt_mark_dc, self.kw.get('meta_org_dict'),exclude= overlaped_fields)
             
             if dif_dc:
                 keys = [self.fields.get(key).label for key in dif_dc.keys()]
-                raise OutDateException('(%s)的%s已经被其他用户改变,请确认后再进行操作!'%(self.instance,keys) )
+                raise OutDateException('(%s)的%s已经发生了变化,请确认后再进行操作!'%(self.instance,keys) )
     
     def get_org_dict(self,row=None):
         if not row:
@@ -620,7 +628,7 @@ class Fields(ModelFields):
                     if head['name'] in dif_dc:
                         head_names.append(head['label'])
                         
-                raise OutDateException('%s已经被其他用户改变,请确认后再进行操作!'%';'.join(head_names) )
+                raise OutDateException('%s已经发生了变化,请确认后再进行操作!'%';'.join(head_names) )
             
     def is_valid(self):
         self.clean()

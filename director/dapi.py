@@ -55,6 +55,8 @@ def save_rows(rows):
      
      except ValidationError as e:
           return {'errors':dict(e),}   
+     except OutDateException as e:
+          return {'_outdate':str(e)}
 
 @director_view('d.get_head_context')
 def get_head_context(director_name):
