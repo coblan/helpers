@@ -116,6 +116,8 @@ def get_lib(request):
             'chosen_css':'https://cdn.jsdelivr.net/npm/chosen-js@1.8.7/chosen.min.css',
             #'ckeditor':'https://cdn.jsdelivr.net/npm/ckeditor@4.11.4/ckeditor.js',
             #'ckeditor':'https://cdn.jsdelivr.net/npm/ckeditor@4.11.4/ckeditor.min.js',
+            'select2':'https://cdn.jsdelivr.net/npm/select2@4.0.10/dist/js/select2.min.js',
+            'select2_css':'https://cdn.jsdelivr.net/npm/select2@4.0.10/dist/css/select2.min.css'
         })
         
         if not settings.DEBUG:

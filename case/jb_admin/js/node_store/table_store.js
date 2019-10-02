@@ -344,7 +344,6 @@ var table_store={
         },
         save_rows(rows,option){
             var self = this
-
             var promise= new ex.DefPromise((resolve,reject)=>{
 
                 ex.director_call('d.save_rows', {rows: rows}).then(resp=> {
@@ -385,8 +384,6 @@ var table_store={
                         })
                     }
                 })
-            },(resp)=>{
-                console.log('default then')
             })
 
             return promise
