@@ -228,8 +228,6 @@ class RowFilter(object):
         for head in out_list:
             if head['name'] in self.icontains:
                 head['editor'] = 'com-filter-text'
-                head['placeholder'] = head['label']
-                head['label'] = ''
         
         out_list = [self.dict_head(head) for head in out_list]
         out_list = [x for x in out_list if x['name'] in send_to_front_names]
