@@ -154,6 +154,12 @@ def int_str(value,name):
             raise UserWarning('%(name)s=%(value)s 不能转换为 int'%{'name':name,'value':value})
     else:
         return value
+
+def float_str(value,name):
+    try:
+        float(value)
+    except ValueError:
+        raise UserWarning('%s不能转换为数字(包含小数)'%name)
     #try:
         #if value is not None:
             #return int(value)
