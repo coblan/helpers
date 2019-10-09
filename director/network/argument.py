@@ -51,6 +51,12 @@ def sign_args(kws,secret):
     sign_str = sign_str + 'secret=' + secret
     return hashlib.md5(sign_str.encode('utf-8')).hexdigest().upper()   
 
+def null_break(value,name):
+    if value is None or (isinstance(value,str) and value.strip() ==''):
+        return True
+    else:
+        return False
+
 def validate_argument(dc,validate_dict={},eliminate = False):
     if isinstance(dc,DotObj):
         dc=dc.__dict__
@@ -58,6 +64,12 @@ def validate_argument(dc,validate_dict={},eliminate = False):
     for k,v in validate_dict.items():
         value = dc.get(k)
         for validator in v:
+            if validator == null_break:
+                if(null_break(value, k)):
+                    break
+                else:
+                    continue
+            
             if 'params' in inspect.getargspec(validator).args:
                 value = validator(value,k,params=org_dc)
             else:
@@ -74,9 +86,8 @@ def validate_argument(dc,validate_dict={},eliminate = False):
                 dc.pop(k)
     return DotObj( dc )
 
-
 def not_null(value,name):
-    if not value:
+    if value is None or (isinstance(value,str) and value.strip() ==''):
         raise UserWarning('%s should not be null'%name)
     return value
 
@@ -116,7 +127,7 @@ def timestamp_span(span):
 
 def default(def_value):
     def _default(value,name):
-        if not value:
+        if value is None or value =='':
             return def_value
         else:
             return value
@@ -157,7 +168,7 @@ def int_str(value,name):
 
 def float_str(value,name):
     try:
-        float(value)
+        return float(value)
     except ValueError:
         raise UserWarning('%s不能转换为数字(包含小数)'%name)
     #try:
