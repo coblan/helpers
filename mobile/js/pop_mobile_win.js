@@ -135,6 +135,7 @@ function pop_mobile_win(editor,ctx,callback){
                 if(callback){
                     callback(e)
                 }
+                bb.show=false
             },
         }
     })
