@@ -55,8 +55,10 @@ def evalue_list(ls,**kw):
     new_ls=[]
     for item in ls:
         # 先evalue子孙元素，再计算是否显示。而且只有在list中，visible属性才起作用
-        tmp = copy.deepcopy(item)
-        tmp=evalue_container(tmp,**kw)
+        #tmp = copy.deepcopy(item)  # deepcopy 有性能问题
+        #tmp=evalue_container(tmp,**kw)
+        
+        tmp=evalue_container(item,**kw)
         
         if isinstance(tmp,dict) and 'visible' in tmp:
             visible= tmp.get('visible')
