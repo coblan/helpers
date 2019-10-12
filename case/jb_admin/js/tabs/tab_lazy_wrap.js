@@ -1,4 +1,6 @@
-
+/*
+* 用于封装延迟加载的tab页面
+* */
 var lazy_wrap={
     props:['tab_head','par_row'],
 
