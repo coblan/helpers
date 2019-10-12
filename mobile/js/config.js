@@ -5,6 +5,17 @@
 //import { Indicator } from 'mint-ui';
 require('./styl/config.styl')
 
+// 下面的代码是为了解决移动端，ios浏览器 100vh包含navbar的高度，造成无法定位foot吸底问题。
+// 原理是声明一个css变量，--app-height 来记录 window.innerHeight,用它替代 100vh
+// https://stackoverflow.com/questions/37112218/css3-100vh-not-constant-in-mobile-browser
+const appHeight = () => {
+    const doc = document.documentElement
+    doc.style.setProperty('--app-height', `${window.innerHeight}px`)
+}
+window.addEventListener('resize', appHeight)
+appHeight()
+
+
 ex.assign(cfg,{
     fields_editor:'com-sim-fields',
     fields_local_editor:'com-sim-fields-local',
@@ -91,9 +102,12 @@ ex.assign(cfg,{
         }
     },
     toast(msg){
-        MINT.Toast(msg)
+        return MINT.Toast(msg)
         //MINT.Toast({duration:10000,message:'sdgdsggg'})
         //vant.Toast(msg,{zIndex:999999});
+    },
+    toast_success(msg){
+        vant.Toast.success(msg)
     }
 })
 

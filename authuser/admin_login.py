@@ -39,10 +39,13 @@ class LoginFormPage(FieldsPage):
     
     
 @director_view('do_login')
-def do_login(username,password,auto_login=False):
+def do_login(row):
     """
     登录函数：
     """
+    username = row.get('username')
+    password = row.get('password')
+    auto_login = row.get('auto_login',False)
     cache = get_request_cache()
     request = cache.get('request')
     form=LoginForm({'username':username,'password':password})
@@ -56,6 +59,10 @@ def do_login(username,password,auto_login=False):
     else:
         return {'errors':form.errors}
         
+@director_view('do_logout')
+def do_logout(**kw):
+    request = get_request_cache()['request']
+    auth.logout(request)
     
     #class fieldsCls(ModelFields):
         #field_sort = ['username', 'password', 'pswd2', 'validate_code', 'email']

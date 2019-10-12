@@ -1,8 +1,8 @@
 var lay_datetime={
     props:['row','head'],
     template:`<div class="com-field-datetime">
-    <span v-show='head.readonly' v-text='row[head.name]'></span>
-        <el-date-picker
+    <span class="readonly-info" v-show='head.readonly' v-text='row[head.name]'></span>
+      <el-date-picker
         v-if="!head.readonly"
       v-model="row[head.name]"
       type="datetime"
@@ -54,13 +54,6 @@ var lay_datetime={
     },
     mounted:function(){
         var self=this
-        //laydate.render({
-        //    elem: $(this.$el).find('input')[0], //指定元素
-        //    type: 'datetime',
-        //    done: function(value, date, endDate){
-        //        self.row[self.head.name] = value
-        //    }
-        //});
     }
 }
 

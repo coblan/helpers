@@ -14,7 +14,7 @@
 <script src="{{ js_config.js_lib.md5 }}"></script>
 <link rel="stylesheet" href="{{ js_config.js_lib.font_awesome }}">
 <script src="{{ js_config.js_lib.vuejs }}"></script>
-<script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+<!--<script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>-->
 
 <script src="{{ js_config.js_lib.nice_validator }}"></script>
 <link rel="stylesheet" href="{{ js_config.js_lib.nice_validator_css }}">
@@ -26,14 +26,13 @@
 <script src="{{ js_config.js_lib.vant }}"></script>
 <link rel="stylesheet" href="{{ js_config.js_lib.vant_css }}">
 <script src="{{ js_config.js_lib.exfun }}"></script>
-<!--<script src="{{ js_config.js_lib.director }}"></script>-->
-<!--<script src="{{ js_config.js_lib.jb_admin }}"></script>-->
+
 <script src="{{ js_config.js_lib.mobile }}"></script>
 <script src="{{ js_config.js_lib.wechat }}"></script>
 <script src="{{ js_config.js_lib.wxfront }}"></script>
-<script src="{{ js_config.js_lib.mylbs }}"></script>
+<!--<script src="{{ js_config.js_lib.mylbs }}"></script>-->
 
-<script src="{{ js_config.js_lib.enterprise }}"></script>
+<!--<script src="{{ js_config.js_lib.enterprise }}"></script>-->
 
 {% endblock %}
 
@@ -63,11 +62,13 @@
 //                    stack:[{editor:page_editor,ctx:ctx}],
                     stack: [],
                     tranName:'slide-left',
+                    is_clearing:false,
                 }
             },
             components:{},
             created(){
-                this.open_live(window[editor],editor_ctx,{first_screen:true})
+//                this.open_live(window[editor],editor_ctx,{firstscreen:true})
+                this.first_screen(window[editor],editor_ctx)
             },
             computed:{
                 current_com(){
@@ -80,7 +81,29 @@
                 },
             },
             methods:{
+                clear_stack(){
+                    this.is_clearing = true
+                    var length =this.stack.length
+                    for(var i=0;i<length-1;i++){
+                        history.back()
+//                        this.back()
+                    }
+                    this.stack = []
+                    history.replaceState({},'')
+                    this.is_clearing=false
+                },
+                first_screen(editor,editor_ctx){
+                    this.clear_stack()
+                    this.tranName ='fade'
+                    this.open_live(editor,editor_ctx,{back_animate:'fade',firstscreen:true})
+                    setTimeout(()=>{
+                        this.tranName = 'slide-left'
+                     },500)
+                },
                 open_live(com,ctx,option){
+                    if(!option ||  !option.firstscreen){
+                        history.pushState({},'')
+                    }
                     if(typeof com =='string'){
                         com = window[com]
                     }
@@ -94,22 +117,29 @@
                         name:com_name,
                     }
                     Vue.set( this.$options.components,com_name,big_com)
-//                    this.stack.push({editor:com_name,ctx:ctx,label:label || com.label  })
-                    this.stack.push({editor:com_name,ctx:ctx  })
-                    if(option && option.first_screen){
-                        return
-                    }
+                    this.stack.push({editor:com_name,ctx:ctx ,option:option })
+
                     var  self =this
-                    var fun_id =Date.now()
+                    var fun_id = 'root_live_back_fun' ;// Date.now()
                     named_hub[fun_id] = function(){
                         self.back()
                     }
                     history.replaceState({callback:fun_id},'','?_live='+com.basename)
-                    history.pushState({},'')
 
                 },
                 back(){
-                    this.tranName = 'slide-right'
+                    if(this.is_clearing){
+                        var com = this.stack.pop()
+                        Vue.delete(this.$options.components,com)
+                        return
+                    }
+                    var stack_ctx = this. stack[this.stack.length -1 ]
+                    var option= stack_ctx.option
+                    if(option && option.back_animate){
+                        this.tranName = option.back_animate
+                    }else{
+                        this.tranName = 'slide-right'
+                    }
                     var com = this.stack.pop()
                     Vue.delete(this.$options.components,com)
                    setTimeout(()=>{
@@ -139,25 +169,35 @@
         transition: all .5s cubic-bezier(.55,0,.1,1);
     }
     .slide-left-enter, .slide-right-leave-active {
-        /*opacity: 0;*/
         position: absolute;
         width: 100vw;
         -webkit-transform: translate(100vw, 0);
         transform: translate(100vw, 0);
     }
-
-
+    /*.slide-right-leave-active{*/
+        /*position: inherit;*/
+    /*}*/
 
     .slide-right-enter,.slide-left-leave-active {
-        /*opacity: 0;*/
         position: absolute;
         width: 100vw;
         -webkit-transform: translate(-100vw, 0);
         transform: translate(-100vw, 0);
     }
 
+    .fade-leave-active{
+        transition:none;
+    }
+    .fade-enter-active {
+        transition: none;
+    }
+   /*opacity .3s;*/
+    .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+        opacity: 0;
+    }
+
 </style>
-<div id="main-panel">
+<div id="main-panel" style="height: 100%">
 
     <transition :name="tranName" @after-enter="onEnter">
         <keep-alive :include="alive_list">

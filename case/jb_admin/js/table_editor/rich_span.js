@@ -3,7 +3,7 @@ require('./styl/rich_span.styl')
 var label_shower = {
     props:['rowData','field','index'],
 //:class="myclass"
-template:`<div :class="['com-table-rich-span',myclass]" >
+template:`<div :class="['com-table-rich-span',myclass]" :style="mystyle">
  <component v-if="head.inn_editor"
             :is="head.inn_editor"
             :row-data="rowData" :field="field" :index="index"></component>
@@ -44,9 +44,31 @@ template:`<div :class="['com-table-rich-span',myclass]" >
             if(this.head.row_change_express){
                 ex.eval(this.head.row_change_express,{row:this.rowData,head:this.head,td:$(this.$el).parents('td').first()})
             }
-        }
+        },
+        light_level(h){
+            var h=h.slice(1)
+            var r = 0, g = 0, b = 0;
+            r = parseInt(h[0],16)*16 + parseInt(h[1],16);
+            g = parseInt(h[2],16)*16 + parseInt(h[3],16);
+            b = parseInt(h[4],16)*16 + parseInt(h[5],16);
+            return r * 0.299 + g * 0.587 + b * 0.114;
+        },
+         hexToReverse(h) {
+             var h=h.slice(1)
+            var r = 0, g = 0, b = 0;
+            r = 255 - parseInt(h[0],16)*16 - parseInt(h[1],16);
+            g = 255 - parseInt(h[2],16)*16 - parseInt(h[3],16);
+            b = 255 - parseInt(h[4],16)*16 - parseInt(h[5],16);
+            var out= (r < 16 ? "0" + r.toString(16).toUpperCase() : r.toString(16).toUpperCase()) + (g < 16 ? "0" + g.toString(16).toUpperCase() : g.toString(16).toUpperCase()) + (b < 16 ? "0" + b.toString(16).toUpperCase() : b.toString(16).toUpperCase());
+             return '#'+out
+         }
     },
     computed:{
+        mystyle(){
+            if(this.head.style){
+               return ex.eval(this.head.style,{row:this.rowData,head:this.head,vc:this})
+            }
+        },
         show_text:function(){
             var value = this.rowData[this.field]
             if( value == undefined){

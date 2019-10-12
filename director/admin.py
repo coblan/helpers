@@ -35,17 +35,17 @@ from .model_func.field_procs import nullboolproc
 from . import js_cfg
 from . import dapi
 from helpers.func.sim_signal import sim_signal
-from .base_data import site_cfg
+from .base_data import inspect_dict
 
 # 定制User表的显示方式
 def get_first_name(self):
-    return self.first_name  +'(%s)'%self.username
+    return self.first_name + '(%s)'%self.username
 
 User.add_to_class("__str__", get_first_name)
-User._meta.get_field('first_name').verbose_name = '用户名'
+User._meta.get_field('first_name').verbose_name = '昵称'
 User._meta.get_field('username').verbose_name = '账号'
 
-site_cfg['inspect_dict']['sim_signal']=sim_signal.map_dict
+inspect_dict['sim_signal']=sim_signal.map_dict
 
 class UserGroupTable(ModelTable):
     

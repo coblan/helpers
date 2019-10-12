@@ -1,4 +1,4 @@
-from helpers.director.shortcut import ModelTable,Fields,director
+from helpers.director.shortcut import ModelTable,Fields,director,get_request_cache
 
 class FilterForm(object):
     def get_operations(self):
@@ -43,36 +43,52 @@ class ModelTableMobile(ModelTable):
     
     def get_head_context(self):
         ctx = super().get_head_context()
+        named_ctx = get_request_cache()['named_ctx']
         director_name = self.get_director_name()
-        fieldCls = director.get(director_name+'.edit')     
+        editor_director = director_name+'.edit'
+        
+        fieldCls = director.get(editor_director)     
         if not  fieldCls:
             return ctx
-        else:
+        if not editor_director in director_name:
             fom = fieldCls()
             form_ctx = fom.get_head_context()
-            form_ctx['after_save']='scope.vc.ctx.table_par.update_or_insert(scope.row)'
-            ctx.update( {
-                'table_editor':'com-ctn-table-van-cell',
-                'block_click':'var dynctx =scope.ps.vc.ctx.fields_ctx;dynctx.table_par=scope.ps;dynctx.row=scope.row;dynctx.title=dynctx.row._label;live_root.open_live("live_fields",dynctx)',
-                'fields_ctx':form_ctx,  
-            }) 
-            return ctx
+            if 'after_save' not in form_ctx:
+                form_ctx['after_save']='cfg.toast("保存成功"); scope.vc.ctx.table_par.update_or_insert(scope.row);'
+            named_ctx[editor_director] = form_ctx
+
+        ctx.update( {
+            'table_editor':'com-ctn-table-van-cell',
+            'block_click':'var dynctx =named_ctx[%(edit_form)s];dynctx.table_par=scope.ps;dynctx.row=scope.row;dynctx.title=dynctx.row._label;live_root.open_live("live_fields",dynctx)'%{'edit_form':editor_director},
+        }) 
+        return ctx
 
     def get_operation(self):
         ops=[]
         director_name = self.get_director_name()
         fieldCls = director.get(director_name+'.edit')     
         if  fieldCls:
-            fieldobj=fieldCls(crt_user=self.crt_user)
+            #fieldobj=fieldCls(crt_user=self.crt_user)
+            # 这里用name是逼不得已，因为vant只接受name作为其label
             ops = [
-                {'name':'新建','basename':'add_new','action':'scope.ps.newRow().then((row)=>{scope.ps.vc.ctx.fields_ctx.row=row;scope.ps.vc.ctx.fields_ctx.table_par=scope.ps; live_root.open_live("live_fields",scope.ps.vc.ctx.fields_ctx)   }) '}
+                {'name':'add_new',
+                 'label':'新增',
+                 'icon_editor':'com-nav-vant-icon',
+                 'icon_ctx':{'name':'plus'},
+                 'level':'rigth-top',
+                 'action':'scope.ps.newRow().then((row)=>{var fields_ctx = named_ctx["%(editor_director_name)s"]; fields_ctx.row=row;fields_ctx.table_par=scope.ps; live_root.open_live("live_fields",fields_ctx)   })'%{'editor_director_name':director_name+'.edit'}}
             ]
         
         filter_obj = self.filterForm()
         filter_obj.set_filter(self.row_filter)
         if self.row_filter.names and self.filterForm:
             ops += [
-                 {'name':'查询','action':'scope.head.filter_ctx.title="查询条件";scope.head.filter_ctx.row=scope.ps.search_args;live_root.open_live("live_fields",scope.head.filter_ctx)',
+                 {'name':'search',
+                  'label':'查询',
+                  'icon_editor':'com-nav-vant-icon',
+                 'icon_ctx':{'name':'search'},
+                 'level':'rigth-top',
+                  'action':'scope.head.filter_ctx.title="查询条件";scope.head.filter_ctx.row=scope.ps.search_args;live_root.open_live("live_fields",scope.head.filter_ctx)',
                      'filter_ctx':filter_obj.get_head_context()}
             ]
         return ops

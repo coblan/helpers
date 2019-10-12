@@ -36,7 +36,9 @@ var mix_fields_data ={
         ex.each(this.heads,function(head){
             if(typeof head.readonly=='string'){
                 head._org_readonly=head.readonly
-                head.readonly=ex.eval(head._org_readonly,{row:self.row})
+                var is_readonly = ex.eval(head._org_readonly,{row:self.row})
+                Vue.set(head,'readonly',is_readonly)
+                //head.readonly=ex.eval(head._org_readonly,{row:self.row})
             }
             if(typeof head.required=='string'){
                 head._org_required=head.required
@@ -53,7 +55,8 @@ var mix_fields_data ={
             var self=this
             ex.each(self.heads,function(head){
                 if( head._org_readonly){
-                    head.readonly=ex.eval(head._org_readonly,{row:self.row})
+                    var is_readonly = ex.eval(head._org_readonly,{row:self.row})
+                    Vue.set(head,'readonly',is_readonly)
                 }
                 if( head._org_required){
                     head.required=ex.eval(head._org_required,{row:self.row})
@@ -62,33 +65,47 @@ var mix_fields_data ={
 
             // 准备用下面两个替换前面所有逻辑
             var heads = ex.filter(self.heads,function(head){
-                if(head.show){
+                if (head.sublevel){
+                    return false
+                }else if(head.show){
                     return ex.eval(head.show,{row:self.row})
                 }else{
                     return true
                 }
             })
 
+            // head.express  用来干啥?
             ex.each(self.heads,function(head){
                 if(head.express){
                     ex.vueAssign(head, ex.eval(head.express,{row:self.row}) )
                 }
             })
             return heads
+        },
+        normed_ops(){
+            return ex.filter(this.ops,op=>{
+                if(op.show){
+                    return ex.eval(op.show,{vc:this})
+                }else{
+                    return true
+                }
+            })
         }
     },
     methods:{
-        updateRowBk:function(director_name,data){
-            // 后端可以控制，直接更新row数据
-            cfg.show_load()
-            ex.director_call(director_name,data).then(row=>{
-                cfg.hide_load()
-                if(this.par_row){
-                    ex.vueAssign(this.par_row,row)
-                }
-                ex.vueAssign(this.row,row)
-            })
-        },
+        //updateRowBk:function(director_name,data){
+        //    // 后端可以控制，直接更新row数据
+        //    // 该函数废弃，替换为 直接调用 ex.director_call .then
+        //
+        //    cfg.show_load()
+        //    ex.director_call(director_name,data).then(resp=>{
+        //        cfg.hide_load()
+        //        if(this.par_row){
+        //            ex.vueAssign(this.par_row,resp.row)
+        //        }
+        //        ex.vueAssign(this.row,resp.row)
+        //    })
+        //},
         on_operation:function(op){
             if(op.action){
                 ex.eval(op.action,{vc:this,row:this.row,head:this.head})
@@ -106,6 +123,7 @@ var mix_fields_data ={
         },
         setErrors:function(errors){
             // errors:{field:['xxx','bbb']}
+            var self=this
             var errors=ex.copy(errors)
             if(!this.heads){
                 return
@@ -114,18 +132,21 @@ var mix_fields_data ={
                 if(errors[head.name]){
                     Vue.set(head,'error',errors[head.name].join(';'))
                     delete errors[head.name]
+
                 }else if(head.error){
                     //delete head.error
                     //Vue.delete(head,'error')
                     Vue.set(head,'error','')
+                    $(self.$el).find(`[name=${head.name}]`).trigger("hidemsg")
                     //Vue.set(head,'error',null)
                 }
             })
 
             if(!ex.isEmpty(errors)){
-                layer.alert(
-                    JSON.stringify(errors)
-                )
+                cfg.showMsg(  JSON.stringify(errors)  )
+                //layer.alert(
+                //    JSON.stringify(errors)
+                //)
             }
 
         },
@@ -187,7 +208,10 @@ var mix_fields_data ={
                             }
                         }, function(index, layero){
                             layer.close(index)
-                            self.updateRowBk(self.row._director_name,{pk:self.row.pk})
+                            ex.director_call(self.row._director_name,{pk:self.row.pk}).then(resp=>{
+                                ex.vueAssign(self.row,resp.row)
+                            })
+                            //self.updateRowBk(self.row._director_name,{pk:self.row.pk})
                         }, function(index){
                             layer.close(index)
                             self.row.meta_hash_fields=''
@@ -195,17 +219,20 @@ var mix_fields_data ={
                         });
                         //cfg.showMsg(rt._outdate)
                     }else{
-                        cfg.toast('操作成功！',{time: 1000})
                         ex.vueAssign(self.row,rt.row)
                         if(this.head && this.head.after_save && typeof this.head.after_save =='string'){
                             ex.eval(this.head.after_save,{ps:self.parStore,vc:self,row:rt.row})
                         }else{
                             // 调用组件默认的
                             self.after_save(rt.row)
+                            if(resp.msg || rt.msg){
+                                //cfg.hide_load()
+                                cfg.showMsg(resp.msg || rt.msg)
+                            }else{
+                                cfg.toast('操作成功！',{time: 1000})
+                            }
                         }
-                        if(resp.msg){
-                            //cfg.hide_load()
-                        }
+
                         self.setErrors({})
                         self.$emit('finish',rt.row)
                         resolve(rt.row)
@@ -219,7 +246,11 @@ var mix_fields_data ={
 
             //ex.assign(this.row,new_row)
             //TODO 配合 table_pop_fields ，tab-fields 统一处理 after_save的问题
-
+            if(this.par_row){
+                if(this.par_row._director_name == new_row._director_name && this.par_row.pk == new_row.pk){
+                    ex.vueAssign(this.par_row,new_row)
+                }
+            }
 
         },
         showErrors:function(errors){

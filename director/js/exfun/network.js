@@ -1,4 +1,9 @@
 
+import {hook_ajax_msg,hook_ajax_csrf,show_upload,hide_upload} from './network/ajax_fun.js'
+
+hook_ajax_msg()
+hook_ajax_csrf()
+
 export var network ={
     get:function(url,callback){
         //replace $.get

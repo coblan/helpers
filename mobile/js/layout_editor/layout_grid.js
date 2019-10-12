@@ -13,9 +13,14 @@ Vue.component('com-grid-icon-btn',{
      <img :src="ctx.icon" alt="">
      <div class="label" v-text="ctx.label"></div>
     </div>`,
+    data(){
+        return {
+            parStore:ex.vueParStore(this)
+        }
+    },
     methods:{
         on_click(){
-            ex.eval(this.ctx.action,{head:this.ctx})
+            ex.eval(this.ctx.action,{head:this.ctx,ps:this.parStore})
         }
     }
 })

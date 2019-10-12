@@ -37,12 +37,12 @@ class PageNum(object):
         #self.totalpage = max(totalpage,1)
         
         # 需要研究下，为什么有时 len(query) != query.count()  ，例如 jb.maindb.ticket_admin.TicketparlayTable
-        #self.count =  len(query) #query.count()
-        
-        #crt_page=max(1,int( self.pageNumber))
+        #self.count =  query.count() #len(query) #
+        #crt_page= max(1,int( self.pageNumber))
         #start = (crt_page -1)*self.perPage
         #end = min(crt_page*self.perPage, self.count)
         #return query[start:end]
+        
         self.pagenator = Paginator(query,self.perPage)
         self.pageNumber = min(self.pagenator.num_pages,abs(int( self.pageNumber)))
         self.count = self.pagenator.count
@@ -139,8 +139,18 @@ class RowFilter(object):
         #self._names=[x for x in self.names if x in allowed_names]        
         self.filter_args={}
         for k in self.names:
+            compare_name = '_%s_compare'%k
             v = dc.pop(k,'')
-            self.filter_args[k] = v
+            if compare_name in kw:
+                cv = str( kw.get(compare_name) )
+                if cv == '0':
+                    self.filter_args[k] =v
+                elif cv == '1':
+                    self.filter_args['%s__gte'%k] =v
+                elif cv == '-1':
+                    self.filter_args['%s__lte'%k] =v
+            else:
+                self.filter_args[k] = v
             #if v != None:
                 #self.filter_args[k]=v   
             #if v=='0':
@@ -378,7 +388,7 @@ class ModelTable(object):
         if not self.row_search.model:
             self.row_search.model=self.model
         self.pagenum = self.pagenator(pageNumber=self.page,perpage=perpage)
-        self.footer = []
+        self.footer = {}
         
     
     def custom_permit(self):
@@ -471,16 +481,6 @@ class ModelTable(object):
             'row_sort': self.getRowSort()
         })
         return head_ctx
-        #rows = self.get_rows()
-        #head_ctx.update({
-            #'rows': rows,
-            #'row_pages' : self.getRowPages(),
-            #'row_sort': self.getRowSort(),#row_sort,
-            #'model_name':model_to_name(self.model),
-            #'parents': self.getParents(),
-            #'footer': self.footer,
-        #})
-        #return head_ctx
     
     def get_event_slots(self):
         return []
@@ -681,7 +681,7 @@ class ModelTable(object):
                     head['editor'] = 'com-table-click'
                     head['fields_ctx'] = fields_ctx
                     head['fields_ctx'].update({
-                        #'init_express':'ex.director_call(scope.vc.ctx.director_name,{car_no:scope.vc.par_row.car_no}).then(res=>ex.vueAssign(scope.row,res))',
+                        #'init_express':'ex.director_call(scope.vc.ctx.director_name,{car_no:scope.vc.par_row.car_no}).then(res=>ex.vueAssign(scope.row,res.row))',
                         #'after_save':'scope.vc.par_row.car_no =scope.row.car_no; scope.vc.par_row.has_washed=scope.row.has_washed ',
                         #'init_express':'cfg.show_load(),ex.director_call(scope.vc.ctx.director_name,{pk:scope.vc.par_row.pk}).then((res)=>{cfg.hide_load();ex.vueAssign(scope.row,res)})',
                         'init_express':'ex.vueAssign(scope.row,scope.vc.par_row)',
@@ -753,15 +753,9 @@ class ModelTable(object):
                        'meta_org_dict':self.get_org_dict(dc,inst)
                        })
             out.append(dc)
-        #out = self.append_sequence(out)
         return out
     
     def get_org_dict(self,row,inst=None):
-        #keys = self.permit.readable_fields()
-        #fields_name = [x.name for x in inst._meta.get_fields()]
-        #valide_name_list = [x for x in fields_name if x in out.keys()]
-        ##out['meta_hash']=hash_dict(instance.__dict__,valide_name_list)
-        #out['meta_hash_fields'] = ','.join(valide_name_list)
         org_row = make_mark_dict(row)
         return org_row
     
@@ -781,8 +775,8 @@ class ModelTable(object):
         """
         return {}
     
-    def init_query(self):
-        return self.model.objects.all()
+    #def init_query(self):
+        #return self.model.objects.all()
     
     def get_query(self):
         if self.nolimit:
@@ -791,7 +785,8 @@ class ModelTable(object):
             raise PermissionDenied('no permission to browse %s ,Please login first' % self.model._meta.model_name)
         elif not self.crt_user.is_superuser and not self.permit.readable_fields():
             raise PermissionDenied('user %s ,no permission to browse %s'% ( self.crt_user.username, self.model._meta.model_name))
-        query =  self.init_query()
+        #query =  self.init_query()
+        query = self.model.objects.all()
         
         # 优化速度
         if self.exclude:
@@ -810,7 +805,7 @@ class ModelTable(object):
         #[todo] 优化，是否select_related,select_related的field限定在输出的head中
         if not query._fields:  # 如果这个属性部位空，证明已经调用了.values() or .values_list()
             for f in self.model._meta.get_fields():
-                if f.name in head_nams and isinstance(f, models.ForeignKey):
+                if f.name in head_nams and isinstance(f, (models.ForeignKey,models.OneToOneField)):
                     query = query.select_related(f.name)        
 
         
@@ -923,7 +918,7 @@ class PlainTable(ModelTable):
         
         self.page= int( page or 1 )
         self.perpage= int( perpage or 20 )
-        self.footer = []
+        self.footer = {}
         self.custom_permit()
     
     def custom_permit(self):

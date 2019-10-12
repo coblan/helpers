@@ -8,7 +8,7 @@ var table_store={
              row_sort:{},
              row_pages:{},
              director_name:'',
-             footer:[],
+             footer:{},
              selected:[],
              search_args:{}, //ex.parseSearch(),
              ops:[],
@@ -341,22 +341,53 @@ var table_store={
 
                 })
             }
+        },
+        save_rows(rows,option){
+            var self = this
+            var promise= new ex.DefPromise((resolve,reject)=>{
 
+                ex.director_call('d.save_rows', {rows: rows}).then(resp=> {
+                    cfg.hide_load()
 
+                    if (resp._outdate) {
+                        layer.confirm(resp._outdate, {
+                            icon: 3,
+                            title: '提示',
+                            btn: ['刷新数据', '仍然保存', '取消'] //可以无限个按钮
+                            , btn3: function (index, layero) {
+                                layer.close(index)
+                            }
+                        }, function (index, layero) {
+                            layer.close(index)
+                            self.search()
+                        }, function (index) {
+                            layer.close(index)
+                            ex.each(rows, row=> {
+                                row.meta_hash_fields = ''
+                            })
+                            self.save_rows(rows)
+                        });
+                    } else if (resp.errors) {
+                        if (option.after_error) {
+                            ex.eval(option.after_error, { errors: resp.errors})
+                        } else {
+                            cfg.showError(JSON.stringify(resp.errors))
+                        }
+                    } else if(promise.has_then){
+                        resolve(resp)
+                    } else if(option.after_save){
+                        return ex.eval(option.after_save,{ps:self,resp:resp})
+                    }else{
+                        cfg.toast('操作成功！', {time: 1000})
+                        ex.each(resp, function (new_row) {
+                            self.update_or_insert(new_row)
+                        })
+                    }
+                })
+            })
 
+            return promise
 
-
-            //row[kws.field]=kws.value
-
-
-            //if(kws.confirm_msg){
-            //    layer.confirm(kws.confirm_msg, {icon: 3, title:'提示'}, function(index){
-            //        layer.close(index);
-            //        judge_pop_fun()
-            //    });
-            //}else {
-            //    judge_pop_fun()
-            //}
         },
         export_excel:function(){
             var self=this
@@ -373,9 +404,21 @@ var table_store={
         director_call:function(kws){
             var self =this
             var row_match_fun = kws.row_match
-            if(row_match_fun && ! row_match[row_match_fun](self,kws)){
-                return
+            if(row_match_fun){
+                if( row_match[row_match_fun]){
+                    if(! row_match[row_match_fun](self,kws)){
+                        return
+                    }
+                } else{// 如果匹配不了，就说明是express
+                    if(! ex.eval(row_match_fun,{ps:self})){
+                        if(kws.match_msg){
+                            ex.eval(kws.match_msg,{ps:self})
+                        }
+                        return
+                    }
+                }
             }
+
 
             function do_director_call(new_row,callback){
                 cfg.show_load()

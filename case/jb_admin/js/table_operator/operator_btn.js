@@ -28,7 +28,14 @@ var op_a = {
                 if(this.head.row_match && !this.parStore.check_selected(this.head)){
                     return
                 }
-                ex.eval(this.head.action, {ps: this.parStore, head: this.head,self:this})
+                if(this.head.confirm_msg){
+                    cfg.confirm(this.head.confirm_msg).then(()=>{
+                        ex.eval(this.head.action, {ps: this.parStore, head: this.head,self:this})
+                    })
+                }else{
+                    ex.eval(this.head.action, {ps: this.parStore, head: this.head,self:this})
+                }
+
             }else{
                 this.$emit('operation',this.head.name || this.head.fun)
             }

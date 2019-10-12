@@ -5,7 +5,6 @@ from django.contrib import admin
 from django.contrib.auth.models import Group,User
 from helpers.director.shortcut import TablePage,ModelTable,page_dc,model_dc,ModelFields, director,RowFilter,director_view
 from helpers.director.models import PermitModel 
-from helpers.director.base_data import site_cfg
 import re
 from . import  js_cfg
 from django.utils.translation import ugettext as _
@@ -21,7 +20,7 @@ class UserPage(TablePage):
     class tableCls(ModelTable):
         model = User
         exclude=['password', 'last_name', 'user_permissions']
-        pop_edit_field = 'username'
+        pop_edit_fields = ['username']
         fields_sort = ['id','username','first_name','groups','is_superuser','is_staff','is_active','last_login']
         
         def dict_head(self, head): 
@@ -36,9 +35,11 @@ class UserPage(TablePage):
                 head['label']='权限分组'
                 head['editor'] = 'com-table-array-mapper'
                 head['options'] = [{'value': group.pk, 'label': str(group),} for group in Group.objects.all()]
-                #head['parse_method'] = 'dotSplit'
-            if head['name'] == 'username':
-                head['label']='账号'
+    
+            #if head['name'] == 'username':
+                #head['label']='账号'
+                #head['editor'] = 'com-table-click'
+                #head['action'] = ''
             return head
         
         def inn_filter(self, query):
@@ -91,7 +92,32 @@ class UserFields(ModelFields):
             target_user.set_password(pswd)
             #target_user.save()            
             
-        
+class UserPicker(ModelTable):
+    model = User
+    exclude = []
+    fields_sort=['id','username','first_name']
+    def dict_head(self, head):
+        width = {
+            'username':160,
+            'first_name':230
+        }
+        if head['name'] in width:
+            head['width'] = width[head['name']]
+        if head['name'] =='username':
+            head['editor'] = 'com-table-foreign-click-select'
+        return head
+    
+    def get_head_context(self):
+        ctx = super().get_head_context()
+        ctx.update({
+            'init_express':'scope.ps.search()',
+            'ops_loc':'bottom'
+        })
+        return ctx
+    
+    class filters(RowFilter):
+        names=['username','first_name']
+        icontains = ['username','first_name']
 
 class GroupPage(TablePage):
     template='jb_admin/table.html'
@@ -180,15 +206,35 @@ class GroupForm(ModelFields):
     
     def get_heads(self):
         heads= super(self.__class__,self).get_heads()
-        options = site_cfg.get('permit.options')()
-        #options = permit_dc.get('__root__')
-        #options = [{'value':x.pk,'label':str(x)} for x in PermitModel.objects.all()]
-        #options = list2tree(options)
+        options = director.get('permit.options')()
+        ##options = permit_dc.get('__root__')
+        ##options = [{'value':x.pk,'label':str(x)} for x in PermitModel.objects.all()]
+        ##options = list2tree(options)
+        if director.get('permit.ui_options'):
+            heads.append({
+                'name':'ui',
+                'editor':'com-field-select',
+                'label':'权限视图',
+                'options':director.get('permit.ui_options'),
+                'help_text':'鉴于权限选择的复杂性和重要性，对权限进行了不同侧重点的整理，不同视图对应不同侧重点。',
+                'event_slots':[
+                    {'event':'input','express':'''cfg.show_load();
+                     ex.director_call("permit.options",{ui:scope.event}).then((res)=>{cfg.hide_load();scope.ps.$emit("permit_options_changed", res)}) ''' },
+                     #{'event':'input','express':'''
+                     #var permit_head = ex.findone( scope.ps.vc.heads,{name:"permit"});
+                     #cfg.show_load();
+                     #ex.director_call("permit.options",{ui:scope.event}).then((res)=>{cfg.hide_load();permit_head.options=res}) ''' },
+                    #{'event':'changed','express':'scope.ps.$emit("group-changed")'},
+                ]
+            })
         heads.append({
             'name':'permit',
             'editor':'com-field-ele-tree-depend',
             'label':'权限选择',
-            'options':options
+            'options':options,
+            'event_slots':[
+                {'par_event':'permit_options_changed','express':'scope.vc.refresh(scope.event)'},
+            ]
         })
         return heads    
     
@@ -237,6 +283,7 @@ def list2tree(ls):
 director.update({
     'jb_user': UserPage.tableCls,
     'jb_user.edit': UserFields,
+    'user.picker':UserPicker,
     'jb_group': GroupPage.tableCls,
     'jb_group.edit': GroupForm,
 })

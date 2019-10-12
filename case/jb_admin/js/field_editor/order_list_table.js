@@ -19,9 +19,9 @@ var order_list =  {
                               border
                               :stripe="true"
                               size="mini"
-                              :summary-method="getSum"
                                @selection-change="handleSelectionChange"
                               style="width: 100%">
+                              <!--:summary-method="getSum"-->
                         <el-table-column
                                 type="selection"
                                 width="55">

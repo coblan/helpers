@@ -36,7 +36,7 @@ from django.shortcuts import render
 from django.core.urlresolvers import reverse
 from django.shortcuts import redirect
 from django.conf import settings
-from django.http import HttpResponse,JsonResponse
+from django.http import HttpResponse,JsonResponse,Http404
 #from .model_admin import ajax
 from helpers.func.collection.container import evalue_container,find_one_r
 from .access.permit import ModelPermit,has_permit
@@ -51,6 +51,7 @@ import time
 from django.shortcuts import redirect
 from .base_data import js_tr_list,js_lib_list
 from django.views.decorators.csrf import csrf_exempt
+from helpers.director.middleware.request_cache import get_request_cache
 
 class BaseEngine(object):
     _pages=None
@@ -66,7 +67,7 @@ class BaseEngine(object):
     home = '/' # 当前engine的主页，没有目的的时候，可以往这里跳
     
     root_page='/'   # 被home 替代了
-    access_from_internet = False
+    access_from_internet = getattr(settings,'ACCESS_FROM_INTERNET',False)
     need_staff = False
     
     @classmethod
@@ -99,6 +100,8 @@ class BaseEngine(object):
         self.engin_url =  reverse(self.url_name,args=('aa',))[:-3]
         
         page_cls = self.get_page_cls(name)
+        #if not page_cls:
+            #raise Http404()
 
         if hasattr(page_cls, 'need_login'):
             need_login = page_cls.need_login
@@ -135,6 +138,11 @@ class BaseEngine(object):
         if request.GET.get('_accept')=='json' or 'json' in request.META.get('HTTP_ACCEPT',''):
             resp= HttpResponse(json.dumps(ctx,ensure_ascii=False),content_type="application/json") 
         else:
+            named_ctx = get_request_cache()['named_ctx']
+            if ctx.get('named_ctx'):
+                named_ctx.update(ctx.get('named_ctx'))
+            ctx['named_ctx'] = evalue_container( named_ctx)
+            
             ctx['brand'] = self.brand
             ctx['title'] = self.title
             ctx['menu_search']=self.menu_search

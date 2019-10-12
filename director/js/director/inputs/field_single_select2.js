@@ -26,8 +26,10 @@ var field_sigle_chosen={
         if (this.head.style){
             ex.append_css(this.head.style)
         }
-        ex.load_css('https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css')
-        let prom1 = ex.load_js('https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js')
+        //ex.load_css('https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css')
+        //let prom1 = ex.load_js('https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js')
+        ex.load_css(js_config.js_lib.select2_css)
+        let prom1 = ex.load_js(js_config.js_lib.select2)
         if(this.head.dyn_options){
             var prom2 =  ex.eval(this.head.dyn_options,{row:this.row,vc:this})
         }else{

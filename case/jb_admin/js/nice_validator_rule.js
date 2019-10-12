@@ -24,8 +24,24 @@ $.validator.config({
             return exp.test(element.value) || '不满足规则'
         },
         express:function(element, param) {
-            return ex.eval(param[0],{value:element.value}) ||  '不满足规则'
+            // 举例
+            //express = base64.b64encode("parseFloat(scope.value) > 0".encode('utf-8'))
+            //msg = base64.b64encode('必须大于0'.encode('utf-8'))
+            //head['fv_rule']= 'express(%s , %s)'%( express.decode('utf-8'),msg.decode('utf-8'))
+
+            var real_param = ex.atou(param[0])
+            if (param[1]){
+                var msg = ex.atou( param[1] )
+            }else{
+                var msg =  '不满足规则'
+            }
+            return ex.eval(real_param,{value:element.value,element:element}) ||  msg
         },
+        myremote:function(element, param){
+            var real_param = ex.atou(param[0])
+            return ex.eval(real_param,{value:element.value,element:element})
+        },
+
         // com-field-table-list
         key_unique:function(elem, param) {
             //return /^1[3458]\d{9}$/.test($(elem).val()) || '请检查手机号格式';

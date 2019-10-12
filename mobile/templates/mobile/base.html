@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 {% load static %}
 {% load jsonify %}
+{% load ctxvalue %}
 {% load rpdot %}
 
 <html>
@@ -43,9 +44,14 @@
 
 </body>
 
-
-
 {% for lib in extra_js %}
-<script src='{{ lib }}'></script>
+<script src='{{ lib | ctxvalue:js_config.js_lib }}'></script>
 {% endfor %}
+
+<script>
+    init_express={{ init_express | jsonify }}
+    if(init_express){
+        ex.eval(init_express)
+    }
+</script>
 </html>

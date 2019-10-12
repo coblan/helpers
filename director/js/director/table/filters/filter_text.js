@@ -1,8 +1,9 @@
-
+require('./styl/filter_text.styl')
 var filter_input = {
     props:['head','search_args','config'],
     template:`<div class="com-filter-input">
-        <input @keyup.enter="parStore.search()" type="text" v-model='search_args[head.name]' class="form-control input-sm" :placeholder="head.label">
+    <span v-if="head.label" v-text="head.label"></span>
+        <input @keyup.enter="parStore.search()" type="text" v-model='search_args[head.name]' class="form-control input-sm" :placeholder="head.placeholder">
     </div>
     `,
     data:function(){

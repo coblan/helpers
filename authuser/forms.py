@@ -62,6 +62,7 @@ class LoginForm(forms.ModelForm):
         
         if user: 
             if user.is_active:
+                self.instance = user
                 return self.cleaned_data
                 #auth.login(request, user)
             else:

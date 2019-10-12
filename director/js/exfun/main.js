@@ -12,6 +12,7 @@ import {layout} from  './layout'
 import {file_proc} from  './file_proc'
 import {rabbit} from  './rabbit'
 import {sys} from  './sys'
+import  * as defPromise from  './defPromise'
 
 var ex={
     assign:function (dst,src) {
@@ -38,7 +39,7 @@ ex.assign(ex,rabbit)
 ex.assign(ex,sys)
 
 ex.sortOrder=sortOrder
-
+ex.DefPromise = defPromise.default
 //ex.md5=md5
 window.ex = ex
 

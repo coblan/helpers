@@ -12,7 +12,7 @@ var ele_table= {
             keyed_heads[head.name]=head
         })
 
-        if(parStore.advise_heads){
+        if(parStore.advise_heads && parStore.advise_heads.length > 0){
             var key = '_table_settings_'+parStore.director_name
             var setting_str = localStorage.getItem(key)
             if(setting_str){
@@ -115,9 +115,9 @@ var ele_table= {
         selected:function(){
             return this.parStore.selected
         },
-        footer:function(){
-            return this.parStore.footer
-        },
+        //footer:function(){
+        //    return this.parStore.footer
+        //},
     },
     watch:{
         selected:function(newvalue,old){
@@ -223,10 +223,27 @@ var ele_table= {
                     </el-table>
                     </div>`,
     methods: {
+        getSum:function(param){
+            var footer =[]
+            if(this.parStore.selectable){
+                footer.push(this.parStore.footer._label || '')
+            }
+            ex.each(this.normed_heads,(head)=>{
+                if(head.children){
+                    var subheads = this.name_in_list(head.children)
+                    ex.each(subheads,(subhead)=>{
+                        footer.push(this.parStore.footer[subhead.name] || '')
+                    })
+                }else if(! head.sublevel){
+                    footer.push(this.parStore.footer[head.name] || '')
+                }
+            })
+            return  footer
+        },
         on_header_dragend(newWidth, oldWidth, column, event){
             this.parStore.$emit('header-dragend',{newWidth:newWidth, oldWidth:oldWidth, column:column, event:event})
 
-            if(this.parStore.advise_width){
+            if(this.parStore.advise_heads && this.parStore.advise_heads.length >0){
                 var key = '_table_settings_'+ this.parStore.director_name
                 var setting_str = localStorage.getItem(key)
                 var setting_obj = JSON.parse(setting_str)

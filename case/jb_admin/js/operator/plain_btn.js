@@ -1,12 +1,18 @@
 var op_a = {
     props:['head','disabled'],
-    template:`<button :class="norm_class"  :style="head.style" :disabled="disabled" @click="operation_call">
+    template:`<button class="btn btn-sm btn-default" :class="this.head.class"
+        :style="head.style" :disabled="disabled" @click="operation_call">
         <i v-if="head.icon" :class='["fa",head.icon]'></i>
         <span  v-text="head.label"></span>
     </button>`,
     data:function(){
         return {
             enable:true
+        }
+    },
+    mounted(){
+        if(this.head.css){
+            ex.append_css(this.head.css)
         }
     },
     computed:{

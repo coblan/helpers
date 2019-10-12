@@ -69,8 +69,12 @@ class ModelFields(forms.ModelForm):
                 如果要设置instance的默认值，可以在kw中传入，这样第一次返回前端的时候就有值。
                 如果在dc中传入默认值，第一次返回前端时，没有值，因为初始化时，不会调用 save_form 函数。
                 
-             当get 时，dc是前端传来的url参数，排除pk后的额外的字典。（用处不大）
-             
+             当get 时，dc是前端传来的url参数中的dc字段，(基本上没有用）
+        
+        * 后端设置默认值:    1. 在clean_dict 中设置 ; 
+                            2. 在clean_save中设置时，但是经历了 clean函数，可能验证不能通过
+        * 前端设置默认值： 在 table的 add_new 操作中 添加 pre_set 。注意 foreignkey 需要加 _id
+        
         """
         self.kw = kw.copy()
         
@@ -93,21 +97,34 @@ class ModelFields(forms.ModelForm):
                 except self._meta.model.DoesNotExist:
                     raise Http404('Id=%s that you request is not exist'%pk)
             else:
-                form_kw['instance'] = self._meta.model(**self.kw)
+                # 前端初始化字段值，在 add_new opertions里面添加 pre_set:'rt={}'
+                field_names = []
+                for field in self._meta.model._meta.get_fields():
+                    if isinstance(field,models.ForeignKey):
+                        field_names.append('%s_id'%field.name)
+                    else:
+                        field_names.append(field.name)
+                init_dc = {k:v for k,v in self.kw.items() if k in field_names}
+                form_kw['instance'] = self._meta.model(**init_dc) #(**self.kw)
         else:
             form_kw['instance']=kw.pop('instance')
         
         self.custom_permit()
          # 强制 readonly的字段，不能修改
         inst =  form_kw['instance']
+        
+        meta_change_fields=[]
+        if dc.get('meta_change_fields'):
+            meta_change_fields = dc.get('meta_change_fields').split(',')
         for k in dict(dc):
-            if k in self.readonly:
+            if k in self.readonly or (meta_change_fields and k not in meta_change_fields ):
                 if hasattr(inst, "%s_id" % k):  # 如果是ForeignKey，必须要pk值才能通过 form验证
                     fieldcls = inst.__class__._meta.get_field(k)
                     if isinstance(fieldcls, models.ForeignKey):
                         dc[k] = getattr(inst, "%s_id" % k)
                         continue
-                dc[k] =  getattr(form_kw['instance'] , k)  
+                if hasattr(inst,k):
+                    dc[k] =  getattr(inst , k)  
             
         # 强制保存字段，不验证是否改变,并且其他字段都不能改变
         #if dc.get('meta_change_fields'):
@@ -126,7 +143,6 @@ class ModelFields(forms.ModelForm):
         self.kw.update(dc)
 
         super(ModelFields,self).__init__(dc,*args,**form_kw)
-        
         
         self.pop_fields()
         self.init_value()
@@ -156,11 +172,15 @@ class ModelFields(forms.ModelForm):
             #ls = [x for x in ls if x in self.fields.keys()]
             #ls =[x for x in ls if x not in self.readonly]
             #ls = [x for x in ls if x not in self.overlap_fields]
-            dif_dc = dif_mark_dict(crt_mark_dc, self.kw.get('meta_org_dict'),exclude= overlaped_fields)
+            if self.kw.get('meta_change_fields'):
+                meta_change_fields = self.kw.get('meta_change_fields').split(',')
+                dif_dc = dif_mark_dict(crt_mark_dc,self.kw.get('meta_org_dict'),include= meta_change_fields)
+            else:
+                dif_dc = dif_mark_dict(crt_mark_dc, self.kw.get('meta_org_dict'),exclude= overlaped_fields)
             
             if dif_dc:
                 keys = [self.fields.get(key).label for key in dif_dc.keys()]
-                raise OutDateException('(%s)的%s已经被其他用户改变,请确认后再进行操作!'%(self.instance,keys) )
+                raise OutDateException('(%s)的%s已经发生了变化,请确认后再进行操作!'%(self.instance,keys) )
     
     def get_org_dict(self,row=None):
         if not row:
@@ -184,7 +204,7 @@ class ModelFields(forms.ModelForm):
                     field = model._meta.get_field(k)
                     if field_map.get(field.__class__):
                         mapper_cls = field_map.get(field.__class__)
-                        dc[k] =  mapper_cls().clean_field(dc,k)
+                        dc[k] =  mapper_cls(field=field).clean_field(dc,k)
                         
                 field_path = model_name+'.'+k
                 if field_map.get(field_path):
@@ -197,7 +217,9 @@ class ModelFields(forms.ModelForm):
         return dc
     
     def get_data_context(self):
-        return self.get_row()
+        return {
+            'row':self.get_row()
+           }
     
     def is_valid(self): 
         rt = super().is_valid()
@@ -237,9 +259,7 @@ class ModelFields(forms.ModelForm):
         """
         """
         ctx = self.get_head_context()
-        ctx.update({
-            'row': self.get_row(),
-        })
+        ctx.update(self.get_data_context())
         return ctx
     
     @request_cache
@@ -452,7 +472,7 @@ class ModelFields(forms.ModelForm):
             raise PermissionDenied('you have no Permission access %s'%self.instance._meta.model_name)
 
         # self.fields 是经过 权限 处理了的。可读写的字段
-        if self.instance.pk:
+        if self.instance.pk: # not self.instance._state.adding #
             self.instance.refresh_from_db()
         row = to_dict(self.instance,include=self.fields.keys())
         row.update( self.dict_row(self.instance) )
@@ -608,7 +628,7 @@ class Fields(ModelFields):
                     if head['name'] in dif_dc:
                         head_names.append(head['label'])
                         
-                raise OutDateException('%s已经被其他用户改变,请确认后再进行操作!'%';'.join(head_names) )
+                raise OutDateException('%s已经发生了变化,请确认后再进行操作!'%';'.join(head_names) )
             
     def is_valid(self):
         self.clean()
@@ -637,7 +657,9 @@ class Fields(ModelFields):
         return ls 
     
     def dict_row(self):
-        return {}
+        return {
+            #'_director_name':self.get_director_name()
+        }
     
     def get_row(self): 
         row= self.dict_row()

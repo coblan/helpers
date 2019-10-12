@@ -43,7 +43,7 @@ class SelectSearch(object):
         return {'value': name, 'label': _(self.model._meta.get_field(name).verbose_name) }
     
     def clean_search(self): 
-        
+        "可以返回字符串。或者返回字典,直接代入query查询"
         field_path = '%s.%s'%(model_to_name(self.model),self.qf)
         mapper = None
         if field_path in field_map:
@@ -69,10 +69,12 @@ class SelectSearch(object):
             q_str = self.clean_search()
             if q_str == None:
                 # 相当于 清空查询集
-                return query.filter(pk = None)
-            exp = self.get_express(q_str)
-            if exp:
-                return query.filter( exp)
+                query = query.filter(pk = None)
+            if isinstance(q_str,dict):
+                query = query.filter(**q_str)
+            else:
+                exp = self.get_express(q_str)
+                query = query.filter(exp)
         return query
     
     def get_express(self, q_str): 

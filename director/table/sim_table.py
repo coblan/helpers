@@ -11,7 +11,7 @@ class SimTable(ModelTable):
         self.kw=kw
         self.crt_user=crt_user 
         self.page=_page
-        self.footer = []
+        self.footer = {}
         allowed_names= []  #self.permited_fields()
         
         self.row_sort=self.sort(row_sort,crt_user,allowed_names,kw)

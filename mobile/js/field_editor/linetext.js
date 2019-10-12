@@ -1,6 +1,6 @@
 Vue.component('com-field-linetext',{
     props:['head','row'],
-    template:`<van-field class="com-field-linetext"  v-model="row[head.name]" :required="head.required"
+    template:`<van-field class="com-field-linetext" :class="{'readonly':head.readonly}"  v-model="row[head.name]" :required="head.required"
     :label="head.label"
     type="text"
     :placeholder="normed_placeholder"
