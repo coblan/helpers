@@ -26,6 +26,7 @@
         row:{
             username:'',
             password:'',
+
         },
         heads:[
             {name:'username',editor:'linetext',autofocus:true,placeholder:'用户名'},
@@ -39,6 +40,7 @@
 //                                meta:meta,
                 row:{  username:'',
                     password:'',
+                    validate_img:'',
                     auto_login:true,
                 },
 //                                heads:[
@@ -54,9 +56,32 @@
                 full_regist_url:function(){
                     var next = ex.parseSearch().next
                     return ex.appendSearch(regist_url,{next:next})
+                },
+                has_validate(){
+                    return this.row.validate_img.length >0
                 }
             },
             mounted:function(){
+            },
+            watch:{
+                has_validate(v){
+                    if(v){
+                        $("#there").validator({
+                            fields: {
+                                username:"required;rowError(login_logic.errors)",
+                                password:'required;rowError(login_logic.errors)',
+                                validate_code:'required;rowError(login_logic.errors)'
+                            }
+                        });
+                    }else{
+                        $("#there").validator({
+                            fields: {
+                                username:"required;rowError(login_logic.errors)",
+                                password:'required;rowError(login_logic.errors)',
+                            }
+                        });
+                    }
+                }
             },
             methods:{
                 submit_info:function () {
@@ -67,18 +92,12 @@
                         password:this.row.password,
                         auto_login:this.row.auto_login,
                     }
+                    cfg.show_load()
                     var self=this;
 //                    $.post('/d/ajax/authuser',JSON.stringify(post_data),function (resp) {
-                    ex.director_call('do_login',post_data,function (resp) {
-                        if(resp.errors){
-                            self.errors=resp.errors
-                            for(var k in self.errors){
-                                $("#"+k).trigger("showmsg", ["error", self.errors[k].join(';') ]);
-                            }
-//                                                        content_validator.isValid()
-//                                                        cfg.showMsg(resp.do_login.errors)
-//                                                        update_vue_obj(self.meta.errors,resp.do_login.errors)
-                        }else{
+                    ex.director_call('do_login',{row:this.row},function (resp) {
+                        cfg.hide_load()
+                        if(resp.success){
                             if(parent.root_page){
                                 // 手机版里面，iframe内容直接跳转到首页
                                 parent.location= parent.root_page
@@ -87,7 +106,38 @@
                             }else{
                                 location = '/'
                             }
+                        }else if(resp.validate_img){
+                            ex.vueAssign(self.row,{validate_img:resp.validate_img})
+                            if(resp.msg){
+                                cfg.toast(resp.msg)
+                            }
                         }
+                        if(resp.errors){
+                            for(var k in resp.errors){
+                               $("#"+k).trigger("showmsg", ["error", resp.errors[k].join(';') ]);
+//                                cfg.toast(resp.errors[k].join(';'),{icon: 6})
+                                break;
+                           }
+
+                        }
+//                        if(resp.errors){
+//                            self.errors=resp.errors
+//                            for(var k in self.errors){
+//                                $("#"+k).trigger("showmsg", ["error", self.errors[k].join(';') ]);
+//                            }
+////                                                        content_validator.isValid()
+////                                                        cfg.showMsg(resp.do_login.errors)
+////                                                        update_vue_obj(self.meta.errors,resp.do_login.errors)
+//                        }else{
+//                            if(parent.root_page){
+//                                // 手机版里面，iframe内容直接跳转到首页
+//                                parent.location= parent.root_page
+//                            }else if(page_cfg.next){
+//                                location=page_cfg.next;
+//                            }else{
+//                                location = '/'
+//                            }
+//                        }
                     })
                 }
             }
@@ -107,11 +157,11 @@
             }
         });
 
-        window. content_validator = $("#there").validator({
+//        window. content_validator =
+ $("#there").validator({
             fields: {
                 username:"required;rowError(login_logic.errors)",
                 password:'required;rowError(login_logic.errors)',
-
             }
         });
 
@@ -180,6 +230,16 @@
                 <input type="password" id="password" name="password" class="form-control"  placeholder="密码" v-model="row.password">
                 <div style="position: absolute;left: 7px;top:3px">
                     <img src="/static/authuser/image/login_ic_password.png" alt="" style="width: 12px">
+                </div>
+            </div>
+            <div class="fa-input" v-if="row.validate_img">
+                <div style="display: flex">
+                    <input type="text" id="validate_code" name="validate_code" class="form-control"  placeholder="验证码" v-model="row.validate_code">
+                    <img :src="row.validate_img" alt="">
+                </div>
+
+                <div style="position: absolute;left: 7px;top:3px">
+                    <img src="/static/authuser/image/validate.png" alt="" style="width: 12px">
                 </div>
             </div>
             <div style="margin: 1em 0;">

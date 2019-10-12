@@ -39,10 +39,13 @@ class LoginFormPage(FieldsPage):
     
     
 @director_view('do_login')
-def do_login(username,password,auto_login=False):
+def do_login(row):
     """
     登录函数：
     """
+    username = row.get('username')
+    password = row.get('password')
+    auto_login = row.get('auto_login',False)
     cache = get_request_cache()
     request = cache.get('request')
     form=LoginForm({'username':username,'password':password})
