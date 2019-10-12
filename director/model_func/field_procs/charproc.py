@@ -30,8 +30,13 @@ class CharProc(BaseFieldProc):
         if this_field.choices:        
             options = [{'value':x[0],'label':x[1]} for x in this_field.choices]
         else:
-            query = model.objects.all().values_list(name,flat=True).distinct()
-            options = [{ 'value':x,'label':str(x)} for x in query]
+            def myoption():
+                query = model.objects.all().values_list(name,flat=True).distinct()
+                options = [{ 'value':x,'label':str(x)} for x in query]
+                return options
+            options = myoption
+            #query = model.objects.all().values_list(name,flat=True).distinct()
+            #options = [{ 'value':x,'label':str(x)} for x in query]
             
         return {
             'name':name,
