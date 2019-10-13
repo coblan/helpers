@@ -3,7 +3,7 @@ require('./styl/live_list.styl')
 var live_list={
     props:['ctx'],
     basename:'live-list',
-    template:`<div class="com-live-list" :class="ctx.class">
+    template:`<div class="com-live-list" >
         <com-uis-nav-bar v-if="is_page" :title="ctx.title" :back="can_back" :ops="ctx.ops"></com-uis-nav-bar>
        <!--<cube-scroll :data="childStore.rows" ref="scroll"  :options="scrollOptions" @pulling-down="onPullingDown"-->
                   <!--@pulling-up="onPullingUp">-->
@@ -18,6 +18,7 @@ var live_list={
       finished-text="没有更多了"
       :immediate-check="false"
       @load="onLoad"
+      :class="ctx.content_class"
     >
     <van-pull-refresh v-model="freshing" @refresh="onRefresh">
         <component class="content-wrap" :is="table_editor" :heads="ctx.heads" :rows="childStore.rows"  @select="triggerBlockClick($event)"></component>

@@ -1,3 +1,5 @@
+require('./styl/live_swip_tab.styl')
+
 window.live_swip_tab = {
     props:['ctx'],
     basename:'live-swip-tab',
@@ -100,6 +102,13 @@ window.live_swip_tab = {
         },
         scroll (pos) {
             const x = Math.abs(pos.x)
+
+            //var tabItemWidth = 0
+            //ex.each($(this.$refs.tabNav.$el).find('.cube-tab'),(item)=>{
+            //    tabItemWidth += $(item).outerWidth()
+            //})
+
+            //tabItemWidth = Math.min(tabItemWidth, this.$refs.tabNav.$el.clientWidth)
             const tabItemWidth = this.$refs.tabNav.$el.clientWidth
             const slideScrollerWidth = this.$refs.slide.slide.scrollerWidth
             const deltaX = x / slideScrollerWidth * tabItemWidth
