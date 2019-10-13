@@ -51,16 +51,17 @@
 					var post_data=[{fun:'changepswd',row:this.row}]
 //					var url = ex.appendSearch('/d/ajax/authuser',self.search_args)
 					cfg.show_load()
-					ex.post('/d/ajax/authuser',JSON.stringify(post_data),function (resp) {
+//					ex.post('/d/ajax/authuser',JSON.stringify(post_data),function (resp) {
 //						callback(resp.changepswd)
-
-						var rt = resp.changepswd
+					ex.director_call('authuser.changepswd',{row:this.row}).then(function (rt) {
+						cfg.hide_load()
+//						var rt = resp.changepswd
 						if(rt.errors){
-							cfg.hide_load()
+
 							self.setErrors(rt.errors)
 							self.showErrors(rt.errors)
 						}else{
-							cfg.hide_load(1500,'修改成功，跳转...')
+							cfg.toast('修改成功，跳转...')
 							self.after_save(rt.row)
 							self.setErrors({})
 						}

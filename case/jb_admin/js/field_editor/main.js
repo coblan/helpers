@@ -13,5 +13,6 @@ import * as compute from  './compute'
 import * as range from  './range'
 import * as time from  './time'
 import * as list_ctn from  './list_ctn'
-import * as number from  './number'
+
+import * as color from  './color'
 import * as richtext from  './richtext'

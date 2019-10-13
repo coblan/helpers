@@ -62,7 +62,7 @@ var live_table_type={
             <div class="table-wraper flex-grow" style="position: relative;">
                 <!--<com-table-grid></com-table-grid>-->
                 <div style="position: absolute;top:0;left: 0;bottom: 0;right: 0;overflow: auto">
-                    <component :is="ctx.content_editor"></component>
+                    <component :is="ctx.inn_editor"></component>
                 </div>
                </div>
         </div>

@@ -209,6 +209,7 @@ class RowFilter(object):
         extrahead_dict = {x['name']: x  for x in extraHead }
         valid_model_names = [x for x in self.names if x in self.model_allowed_names]
         send_to_front_names = valid_model_names + [x['name'] for x in extraHead]
+        
         for proc_cls,name in zip(self.get_proc_list() ,self.valid_name):
             if name in extrahead_dict:
                 # 为了性能考虑，如果有head了，就不进行自动生成head了，并且排除掉那些不在model里面的字段
@@ -228,6 +229,7 @@ class RowFilter(object):
         for head in out_list:
             if head['name'] in self.icontains:
                 head['editor'] = 'com-filter-text'
+                head['options']=[]
         
         out_list = [self.dict_head(head) for head in out_list]
         out_list = [x for x in out_list if x['name'] in send_to_front_names]

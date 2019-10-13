@@ -1,4 +1,4 @@
-from helpers.director.shortcut import FieldsPage, ModelFields, director
+from helpers.director.shortcut import FieldsPage, ModelFields, director,director_view
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext as _
 
@@ -28,6 +28,25 @@ class AuthPwsd(FieldsPage):
     #'authuser.login': RegistFormPage.fieldsCls,
 #})
         
+@director_view('authuser.changepswd')
+def changepswd(row):
+    if row.get('first_pswd')!=row.get('second_pswd'):
+        return  {'errors':{'second_pswd':['second password not match']}}
+    elif not row.get('first_pswd'):
+        return {'errors':{'first_pswd':['must input password']}}
+        
+    md_user= User.objects.get(pk=row.get('uid'))
+    #if user.is_superuser or has_permit(user,"myauth.modify_other_pswd")  or  md_user.check_password(row.get('old_pswd')):
+    if md_user.check_password(row.get('old_pswd')):
+        md_user.set_password(row.get('first_pswd'))
+        md_user.save()
+        dc={'status':'success'}
+    else:
+        dc={'errors':{'old_pswd':['old password not match']}}
+
+    return dc
+
+
 
 auth_page_dc .update({
     'pswd': AuthPwsd,
