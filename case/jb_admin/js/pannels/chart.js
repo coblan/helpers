@@ -47,7 +47,7 @@ Vue.component('com-chart-plain',{
                     barMaxWidth: 30,
                     itemStyle: {
                         normal: {
-                            color: head.color || '#27B6AC'
+                            color: head.color // || '#27B6AC'
                         },
                     },
                 })
