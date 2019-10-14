@@ -15,6 +15,7 @@ from helpers.director.engine import BaseEngine
 
 @ensure_csrf_cookie
 def login(request):
+    "login页面"
     if request.method=='GET':
         next_url=request.GET.get('next','/')
         dc={
@@ -53,13 +54,15 @@ def logout(request):
     auth.logout(request)
     return redirect(next) 
 
-@ensure_csrf_cookie
-@login_required
+#@ensure_csrf_cookie
 def change_pswd(request):
     pk = request.GET.get('uid')
+    name = request.GET.get('username')
     if pk:
         name=User.objects.get(pk=pk).username
-    else:
+    elif name:
+        pass
+    elif request.user.is_authenticated():
         pk = request.user.pk
         name=request.user.username
         

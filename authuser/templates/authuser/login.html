@@ -62,11 +62,17 @@
                 }
             },
             mounted:function(){
+                this.validateor= $("#there").validator({
+                    fields: {
+                        username:"required;rowError(login_logic.errors)",
+                        password:'required;rowError(login_logic.errors)',
+                    }
+                });
             },
             watch:{
                 has_validate(v){
                     if(v){
-                        $("#there").validator({
+                        this.validateor=$("#there").validator({
                             fields: {
                                 username:"required;rowError(login_logic.errors)",
                                 password:'required;rowError(login_logic.errors)',
@@ -74,7 +80,7 @@
                             }
                         });
                     }else{
-                        $("#there").validator({
+                        this.validateor=$("#there").validator({
                             fields: {
                                 username:"required;rowError(login_logic.errors)",
                                 password:'required;rowError(login_logic.errors)',
@@ -85,13 +91,17 @@
             },
             methods:{
                 submit_info:function () {
-
+                    debugger
+                if(! this.validateor.isValid()){
+                    return
+                }
 //                    var post_data=[{fun:'do_login',username:this.row.username,password:this.row.password,auto_login:this.row.auto_login}]
-                    var post_data={
-                        username:this.row.username,
-                        password:this.row.password,
-                        auto_login:this.row.auto_login,
-                    }
+//                    var post_data={
+//                        username:this.row.username,
+//                        password:this.row.password,
+//                        auto_login:this.row.auto_login,
+//                    }
+
                     cfg.show_load()
                     var self=this;
 //                    $.post('/d/ajax/authuser',JSON.stringify(post_data),function (resp) {
@@ -108,9 +118,10 @@
                             }
                         }else if(resp.validate_img){
                             ex.vueAssign(self.row,{validate_img:resp.validate_img})
-                            if(resp.msg){
-                                cfg.toast(resp.msg)
-                            }
+                        }
+
+                        if(resp.action){
+                            ex.eval(resp.action)
                         }
                         if(resp.errors){
                             for(var k in resp.errors){
@@ -158,12 +169,12 @@
         });
 
 //        window. content_validator =
- $("#there").validator({
-            fields: {
-                username:"required;rowError(login_logic.errors)",
-                password:'required;rowError(login_logic.errors)',
-            }
-        });
+// $("#there").validator({
+//            fields: {
+//                username:"required;rowError(login_logic.errors)",
+//                password:'required;rowError(login_logic.errors)',
+//            }
+//        });
 
     })
 
