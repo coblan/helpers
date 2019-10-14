@@ -910,7 +910,7 @@ class PlainTable(ModelTable):
         self.search_args = kw.get('search_args', {})
         
         self.kw=kw
-        self.crt_user=crt_user 
+        self.crt_user=crt_user or get_request_cache()['request'].user
         
         #allowed_names = []
         #self.row_sort=self.sort(row_sort,crt_user,allowed_names,kw)
