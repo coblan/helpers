@@ -95,13 +95,10 @@ var ckeditor = {
 		maxlength:{},
 	},
 	created:function(){
-		var self=this
-		//if(!window.bus){
-		//	window.bus=new Vue()
-		//}
-		eventBus.$on('sync_data',function(){
-			self.$emit('input',self.editor.getData())
-		})
+		//var self=this
+		//eventBus.$on('sync_data',function(){
+		//	self.$emit('input',self.editor.getData())
+		//})
 	},
 	watch:{
 		value:function(v){

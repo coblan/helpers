@@ -209,6 +209,7 @@ class RowFilter(object):
         extrahead_dict = {x['name']: x  for x in extraHead }
         valid_model_names = [x for x in self.names if x in self.model_allowed_names]
         send_to_front_names = valid_model_names + [x['name'] for x in extraHead]
+        
         for proc_cls,name in zip(self.get_proc_list() ,self.valid_name):
             if name in extrahead_dict:
                 # 为了性能考虑，如果有head了，就不进行自动生成head了，并且排除掉那些不在model里面的字段
@@ -228,6 +229,7 @@ class RowFilter(object):
         for head in out_list:
             if head['name'] in self.icontains:
                 head['editor'] = 'com-filter-text'
+                head['options']=[]
         
         out_list = [self.dict_head(head) for head in out_list]
         out_list = [x for x in out_list if x['name'] in send_to_front_names]
@@ -681,9 +683,8 @@ class ModelTable(object):
                     head['editor'] = 'com-table-click'
                     head['fields_ctx'] = fields_ctx
                     head['fields_ctx'].update({
-                        #'init_express':'ex.director_call(scope.vc.ctx.director_name,{car_no:scope.vc.par_row.car_no}).then(res=>ex.vueAssign(scope.row,res.row))',
                         #'after_save':'scope.vc.par_row.car_no =scope.row.car_no; scope.vc.par_row.has_washed=scope.row.has_washed ',
-                        #'init_express':'cfg.show_load(),ex.director_call(scope.vc.ctx.director_name,{pk:scope.vc.par_row.pk}).then((res)=>{cfg.hide_load();ex.vueAssign(scope.row,res)})',
+                        #'init_express':'cfg.show_load(),ex.director_call(scope.vc.ctx.director_name,{pk:scope.vc.par_row.pk}).then((res)=>{cfg.hide_load();ex.vueAssign(scope.row,res.row)})',
                         'init_express':'ex.vueAssign(scope.row,scope.vc.par_row)',
                         'after_save':'ex.vueAssign( scope.vc.par_row,scope.row)',
                         'ops_loc':'bottom'
