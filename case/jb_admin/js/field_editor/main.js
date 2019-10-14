@@ -15,4 +15,5 @@ import * as time from  './time'
 import * as list_ctn from  './list_ctn'
 
 import * as color from  './color'
+import * as number from  './number'
 import * as richtext from  './richtext'
