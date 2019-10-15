@@ -53,9 +53,9 @@ export var com_sim_fields = {
         small_srn:function(){
             return this.env.width < 760
         },
-        normed_heads:function(){
-            return this.heads
-        },
+        //normed_heads:function(){
+        //    return this.heads
+        //},
         label_width:function (){
             if(!this.autoWith){
 
@@ -80,15 +80,13 @@ export var com_sim_fields = {
     template:` <div :class="['field-panel sim-fields',{'msg-bottom':small_srn}]"
     style="text-align:center;">
            <table class="table-fields">
-        <tr v-for="head in heads">
+        <tr v-for="head in normed_heads">
             <td class="field-label-td"  valign="top" >
             <div class="field-label" :style="label_width">
                 <span class="label-content">
                      <span v-text="head.label"></span>
                      <span class="req_star" v-if='head.required'>*</span>
                 </span>
-
-
             </div>
 
             </td>

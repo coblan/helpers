@@ -33,12 +33,12 @@ class AuthPwsd(FieldsPage):
 @director_view('authuser.changepswd')
 def changepswd(row):
     if row.get('first_pswd')!=row.get('second_pswd'):
-        return  {'errors':{'second_pswd':['second password not match']}}
+        return  {'errors':{'second_pswd':['两次密码不一致']}}
     elif not row.get('first_pswd'):
-        return {'errors':{'first_pswd':['must input password']}}
+        return {'errors':{'first_pswd':['新密码不能为空!']}}
         
     md_user= User.objects.get(pk=row.get('uid'))
-    #if user.is_superuser or has_permit(user,"myauth.modify_other_pswd")  or  md_user.check_password(row.get('old_pswd')):
+
     if md_user.check_password(row.get('old_pswd')):
         md_user.set_password(row.get('first_pswd'))
         md_user.save()
