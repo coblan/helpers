@@ -26,16 +26,16 @@ class CharProc(BaseFieldProc):
                 }
     
     def filter_get_head(self, name, model):
+        ".. Note:: 在没有choices的情况下，可能会造成性能问题"
         this_field= model._meta.get_field(name)
         if this_field.choices:   
             options = [{'value':x[0],'label':x[1]} for x in this_field.choices]
         else:
-            options = []
-            #def myoption():
-                #query = model.objects.all().values_list(name,flat=True).distinct()
-                #options = [{ 'value':x,'label':str(x)} for x in query]
-                #return options
-            #options = myoption
+            def myoption():
+                query = model.objects.all().values_list(name,flat=True).distinct()
+                options = [{ 'value':x,'label':str(x)} for x in query]
+                return options
+            options = myoption
         return {
             'name':name,
             'label':_(this_field.verbose_name),
