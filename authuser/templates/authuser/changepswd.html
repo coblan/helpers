@@ -20,7 +20,7 @@
 		{name:'old_pswd',editor:'password',label:'原密码',required:true}, //,help_text:'如果您是超级管理员，不需要输入原密码'},
 		{name:'first_pswd',editor:'password',label:'新密码',required:true,fv_rule:'新密码:'},
 		{name:'second_pswd',editor:'password',label:'确认输入',fv_rule:'match(first_pswd)'},
-		{name:'validate_code',editor:'com-field-auth-validate-code',label:'验证码',required:true,show:'debugger;scope.row.validate_img'}
+		{name:'validate_code',editor:'com-field-auth-validate-code',label:'验证码',required:true,show:'scope.row.validate_img'}
 	]
 	row={
 		uid:uid,
@@ -60,8 +60,12 @@
 //						callback(resp.changepswd)
 					ex.director_call('authuser.changepswd',{row:this.row}).then(function (rt) {
 						cfg.hide_load()
-						debugger
+
 //						var rt = resp.changepswd
+						if(rt.validate_img){
+							Vue.set(self.row,'validate_img',rt.validate_img)
+						}
+
 						if(rt.errors){
 							self.setErrors(rt.errors)
 							self.showErrors(rt.errors)
