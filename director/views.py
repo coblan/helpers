@@ -19,7 +19,7 @@ from django.db import transaction
 from helpers.director.network import argument
 from django.conf import settings
 import inspect
-
+from helpers.director.exceptions.unauth401 import UnAuth401Exception
 import logging
 req_log = logging.getLogger('general_log')
 
@@ -79,6 +79,8 @@ def ajax_views(request,app=None):
             
     #except KeyError as e:
         #rt={'success':False,'msg':'key error '+str(e) +' \n may function name error'}
+    except UnAuth401Exception as e:
+        return HttpResponse(str(e),status=401)
     except UserWarning as e:
         rt = {'success': False, 'msg': str(e)}
     if isinstance(rt, HttpResponse):
@@ -137,6 +139,8 @@ def director_view(request,director_name):
             dc ={'success':True,'data':rt}
             #rt = JsonResponse(dc,safe=False,ensure_ascii=False)
             rt = HttpResponse(json.dumps(dc,ensure_ascii=False),content_type="application/json") 
+    except UnAuth401Exception as e:
+        return HttpResponse(str(e),status=401)
     except UserWarning as e:
         dc = {'success':False,'msg':str(e)}
         rt = HttpResponse(json.dumps(dc,ensure_ascii=False),content_type="application/json") 

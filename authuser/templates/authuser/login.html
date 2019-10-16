@@ -112,7 +112,7 @@
                                 // 手机版里面，iframe内容直接跳转到首页
                                 parent.location= parent.root_page
                             }else if(page_cfg.next){
-                                location=page_cfg.next;
+                                location=decodeURIComponent(page_cfg.next) ;
                             }else{
                                 location = '/'
                             }

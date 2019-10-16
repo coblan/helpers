@@ -8,6 +8,7 @@ import json
 from django.core.exceptions import ObjectDoesNotExist
 
 def need_login(fun):
+    "废弃了，可能没有地方使用了。被director.decorator.need_login替代了"
     def _fun(request,*args,**kw):
         if request.user.is_authenticated():
             return fun(request,*args,**kw)

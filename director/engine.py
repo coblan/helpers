@@ -61,7 +61,7 @@ class BaseEngine(object):
     mini_brand = 'AdSys'
     title = 'Admin'
     prefer='pc'
-    login_url=settings.LOGIN_URL
+    login_url=getattr( settings,'LOGIN_URL','/accounts/login')
     need_login = True
     menu_search = True
     home = '/' # 当前engine的主页，没有目的的时候，可以往这里跳
@@ -233,6 +233,7 @@ class BaseEngine(object):
             'tr':tr_dc ,
             'js_lib':lib_dc,
             'is_debug':settings.DEBUG,
+            'login_url':self.login_url,
         }
     
 

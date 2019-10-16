@@ -21,7 +21,7 @@ from helpers.director.model_func.hash_dict import make_mark_dict
 
 from django.core.paginator import Paginator
 from django.forms.models import fields_for_model
-
+from helpers.director.exceptions.unauth401 import UnAuth401Exception
 
 class PageNum(object):
     perPage=20
@@ -783,7 +783,7 @@ class ModelTable(object):
         if self.nolimit:
             pass
         elif not self.crt_user.is_authenticated:
-            raise PermissionDenied('no permission to browse %s ,Please login first' % self.model._meta.model_name)
+            raise  UnAuth401Exception('no permission to browse %s ,Please login first' % self.model._meta.model_name)
         elif not self.crt_user.is_superuser and not self.permit.readable_fields():
             raise PermissionDenied('user %s ,no permission to browse %s'% ( self.crt_user.username, self.model._meta.model_name))
         #query =  self.init_query()
