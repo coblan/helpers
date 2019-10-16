@@ -15,6 +15,7 @@ from .access.permit import ModelPermit,has_permit
 from .model_func.dictfy import field_map,model_to_name,name_to_model,BaseFieldProc
 from .access.permit_data import add_permits, get_model_permit, model_full_permit, model_read_permit
 from .middleware.request_cache import get_request_cache, request_cache
+from .data_format.json_format import DirectorEncoder
 #
 #from .container import evalue_container
 #from .short_gen import regist_director
