@@ -29,30 +29,36 @@ var field_sigle_chosen={
         //ex.load_css('https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css')
         //let prom1 = ex.load_js('https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js')
         ex.load_css(js_config.js_lib.select2_css)
-        let prom1 = ex.load_js(js_config.js_lib.select2)
-        if(this.head.dyn_options){
-            var prom2 =  ex.eval(this.head.dyn_options,{row:this.row,vc:this})
+
+        if(this.head.init_express){
+            ex.eval(this.head.init_express,{row:this.row,vc:this})
         }else{
-            var prom2 =1
+                // 老的调用
+            let prom1 = ex.load_js(js_config.js_lib.select2)
+
+            if(this.head.dyn_options){
+                var prom2 =  ex.eval(this.head.dyn_options,{row:this.row,vc:this})
+            }else{
+                var prom2 =1
+            }
+            Promise.all([prom1,prom2]).then(function(){
+                $(self.$el).find('select').select2({
+                    placeholder:self.head.placeholder || '请选择',
+                    allowClear: true
+                })
+                self.setValue(self.row[self.head.name])
+                $(self.$el).find('.select2').change(function(e) {
+                    var value = $(self.$el).find('.select2').val( )
+                    if(value ==''){
+                        Vue.delete(self.row,self.head.name)
+                    }else{
+                        Vue.set(self.row,self.head.name,value)
+                    }
+                })
+            })
         }
-        Promise.all([prom1,prom2]).then(function(){
-            $(self.$el).find('select').select2({
-                placeholder:self.head.placeholder || '请选择',
-                allowClear: true
-            })
-            self.setValue(self.row[self.head.name])
-            $(self.$el).find('.select2').change(function(e) {
-                var value = $(self.$el).find('.select2').val( )
-                if(value ==''){
-                    Vue.delete(self.row,self.head.name)
-                }else{
-                    Vue.set(self.row,self.head.name,value)
-                }
-            })
-        })
 
         ex.vueEventRout(this)
-
 
     },
     watch:{
@@ -81,6 +87,22 @@ var field_sigle_chosen={
         //}
     },
     methods:{
+        update_select2(){
+            var self = this
+            $(self.$el).find('select').select2({
+                placeholder:self.head.placeholder || '请选择',
+                allowClear: true
+            })
+            self.setValue(self.row[self.head.name])
+            $(self.$el).find('.select2').change(function(e) {
+                var value = $(self.$el).find('.select2').val( )
+                if(value ==''){
+                    Vue.delete(self.row,self.head.name)
+                }else{
+                    Vue.set(self.row,self.head.name,value)
+                }
+            })
+        },
         setValue:function(val){
             $(this.$el).find('.select2').val(val);
             $(this.$el).find('.select2').trigger('change');
@@ -99,5 +121,11 @@ var field_sigle_chosen={
         }
     }
 }
+
+Vue.component('com-field-single-select2', function (resolve, reject) {
+    ex.load_js(js_config.js_lib.select2).then(()=>{
+        resolve( field_sigle_chosen )
+    })
+})
 
 Vue.component('com-field-single-select2',field_sigle_chosen)
