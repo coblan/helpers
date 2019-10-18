@@ -12,7 +12,6 @@ from ..base_data import model_dc
 import base64
 from django.db import models
 from ..access.permit import ModelPermit
-from ..models import LogModel
 from helpers.director.base_data import director
 from helpers.director.data_format.json_format import DirectorEncoder
 from django.conf import settings

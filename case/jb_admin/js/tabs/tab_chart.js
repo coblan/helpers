@@ -23,7 +23,9 @@ var tab_chart={
                     del_info:[],
                     search_args: {},
                     vc:vc,
-                    parStore:ex.vueParStore(vc)
+                    parStore:ex.vueParStore(vc),
+                    after_get_rows:heads_ctx.after_get_rows,
+                    option:heads_ctx.option ||{}
                 }
             },
             mixins:[table_store],

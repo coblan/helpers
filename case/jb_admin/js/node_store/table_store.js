@@ -18,6 +18,8 @@ var table_store={
              event_slots:[],
              option:{},
              table_layout:{},
+             after_get_rows:null,
+
          }
     },
     mixins:[mix_ele_table_adapter],
@@ -92,6 +94,9 @@ var table_store={
                 self.footer=resp.get_rows.footer
                 self.parents=resp.get_rows.parents
                 self.table_layout=resp.get_rows.table_layout
+                if(self.after_get_rows){
+                    ex.eval(self.after_get_rows,{ps:self,resp:resp})
+                }
                 self.$emit('data-updated-backend')
             })
         },

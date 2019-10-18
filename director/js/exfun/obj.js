@@ -16,5 +16,21 @@ export var obj_control={
             }
         }
         return is_contain
+    },
+    mergeObject(dst,src){
+        for(var k in src){
+            if(dst[k] && src[k] && typeof(src[k])=='object'&& !Array.isArray(dst[k])&&!Array.isArray(src[k]) &&typeof(src[k])==typeof(dst[k]) ){
+                ex.mergeObject(dst[k],src[k])
+            }else{
+                dst[k]=src[k]
+            }
+        }
+
+
+        //if(Array.isArray(dst)){
+        //    ex.each(dst,dst_item=>{
+        //        ex.mergeObject()
+        //    })
+        //}
     }
 }
