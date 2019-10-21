@@ -1,4 +1,6 @@
 .com-filter-month{
+  display: flex;
+  align-items: center;
   .form-control[readonly]{
     background-color: transparent;
   }

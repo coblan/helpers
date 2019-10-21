@@ -5,11 +5,11 @@ var com_select = {
     //head.forbid_select_null
     props:['head','search_args','config'],
     template:`<div class="com-filter-select">
-    <span class="title-span" v-if="head.label" v-text="head.label"></span>
+     <span  class="title-span" v-if="head.show_label"><span  v-text="head.label"></span>:</span>
     <select v-model='search_args[head.name]' :class="['form-control input-sm myselect',{novalue:search_args[head.name]===undefined}]" >
 
-         <option class="fake-placeholder" v-if="head.required && head.placeholder" :value="undefined" disabled v-text='head.placeholder  +"*"'></option>
-         <option class="fake-placeholder" v-else :value="undefined" v-text='head.placeholder' ></option>
+         <option class="fake-placeholder" v-if="head.required && head.placeholder" :value="undefined" disabled v-text='myplaceholder  +"*"'></option>
+         <option class="fake-placeholder" v-else :value="undefined" v-text='myplaceholder' ></option>
 
         <option v-for='option in orderBy(options,"label")' :value="option.value" v-text='option.label'></option>
     </select>
@@ -25,6 +25,13 @@ var com_select = {
     },
 
     computed:{
+        myplaceholder(){
+            if(this.head.show_label){
+                return this.head.placeholder
+            }else{
+                return this.head.placeholder || this.head.label
+            }
+        },
         myvalue:function(){
             return this.search_args[this.head.name]
         },

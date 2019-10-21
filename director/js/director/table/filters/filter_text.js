@@ -2,8 +2,8 @@ require('./styl/filter_text.styl')
 var filter_input = {
     props:['head','search_args','config'],
     template:`<div class="com-filter-input">
-    <span v-if="head.label" v-text="head.label"></span>
-        <input @keyup.enter="parStore.search()" type="text" v-model='search_args[head.name]' class="form-control input-sm" :placeholder="head.placeholder">
+    <span v-if="head.show_label"><span  v-text="head.label"></span>:</span>
+        <input @keyup.enter="parStore.search()" type="text" v-model='search_args[head.name]' class="form-control input-sm" :placeholder="myplaceholder">
     </div>
     `,
     data:function(){
@@ -18,6 +18,13 @@ var filter_input = {
         myvalue:function(){
             return this.search_args[this.head.name]
         },
+        myplaceholder(){
+            if(this.head.show_label){
+                return this.head.placeholder
+            }else{
+                return this.head.placeholder ||this.head.label
+            }
+        }
     },
     watch:{
         myvalue:function(v){

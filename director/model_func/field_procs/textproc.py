@@ -24,7 +24,7 @@ class TextProc(BaseFieldProc):
             
         return {
             'name':name,
-            'placeholder':_(this_field.verbose_name),
+            'label':_(this_field.verbose_name),
             'editor':'com-filter-text',
             #'options':options
         }

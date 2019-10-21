@@ -38,8 +38,8 @@ class CharProc(BaseFieldProc):
             options = myoption
         return {
             'name':name,
-            'placeholder':_(this_field.verbose_name),
-            'editor':'com-select-filter',
+            'label':_(this_field.verbose_name),
+            'editor':'com-filter-select',
             'options':options
         }
 
