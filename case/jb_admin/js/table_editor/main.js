@@ -12,6 +12,7 @@ import * as link from  './link.js'
 import * as rich_span from  './rich_span.js'
 import * as multi_row from  './multi_row.js'
 import * as color from  './color.js'
+import * as icon_cell from  './icon_cell.js'
 
 /*
 

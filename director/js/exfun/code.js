@@ -54,7 +54,12 @@ export var code ={
     },
     eval:function(js,scope){
         var rt=''
-        return eval(js)
+        var ll = eval(js)
+        if(rt !=''){
+            return rt
+        }else{
+            return ll
+        }
     },
     _count:0,
     get_uid:function(){
