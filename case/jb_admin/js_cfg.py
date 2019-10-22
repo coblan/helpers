@@ -83,7 +83,10 @@ def get_lib(request):
         'chosen_css': '/static/lib/chosen_v1.8.7/chosen.min.css',  
         'ckeditor': '/static/lib/ckeditor_4.10.1/ckeditor/ckeditor.js', 
         'notify':'https://cdn.jsdelivr.net/npm/@wcjiang/notify@2.0.12/dist/notify.min.js',
-        'sortablejs':'https://cdn.jsdelivr.net/npm/sortablejs@1.8.4/Sortable.min.js'
+        'sortablejs':'https://cdn.jsdelivr.net/npm/sortablejs@1.8.4/Sortable.min.js',
+        'selectizejs': 'https://cdn.jsdelivr.net/npm/selectize@0.12.6/dist/js/standalone/selectize.min.js', # 'https://cdn.jsdelivr.net/npm/selectize@0.12.6/dist/js/selectize.min.js',
+        #'selectizejs_css':'https://cdn.jsdelivr.net/npm/selectize@0.12.6/dist/css/selectize.css',
+        'selectizejs_css':'https://cdn.jsdelivr.net/npm/selectize@0.12.6/dist/css/selectize.default.css',
     }
     if request.META['ACCESS_FROM_INTERNET']:
 

@@ -32,7 +32,16 @@ var picture = {
     },
     methods:{
         open:function(){
-            window.open(this.rowData[this.field])
+            //window.open(this.rowData[this.field])
+            var ctx = {imgsrc:this.rowData[this.field]}
+            pop_layer(ctx,'com-pop-image',function(){},{
+                title:false,
+                area: ['90%', '90%'],
+                shade: 0.8,
+                skin: 'img-shower',
+                shadeClose: true,
+            })
+
         }
     }
     }
