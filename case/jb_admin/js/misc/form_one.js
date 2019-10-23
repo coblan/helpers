@@ -144,9 +144,9 @@ var get_data={
         var relat_field = kws.relat_field
         var dt = {fun:'get_row',director_name:director_name}
         dt[relat_field] = self.par_row[relat_field]
-        var post_data=[dt]
+        //var post_data=[dt]
         cfg.show_load()
-        ex.director_call('d.get_row?dname='+director_name,{director_name:director_name}).then((resp)=>{
+        ex.director_call('d.get_row?dname='+director_name,dt).then((resp)=>{
             cfg.hide_load()
             callback(resp)
         })

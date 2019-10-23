@@ -33,11 +33,12 @@ def save_row(row):
      except OutDateException as e:
           return {'_outdate':str(e)}
 
+
 @director_view('get_row')
 @director_view('d.get_row')
-def get_row(director_name,filter_kws={}):
+def get_row(director_name,pk=None,**kws):
      fields_cls = director.get(director_name)
-     fields_obj = fields_cls(**filter_kws)
+     fields_obj = fields_cls(pk=pk, **kws)
      return fields_obj.get_row()
 
 @director_view('d.get_rows')
