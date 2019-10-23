@@ -146,10 +146,15 @@ var get_data={
         dt[relat_field] = self.par_row[relat_field]
         var post_data=[dt]
         cfg.show_load()
-        $.post('/d/ajax',JSON.stringify(post_data),function(resp){
+        ex.director_call('d.get_row?dname='+director_name,{director_name:director_name}).then((resp)=>{
             cfg.hide_load()
-            callback(resp.get_row)
+            callback(resp)
         })
+
+        //$.post('/d/ajax',JSON.stringify(post_data),function(resp){
+        //    cfg.hide_load()
+        //    callback(resp.get_row)
+        //})
     },
     table_row:function(self,callback,kws){
         callback(self.par_row)
