@@ -20,6 +20,7 @@ from helpers.director.network import argument
 from django.conf import settings
 import inspect
 from helpers.director.exceptions.unauth401 import UnAuth401Exception
+from .data_format.json_format import DirectorEncoder
 import logging
 req_log = logging.getLogger('general_log')
 
@@ -86,7 +87,7 @@ def ajax_views(request,app=None):
     if isinstance(rt, HttpResponse):
         return rt
     else:
-        return HttpResponse(json.dumps(rt,ensure_ascii=False),content_type="application/json")  
+        return HttpResponse(json.dumps(rt,ensure_ascii=False,cls=DirectorEncoder),content_type="application/json")  
     
 @csrf_exempt
 def general_upload(request):
@@ -138,12 +139,12 @@ def director_view(request,director_name):
         else:
             dc ={'success':True,'data':rt}
             #rt = JsonResponse(dc,safe=False,ensure_ascii=False)
-            rt = HttpResponse(json.dumps(dc,ensure_ascii=False),content_type="application/json") 
+            rt = HttpResponse(json.dumps(dc,ensure_ascii=False,cls=DirectorEncoder),content_type="application/json") 
     except UnAuth401Exception as e:
         return HttpResponse(str(e),status=401)
     except UserWarning as e:
         dc = {'success':False,'msg':str(e)}
-        rt = HttpResponse(json.dumps(dc,ensure_ascii=False),content_type="application/json") 
+        rt = HttpResponse(json.dumps(dc,ensure_ascii=False,cls=DirectorEncoder),content_type="application/json") 
         #rt = JsonResponse({'success':False,'msg':str(e)})
     except PermissionDenied as e:
         rt = HttpResponse(str(e))

@@ -84,21 +84,37 @@ var table_store={
             var self=this
 
             cfg.show_load()
-            //self.rows=[]
-            var post_data=[{fun:'get_rows',director_name:self.director_name,search_args:self.search_args}]
-            ex.post('/d/ajax',JSON.stringify(post_data),function(resp){
+
+            var post_data={director_name:self.director_name,search_args:self.search_args}
+            ex.director_call('d.get_rows',post_data,function(resp){
                 cfg.hide_load()
-                self.rows = resp.get_rows.rows
-                ex.vueAssign( self.row_pages,resp.get_rows.row_pages)
-                ex.vueAssign(self.search_args,resp.get_rows.search_args)
-                self.footer=resp.get_rows.footer
-                self.parents=resp.get_rows.parents
-                self.table_layout=resp.get_rows.table_layout
+                self.rows = resp.rows
+                ex.vueAssign( self.row_pages,resp.row_pages)
+                ex.vueAssign(self.search_args,resp.search_args)
+                self.footer=resp.footer
+                self.parents=resp.parents
+                self.table_layout=resp.table_layout
                 if(self.after_get_rows){
                     ex.eval(self.after_get_rows,{ps:self,resp:resp})
                 }
                 self.$emit('data-updated-backend')
             })
+
+
+            //var post_data=[{fun:'get_rows',director_name:self.director_name,search_args:self.search_args}]
+            //ex.post('/d/ajax',JSON.stringify(post_data),function(resp){
+            //    cfg.hide_load()
+            //    self.rows = resp.get_rows.rows
+            //    ex.vueAssign( self.row_pages,resp.get_rows.row_pages)
+            //    ex.vueAssign(self.search_args,resp.get_rows.search_args)
+            //    self.footer=resp.get_rows.footer
+            //    self.parents=resp.get_rows.parents
+            //    self.table_layout=resp.get_rows.table_layout
+            //    if(self.after_get_rows){
+            //        ex.eval(self.after_get_rows,{ps:self,resp:resp})
+            //    }
+            //    self.$emit('data-updated-backend')
+            //})
         },
         add_new:function(kws){
             var head =kws

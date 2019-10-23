@@ -27,18 +27,25 @@ def save_row(row):
           kw = request.GET.dict()
           field_obj = permit_save_model(user, row,**kw)
           dc = field_obj.get_row()
-          return {'status':'success','row':dc}
+          return {'success':True,'status':'success','row':dc}
      except ValidationError as e:
           return {'errors':dict(e)}
      except OutDateException as e:
           return {'_outdate':str(e)}
 
+
 @director_view('get_row')
 @director_view('d.get_row')
-def get_row(director_name,filter_kws={}):
+def get_row(director_name,pk=None,**kws):
      fields_cls = director.get(director_name)
-     fields_obj = fields_cls(**filter_kws)
+     fields_obj = fields_cls(pk=pk, **kws)
      return fields_obj.get_row()
+
+@director_view('d.get_rows')
+def get_rows(director_name,search_args={},user=None):
+     table_cls = director.get(director_name)
+     table_obj = table_cls.gen_from_search_args(search_args,user)
+     return table_obj.get_data_context()
 
 @director_view('save_rows')
 @director_view('d.save_rows')

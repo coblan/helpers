@@ -193,18 +193,32 @@ export var network ={
 
     },
     director_call:function(director_name,kws,callback){
-        var post_data=[{fun:"director_call",director_name:director_name,kws:kws}]
+        //var post_data=[{fun:"director_call",director_name:director_name,kws:kws}]
         if(callback){
-            ex.post('/d/ajax',JSON.stringify(post_data),function(resp){
-                callback( resp.director_call )
+            //ex.post('/d/ajax',JSON.stringify(post_data),function(resp){
+            //    callback( resp.director_call )
+            //})
+            ex.post('/dapi/'+director_name,JSON.stringify(kws),function(resp){
+                if(resp.success){
+                    callback( resp.data )
+                }
+
             })
         }else{
             return new Promise(function(resolve,reject){
-                    ex.post('/d/ajax',JSON.stringify(post_data)).then(
-                        function(resp){
-                            resolve(resp.director_call)
+                    //ex.post('/d/ajax',JSON.stringify(post_data)).then(
+                    //    function(resp){
+                    //        resolve(resp.director_call)
+                    //    }
+                    //)
+                ex.post('/dapi/'+director_name,JSON.stringify(kws)).then(
+                    function(resp){
+                        if(resp.success) {
+                            resolve(resp.data)
                         }
-                    )
+                    }
+                )
+
             })
         }
 
