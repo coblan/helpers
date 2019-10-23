@@ -9,6 +9,9 @@ from django.contrib import auth
 from django.shortcuts import redirect
 from helpers.director.middleware.request_cache import get_request_cache
 from .forms import LoginForm
+from helpers.director.kv import get_value,set_value,clear_value
+from django.utils import timezone
+from helpers.authuser.validate_code import code_and_url
 
 class LoginFormPage(FieldsPage):
     template = 'authuser/login.html'
@@ -36,28 +39,115 @@ class LoginFormPage(FieldsPage):
         
         ctx.update(dc)
         return ctx
+
+
+class Login(object):
     
     
-@director_view('do_login')
-def do_login(row):
-    """
-    登录函数：
-    """
-    username = row.get('username')
-    password = row.get('password')
-    auto_login = row.get('auto_login',False)
-    cache = get_request_cache()
-    request = cache.get('request')
-    form=LoginForm({'username':username,'password':password})
+    @staticmethod
+    @director_view('do_login')
+    def run(row):
+        loger = Login(row)
+
+        if not loger.check_code():
+            code,url = code_and_url()
+            set_value(loger.code_key, code)
+            return {'success':False,'errors':{'validate_code':['验证码错误']},'validate_img':url}
+        rt= loger.check_and_login()
+        return rt
+
+
+    def __init__(self,row):
+        self.request = get_request_cache()['request']
+        self.row = row
+        self.code_key = 'validate_code_user_%(username)s'%self.row
+        self.count_key = 'login_count_user_%(username)s'%self.row
+        self.code_life = timezone.now()-timezone.timedelta(minutes=30)
+
+    def check_code(self):
+        org_code = get_value(self.code_key,gte=self.code_life) # 30分钟内
+        if  org_code:
+            if  org_code.lower() != self.row.get('validate_code').lower():
+                return False
+        return True
+
+    def check_and_login(self):
+        form=LoginForm({'username':self.row.get('username'),'password':self.row.get('password')})
+        if form.is_valid():
+            user= auth.authenticate(username=self.row.get('username'),password=self.row.get('password'))
+            return self.login(user)
+        else:
+            return self.wrap_fail_info({
+                'errors':form.errors
+            })
+
+    def login(self,user):
+        if not self.row.get('auto_login'):
+            self.request.session.set_expiry(0)  # 浏览器关闭就过期，否则默认是2星期过期
+            #self.request.session['auto_login'] = False
+        #else:
+            #self.request.session['auto_login'] = True
+            #self.request.session.set_expiry(0)settings.LOGIN_SPAN) 
+
+        auth.login(self.request, user)
+
+        clear_value(self.count_key)
+        clear_value(self.code_key)
+        
+        return {'success':True,'token':self.request.session.session_key}
+
+
+    #def w(self,errors):
+        #dc ={}
+        #if not redisInst6.get(self.count_key) :
+            #redisInst6.set(self.count_key,1,ex=60*60*2)
+        #else:
+            #old_value = redisInst6.get(self.count_key) 
+            #redisInst6.set(self.count_key,int(old_value)+1,ex=60*60*2)
+
+        #if int( redisInst6.get(self.count_key) ) >5:
+            #code,url = code_and_url()
+            #redisInst6.set(self.code_key,code,ex=60*3)
+            #dc.update( {'success':False,'validate_img':url} ) 
+        #dc.update({
+            #'errors':errors
+        #})
+        #return dc
     
-    if form.is_valid():
-        user= auth.authenticate(username=username,password=password)
-        if not auto_login:
-            request.session.set_expiry(0)
-        auth.login(request, user)
-        return {'success':True,'token':request.session.session_key}
-    else:
-        return {'errors':form.errors}
+    def wrap_fail_info(self,infodc):
+        old_count = int( get_value(self.count_key,0,gte=self.code_life) )
+        old_count = old_count + 1
+        set_value(self.count_key,old_count)
+        
+        if old_count >5:
+            code,url = code_and_url()
+            set_value(self.code_key,code)
+            infodc.update( {'validate_img':url} )
+        infodc.update({
+            'success':False
+        })
+        return infodc
+    
+#@director_view('do_login')
+#def do_login(row):
+    #"""
+    #登录函数：
+    #"""
+    #username = row.get('username')
+    #password = row.get('password')
+    #auto_login = row.get('auto_login',False)
+    #cache = get_request_cache()
+    #request = cache.get('request')
+    #form=LoginForm({'username':username,'password':password})
+    
+    #if form.is_valid():
+        #user= auth.authenticate(username=username,password=password)
+        #if not auto_login:
+            #request.session.set_expiry(0)
+        #auth.login(request, user)
+        #return {'success':True,'token':request.session.session_key}
+    #else:
+        #return {'errors':form.errors}
         
 @director_view('do_logout')
 def do_logout(**kw):

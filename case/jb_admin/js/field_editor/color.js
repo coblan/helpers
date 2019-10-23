@@ -1,6 +1,8 @@
 var color={
     props:['row','head'],
     template:`<div :class="['com-field-color',head.class]">
+   	<input type="text"  v-model="row[head.name]"
+            		 	    :id="'id_'+head.name" :name="head.name" style="display: none;">
     <el-color-picker
   v-model="row[head.name]"
   color-format="hex"

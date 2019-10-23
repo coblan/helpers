@@ -9,6 +9,7 @@ from helpers.director.access.permit import has_permit
 from django.conf import settings
 from .admin_regist import RegistFormPage
 from .validate_code import faseGetDataUrl
+from helpers.director.kv import get_value,set_value
 
 def get_global():
     return globals()
@@ -21,7 +22,8 @@ def logout(request):
 
 def do_login(username,password,request,auto_login=False):
     """
-    登录函数：
+    2.废弃了，登录函数移到了admin_login里面
+    1.登录函数
     """
     form=LoginForm({'username':username,'password':password})
     
@@ -33,6 +35,8 @@ def do_login(username,password,request,auto_login=False):
         return {'success':True}
     else:
         return {'errors':form.errors,'success':False}
+
+
 
 def do_login_old(username,password,request):
     """
