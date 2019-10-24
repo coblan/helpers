@@ -1,5 +1,16 @@
 require('./scss/cfg.scss')
 
+window.layer_index_stack =[]
+
+$(document).ready(function () { }).keydown(
+    function (e) {
+
+        if (e.which === 27) {
+            if(layer_index_stack.length>0){
+                layer.close(layer_index_stack[layer_index_stack.length-1]);
+            }
+        }
+    });
 
 var cfg={
     env:{
