@@ -1,8 +1,8 @@
 from .models import KVModel
 import json
 
-def get_json(key,default=None):
-    value = get_value(key)
+def get_json(key,default=None,gte=None):
+    value = get_value(key,gte=gte)
     if value is not None and value !='':
         return json.loads(value)
     else:
@@ -12,9 +12,12 @@ def set_json(key,value):
     myvalue = json.dumps(value,ensure_ascii=False)
     set_value(key,myvalue)
 
-def get_value(key,default=None):
+def get_value(key,default=None,gte=None):
     try:
-        inst=KVModel.objects.get(key=key)
+        if gte:
+            inst=KVModel.objects.get(key=key,update__gte=gte)
+        else:
+            inst=KVModel.objects.get(key=key)
         return inst.value
     except KVModel.DoesNotExist:
         return default
