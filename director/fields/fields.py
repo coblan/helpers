@@ -112,6 +112,7 @@ class ModelFields(forms.ModelForm):
          # 强制 readonly的字段，不能修改
         inst =  form_kw['instance']
         
+        # 如果row有meta_change_fields 字段，那么该次请求，只能修改这些字段，其他字段一律还原
         meta_change_fields=[]
         if dc.get('meta_change_fields'):
             meta_change_fields = dc.get('meta_change_fields').split(',')
@@ -505,9 +506,9 @@ class ModelFields(forms.ModelForm):
             if not self.can_access():
                 raise PermissionDenied('you have no Permission access %s'%self.instance._meta.model_name  )
  
-            for data in self.changed_data:
-                if data in self.get_readonly_fields():
-                    raise PermissionDenied(" {data} is readonly".format(data=data))
+        for data in self.changed_data:
+            if data in self.get_readonly_fields():
+                raise PermissionDenied(" {data} is readonly".format(data=data))
         
         op=None
         if self.changed_data:
