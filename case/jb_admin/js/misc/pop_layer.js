@@ -25,17 +25,14 @@ export  function pop_layer (com_ctx,component_name,callback,layerConfig){
                     <component :is="component_name" :ctx="com_ctx" @finish="on_finish($event)"></component>
                 </div>`,
         end: function () {
-            var index = layer_index_stack.indexOf(opened_layer_index)
-            if(index){
-                layer_index_stack.splice(index,1)
-            }
+            ex.remove(cfg.layer_index_stack,opened_layer_index)
         }
     }
     if(layerConfig){
         ex.assign(layer_config,layerConfig)
     }
     var opened_layer_index = layer.open(layer_config);
-    layer_index_stack.push(opened_layer_index)
+    cfg.layer_index_stack.push(opened_layer_index);
         new Vue({
             el:'#fields-pop-'+pop_id,
             data:{

@@ -69,14 +69,15 @@ export  function pop_fields_layer (row,fields_ctx,callback,layerConfig){
         end: function () {
 
             //eventBus.$emit('openlayer_changed')
-
+           ex.remove(cfg.layer_index_stack,openfields_layer_index)
         }
     }
     if(layerConfig){
         ex.assign(layer_config,layerConfig)
     }
     var openfields_layer_index = layer.open(layer_config);
-
+    debugger
+    cfg.layer_index_stack.push(openfields_layer_index);
     (function(pop_id,row,heads,ops,com_id,openfields_layer_index){
 
         //Vue.nextTick(function(){
@@ -124,7 +125,6 @@ export  function pop_fields_layer (row,fields_ctx,callback,layerConfig){
                 methods:{
                     on_sub_success:function(new_row){
                       callback(new_row,this.childStore,openfields_layer_index)
-
                     }
                 }
             })
@@ -132,7 +132,7 @@ export  function pop_fields_layer (row,fields_ctx,callback,layerConfig){
             //eventBus.$emit('openlayer_changed')
 
         //})
-    })(pop_id,row,heads,ops,com_id,openfields_layer_index)
+    })(pop_id,row,heads,ops,com_id,openfields_layer_index);
 
 
     return openfields_layer_index
