@@ -116,6 +116,7 @@ class ModelFields(forms.ModelForm):
         meta_change_fields=[]
         if dc.get('meta_change_fields'):
             meta_change_fields = dc.get('meta_change_fields').split(',')
+        
         for k in dict(dc):
             if k in self.readonly or (meta_change_fields and k not in meta_change_fields ):
                 if hasattr(inst, "%s_id" % k):  # 如果是ForeignKey，必须要pk值才能通过 form验证
