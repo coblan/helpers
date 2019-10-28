@@ -165,9 +165,13 @@
 
 </script>
 <style>
+    #main-panel{
+        margin: auto;
+    }
     .child-view {
         transition: all .5s cubic-bezier(.55,0,.1,1);
     }
+
     .slide-left-enter, .slide-right-leave-active {
         position: absolute;
         width: 100vw;
@@ -210,7 +214,15 @@
 </div>
 
 
+<script>
+    if(ex.os.isPc){
+        var hh = window.innerHeight*0.563
+        $('#main-panel').width( hh +'px')
+        $('html').css('font-size',window.innerHeight * 0.1333)
+        $(window).trigger('resize')
+    }
 
+</script>
 {% block page_content %}
 
 {% endblock %}
