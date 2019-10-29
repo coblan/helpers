@@ -167,27 +167,58 @@
 <style>
     #main-panel{
         margin: auto;
+        overflow: hidden;
+        position: relative;
+        height: var(--app-height);
+        width: 100vw;
     }
     .child-view {
-        transition: all .5s cubic-bezier(.55,0,.1,1);
+        transition: transform .5s cubic-bezier(.55,0,.1,1);
+        /*transition: all .5s linear;*/
     }
 
-    .slide-left-enter, .slide-right-leave-active {
+    .slide-left-enter{
         position: absolute;
-        width: 100vw;
-        -webkit-transform: translate(100vw, 0);
-        transform: translate(100vw, 0);
+        width: 100%;
+        -webkit-transform: translate(100%, 0);
+        transform: translate(100%, 0);
     }
-    /*.slide-right-leave-active{*/
-        /*position: inherit;*/
+    .slide-right-leave-active {
+        position: absolute;
+        width: 100%;
+        -webkit-transform: translate(100%, 0);
+        transform: translate(100%, 0);
+        z-index:100;
+    }
+    .slide-right-enter{
+        position: relative;
+        width: 100%;
+        -webkit-transform: translate(-50%, 0);
+        transform: translate(-50%, 0);
+        z-index:-1;
+    }
+    .slide-left-leave-active {
+        position: absolute;
+        width: 100%;
+        -webkit-transform: translate(-50%, 0);
+        transform: translate(-50%, 0);
+    }
+
+
+
+
+    /*.slide-left-enter, .slide-right-leave-active {*/
+        /*position: absolute;*/
+        /*width: 100vw;*/
+        /*-webkit-transform: translate(100vw, 0);*/
+        /*transform: translate(100vw, 0);*/
     /*}*/
-
-    .slide-right-enter,.slide-left-leave-active {
-        position: absolute;
-        width: 100vw;
-        -webkit-transform: translate(-100vw, 0);
-        transform: translate(-100vw, 0);
-    }
+    /*.slide-right-enter,.slide-left-leave-active {*/
+        /*position: absolute;*/
+        /*width: 100vw;*/
+        /*-webkit-transform: translate(-100vw, 0);*/
+        /*transform: translate(-100vw, 0);*/
+    /*}*/
 
     .fade-leave-active{
         transition:none;
