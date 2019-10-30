@@ -46,7 +46,7 @@
         Vue.config.devtools = false
     }
 
-//    page_editor ={{ page_editor | jsonify }}
+    //    page_editor ={{ page_editor | jsonify }}
 //    ctx = {{ ctx | jsonify }}
 
     editor= {{ editor | jsonify }}
@@ -63,13 +63,14 @@
                     stack: [],
                     tranName:'slide-left',
                     is_clearing:false,
-                    loading:false,
+                    loading:false, // 用于点击抖动
                 }
             },
             components:{},
             created(){
 //                this.open_live(window[editor],editor_ctx,{firstscreen:true})
                 this.first_screen(window[editor],editor_ctx)
+//                this.open_live(window[editor],editor_ctx)
             },
             computed:{
                 current_com(){
@@ -102,6 +103,7 @@
                      },500)
                 },
                 open_live(com,ctx,option){
+
                     if(this.loading){
                         return
                     }else{
@@ -139,6 +141,10 @@
 
                 },
                 back(){
+                    // IOS history.back 时 ，会调用到 这个back(不知道原因)，防止页面结构被破坏.
+                    if(this.stack.length <=1){
+                        return
+                    }
                     if(this.is_clearing){
                         var com = this.stack.pop()
                         Vue.delete(this.$options.components,com)
