@@ -63,6 +63,7 @@
                     stack: [],
                     tranName:'slide-left',
                     is_clearing:false,
+                    loading:false,
                 }
             },
             components:{},
@@ -101,6 +102,14 @@
                      },500)
                 },
                 open_live(com,ctx,option){
+                    if(this.loading){
+                        return
+                    }else{
+                        this.loading = true
+                        setTimeout(()=>{
+                            this.loading = false
+                        },1000)
+                    }
                     if(!option ||  !option.firstscreen){
                         history.pushState({},'')
                     }
