@@ -124,7 +124,9 @@
                     named_hub[fun_id] = function(){
                         self.back()
                     }
-                    history.replaceState({callback:fun_id},'','?_live='+com.basename)
+//                    history.replaceState({callback:fun_id},'','?_live='+com.basename)
+                    var url = ex.appendSearch({_live:com.basename})
+                    history.replaceState({callback:fun_id},'',url)
 
                 },
                 back(){
