@@ -192,6 +192,26 @@ export var network ={
         })
 
     },
+    load_img(url) {
+        var img = new Image();
+        img.src = url;
+
+        var p = new Promise(function(resolve,reject){
+            if(img.complete) {
+                //接下来可以使用图片了
+                //do something here
+                resolve()
+            }
+            else {
+                img.onload = function() {
+                    //接下来可以使用图片了
+                    //do something here
+                    resolve()
+                };
+            }
+        })
+        return p
+    },
     director_call:function(director_name,kws,callback){
         //var post_data=[{fun:"director_call",director_name:director_name,kws:kws}]
         if(callback){
