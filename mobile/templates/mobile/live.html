@@ -46,7 +46,7 @@
         Vue.config.devtools = false
     }
 
-//    page_editor ={{ page_editor | jsonify }}
+    //    page_editor ={{ page_editor | jsonify }}
 //    ctx = {{ ctx | jsonify }}
 
     editor= {{ editor | jsonify }}
@@ -63,12 +63,14 @@
                     stack: [],
                     tranName:'slide-left',
                     is_clearing:false,
+                    loading:false, // 用于点击抖动
                 }
             },
             components:{},
             created(){
 //                this.open_live(window[editor],editor_ctx,{firstscreen:true})
                 this.first_screen(window[editor],editor_ctx)
+//                this.open_live(window[editor],editor_ctx)
             },
             computed:{
                 current_com(){
@@ -101,6 +103,15 @@
                      },500)
                 },
                 open_live(com,ctx,option){
+
+                    if(this.loading){
+                        return
+                    }else{
+                        this.loading = true
+                        setTimeout(()=>{
+                            this.loading = false
+                        },1000)
+                    }
                     if(!option ||  !option.firstscreen){
                         history.pushState({},'')
                     }
@@ -124,10 +135,16 @@
                     named_hub[fun_id] = function(){
                         self.back()
                     }
-                    history.replaceState({callback:fun_id},'','?_live='+com.basename)
+//                    history.replaceState({callback:fun_id},'','?_live='+com.basename)
+                    var url = ex.appendSearch({_live:com.basename})
+                    history.replaceState({callback:fun_id},'',url)
 
                 },
                 back(){
+                    // IOS history.back 时 ，会调用到 这个back(不知道原因)，防止页面结构被破坏.
+                    if(this.stack.length <=1){
+                        return
+                    }
                     if(this.is_clearing){
                         var com = this.stack.pop()
                         Vue.delete(this.$options.components,com)
@@ -165,25 +182,61 @@
 
 </script>
 <style>
+    #main-panel{
+        margin: auto;
+        overflow: hidden;
+        position: relative;
+        height: var(--app-height);
+        width: 100vw;
+    }
     .child-view {
-        transition: all .5s cubic-bezier(.55,0,.1,1);
+        transition: transform .6s cubic-bezier(.55,0,.1,1);
+        /*transition: transform .5s cubic-bezier(.1,.4,.1,1);*/
+        /*transition: all .5s linear;*/
     }
-    .slide-left-enter, .slide-right-leave-active {
-        position: absolute;
-        width: 100vw;
-        -webkit-transform: translate(100vw, 0);
-        transform: translate(100vw, 0);
-    }
-    /*.slide-right-leave-active{*/
-        /*position: inherit;*/
-    /*}*/
 
-    .slide-right-enter,.slide-left-leave-active {
+    .slide-left-enter{
         position: absolute;
-        width: 100vw;
-        -webkit-transform: translate(-100vw, 0);
-        transform: translate(-100vw, 0);
+        width: 100%;
+        -webkit-transform: translate(100%, 0);
+        transform: translate(100%, 0);
     }
+    .slide-right-leave-active {
+        position: absolute;
+        width: 100%;
+        -webkit-transform: translate(100%, 0);
+        transform: translate(100%, 0);
+        z-index:100;
+    }
+    .slide-right-enter{
+        position: relative;
+        width: 100%;
+        -webkit-transform: translate(-50%, 0);
+        transform: translate(-50%, 0);
+        z-index:-1;
+    }
+    .slide-left-leave-active {
+        position: absolute;
+        width: 100%;
+        -webkit-transform: translate(-50%, 0);
+        transform: translate(-50%, 0);
+    }
+
+
+
+
+    /*.slide-left-enter, .slide-right-leave-active {*/
+        /*position: absolute;*/
+        /*width: 100vw;*/
+        /*-webkit-transform: translate(100vw, 0);*/
+        /*transform: translate(100vw, 0);*/
+    /*}*/
+    /*.slide-right-enter,.slide-left-leave-active {*/
+        /*position: absolute;*/
+        /*width: 100vw;*/
+        /*-webkit-transform: translate(-100vw, 0);*/
+        /*transform: translate(-100vw, 0);*/
+    /*}*/
 
     .fade-leave-active{
         transition:none;
@@ -210,7 +263,15 @@
 </div>
 
 
+<script>
+    if(ex.os.isPc){
+        var hh = window.innerHeight*0.563
+        $('#main-panel').width( hh +'px')
+        $('html').css('font-size',hh * 0.1333)
+        $(window).trigger('resize')
+    }
 
+</script>
 {% block page_content %}
 
 {% endblock %}
