@@ -1,6 +1,6 @@
 require('./styl/multi_select2.styl')
 
-var field_sigle_chosen={
+var field_multi_chosen={
     props:['row','head'],
     data(){
       return {
@@ -20,9 +20,10 @@ var field_sigle_chosen={
     </div>`,
     mounted:function(){
         var self=this
-        ex.load_css('https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css')
-        ex.load_js('https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js',function(){
-
+        //ex.load_css('https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css')
+        //ex.load_js('https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js',function(){
+        ex.load_css(js_config.js_lib.select2_css)
+        ex.load_js(js_config.js_lib.select2,function(){
 
             $(self.$el).find('select').select2({
                 placeholder:self.head.placeholder || '请选择',
@@ -85,4 +86,4 @@ var field_sigle_chosen={
     }
 }
 
-Vue.component('com-field-multi-select2',field_sigle_chosen)
+Vue.component('com-field-multi-select2',field_multi_chosen)
