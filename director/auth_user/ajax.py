@@ -6,6 +6,9 @@ from django.contrib import auth
 from helpers.director.db_tools import get_or_none,from_dict
 from helpers.director.forms import AuthForm,LoginForm
 from ..model_admin.permit import has_permit
+from helpers.director.kv import get_value,set_value,KVModel
+import json
+from django.utils import timezone
 
 def get_globe():
     return globals()
@@ -20,6 +23,14 @@ def do_login(username,password,request,auto_login=False):
     """
     登录函数：
     """
+    key = 'login_count_%s'%username
+    value = get_value(key,0)
+    now = (timezone.now() + timezone.timedelta(hours = 8 )).replace(tzinfo = None)
+    if value:
+        dc = json.loads(value)
+        if timezone.datetime.strptime( dc.get('createtime') ,'%Y-%m-%d %H:%M:%S') + timezone.timedelta(hours=2) > now \
+        and dc.get('count') > 5:
+            return {'errors':{"password":['近期尝试登陆次数过多，请稍后再试！']}}
     form=LoginForm({'username':username,'password':password})
     
     if form.is_valid():
@@ -27,8 +38,21 @@ def do_login(username,password,request,auto_login=False):
         if not auto_login:
             request.session.set_expiry(0)
         auth.login(request, user)
+        if value:
+            KVModel.objects.filter(key=key).delete()
         return {'status':'success'}
     else:
+        if value:
+            dc ={
+                'count':dc['count']+1,
+                'createtime':now.strftime('%Y-%m-%d %H:%M:%S'),
+            }
+        else:
+            dc ={
+                'createtime':now.strftime('%Y-%m-%d %H:%M:%S'),
+                'count':1
+            }
+        set_value(key,json.dumps(dc))
         return {'errors':form.errors}
 
 def do_login_old(username,password,request):
