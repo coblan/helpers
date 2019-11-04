@@ -975,6 +975,8 @@ class PlainTable(ModelTable):
             #'selectable': self.selectable,
             #'event_slots':self.get_event_slots()
         #}    
+    def get_operation(self):
+        return []
     
     def getRowSort(self): 
         return {
