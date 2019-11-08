@@ -84,13 +84,19 @@ var sim_select= {
                     return item.value != self.row[self.head.hide_related_field]
                 })
             }else{
-                var array = ex.filter(this.head.options,(item)=>{
-                    if(item.show){
-                        return ex.eval(item.show,{option:item,row:self.row,ps:self.parStore,vc:self})
-                    }else{
-                        return true
-                    }
-                })
+                if(this.head.option_show){
+                    var array = ex.filter(this.head.options,(item)=>{
+                        return ex.eval(this.head.option_show,{option:item,row:self.row,ps:self.parStore,vc:self})
+                    })
+                }else {
+                    var array = ex.filter(this.head.options,(item)=>{
+                        if(item.show){
+                            return ex.eval(item.show,{option:item,row:self.row,ps:self.parStore,vc:self})
+                        }else{
+                            return true
+                        }
+                    })
+                }
             }
 
             return self.orderBy(array,'label')

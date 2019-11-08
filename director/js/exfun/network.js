@@ -192,6 +192,26 @@ export var network ={
         })
 
     },
+    load_img(url) {
+        var img = new Image();
+        img.src = url;
+
+        var p = new Promise(function(resolve,reject){
+            if(img.complete) {
+                //接下来可以使用图片了
+                //do something here
+                resolve()
+            }
+            else {
+                img.onload = function() {
+                    //接下来可以使用图片了
+                    //do something here
+                    resolve()
+                };
+            }
+        })
+        return p
+    },
     director_call:function(director_name,kws,callback){
         //var post_data=[{fun:"director_call",director_name:director_name,kws:kws}]
         if(callback){
@@ -243,7 +263,7 @@ export var network ={
             }
             return false;
     },
-    uploadfile({url,}={}){
+    uploadfile({url,accept}={}){
         this.__upload_url =url
         return new Promise((resolve,reject)=>{
             ex.__on_filechange=function(event){
@@ -258,13 +278,19 @@ export var network ={
             }
 
             if(!window._director_uploadfile_input){
-                $('body').append('<input type="file" id="__director-upload-file-input" style="display: none">')
+                $('body').append('<input type="file" id="__director-upload-file-input" style="display: none" >')
                 $('#__director-upload-file-input').change(function(event){
                     ex.__on_filechange(event)
                 })
                 window._director_uploadfile_input=true
+                if(accept){
+                    $('#__director-upload-file-input').attr('accept',accept)
+                }
                 $('#__director-upload-file-input').click()
             }else{
+                if(accept){
+                    $('#__director-upload-file-input').attr('accept',accept)
+                }
                 $('#__director-upload-file-input').click()
             }
 
