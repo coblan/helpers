@@ -232,10 +232,19 @@ var ele_table= {
                 if(head.children){
                     var subheads = this.name_in_list(head.children)
                     ex.each(subheads,(subhead)=>{
-                        footer.push(this.parStore.footer[subhead.name] || '')
+                        if(this.parStore.footer[subhead.name] !=undefined){
+                            footer.push(this.parStore.footer[subhead.name] )
+                        }else{
+                            footer.push( '')
+                        }
                     })
                 }else if(! head.sublevel){
-                    footer.push(this.parStore.footer[head.name] || '')
+                    if(this.parStore.footer[head.name] != undefined){
+                        footer.push(this.parStore.footer[head.name])
+                    }else{
+                        footer.push( '')
+                    }
+
                 }
             })
             return  footer
