@@ -174,7 +174,7 @@ var cfg={
     select(msg,actions,option){
         var index=0
         var btns= ex.map(actions,action=>{return action.label})
-        var funclist= ex.map(actions,action=>{return (function(){ ex.eval(action.action,{index:index})  })})
+        var funclist= ex.map(actions,action=>{return (function(){ ex.eval(action.action,{index:index,option:option})  })})
         index = layer.confirm(msg, {
             btn: btns ,//按钮
             end:function(){

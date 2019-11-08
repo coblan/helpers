@@ -234,7 +234,11 @@ export var network ={
                 ex.post('/dapi/'+director_name,JSON.stringify(kws)).then(
                     function(resp){
                         if(resp.success) {
-                            resolve(resp.data)
+                            if(resp._question){
+                                ex.eval(resp._question,{director_name:director_name,kws:kws,resolve:resolve})
+                            }else{
+                                resolve(resp.data)
+                            }
                         }
                     }
                 )

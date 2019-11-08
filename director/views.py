@@ -21,6 +21,8 @@ from django.conf import settings
 import inspect
 from helpers.director.exceptions.unauth401 import UnAuth401Exception
 from .data_format.json_format import DirectorEncoder
+from .exceptions.question import QuestionException
+
 import logging
 req_log = logging.getLogger('general_log')
 
@@ -142,6 +144,9 @@ def director_view(request,director_name):
             rt = HttpResponse(json.dumps(dc,ensure_ascii=False,cls=DirectorEncoder),content_type="application/json") 
     except UnAuth401Exception as e:
         return HttpResponse(str(e),status=401)
+    except QuestionException as e:
+        dc= {'success':True,'_question':str(e)}
+        rt = HttpResponse(json.dumps(dc,ensure_ascii=False,cls=DirectorEncoder),content_type="application/json") 
     except UserWarning as e:
         dc = {'success':False,'msg':str(e)}
         rt = HttpResponse(json.dumps(dc,ensure_ascii=False,cls=DirectorEncoder),content_type="application/json") 
