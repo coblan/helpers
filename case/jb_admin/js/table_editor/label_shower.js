@@ -9,7 +9,11 @@ var label_shower = {
     },
     computed:{
         show_text:function(){
-            return this.rowData[this.label] || ''
+            if(this.rowData[this.label] != undefined){
+                return this.rowData[this.label]
+            }else{
+                return ''
+            }
         }
     }
 }

@@ -234,7 +234,11 @@ export var network ={
                 ex.post('/dapi/'+director_name,JSON.stringify(kws)).then(
                     function(resp){
                         if(resp.success) {
-                            resolve(resp.data)
+                            if(resp._question){
+                                ex.eval(resp._question,{director_name:director_name,kws:kws,resolve:resolve})
+                            }else{
+                                resolve(resp.data)
+                            }
                         }
                     }
                 )
@@ -263,7 +267,7 @@ export var network ={
             }
             return false;
     },
-    uploadfile({url,}={}){
+    uploadfile({url,accept}={}){
         this.__upload_url =url
         return new Promise((resolve,reject)=>{
             ex.__on_filechange=function(event){
@@ -278,13 +282,19 @@ export var network ={
             }
 
             if(!window._director_uploadfile_input){
-                $('body').append('<input type="file" id="__director-upload-file-input" style="display: none">')
+                $('body').append('<input type="file" id="__director-upload-file-input" style="display: none" >')
                 $('#__director-upload-file-input').change(function(event){
                     ex.__on_filechange(event)
                 })
                 window._director_uploadfile_input=true
+                if(accept){
+                    $('#__director-upload-file-input').attr('accept',accept)
+                }
                 $('#__director-upload-file-input').click()
             }else{
+                if(accept){
+                    $('#__director-upload-file-input').attr('accept',accept)
+                }
                 $('#__director-upload-file-input').click()
             }
 

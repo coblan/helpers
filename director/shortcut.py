@@ -19,6 +19,7 @@ from .data_format.json_format import DirectorEncoder
 
 from .model_func.cus_fields.form_datetime import FormDatetime
 
+from .exceptions.question import QuestionException
 #
 #from .container import evalue_container
 #from .short_gen import regist_director
