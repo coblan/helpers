@@ -1,12 +1,18 @@
 .com-live-list-page
+  position relative
+  height var(--app-height)
   .van-nav-bar
     position: fixed
     top 0
     left 0
     right 0
 
+  .middle-wrap
+    height calc( var(--app-height) - 120px )
+    overflow-y  auto
+
   .footer
-    position:fixed;
+    position:absolute;
     bottom: 0;
     left: 0;
     right: 0;
