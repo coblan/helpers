@@ -11,7 +11,7 @@ var live_list_page ={
         <com-uis-nav-bar :title="ctx.title" :back="can_back" :ops="ctx.ops"></com-uis-nav-bar>
             <!--<cube-scroll :data="childStore.rows" ref="scroll"  :options="scrollOptions" @pulling-down="onPullingDown"-->
                   <!--@pulling-up="onPullingUp">-->
-              <div class="middle-wrap" style="padding: 1rem 0 2rem 0">
+              <div class="middle-wrap">
                 <component :is="table_editor" :heads="ctx.heads" :rows="childStore.rows"  @select="on_block_click($event)"></component>
               </div>
 
