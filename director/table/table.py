@@ -23,7 +23,7 @@ from django.core.paginator import Paginator
 from django.forms.models import fields_for_model
 from helpers.director.exceptions.unauth401 import UnAuth401Exception
 from django.db import connections
-
+from django.db.utils import ProgrammingError
 class PageNum(object):
     perPage=20
     def __init__(self,pageNumber=1,perpage=None,kw={}):
@@ -763,7 +763,22 @@ class ModelTable(object):
             out.append(dc)
         return out
     
-    
+    def get_model_field_name(self):
+        fields =self.model._meta.get_fields()
+        fields=[field for field in fields if isinstance(field,models.Field)]
+        if self.include != None :
+            fields=filter(lambda field:field.name in self.include,fields)
+        if self.exclude != None:
+            fields=filter(lambda field:field.name not in self.exclude,fields)
+        return [x.name for x in fields]
+            #model_path = instance._meta.app_label+'.'+instance._meta.model_name
+    #fields=instance._meta.get_fields() # 如果用  instance._meta.fields 没有 manytomany (测试过) ,可能也没有 onetoone
+    #fields=[field for field in fields if isinstance(field,models.Field)]
+    #if include != None :
+        #fields=filter(lambda field:field.name in include,fields)
+    #if exclude != None:
+        #fields=filter(lambda field:field.name not in exclude,fields)
+        
     def get_org_dict(self,row,inst=None):
         org_row = make_mark_dict(row)
         return org_row
@@ -918,14 +933,17 @@ class RawTable(ModelTable):
         if sql:
             with connections[self.model.objects.db].cursor() as cursor:
                 cursor.execute( sql ,self.params)
+                
+                try:
+                    self.bucket.append( self.get_result(cursor) )
+                except ProgrammingError as e:
+                    pass
                 while  cursor.nextset():
-                    rows =[]
-                    for row in cursor:
-                        dc = {}
-                        for index, head in enumerate(cursor.description):
-                            dc[head[0]] = row[index]
-                        rows.append(dc)
-                    self.bucket.append(rows)
+                    try:
+                        self.bucket.append( self.get_result(cursor) )
+                    except ProgrammingError as e:
+                        pass
+                        
             self.pagenum.count = self.bucket[1][0]['count']
             if len(self.bucket)>=2:
                 self.footer = self.bucket[2][0]
@@ -935,6 +953,15 @@ class RawTable(ModelTable):
                 out_rows.append({k.lower():v for k,v in row.items()})
             return out_rows
   
+    
+    def get_result(self,cursor):
+        rows =[]
+        for row in cursor:
+            dc = {}
+            for index, head in enumerate(cursor.description):
+                dc[head[0]] = row[index]
+            rows.append(dc)
+        return rows
     
     def get_where(self):
         self.where_list =[]
