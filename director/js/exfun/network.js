@@ -218,7 +218,7 @@ export var network ={
             //ex.post('/d/ajax',JSON.stringify(post_data),function(resp){
             //    callback( resp.director_call )
             //})
-            ex.post('/dapi/'+director_name,JSON.stringify(kws),function(resp){
+            ex.post('/dapi/'+director_name,kws,function(resp){
                 if(resp.success){
                     callback( resp.data )
                 }
@@ -231,7 +231,7 @@ export var network ={
                     //        resolve(resp.director_call)
                     //    }
                     //)
-                ex.post('/dapi/'+director_name,JSON.stringify(kws)).then(
+                ex.post('/dapi/'+director_name,kws).then(
                     function(resp){
                         if(resp.success) {
                             if(resp._question){
