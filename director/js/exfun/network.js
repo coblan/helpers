@@ -214,11 +214,17 @@ export var network ={
     },
     director_call:function(director_name,kws,callback){
         //var post_data=[{fun:"director_call",director_name:director_name,kws:kws}]
+        if(ex.isEmpty(kws)){
+            var post_data = {}
+        }else{
+            var post_data= JSON.stringify(kws)
+        }
+
         if(callback){
             //ex.post('/d/ajax',JSON.stringify(post_data),function(resp){
             //    callback( resp.director_call )
             //})
-            ex.post('/dapi/'+director_name,JSON.stringify(kws),function(resp){
+            ex.post('/dapi/'+director_name,post_data,function(resp){
                 if(resp.success){
                     callback( resp.data )
                 }
@@ -231,10 +237,14 @@ export var network ={
                     //        resolve(resp.director_call)
                     //    }
                     //)
-                ex.post('/dapi/'+director_name,JSON.stringify(kws)).then(
+                ex.post('/dapi/'+director_name,post_data).then(
                     function(resp){
                         if(resp.success) {
-                            resolve(resp.data)
+                            if(resp._question){
+                                ex.eval(resp._question,{director_name:director_name,kws:kws,resolve:resolve})
+                            }else{
+                                resolve(resp.data)
+                            }
                         }
                     }
                 )

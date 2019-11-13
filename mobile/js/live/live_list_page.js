@@ -1,13 +1,17 @@
 require('./styl/live_list_page.styl')
 
 var live_list_page ={
+    /*
+    *  与live_list 获取数据一致，但是具备上一页，下一页，以及 总数功能
+    *
+    * */
     props:['ctx'],
     basename:'live-list-page',
     template:`<div class="com-live-list-page">
         <com-uis-nav-bar :title="ctx.title" :back="can_back" :ops="ctx.ops"></com-uis-nav-bar>
             <!--<cube-scroll :data="childStore.rows" ref="scroll"  :options="scrollOptions" @pulling-down="onPullingDown"-->
                   <!--@pulling-up="onPullingUp">-->
-              <div style="padding: 1rem 0 2rem 0">
+              <div class="middle-wrap">
                 <component :is="table_editor" :heads="ctx.heads" :rows="childStore.rows"  @select="on_block_click($event)"></component>
               </div>
 

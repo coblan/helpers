@@ -75,7 +75,7 @@ var table_store={
         },
         search:function(){
             this.search_args._page=1
-            this.getRows()
+            return this.getRows()
         },
         getRows:function(){
             /*
@@ -86,19 +86,23 @@ var table_store={
             cfg.show_load()
 
             var post_data={director_name:self.director_name,search_args:self.search_args}
-            ex.director_call('d.get_rows',post_data,function(resp){
-                cfg.hide_load()
-                self.rows = resp.rows
-                ex.vueAssign( self.row_pages,resp.row_pages)
-                ex.vueAssign(self.search_args,resp.search_args)
-                self.footer=resp.footer
-                self.parents=resp.parents
-                self.table_layout=resp.table_layout
-                if(self.after_get_rows){
-                    ex.eval(self.after_get_rows,{ps:self,resp:resp})
-                }
-                self.$emit('data-updated-backend')
+            return new Promise(function(resolve,reject){
+                ex.director_call('d.get_rows',post_data,function(resp){
+                    cfg.hide_load()
+                    self.rows = resp.rows
+                    ex.vueAssign( self.row_pages,resp.row_pages)
+                    ex.vueAssign(self.search_args,resp.search_args)
+                    self.footer=resp.footer
+                    self.parents=resp.parents
+                    self.table_layout=resp.table_layout
+                    if(self.after_get_rows){
+                        ex.eval(self.after_get_rows,{ps:self,resp:resp})
+                    }
+                    self.$emit('data-updated-backend')
+                    resolve(resp)
+                })
             })
+
 
 
             //var post_data=[{fun:'get_rows',director_name:self.director_name,search_args:self.search_args}]
@@ -306,14 +310,14 @@ var table_store={
                         row._cache_director_name = row._director_name // [1] 有可能是用的特殊的 direcotor
                         row._director_name=kws.fields_ctx.director_name
                     }
-                    //row[kws.field]=kws.value
                 })
-                var post_data=[{fun:'save_rows',rows:cache_rows}]
+                //var post_data=[{fun:'save_rows',rows:cache_rows}]
                 cfg.show_load()
-                ex.post('/d/ajax',JSON.stringify(post_data),function(resp){
+                //ex.post('/d/ajax',JSON.stringify(post_data),function(resp){
+                ex.director_call('d.save_rows',{rows:cache_rows}).then((resp)=>{
                     cfg.hide_load()
-                    if(resp.save_rows._outdate){
-                        layer.confirm(resp.save_rows._outdate, {
+                    if(resp._outdate){
+                        layer.confirm(resp._outdate, {
                             icon:3,
                             title:'提示',
                             btn: ['刷新数据', '仍然保存', '取消'] //可以无限个按钮
@@ -331,14 +335,14 @@ var table_store={
                             self.selected_set_and_save(kws,true)
                         });
                         return
-                    }else  if( !resp.save_rows.errors){
+                    }else  if( !resp.errors){
                         cfg.toast('操作成功！',{time:1000})
                         if(kws.after_save){
-                            if(ex.eval(kws.after_save,{rows:resp.save_rows,ps:self}) == 'stop'){
+                            if(ex.eval(kws.after_save,{rows:resp,ps:self}) == 'stop'){
                                 return
                             }
                         }
-                        ex.each(resp.save_rows,function(new_row){
+                        ex.each(resp,function(new_row){
                             // [1]  这里还原回去
                             if(new_row._cache_director_name){
                                 new_row._director_name = new_row._cache_director_name
@@ -353,9 +357,9 @@ var table_store={
 
                     }else{
                         if(kws.after_error){
-                            ex.eval(kws.after_error,{fs:field_store,errors:resp.save_rows.errors})
+                            ex.eval(kws.after_error,{fs:field_store,errors:resp.errors})
                         }else{
-                            cfg.showError(JSON.stringify( resp.save_rows.errors))
+                            cfg.showError(JSON.stringify( resp.errors))
                         }
 
                     }

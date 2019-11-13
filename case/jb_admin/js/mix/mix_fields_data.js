@@ -189,9 +189,10 @@ var mix_fields_data ={
             var post_data=[{fun:'save_row',row:this.row}]
             this.old_row=ex.copy(this.row)
             var p = new Promise((resolve,reject)=>{
-                ex.post('/d/ajax',JSON.stringify(post_data), (resp) =>{
+                //ex.post('/d/ajax',JSON.stringify(post_data), (resp) =>{
+                ex.director_call('d.save_row',{row:this.row}).then( (resp) =>{
                     cfg.hide_load()
-                    var rt = resp.save_row
+                    var rt = resp //resp.save_row
                     if(rt.errors){
                         //cfg.hide_load()
                         self.setErrors(rt.errors)

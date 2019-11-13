@@ -10,6 +10,7 @@ class SelectSearch(object):
     exact_names = []
     model=''
     field_sort=[]
+    db_map={} # 用户 raw sql 查询时，映射字段到 数据库字段
     def __init__(self,q,user = None,allowed_names = [], kw = {}):
         self.valid_name=  self.names + self.exact_names  #[x for x in self.names if x in allowed_names]
         self.crt_user=user
@@ -87,3 +88,12 @@ class SelectSearch(object):
         else:
             raise UserWarning('没有指定查询字段')
         return Q(**exp)
+    
+    def inject_sql(self,where_list,params):
+        if self.q and self.qf:
+            db_field = self.db_map.get(self.qf,self.qf)
+            if self.qf in self.exact_names:
+                where_list.append( '%s = %s'%(db_field,self.q) )
+            else:
+                where_list.append( db_field +" like %s" )
+                params.append('%%%s%%'%self.q)
