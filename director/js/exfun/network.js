@@ -243,7 +243,16 @@ export var network ={
         }
 
     },
-
+    director(director_name){
+        let handler = {
+            get: function(target, attr_name){
+                return function (kws){
+                    return ex.director_call('d.director_element_call',{director_name:director_name,attr_name:attr_name,kws:kws})
+                }
+            }
+        };
+        return new Proxy({},handler)
+    },
     download:function(strPath){
             var varExt = strPath.split('.');
             //alert(varExt.length);
