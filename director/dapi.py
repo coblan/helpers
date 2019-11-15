@@ -69,3 +69,9 @@ def save_rows(rows):
 def get_head_context(director_name):
      dcls = director.get(director_name)
      return dcls().get_head_context()
+
+@director_view('d.director_element_call')
+def director_element_call(director_name,attr_name,kws):
+     dcls = director.get(director_name)
+     obj = dcls()
+     return getattr(obj,attr_name)(**kws)

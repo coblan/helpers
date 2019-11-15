@@ -214,11 +214,17 @@ export var network ={
     },
     director_call:function(director_name,kws,callback){
         //var post_data=[{fun:"director_call",director_name:director_name,kws:kws}]
+        if(ex.isEmpty(kws)){
+            var post_data = {}
+        }else{
+            var post_data= JSON.stringify(kws)
+        }
+
         if(callback){
             //ex.post('/d/ajax',JSON.stringify(post_data),function(resp){
             //    callback( resp.director_call )
             //})
-            ex.post('/dapi/'+director_name,JSON.stringify(kws),function(resp){
+            ex.post('/dapi/'+director_name,post_data,function(resp){
                 if(resp.success){
                     callback( resp.data )
                 }
@@ -231,7 +237,7 @@ export var network ={
                     //        resolve(resp.director_call)
                     //    }
                     //)
-                ex.post('/dapi/'+director_name,JSON.stringify(kws)).then(
+                ex.post('/dapi/'+director_name,post_data).then(
                     function(resp){
                         if(resp.success) {
                             if(resp._question){
@@ -247,7 +253,16 @@ export var network ={
         }
 
     },
-
+    director(director_name){
+        let handler = {
+            get: function(target, attr_name){
+                return function (kws){
+                    return ex.director_call('d.director_element_call',{director_name:director_name,attr_name:attr_name,kws:kws})
+                }
+            }
+        };
+        return new Proxy({},handler)
+    },
     download:function(strPath){
             var varExt = strPath.split('.');
             //alert(varExt.length);
