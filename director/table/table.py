@@ -950,9 +950,17 @@ class RawTable(ModelTable):
                 self.footer['_label']='合计'
             out_rows = []
             for row in self.bucket[0]:
-                out_rows.append({k.lower():v for k,v in row.items()})
+                row_dc = {k.lower():v for k,v in row.items()}
+                row_dc.update({
+                    '_director_name':self.get_edit_director_name(),
+                    **self.dict_row(row_dc)
+                })
+                
+                out_rows.append(row_dc)
             return out_rows
   
+    def dict_row(self, row_dc):
+        return {}
     
     def get_result(self,cursor):
         rows =[]
