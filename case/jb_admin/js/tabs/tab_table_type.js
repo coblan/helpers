@@ -74,7 +74,7 @@ var tab_table_type={
 
         <div class="box box-success flex-v flex-grow" style="margin-bottom: 0">
             <div class="table-wraper flex-grow" style="position: relative;">
-                <!--<com-table-grid></com-table-grid>-->
+                <!--<com-table-rows></com-table-rows>-->
                  <component :is="tab_head.inn_editor"></component>
             </div>
         </div>

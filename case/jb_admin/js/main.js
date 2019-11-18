@@ -49,6 +49,8 @@ import * as append_html_shower from  './table_editor/append_html_shower.js'
 import * as array_obj_shower from  './table_editor/array_obj_shower.js'
 import * as pop_table from  './table_editor/pop_table.js'
 
+import * as table_type_main from  './table_type_editor/main.js'
+
 // field editor
 import * as fields_editor_main from  './field_editor/main.js'
 import * as field_label_shower from  './field_editor/label_shower.js'

@@ -1,7 +1,7 @@
 
 var live_table_type={
     props:['ctx'],
-    basename:'live-chart',
+    basename:'live-table-type',
     data:function(){
         var vc = this
         //var heads_ctx = this.ctx
@@ -14,7 +14,7 @@ var live_table_type={
                     director_name:vc.ctx.director_name,
                     footer:vc.ctx.footer || [],
                     ops:vc.ctx.ops || [],
-                    rows:[],
+                    rows: vc.ctx.rows || [] ,
                     row_pages:{},
                     selectable:vc.ctx.selectable==undefined? true:vc.ctx.selectable,
                     selected:[],
@@ -60,7 +60,7 @@ var live_table_type={
         </div>
         <div class="box box-success flex-v flex-grow" style="margin-bottom: 0">
             <div class="table-wraper flex-grow" style="position: relative;">
-                <!--<com-table-grid></com-table-grid>-->
+                <!--<com-table-rows></com-table-rows>-->
                 <div style="position: absolute;top:0;left: 0;bottom: 0;right: 0;overflow: auto">
                     <component :is="ctx.inn_editor"></component>
                 </div>

@@ -79,7 +79,7 @@ var tab_chart={
 
         <div class="box box-success flex-v flex-grow" style="margin-bottom: 0">
             <div class="table-wraper flex-grow" style="position: relative;">
-                <!--<com-table-grid></com-table-grid>-->
+                <!--<com-table-rows></com-table-rows>-->
                 <div style="position: absolute;top:0;left:0;bottom: 0;right:0;overflow-y: auto">
                        <div class="statistic-panel" v-if="tab_head.foot_heads">
                     <label class="title-label" v-text="childStore.footer._label"></label>
