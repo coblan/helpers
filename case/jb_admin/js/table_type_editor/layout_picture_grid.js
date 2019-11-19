@@ -27,8 +27,9 @@ Vue.component('com-table-layout-picture-grid',{
     },
     methods:{
         on_click(row){
-            if(this.parStore.vc.ctx.title_click){
-                ex.eval(this.parStore.vc.ctx.title_click,{row:row})
+            var ctx = this.parStore.vc.ctx
+            if(ctx.title_click){
+                ex.eval(ctx.title_click,{row:row,ctx:ctx})
             }
         }
     }
