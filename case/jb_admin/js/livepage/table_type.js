@@ -8,6 +8,7 @@ var live_table_type={
         var my_table_store ={
             data:function(){
                 return {
+                    head:vc.ctx,
                     heads:vc.ctx.heads,
                     row_filters:vc.ctx.row_filters,
                     row_sort:vc.ctx.row_sort,
@@ -15,11 +16,11 @@ var live_table_type={
                     footer:vc.ctx.footer || [],
                     ops:vc.ctx.ops || [],
                     rows: vc.ctx.rows || [] ,
-                    row_pages:{},
+                    row_pages:vc.ctx.row_pages || {},
                     selectable:vc.ctx.selectable==undefined? true:vc.ctx.selectable,
                     selected:[],
                     del_info:[],
-                    search_args: {},
+                    search_args: vc.ctx.search_args || {},
                     vc:vc,
                     parStore:ex.vueParStore(vc)
                 }
@@ -61,16 +62,17 @@ var live_table_type={
         <div class="box box-success flex-v flex-grow" style="margin-bottom: 0">
             <div class="table-wraper flex-grow" style="position: relative;">
                 <!--<com-table-rows></com-table-rows>-->
-                <div style="position: absolute;top:0;left: 0;bottom: 0;right: 0;overflow: auto">
+                <!--<div style="position: absolute;top:0;left: 0;bottom: 10px;right: 0;overflow: auto">-->
                     <component :is="ctx.inn_editor"></component>
-                </div>
+                <!--</div>-->
                </div>
         </div>
-        <!--<div style="background-color: white;">-->
-            <!--<com-table-pagination></com-table-pagination>-->
-        <!--</div>-->
+        <div style="background-color: white;">
+            <com-table-pagination></com-table-pagination>
+        </div>
     </div>`
 }
 
 
 window.live_table_type = live_table_type
+Vue.component('com-live-table-type',live_table_type)

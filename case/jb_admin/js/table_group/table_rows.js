@@ -1,4 +1,5 @@
 require('./scss/table_grid.scss')
+require('./styl/table_rows.styl')
 var ele_table= {
     props: ['ctx'],
     created: function () {
@@ -57,10 +58,6 @@ var ele_table= {
         }
     },
     mounted: function () {
-        //this.bus.eventBus.$on('search', this.bus_search)
-        //this.bus.eventBus.$on('pageindex-change', this.get_page)
-        //this.bus.eventBus.$on('operation', this.on_operation)
-        //this.bus.eventBus.$on('perpage-change', this.on_perpage_change)
         this.parStore.e_table = this.$refs.e_table
         this.parStore.$on('data-updated-backend',this.on_data_updated)
         ex.each(this.parStore.heads,(head)=>{
@@ -68,6 +65,10 @@ var ele_table= {
                 ex.append_css(head.style)
             }
         })
+        ex.each(this.parStore.selected,row=>{
+            this.parStore.e_table.toggleRowSelection(row)
+        })
+
     },
 
 
@@ -140,7 +141,7 @@ var ele_table= {
     },
 
     mixins: [mix_table_data, mix_ele_table_adapter],
-    template: `<div class="com-table-rows" style="position: absolute;top:0;left:0;bottom: 0;right:0;">
+    template: `<div class="com-table-rows com-table-grid" style="position: absolute;top:0;left:0;bottom: 0;right:0;">
         <el-table class="table flat-head" ref="e_table"
                               :data="rows"
                                border
@@ -263,7 +264,8 @@ var ele_table= {
         },
         on_data_updated(){
             Vue.nextTick(()=>{
-                this.$refs.e_table.doLayout()
+                //this.$refs.e_table.doLayout()
+                this.parStore.e_table.doLayout()
             })
         },
         on_sort_change(event){

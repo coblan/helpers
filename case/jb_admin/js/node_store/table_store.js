@@ -89,6 +89,7 @@ var table_store={
             return new Promise(function(resolve,reject){
                 ex.director_call('d.get_rows',post_data,function(resp){
                     cfg.hide_load()
+                    self.selected = []
                     self.rows = resp.rows
                     ex.vueAssign( self.row_pages,resp.row_pages)
                     ex.vueAssign(self.search_args,resp.search_args)
@@ -569,7 +570,7 @@ var table_store={
 
             if(window.root_live){
                 // keeplive 页面
-                root_live.open_live(live_el_tab,{tabs:tabs,title:kws.par_row._label,crt_tab_name:kws.tab_name,par_row:kws.par_row})
+                root_live.open_live(live_el_tab,{tabs:tabs,title:kws.par_row._label,crt_tab_name:kws.tab_name,par_row:kws.par_row,last_ps:self})
             }else{
                 // 传统 页面
                 self.tab_stack.push( {
