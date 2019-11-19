@@ -22,7 +22,8 @@ from helpers.director.model_func.hash_dict import make_mark_dict
 from django.core.paginator import Paginator
 from django.forms.models import fields_for_model
 from helpers.director.exceptions.unauth401 import UnAuth401Exception
-
+from django.db import connections
+from django.db.utils import ProgrammingError
 class PageNum(object):
     perPage=20
     def __init__(self,pageNumber=1,perpage=None,kw={}):
@@ -47,9 +48,12 @@ class PageNum(object):
         self.pageNumber = min(self.pagenator.num_pages,abs(int( self.pageNumber)))
         self.count = self.pagenator.count
         return self.pagenator.page(self.pageNumber)
- 
-        
-        
+    
+    def get_slice_index(self):
+        crt_page= max(1,int( self.pageNumber))
+        start = (crt_page -1)*self.perPage
+        end = crt_page*self.perPage
+        return start,end
     
     def get_context(self):
         """
@@ -271,6 +275,9 @@ class RowFilter(object):
         query=query.filter(**self.filter_args)
         query = self.clean_query(query)
         return query    
+    
+    def inject_sql(self,where_list,params):
+        pass
     
 class RowSort(object):
     """
@@ -756,6 +763,22 @@ class ModelTable(object):
             out.append(dc)
         return out
     
+    def get_model_field_name(self):
+        fields =self.model._meta.get_fields()
+        fields=[field for field in fields if isinstance(field,models.Field)]
+        if self.include != None :
+            fields=filter(lambda field:field.name in self.include,fields)
+        if self.exclude != None:
+            fields=filter(lambda field:field.name not in self.exclude,fields)
+        return [x.name for x in fields]
+            #model_path = instance._meta.app_label+'.'+instance._meta.model_name
+    #fields=instance._meta.get_fields() # 如果用  instance._meta.fields 没有 manytomany (测试过) ,可能也没有 onetoone
+    #fields=[field for field in fields if isinstance(field,models.Field)]
+    #if include != None :
+        #fields=filter(lambda field:field.name in include,fields)
+    #if exclude != None:
+        #fields=filter(lambda field:field.name not in exclude,fields)
+        
     def get_org_dict(self,row,inst=None):
         org_row = make_mark_dict(row)
         return org_row
@@ -899,6 +922,132 @@ class ModelTable(object):
         
         return wb
 
+class RawTable(ModelTable):
+    def get_sql(self):
+        pass
+    
+    def get_rows(self):
+        self.params = []
+        sql = self.get_sql()
+        self.bucket=[]
+        if sql:
+            with connections[self.model.objects.db].cursor() as cursor:
+                cursor.execute( sql ,self.params)
+                
+                try:
+                    self.bucket.append( self.get_result(cursor) )
+                except ProgrammingError as e:
+                    pass
+                while  cursor.nextset():
+                    try:
+                        self.bucket.append( self.get_result(cursor) )
+                    except ProgrammingError as e:
+                        pass
+                        
+            self.pagenum.count = self.bucket[1][0]['count']
+            if len(self.bucket)>=2:
+                self.footer = self.bucket[2][0]
+                self.footer['_label']='合计'
+            out_rows = []
+            for row in self.bucket[0]:
+                row_dc = {k.lower():v for k,v in row.items()}
+                row_dc.update({
+                    '_director_name':self.get_edit_director_name(),
+                    **self.dict_row(row_dc)
+                })
+                
+                out_rows.append(row_dc)
+            return out_rows
+  
+    def dict_row(self, row_dc):
+        return {}
+    
+    def get_result(self,cursor):
+        rows =[]
+        for row in cursor:
+            dc = {}
+            for index, head in enumerate(cursor.description):
+                dc[head[0]] = row[index]
+            rows.append(dc)
+        return rows
+    
+    def get_where(self):
+        self.where_list =[]
+        self.row_search.inject_sql(self.where_list,self.params)
+        ss = ' AND '.join(self.where_list)
+        if ss:
+            return 'WHERE %s'%ss
+        else:
+            return ss
+    
+    def get_sort(self):
+        search_args = self.kw.get('search_args')
+        sort_str = search_args.get('_sort') or self.row_sort.general_sort
+
+        if sort_str.startswith('-'):
+            order_by = ' ORDER BY %s DESC '%sort_str[1:] 
+        else:
+            order_by = ' ORDER BY %s'% sort_str
+        return  order_by
+   
+        
+        
+    #def get_query(self):
+        #self.where_list =[]
+        #self.params =[]
+        #self.order_by=''
+        
+        #self.inject_sql()
+        ##self.row_filter.inject_sql(self.where_list,self.params)
+        ##self.row_search.inject_sql(self.where_list,self.params)
+        ##if self.where_list:
+            ##self.sql += ' WHERE ' + ' AND '.join(self.where_list)
+        #self.query = self.model.objects.raw(self.sql+self.order_by,self.params)
+        #self.query.count = lambda : self.update_count()
+        #self.statistics(self.query)
+        
+        #return self.query
+    
+        #rows = []
+        #for row in query:
+            #dc = self.dict_row(row)
+            #rows.append(to_dict(row,filt_attr = dc))
+        #return rows
+    
+    #def getRowPages(self): 
+        
+        #return {'crt_page':1, #self.pageNumber,
+               #'total':self.count,
+               #'perpage': 20#self.perPage
+               #}
+    
+    #def update_count(self):
+        #with connections[self.query.db].cursor() as cursor:
+            #cursor.execute( 'SELECT COUNT(*) FROM (' + self.sql + ') bba' ,self.params)
+            #set0 = cursor.fetchall()
+            #return set0[0][0]
+    
+    #def get_foot_sql(self):
+        #self.foot_field=[]
+        #return ''
+    
+    #def statistics(self, query):
+        #sql = self.get_foot_sql()
+        #if sql:
+            #with connections[self.query.db].cursor() as cursor:
+                #cursor.execute( sql ,self.params)
+                #for row in cursor:
+                    #dc = {}
+                    #for index, head in enumerate(cursor.description):
+                        #dc[head[0]] = row[index]
+                    #dc['_label']='合计'
+                #self.footer=dc
+                
+        
+    
+            
+
+
 class PlainTable(ModelTable):
     def __init__(self,page=1,row_sort=[],row_filter={},row_search= '',crt_user=None,perpage=None,**kw):
         """
@@ -975,6 +1124,8 @@ class PlainTable(ModelTable):
             #'selectable': self.selectable,
             #'event_slots':self.get_event_slots()
         #}    
+    def get_operation(self):
+        return []
     
     def getRowSort(self): 
         return {

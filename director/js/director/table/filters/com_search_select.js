@@ -50,12 +50,20 @@ var com_search = {
     watch:{
         myvalue(v){
             this.search_args._q = v
+        },
+        org_value(v){
+            if(this.myvalue != v){
+                this.myvalue = v
+            }
         }
     },
     computed:{
         normed_placeholder:function(){
             var crt = ex.findone(this.head.options,{value:this.search_args._qf})
             return crt.label
+        },
+        org_value(){
+            return this.search_args._q
         }
     },
     methods:{

@@ -1,9 +1,7 @@
-require('./scss/table_grid.scss')
+
 var ele_table= {
     props: ['ctx'],
     created: function () {
-        //this.bus.table = this
-
     },
     data: function () {
         var parStore=ex.vueParStore(this)
@@ -57,10 +55,6 @@ var ele_table= {
         }
     },
     mounted: function () {
-        //this.bus.eventBus.$on('search', this.bus_search)
-        //this.bus.eventBus.$on('pageindex-change', this.get_page)
-        //this.bus.eventBus.$on('operation', this.on_operation)
-        //this.bus.eventBus.$on('perpage-change', this.on_perpage_change)
         this.parStore.e_table = this.$refs.e_table
         this.parStore.$on('data-updated-backend',this.on_data_updated)
         ex.each(this.parStore.heads,(head)=>{
@@ -232,10 +226,19 @@ var ele_table= {
                 if(head.children){
                     var subheads = this.name_in_list(head.children)
                     ex.each(subheads,(subhead)=>{
-                        footer.push(this.parStore.footer[subhead.name] || '')
+                        if(this.parStore.footer[subhead.name] !=undefined){
+                            footer.push(this.parStore.footer[subhead.name] )
+                        }else{
+                            footer.push( '')
+                        }
                     })
                 }else if(! head.sublevel){
-                    footer.push(this.parStore.footer[head.name] || '')
+                    if(this.parStore.footer[head.name] != undefined){
+                        footer.push(this.parStore.footer[head.name])
+                    }else{
+                        footer.push( '')
+                    }
+
                 }
             })
             return  footer
@@ -254,7 +257,8 @@ var ele_table= {
         },
         on_data_updated(){
             Vue.nextTick(()=>{
-                this.$refs.e_table.doLayout()
+                this.parStore.e_table.doLayout()
+                //this.$refs.e_table.doLayout()
             })
         },
         on_sort_change(event){
@@ -315,45 +319,4 @@ var arg_filter={
     }
 }
 
-Vue.component('com-element-table-colomu',{
-    props:['head'],
-    data:function(){
-        var self=this
-      return {
-          parStore:ex.vueParStore(self)
-      }
-    },
-    template:`<template >
-
-                            <el-table-column v-if="head.editor"
-                                             :show-overflow-tooltip="parStore.is_show_tooltip(head) "
-                                              :fixed="head.fixed"
-                                             :label="head.label"
-                                             :prop="head.name.toString()"
-                                             :sortable="parStore.is_sort(head)"
-                                             :sort-orders="['ascending', 'descending']"
-                                             :width="head.width">
-                                <template slot-scope="scope">
-                                    <component :is="head.editor"
-                                               @on-custom-comp="on_td_event($event)"
-                                               :row-data="scope.row" :field="head.name" :index="scope.$index">
-                                    </component>
-
-                                </template>
-
-                            </el-table-column>
-
-                            <el-table-column v-else
-                                             :show-overflow-tooltip="parStore.is_show_tooltip(head) "
-                                             :fixed="head.fixed"
-                                             :prop="head.name.toString()"
-                                             :label="head.label"
-                                             :sortable="parStore.is_sort(head)"
-                                             :sort-orders="['ascending', 'descending']"
-                                             :width="head.width">
-                            </el-table-column>
-
-         </template>
-    `
-})
 

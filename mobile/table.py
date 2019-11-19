@@ -21,12 +21,19 @@ class FilterForm(object):
             if head['editor'] in ['com-select-filter','com-filter-select']:
                 head['editor'] ='com-field-select'
                 heads.append(head)
-            if head['editor'] in ['com-date-datetimefield-range-filter']:
+            if head['editor'] in ['com-date-datetimefield-range-filter',]:
                 heads.append({
                     'name':'_start_%s'%head['name'],'label':'开始'+head['label'],'editor':'com-field-date'
                 })
                 heads.append({
                      'name':'_end_%s'%head['name'],'label':'结束'+head['label'],'editor':'com-field-date'
+                })
+            if head['editor'] in ['com-filter-datetime-range']:
+                heads.append({
+                    'name':'_start_%s'%head['name'],'label':'开始'+head['label'],'editor':'com-field-datetime'
+                })
+                heads.append({
+                     'name':'_end_%s'%head['name'],'label':'结束'+head['label'],'editor':'com-field-datetime'
                 })
             if head['editor'] in ['com-filter-text']:
                 head['editor'] = 'com-field-linetext'

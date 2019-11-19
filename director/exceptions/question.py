@@ -1,0 +1,3 @@
+
+class QuestionException(UserWarning):
+    pass

@@ -156,12 +156,32 @@ var cfg={
         layer.open(dc);
     },
     confirm:function(msg){
+
         return new Promise(function(resolve,reject){
-            layer.confirm(msg, {icon: 3, title:'提示'}, function(index){
+            var index =layer.confirm(msg,
+                {icon: 3,
+                    title:'提示',
+                    end:function(){
+                        ex.remove(cfg.layer_index_stack,index)
+                        }
+            }, function(index){
                 layer.close(index);
                 resolve()
             });
+            cfg.layer_index_stack.push(index);
         })
+    },
+    select(msg,actions,option){
+        var index=0
+        var btns= ex.map(actions,action=>{return action.label})
+        var funclist= ex.map(actions,action=>{return (function(){ ex.eval(action.action,{index:index,option:option})  })})
+        index = layer.confirm(msg, {
+            btn: btns ,//按钮
+            end:function(){
+                ex.remove(cfg.layer_index_stack,index)
+            }
+        },...funclist);
+        cfg.layer_index_stack.push(index);
     }
 }
 

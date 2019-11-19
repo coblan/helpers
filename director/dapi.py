@@ -6,6 +6,7 @@ from helpers.director.base_data import director
 from .model_func.wirtedb import permit_save_model
 from django.core.exceptions import ValidationError
 from .fields.fields import ModelFields,OutDateException
+from django.core.exceptions import PermissionDenied
 
 def director_save_row(row):
      request = get_request_cache()['request']
@@ -30,6 +31,8 @@ def save_row(row):
           return {'success':True,'status':'success','row':dc}
      except ValidationError as e:
           return {'errors':dict(e)}
+     except PermissionDenied as e:
+          raise UserWarning(str(e))
      except OutDateException as e:
           return {'_outdate':str(e)}
 
@@ -69,3 +72,9 @@ def save_rows(rows):
 def get_head_context(director_name):
      dcls = director.get(director_name)
      return dcls().get_head_context()
+
+@director_view('d.director_element_call')
+def director_element_call(director_name,attr_name,kws):
+     dcls = director.get(director_name)
+     obj = dcls()
+     return getattr(obj,attr_name)(**kws)

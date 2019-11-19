@@ -79,7 +79,7 @@ var live_table={
 
         <div class="box box-success flex-v flex-grow" style="margin-bottom: 0">
             <div class="table-wraper flex-grow" style="position: relative;">
-                <com-table-grid></com-table-grid>
+                <com-table-rows></com-table-rows>
                </div>
         </div>
         <div style="background-color: white;">

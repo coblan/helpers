@@ -1,6 +1,6 @@
 var op_a = {
     props:['head','disabled'],
-    template:` <span style="margin-left: 3px">
+    template:` <span class="com-op-btn" style="margin-left: 3px">
     <button :class="norm_class" @click="operation_call()"  :style="head.style" :disabled="disabled">
         <i v-if="head.icon" :class='["fa",head.icon]'></i>
         <span  v-text="head.label"></span>
@@ -11,6 +11,11 @@ var op_a = {
         return {
             enable:true,
             parStore : parStore,
+        }
+    },
+    mounted(){
+        if(this.head.css){
+            ex.append_css(this.head.css)
         }
     },
     computed:{
