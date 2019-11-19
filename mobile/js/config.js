@@ -10,11 +10,13 @@ require('./styl/config.styl')
 // https://stackoverflow.com/questions/37112218/css3-100vh-not-constant-in-mobile-browser
 const appHeight = () => {
     const doc = document.documentElement
-    doc.style.setProperty('--app-height', `${window.innerHeight}px`)
+
+    //doc.style.setProperty('--app-height', `${window.innerHeight}px`)
+    doc.style.setProperty('--app-height', $('#main-panel').height()+'px')
     doc.style.setProperty('--app-width',$('#main-panel').width()+'px')
 }
 window.addEventListener('resize', appHeight)
-appHeight()
+//appHeight()
 
 
 ex.assign(cfg,{

@@ -186,8 +186,8 @@
         margin: auto;
         overflow: hidden;
         position: relative;
-        height: var(--app-height);
-        width: 100vw;
+        /*height: var(--app-height);*/
+        /*width: 100vw;*/
     }
     .child-view {
         transition: transform .5s cubic-bezier(.55,0,.1,1);
@@ -264,12 +264,40 @@
 
 
 <script>
-    if(ex.os.isPc){
+    var adapt_size = {{ adapt_size | jsonify }}
+    function fullsize(){
+        $('#main-panel').height( window.innerHeight +'px')
+        $('#main-panel').width( window.innerWidth +'px')
+        $(window).trigger('resize')
+    }
+    function fullheight(){
         var hh = window.innerHeight*0.563
         $('#main-panel').width( hh +'px')
+        $('#main-panel').height( window.innerHeight +'px')
         $('html').css('font-size',hh * 0.1333)
         $(window).trigger('resize')
     }
+    function fullwidth(){
+        var hh = window.innerWidth / 0.563
+        $('#main-panel').height( hh +'px')
+        $('#main-panel').width( window.innerWidth +'px')
+        $(window).trigger('resize')
+    }
+    if(ex.os.isPc && !ex.os.isTablet){
+        fullheight()
+    }else if(ex.os.isTablet){
+        fullsize()
+//        if(adapt_size =='fullheight'){
+//            fullheight()
+//        }else if(adapt_size == 'fullwidth'){
+//            fullwidth()
+//        }else{
+//            fullsize()
+//        }
+    }else{
+        fullsize()
+    }
+
 
 </script>
 {% block page_content %}
