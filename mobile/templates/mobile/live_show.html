@@ -1,0 +1,432 @@
+{% extends "mobile/base.html" %}
+
+{% load static %}
+{% load jsonify %}
+
+
+{% block head-content %}
+
+{% block head-content2 %}
+<title></title>
+{% endblock %}
+
+<script src="{{ js_config.js_lib.jquery }}"></script>
+<script src="{{ js_config.js_lib.md5 }}"></script>
+<link rel="stylesheet" href="{{ js_config.js_lib.font_awesome }}">
+<script src="{{ js_config.js_lib.vuejs }}"></script>
+<!--<script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>-->
+
+<script src="{{ js_config.js_lib.nice_validator }}"></script>
+<link rel="stylesheet" href="{{ js_config.js_lib.nice_validator_css }}">
+
+<script src="{{ js_config.js_lib.cube_ui }}"></script>
+<link rel="stylesheet" href="{{ js_config.js_lib.cube_ui_css }}">
+<script src="{{ js_config.js_lib.mint_ui }}"></script>
+<link rel="stylesheet" href="{{ js_config.js_lib.mint_ui_css }}">
+<script src="{{ js_config.js_lib.vant }}"></script>
+<link rel="stylesheet" href="{{ js_config.js_lib.vant_css }}">
+<script src="{{ js_config.js_lib.exfun }}"></script>
+
+<script src="{{ js_config.js_lib.mobile }}"></script>
+<script src="{{ js_config.js_lib.wechat }}"></script>
+<script src="{{ js_config.js_lib.wxfront }}"></script>
+<!--<script src="{{ js_config.js_lib.mylbs }}"></script>-->
+
+<!--<script src="{{ js_config.js_lib.enterprise }}"></script>-->
+
+{% endblock %}
+
+
+{% block page_body %}
+
+<script>
+    if(js_config.is_debug){
+        Vue.config.devtools = true
+    }else{
+        Vue.config.devtools = false
+    }
+
+    //    page_editor ={{ page_editor | jsonify }}
+//    ctx = {{ ctx | jsonify }}
+
+    editor= {{ editor | jsonify }}
+    editor_ctx = {{ editor_ctx | jsonify }}
+
+    $(function(){
+
+        live_root = new Vue({
+            el:'#main-panel',
+            data: function(){
+                var search_args = ex.parseSearch()
+                return {
+//                    stack:[{editor:page_editor,ctx:ctx}],
+                    stack: [],
+                    tranName:'slide-left',
+                    is_clearing:false,
+                    loading:false, // 用于点击抖动
+                    open_status:'default',
+                    crt_index:0,
+                }
+            },
+            components:{},
+            created(){
+//                this.open_live(window[editor],editor_ctx,{firstscreen:true})
+                this.first_screen(window[editor],editor_ctx)
+//                this.open_live(window[editor],editor_ctx)
+            },
+            computed:{
+                current_com(){
+                    return this. stack[this.stack.length -1 ]
+                },
+                alive_list(){
+                    return this.stack.map((item)=>{
+                                return item.editor
+                            })
+                },
+            },
+            methods:{
+                clear_stack(){
+                    this.is_clearing = true
+                    var length =this.stack.length
+                    for(var i=0;i<length-1;i++){
+                        history.back()
+//                        this.back()
+                    }
+                    this.stack = []
+                    history.replaceState({},'')
+                    this.is_clearing=false
+                },
+                first_screen(editor,editor_ctx){
+                    this.clear_stack()
+                    this.tranName ='fade'
+                    this.open_live(editor,editor_ctx,{back_animate:'fade',firstscreen:true})
+                    setTimeout(()=>{
+                        this.tranName = 'slide-left'
+                     },500)
+                },
+                open_live(com,ctx,option){
+                    if(this.loading){
+                        return
+                    }else{
+                        this.loading = true
+                        setTimeout(()=>{
+                            this.loading = false
+                        },1000)
+                    }
+                    if(!option ||  !option.firstscreen){
+                        history.pushState({},'')
+                    }
+                    if(typeof com =='string'){
+                        com = window[com]
+                    }
+                    if (com.basename){
+                        var com_name = 'dyn-'+com.basename +'-'+ Date.now()
+                    }else{
+                        var com_name = 'dyn-'+ Date.now()
+                    }
+                    var big_com = {
+                        mixins:[com],
+                        name:com_name,
+                    }
+                    Vue.set( this.$options.components,com_name,big_com)
+                    this.stack.push({editor:com_name,ctx:ctx ,option:option })
+                    this.crt_index= this.stack.length - 1
+                    var  self =this
+                    var fun_id = 'root_live_back_fun' ;// Date.now()
+                    named_hub[fun_id] = function(){
+                        self.back()
+                    }
+//                    history.replaceState({callback:fun_id},'','?_live='+com.basename)
+                    var url = ex.appendSearch({_live:com.basename})
+                    history.replaceState({callback:fun_id},'',url)
+                    Vue.nextTick(()=>{
+                        if(this.$refs[com_name][0].activated){
+                            this.$refs[com_name][0].activated()
+                        }
+                        if(this.stack.length >1 ){
+                            var last_com_name = this.stack[this.stack.length -2].editor
+                            if(this.$refs[last_com_name][0].deactivated){
+                                this.$refs[last_com_name][0].deactivated()
+                            }
+                        }
+                    })
+                },
+                back(){
+                    // IOS history.back 时 ，会调用到 这个back(不知道原因)，防止页面结构被破坏.
+                    if(this.stack.length <=1){
+                        return
+                    }
+                    if(this.is_clearing){
+                        var com = this.stack.pop()
+                        Vue.delete(this.$options.components,com)
+                        return
+                    }
+                    var stack_ctx = this. stack[this.stack.length -1 ]
+                    var option= stack_ctx.option
+                    if(option && option.back_animate){
+                        this.tranName = option.back_animate
+                    }else{
+                        this.tranName = 'slide-right'
+                    }
+                    this.crt_index -= 1
+
+                    Vue.nextTick(()=>{
+                        var com_name=this.stack[this.stack.length-1].editor
+                        if(this.$refs[com_name][0].deactivated){
+                            this.$refs[com_name][0].deactivated()
+                        }
+                    if(this.stack.length >1 ){
+                        var last_com_name = this.stack[this.stack.length -2].editor
+                        if(this.$refs[last_com_name][0].activated){
+                            this.$refs[last_com_name][0].activated()
+                        }
+                    }
+                })
+                   setTimeout(()=>{
+                        this.tranName = 'slide-left'
+                        var com = this.stack.pop()
+                        Vue.delete(this.$options.components,com)
+                    },800)
+                },
+                lastsibe(vc){
+                    var index = this.$children.indexOf(vc)
+                    if(index >0){
+                        return this.$children[index-1]
+                    }
+                },
+                get_class(index){
+                    var dc={}
+//                    if(this.open_status =='left-enter'){
+//                        if(index==this.stack.length-1){
+//                            dc['slide-left-enter'] = true
+//                        }else if(index == this.stack.length -2){
+//                            dc['slide-left-leave-active'] =true
+//                        }else{
+//                            dc['hide']=true
+//                        }
+//                    }
+
+                    return dc
+
+                }
+
+            }
+        })
+    })
+
+
+</script>
+<style>
+    body{
+        background-color: #525252;
+    }
+    #main-panel{
+        margin: auto;
+        overflow: hidden;
+        position: relative;
+        /*height: var(--app-height);*/
+        /*width: 100vw;*/
+        background-color: white;
+    }
+    .child-view {
+        width: 100%;
+        height: 100%;
+        transition: transform .5s cubic-bezier(.55,0,.1,1);
+        /*transition: transform 20.5s cubic-bezier(.55,0,.1,1);*/
+
+
+        /*transition: transform .5s cubic-bezier(.1,.4,.1,1);*/
+        /*transition: all .5s linear;*/
+    }
+
+
+
+    .slide-left-enter{
+        position: absolute;
+        top:0;
+        -webkit-transform: translate(100%, 0);
+        transform: translate(100%, 0);
+        z-index: -1;
+    }
+    /*.slide-left-enter-active{*/
+        /*position: absolute;*/
+        /*top:0;*/
+        /*-webkit-transform: translate(50%, 0);*/
+        /*transform: translate(50%, 0);*/
+    /*}*/
+
+    /*.slide-right-enter-active{*/
+        /*position: absolute;*/
+        /*top:0;*/
+        /*-webkit-transform: translate(0, 0);*/
+        /*transform: translate(0, 0);*/
+        /*z-index: -1;*/
+    /*}*/
+    .slide-left-leave-active {
+        position: absolute;
+        width: 100%;
+        -webkit-transform: translate(-50%, 0);
+        transform: translate(-50%, 0);
+    }
+
+    .slide-right-enter{
+        position: absolute;
+        width: 100%;
+        -webkit-transform: translate(50%, 0);
+        transform: translate(50%, 0);
+    }
+    /*.slide-left-leave {*/
+        /*top:0;*/
+        /*position: absolute;*/
+        /*width: 100%;*/
+        /*-webkit-transform: translate(-50%, 0);*/
+        /*transform: translate(-50%, 0);*/
+    /*}*/
+
+    /*.slide-left-leave-active {*/
+        /*z-index: -1;*/
+        /*transition: transform 20.5s cubic-bezier(.55,0,.1,1);*/
+
+    /*}*/
+
+    /*.slide-right-enter-active{*/
+        /*position: absolute;*/
+        /*width: 100%;*/
+        /*-webkit-transform: translate(-50%, 0);*/
+        /*transform: translate(-50%, 0);*/
+        /*z-index:-1;*/
+        /*transition: transform 20.5s cubic-bezier(.55,0,.1,1);*/
+    /*}*/
+
+    /*.slide-left-leave-active {*/
+        /*position: absolute;*/
+        /*width: 100%;*/
+        /*-webkit-transform: translate(-50%, 0);*/
+        /*transform: translate(-50%, 0);*/
+        /*transition: transform 20.5s cubic-bezier(.55,0,.1,1);*/
+    /*}*/
+
+    .slide-right-leave-active {
+        position: absolute;
+        width: 100%;
+        -webkit-transform: translate(100%, 0);
+        transform: translate(100%, 0);
+        z-index:100;
+        top:0;
+        z-index: 99999;
+    }
+
+    /*.slide-right-enter{*/
+        /*position: absolute;*/
+        /*width: 100%;*/
+        /*-webkit-transform: translate(-50%, 0);*/
+        /*transform: translate(-50%, 0);*/
+        /*z-index:-1;*/
+    /*}*/
+
+
+
+    /*.slide-right-enter-active{*/
+        /*position: absolute;*/
+        /*width: 100%;*/
+        /*-webkit-transform: translate(-50%, 0);*/
+        /*transform: translate(-50%, 0);*/
+        /*z-index:-1;*/
+        /*transition: transform 20.5s cubic-bezier(.55,0,.1,1);*/
+    /*}*/
+
+
+
+    /*.slide-left-enter, .slide-right-leave-active {*/
+        /*position: absolute;*/
+        /*width: 100vw;*/
+        /*-webkit-transform: translate(100vw, 0);*/
+        /*transform: translate(100vw, 0);*/
+    /*}*/
+    /*.slide-right-enter,.slide-left-leave-active {*/
+        /*position: absolute;*/
+        /*width: 100vw;*/
+        /*-webkit-transform: translate(-100vw, 0);*/
+        /*transform: translate(-100vw, 0);*/
+    /*}*/
+
+    .fade-leave-active{
+        transition:none;
+    }
+    .fade-enter-active {
+        transition: none;
+    }
+   /*opacity .3s;*/
+    .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+        opacity: 0;
+    }
+
+</style>
+<div id="main-panel">
+
+    <transition-group :name="tranName">
+        <component :ref="ctx.editor" v-for="(ctx,index) in stack" :key="ctx.editor" class="child-view" v-show="index==crt_index" :is="ctx.editor" :ctx="ctx.ctx" ></component>
+    </transition-group>
+        <!--<template v-for="(ctx,index) in stack">-->
+            <!--<transition :name="tranName">-->
+                <!--<component class="child-view" v-show="index==stack.length-1" :is="ctx.editor" :ctx="ctx.ctx" ></component>-->
+            <!--</transition>-->
+        <!--</template>-->
+
+
+    <!--<com-live-stack  :ctx_list="stack">-->
+
+    <!--</com-live-stack>-->
+    <!--<transition :name="tranName" @after-enter="onEnter">-->
+        <!--<keep-alive :include="alive_list">-->
+            <!--<component ref="crt_com" class="child-view" :is="current_com.editor" :ctx="current_com.ctx" ></component>-->
+        <!--</keep-alive>-->
+    <!--</transition>-->
+
+
+
+</div>
+
+
+<script>
+    var adapt_size = {{ adapt_size | jsonify }}
+    function fullsize(){
+        $('#main-panel').height( window.innerHeight +'px')
+        $('#main-panel').width( window.innerWidth +'px')
+        $(window).trigger('resize')
+    }
+    function fullheight(){
+        var hh = window.innerHeight*0.563
+        $('#main-panel').width( hh +'px')
+        $('#main-panel').height( window.innerHeight +'px')
+        $('html').css('font-size',hh * 0.1333)
+        $(window).trigger('resize')
+    }
+    function fullwidth(){
+        var hh = window.innerWidth / 0.563
+        $('#main-panel').height( hh +'px')
+        $('#main-panel').width( window.innerWidth +'px')
+        $(window).trigger('resize')
+    }
+    if(ex.os.isPc && !ex.os.isTablet){
+        fullheight()
+    }else if(ex.os.isTablet){
+        fullsize()
+//        if(adapt_size =='fullheight'){
+//            fullheight()
+//        }else if(adapt_size == 'fullwidth'){
+//            fullwidth()
+//        }else{
+//            fullsize()
+//        }
+    }else{
+        fullsize()
+    }
+
+
+</script>
+{% block page_content %}
+
+{% endblock %}
+
+{% endblock %}
