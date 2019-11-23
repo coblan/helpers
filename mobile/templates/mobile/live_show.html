@@ -192,14 +192,17 @@
                         }
                     }
                 })
+                    Vue.nextTick(()=>{
+                        this.tranName = 'slide-left'
+                    })
                     var com = this.stack.pop()
                     this.stack2.push(com)
                     setTimeout(()=>{
-                        this.tranName = 'slide-left'
+
                         this.stack2 = []
                         Vue.delete(this.$options.components,com)
     //                        this.loading = false
-                    },600)
+                    },500)
 //                   setTimeout(()=>{
 //                        this.tranName = 'slide-left'
 //                        var com = this.stack.pop()
