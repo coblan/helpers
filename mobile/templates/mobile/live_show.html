@@ -61,6 +61,7 @@
                 return {
 //                    stack:[{editor:page_editor,ctx:ctx}],
                     stack: [],
+                    stack2:[],
                     tranName:'slide-left',
                     is_clearing:false,
                     loading:false, // 用于点击抖动
@@ -83,6 +84,9 @@
                                 return item.editor
                             })
                 },
+                total_stack(){
+                    return this.stack.concat(this.stack2)
+                }
             },
             methods:{
                 clear_stack(){
@@ -156,6 +160,12 @@
                     if(this.stack.length <=1){
                         return
                     }
+//                    if(this.loading){
+//                        return
+//                    }else{
+//                        this.loading = true
+//                    }
+
                     if(this.is_clearing){
                         var com = this.stack.pop()
                         Vue.delete(this.$options.components,com)
@@ -182,11 +192,20 @@
                         }
                     }
                 })
-                   setTimeout(()=>{
+                    var com = this.stack.pop()
+                    this.stack2.push(com)
+                    setTimeout(()=>{
                         this.tranName = 'slide-left'
-                        var com = this.stack.pop()
+                        this.stack2 = []
                         Vue.delete(this.$options.components,com)
-                    },800)
+    //                        this.loading = false
+                    },600)
+//                   setTimeout(()=>{
+//                        this.tranName = 'slide-left'
+//                        var com = this.stack.pop()
+//                        Vue.delete(this.$options.components,com)
+////                        this.loading = false
+//                    },50)
                 },
                 lastsibe(vc){
                     var index = this.$children.indexOf(vc)
@@ -365,7 +384,7 @@
 <div id="main-panel">
 
     <transition-group :name="tranName">
-        <component :ref="ctx.editor" v-for="(ctx,index) in stack" :key="ctx.editor" class="child-view" v-show="index==crt_index" :is="ctx.editor" :ctx="ctx.ctx" ></component>
+        <component :ref="ctx.editor" v-for="(ctx,index) in total_stack" :key="ctx.editor" class="child-view" v-show="index==crt_index" :is="ctx.editor" :ctx="ctx.ctx" ></component>
     </transition-group>
         <!--<template v-for="(ctx,index) in stack">-->
             <!--<transition :name="tranName">-->
