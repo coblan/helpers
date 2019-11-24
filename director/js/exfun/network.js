@@ -192,7 +192,7 @@ export var network ={
         })
 
     },
-    load_img(url) {
+    load_image(url) {
         var img = new Image();
         img.src = url;
 
