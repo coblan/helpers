@@ -217,8 +217,9 @@
                     }
                 },
                 open_page(url){
-                    var  json={time:newDate().getTime()};
-                    window.history.replaceState(json,"",window.location.href+"&t="+newDate().getTime());
+                    var t = new Date().getTime()
+                    var  json={time:t};
+                    window.history.replaceState(json,"",window.location.href+"&t="+t);
                     window.location.href= url;
                 }
 
