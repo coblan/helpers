@@ -45,7 +45,6 @@
     }else{
         Vue.config.devtools = false
     }
-
     //    page_editor ={{ page_editor | jsonify }}
 //    ctx = {{ ctx | jsonify }}
 
@@ -197,18 +196,11 @@
                     })
                     var com = this.stack.pop()
                     this.stack2.push(com)
-                    setTimeout(()=>{
-
-                        this.stack2 = []
-                        Vue.delete(this.$options.components,com)
-    //                        this.loading = false
-                    },500)
-//                   setTimeout(()=>{
-//                        this.tranName = 'slide-left'
-//                        var com = this.stack.pop()
+//                    setTimeout(()=>{
+//                        this.stack2 = []
 //                        Vue.delete(this.$options.components,com)
-////                        this.loading = false
-//                    },50)
+//    //                        this.loading = false
+//                    },20000)
                 },
                 lastsibe(vc){
                     var index = this.$children.indexOf(vc)
@@ -217,11 +209,18 @@
                     }
                 },
                 open_page(url){
-                    var t = new Date().getTime()
-                    var  json={time:t};
-                    var old_url = ex.appendSearch({t:t})
-                    window.history.replaceState(json,"",old_url);
+//                    var t = new Date().getTime()
+//                    var  json={time:t};
+//                    var old_url = ex.appendSearch({t:t})
+//                    window.history.replaceState(json,"",old_url);
                     window.location.href= url;
+                },
+                onAfterLeave(){
+                    console.log('sss')
+                    ex.each(this.stack2,(com)=>{
+                        Vue.delete(this.$options.components,com)
+                    })
+                    this.stack2=[]
                 }
 
             }
@@ -252,8 +251,6 @@
         /*transition: transform .5s cubic-bezier(.1,.4,.1,1);*/
         /*transition: all .5s linear;*/
     }
-
-
 
     .slide-left-enter{
         position: absolute;
@@ -289,6 +286,7 @@
         -webkit-transform: translate(50%, 0);
         transform: translate(50%, 0);
     }
+
     /*.slide-left-leave {*/
         /*top:0;*/
         /*position: absolute;*/
@@ -320,6 +318,7 @@
         /*transition: transform 20.5s cubic-bezier(.55,0,.1,1);*/
     /*}*/
 
+
     .slide-right-leave-active {
         position: absolute;
         width: 100%;
@@ -329,6 +328,7 @@
         top:0;
         z-index: 99999;
     }
+
 
     /*.slide-right-enter{*/
         /*position: absolute;*/
@@ -378,7 +378,7 @@
 </style>
 <div id="main-panel">
 
-    <transition-group :name="tranName">
+    <transition-group :name="tranName" @after-leave="onAfterLeave()">
         <component :ref="ctx.editor" v-for="(ctx,index) in total_stack" :key="ctx.editor" class="child-view" v-show="index==crt_index" :is="ctx.editor" :ctx="ctx.ctx" ></component>
     </transition-group>
         <!--<template v-for="(ctx,index) in stack">-->
