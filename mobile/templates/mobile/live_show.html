@@ -219,7 +219,8 @@
                 open_page(url){
                     var t = new Date().getTime()
                     var  json={time:t};
-                    window.history.replaceState(json,"",window.location.href+"&t="+t);
+                    var old_url = ex.appendSearch({t:t})
+                    window.history.replaceState(json,"",old_url);
                     window.location.href= url;
                 }
 
