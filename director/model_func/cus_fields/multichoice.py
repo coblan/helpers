@@ -25,14 +25,19 @@ class MultiChoiceProc(CharProc):
     
     def clean_field(self, dc, name):
         seperator = self.field.seperator
+        if isinstance(dc[name],str):
+            myvalue = [x for x in dc[name].split(seperator) if x]
+        else:
+            myvalue = dc[name]
+            
         if self.field.full_choice :
             whole_values = [x[0] for x in self.field.my_choices]
             for x in whole_values:
-                if not x in dc[name]:
-                    return seperator.join( dc[name])
+                if not x in myvalue:
+                    return seperator.join( myvalue)
             return self.field.full_choice
         else:
-            return  seperator.join( dc[name])
+            return  seperator.join( myvalue)
     
     def dict_table_head(self, head):
         head['editor']='com-table-array-mapper'
