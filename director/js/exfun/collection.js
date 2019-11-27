@@ -151,6 +151,7 @@ export var collection={
                 for(var key in obj){
                     if(obj[key]!== array[i][key]){
                         match=false
+                        break
                     }
                 }
                 if(match){

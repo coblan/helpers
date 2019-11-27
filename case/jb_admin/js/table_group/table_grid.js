@@ -257,7 +257,8 @@ var ele_table= {
         },
         on_data_updated(){
             Vue.nextTick(()=>{
-                this.$refs.e_table.doLayout()
+                this.parStore.e_table.doLayout()
+                //this.$refs.e_table.doLayout()
             })
         },
         on_sort_change(event){

@@ -45,7 +45,6 @@
     }else{
         Vue.config.devtools = false
     }
-
     //    page_editor ={{ page_editor | jsonify }}
 //    ctx = {{ ctx | jsonify }}
 
@@ -61,9 +60,12 @@
                 return {
 //                    stack:[{editor:page_editor,ctx:ctx}],
                     stack: [],
+                    stack2:[],
                     tranName:'slide-left',
                     is_clearing:false,
                     loading:false, // 用于点击抖动
+                    open_status:'default',
+                    crt_index:0,
                 }
             },
             components:{},
@@ -81,6 +83,9 @@
                                 return item.editor
                             })
                 },
+                total_stack(){
+                    return this.stack.concat(this.stack2)
+                }
             },
             methods:{
                 clear_stack(){
@@ -103,7 +108,6 @@
                      },500)
                 },
                 open_live(com,ctx,option){
-
                     if(this.loading){
                         return
                     }else{
@@ -129,7 +133,7 @@
                     }
                     Vue.set( this.$options.components,com_name,big_com)
                     this.stack.push({editor:com_name,ctx:ctx ,option:option })
-
+                    this.crt_index= this.stack.length - 1
                     var  self =this
                     var fun_id = 'root_live_back_fun' ;// Date.now()
                     named_hub[fun_id] = function(){
@@ -138,13 +142,29 @@
 //                    history.replaceState({callback:fun_id},'','?_live='+com.basename)
                     var url = ex.appendSearch({_live:com.basename})
                     history.replaceState({callback:fun_id},'',url)
-
+                    Vue.nextTick(()=>{
+                        if(this.$refs[com_name][0].activated){
+                            this.$refs[com_name][0].activated()
+                        }
+                        if(this.stack.length >1 ){
+                            var last_com_name = this.stack[this.stack.length -2].editor
+                            if(this.$refs[last_com_name][0].deactivated){
+                                this.$refs[last_com_name][0].deactivated()
+                            }
+                        }
+                    })
                 },
                 back(){
                     // IOS history.back 时 ，会调用到 这个back(不知道原因)，防止页面结构被破坏.
                     if(this.stack.length <=1){
                         return
                     }
+//                    if(this.loading){
+//                        return
+//                    }else{
+//                        this.loading = true
+//                    }
+
                     if(this.is_clearing){
                         var com = this.stack.pop()
                         Vue.delete(this.$options.components,com)
@@ -157,11 +177,30 @@
                     }else{
                         this.tranName = 'slide-right'
                     }
-                    var com = this.stack.pop()
-                    Vue.delete(this.$options.components,com)
-                   setTimeout(()=>{
+                    this.crt_index -= 1
+
+                    Vue.nextTick(()=>{
+                        var com_name=this.stack[this.stack.length-1].editor
+                        if(this.$refs[com_name][0].deactivated){
+                            this.$refs[com_name][0].deactivated()
+                        }
+                    if(this.stack.length >1 ){
+                        var last_com_name = this.stack[this.stack.length -2].editor
+                        if(this.$refs[last_com_name][0].activated){
+                            this.$refs[last_com_name][0].activated()
+                        }
+                    }
+                })
+                    Vue.nextTick(()=>{
                         this.tranName = 'slide-left'
-                    },500)
+                    })
+                    var com = this.stack.pop()
+                    this.stack2.push(com)
+//                    setTimeout(()=>{
+//                        this.stack2 = []
+//                        Vue.delete(this.$options.components,com)
+//    //                        this.loading = false
+//                    },20000)
                 },
                 lastsibe(vc){
                     var index = this.$children.indexOf(vc)
@@ -169,19 +208,21 @@
                         return this.$children[index-1]
                     }
                 },
-
-                onEnter(element){
-                    if(this.$refs.crt_com.onAfterEnter){
-                        this.$refs.crt_com.onAfterEnter()
-                    }
-                },
                 open_page(url){
-                    var t = new Date().getTime()
-                    var  json={time:t};
-                    var old_url = ex.appendSearch({t:t})
-                    window.history.replaceState(json,"",old_url);
+//                    var t = new Date().getTime()
+//                    var  json={time:t};
+//                    var old_url = ex.appendSearch({t:t})
+//                    window.history.replaceState(json,"",old_url);
                     window.location.href= url;
+                },
+                onAfterLeave(){
+                    console.log('sss')
+                    ex.each(this.stack2,(com)=>{
+                        Vue.delete(this.$options.components,com)
+                    })
+                    this.stack2=[]
                 }
+
             }
         })
     })
@@ -201,31 +242,37 @@
         background-color: white;
     }
     .child-view {
+        width: 100%;
+        height: 100%;
         transition: transform .5s cubic-bezier(.55,0,.1,1);
+        /*transition: transform 20.5s cubic-bezier(.55,0,.1,1);*/
+
+
         /*transition: transform .5s cubic-bezier(.1,.4,.1,1);*/
         /*transition: all .5s linear;*/
     }
 
     .slide-left-enter{
         position: absolute;
-        width: 100%;
+        top:0;
         -webkit-transform: translate(100%, 0);
         transform: translate(100%, 0);
+        z-index: -1;
     }
-    .slide-right-leave-active {
-        position: absolute;
-        width: 100%;
-        -webkit-transform: translate(100%, 0);
-        transform: translate(100%, 0);
-        z-index:100;
-    }
-    .slide-right-enter{
-        position: relative;
-        width: 100%;
-        -webkit-transform: translate(-50%, 0);
-        transform: translate(-50%, 0);
-        z-index:-1;
-    }
+    /*.slide-left-enter-active{*/
+        /*position: absolute;*/
+        /*top:0;*/
+        /*-webkit-transform: translate(50%, 0);*/
+        /*transform: translate(50%, 0);*/
+    /*}*/
+
+    /*.slide-right-enter-active{*/
+        /*position: absolute;*/
+        /*top:0;*/
+        /*-webkit-transform: translate(0, 0);*/
+        /*transform: translate(0, 0);*/
+        /*z-index: -1;*/
+    /*}*/
     .slide-left-leave-active {
         position: absolute;
         width: 100%;
@@ -233,6 +280,74 @@
         transform: translate(-50%, 0);
     }
 
+    .slide-right-enter{
+        position: absolute;
+        width: 100%;
+        -webkit-transform: translate(50%, 0);
+        transform: translate(50%, 0);
+    }
+
+    /*.slide-left-leave {*/
+        /*top:0;*/
+        /*position: absolute;*/
+        /*width: 100%;*/
+        /*-webkit-transform: translate(-50%, 0);*/
+        /*transform: translate(-50%, 0);*/
+    /*}*/
+
+    /*.slide-left-leave-active {*/
+        /*z-index: -1;*/
+        /*transition: transform 20.5s cubic-bezier(.55,0,.1,1);*/
+
+    /*}*/
+
+    /*.slide-right-enter-active{*/
+        /*position: absolute;*/
+        /*width: 100%;*/
+        /*-webkit-transform: translate(-50%, 0);*/
+        /*transform: translate(-50%, 0);*/
+        /*z-index:-1;*/
+        /*transition: transform 20.5s cubic-bezier(.55,0,.1,1);*/
+    /*}*/
+
+    /*.slide-left-leave-active {*/
+        /*position: absolute;*/
+        /*width: 100%;*/
+        /*-webkit-transform: translate(-50%, 0);*/
+        /*transform: translate(-50%, 0);*/
+        /*transition: transform 20.5s cubic-bezier(.55,0,.1,1);*/
+    /*}*/
+
+
+    .slide-right-leave-active {
+        position: absolute;
+        width: 100%;
+        -webkit-transform: translate(100%, 0);
+        transform: translate(100%, 0);
+        z-index:100;
+        top:0;
+        z-index: 99999;
+    }
+
+
+    /*.slide-right-enter{*/
+        /*position: absolute;*/
+        /*width: 100%;*/
+        /*-webkit-transform: translate(-50%, 0);*/
+        /*transform: translate(-50%, 0);*/
+        /*z-index:-1;*/
+    /*}*/
+
+
+
+    /*.slide-right-enter-active{*/
+        /*position: absolute;*/
+        /*width: 100%;*/
+        /*-webkit-transform: translate(-50%, 0);*/
+        /*transform: translate(-50%, 0);*/
+        /*z-index:-1;*/
+        /*transition: transform 20.5s cubic-bezier(.55,0,.1,1);*/
+    /*}*/
 
 
 
@@ -263,11 +378,24 @@
 </style>
 <div id="main-panel">
 
-    <transition :name="tranName" @after-enter="onEnter">
-        <keep-alive :include="alive_list">
-            <component ref="crt_com" class="child-view" :is="current_com.editor" :ctx="current_com.ctx" ></component>
-        </keep-alive>
-    </transition>
+    <transition-group :name="tranName" @after-leave="onAfterLeave()">
+        <component :ref="ctx.editor" v-for="(ctx,index) in total_stack" :key="ctx.editor" class="child-view" v-show="index==crt_index" :is="ctx.editor" :ctx="ctx.ctx" ></component>
+    </transition-group>
+        <!--<template v-for="(ctx,index) in stack">-->
+            <!--<transition :name="tranName">-->
+                <!--<component class="child-view" v-show="index==stack.length-1" :is="ctx.editor" :ctx="ctx.ctx" ></component>-->
+            <!--</transition>-->
+        <!--</template>-->
+
+
+    <!--<com-live-stack  :ctx_list="stack">-->
+
+    <!--</com-live-stack>-->
+    <!--<transition :name="tranName" @after-enter="onEnter">-->
+        <!--<keep-alive :include="alive_list">-->
+            <!--<component ref="crt_com" class="child-view" :is="current_com.editor" :ctx="current_com.ctx" ></component>-->
+        <!--</keep-alive>-->
+    <!--</transition>-->
 
 
 
