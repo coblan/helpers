@@ -144,7 +144,10 @@ class ModelFields(forms.ModelForm):
         self.kw.update(dc)
 
         super(ModelFields,self).__init__(dc,*args,**form_kw)
-        
+        if not self.instance.pk:
+            self.is_create = True
+        else:
+            self.is_create = False
         self.pop_fields()
         self.init_value()
         
