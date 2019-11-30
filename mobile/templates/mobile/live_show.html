@@ -215,8 +215,7 @@
 //                    window.history.replaceState(json,"",old_url);
                     window.location.href= url;
                 },
-                onAfterLeave(){
-                    console.log('sss')
+                onAfterLeave(el){
                     ex.each(this.stack2,(com)=>{
                         Vue.delete(this.$options.components,com)
                     })
@@ -374,7 +373,7 @@
 </style>
 <div id="main-panel">
 
-    <transition-group :name="tranName" @after-leave="onAfterLeave()">
+    <transition-group :name="tranName" @after-leave="onAfterLeave">
         <component :ref="ctx.editor" v-for="(ctx,index) in total_stack" :key="ctx.editor" class="child-view" v-show="index==crt_index" :is="ctx.editor" :ctx="ctx.ctx" ></component>
     </transition-group>
         <!--<template v-for="(ctx,index) in stack">-->
