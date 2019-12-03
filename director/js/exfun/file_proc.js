@@ -33,25 +33,36 @@ export var  file_proc={
             var file=files[x]
             fd.append(file.name,file);
         }
-        $.ajax({
-            url:url,
-            type:'post',
-            data:fd,
-            contentType: false,
-            success:success,
-            processData:false,
-            xhr:function() {
-                var xhr = new window.XMLHttpRequest();
-                xhr.upload.addEventListener("progress", function(evt) {
-                    if (progress &&evt.lengthComputable) {
-                        var percentComplete = evt.loaded / evt.total;
-                        progress(percentComplete)
-                        //console.log('进度', percentComplete);
+        return new Promise(function(resolve,reject){
+            $.ajax({
+                url:url,
+                type:'post',
+                data:fd,
+                contentType: false,
+                success:function(resp){
+                    resolve(resp)
+                    if(success){
+                        success(resp)
                     }
-                }, false);
+                } ,
+                processData:false,
+                xhr:function() {
+                    var xhr = new window.XMLHttpRequest();
+                    xhr.upload.addEventListener("progress", function(evt) {
+                        if (progress &&evt.lengthComputable) {
+                            var percentComplete = evt.loaded / evt.total;
+                            progress(percentComplete)
+                            //console.log('进度', percentComplete);
+                        }
+                    }, false);
 
-                return xhr;
-            }
+                    return xhr;
+                }
+            })
+
+
+
         })
+
     }
 }

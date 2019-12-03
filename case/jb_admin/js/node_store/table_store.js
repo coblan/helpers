@@ -159,6 +159,8 @@ var table_store={
                     fields_ctx.row=crt_row
                     cfg.pop_vue_com('com-form-one',fields_ctx).then(row=>{
                         self.update_or_insert(row)
+                    }).catch(()=>{
+                        console.log('break form one')
                     })
                     //var win=pop_fields_layer(crt_row,fields_ctx,function(new_row){
                     //    self.update_or_insert(new_row, crt_row)

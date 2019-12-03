@@ -25,6 +25,9 @@ export  function pop_layer (com_ctx,component_name,callback,layerConfig){
                     <component :is="component_name" :ctx="com_ctx" @finish="on_finish($event)"></component>
                 </div>`,
         end: function () {
+            if(callback){
+                callback(null)
+            }
             ex.remove(cfg.layer_index_stack,opened_layer_index)
         }
     }
