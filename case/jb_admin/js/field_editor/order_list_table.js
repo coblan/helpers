@@ -135,6 +135,8 @@ var order_list =  {
            // })
             cfg.pop_vue_com('com-form-one',fields_ctx).then((row)=>{
                 self.rows.push(row)
+            }).catch(()=>{
+               console.log('break form one')
             })
         },
         delete_rows:function(){

@@ -248,23 +248,6 @@ var img_uploader={
             }
             return dc
         },
-        //real_url:function(){
-        //    if(this.config.url_prefix){
-        //        var mt = /\w+:\/\//.exec(this.url)
-        //        // 表示地址没有域名
-        //        if(!mt){
-        //            return this.config.url_prefix + this.url
-        //        }else {
-        //            return this.url
-        //        }
-        //    }else{
-        //        return this.url
-        //    }
-        //
-        //},
-        //is_crop:function(){
-        //    return this.config && this.config.crop
-        //},
         crop_config:function(){
             // 用cfg来代表内部设置，本来不应该有这个属性了，但是没弄清楚，以后来整个这个属性。
             if(this.config && this.config.crop){
@@ -274,6 +257,9 @@ var img_uploader={
             }else{
                 return {}
             }
+        },
+        rotate_str(){
+            return  'rotate('+ex.parseSearch(this.url).rotate || 0+ 'deg)'
         }
     },
 
@@ -284,13 +270,18 @@ var img_uploader={
                 accept='image/*'
                 v-model= 'img_files'>
             </file-input>
-            <img-crop class='input' v-if='cfg.crop' v-model='img_files' :config="crop_config">
-            </img-crop>
+            <!--<img-crop class='input' v-if='cfg.crop' v-model='img_files' :config="crop_config">-->
+            <!--</img-crop>-->
             <div style="padding: 40px" @click="select()">
                 <a class='choose'>Choose</a>
             </div>
             <div v-if='url' class="closeDiv">
-            <div class="close" @click='clear()'><i class="fa fa-times-circle" aria-hidden="true" style="color:red;position:relative;left:30px;"></i></div>
+            <div class="close" @click='clear()'>
+                <i class="fa fa-times-circle" aria-hidden="true" style="color:red;position:relative;left:30px;"></i>
+            </div>
+            <div class="close" v-if="cfg.can_edit" @click="edit()">
+                <i class="fa fa-edit" aria-hidden="true" style="color:black;position:relative;left:30px;top:30px"></i>
+            </div>
             <img :src="url" alt="" class="logoImg">
             </div>
             </div>
@@ -305,23 +296,97 @@ var img_uploader={
             if(v==""){
                 return
             }
-            if(! self.validate(v[0])){
-                return
-            }
-            fl.upload(v[0],this.up_url,function(url_list){
-                self.url=url_list[0]
-                self.$emit('input',self.url)
-                self.$emit('select')
+            Promise.resolve().then(()=>{
+                if(self.cfg.first_edit){
+                    return cfg.pop_vue_com('com-image-crop',{file:v[0]},{
+                        title:false,
+                        area: ['90%', '90%'],
+                        shade: 0.8,
+                        skin: 'img-shower',
+                        shadeClose: true,
+                    })
+                }else{
+                    return v[0]
+                }
+            }).then((file1)=>{
+                if(! self.validate(file1)){
+                    return Promise.reject()
+                }
+                if(self.cfg.maxspan){
+                    return compressImage(file1,self.cfg.maxspan,0)
+                }else{
+                    return file1
+                }
+            }).then((file1)=>{
+                var files = [file1]
+                ex.uploads(files,this.up_url).then((url_list)=>{
+                    self.url=url_list[0]
+                    self.$emit('input',self.url)
+                    self.$emit('select')
+                })
+            }).catch(()=>{
+                this.clear()
             })
         }
     },
     methods:{
+        read_image(img_url){
+            var request = new XMLHttpRequest();
+            request.open('GET', img_url, true);
+            request.responseType = 'blob';
+            return new  Promise((resolve,reject)=>{
+                request.onload = function() {
+                    resolve(request.response)
+                };
+                request.send();
+            })
+        },
+        edit(){
+            var self = this
+            if(this.url){
+                Promise.resolve().then(()=>{
+                   return this.read_image(this.url)
+
+                }).then((file)=>{
+                        return cfg.pop_vue_com('com-image-crop',{file:file},{
+                            title:false,
+                            area: ['90%', '90%'],
+                            shade: 0.8,
+                            skin: 'img-shower',
+                            shadeClose: true,
+                        })
+                } ).then((file1)=>{
+                    if(! self.validate(file1)){
+                        return Promise.reject()
+                    }
+                    if(self.cfg.maxspan){
+                        return compressImage(file1,self.cfg.maxspan,0)
+                    }else{
+                        return file1
+                    }
+                }).then((file1)=>{
+                    var files = [file1]
+                    ex.uploads(files,this.up_url).then((url_list)=>{
+                        self.url=url_list[0]
+                        self.$emit('input',self.url)
+                        self.$emit('select')
+                    })
+                })
+
+            }
+
+        },
         clear:function () {
             console.log('clear image data')
             this.img_files=''
             //this.url=''
             this.$emit('input','')
             this.$refs.file_input.clear()
+        },
+        rotate(){
+
+            var crt= ex.parseSearch(this.url).rotate || 0
+            this.url = ex.appendSearch(this.url,{rotate: (crt + 90) % 360})
         },
         validate:function(img_fl){
             //重载该函数，验证文件
@@ -380,10 +445,10 @@ Vue.component('img-uploador',img_uploader)
 
 var img_crop={
     template: `<div class="img-crop">
-    <input type='file' @change='on_change($event)'
-            accept='image/*'>
-    <modal v-show='cropping' >
-        <div class="total-wrap flex-v" style="width:80vw;height: 80vh;background-color: white;">
+    <!--<input type='file' @change='on_change($event)'-->
+            <!--accept='image/*'>-->
+    <!--<modal v-show='cropping' >-->
+        <div class="total-wrap flex-v" style="width:80vw;height: 80vh;background-color: #ececec;">
             <div class="crop-wrap flex-grow">
                 <img class="crop-img" :src="org_img" >
             </div>
@@ -399,14 +464,15 @@ var img_crop={
             </div>
             </div>
         </div>
-    </modal>
+    <!--</modal>-->
     </div>`,
-    props: ['value','config'],
+    props:['ctx'],
+    //props: ['value','config'],
     data: function () {
         var inn_config={
             size:{}
         }
-        ex.assign(inn_config,this.config)
+        ex.assign(inn_config,this.ctx.config)
 
         return {
             files: [],
@@ -414,10 +480,6 @@ var img_crop={
             cropping:false,
             inn_config:inn_config
         }
-    },
-    mounted:function(){
-        ex.load_css('/static/lib/cropper2.3.4.min.css')
-        ex.load_js('/static/lib/cropper2.3.4.min.js')
     },
     watch: {
         value: function (v) {
@@ -430,8 +492,21 @@ var img_crop={
         }
         ,
     },
-
+    mounted(){
+        this.set_value(this.ctx.file)
+    },
     methods: {
+        set_value(img_file){
+            var self=this
+            this.cropping=true
+            //var img_file = event.target.files[0]
+            fl.read(img_file,function (data) {
+                self.org_img = data
+                Vue.nextTick(function(){
+                    self.init_crop()
+                })
+            })
+        },
         cancel:function(){
             $(this.$el).find('input[type=file]').val('')
             this.cropping=false
@@ -451,24 +526,24 @@ var img_crop={
         move_crop:function(){
             $(this.$el).find('.crop-img').cropper('setDragMode','crop')
         },
-        on_change: function (event) {
-
-            if($(this.$el).find('input[type=file]').val()==''){
-                return
-            }
-            var self=this
-            this.cropping=true
-            var img_file = event.target.files[0]
-
-            //fl.read(img_file)
-            //this.$emit('input', this.files)
-            fl.read(img_file,function (data) {
-                self.org_img = data
-                Vue.nextTick(function(){
-                    self.init_crop()
-                })
-            })
-        },
+        //on_change: function (event) {
+        //
+        //    if($(this.$el).find('input[type=file]').val()==''){
+        //        return
+        //    }
+        //    var self=this
+        //    this.cropping=true
+        //    var img_file = event.target.files[0]
+        //
+        //    //fl.read(img_file)
+        //    //this.$emit('input', this.files)
+        //    fl.read(img_file,function (data) {
+        //        self.org_img = data
+        //        Vue.nextTick(function(){
+        //            self.init_crop()
+        //        })
+        //    })
+        //},
         init_crop:function(){
             //$(this.$el).find('.crop-img').cropper({
             //    aspectRatio: 8 / 10,
@@ -492,8 +567,9 @@ var img_crop={
             //});
             var data_url = $(this.$el).find('.crop-img').cropper('getCroppedCanvas',this.inn_config.size).toDataURL('image/jpeg')
             var blob=dataURLtoBlob(data_url)
-            self.$emit('input',[blob])
+            //self.$emit('input',[blob])
             self.cropping=false
+            self.$emit('finish',blob)
         }
     }
 
@@ -508,8 +584,12 @@ function dataURLtoBlob(dataurl) {
     return new Blob([u8arr], {type:mime});
 }
 
-
-Vue.component('img-crop',img_crop)
+Vue.component('com-image-crop',function(resolve,reject){
+    ex.load_css(js_config.js_lib.cropper_css)
+    ex.load_js(js_config.js_lib.cropper).then(()=>{
+        resolve(img_crop)
+    })
+})
 
 
 
@@ -602,3 +682,115 @@ Vue.component('file-obj',{
 
 
 window.fl=fl
+
+
+////压缩图片
+function compressImage  (file,maxspan,Orientation)  {
+    // 图片小于1M不压缩
+    //if ( file.size < Math.pow(1024, 2)) {
+    //    return success(file);
+    //}
+
+    return new Promise(function(resolve,reject){
+        const name = file.name; //文件名
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = (e) => {
+            const src = e.target.result;
+            const img = new Image();
+            img.src = src;
+            img.onload = (e) => {
+                const w = img.width;
+                const h = img.height;
+                var span =  Math.max(w,h)
+                if(maxspan > span){
+                    console.log('small than '+maxspan)
+                    resolve(file)
+                    return
+                }
+                var ratio = maxspan / span
+                var real_w = w * ratio
+                var real_h = h * ratio
+                const quality = 0.92;  // 默认图片质量为0.92
+                //生成canvas
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                // 创建属性节点
+                const anw = document.createAttribute("width");
+                anw.nodeValue = real_w   // w;
+                const anh = document.createAttribute("height");
+                anh.nodeValue = real_h //h;
+                canvas.setAttributeNode(anw);
+                canvas.setAttributeNode(anh);
+
+                // 旋转图像方向
+                var width = real_w
+                var height = real_h
+                var drawWidth = width
+                var drawHeight = height
+                var degree =0
+                switch(Orientation){
+                    //iphone横屏拍摄，此时home键在左侧
+                    case 3:
+                        degree=180;
+                        drawWidth=-width;
+                        drawHeight=-height;
+                        break;
+                    //iphone竖屏拍摄，此时home键在下方(正常拿手机的方向)
+                    case 6:
+                        canvas.width=height;
+                        canvas.height=width;
+                        degree=90;
+                        drawWidth=width;
+                        drawHeight=-height;
+                        break;
+                    //iphone竖屏拍摄，此时home键在上方
+                    case 8:
+                        canvas.width=height;
+                        canvas.height=width;
+                        degree=270;
+                        drawWidth=-width;
+                        drawHeight=height;
+                        break;
+                }
+                //使用canvas旋转校正
+                ctx.rotate(degree*Math.PI/180);
+
+                //铺底色 PNG转JPEG时透明区域会变黑色
+                ctx.fillStyle = "#fff";
+                ctx.fillRect(0, 0, drawWidth, drawHeight);
+
+                //ctx.drawImage(img, 0, 0, w, h);
+                ctx.drawImage(img, 0, 0, drawWidth, drawHeight);
+                // quality值越小，所绘制出的图像越模糊
+                const base64 = canvas.toDataURL('image/jpeg', quality); //图片格式jpeg或webp可以选0-1质量区间
+
+                // 返回base64转blob的值
+                console.log(`原图${(src.length/1024).toFixed(2)}kb`+ `新图${(base64.length/1024).toFixed(2)}kb`);
+                if(src.length < base64.length){
+                    resolve(file)
+                    return
+                }
+                //去掉url的头，并转换为byte
+                const bytes = window.atob(base64.split(',')[1]);
+                //处理异常,将ascii码小于0的转换为大于0
+                const ab = new ArrayBuffer(bytes.length);
+                const ia = new Uint8Array(ab);
+                for (let i = 0; i < bytes.length; i++) {
+                    ia[i] = bytes.charCodeAt(i);
+                }
+                file = new Blob( [ab] , {type : 'image/jpeg'});
+                file.name = name;
+
+                resolve(file);
+            }
+            img.onerror = (e) => {
+                reject(e);
+            }
+        }
+        reader.onerror = (e) => {
+            reject(e);
+        }
+    })
+
+}

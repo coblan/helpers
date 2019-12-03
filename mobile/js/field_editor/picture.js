@@ -108,11 +108,6 @@ Vue.component('com-field-picture',function(resolve,reject){
     })
 })
 
-//this.compressImage(files[0], (file)=>{
-//    console.log(file);
-//    const formData = new FormData();
-//    formData.append('file', file, file.name || '上传图片.jpeg');
-//}, $.noop);
 ////压缩图片
  function compressImage  (file,option,Orientation)  {
     // 图片小于1M不压缩
