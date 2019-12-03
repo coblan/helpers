@@ -251,8 +251,20 @@ class GroupForm(ModelFields):
         if not hasattr(self.instance, 'permitmodel'):
             PermitModel.objects.create(group = self.instance)
         if self.kw.get('permit',None) != None:
+            before = {
+                'permit':self.instance.permitmodel.names
+            }
+            
             self.instance.permitmodel.names = ';'.join( self.kw.get('permit') ) 
             self.instance.permitmodel.save()
+            
+            return {
+                'before':before,
+                'after':{
+                    'permit':';'.join( self.kw.get('permit') ) 
+                },
+            }
+        
 
 def list2tree(ls):
     clsfy = {}

@@ -71,7 +71,7 @@ class SelectSearch(object):
             if q_str == None:
                 # 相当于 清空查询集
                 query = query.filter(pk = None)
-            if isinstance(q_str,dict):
+            elif isinstance(q_str,dict):
                 query = query.filter(**q_str)
             else:
                 exp = self.get_express(q_str)

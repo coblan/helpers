@@ -215,8 +215,7 @@
 //                    window.history.replaceState(json,"",old_url);
                     window.location.href= url;
                 },
-                onAfterLeave(){
-                    console.log('sss')
+                onAfterLeave(el){
                     ex.each(this.stack2,(com)=>{
                         Vue.delete(this.$options.components,com)
                     })
@@ -244,12 +243,7 @@
     .child-view {
         width: 100%;
         height: 100%;
-        transition: transform .5s cubic-bezier(.55,0,.1,1);
-        /*transition: transform 20.5s cubic-bezier(.55,0,.1,1);*/
-
-
-        /*transition: transform .5s cubic-bezier(.1,.4,.1,1);*/
-        /*transition: all .5s linear;*/
+        transition: transform .6s cubic-bezier(.55,0,.1,1);
     }
 
     .slide-left-enter{
@@ -286,6 +280,7 @@
         -webkit-transform: translate(50%, 0);
         transform: translate(50%, 0);
     }
+
 
     /*.slide-left-leave {*/
         /*top:0;*/
@@ -378,7 +373,7 @@
 </style>
 <div id="main-panel">
 
-    <transition-group :name="tranName" @after-leave="onAfterLeave()">
+    <transition-group :name="tranName" @after-leave="onAfterLeave">
         <component :ref="ctx.editor" v-for="(ctx,index) in total_stack" :key="ctx.editor" class="child-view" v-show="index==crt_index" :is="ctx.editor" :ctx="ctx.ctx" ></component>
     </transition-group>
         <!--<template v-for="(ctx,index) in stack">-->
