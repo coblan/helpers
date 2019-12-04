@@ -87,6 +87,8 @@ def get_lib(request):
         'selectizejs': 'https://cdn.jsdelivr.net/npm/selectize@0.12.6/dist/js/standalone/selectize.min.js', # 'https://cdn.jsdelivr.net/npm/selectize@0.12.6/dist/js/selectize.min.js',
         #'selectizejs_css':'https://cdn.jsdelivr.net/npm/selectize@0.12.6/dist/css/selectize.css',
         'selectizejs_css':'https://cdn.jsdelivr.net/npm/selectize@0.12.6/dist/css/selectize.default.css',
+        'cropper_css':'/static/lib/cropper2.3.4.min.css',
+        'cropper':'/static/lib/cropper2.3.4.min.js'
     }
     if request.META['ACCESS_FROM_INTERNET']:
 
@@ -123,7 +125,10 @@ def get_lib(request):
             #'ckeditor':'https://cdn.jsdelivr.net/npm/ckeditor-full@4.7.3/ckeditor.js',
             
             'select2':'https://cdn.jsdelivr.net/npm/select2@4.0.10/dist/js/select2.min.js',
-            'select2_css':'https://cdn.jsdelivr.net/npm/select2@4.0.10/dist/css/select2.min.css'
+            'select2_css':'https://cdn.jsdelivr.net/npm/select2@4.0.10/dist/css/select2.min.css',
+            
+             'cropper_css':'https://cdn.jsdelivr.net/npm/cropper@4.1.0/dist/cropper.min.css',
+             'cropper':'https://cdn.jsdelivr.net/npm/cropper@4.1.0/dist/cropper.min.js'
         })
         
         if not settings.DEBUG:

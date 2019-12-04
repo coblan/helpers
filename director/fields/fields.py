@@ -144,7 +144,10 @@ class ModelFields(forms.ModelForm):
         self.kw.update(dc)
 
         super(ModelFields,self).__init__(dc,*args,**form_kw)
-        
+        if not self.instance.pk:
+            self.is_create = True
+        else:
+            self.is_create = False
         self.pop_fields()
         self.init_value()
         
@@ -536,8 +539,8 @@ class ModelFields(forms.ModelForm):
                 'pk': self.instance.pk,
                 'kind': op or 'extra_log',
                 'user': self.crt_user.username if self.crt_user.is_authenticated else 'anonymous',
-                'before': self.before_changed_data,
-                'after': after_changed_data,
+                '_before': self.before_changed_data,
+                '_after': after_changed_data,
             }
             if extra_log:
                 dc.update(extra_log)
@@ -567,7 +570,7 @@ class ModelFields(forms.ModelForm):
                 'pk':pk, 
                 'kind':'delete', 
                 'user': self.crt_user.username if self.crt_user.is_authenticated else 'anonymous',
-                'before':before_del_data,                 
+                '_before':before_del_data,                 
             }
             if ex_del_log:
                 dc.update(ex_del_log)

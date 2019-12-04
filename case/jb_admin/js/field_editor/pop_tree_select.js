@@ -34,6 +34,8 @@ var pop_tree_select =  {
                     Vue.set(self.row,self.head.name,resp.value)
                     Vue.set(self.row,'_'+self.head.name+'_label',resp.path)
                 }
+            }).catch(()=>{
+               console.log('break pop tree')
             })
         },
     }
@@ -44,7 +46,7 @@ Vue.component('com-field-pop-tree-select',pop_tree_select)
 
 Vue.component('com-pop-tree',{
     props:['ctx'],
-    template:`<div>
+    template:`<div class="com-pop-tree">
     <el-tree
           :data="ctx.options"
           :props="defaultProps"
@@ -62,7 +64,13 @@ Vue.component('com-pop-tree',{
     },
     methods:{
         handleNodeClick(data){
-            this.$emit('finish',{value:data.value,label:data.label,path:data.path})
+            if(this.ctx.click_filter){
+                if(ex.eval(this.ctx.click_filter,{item:data})){
+                    this.$emit('finish',{value:data.value,label:data.label,path:data.path})
+                }
+            }else{
+                this.$emit('finish',{value:data.value,label:data.label,path:data.path})
+            }
         }
     }
 })
