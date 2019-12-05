@@ -379,12 +379,13 @@ class ModelTable(object):
         
         """
         self.search_args = kw.get('search_args', {})
+        
         self.nolimit = kw.get('nolimit',self.__class__.nolimit)
         self.kw=kw
         self.crt_user=crt_user 
         if not self.crt_user:
             self.crt_user = get_request_cache()['request'].user
-        self.page=page
+        self.page= kw.get('_page',page)
         
         self.custom_permit()
         allowed_names=self.permited_fields()
@@ -396,7 +397,8 @@ class ModelTable(object):
             self.row_filter.model=self.model
         if not self.row_search.model:
             self.row_search.model=self.model
-        self.pagenum = self.pagenator(pageNumber=self.page,perpage=perpage)
+        myperpage =  self.kw.get('_perpage',perpage)
+        self.pagenum = self.pagenator(pageNumber=self.page,perpage=myperpage)
         self.footer = {}
         
     
