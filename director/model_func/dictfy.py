@@ -27,7 +27,7 @@ def name_to_model(app_model_string):
     return apps.get_model(app_model_string)
     
 
-def to_dict(instance,filt_attr=None,include=None,exclude=None,hash_keys=None,form=False):
+def to_dict(instance,filt_attr=None,include=None,exclude=None,hash_keys=None,form=False,):
     if form:
         form_cls=model_dc.get(instance.__class__).get('fields')
         form_obj = form_cls(instance=instance,nolimit=True)

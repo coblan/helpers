@@ -15,7 +15,7 @@ class RichtextProc(BaseFieldProc):
     def to_dict(self, inst, name):
         value = getattr(inst,name,'')
         return {
-            #name:value,
+            name:value,
             '_%s_label'%name:Truncator(value).chars(20, html=True)
         }
     
