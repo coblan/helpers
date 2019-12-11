@@ -333,7 +333,7 @@ var table_store={
                         }, function(index){
                             layer.close(index)
                             ex.each(self.selected,row=>{
-                                row.meta_hash_fields=''
+                                row.meta_overlap_fields='__all__'
                             })
                             self.selected_set_and_save(kws,true)
                         });
@@ -391,7 +391,7 @@ var table_store={
                         }, function (index) {
                             layer.close(index)
                             ex.each(rows, row=> {
-                                row.meta_hash_fields = ''
+                                row.meta_overlap_fields = '__all__'
                             })
                             self.save_rows(rows)
                         });

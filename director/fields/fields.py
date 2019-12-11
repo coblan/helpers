@@ -161,9 +161,18 @@ class ModelFields(forms.ModelForm):
         
     
     def clean(self):
+        """
+        数据过期检查
+           overlaped_fields  用于排除掉不需要检查的字段。
+           meta_change_fields   用于设定只检查哪些字段
+           
+        """
         super().clean()
         overlaped_fields = []
         if self.kw.get('meta_overlap_fields'):
+            if self.kw.get('meta_overlap_fields') =='__all__':
+                # 表示覆盖所有字段，意味着不再做过期检查
+                return
             overlaped_fields+= self.kw.get('meta_overlap_fields').split(',')
         if self.overlap_fields:
             overlaped_fields += self.overlap_fields
