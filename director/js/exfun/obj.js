@@ -1,11 +1,13 @@
 export var obj_control={
     isEmpty:function(obj){
-        for(var k in obj){
-            if(/^[^_]/.exec(k)){
-                return false
-            }
-        }
-        return true
+        var keys =Object.keys(obj)
+        return keys.length == 0
+        //for(var k in obj){
+        //    if(/^[^_]/.exec(k)){
+        //        return false
+        //    }
+        //}
+        //return true
     },
     objContain(par,child){
         var is_contain = true
