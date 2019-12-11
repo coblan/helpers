@@ -215,7 +215,7 @@ var mix_fields_data ={
                             //self.updateRowBk(self.row._director_name,{pk:self.row.pk})
                         }, function(index){
                             layer.close(index)
-                            self.row.meta_hash_fields=''
+                            self.row.meta_overlap_fields='__all__'
                             self.submit()
                         });
                         //cfg.showMsg(rt._outdate)
