@@ -1173,7 +1173,7 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, ".web-wrap {\n  width: 1180px;\n  margin: auto;\n}\n", ""]);
+exports.push([module.i, ".web-wrap {\n  width: 1180px;\n  margin: auto;\n}\nhtml {\n  font-size: 11.8px;\n}\n", ""]);
 
 // exports
 
@@ -1229,7 +1229,7 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, ".com-top-swiper-fade {\n  height: 430px;\n  position: relative;\n  overflow: hidden;\n}\n.com-top-swiper-fade .bg-image {\n  height: 100%;\n  width: 100%;\n  position: absolute;\n  background-size: cover;\n  background-position: center;\n  filter: blur(10px);\n  overflow: hidden;\n  top: -25px;\n  left: -25px;\n  padding: 50px;\n}\n.com-top-swiper-fade .web-wrap {\n  height: 100%;\n}\n.com-top-swiper-fade .swiper-container {\n  width: 100%;\n  height: 100%;\n}\n.com-top-swiper-fade .swiper-button-white:focus {\n  outline: none;\n}\n", ""]);
+exports.push([module.i, ".com-top-swiper-fade {\n  height: 36.6rem;\n  position: relative;\n  overflow: hidden;\n}\n.com-top-swiper-fade .bg-image {\n  height: 100%;\n  width: 100%;\n  position: absolute;\n  background-size: cover;\n  background-position: center;\n  filter: blur(10px);\n  overflow: hidden;\n  top: -25px;\n  left: -25px;\n  padding: 4rem;\n}\n.com-top-swiper-fade .web-wrap {\n  height: 100%;\n}\n.com-top-swiper-fade .swiper-container {\n  width: 100%;\n  height: 100%;\n}\n.com-top-swiper-fade .swiper-button-white:focus {\n  outline: none;\n}\n", ""]);
 
 // exports
 
