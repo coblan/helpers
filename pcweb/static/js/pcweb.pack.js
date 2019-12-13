@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 54);
+/******/ 	return __webpack_require__(__webpack_require__.s = 55);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -553,6 +553,10 @@ var _block_ctn = __webpack_require__(14);
 
 var block_ctn = _interopRequireWildcard(_block_ctn);
 
+var _transparent_ctn = __webpack_require__(18);
+
+var transparent_ctn = _interopRequireWildcard(_transparent_ctn);
+
 var _lay_main_small = __webpack_require__(15);
 
 var lay_main_small = _interopRequireWildcard(_lay_main_small);
@@ -566,27 +570,27 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 "use strict";
 
 
-var _caption = __webpack_require__(19);
+var _caption = __webpack_require__(20);
 
 var caption = _interopRequireWildcard(_caption);
 
-var _caption2 = __webpack_require__(20);
+var _caption2 = __webpack_require__(21);
 
 var caption2 = _interopRequireWildcard(_caption2);
 
-var _list = __webpack_require__(21);
+var _list = __webpack_require__(22);
 
 var list = _interopRequireWildcard(_list);
 
-var _article = __webpack_require__(18);
+var _article = __webpack_require__(19);
 
 var article = _interopRequireWildcard(_article);
 
-var _msg_panel = __webpack_require__(23);
+var _msg_panel = __webpack_require__(24);
 
 var msg_panel = _interopRequireWildcard(_msg_panel);
 
-var _list_one_page = __webpack_require__(22);
+var _list_one_page = __webpack_require__(23);
 
 var list_one_page = _interopRequireWildcard(_list_one_page);
 
@@ -599,7 +603,7 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(28);
+var content = __webpack_require__(29);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -625,7 +629,7 @@ if(false) {
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(39);
+var content = __webpack_require__(40);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -651,7 +655,7 @@ if(false) {
 "use strict";
 
 
-__webpack_require__(40);
+__webpack_require__(41);
 
 Vue.component('com-ft-copyright', {
     props: ['ctx'],
@@ -667,7 +671,7 @@ Vue.component('com-ft-copyright', {
 "use strict";
 
 
-__webpack_require__(41);
+__webpack_require__(42);
 
 Vue.component('com-li-article', {
     props: ['ctx'],
@@ -705,7 +709,7 @@ Vue.component('com-li-article', {
 "use strict";
 
 
-__webpack_require__(42);
+__webpack_require__(43);
 
 Vue.component('com-li-article-simple', {
     props: ['ctx'],
@@ -742,7 +746,7 @@ Vue.component('com-li-article-simple', {
 "use strict";
 
 
-__webpack_require__(43);
+__webpack_require__(44);
 
 Vue.component('com-xiu-menu', {
     template: '<div class="com-xiu-menu">\n    <div class="web-wrap">\n        <div class="brand" v-html="parStore.vc.head_bar_data.brand"></div>\n        <div class="menu">\n            <div class="action"  v-for="action in parStore.vc.menu">\n                <a :class="{\'active\':is_active(action)}" :href="action.url" v-text="action.label"></a>\n            </div>\n        </div>\n        <div class="right-ops">\n\n        </div>\n\n    </div>\n\n    </div>',
@@ -780,7 +784,7 @@ Vue.component('com-xiu-menu', {
 "use strict";
 
 
-__webpack_require__(44);
+__webpack_require__(45);
 
 Vue.component('com-top-block-ctn', {
     props: ['ctx'],
@@ -794,7 +798,7 @@ Vue.component('com-top-block-ctn', {
 "use strict";
 
 
-__webpack_require__(45);
+__webpack_require__(46);
 
 Vue.component('com-top-lay-main-small', {
     props: ['ctx'],
@@ -808,7 +812,7 @@ Vue.component('com-top-lay-main-small', {
 "use strict";
 
 
-__webpack_require__(46);
+__webpack_require__(47);
 Vue.component('com-top-swiper', {
     props: ['ctx'],
     template: '<div class="com-top-swiper">\n    <div class = \'web-wrap content\'>\n        <el-carousel :interval="5000" arrow="always">\n            <el-carousel-item v-for="item in ctx.items" :key="item.name">\n            <component :is="item.editor" :ctx="item"></component>\n            </el-carousel-item>\n      </el-carousel>\n    </div>\n\n    </div>'
@@ -833,7 +837,7 @@ Vue.component('com-swiper-image', {
 "use strict";
 
 
-__webpack_require__(47);
+__webpack_require__(48);
 
 var swiper_fade = {
     props: ['ctx'],
@@ -898,12 +902,19 @@ Vue.component('com-top-swiper-fade', function (resolve, reject) {
 "use strict";
 
 
-__webpack_require__(48);
+//https://bing.ioliu.cn/photo/BlueChip_ZH-CN7376022522?force=home_1
 
-Vue.component('com-ti-article', {
+__webpack_require__(57);
+
+Vue.component('com-top-transparent-ctn', {
     props: ['ctx'],
-    template: '<div class="com-ti-article" :class="ctx.class">\n    <div class="title" v-text="ctx.row.title"></div>\n    <div v-html="ctx.row.content"></div>\n    </div>'
+    template: '<div class="com-top-transparent-ctn" :style="mystyle">\n        <div class = \'web-wrap\'>\n        <!--<div v-if="ctx.title" class="title" v-text="ctx.title"> </div>-->\n        <!--<div v-if="ctx.sub_title" class="sub-title" v-text="ctx.sub_title"></div>-->\n        <!--<div class="block-content">-->\n          <!--<component v-for="item in ctx.items" :is="item.editor" :ctx="item"></component>-->\n        <!--</div>-->\n        </div>\n    </div>',
+    computed: {
+        mystyle: function mystyle() {
 
+            return { 'background-image': 'url(' + this.ctx.image_url + ')' };
+        }
+    }
 });
 
 /***/ }),
@@ -914,6 +925,21 @@ Vue.component('com-ti-article', {
 
 
 __webpack_require__(49);
+
+Vue.component('com-ti-article', {
+    props: ['ctx'],
+    template: '<div class="com-ti-article" :class="ctx.class">\n    <div class="title" v-text="ctx.row.title"></div>\n    <div v-html="ctx.row.content"></div>\n    </div>'
+
+});
+
+/***/ }),
+/* 20 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+__webpack_require__(50);
 /*
 * | 图片 |
 * |------|
@@ -935,17 +961,17 @@ Vue.component('com-ti-caption', {
 });
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(50);
+__webpack_require__(51);
 
 Vue.component('com-ti-caption2', {
     props: ['ctx'],
-    template: '<div class="com-ti-caption2">\n    <div class="image-content"  @mouseover="on_enter" @mouseout="on_leave">\n        <div class="image-panel" :style="mystyle"></div>\n    </div>\n\n    <div class="text-content">\n        <div class="title" v-text="ctx.title"></div>\n        <div class="sub-title" v-text="ctx.sub_title"></div>\n    </div>\n\n    </div>',
+    template: '<div class="com-ti-caption2" :class="ctx.class">\n    <div class="image-content"  @mouseover="on_enter" @mouseout="on_leave">\n        <div class="image-panel" :style="mystyle"></div>\n    </div>\n\n    <div class="text-content">\n        <div class="title" v-text="ctx.title"></div>\n        <div class="sub-title" v-text="ctx.sub_title"></div>\n    </div>\n\n    </div>',
     computed: {
         mystyle: function mystyle() {
             return {
@@ -976,13 +1002,13 @@ Vue.component('com-ti-caption2', {
 });
 
 /***/ }),
-/* 21 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(51);
+__webpack_require__(52);
 
 Vue.component('com-ti-list', {
     props: ['ctx'],
@@ -1030,13 +1056,13 @@ Vue.component('com-ti-list', {
 });
 
 /***/ }),
-/* 22 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(52);
+__webpack_require__(53);
 
 Vue.component('com-ti-list-one-page', {
     props: ['ctx'],
@@ -1068,13 +1094,13 @@ Vue.component('com-ti-list-one-page', {
 });
 
 /***/ }),
-/* 23 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(53);
+__webpack_require__(54);
 
 Vue.component('com-ti-msg-panel', {
     props: ['ctx'],
@@ -1083,7 +1109,7 @@ Vue.component('com-ti-msg-panel', {
 });
 
 /***/ }),
-/* 24 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -1097,7 +1123,7 @@ exports.push([module.i, ".com-ft-copyright {\n  text-align: center;\n  backgroun
 
 
 /***/ }),
-/* 25 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -1111,7 +1137,7 @@ exports.push([module.i, ".com-li-article {\n  padding: 20px;\n  border-bottom: 1
 
 
 /***/ }),
-/* 26 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -1125,7 +1151,7 @@ exports.push([module.i, ".com-li-article-simple {\n  display: flex;\n  padding: 
 
 
 /***/ }),
-/* 27 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -1139,7 +1165,7 @@ exports.push([module.i, ".com-xiu-menu {\n  background-color: #fff;\n  height: 6
 
 
 /***/ }),
-/* 28 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -1153,20 +1179,6 @@ exports.push([module.i, ".web-wrap {\n  width: 1180px;\n  margin: auto;\n}\n", "
 
 
 /***/ }),
-/* 29 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(0)();
-// imports
-
-
-// module
-exports.push([module.i, ".com-top-block-ctn {\n  text-align: center;\n  padding: 30px 0;\n}\n.com-top-block-ctn .title {\n  font-size: 24px;\n  font-weight: 600;\n}\n.com-top-block-ctn .block-content {\n  padding: 20px 0;\n  width: 100%;\n}\n", ""]);
-
-// exports
-
-
-/***/ }),
 /* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1175,7 +1187,7 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, ".com-top-lay-main-small {\n  margin: 10px;\n  min-height: 500px;\n}\n.com-top-lay-main-small .web-wrap {\n  display: flex;\n}\n.com-top-lay-main-small .main {\n  width: 75%;\n}\n.com-top-lay-main-small .small {\n  margin-left: 1%;\n  width: 24%;\n}\n", ""]);
+exports.push([module.i, ".com-top-block-ctn {\n  text-align: center;\n  padding: 50px 0;\n}\n.com-top-block-ctn .title {\n  font-size: 24px;\n  font-weight: 600;\n  margin: 10px 0 20px 0;\n}\n.com-top-block-ctn .sub-title {\n  margin: 10px 0 20px 0;\n}\n.com-top-block-ctn .block-content {\n  padding: 20px 0;\n  width: 100%;\n  margin: 10px 0 20px 0;\n}\n", ""]);
 
 // exports
 
@@ -1189,7 +1201,7 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, ".com-top-swiper {\n  height: 400px;\n  background-color: #f00;\n}\n.com-top-swiper .content {\n  position: relative;\n  height: 100%;\n}\n.com-swiper-image {\n  width: 100%;\n  height: 100%;\n  background-size: cover;\n  background-position: center;\n  position: relative;\n}\n.com-swiper-image .mylabel {\n  background-color: rgba(0,0,0,0.5);\n  color: #fff;\n  min-width: 300px;\n  padding: 10px 30px;\n  position: absolute;\n  bottom: 30px;\n  left: 0;\n}\n", ""]);
+exports.push([module.i, ".com-top-lay-main-small {\n  margin: 10px;\n  min-height: 500px;\n}\n.com-top-lay-main-small .web-wrap {\n  display: flex;\n}\n.com-top-lay-main-small .main {\n  width: 75%;\n}\n.com-top-lay-main-small .small {\n  margin-left: 1%;\n  width: 24%;\n}\n", ""]);
 
 // exports
 
@@ -1203,7 +1215,7 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, ".com-top-swiper-fade {\n  height: 400px;\n  position: relative;\n  overflow: hidden;\n}\n.com-top-swiper-fade .bg-image {\n  height: 100%;\n  width: 100%;\n  position: absolute;\n  background-size: cover;\n  background-position: center;\n  filter: blur(10px);\n  overflow: hidden;\n  top: -25px;\n  left: -25px;\n  padding: 50px;\n}\n.com-top-swiper-fade .web-wrap {\n  height: 400px;\n}\n.com-top-swiper-fade .swiper-container {\n  width: 100%;\n  height: 100%;\n}\n.com-top-swiper-fade .swiper-button-white:focus {\n  outline: none;\n}\n", ""]);
+exports.push([module.i, ".com-top-swiper {\n  height: 400px;\n  background-color: #f00;\n}\n.com-top-swiper .content {\n  position: relative;\n  height: 100%;\n}\n.com-swiper-image {\n  width: 100%;\n  height: 100%;\n  background-size: cover;\n  background-position: center;\n  position: relative;\n}\n.com-swiper-image .mylabel {\n  background-color: rgba(0,0,0,0.5);\n  color: #fff;\n  min-width: 300px;\n  padding: 10px 30px;\n  position: absolute;\n  bottom: 30px;\n  left: 0;\n}\n", ""]);
 
 // exports
 
@@ -1217,7 +1229,7 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, ".com-ti-article {\n  padding: 20px;\n  min-height: 600px;\n  background-color: #fff;\n}\n.com-ti-article .title {\n  text-align: center;\n  font-size: 24px;\n  font-weight: 500;\n  margin: 20px 0 10px 0;\n}\n", ""]);
+exports.push([module.i, ".com-top-swiper-fade {\n  height: 430px;\n  position: relative;\n  overflow: hidden;\n}\n.com-top-swiper-fade .bg-image {\n  height: 100%;\n  width: 100%;\n  position: absolute;\n  background-size: cover;\n  background-position: center;\n  filter: blur(10px);\n  overflow: hidden;\n  top: -25px;\n  left: -25px;\n  padding: 50px;\n}\n.com-top-swiper-fade .web-wrap {\n  height: 100%;\n}\n.com-top-swiper-fade .swiper-container {\n  width: 100%;\n  height: 100%;\n}\n.com-top-swiper-fade .swiper-button-white:focus {\n  outline: none;\n}\n", ""]);
 
 // exports
 
@@ -1231,7 +1243,7 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, ".com-ti-caption {\n  display: inline-block;\n  width: 220px;\n  height: 300px;\n  border: 1px solid #d5d5d5;\n  padding: 10px;\n  margin: 10px;\n  vertical-align: top;\n}\n.com-ti-caption .image-content {\n  margin: auto;\n  height: 210px;\n  width: 210px;\n  background-size: cover;\n  background-position: center;\n  margin-bottom: 10px;\n}\n.com-ti-caption:hover {\n  box-shadow: 1px 1px 3px #292929;\n}\n.com-ti-caption .text-content {\n  padding: 10px 10px;\n}\n", ""]);
+exports.push([module.i, ".com-ti-article {\n  padding: 20px;\n  min-height: 600px;\n  background-color: #fff;\n}\n.com-ti-article .title {\n  text-align: center;\n  font-size: 24px;\n  font-weight: 500;\n  margin: 20px 0 10px 0;\n}\n", ""]);
 
 // exports
 
@@ -1245,7 +1257,7 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, ".com-ti-caption2 {\n  height: 400px;\n  width: 220px;\n  display: inline-block;\n  border: 1px solid #d5d5d5;\n  position: relative;\n}\n.com-ti-caption2 .image-content {\n  width: 100%;\n  height: 250px;\n  overflow: hidden;\n}\n.com-ti-caption2 .image-content .image-panel {\n  height: 100%;\n  width: 100%;\n  background-size: cover;\n  background-position: center;\n}\n.com-ti-caption2 .text-content {\n  padding: 10px 10px;\n}\n", ""]);
+exports.push([module.i, ".com-ti-caption {\n  display: inline-block;\n  width: 220px;\n  height: 300px;\n  border: 1px solid #ededed;\n  padding: 10px;\n  margin: 10px;\n  vertical-align: top;\n}\n.com-ti-caption .image-content {\n  margin: auto;\n  height: 210px;\n  width: 210px;\n  background-size: cover;\n  background-position: center;\n  margin-bottom: 10px;\n}\n.com-ti-caption:hover {\n  box-shadow: 1px 1px 3px #8e8e8e;\n}\n.com-ti-caption .text-content {\n  padding: 10px 10px;\n}\n", ""]);
 
 // exports
 
@@ -1259,7 +1271,7 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, ".com-ti-list {\n  background-color: #fff;\n}\n", ""]);
+exports.push([module.i, ".com-ti-caption2 {\n  height: 400px;\n  width: 320px;\n  margin: 0 16px;\n  display: inline-block;\n  border: 1px solid #d5d5d5;\n  position: relative;\n  vertical-align: top;\n}\n.com-ti-caption2 .image-content {\n  width: 100%;\n  height: 250px;\n  overflow: hidden;\n}\n.com-ti-caption2 .image-content .image-panel {\n  height: 100%;\n  width: 100%;\n  background-size: cover;\n  background-position: center;\n}\n.com-ti-caption2 .text-content {\n  padding: 10px 10px;\n}\n", ""]);
 
 // exports
 
@@ -1273,7 +1285,7 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, ".com-ti-list-one-page {\n  background-color: #fff;\n  margin: 10px 0;\n  padding: 10px;\n}\n.com-ti-list-one-page .title {\n  padding: 10px 0 10px 0;\n}\n", ""]);
+exports.push([module.i, ".com-ti-list {\n  background-color: #fff;\n}\n", ""]);
 
 // exports
 
@@ -1287,7 +1299,7 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, ".com-ti-msg-panel {\n  background-color: #fff;\n  padding: 10px;\n}\n.com-ti-msg-panel .title {\n  text-align: center;\n  font-size: 110%;\n  font-weight: 500;\n  color: #6b6b6b;\n  border-bottom: 1px solid #e5e5e5;\n}\n", ""]);
+exports.push([module.i, ".com-ti-list-one-page {\n  background-color: #fff;\n  margin: 10px 0;\n  padding: 10px;\n}\n.com-ti-list-one-page .title {\n  padding: 10px 0 10px 0;\n}\n", ""]);
 
 // exports
 
@@ -1301,7 +1313,7 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, "body {\n  background-color: #f8f8f8;\n  min-width: 1200px;\n}\n", ""]);
+exports.push([module.i, ".com-ti-msg-panel {\n  background-color: #fff;\n  padding: 10px;\n}\n.com-ti-msg-panel .title {\n  text-align: center;\n  font-size: 110%;\n  font-weight: 500;\n  color: #6b6b6b;\n  border-bottom: 1px solid #e5e5e5;\n}\n", ""]);
 
 // exports
 
@@ -1310,27 +1322,15 @@ exports.push([module.i, "body {\n  background-color: #f8f8f8;\n  min-width: 1200
 /* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
-// style-loader: Adds some css to the DOM by adding a <style> tag
+exports = module.exports = __webpack_require__(0)();
+// imports
 
-// load the styles
-var content = __webpack_require__(24);
-if(typeof content === 'string') content = [[module.i, content, '']];
-// add the styles to the DOM
-var update = __webpack_require__(1)(content, {});
-if(content.locals) module.exports = content.locals;
-// Hot Module Replacement
-if(false) {
-	// When the styles change, update the <style> tags
-	if(!content.locals) {
-		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./copyright.styl", function() {
-			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./copyright.styl");
-			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-			update(newContent);
-		});
-	}
-	// When the module is disposed, remove the <style> tags
-	module.hot.dispose(function() { update(); });
-}
+
+// module
+exports.push([module.i, "body {\n  background-color: #f8f8f8;\n  min-width: 1200px;\n}\n", ""]);
+
+// exports
+
 
 /***/ }),
 /* 41 */
@@ -1348,8 +1348,8 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./article.styl", function() {
-			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./article.styl");
+		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./copyright.styl", function() {
+			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./copyright.styl");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -1374,8 +1374,8 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./article_simple.styl", function() {
-			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./article_simple.styl");
+		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./article.styl", function() {
+			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./article.styl");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -1400,8 +1400,8 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./xiu.styl", function() {
-			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./xiu.styl");
+		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./article_simple.styl", function() {
+			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./article_simple.styl");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -1417,7 +1417,7 @@ if(false) {
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(29);
+var content = __webpack_require__(28);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(1)(content, {});
@@ -1426,8 +1426,8 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./block_ctn.styl", function() {
-			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./block_ctn.styl");
+		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./xiu.styl", function() {
+			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./xiu.styl");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -1452,8 +1452,8 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./lay_main_small.styl", function() {
-			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./lay_main_small.styl");
+		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./block_ctn.styl", function() {
+			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./block_ctn.styl");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -1478,8 +1478,8 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./swiper.styl", function() {
-			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./swiper.styl");
+		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./lay_main_small.styl", function() {
+			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./lay_main_small.styl");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -1504,8 +1504,8 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./swiper_fade.styl", function() {
-			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./swiper_fade.styl");
+		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./swiper.styl", function() {
+			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./swiper.styl");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -1530,8 +1530,8 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./article.styl", function() {
-			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./article.styl");
+		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./swiper_fade.styl", function() {
+			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./swiper_fade.styl");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -1556,8 +1556,8 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./caption.styl", function() {
-			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./caption.styl");
+		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./article.styl", function() {
+			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./article.styl");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -1582,8 +1582,8 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./caption2.styl", function() {
-			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./caption2.styl");
+		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./caption.styl", function() {
+			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./caption.styl");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -1608,8 +1608,8 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./list.styl", function() {
-			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./list.styl");
+		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./caption2.styl", function() {
+			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./caption2.styl");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -1634,8 +1634,8 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./list_one_page.styl", function() {
-			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./list_one_page.styl");
+		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./list.styl", function() {
+			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./list.styl");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -1660,6 +1660,32 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
+		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./list_one_page.styl", function() {
+			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./list_one_page.styl");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 54 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(39);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// add the styles to the DOM
+var update = __webpack_require__(1)(content, {});
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
 		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./msg_panel.styl", function() {
 			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./msg_panel.styl");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
@@ -1671,7 +1697,7 @@ if(false) {
 }
 
 /***/ }),
-/* 54 */
+/* 55 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1705,6 +1731,46 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 
 __webpack_require__(8);
 __webpack_require__(9);
+
+/***/ }),
+/* 56 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(0)();
+// imports
+
+
+// module
+exports.push([module.i, ".com-top-transparent-ctn {\n  height: 300px;\n  background-attachment: fixed;\n  background-position: center;\n  background-repeat: no-repeat;\n  background-size: cover;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 57 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(56);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// add the styles to the DOM
+var update = __webpack_require__(1)(content, {});
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./transparent_ctn.styl", function() {
+			var newContent = require("!!../../../../../../../../../coblan/webcode/node_modules/css-loader/index.js!../../../../../../../../../coblan/webcode/node_modules/stylus-loader/index.js!./transparent_ctn.styl");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
 
 /***/ })
 /******/ ]);

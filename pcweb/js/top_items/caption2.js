@@ -2,7 +2,7 @@ require('./styl/caption2.styl')
 
 Vue.component('com-ti-caption2',{
     props:['ctx'],
-    template:`<div class="com-ti-caption2">
+    template:`<div class="com-ti-caption2" :class="ctx.class">
     <div class="image-content"  @mouseover="on_enter" @mouseout="on_leave">
         <div class="image-panel" :style="mystyle"></div>
     </div>

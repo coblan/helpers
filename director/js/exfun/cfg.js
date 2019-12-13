@@ -17,6 +17,21 @@ var cfg={
         width:$(window).width(),
         height:$(window).height(),
     },
+    prompt(mycfg){
+        //{
+        //    formType: 2,
+        //        value: '初始值',
+        //    title: '请输入值',
+        //    area: ['800px', '350px'] //自定义文本域宽高
+        //}
+        mycfg = mycfg || {}
+        return new Promise(function(resolve,reject){
+            layer.prompt(mycfg,function(val, index){
+                resolve(val)
+                layer.close(index);
+            });
+        })
+    },
     showMsg:function(msg){
         return new Promise((resolve,reject)=>{
             layer.alert(msg,function(index){
