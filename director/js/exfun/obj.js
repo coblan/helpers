@@ -1,7 +1,12 @@
 export var obj_control={
     isEmpty:function(obj){
-        var keys =Object.keys(obj)
-        return keys.length == 0
+        if(typeof(obj)=='object'){
+            var keys =Object.keys(obj)
+            return keys.length == 0
+        }else{
+            return true
+        }
+
         //for(var k in obj){
         //    if(/^[^_]/.exec(k)){
         //        return false
