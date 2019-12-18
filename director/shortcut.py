@@ -1,6 +1,6 @@
 from __future__ import absolute_import
 
-from .base_data import model_dc,page_dc,director, director_view,director_element
+from .base_data import model_dc,page_dc,director, director_view,director_element,doc_str,doc_fun
 from .table.tablepage import TablePage,TablePage
 from .table.table import ModelTable,PageNum,TrivalPageNum,RowFilter,RowSearch,RowSort,PlainTable,RawTable
 from .table.row_search import SelectSearch
