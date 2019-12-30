@@ -18,12 +18,12 @@ class MobileLogin(FieldsPage):
         ctx = super().get_context()
         ctx.update({
             'title':'用户登录',
-            'init_express':'scope.row._director_name="mb-login-form"',
-            'after_save':'cfg.toast("登录成功");setTimeout(function(){location=search_args.next},1500)'
+            #'init_express':'scope.row._director_name="mb-login-form"',
+            #'after_save':'cfg.toast("登录成功");setTimeout(function(){location=search_args.next},1500)'
         })
         return {
             'editor_ctx':ctx,
-            'editor':'live_fields',
+            'editor': 'live_login', #'live_fields',
         }
     
     class fieldsCls(FieldsMobile):

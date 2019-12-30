@@ -203,10 +203,15 @@
 //                    },20000)
                 },
                 lastsibe(vc){
-                    var index = this.$children.indexOf(vc)
-                    if(index >0){
-                        return this.$children[index-1]
-                    }
+                    var com_name = vc.$options.name
+                    var editor_list = ex.map(this.stack,(item)=>{return item.editor })
+                    var index = editor_list.indexOf(com_name)
+                    var sibe_name = editor_list[index - 1]
+                    return this.$refs[sibe_name][0]
+//                    var index = this.$children.indexOf(vc)
+//                    if(index >0){
+//                        return this.$children[index-1]
+//                    }
                 },
                 open_page(url){
 //                    var t = new Date().getTime()
@@ -402,20 +407,23 @@
     function fullsize(){
         $('#main-panel').height( window.innerHeight +'px')
         $('#main-panel').width( window.innerWidth +'px')
-        $(window).trigger('resize')
+//        $(window).trigger('resize')
+        cfg.updateSizeConfig()
     }
     function fullheight(){
         var hh = window.innerHeight*0.563
         $('#main-panel').width( hh +'px')
         $('#main-panel').height( window.innerHeight +'px')
         $('html').css('font-size',hh * 0.1333)
-        $(window).trigger('resize')
+//        $(window).trigger('resize')
+        cfg.updateSizeConfig()
     }
     function fullwidth(){
         var hh = window.innerWidth / 0.563
         $('#main-panel').height( hh +'px')
         $('#main-panel').width( window.innerWidth +'px')
-        $(window).trigger('resize')
+//        $(window).trigger('resize')
+        cfg.updateSizeConfig()
     }
     if(ex.os.isPc && !ex.os.isTablet){
         fullheight()
