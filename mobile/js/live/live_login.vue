@@ -57,9 +57,9 @@
 .live-login{
     position: relative;
     height: var(--app-height);
-    background: url("/static/mobile/76f93439-7072-45dd-b257-c09603e01ad7_thumb.jpg");
+    background: url("/static/mobile/UZuAHiafUi_small2.jpg");
     background-size: 100% 100%;
-    color: white;
+    color: #e1e1e1;
 }
 .login-form{
     width: 70%;
