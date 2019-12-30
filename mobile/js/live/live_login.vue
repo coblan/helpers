@@ -89,9 +89,10 @@
             background-color: transparent;
 
             &::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
-                color: #f7f7f7;
+                color: #b3b3b3;
                 opacity: 1; /* Firefox */
-                font-style: italic;
+                /*font-style: italic;*/
+                font-size: .26rem;
             }
         }
 
