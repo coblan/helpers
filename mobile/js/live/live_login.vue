@@ -57,9 +57,10 @@
 .live-login{
     position: relative;
     height: var(--app-height);
-    background: url("/static/mobile/UZuAHiafUi_small2.jpg");
+    background: url("/static/mobile/76f93439-7072-45dd-b257-c09603e01ad7_thumb.jpg");
     background-size: 100% 100%;
-    color: #e1e1e1;
+    color: white;
+
 }
 .login-form{
     width: 70%;
@@ -84,12 +85,13 @@
         margin: .3rem 0;
         font-size:.32rem;
         input{
+            /*color: #665656;*/
             display:inline-block;
             margin-left: .3rem;
             background-color: transparent;
 
             &::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
-                color: #b3b3b3;
+                color: #9f9a9c;
                 opacity: 1; /* Firefox */
                 /*font-style: italic;*/
                 font-size: .26rem;
