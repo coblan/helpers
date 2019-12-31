@@ -18,8 +18,12 @@ class MobileLogin(FieldsPage):
         ctx = super().get_context()
         ctx.update({
             'title':'用户登录',
+            'footer':[
+                {'label':'忘记密码','action':'cfg.toast("请联系管理员重置密码!")'},
+                {'label':'立即注册','action':'location="/mb/regist"'}
+            ],
             #'init_express':'scope.row._director_name="mb-login-form"',
-            #'after_save':'cfg.toast("登录成功");setTimeout(function(){location=search_args.next},1500)'
+            'after_save':'location=search_args.next;cfg.toast("登录成功!")'
         })
         return {
             'editor_ctx':ctx,
@@ -27,7 +31,7 @@ class MobileLogin(FieldsPage):
         }
     
     class fieldsCls(FieldsMobile):
-            
+        nolimit = True
         def get_heads(self):
             return [
                  {'name':'username','label':'账号','editor':'com-field-linetext','required':True},

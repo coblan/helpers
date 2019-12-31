@@ -43,6 +43,10 @@ export default {
 </script>
 
 <style scoped lang="scss">
+    .com-list-row-cell{
+        overflow: auto;
+        min-height: calc(var(--app-height) - 80px );
+    }
 .content{
     display: flex;
     width: 90%;

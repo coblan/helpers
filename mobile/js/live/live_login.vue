@@ -18,6 +18,15 @@
             </div>
 
         </div>
+        <div class="footer" v-if="ctx.footer">
+            <template v-for="(item,index) in ctx.footer">
+                <div v-text="item.label" @click="on_click(item)"></div>
+                <div v-if="index != (ctx.footer.length -1)"  class="spliter"></div>
+            </template>
+            <!--<div>忘记密码</div>-->
+            <!--<div class="spliter"></div>-->
+            <!--<div>立即注册</div>-->
+        </div>
     </div>
 </template>
 <script>
@@ -43,11 +52,15 @@
                             break
                         }
                     }else{
-                        cfg.toast("登录成功");
-                        setTimeout(function(){
-                            location=window.search_args.next},1500)
+                        ex.eval(this.ctx.after_save)
+//                        cfg.toast("登录成功");
+//                        setTimeout(function(){
+//                            location=window.search_args.next},1500)
                     }
                 })
+            },
+            on_click(item){
+                ex.eval(item.action)
             }
         }
     }
@@ -98,6 +111,37 @@
             }
         }
 
+    }
+}
+
+.footer{
+    background-color: rgba(6,6,6,.2);
+    position: absolute;
+    bottom: 0;
+    height: .8rem;
+    display: flex;
+    width: 100%;
+    justify-content:space-around;
+    align-items:center;
+    /*div.item{*/
+        /*position:relative;*/
+        /*&::after{*/
+             /*content: '';*/
+             /*display: block;*/
+             /*height: .3rem;*/
+             /*background-color: white;*/
+             /*width: 1px;*/
+             /*position: absolute;*/
+            /*right: -.4rem;*/
+             /*top: -.1rem;*/
+         /*}*/
+    /*}*/
+    .spliter{
+        position: absolute;
+        left: 50%;
+        width: 1px;
+        height: .3rem;
+        background-color: white;
     }
 }
 </style>

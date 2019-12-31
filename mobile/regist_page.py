@@ -27,25 +27,18 @@ class MobileRegist(FieldsPage):
         }
     
     class fieldsCls(ModelFieldsMobile,RegistFormPage.fieldsCls):
-        pass
-        #field_sort = ['username', 'password', 'pswd2', 'validate_code', 'email']
-        #def __init__(self,  **kws): 
-            #instance = User()
-            #super().__init__(instance = instance, nolimit = True, **kws)
-        ##def get_heads(self):
-            ##return [
-                 ##{'name':'username','label':'账号','editor':'com-field-linetext','required':True},
-                 ##{'name':'password','label':'密码','editor':'com-field-password','required':True},
-            ##]
-        #def getExtraHeads(self): 
-            #return [
-                #{'name': 'pswd2','label': '确认密码','editor': 'password', 'required': True,'fv_rule': 'match(password)',}, 
-                #{'name': 'validate_code','label': '验证码',
-                 #'editor': 'com-field-validate-code',
-                 #'required': True,
-                 #'code_img': faseGetDataUrl(),}
-                
-            #]
+        nolimit=True
+        class Meta:
+            model = User
+            fields = ['username', 'password', ]
+        
+        def dict_head(self, head): 
+            if head['name'] == 'password':
+                head['editor'] = 'com-field-password'
+                head['fv_rule'] = '密码:'
+            if head['name']=='username':
+                head['placeholder'] ='用户名/手机号码'
+            return head
 
 director.update({
     'mb-regist-form':MobileRegist.fieldsCls

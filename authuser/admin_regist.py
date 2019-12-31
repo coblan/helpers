@@ -37,6 +37,13 @@ class RegistFormPage(FieldsPage):
             model = User
             fields = ['username', 'password', 'email']
         
+        def get_head_context(self):
+            ctx = super().get_head_context()
+            ctx.update({
+                'after_save':'cfg.toast("注册成功");setTimeout(function(){location = "/"},1500)'
+            })
+            return ctx
+        
         def dict_head(self, head): 
             if head['name'] == 'password':
                 head['editor'] = 'com-field-password'
@@ -44,7 +51,7 @@ class RegistFormPage(FieldsPage):
             if head['name']=='email':
                 head['label'] ='电子邮件'
             return head
-    
+        
         
         def clean_password(self):
             password = self.cleaned_data.get('password')

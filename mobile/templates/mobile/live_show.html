@@ -107,6 +107,13 @@
                         this.tranName = 'slide-left'
                      },500)
                 },
+                open_fade(com,editor_ctx){
+                    this.tranName ='fade'
+                    this.open_live(com,editor_ctx,{back_animate:'fade'})
+                    setTimeout(()=>{
+                        this.tranName = 'slide-left'
+                     },500)
+                },
                 open_live(com,ctx,option){
                     if(this.loading){
                         return
