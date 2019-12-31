@@ -1,8 +1,8 @@
 <template>
     <div class="com-list-row-cell">
-        <van-cell v-for="row in rows" title="单元格" :is-link="has_nextlevel" clickable>
+        <van-cell v-for="row in rows" title="单元格" :is-link="has_nextlevel" clickable @click="on_click(row)">
             <template slot="title">
-                <div class="material-wave content"  @click="on_click(row)">
+                <div class="material-wave content"  >
                     <component :is="head.editor" v-for="head in heads"
                                :class="head.class" :head="head" :row="row"></component>
                 </div>
