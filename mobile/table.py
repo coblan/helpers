@@ -9,7 +9,12 @@ class FilterForm(object):
             ex.vueAssign(table.childStore.search_args,scope.ps.vc.row)
             table.childStore.search();
             window.history.back();
-                       '''}
+                       '''},
+            {'label':'清空条件','editor':'com-op-submit','type':'default',
+             'action':'''
+             var vc = ex.vueParStore(scope.ps.vc,function(vc){return vc.basename && vc.basename.startsWith("live-")}).vc; 
+            var table = vc.$root.lastsibe(vc) ;
+            table.childStore.search_args={}; table.childStore.search();window.history.back();'''}
         ]
         return ops
     def set_filter(self,table_filter):

@@ -412,9 +412,10 @@
 <script>
     var adapt_size = {{ adapt_size | jsonify }}
     function fullsize(){
-        $('#main-panel').height( window.innerHeight +'px')
-        $('#main-panel').width( window.innerWidth +'px')
-//        $(window).trigger('resize')
+//        $('#main-panel').height( window.innerHeight +'px')
+//        $('#main-panel').width( window.innerWidth +'px')
+        $('#main-panel').width( '100vw')
+        $('#main-panel').height( '100vh')
         cfg.updateSizeConfig()
     }
     function fullheight(){
@@ -432,20 +433,16 @@
 //        $(window).trigger('resize')
         cfg.updateSizeConfig()
     }
-    if(ex.os.isPc && !ex.os.isTablet){
-        fullheight()
-    }else if(ex.os.isTablet){
-        fullsize()
-//        if(adapt_size =='fullheight'){
-//            fullheight()
-//        }else if(adapt_size == 'fullwidth'){
-//            fullwidth()
-//        }else{
-//            fullsize()
-//        }
-    }else{
-        fullsize()
-    }
+        if(ex.os.isPc && !ex.os.isTablet){
+            fullheight()
+        }else if(ex.os.isTablet){
+            fullsize()
+
+        }else{
+            fullsize()
+        }
+
+
 
 
 </script>
