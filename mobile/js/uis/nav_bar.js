@@ -17,12 +17,12 @@ Vue.component('com-uis-nav-bar',{
     </div>
 
     </van-nav-bar>
-        <van-actionsheet
+        <van-action-sheet
             v-model="actionVisible"
             :actions="rigth_down"
             cancel-text="取消"
             @select="onSelectAction"
-    ></van-actionsheet>
+    ></van-action-sheet>
     </div>`,
     data(){
         this.ops = this.ops || []
@@ -80,7 +80,7 @@ Vue.component('com-uis-nav-bar',{
 
 Vue.component('com-nav-vant-icon',{
     props:['ctx'],
-    template:`<div class="com-nav-vant-icon">
+    template:`<div class="com-nav-vant-icon" style="width: .5rem;font-size: .4rem">
       <van-icon  :name="ctx.name" />
     </div>`
 })

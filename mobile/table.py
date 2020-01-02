@@ -9,7 +9,12 @@ class FilterForm(object):
             ex.vueAssign(table.childStore.search_args,scope.ps.vc.row)
             table.childStore.search();
             window.history.back();
-                       '''}
+                       '''},
+            {'label':'清空条件','editor':'com-op-submit','type':'default',
+             'action':'''
+             var vc = ex.vueParStore(scope.ps.vc,function(vc){return vc.basename && vc.basename.startsWith("live-")}).vc; 
+            var table = vc.$root.lastsibe(vc) ;
+            table.childStore.search_args={}; table.childStore.search();window.history.back();'''}
         ]
         return ops
     def set_filter(self,table_filter):
@@ -95,7 +100,7 @@ class ModelTableMobile(ModelTable):
                   'icon_editor':'com-nav-vant-icon',
                  'icon_ctx':{'name':'search'},
                  'level':'rigth-top',
-                  'action':'scope.head.filter_ctx.title="查询条件";scope.head.filter_ctx.row=scope.ps.search_args;live_root.open_live("live_fields",scope.head.filter_ctx)',
+                  'action':'scope.head.filter_ctx.title="查询条件";scope.head.filter_ctx.row=scope.ps.search_args;live_root.open_fade("live_fields",scope.head.filter_ctx)',
                      'filter_ctx':filter_obj.get_head_context()}
             ]
         return ops

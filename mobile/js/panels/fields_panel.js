@@ -40,6 +40,13 @@ Vue.component('com-fields-panel',{
        </div>
     </van-cell-group>
     </div>`,
+    mounted(){
+        this.$on('finish',(row)=>{
+            if(this.ctx.row){
+                ex.vueAssign(this.ctx.row,row)
+            }
+        })
+    },
     computed:{
         grouped_heads_bucket:function(){
             var out_bucket = []
