@@ -33,7 +33,7 @@ class SelectSearch(object):
             for name in sorted_name:
                 option = self.get_option(name)
                 if name in self.exact_names:
-                    option['exact'] = True
+                    option['exact_search'] = True
                 ls.append( option )
                 #ls.append({'value': name, 'label': _(self.model._meta.get_field(name).verbose_name) })
             dc = {
