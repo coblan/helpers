@@ -361,7 +361,7 @@ class ModelFields(forms.ModelForm):
             
             dc = {'name':k,'label':str(v.label),
                   'help_text':str(v.help_text),
-                  'editor':'linetext'}
+                  'editor':'com-field-linetext'}
                   
             if hasattr(v,'required'):
                 dc['required'] = v.required   

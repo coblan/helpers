@@ -17,7 +17,11 @@ const appHeight = () => {
 }
 window.addEventListener('resize', appHeight)
 //appHeight()
-
+ex.assign(cfg,{
+    updateSizeConfig(){
+        appHeight()
+    }
+})
 
 ex.assign(cfg,{
     fields_editor:'com-sim-fields',

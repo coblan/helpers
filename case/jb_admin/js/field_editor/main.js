@@ -18,3 +18,8 @@ import * as color from  './color'
 import * as number from  './number'
 import * as richtext from  './richtext'
 import * as split_text from  './split_text'
+
+
+import  password from  './password.vue'
+
+Vue.component('com-field-password',password)

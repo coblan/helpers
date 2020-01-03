@@ -17,3 +17,7 @@ import * as datetime from './datetime.js'
 import * as tree_select from './tree_select.js'
 
 import * as pop_table_select from './pop_table_select.js'
+
+import  validate_code from './validate_code.vue'
+
+Vue.component('com-field-validate-code',validate_code)

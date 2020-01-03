@@ -25,7 +25,7 @@ class RegistFormPage(FieldsPage):
             #img_data_url = "data:image/jpeg;base64,%s" % img_str.decode('utf-8')
             
             return [
-                {'name': 'pswd2','label': '确认密码','editor': 'password', 'required': True,'fv_rule': 'match(password)',}, 
+                {'name': 'pswd2','label': '确认密码','editor': 'com-field-password', 'required': True,'fv_rule': 'match(password)',}, 
                 {'name': 'validate_code','label': '验证码',
                  'editor': 'com-field-validate-code',
                  'required': True,
@@ -37,14 +37,21 @@ class RegistFormPage(FieldsPage):
             model = User
             fields = ['username', 'password', 'email']
         
+        def get_head_context(self):
+            ctx = super().get_head_context()
+            ctx.update({
+                'after_save':'cfg.toast("注册成功");setTimeout(function(){location = "/"},1500)'
+            })
+            return ctx
+        
         def dict_head(self, head): 
             if head['name'] == 'password':
-                head['editor'] = 'password'
+                head['editor'] = 'com-field-password'
                 head['fv_rule'] = '密码:'
             if head['name']=='email':
                 head['label'] ='电子邮件'
             return head
-    
+        
         
         def clean_password(self):
             password = self.cleaned_data.get('password')
