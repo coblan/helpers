@@ -93,7 +93,9 @@ class SelectSearch(object):
         if self.q and self.qf:
             db_field = self.db_map.get(self.qf,self.qf)
             if self.qf in self.exact_names:
-                where_list.append( '%s = %s'%(db_field,self.q) )
+                #where_list.append( '%s = %s'%(db_field,self.q) )
+                where_list.append( db_field +" = %s" )
+                params.append('%s'%self.q)
             else:
                 where_list.append( db_field +" like %s" )
                 params.append('%%%s%%'%self.q)
