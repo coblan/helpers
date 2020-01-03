@@ -31,7 +31,10 @@ class SelectSearch(object):
         if sorted_name:
             ls=[]
             for name in sorted_name:
-                ls.append( self.get_option(name) )
+                option = self.get_option(name)
+                if name in self.exact_names:
+                    option['exact'] = True
+                ls.append( option )
                 #ls.append({'value': name, 'label': _(self.model._meta.get_field(name).verbose_name) })
             dc = {
                 'options':ls,

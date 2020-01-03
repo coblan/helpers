@@ -29,6 +29,7 @@ var com_search = {
                 size="small"
                 maxlength="200"
                 v-model="myvalue">
+                <!--<span slot="prefix" class="el-input__icon">[=]</span>-->
                  <!--<el-select v-model="search_args.qf" slot="append" placeholder="请选择">-->
                       <!--<el-option label="餐厅名" value="1"></el-option>-->
                       <!--<el-option label="订单号" value="2"></el-option>-->
