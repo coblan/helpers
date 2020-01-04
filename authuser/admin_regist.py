@@ -88,10 +88,11 @@ class RegistFormPage(FieldsPage):
              
             return self.cleaned_data 
         
-        def clean_save(self): 
+        def after_save(self): 
             user = self.instance
-            user.set_password(user.password)
-            user.is_active=True           
+            user.set_password(self.kw.get('password'))
+            user.is_active=True   
+            user.save()
         
         
             

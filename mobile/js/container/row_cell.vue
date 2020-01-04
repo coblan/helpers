@@ -1,6 +1,6 @@
 <template>
     <div class="com-list-row-cell">
-        <van-cell v-for="row in rows" title="单元格" :is-link="has_nextlevel" clickable @click="on_click(row)">
+        <van-cell  v-for="row in rows" title="单元格" :is-link="has_nextlevel" clickable @click="on_click(row)">
             <template slot="title">
                 <div class="material-wave content"  >
                     <component :is="head.editor" v-for="head in heads"
@@ -8,6 +8,7 @@
                 </div>
             </template>
         </van-cell>
+        <div class="no-data" v-if="rows.length == 0">暂无数据</div>
     </div>
 </template>
 <script>
@@ -52,4 +53,10 @@ export default {
     width: 90%;
     overflow: hidden;
 }
+    .no-data{
+        position: absolute;
+        top:30%;
+        left: 50%;
+        transform: translateX(-50%);
+    }
 </style>
