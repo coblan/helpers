@@ -29,6 +29,12 @@ var com_search = {
                 size="small"
                 maxlength="200"
                 v-model="myvalue">
+
+                <!--<i slot="prefix" v-if="crt_option.exact_search" class="fas fa-equals el-input__icon"></i>-->
+                <span v-if="crt_option.exact_search" slot="prefix" class="myicon el-input__icon">
+                    <img src="/static/jb_admin/equal.png" alt="">
+                </span>
+                <i v-else slot="prefix" class="el-input__icon el-icon-search"></i>
                  <!--<el-select v-model="search_args.qf" slot="append" placeholder="请选择">-->
                       <!--<el-option label="餐厅名" value="1"></el-option>-->
                       <!--<el-option label="订单号" value="2"></el-option>-->
@@ -61,6 +67,10 @@ var com_search = {
         normed_placeholder:function(){
             var crt = ex.findone(this.head.options,{value:this.search_args._qf})
             return crt.label
+        },
+        crt_option(){
+            var crt = ex.findone(this.head.options,{value:this.search_args._qf})
+            return crt
         },
         org_value(){
             return this.search_args._q

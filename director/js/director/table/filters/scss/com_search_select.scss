@@ -9,7 +9,16 @@
     .input-with-select input{
         height: 30px;
     }
-
+    .myicon{
+        img{
+            width: 12px;
+            display: inline-block;
+            height: 6px;
+            position: relative;
+            left: 4px;
+            top: -2px;
+        }
+    }
 }
 
 .el-dropdown-menu .active-search-item{
