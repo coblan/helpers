@@ -17,7 +17,7 @@ class ELKHander(logging.Handler):
         self.make_index()
         self.hostName = socket.gethostname()
         super().__init__()
-        print('elk-log1')
+        #print('elk-log1')
         
     def make_index(self):
         _index_mappings = {
