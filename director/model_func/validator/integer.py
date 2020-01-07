@@ -9,5 +9,5 @@ def int_0_p(value):
         )
 
 validator_map.update({
-    int_0_p:'integer(+0)'
+    'int_0_p':'integer(+0)'
 })

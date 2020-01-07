@@ -17,7 +17,7 @@ class IntProc(BaseFieldProc):
 
     def dict_field_head(self, head): 
         options = self.get_options() 
-        valid_rules = [ validator_map.get( validator,None) for validator in self.field.validators ]
+        valid_rules = [ validator_map.get( validator.__name__ ,None) for validator in self.field.validators ]
         valid_rules =[x for x in valid_rules if x]
         if options:
             head['options']=options
