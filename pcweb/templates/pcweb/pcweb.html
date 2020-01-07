@@ -24,8 +24,15 @@
          new Vue({
             el:'#main-panel',
             data: function(){
-                var childStore = new Vue()
-                childStore.vc = this
+                var self =this
+                var childStore = new Vue({
+                    data(){
+                        return {
+                            option:{},
+                            vc:self
+                        }
+                    }
+                })
                 return {
                     childStore:childStore,
                     head_bar_data:head_bar_data,
@@ -61,6 +68,9 @@
 
 </script>
 <style>
+    body{
+        font-size: 1.3rem;
+    }
     #main-panel{
         position: relative;
         width: 100%;
@@ -68,13 +78,16 @@
     /*#main-panel>.content{*/
         /*min-height: calc( var(--win-height) - 200px - 66px);*/
     /*}*/
+    .has_navibar{
+        padding-top:66px;
+    }
 </style>
 <div id="main-panel">
 
     <component class="header-bar" :is="navibar.editor" :ctx="navibar"></component>
     <!--<com-xiu-menu></com-xiu-menu>-->
 
-    <div class="content" style="padding-top:66px;">
+    <div class="content" :class="{has_navibar:navibar.editor}">
         <component v-for="top in tops" :is="top.editor" :ctx="top"></component>
     </div>
 
