@@ -1,16 +1,15 @@
 from django.core.exceptions import ValidationError
 
-class int_0_p(object):
-    
-    @staticmethod
-    def __call__(value):
+class Int0P(object):
+    def __call__(self,value):
         if value < 0:
             raise ValidationError(
                 '%(value)s 不是正整数',
                 params={'value': value},
             )
-    
-    @classmethod
-    def get_validate_str(cls):
+
+    def get_validate_str(self):
         return 'integer(+0)'
+
+int_0_p=Int0P()
     
