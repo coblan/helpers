@@ -23,6 +23,9 @@ director_views={
 field_map={
 }
 
+validator_map={
+}
+
 inspect_dict ={
     'page_dc':page_dc,
     'director':director,

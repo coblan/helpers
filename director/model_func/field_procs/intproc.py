@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 import re
 from ..field_proc  import BaseFieldProc
 from django.db.models import IntegerField, SmallIntegerField,BigIntegerField
-from .. .base_data import field_map
+from .. .base_data import field_map,validator_map
 from django.utils.translation import ugettext as _
 
 class IntProc(BaseFieldProc):
@@ -16,13 +16,17 @@ class IntProc(BaseFieldProc):
                 }
 
     def dict_field_head(self, head): 
-        options = self.get_options()   
+        options = self.get_options() 
+        valid_rules = [ validator_map.get( validator) for validator in self.field.validators ]
+        valid_rules =[x for x in valid_rules if x]
         if options:
             head['options']=options
             head['editor'] = 'com-field-select'
         else:
             head['editor'] = 'com-field-number'
-            head['fv_rule'] = 'integer'
+            valid_rules.append('integer')
+            head['fv_rule'] = ';'.join(valid_rules)
+            
         return head
     
     def filter_get_head(self, name, model):
