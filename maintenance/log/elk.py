@@ -47,7 +47,7 @@ class ELKHander(logging.Handler):
         try:
             res = self.es.index(self.index, doc_type='_doc', body = dc)
         except Exception as e:
-            general_log.error('请求ELK出现了问题,%s' % e)
+            general_log.error('请求ELK出现了问题msg=%(msg)s,Exception= %(except)s' % {'msg':msg,'except':str(e)})
 
 
 
