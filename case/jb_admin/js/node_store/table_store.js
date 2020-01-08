@@ -417,10 +417,10 @@ var table_store={
             return promise
 
         },
-        export_excel:function(){
+        export_excel:function(head){
             var self=this
             var search_args = ex.copy(self.search_args)
-            search_args._perpage=5000
+            search_args._perpage= head.count || 5000
             var post_data=[{fun:'get_excel',director_name:self.director_name,search_args:search_args}]
             cfg.show_load()
             ex.post('/d/ajax',JSON.stringify(post_data),function(resp){

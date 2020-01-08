@@ -86,7 +86,7 @@ export  function pop_table_layer (row,table_ctx,callback,layer_config){
                                 @size-change="on_perpage_change"
                                 @current-change="get_page"
                                 :current-page="row_pages.crt_page"
-                                :page-sizes="[20, 50, 100, 500]"
+                                :page-sizes="[20, 50, 100]"
                                 :page-size="row_pages.perpage"
                                 layout="total, sizes, prev, pager, next, jumper"
                                 :total="row_pages.total">

@@ -16,13 +16,16 @@ class IntProc(BaseFieldProc):
                 }
 
     def dict_field_head(self, head): 
-        options = self.get_options()   
+        options = self.get_options() 
+        valid_rules = [validator.get_validate_str()  for validator in self.field.validators if hasattr( validator,'get_validate_str') ]
         if options:
             head['options']=options
             head['editor'] = 'com-field-select'
         else:
             head['editor'] = 'com-field-number'
-            head['fv_rule'] = 'integer'
+            valid_rules.append('integer')
+            head['fv_rule'] = ';'.join(valid_rules)
+            
         return head
     
     def filter_get_head(self, name, model):
