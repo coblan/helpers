@@ -13,7 +13,7 @@ class ELKHander(logging.Handler):
     pswd=''
     index=''
     def __init__(self):
-        self.es = Elasticsearch(self.host,http_auth=(self.user,self.pswd ),timeout=30)
+        self.es = Elasticsearch(self.host,http_auth=(self.user,self.pswd ),timeout=100,max_retries=3)
         self.make_index()
         self.hostName = socket.gethostname()
         super().__init__()
