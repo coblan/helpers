@@ -13,7 +13,7 @@ class ELKHander(logging.Handler):
     pswd=''
     index=''
     def __init__(self):
-        self.es = Elasticsearch(self.host,http_auth=(self.user,self.pswd ),)
+        self.es = Elasticsearch(self.host,http_auth=(self.user,self.pswd ),timeout=30)
         self.make_index()
         self.hostName = socket.gethostname()
         super().__init__()
@@ -45,7 +45,7 @@ class ELKHander(logging.Handler):
             'message': msg
         }
         try:
-            res = self.es.index(self.index, doc_type='_doc', body = dc,request_timeout=30)
+            res = self.es.index(self.index, doc_type='_doc', body = dc,request_timeout=10)
         except Exception as e:
             general_log.error('请求ELK出现了问题msg=%(msg)s,Exception= %(except)s' % {'msg':msg,'except':str(e)})
 
