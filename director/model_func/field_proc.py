@@ -104,7 +104,10 @@ class BaseFieldProc(object):
         elif value is None:
             return {'%s__isnull'%name:True}
         elif isinstance(value,(list,tuple)):
-            return {'%s__in'%name:value}
+            if value:  # 如果是空数组，就表示不过滤
+                return {'%s__in'%name:value}
+            else:
+                return {}
         else:
             return {name:value}
 
