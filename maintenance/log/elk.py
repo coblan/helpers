@@ -18,7 +18,13 @@ class ELKHander(logging.Handler):
         self.hostName = socket.gethostname()
         super().__init__()
         #print('elk-log1')
-        
+    
+    def clean_hostname(self,msg):
+        return {
+            'msg':'msg',
+            'host':self.hostName
+        }
+    
     def make_index(self):
         _index_mappings = {
             "mappings": {
@@ -35,14 +41,16 @@ class ELKHander(logging.Handler):
     
     def emit(self, record): 
         msg =   record.getMessage()
+        dc = self.clean_hostname(msg)
+        
         if record.levelname == 'ERROR':
             if record.exc_text:
                 msg += '\n' + record.exc_text
         dc = {
             '@timestamp': datetime.datetime.utcnow(),
             'level': record.levelname,
-            'host': self.hostName,
-            'message': msg
+            'host': dc.get('host') , #self.hostName,
+            'message': dc.get('msg'), #msg
         }
         try:
             res = self.es.index(self.index, doc_type='_doc', body = dc,request_timeout=100)
