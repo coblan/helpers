@@ -42,15 +42,16 @@ class ELKHander(logging.Handler):
     def emit(self, record): 
         msg =   record.getMessage()
         dc = self.clean_hostname(msg)
-        
+        msg =  dc.get('msg')
+        hostname = dc.get('hostname')
         if record.levelname == 'ERROR':
             if record.exc_text:
                 msg += '\n' + record.exc_text
         dc = {
             '@timestamp': datetime.datetime.utcnow(),
             'level': record.levelname,
-            'host': dc.get('host') , #self.hostName,
-            'message': dc.get('msg'), #msg
+            'host': hostname , #self.hostName,
+            'message': msg, #msg
         }
         try:
             res = self.es.index(self.index, doc_type='_doc', body = dc,request_timeout=100)
