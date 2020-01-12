@@ -21,7 +21,7 @@ class ELKHander(logging.Handler):
     
     def clean_hostname(self,msg):
         return {
-            'msg':'msg',
+            'msg':msg,
             'host':self.hostName
         }
     
