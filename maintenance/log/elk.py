@@ -22,7 +22,7 @@ class ELKHander(logging.Handler):
     def clean_hostname(self,msg):
         return {
             'msg':msg,
-            'host':self.hostName
+            'hostname':self.hostName
         }
     
     def make_index(self):
