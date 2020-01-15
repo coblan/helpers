@@ -126,7 +126,11 @@ def director_view(request,director_name):
     try:
         if inspect.isfunction(directorEnt):
             wraped_directorEnt = transactionall(directorEnt)
-            rt = wraped_directorEnt(**kws)
+            try:
+                rt = wraped_directorEnt(**kws)
+            except TypeError as e:
+                # 如果调用函数少了参数，就会报这个异常
+                raise UserWarning(str(e))
         else:
             # directorEnt is class
             obj = directorEnt(**kws)
