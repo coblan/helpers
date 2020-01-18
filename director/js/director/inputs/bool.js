@@ -4,6 +4,11 @@ var field_bool={
 	        <input type="checkbox" :id="'id_'+head.name" v-model='row[head.name]' :name="head.name" :disabled="head.readonly">
 			 <label :for="'id_'+head.name"><span v-text='head.check_label'></span></label>
 					  </div>`,
+    mounted(){
+        if(this.head.css){
+            ex.append_css(this.head.css)
+        }
+    },
         computed:{
             my_label:function(){
                 if(this.head.check_label){
