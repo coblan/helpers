@@ -84,8 +84,10 @@ class ModelFields(forms.ModelForm):
             self.crt_user = crt_user
             
         # if pk is None:
-        if dc.get('pk') != None:
+        if dc.get('pk') != None and dc.get('id') != '':
             pk=dc.get('pk')
+        elif dc.get('id') !=None and dc.get('id') != '':
+            pk = dc.get('id')
         form_kw={}
         if 'instance' not in kw:
             if pk=='-1':  # -1 表示 最后一个记录 （一般用不到）
