@@ -4,6 +4,7 @@ from django.db import models
 from helpers.director.shortcut import field_map
 from helpers.director.model_func.field_proc import BaseFieldProc
 import re
+from django.utils import timezone
 
 class PictureField(models.CharField):
     pass
@@ -27,8 +28,8 @@ class PictureProc(BaseFieldProc):
     
     def dict_field_head(self,head):
         head['editor']='com-field-picture'
-        head['up_url']='/d/upload?path=general_upload/images'
-        
+        #head['up_url']='/d/upload?path=general_upload/images'
+        head['up_url']='/d/upload?path=general_upload/%s'%timezone.now().strftime('%Y%m')
         #head['config']={
             #'up_url':'/d/upload?path=public/images'
         #}
