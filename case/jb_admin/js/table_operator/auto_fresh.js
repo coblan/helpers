@@ -22,9 +22,7 @@ var op_a = {
              if(this.interval_index){
                 clearTimeout(this.interval_index)
             }
-
             if(v){
-
                 this.auto_refresh=()=>{
                     this.interval_index = setTimeout(()=>{
                         Promise.resolve().then(()=>{
@@ -34,7 +32,6 @@ var op_a = {
                         })
                     },v)
                 }
-
                 this.auto_refresh()
             }
             //if(this.interval_index){
