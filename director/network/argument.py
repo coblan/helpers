@@ -17,11 +17,11 @@ def get_argument(request,outtype='obj'):
     """
     
     if request.method=='POST':
-        if request.body :#and re.match('{.+}|\[.+\]',request.body.decode('utf-8')):
+        if request.body and request.body.strip().decode('utf-8').startswith(('{','[')):
             try:
                 dc=json.loads(request.body.decode('utf-8'))
             except Exception as e:
-                dc = request.POST.dict()
+                raise UserWarning(str(e) )
         else:
             dc = request.POST.dict()
         #else:

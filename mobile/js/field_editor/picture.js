@@ -11,7 +11,9 @@ export var com_picture = {
                <div class="picture-content" v-else
                :style="{backgroundImage:'url('+ row[head.name]  +')'}"
                @click="big_win(row[head.name])">
-                    <div v-if="!head.readonly" class="close" @click.stop='remove_image()'><i class="fa fa-times-circle" aria-hidden="true" style="color:red;position:relative;left:30px;"></i></div>
+                    <div v-if="!head.readonly" class="close" @click.stop='remove_image()'>
+                        <i class="fa fa-times-circle" aria-hidden="true" style="color:red;position:relative;left:30px;"></i>
+                    </div>
                </div>
 
             </div>
