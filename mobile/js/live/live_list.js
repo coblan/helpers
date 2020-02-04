@@ -1,5 +1,9 @@
 require('./styl/live_list.styl')
-
+/*
+* 类似于 pc的table组件
+* 具备滚动加载功能
+*
+* */
 var live_list={
     props:['ctx'],
     basename:'live-list',

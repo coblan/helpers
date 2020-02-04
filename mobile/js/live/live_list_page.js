@@ -2,7 +2,7 @@ require('./styl/live_list_page.styl')
 
 var live_list_page ={
     /*
-    *  与live_list 获取数据一致，但是具备上一页，下一页，以及 总数功能
+    *  与live_list 获取数据一致，但是具备上一页，下一页，以及 总数功能，不具备滚动加载
     *
     * */
     props:['ctx'],
