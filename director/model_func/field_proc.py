@@ -116,6 +116,22 @@ class BaseFieldProc(object):
         if q_str == '':
             return None
         return q_str
+    
+    def filter_inject_sql(self,name,filter_args):    
+        if filter_args.get(name) != None and filter_args.get(name) != '':
+            '''未完工，需要测试compare 组件功能'''
+            compare_name = '_%s_compare'%name
+            if compare_name in filter_args:
+                cv = str( filter_args.get(compare_name) )
+                if cv == '0':
+                    return  '%s = %s'%(name,filter_args.get(name) )
+                elif cv == '1':
+                    return '%s >= %s'%(name,filter_args.get(name) )
+                elif cv == '-1':
+                    return '%s <= %s'%(name,filter_args.get(name) )
+            return '%s = %s'%(name,filter_args.get(name) )
+        else:
+            return ''
 
 
 def model_to_name(model):
