@@ -283,7 +283,7 @@ var img_uploader={
                     <i class="fa fa-edit" aria-hidden="true" style="color:black;position:relative;left:30px;top:30px"></i>
                 </div>
 
-                <img :src="url" alt="" class="logoImg">
+                <img :src="url" @click="open_img(url)" alt="" class="logoImg">
             </div>
              <div class="close" v-if="cfg.can_input" @click="do_input()">
                 <i class="fa fa-edit" aria-hidden="true" style="color:black;position:relative;left:30px;top:30px"></i>
@@ -433,6 +433,16 @@ var img_uploader={
             }
 
             console.log('after select')
+        },
+        open_img(url){
+            var ctx = {imgsrc:url }
+            pop_layer(ctx,'com-pop-image',function(){},{
+                title:false,
+                area: ['90%', '90%'],
+                shade: 0.8,
+                skin: 'img-shower',
+                shadeClose: true,
+            })
         }
     }
 }
