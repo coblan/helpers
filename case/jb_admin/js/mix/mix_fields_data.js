@@ -192,6 +192,9 @@ var mix_fields_data ={
                 //ex.post('/d/ajax',JSON.stringify(post_data), (resp) =>{
                 ex.director_call('d.save_row',{row:this.row}).then( (resp) =>{
                     cfg.hide_load()
+                    delete self.row.meta_overlap_fields
+                    delete self.row.meta_change_fields
+
                     var rt = resp //resp.save_row
                     if(rt.errors){
                         //cfg.hide_load()

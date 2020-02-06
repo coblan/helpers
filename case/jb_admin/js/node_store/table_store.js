@@ -278,14 +278,24 @@ var table_store={
                     }
                 }).then(function(){
                     //  弹出编辑框/ 或者不弹出
+                        var first_sel_row = self.selected[0]
                         var one_row={}
                         if(kws.field){ // 兼容老的，新的采用eval形式，
                             one_row[kws.field]=kws.value
-                            one_row.meta_overlap_fields =kws.field
+                            //if(! first_sel_row.meta_overlap_fields){
+                            //    one_row.meta_overlap_fields =kws.field
+                            //}else{
+                            //    one_row.meta_overlap_fields= first_sel_row.meta_overlap_fields
+                            //}
+
                         }else if(kws.pre_set){
                             var dc = ex.eval(kws.pre_set)
                             ex.assign(one_row,dc)
-                            one_row.meta_overlap_fields = Object.keys(dc).join(',')
+                            //if(! first_sel_row.meta_overlap_fields){
+                            //    one_row.meta_overlap_fields = Object.keys(dc).join(',')
+                            //}else{
+                            //    one_row.meta_overlap_fields= first_sel_row.meta_overlap_fields
+                            //}
                         }
 
                         if(kws.fields_ctx){
@@ -319,6 +329,10 @@ var table_store={
                 //ex.post('/d/ajax',JSON.stringify(post_data),function(resp){
                 ex.director_call('d.save_rows',{rows:cache_rows}).then((resp)=>{
                     cfg.hide_load()
+                    ex.each(self.selected,(row)=>{
+                        delete  row.meta_overlap_fields
+                        delete row.meta_change_fields
+                    })
                     if(resp._outdate){
                         layer.confirm(resp._outdate, {
                             icon:3,
@@ -331,6 +345,7 @@ var table_store={
                             layer.close(index)
                             self.search()
                         }, function(index){
+                            debugger
                             layer.close(index)
                             ex.each(self.selected,row=>{
                                 row.meta_overlap_fields='__all__'
@@ -389,6 +404,7 @@ var table_store={
                             layer.close(index)
                             self.search()
                         }, function (index) {
+                            debugger
                             layer.close(index)
                             ex.each(rows, row=> {
                                 row.meta_overlap_fields = '__all__'
