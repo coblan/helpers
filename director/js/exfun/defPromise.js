@@ -48,7 +48,7 @@ export default  class DefPromise {
         this.has_then =true
         return this.promise.then(resolve_handler)
     }
-    resove(resp){
+    resolve(resp){
         this.cache_resolve(resp)
     }
 }
