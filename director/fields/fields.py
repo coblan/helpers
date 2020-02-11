@@ -166,11 +166,15 @@ class ModelFields(forms.ModelForm):
         """
         数据过期检查
            overlaped_fields  用于排除掉不需要检查的字段。
-           meta_change_fields   用于设定只检查哪些字段
+           meta_key_fields   用于设定只检查哪些字段
+           
+           meta_change_fields 在__init__函数中，不在meta_change_fields中的字段会被还原，只剩下变化的，所以这里不需要检测了。
            
         """
         super().clean()
         overlaped_fields = []
+        if self.kw.get('meta_change_fields'): 
+            return 
         if self.kw.get('meta_overlap_fields'):
             if self.kw.get('meta_overlap_fields') =='__all__':
                 # 表示覆盖所有字段，意味着不再做过期检查
@@ -183,18 +187,20 @@ class ModelFields(forms.ModelForm):
             #fields_name =  self.kw.get('meta_hash_fields').split(',') 
             #crt_mark_dc = make_mark_dict(self.instance.__dict__,fields_name)
             crt_mark_dc= self.get_org_dict()
-            #ls = self.permit.changeable_fields()
-            #ls = [x for x in ls if x in self.fields.keys()]
-            #ls =[x for x in ls if x not in self.readonly]
-            #ls = [x for x in ls if x not in self.overlap_fields]
-            if self.kw.get('meta_change_fields'):
-                meta_change_fields = self.kw.get('meta_change_fields').split(',')
-                dif_dc = dif_mark_dict(crt_mark_dc,self.kw.get('meta_org_dict'),include= meta_change_fields)
+
+            if self.kw.get('meta_key_fields'):
+                meta_key_fields = self.kw.get('meta_key_fields').split(',')
+                dif_dc = dif_mark_dict(crt_mark_dc,self.kw.get('meta_org_dict'),include= meta_key_fields)
             else:
                 dif_dc = dif_mark_dict(crt_mark_dc, self.kw.get('meta_org_dict'),exclude= overlaped_fields)
             
             if dif_dc:
-                keys = [self.fields.get(key).label for key in dif_dc.keys()]
+                keys =[]
+                for key in dif_dc.keys():
+                    fld =self.fields.get(key)
+                    if fld:
+                        keys.append(fld.label)
+                #keys = [self.fields.get(key).label for key in dif_dc.keys() ]
                 raise OutDateException('(%s)的%s已经发生了变化,请确认后再进行操作!'%(self.instance,keys) )
     
     def get_org_dict(self,row=None):

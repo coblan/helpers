@@ -8,6 +8,7 @@ import * as live_layout from './live_layout.js'
 import * as live_swip_tab from './live_swip_tab.js'
 
 import  live_login from './live_login.vue'
-
+import  live_cell from './live_cell.vue'
 window.live_login = live_login
+window.live_cell = live_cell
 //Vue.component('com-live-login',live_login)

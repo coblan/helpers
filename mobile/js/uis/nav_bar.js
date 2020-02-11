@@ -3,6 +3,7 @@ Vue.component('com-uis-nav-bar',{
     props:{
         title:'',
         back:'',
+        back_action:'',
         ops:{default:()=>{return []}}},
     template:`<div class="com-uis-many-ops">
  <!--@click-right="onClickRight"-->
@@ -33,8 +34,8 @@ Vue.component('com-uis-nav-bar',{
     },
     computed:{
         can_back(){
-            if(this.back){
-                return this.back
+            if(this.back_action){
+                return true
             }else{
                 return  this.$root.stack.length >1
             }
@@ -58,7 +59,11 @@ Vue.component('com-uis-nav-bar',{
     },
     methods:{
         onClickLeft(){
-            history.back()
+            if(this.back_action){
+                ex.eval(this.back_action)
+            }else{
+                history.back()
+            }
         },
         on_click(op){
             ex.eval(op.action,{ps:this.parStore,head:op})
