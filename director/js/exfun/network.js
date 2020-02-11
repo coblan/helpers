@@ -152,16 +152,22 @@ export var network ={
         }
     },
     load_js_list:function(js_list,success){
-        var length = js_list.length
-        ex.each(js_list,function(js){
-            ex.load_js(js,function(){
-                length -=1
-                if(length ==0){
-                    success()
-                }
-            })
+        return new Promise( (resolve,reject)=>{
+            var length = js_list.length
+            ex.each(js_list,function(js){
+                ex.load_js(js,function(){
+                    length -=1
+                    if(length ==0){
+                        if(success){
+                            success()
+                        }
+                        resolve()
+                    }
+                })
 
+            })
         })
+
     },
     load_css:function (src) {
         var name = btoa(src)
