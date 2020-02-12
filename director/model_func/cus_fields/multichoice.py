@@ -1,4 +1,4 @@
-from django.db.models import CharField
+from django.db.models import CharField,TextField
 from .. field_procs.charproc import CharProc
 from .. .base_data import field_map
 from helpers.director.shortcut import request_cache
@@ -13,14 +13,37 @@ class MultiChoiceField(CharField):
         self.full_choice = kwargs.pop('full_choice',None)
         super().__init__(*args,**kwargs)
 
+class MultiChoiceTextField(TextField):
+    """
+    多选字段，选项由 choices传入，与django的普通字段一致.
+    """
+    def __init__(self, *args, **kwargs):
+        choices = kwargs.pop('choices',[])
+        if callable(choices):
+            self.my_choices = choices()
+        else:
+            self.my_choices = choices
+        self.seperator = kwargs.pop('seperator',';')
+        self.full_choice = kwargs.pop('full_choice',None)
+        super().__init__(*args,**kwargs)
+
+
 class MultiChoiceProc(CharProc):
     def to_dict(self, inst, name):
         seperator = self.field.seperator
         value = getattr(inst,name)
+        if not value:
+            return {name:[]}
+        
         if self.field.full_choice and value == self.field.full_choice:
             ls = [x[0] for x in self.field.my_choices]
         else:
             ls = [x for x in value.split(seperator) if x!=''] 
+        try:
+            ls = [ int(x) for x in ls]
+        except ValueError:
+            pass
+        
         return { name :ls}
     
     def clean_field(self, dc, name):
@@ -61,3 +84,4 @@ class MultiChoiceProc(CharProc):
     
     
 field_map[MultiChoiceField]=MultiChoiceProc
+field_map[MultiChoiceTextField]=MultiChoiceProc

@@ -55,11 +55,11 @@ var mix_fields_data ={
             var self=this
             ex.each(self.heads,function(head){
                 if( head._org_readonly){
-                    var is_readonly = ex.eval(head._org_readonly,{row:self.row})
+                    var is_readonly = ex.eval(head._org_readonly,{row:self.row,head:head})
                     Vue.set(head,'readonly',is_readonly)
                 }
                 if( head._org_required){
-                    head.required=ex.eval(head._org_required,{row:self.row})
+                    head.required=ex.eval(head._org_required,{row:self.row,head:head})
                 }
             })
 
@@ -68,7 +68,7 @@ var mix_fields_data ={
                 if (head.sublevel){
                     return false
                 }else if(head.show){
-                    return ex.eval(head.show,{row:self.row})
+                    return ex.eval(head.show,{row:self.row,head:head})
                 }else{
                     return true
                 }
