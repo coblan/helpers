@@ -13,17 +13,26 @@ var sim_select= {
 
         this.head.placeholder = this.head.placeholder || '请选择'
 
+        if(this.row[this.head.name] || this.row[this.head.name] ==0){
+            var novalue = undefined
+        }else {
+            var novalue = this.row[this.head.name]
+        }
+
         return {
             model: this.row[this.head.name],
             cfg: inn_config,
-            parStore:ex.vueParStore(this)
+            parStore:ex.vueParStore(this),
+            novalue:novalue,
         }
     },
     template: `<div class="com-field-select">
             <span v-if='head.readonly' v-text='get_label(head.options,row[head.name])'></span>
             <select v-else v-model='row[head.name]'  :id="'id_'+head.name" :name="head.name"  :class="['form-control input-sm',{ novalue: ! is_select}] ">
-                <option v-if="head.required"  :value="undefined" disabled selected style='display:none;' class="placeholder" v-text="head.placeholder"></option>
-            	<option v-else  :value="undefined" selected style="color: #b8b8b8" class="placeholder" v-text="head.placeholder"></option>
+                <!--<option v-if="head.required"  :value="undefined" disabled selected style='display:none;' class="placeholder" v-text="head.placeholder"></option>-->
+                <!--<option v-else  :value="undefined" selected style="color: #b8b8b8" class="placeholder" v-text="head.placeholder"></option>-->
+                <option v-if="head.required"  :value="novalue" disabled selected style='display:none;color: #b8b8b8' class="placeholder" v-text="head.placeholder"></option>
+            	<option v-else   :value="novalue" selected style="color: #b8b8b8" class="placeholder" v-text="head.placeholder"></option>
 
             	<option v-for='opt in normed_options' :value='opt.value' v-text='opt.label'></option>
             </select>
@@ -61,7 +70,7 @@ var sim_select= {
         },
         is_select:function(){
             var v = this.row[this.head.name]
-            return v !== undefined
+            return v !== this.novalue
         },
         place_value:function(){
             var v = this.row[this.head.name]
