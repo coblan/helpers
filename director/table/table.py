@@ -695,7 +695,7 @@ class ModelTable(object):
                         #'after_save':'scope.vc.par_row.car_no =scope.row.car_no; scope.vc.par_row.has_washed=scope.row.has_washed ',
                         #'init_express':'cfg.show_load(),ex.director_call(scope.vc.ctx.director_name,{pk:scope.vc.par_row.pk}).then((res)=>{cfg.hide_load();ex.vueAssign(scope.row,res.row)})',
                         'init_express':'ex.vueAssign(scope.row,scope.vc.par_row)',
-                        'after_save':'ex.vueAssign( scope.vc.par_row,scope.row)',
+                        #'after_save':'ex.vueAssign( scope.vc.par_row,scope.row)',
                         'ops_loc':'bottom'
                     })
                     head['action'] = 'scope.head.fields_ctx.title=scope.row._label;scope.head.fields_ctx.par_row=scope.row;cfg.pop_vue_com("com-form-one",scope.head.fields_ctx)'

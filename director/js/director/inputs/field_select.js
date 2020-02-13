@@ -13,17 +13,19 @@ var sim_select= {
 
         this.head.placeholder = this.head.placeholder || '请选择'
 
-        if(this.row[this.head.name] || this.row[this.head.name] ==0){
-            var novalue = undefined
-        }else {
-            var novalue = this.row[this.head.name]
-        }
+
+
+        //if(this.row[this.head.name] || this.row[this.head.name] ==0){
+        //    var novalue = undefined
+        //}else {
+        //    var novalue = this.row[this.head.name]
+        //}
 
         return {
             model: this.row[this.head.name],
             cfg: inn_config,
             parStore:ex.vueParStore(this),
-            novalue:novalue,
+            //novalue:novalue,
         }
     },
     template: `<div class="com-field-select">
@@ -65,6 +67,16 @@ var sim_select= {
     },
 
     computed:{
+        novalue(){
+            if(this.row[this.head.name] ==0){
+                var novalue = undefined
+            }else if(! this.row[this.head.name]){
+                var novalue = this.row[this.head.name]
+            }else{
+                var novalue = undefined
+            }
+            return novalue
+        },
         my_value:function(){
             return this.row[this.head.name]
         },

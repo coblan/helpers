@@ -251,11 +251,15 @@ var mix_fields_data ={
             //ex.assign(this.row,new_row)
             //TODO 配合 table_pop_fields ，tab-fields 统一处理 after_save的问题
             if(this.par_row){
-                if(this.par_row._director_name == new_row._director_name && this.par_row.pk == new_row.pk){
-                    ex.vueAssign(this.par_row,new_row)
+                if(this.par_row._director_name == new_row._director_name){
+                    if(this.par_row.pk == new_row.pk){
+                        ex.vueAssign(this.par_row,new_row)
+                    }else if(!this.par_row.pk){
+                        ex.vueAssign(this.par_row,new_row)
+                        this.parStore.update_or_insert(this.par_row)
+                    }
                 }
             }
-
         },
         showErrors:function(errors){
             // 落到 nice validator去

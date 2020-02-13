@@ -57,10 +57,10 @@ class MultiChoiceProc(CharProc):
             whole_values = [x[0] for x in self.field.my_choices]
             for x in whole_values:
                 if not x in myvalue:
-                    return seperator.join( myvalue)
+                    return seperator.join( [str(x) for x in myvalue])
             return self.field.full_choice
         else:
-            return  seperator.join( myvalue)
+            return  seperator.join( [str(x) for x in myvalue])
     
     def dict_table_head(self, head):
         head['editor']='com-table-array-mapper'
