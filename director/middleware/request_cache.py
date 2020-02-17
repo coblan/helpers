@@ -7,9 +7,19 @@ from functools import wraps
 _request_cache = {}
 _installed_middleware = False
 
+class NoRequest(object):
+    def __init__(self, *args, **kwargs):
+        self.user = None
+
 def get_request_cache():
-    assert _installed_middleware, 'GlobalCacheMiddleware not loaded'
-    return _request_cache[currentThread()]
+    if _installed_middleware:
+        assert _installed_middleware, 'GlobalCacheMiddleware not loaded'
+        return _request_cache[currentThread()]
+    else:
+        no_request =NoRequest()
+        return {
+            'request':no_request
+        }
 
 def request_cache(fun): 
     @wraps(fun)

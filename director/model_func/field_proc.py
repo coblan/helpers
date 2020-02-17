@@ -16,8 +16,8 @@ class BaseFieldProc(object):
         self.field=field
         if not self.field and self.model and name:
             self.field = self.model._meta.get_field(name)
-        catch = get_request_cache()
-        self.request = catch.get('request')
+            
+        self.request = get_request_cache().get('request')
         self.crt_user= self.request.user
         
     def to_dict(self,inst,name):
