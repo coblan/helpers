@@ -95,6 +95,7 @@ var ckeditor = {
 		maxlength:{},
 	},
 	created:function(){
+		debugger;
 		//var self=this
 		//eventBus.$on('sync_data',function(){
 		//	self.$emit('input',self.editor.getData())
