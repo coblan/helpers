@@ -136,7 +136,6 @@ Vue.component('com-field-picture',function(resolve,reject){
                 const h = img.height;
                var span =  Math.max(w,h)
                 if(option.maxspan > span){
-                    alert(span )
                     resolve(file)
                     return
                 }
