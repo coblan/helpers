@@ -4,6 +4,11 @@ class ModelFieldsMobile(ModelFields):
     
     #'init_express':'ex.director_call("%(director_name)s",{}).then((resp)=>{ex.vueAssign(scope.row,resp.row)})'%{'director_name':self.get_director_name()}
     
+    def dict_head(self, head):
+        if head['editor'] =='com-field-picture':
+            head['maxspan'] = 1200
+        return head
+    
     def get_operations(self):
         if self.permit.changeable_fields():
             return [

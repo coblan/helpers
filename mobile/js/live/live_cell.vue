@@ -14,6 +14,13 @@
 
 </template>
 <script>
+/*
+*  --------------------
+*  text            >
+* --------------------
+*
+* 这个样子的页面
+* */
     export default {
         props:['ctx'],
         basename:'live-cell',

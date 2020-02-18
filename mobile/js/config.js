@@ -115,6 +115,13 @@ ex.assign(cfg,{
     },
     toast_success(msg){
         vant.Toast.success(msg)
+    },
+    open_image(imgsrc){
+        vant.ImagePreview({
+                images:[imgsrc],
+                startPosition: 0,
+            }
+        );
     }
 })
 
