@@ -442,7 +442,7 @@ eval("exports = module.exports = __webpack_require__(/*! ../../../../../../../..
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("exports = module.exports = __webpack_require__(/*! ../../../../../../../../../coblan/webcode/node_modules/css-loader/lib/css-base.js */ \"../../../../../../../coblan/webcode/node_modules/css-loader/lib/css-base.js\")();\n// imports\n\n\n// module\nexports.push([module.i, \".com-live-layout {\\n  background-color: #f9f9f9;\\n  height: var(--app-height);\\n}\\n\", \"\"]);\n\n// exports\n\n\n//# sourceURL=webpack:///./live/styl/live_layout.styl?D:/coblan/webcode/node_modules/css-loader!D:/coblan/webcode/node_modules/stylus-loader");
+eval("exports = module.exports = __webpack_require__(/*! ../../../../../../../../../coblan/webcode/node_modules/css-loader/lib/css-base.js */ \"../../../../../../../coblan/webcode/node_modules/css-loader/lib/css-base.js\")();\n// imports\n\n\n// module\nexports.push([module.i, \".com-live-layout {\\n  background-color: #f9f9f9;\\n  height: var(--app-height);\\n  overflow: auto;\\n}\\n\", \"\"]);\n\n// exports\n\n\n//# sourceURL=webpack:///./live/styl/live_layout.styl?D:/coblan/webcode/node_modules/css-loader!D:/coblan/webcode/node_modules/stylus-loader");
 
 /***/ }),
 
