@@ -163,6 +163,22 @@
                 },
                 back(){
                     // IOS history.back 时 ，会调用到 这个back(不知道原因)，防止页面结构被破坏.
+                    if(this.last_back_time){
+                        var now = Date.now()
+                        var span = now - this.last_back_time
+                        if(span < 500){
+                            console.log('等待')
+                            setTimeout(this.back,span+100)
+                            return
+                        }else{
+
+                            this.last_back_time = now
+                        }
+                    }else{
+                        this.last_back_time =Date.now()
+                    }
+
+
                     if(this.stack.length <=1){
                         return
                     }
@@ -228,18 +244,18 @@
                     window.location.href= url;
                 },
                 onAfterLeave(el){
-                    var self =this
-                    setTimeout(()=>{
-                        var com = self.stack2.pop()
-                        if(com){
-                            Vue.delete(self.$options.components,com)
-                        }
-                    },500)
+//                    var self =this
+//                    setTimeout(()=>{
+//                        var com = self.stack2.pop()
+//                        if(com){
+//                            Vue.delete(self.$options.components,com)
+//                        }
+//                    },500)
 
-//                    ex.each(this.stack2,(com)=>{
-//                        Vue.delete(this.$options.components,com)
-//                    })
-//                    this.stack2=[]
+                    ex.each(this.stack2,(com)=>{
+                        Vue.delete(this.$options.components,com)
+                    })
+                    this.stack2=[]
                 }
 
             }
