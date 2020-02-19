@@ -228,10 +228,15 @@
                     window.location.href= url;
                 },
                 onAfterLeave(el){
-                    ex.each(this.stack2,(com)=>{
-                        Vue.delete(this.$options.components,com)
-                    })
-                    this.stack2=[]
+                    var self =this
+                    var com = self.stack2.pop()
+                    if(com){
+                        Vue.delete(self.$options.components,com)
+                    }
+//                    ex.each(this.stack2,(com)=>{
+//                        Vue.delete(this.$options.components,com)
+//                    })
+//                    this.stack2=[]
                 }
 
             }
