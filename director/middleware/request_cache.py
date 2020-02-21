@@ -9,8 +9,8 @@ _installed_middleware = False
 
 class NoUser(object):
     def __init__(self, *args, **kwargs):
-        username='no_user'
-        is_authenticated = False
+        self.username='systemcall'
+        self.is_authenticated = False
 
 class NoRequest(object):
     def __init__(self, *args, **kwargs):
