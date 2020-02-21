@@ -26,12 +26,18 @@ export var com_picture = {
                @click="big_win(row[head.name])">
            </div>
 
+        <div class="right-awser" v-if="head.help_text" @click="show_msg(head.help_text)">
+            <van-icon  name="question-o" />
+        </div>
     </van-cell>`,
     data(){
         return {
         }
     },
     methods:{
+        show_msg(msg){
+            cfg.showMsg(msg)
+        },
         on_change(event){
             //let new_selected_files = event.target.files
             var self =this
@@ -130,7 +136,6 @@ Vue.component('com-field-picture',function(resolve,reject){
                 const h = img.height;
                var span =  Math.max(w,h)
                 if(option.maxspan > span){
-                    alert(span )
                     resolve(file)
                     return
                 }

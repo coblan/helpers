@@ -70,8 +70,8 @@ class ModelTableMobile(ModelTable):
             named_ctx[editor_director] = form_ctx
 
         ctx.update( {
-            'table_editor':'com-ctn-table-van-cell',
-            'block_click':'var dynctx =named_ctx[%(edit_form)s];dynctx.table_par=scope.ps;dynctx.row=scope.row;dynctx.title=dynctx.row._label;live_root.open_live("live_fields",dynctx)'%{'edit_form':editor_director},
+            'table_editor': 'com-list-row-cell',#'com-ctn-table-van-cell',
+            'block_click':'var dynctx =named_ctx["%(edit_form)s"];dynctx.table_par=scope.ps;dynctx.row=scope.row;dynctx.title=dynctx.row._label;live_root.open_live("live_fields",dynctx)'%{'edit_form':editor_director},
         }) 
         return ctx
 
