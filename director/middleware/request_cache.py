@@ -7,9 +7,14 @@ from functools import wraps
 _request_cache = {}
 _installed_middleware = False
 
+class NoUser(object):
+    def __init__(self, *args, **kwargs):
+        username='no_user'
+        is_authenticated = False
+
 class NoRequest(object):
     def __init__(self, *args, **kwargs):
-        self.user = None
+        self.user = NoUser()
 
 def get_request_cache():
     if _installed_middleware:
