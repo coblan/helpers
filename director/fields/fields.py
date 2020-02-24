@@ -160,7 +160,7 @@ class ModelFields(forms.ModelForm):
         # 有事直接利用table的rows，而table进行了一定的修改显示，这些字段都是readonly的，所以要过滤掉这些字段，否则会造成严重后果。
         #self.changed_data = [x for x in self.changed_data if x not in self.readonly]
         # 保留下instance的原始值,用于记录日志 
-        self.before_changed_data = sim_dict(self.instance, include= self.changed_data)
+        self.before_changed_data = {k:v for k,v in simdc.items() if k in self.changed_data} # sim_dict(self.instance, include= self.changed_data)
         #self.org_db_dict = mark_dict(self.instance.__dict__,keys= self.fields.keys())
         
     
