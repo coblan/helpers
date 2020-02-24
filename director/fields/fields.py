@@ -119,15 +119,17 @@ class ModelFields(forms.ModelForm):
         if dc.get('meta_change_fields'):
             meta_change_fields = dc.get('meta_change_fields').split(',')
         
+        simdc = sim_dict(inst)
         for k in dict(dc):
             if k in self.readonly or (meta_change_fields and k not in meta_change_fields ):
-                if hasattr(inst, "%s_id" % k):  # 如果是ForeignKey，必须要pk值才能通过 form验证
-                    fieldcls = inst.__class__._meta.get_field(k)
-                    if isinstance(fieldcls, models.ForeignKey):
-                        dc[k] = getattr(inst, "%s_id" % k)
-                        continue
-                if hasattr(inst,k):
-                    dc[k] =  getattr(inst , k)  
+                dc[k] = simdc.get(k)
+                #if hasattr(inst, "%s_id" % k):  # 如果是ForeignKey，必须要pk值才能通过 form验证
+                    #fieldcls = inst.__class__._meta.get_field(k)
+                    #if isinstance(fieldcls, models.ForeignKey):
+                        #dc[k] = getattr(inst, "%s_id" % k)
+                        #continue
+                #if hasattr(inst,k):
+                    #dc[k] =  getattr(inst , k)  
             
         # 强制保存字段，不验证是否改变,并且其他字段都不能改变
         #if dc.get('meta_change_fields'):
