@@ -6,7 +6,7 @@ export var com_picture = {
         <template v-if="!head.readonly">
              <textarea style="display: none;" :name="head.name" id="" cols="30" rows="10" v-model="row[head.name]"></textarea>
             <div class="picture-panel" style="vertical-align: top" >
-              <div v-if="!row[head.name]" class="center-vh choose-btn" @click="open_select_images()" v-text="head.placeholder || 'Choose'"></div>
+              <div v-if="!row[head.name]" class="center-vh choose-btn" @click="open_select_images()" v-text="head.placeholder || '选 择'"></div>
 
                <div class="picture-content" v-else
                :style="{backgroundImage:'url('+ row[head.name]  +')'}"
