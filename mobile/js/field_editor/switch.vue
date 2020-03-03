@@ -2,10 +2,12 @@
     <div class="com-field-switch">
         <van-cell :title="head.label" >
             <van-switch v-model="checked"  active-color="#07c160" :disabled="head.readonly"/>
+            <div class="field-error-msg" v-if="head.error" v-text="head.error" style="color: red"></div>
         </van-cell>
     </div>
 </template>
 <script>
+    import {mix_validta_msg} from './mix_validate_msg'
     export default{
         props:['row','head'],
         data(){
@@ -22,6 +24,7 @@
                 checked:checked
             }
         },
+        mixins:[mix_validta_msg],
         watch:{
             checked(v){
                 if(this.head.int_bool){
