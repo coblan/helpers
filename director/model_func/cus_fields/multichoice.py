@@ -12,7 +12,7 @@ class MultiChoiceField(CharField):
         self.seperator = kwargs.pop('seperator',';')
         self.full_choice = kwargs.pop('full_choice',None)
         super().__init__(*args,**kwargs)
-
+    
 class MultiChoiceTextField(TextField):
     """
     多选字段，选项由 choices传入，与django的普通字段一致.
@@ -26,7 +26,7 @@ class MultiChoiceTextField(TextField):
         self.seperator = kwargs.pop('seperator',';')
         self.full_choice = kwargs.pop('full_choice',None)
         super().__init__(*args,**kwargs)
-
+        
 
 class MultiChoiceProc(CharProc):
     def to_dict(self, inst, name):

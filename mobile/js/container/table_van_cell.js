@@ -1,5 +1,9 @@
 require('./styl/table_van_cell.styl')
 
+/*
+*
+* 被 ./row_cell.vue 替代了。
+* */
 Vue.component('com-ctn-table-van-cell',{
     props:['heads','rows','option'],
     template:`<div class="com-ctn-table-van-cell">

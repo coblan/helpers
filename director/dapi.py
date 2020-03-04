@@ -66,6 +66,8 @@ def save_rows(rows):
           return {'errors':dict(e),}   
      except OutDateException as e:
           return {'_outdate':str(e)}
+     except PermissionDenied as e :
+          raise UserWarning(str(e))
 
 @director_view('d.get_head_context')
 def get_head_context(director_name):

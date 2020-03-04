@@ -7,6 +7,7 @@ import hashlib
 import io
 from urllib.parse import urljoin
 from django.views.decorators.csrf import csrf_exempt
+from django.utils import timezone
 
 class Ckeditor(object):
     def RecieveView(self,request):
@@ -47,13 +48,14 @@ class Ckeditor(object):
                 return HttpResponse(json.dumps(dc),content_type="application/json")
     
     def getParentPath(self):
-        file_dir= os.path.join(settings.MEDIA_ROOT,'ckeditor')
+        self.path = '%s/%s'%( self.request.GET.get('save_path','ckeditor') , timezone.now().strftime('%Y%m%d'))
+        file_dir= os.path.join(settings.MEDIA_ROOT,self.path)
         if not os.path.exists(file_dir):
             os.makedirs(file_dir)
         return file_dir
     
     def getUrl(self):
-        file_url=urljoin(settings.MEDIA_URL, 'ckeditor/{file_name}'.format(file_name=self.file_name))
+        file_url=urljoin(settings.MEDIA_URL, '{path}/{file_name}'.format(path = self.path,file_name=self.file_name))
         return file_url
         
 

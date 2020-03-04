@@ -115,6 +115,74 @@ ex.assign(cfg,{
     },
     toast_success(msg){
         vant.Toast.success(msg)
+    },
+    open_image(imgsrc){
+        vant.ImagePreview({
+                images:[imgsrc],
+                startPosition: 0,
+            }
+        );
+    },
+    pop_vue_com(editor,ctx,option){
+        return new Promise(function(resolve,reject){
+
+            var pop_id =new Date().getTime()
+            $('body').append(`<div id="pop_${pop_id}">
+            <van-popup v-model="show">
+                <component :is="editor" :ctx="editor_ctx" @finish="on_finish" @closed="on_close"></component>
+            </van-popup>
+            </div>`)
+
+            new Vue({
+                el:'#pop_'+pop_id ,
+                data(){
+                    var childStore = new Vue()
+                    childStore.vc = this
+                    return {
+                        show:true,
+                        editor:editor,
+                        editor_ctx:ctx,
+                        childStore:childStore,
+                    }
+
+                },
+                watch:{
+                    show(nv,ov){
+                        if(ov && !nv){
+                            $('#pop_'+pop_id).remove()
+                        }
+                    }
+                },
+                methods:{
+                    close(){
+                        this.show = false
+                    },
+                    on_finish(e){
+                        this.show=false
+                        resolve(e)
+                    },
+                    on_close(){
+                        alert('hee')
+                        $('#pop_'+pop_id).remove()
+                    }
+                }
+            })
+
+            //var callback = function(e){
+            //    if(e){
+            //        close_fun()
+            //        resolve(e)
+            //    }else{
+            //        close_fun()
+            //        reject(e)
+            //    }
+            //}
+            //ctx.ops_loc = ctx.ops_loc || 'bottom'
+            //var winindex = pop_layer(ctx,editor,callback,option)
+            //var close_fun = function (){
+            //    layer.close(winindex)
+            //}
+        })
     }
 })
 

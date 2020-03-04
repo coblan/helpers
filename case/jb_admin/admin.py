@@ -1,9 +1,7 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
 
 from django.contrib import admin
 from django.contrib.auth.models import Group,User
-from helpers.director.shortcut import TablePage,ModelTable,page_dc,model_dc,ModelFields, director,RowFilter,director_view
+from helpers.director.shortcut import TablePage,ModelTable,page_dc,model_dc,ModelFields, director,RowFilter,director_view,director
 from helpers.director.models import PermitModel 
 import re
 from . import  js_cfg
@@ -248,6 +246,7 @@ class GroupForm(ModelFields):
     
     def clean_save(self):
         self.instance.save()
+        
         if not hasattr(self.instance, 'permitmodel'):
             PermitModel.objects.create(group = self.instance)
         if self.kw.get('permit',None) != None:
@@ -255,16 +254,37 @@ class GroupForm(ModelFields):
                 'permit':self.instance.permitmodel.names
             }
             
-            self.instance.permitmodel.names = ';'.join( self.kw.get('permit') ) 
+            if not getattr(self.__class__,'exposed_permit',None):
+                exposed_permit =[]
+                permit_options = director.get('permit.options')()
+                for item in permit_options:
+                    exposed_permit += list( get_all_permit(item))
+                self.__class__ . exposed_permit = exposed_permit
+            else :
+                exposed_permit = self.__class__ . exposed_permit
+                
+            valid_permit_ls = [x for x in self.kw.get('permit') if x in exposed_permit]
+            self.instance.permitmodel.names = ';'.join( valid_permit_ls ) 
             self.instance.permitmodel.save()
             
             return {
                 'before':before,
                 'after':{
-                    'permit':';'.join( self.kw.get('permit') ) 
+                    'permit':';'.join( valid_permit_ls ) 
                 },
             }
-        
+
+
+def get_all_permit(item):
+    '获取所有暴露出来的permit'
+    if item.get('value'):
+        yield item.get('value')
+    if item.get('children'):
+        for child in item.get('children'):
+            for dc in get_all_permit(child):
+                yield dc
+
+
 
 def list2tree(ls):
     clsfy = {}

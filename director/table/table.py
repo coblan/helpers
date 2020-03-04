@@ -400,6 +400,7 @@ class ModelTable(object):
         myperpage =  self.kw.get('_perpage',perpage)
         self.pagenum = self.pagenator(pageNumber=self.page,perpage=myperpage)
         self.footer = {}
+        self.is_export_excel = False
         
     
     def custom_permit(self):
@@ -888,6 +889,8 @@ class ModelTable(object):
         
         #self.search_args['_perpage'] = 5000
         #ctx = self.get_context()
+        self.is_export_excel = True
+        
         heads = self.getExcelHead() #ctx['heads']
         rows =  self.getExcelRows() #ctx['rows']
         out_rows = []

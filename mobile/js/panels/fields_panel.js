@@ -27,7 +27,7 @@ Vue.component('com-fields-panel',{
     </template>
     <template v-else>
      <van-cell-group   >
-        <component v-for="head in heads" :is="head.editor" :head="head" :row="row"></component>
+        <component v-for="head in normed_heads" :is="head.editor" :head="head" :row="row"></component>
     </van-cell-group>
     </template>
 

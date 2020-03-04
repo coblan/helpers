@@ -23,8 +23,9 @@ var live_list={
       :immediate-check="false"
       @load="onLoad"
       :class="ctx.content_class"
+      @touchmove.stop
     >
-    <van-pull-refresh v-model="freshing" @refresh="onRefresh">
+    <van-pull-refresh  v-model="freshing" @refresh="onRefresh">
         <component class="content-wrap" :is="table_editor" :heads="ctx.heads" :rows="childStore.rows"  @select="triggerBlockClick($event)"></component>
     </van-pull-refresh>
     </van-list>
