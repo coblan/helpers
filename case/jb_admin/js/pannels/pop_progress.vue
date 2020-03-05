@@ -20,7 +20,7 @@
             progress(v){
                 if(v>=100){
                     setTimeout(()=>{
-                        this.$emit('finish')
+                        this.$emit('finish',null)
                     },500)
                 }
             }

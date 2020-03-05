@@ -128,11 +128,10 @@ export var com_file_uploader = {
                     }else{
                         self.set_value(resp)
                     }
-
                 }
                 //hide_upload(300)
             },(progress)=>{
-                console.log(progress)
+                //console.log(progress)
                 if(progress <1){
                     ps.progress = parseInt( progress *100 )
                 }
