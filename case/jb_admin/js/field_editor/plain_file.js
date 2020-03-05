@@ -122,6 +122,8 @@ export var com_file_uploader = {
 
                 }
                 //hide_upload(300)
+            },(progress)=>{
+                console.log(progress)
             })
         },
         set_value:function(value){
