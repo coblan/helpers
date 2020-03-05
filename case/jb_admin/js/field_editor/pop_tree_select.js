@@ -28,14 +28,16 @@ var pop_tree_select =  {
         open_win:function(){
             var self=this
             cfg.pop_vue_com('com-pop-tree',this.head.tree_ctx).then(resp=>{
+                if(!resp){
+                   console.log('break pop tree')
+                   return
+                }
                 if(self.head.after_select){
                     ex.eval(self.head.after_select,{selected_row:resp,row:self.row})
                 }else{
                     Vue.set(self.row,self.head.name,resp.value)
                     Vue.set(self.row,'_'+self.head.name+'_label',resp.path)
                 }
-            }).catch(()=>{
-               console.log('break pop tree')
             })
         },
     }
