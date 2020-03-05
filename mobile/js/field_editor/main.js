@@ -19,5 +19,7 @@ import * as tree_select from './tree_select.js'
 import * as pop_table_select from './pop_table_select.js'
 
 import  validate_code from './validate_code.vue'
+import  switch_btn from './switch.vue'
 
 Vue.component('com-field-validate-code',validate_code)
+Vue.component('com-field-switch',switch_btn)

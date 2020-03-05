@@ -8,7 +8,7 @@ const VueLoaderPlugin = require('vue-loader/lib/plugin');
 module.exports =
 {
     //context:__dirname,
-    mode: 'production', //'development', //
+    mode: 'production', // 'development', //
     entry: {
         mobile:'./main.js',
     },

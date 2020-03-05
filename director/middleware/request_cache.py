@@ -3,6 +3,7 @@ from threading import currentThread
 import json
 from django.utils.deprecation import MiddlewareMixin
 from functools import wraps
+from django.contrib.auth.models import AnonymousUser
 
 _request_cache = {}
 _installed_middleware = False
@@ -14,17 +15,18 @@ class NoUser(object):
 
 class NoRequest(object):
     def __init__(self, *args, **kwargs):
-        self.user = NoUser()
+        self.user = AnonymousUser()
 
 def get_request_cache():
     if _installed_middleware:
         assert _installed_middleware, 'GlobalCacheMiddleware not loaded'
-        return _request_cache[currentThread()]
-    else:
-        no_request =NoRequest()
-        return {
-            'request':no_request
-        }
+        request_cache=  _request_cache.get( currentThread() )
+        if request_cache:
+            return request_cache
+    no_request =NoRequest()
+    return {
+        'request':no_request
+    }
 
 def request_cache(fun): 
     @wraps(fun)
