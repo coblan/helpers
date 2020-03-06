@@ -1,8 +1,7 @@
 
 var my_link = {
     props:['rowData','field','index'],
-    template:`<span class="com-table-link clickable" v-text="rowData[field]" @click="on_click">
-    </span>`,
+    template:`<a class="com-table-link clickable" :href="rowData[field]" v-text="rowData[field]"></a>`,
     created:function(){
         // find head from parent table
         var table_par = this.$parent
@@ -24,9 +23,9 @@ var my_link = {
         }
     },
     methods:{
-        on_click(){
-            ex.eval(this.head.action,{head:this.head,row:this.rowData,ps:this.parStore})
-        }
+        //on_click(){
+        //    ex.eval(this.head.action,{head:this.head,row:this.rowData,ps:this.parStore})
+        //}
     }
 }
 
