@@ -3,18 +3,19 @@ from threading import currentThread
 import json
 from django.utils.deprecation import MiddlewareMixin
 from functools import wraps
-from django.contrib.auth.models import AnonymousUser
+
 
 _request_cache = {}
 _installed_middleware = False
 
-class NoUser(object):
-    def __init__(self, *args, **kwargs):
-        self.username='systemcall'
-        self.is_authenticated = False
+#class NoUser(object):
+    #def __init__(self, *args, **kwargs):
+        #self.username='systemcall'
+        #self.is_authenticated = False
 
 class NoRequest(object):
     def __init__(self, *args, **kwargs):
+        from django.contrib.auth.models import AnonymousUser
         self.user = AnonymousUser()
 
 def get_request_cache():
