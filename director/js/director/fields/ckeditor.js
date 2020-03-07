@@ -242,6 +242,7 @@ var edit_level = {
 	imageUploadUrl:'/d/ckeditor_image', // '/_face/ckeditor_upload_image',
 	filebrowserImageUploadUrl:'/d/ckeditor_image',// '/_face/ckeditor_upload_image', // Will be replace by imageUploadUrl when upload_image
 	extraPlugins:'html5video,lineheight',
+	allowedContent: true,
 	//extraPlugins : 'justify,lineutils,colorbutton,uploadimage,font,autogrow', //,mathjax,codesnippet
 	//removePlugins: 'html5video,forms,flash,a11yhelp,scayt,wsc,language,preview,print,save,saveall,template,newpage,templates',
 	removePlugins: 'iframe,forms,flash,a11yhelp,scayt,wsc,language,preview,print,save,saveall,template,newpage,templates',
