@@ -133,6 +133,8 @@ var ckeditor = {
 			//CKEDITOR.timestamp='GABCDFDGff'
 			//self.input.value=self.value
 
+		//CKEDITOR.plugins.addExternal('html5video', 'https://cdn.jsdelivr.net/gh/coblan/static@0.0/ckeditor/plugins/html5video/dialogs', 'html5video.js');
+
 			var editor = CKEDITOR.replace(self.input,config)
 			if(self.value){
 				editor.setData(self.value)
@@ -197,6 +199,7 @@ Vue.component('ckeditor',function(resolve,reject){
 	})
 })
 
+
 var edit_level = {
 	// Define changes to default configuration here.
 	// For complete reference see:
@@ -204,13 +207,13 @@ var edit_level = {
 
 	// The toolbar groups arrangement, optimized for two toolbar rows.
 	toolbarGroups : [
-		//{ name: 'clipboard',   groups: [ 'clipboard', 'undo' ] },
+
 		//{ name: 'editing',     groups: [ 'find', 'selection', 'spellchecker' ] },
 		{ name: 'tools' },
-
+		//{ name: 'clipboard',   groups: [  'undo' ] },
 		//'/',
-		{ name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
-		{ name: 'paragraph',   groups: [ 'list', 'indent', 'blocks', 'align', 'bidi' ] },
+		{ name: 'basicstyles', groups: [  'undo','basicstyles', 'cleanup', ] },
+		{ name: 'paragraph',   groups: [ 'list', 'indent', 'blocks', 'align',  ] }, //'bidi',
 		{ name: 'styles' },
 		{name:'font'},
 		{ name: 'colors' },
@@ -218,7 +221,6 @@ var edit_level = {
 		{ name: 'links' },
 		{ name: 'insert' },
 		{ name: 'forms' },
-
 		{ name: 'others' },
 		{ name: 'document',	   groups: [ 'mode', 'document', 'doctools' ] },
 		//{ name: 'about' },
@@ -239,8 +241,10 @@ var edit_level = {
 	image_previewText:'image preview',
 	imageUploadUrl:'/d/ckeditor_image', // '/_face/ckeditor_upload_image',
 	filebrowserImageUploadUrl:'/d/ckeditor_image',// '/_face/ckeditor_upload_image', // Will be replace by imageUploadUrl when upload_image
+	extraPlugins:'html5video',
 	//extraPlugins : 'justify,lineutils,colorbutton,uploadimage,font,autogrow', //,mathjax,codesnippet
-	removePlugins: 'html5video,forms,flash,a11yhelp,scayt,wsc,language,preview,print,save,saveall,template,newpage,templates',
+	//removePlugins: 'html5video,forms,flash,a11yhelp,scayt,wsc,language,preview,print,save,saveall,template,newpage,templates',
+	removePlugins: 'iframe,forms,flash,a11yhelp,scayt,wsc,language,preview,print,save,saveall,template,newpage,templates',
 	mathJaxLib : '//cdn.mathjax.org/mathjax/2.6-latest/MathJax.js?config=TeX-AMS_HTML',
 	extraAllowedContent :'img[class]',
 	autoGrow_maxHeight : 600,
