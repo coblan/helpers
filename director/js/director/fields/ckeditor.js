@@ -226,9 +226,7 @@ var edit_level = {
 		//{ name: 'about' },
 	],
 
-
-
-	// Remove some buttons provided by the standard plugins, which are
+// Remove some buttons provided by the standard plugins, which are
 	// not needed in the Standard(s) toolbar.
 	removeButtons : 'Underline,Subscript,Superscript',
 
