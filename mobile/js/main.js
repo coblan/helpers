@@ -35,4 +35,5 @@ import * as live_main from './live/main.js'
 import * as uis_main from './uis/main.js'
 
 import * as layout_editor_main from './layout_editor/main.js'
+import * as top_main from './top/main.js'
 
