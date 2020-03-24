@@ -22,6 +22,7 @@ import inspect
 from helpers.director.exceptions.unauth401 import UnAuth401Exception
 from .data_format.json_format import DirectorEncoder
 from .exceptions.question import QuestionException
+from helpers.func.d_import import import_element
 
 import logging
 req_log = logging.getLogger('general_log')
@@ -96,7 +97,12 @@ def general_upload(request):
     if request.GET.get('director'):
         UploadView=director.get(request.GET.get('director'))
         return UploadView().asView(request)
-    return GeneralUpload().asView(request)
+    if getattr(settings,'FILE_SAVER'):
+        uploader_str = getattr(settings,'FILE_SAVER').get('class')
+        uploader = import_element(uploader_str)
+        return uploader().asView(request)
+    else:
+        return GeneralUpload().asView(request)
 
 @csrf_exempt
 def ckeditor(request): 
