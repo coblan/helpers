@@ -4,7 +4,7 @@ var live_fields={
     props:['ctx'],
     basename:'live-fields',
     template:`<div class="com-live-fields flex-v">
-        <com-uis-nav-bar :title="ctx.title" :back="can_back" ></com-uis-nav-bar>
+        <com-uis-nav-bar :title="ctx.title" :back="can_back" :back_action="ctx.back_action"></com-uis-nav-bar>
         <com-fields-panel :ctx="ctx"></com-fields-panel>
     </div>`,
     data(){

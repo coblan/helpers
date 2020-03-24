@@ -21,7 +21,7 @@ class LogModel(models.Model):
     # desp=models.TextField(verbose_name="描述",blank=True)
 
 class PermitModel(models.Model):
-    group = models.OneToOneField(Group, null = True)
+    group = models.OneToOneField(Group)
     names = models.TextField(default= '')
 
 #class PermitModel(models.Model):

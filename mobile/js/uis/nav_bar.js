@@ -3,6 +3,7 @@ Vue.component('com-uis-nav-bar',{
     props:{
         title:'',
         back:'',
+        back_action:'',
         ops:{default:()=>{return []}}},
     template:`<div class="com-uis-many-ops">
  <!--@click-right="onClickRight"-->
@@ -17,12 +18,12 @@ Vue.component('com-uis-nav-bar',{
     </div>
 
     </van-nav-bar>
-        <van-actionsheet
+        <van-action-sheet
             v-model="actionVisible"
             :actions="rigth_down"
             cancel-text="取消"
             @select="onSelectAction"
-    ></van-actionsheet>
+    ></van-action-sheet>
     </div>`,
     data(){
         this.ops = this.ops || []
@@ -33,8 +34,8 @@ Vue.component('com-uis-nav-bar',{
     },
     computed:{
         can_back(){
-            if(this.back){
-                return this.back
+            if(this.back_action){
+                return true
             }else{
                 return  this.$root.stack.length >1
             }
@@ -58,7 +59,11 @@ Vue.component('com-uis-nav-bar',{
     },
     methods:{
         onClickLeft(){
-            history.back()
+            if(this.back_action){
+                ex.eval(this.back_action)
+            }else{
+                history.back()
+            }
         },
         on_click(op){
             ex.eval(op.action,{ps:this.parStore,head:op})
@@ -80,7 +85,7 @@ Vue.component('com-uis-nav-bar',{
 
 Vue.component('com-nav-vant-icon',{
     props:['ctx'],
-    template:`<div class="com-nav-vant-icon">
+    template:`<div class="com-nav-vant-icon" style="width: .5rem;font-size: .4rem">
       <van-icon  :name="ctx.name" />
     </div>`
 })

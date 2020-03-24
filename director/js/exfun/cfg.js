@@ -17,6 +17,21 @@ var cfg={
         width:$(window).width(),
         height:$(window).height(),
     },
+    prompt(mycfg){
+        //{
+        //    formType: 2,
+        //        value: '初始值',
+        //    title: '请输入值',
+        //    area: ['800px', '350px'] //自定义文本域宽高
+        //}
+        mycfg = mycfg || {}
+        return new Promise(function(resolve,reject){
+            layer.prompt(mycfg,function(val, index){
+                resolve(val)
+                layer.close(index);
+            });
+        })
+    },
     showMsg:function(msg){
         return new Promise((resolve,reject)=>{
             layer.alert(msg,function(index){
@@ -126,13 +141,15 @@ var cfg={
     pop_vue_com:function(editor,ctx,option){
         return new Promise(function(resolve,reject){
             var callback = function(e){
-                if(e){
-                    close_fun()
-                    resolve(e)
-                }else{
-                    close_fun()
-                    reject(e)
-                }
+                close_fun()
+                resolve(e)
+                //if(e){
+                    //close_fun()
+                    //resolve(e)
+                //}else{
+                    //close_fun()
+                    //reject(e)
+                //}
             }
             ctx.ops_loc = ctx.ops_loc || 'bottom'
             var winindex = pop_layer(ctx,editor,callback,option)

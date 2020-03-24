@@ -121,14 +121,17 @@ def get_lib(request):
             'chosen_css':'https://cdn.jsdelivr.net/npm/chosen-js@1.8.7/chosen.min.css',
             #'ckeditor':'https://cdn.jsdelivr.net/npm/ckeditor@4.11.4/ckeditor.js',
             #'ckeditor':'https://cdn.jsdelivr.net/npm/ckeditor@4.11.4/ckeditor.min.js',
-            'ckeditor':'https://cdn.ckeditor.com/4.10.1/full/ckeditor.js',
+            'ckeditor': 'https://cdn.jsdelivr.net/gh/coblan/static@0.04/ckeditor_4.10.1/ckeditor/ckeditor.js',#'https://cdn.ckeditor.com/4.10.1/full/ckeditor.js',
             #'ckeditor':'https://cdn.jsdelivr.net/npm/ckeditor-full@4.7.3/ckeditor.js',
             
             'select2':'https://cdn.jsdelivr.net/npm/select2@4.0.10/dist/js/select2.min.js',
             'select2_css':'https://cdn.jsdelivr.net/npm/select2@4.0.10/dist/css/select2.min.css',
             
-             'cropper_css':'https://cdn.jsdelivr.net/npm/cropper@4.1.0/dist/cropper.min.css',
-             'cropper':'https://cdn.jsdelivr.net/npm/cropper@4.1.0/dist/cropper.min.js'
+            'cropper_css':'https://cdn.jsdelivr.net/npm/cropper@4.1.0/dist/cropper.min.css',
+            'cropper':'https://cdn.jsdelivr.net/npm/cropper@4.1.0/dist/cropper.min.js',
+            'velocity':'https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.min.js',
+            'animate_css':'https://cdn.jsdelivr.net/npm/animate.css@3.7.2/animate.min.css',
+            'wow':'https://cdn.jsdelivr.net/npm/wow.js@1.2.2/dist/wow.min.js',
         })
         
         if not settings.DEBUG:

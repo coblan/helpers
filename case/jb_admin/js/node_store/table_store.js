@@ -158,9 +158,9 @@ var table_store={
                 }else{
                     fields_ctx.row=crt_row
                     cfg.pop_vue_com('com-form-one',fields_ctx).then(row=>{
-                        self.update_or_insert(row)
-                    }).catch(()=>{
-                        console.log('break form one')
+                        if(row){
+                          self.update_or_insert(row)
+                        }
                     })
                     //var win=pop_fields_layer(crt_row,fields_ctx,function(new_row){
                     //    self.update_or_insert(new_row, crt_row)
@@ -278,14 +278,24 @@ var table_store={
                     }
                 }).then(function(){
                     //  弹出编辑框/ 或者不弹出
+                        var first_sel_row = self.selected[0]
                         var one_row={}
                         if(kws.field){ // 兼容老的，新的采用eval形式，
                             one_row[kws.field]=kws.value
-                            one_row.meta_overlap_fields =kws.field
+                            //if(! first_sel_row.meta_overlap_fields){
+                            //    one_row.meta_overlap_fields =kws.field
+                            //}else{
+                            //    one_row.meta_overlap_fields= first_sel_row.meta_overlap_fields
+                            //}
+
                         }else if(kws.pre_set){
                             var dc = ex.eval(kws.pre_set)
                             ex.assign(one_row,dc)
-                            one_row.meta_overlap_fields = Object.keys(dc).join(',')
+                            //if(! first_sel_row.meta_overlap_fields){
+                            //    one_row.meta_overlap_fields = Object.keys(dc).join(',')
+                            //}else{
+                            //    one_row.meta_overlap_fields= first_sel_row.meta_overlap_fields
+                            //}
                         }
 
                         if(kws.fields_ctx){
@@ -319,6 +329,10 @@ var table_store={
                 //ex.post('/d/ajax',JSON.stringify(post_data),function(resp){
                 ex.director_call('d.save_rows',{rows:cache_rows}).then((resp)=>{
                     cfg.hide_load()
+                    ex.each(self.selected,(row)=>{
+                        delete  row.meta_overlap_fields
+                        delete row.meta_change_fields
+                    })
                     if(resp._outdate){
                         layer.confirm(resp._outdate, {
                             icon:3,
@@ -331,9 +345,10 @@ var table_store={
                             layer.close(index)
                             self.search()
                         }, function(index){
+                            debugger
                             layer.close(index)
                             ex.each(self.selected,row=>{
-                                row.meta_hash_fields=''
+                                row.meta_overlap_fields='__all__'
                             })
                             self.selected_set_and_save(kws,true)
                         });
@@ -389,9 +404,10 @@ var table_store={
                             layer.close(index)
                             self.search()
                         }, function (index) {
+                            debugger
                             layer.close(index)
                             ex.each(rows, row=> {
-                                row.meta_hash_fields = ''
+                                row.meta_overlap_fields = '__all__'
                             })
                             self.save_rows(rows)
                         });
@@ -417,10 +433,10 @@ var table_store={
             return promise
 
         },
-        export_excel:function(){
+        export_excel:function(head){
             var self=this
             var search_args = ex.copy(self.search_args)
-            search_args._perpage=5000
+            search_args._perpage= head.count || 5000
             var post_data=[{fun:'get_excel',director_name:self.director_name,search_args:search_args}]
             cfg.show_load()
             ex.post('/d/ajax',JSON.stringify(post_data),function(resp){

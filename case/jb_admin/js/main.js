@@ -4,6 +4,9 @@ require('./scss/tab.scss')
 require('./scss/table.scss')
 require('./scss/table_page.scss')
 require('./scss/element_ex.scss')
+require('./scss/share.scss')
+require('./scss/layer.scss')
+
 require('./styl/adminlte.styl')
 
 import * as config from  './config.js'

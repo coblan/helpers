@@ -276,13 +276,17 @@ var img_uploader={
                 <a class='choose'>Choose</a>
             </div>
             <div v-if='url' class="closeDiv">
-            <div class="close" @click='clear()'>
-                <i class="fa fa-times-circle" aria-hidden="true" style="color:red;position:relative;left:30px;"></i>
+                <div class="close" @click='clear()'>
+                    <i class="fa fa-times-circle" aria-hidden="true" style="color:red;position:relative;left:30px;"></i>
+                </div>
+                <div class="close" v-if="cfg.can_edit" @click="edit()">
+                    <i class="fa fa-edit" aria-hidden="true" style="color:black;position:relative;left:30px;top:30px"></i>
+                </div>
+
+                <img :src="url" @click="open_img(url)" alt="" class="logoImg">
             </div>
-            <div class="close" v-if="cfg.can_edit" @click="edit()">
+             <div class="close" v-if="cfg.can_input" @click="do_input()">
                 <i class="fa fa-edit" aria-hidden="true" style="color:black;position:relative;left:30px;top:30px"></i>
-            </div>
-            <img :src="url" alt="" class="logoImg">
             </div>
             </div>
         `,
@@ -339,6 +343,13 @@ var img_uploader={
                     resolve(request.response)
                 };
                 request.send();
+            })
+        },
+        do_input(){
+            cfg.prompt({value:this.url}).then((val)=>{
+                this.url = val
+                this.$emit('input',this.url)
+                this.$emit('select')
             })
         },
         edit(){
@@ -422,6 +433,16 @@ var img_uploader={
             }
 
             console.log('after select')
+        },
+        open_img(url){
+            var ctx = {imgsrc:url }
+            pop_layer(ctx,'com-pop-image',function(){},{
+                title:false,
+                area: ['90%', '90%'],
+                shade: 0.8,
+                skin: 'img-shower',
+                shadeClose: true,
+            })
         }
     }
 }

@@ -44,7 +44,8 @@ def make_mark_dict(dc,keys=None):
 def dif_mark_dict(dc,mark,include=None,exclude=[]):
     dif_dc = {}
     for k,v in mark.items():
-        if include and k not in include:
+        if include is not None \
+           and k not in include:
             continue
         if k in exclude:
             continue

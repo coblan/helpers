@@ -107,6 +107,13 @@
                         this.tranName = 'slide-left'
                      },500)
                 },
+                open_fade(com,editor_ctx){
+                    this.tranName ='fade'
+                    this.open_live(com,editor_ctx,{back_animate:'fade'})
+                    setTimeout(()=>{
+                        this.tranName = 'slide-left'
+                     },500)
+                },
                 open_live(com,ctx,option){
                     if(this.loading){
                         return
@@ -156,6 +163,22 @@
                 },
                 back(){
                     // IOS history.back 时 ，会调用到 这个back(不知道原因)，防止页面结构被破坏.
+                    if(this.last_back_time){
+                        var now = Date.now()
+                        var span = now - this.last_back_time
+                        if(span < 500){
+                            console.log('等待')
+                            setTimeout(this.back,span+100)
+                            return
+                        }else{
+
+                            this.last_back_time = now
+                        }
+                    }else{
+                        this.last_back_time =Date.now()
+                    }
+
+
                     if(this.stack.length <=1){
                         return
                     }
@@ -203,10 +226,15 @@
 //                    },20000)
                 },
                 lastsibe(vc){
-                    var index = this.$children.indexOf(vc)
-                    if(index >0){
-                        return this.$children[index-1]
-                    }
+                    var com_name = vc.$options.name
+                    var editor_list = ex.map(this.stack,(item)=>{return item.editor })
+                    var index = editor_list.indexOf(com_name)
+                    var sibe_name = editor_list[index - 1]
+                    return this.$refs[sibe_name][0]
+//                    var index = this.$children.indexOf(vc)
+//                    if(index >0){
+//                        return this.$children[index-1]
+//                    }
                 },
                 open_page(url){
 //                    var t = new Date().getTime()
@@ -216,6 +244,14 @@
                     window.location.href= url;
                 },
                 onAfterLeave(el){
+//                    var self =this
+//                    setTimeout(()=>{
+//                        var com = self.stack2.pop()
+//                        if(com){
+//                            Vue.delete(self.$options.components,com)
+//                        }
+//                    },500)
+
                     ex.each(this.stack2,(com)=>{
                         Vue.delete(this.$options.components,com)
                     })
@@ -400,37 +436,37 @@
 <script>
     var adapt_size = {{ adapt_size | jsonify }}
     function fullsize(){
-        $('#main-panel').height( window.innerHeight +'px')
-        $('#main-panel').width( window.innerWidth +'px')
-        $(window).trigger('resize')
+//        $('#main-panel').height( window.innerHeight +'px')
+//        $('#main-panel').width( window.innerWidth +'px')
+        $('#main-panel').width( '100vw')
+        $('#main-panel').height( '100vh')
+        cfg.updateSizeConfig()
     }
     function fullheight(){
         var hh = window.innerHeight*0.563
         $('#main-panel').width( hh +'px')
         $('#main-panel').height( window.innerHeight +'px')
         $('html').css('font-size',hh * 0.1333)
-        $(window).trigger('resize')
+//        $(window).trigger('resize')
+        cfg.updateSizeConfig()
     }
     function fullwidth(){
         var hh = window.innerWidth / 0.563
         $('#main-panel').height( hh +'px')
         $('#main-panel').width( window.innerWidth +'px')
-        $(window).trigger('resize')
+//        $(window).trigger('resize')
+        cfg.updateSizeConfig()
     }
-    if(ex.os.isPc && !ex.os.isTablet){
-        fullheight()
-    }else if(ex.os.isTablet){
-        fullsize()
-//        if(adapt_size =='fullheight'){
-//            fullheight()
-//        }else if(adapt_size == 'fullwidth'){
-//            fullwidth()
-//        }else{
-//            fullsize()
-//        }
-    }else{
-        fullsize()
-    }
+        if(ex.os.isPc && !ex.os.isTablet){
+            fullheight()
+        }else if(ex.os.isTablet){
+            fullsize()
+
+        }else{
+            fullsize()
+        }
+
+
 
 
 </script>

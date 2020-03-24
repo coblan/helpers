@@ -1,4 +1,4 @@
-from helpers.director.ajax import save_row
+#from helpers.director.ajax import save_row
 from helpers.director.decorator import get_request_cache
 from django.http import JsonResponse
 from .shortcut import director_view
@@ -9,9 +9,8 @@ from .fields.fields import ModelFields,OutDateException
 from django.core.exceptions import PermissionDenied
 
 def director_save_row(row):
-     request = get_request_cache()['request']
-     user = request.user
-     rt_dc = save_row(row,user,request)
+     #rt_dc = save_row(row,user,request)
+     rt_dc = save_row(row)
      if 'errors' in rt_dc:
           errors = {}
           for k,v in rt_dc['errors'].items():
@@ -67,6 +66,8 @@ def save_rows(rows):
           return {'errors':dict(e),}   
      except OutDateException as e:
           return {'_outdate':str(e)}
+     except PermissionDenied as e :
+          raise UserWarning(str(e))
 
 @director_view('d.get_head_context')
 def get_head_context(director_name):

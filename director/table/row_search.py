@@ -31,7 +31,10 @@ class SelectSearch(object):
         if sorted_name:
             ls=[]
             for name in sorted_name:
-                ls.append( self.get_option(name) )
+                option = self.get_option(name)
+                if name in self.exact_names:
+                    option['exact_search'] = True
+                ls.append( option )
                 #ls.append({'value': name, 'label': _(self.model._meta.get_field(name).verbose_name) })
             dc = {
                 'options':ls,
@@ -93,7 +96,9 @@ class SelectSearch(object):
         if self.q and self.qf:
             db_field = self.db_map.get(self.qf,self.qf)
             if self.qf in self.exact_names:
-                where_list.append( '%s = %s'%(db_field,self.q) )
+                #where_list.append( '%s = %s'%(db_field,self.q) )
+                where_list.append( db_field +" = %s" )
+                params.append('%s'%self.q)
             else:
                 where_list.append( db_field +" like %s" )
                 params.append('%%%s%%'%self.q)

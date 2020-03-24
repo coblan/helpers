@@ -128,18 +128,20 @@ def director_view(request,director_name):
     directorEnt= director_views.get(director_name)
     if not directorEnt:
         directorEnt = director.get(director_name)
-    kws = argument.get_argument(request,outtype='dict')
     try:
+        kws = argument.get_argument(request,outtype='dict')
         if inspect.isfunction(directorEnt):
-            wraped_directorEnt = transactionall(directorEnt)
-            rt = wraped_directorEnt(**kws)
+            rt = directorEnt(**kws)
+            # 2020/3/18 去掉统一的事务，免得造成异步性能不足和死锁
+            #wraped_directorEnt = transactionall(directorEnt)
+            #rt = wraped_directorEnt(**kws)
         else:
             # directorEnt is class
             obj = directorEnt(**kws)
             if hasattr(obj,'get_data_context'):
-                wraped_directorEnt = transactionall(obj.get_data_context)
+                wraped_directorEnt = obj.get_data_context # transactionall(obj.get_data_context)
             else:
-                wraped_directorEnt = transactionall(obj.get_context)
+                wraped_directorEnt = obj.get_context # transactionall(obj.get_context)
             rt = wraped_directorEnt()
         if isinstance(rt,HttpResponse):
             # 直接返回

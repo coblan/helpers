@@ -1,7 +1,11 @@
+/*
+*  bootstrap 按钮
+* */
+
 var op_a = {
     props:['head','disabled'],
     template:` <span class="com-op-btn" style="margin-left: 3px">
-    <button :class="norm_class" @click="operation_call()"  :style="head.style" :disabled="disabled">
+    <button :class="norm_class" @click="operation_call()" :title="head.help_text"  :style="head.style" :disabled="disabled">
         <i v-if="head.icon" :class='["fa",head.icon]'></i>
         <span  v-text="head.label"></span>
     </button>

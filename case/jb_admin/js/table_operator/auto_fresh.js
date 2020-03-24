@@ -18,13 +18,28 @@ var op_a = {
     },
     watch:{
         myvalue(v){
-            debugger
+            //if(this.interval_index){
+            //    clearTimeout(this.interval_index)
+            //}
+            //if(v){
+            //    this.auto_refresh=()=>{
+            //        this.interval_index = setTimeout(()=>{
+            //            Promise.resolve().then(()=>{
+            //                return  ex.eval(this.head.action,{ps:this.parStore})
+            //            }).then(()=>{
+            //                this.auto_refresh()
+            //            })
+            //        },v)
+            //    }
+            //    this.auto_refresh()
+            //}
+
             if(this.interval_index){
                 clearInterval(this.interval_index)
             }
 
             if(v){
-                setInterval(()=>{
+                this.interval_index = setInterval(()=>{
                     ex.eval(this.head.action,{ps:this.parStore})
                 },v)
             }

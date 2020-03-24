@@ -8,6 +8,9 @@ RequestMiddleware
     其他类型的信息，只会显示长度信息
 <-<
 """
+"""
+该方法造成日志过多，不适用，淘汰了。
+"""
 import re
 import logging
 log = logging.getLogger('all_request')

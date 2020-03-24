@@ -6,12 +6,14 @@ export var com_picture = {
         <template v-if="!head.readonly">
              <textarea style="display: none;" :name="head.name" id="" cols="30" rows="10" v-model="row[head.name]"></textarea>
             <div class="picture-panel" style="vertical-align: top" >
-              <div v-if="!row[head.name]" class="center-vh choose-btn" @click="open_select_images()" v-text="head.placeholder || 'Choose'"></div>
+              <div v-if="!row[head.name]" class="center-vh choose-btn" @click="open_select_images()" v-text="head.placeholder || '选 择'"></div>
 
                <div class="picture-content" v-else
                :style="{backgroundImage:'url('+ row[head.name]  +')'}"
                @click="big_win(row[head.name])">
-                    <div v-if="!head.readonly" class="close" @click.stop='remove_image()'><i class="fa fa-times-circle" aria-hidden="true" style="color:red;position:relative;left:30px;"></i></div>
+                    <div v-if="!head.readonly" class="close" @click.stop='remove_image()'>
+                        <i class="fa fa-times-circle" aria-hidden="true" style="color:red;position:relative;left:30px;"></i>
+                    </div>
                </div>
 
             </div>
@@ -24,12 +26,18 @@ export var com_picture = {
                @click="big_win(row[head.name])">
            </div>
 
+        <div class="right-awser" v-if="head.help_text" @click="show_msg(head.help_text)">
+            <van-icon  name="question-o" />
+        </div>
     </van-cell>`,
     data(){
         return {
         }
     },
     methods:{
+        show_msg(msg){
+            cfg.showMsg(msg)
+        },
         on_change(event){
             //let new_selected_files = event.target.files
             var self =this
@@ -128,7 +136,6 @@ Vue.component('com-field-picture',function(resolve,reject){
                 const h = img.height;
                var span =  Math.max(w,h)
                 if(option.maxspan > span){
-                    alert(span )
                     resolve(file)
                     return
                 }

@@ -1,5 +1,9 @@
 require('./styl/live_list.styl')
-
+/*
+* 类似于 pc的table组件
+* 具备滚动加载功能
+*
+* */
 var live_list={
     props:['ctx'],
     basename:'live-list',
@@ -19,8 +23,9 @@ var live_list={
       :immediate-check="false"
       @load="onLoad"
       :class="ctx.content_class"
+      @touchmove.stop
     >
-    <van-pull-refresh v-model="freshing" @refresh="onRefresh">
+    <van-pull-refresh  v-model="freshing" @refresh="onRefresh">
         <component class="content-wrap" :is="table_editor" :heads="ctx.heads" :rows="childStore.rows"  @select="triggerBlockClick($event)"></component>
     </van-pull-refresh>
     </van-list>

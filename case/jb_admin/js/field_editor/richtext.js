@@ -1,6 +1,6 @@
 Vue.component('com-field-richtext',{
     props:['row','head'],
-    template:`<div >
+    template:`<div class="com-field-richtext">
             <span v-if='head.readonly' v-text='row[head.name]'></span>
             <div v-else>
                 <ckeditor ref="ck" :style="head.style" v-model="row[head.name]"

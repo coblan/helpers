@@ -400,6 +400,7 @@ class ModelTable(object):
         myperpage =  self.kw.get('_perpage',perpage)
         self.pagenum = self.pagenator(pageNumber=self.page,perpage=myperpage)
         self.footer = {}
+        self.is_export_excel = False
         
     
     def custom_permit(self):
@@ -695,7 +696,7 @@ class ModelTable(object):
                         #'after_save':'scope.vc.par_row.car_no =scope.row.car_no; scope.vc.par_row.has_washed=scope.row.has_washed ',
                         #'init_express':'cfg.show_load(),ex.director_call(scope.vc.ctx.director_name,{pk:scope.vc.par_row.pk}).then((res)=>{cfg.hide_load();ex.vueAssign(scope.row,res.row)})',
                         'init_express':'ex.vueAssign(scope.row,scope.vc.par_row)',
-                        'after_save':'ex.vueAssign( scope.vc.par_row,scope.row)',
+                        #'after_save':'ex.vueAssign( scope.vc.par_row,scope.row)',
                         'ops_loc':'bottom'
                     })
                     head['action'] = 'scope.head.fields_ctx.title=scope.row._label;scope.head.fields_ctx.par_row=scope.row;cfg.pop_vue_com("com-form-one",scope.head.fields_ctx)'
@@ -729,7 +730,10 @@ class ModelTable(object):
                     tmp_heads.append(head)
                     break
         return tmp_heads
-            
+    
+    def before_query(self):
+        pass
+    
     def get_rows(self):
         """
         return: [{"name": "heyul0", "age": "32", "user": null, "pk": 1, "_class": "user_admin.BasicInfo", "id": 1}]
@@ -740,7 +744,7 @@ class ModelTable(object):
         #director_name = self.get_director_name()
         permit_fields =  self.permited_fields()
         #used_head_names= self.hide_fields +  [x['name'] for x in self.get_light_heads()] 
-        
+        self.before_query()
         for inst in query:
             # 遇到一种情况，聚合时，这里的queryset返回的item是dict。所以下面做一个判断
             if isinstance(inst,models.Model):
@@ -885,6 +889,8 @@ class ModelTable(object):
         
         #self.search_args['_perpage'] = 5000
         #ctx = self.get_context()
+        self.is_export_excel = True
+        
         heads = self.getExcelHead() #ctx['heads']
         rows =  self.getExcelRows() #ctx['rows']
         out_rows = []
@@ -925,6 +931,10 @@ class ModelTable(object):
         return wb
 
 class RawTable(ModelTable):
+    '''
+    1. 重写 get_sql
+    
+    '''
     def get_sql(self):
         pass
     
@@ -947,7 +957,7 @@ class RawTable(ModelTable):
                         pass
                         
             self.pagenum.count = self.bucket[1][0]['count']
-            if len(self.bucket)>=2:
+            if len(self.bucket)>2:
                 self.footer = self.bucket[2][0]
                 self.footer['_label']='合计'
             out_rows = []
@@ -992,6 +1002,11 @@ class RawTable(ModelTable):
             order_by = ' ORDER BY %s'% sort_str
         return  order_by
    
+    def inject_sql(self,where_list,params):
+        for proc_cls,name in zip(self.get_proc_list() ,self.valid_name):
+            condition = proc_cls().filter_inject_sql(name ,self.filter_args )
+            if condition:
+                where_list.append(condition)
         
         
     #def get_query(self):

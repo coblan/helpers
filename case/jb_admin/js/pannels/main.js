@@ -10,3 +10,6 @@ import * as table_setting from  './table_setting.js'
 import * as grid_layout from  './grid_layout.js'
 import * as chart from  './chart.js'
 import * as charts_main from  './charts/main'
+
+import  pop_progress from  './pop_progress.vue'
+Vue.component('com-pop-progress',pop_progress)
