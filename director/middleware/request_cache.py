@@ -4,12 +4,30 @@ import json
 from django.utils.deprecation import MiddlewareMixin
 from functools import wraps
 
+
 _request_cache = {}
 _installed_middleware = False
 
+#class NoUser(object):
+    #def __init__(self, *args, **kwargs):
+        #self.username='systemcall'
+        #self.is_authenticated = False
+
+class NoRequest(object):
+    def __init__(self, *args, **kwargs):
+        from django.contrib.auth.models import AnonymousUser
+        self.user = AnonymousUser()
+
 def get_request_cache():
-    assert _installed_middleware, 'GlobalCacheMiddleware not loaded'
-    return _request_cache[currentThread()]
+    if _installed_middleware:
+        assert _installed_middleware, 'GlobalCacheMiddleware not loaded'
+        request_cache=  _request_cache.get( currentThread() )
+        if request_cache:
+            return request_cache
+    no_request =NoRequest()
+    return {
+        'request':no_request
+    }
 
 def request_cache(fun): 
     @wraps(fun)

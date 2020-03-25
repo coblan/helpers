@@ -9,7 +9,12 @@ class FilterForm(object):
             ex.vueAssign(table.childStore.search_args,scope.ps.vc.row)
             table.childStore.search();
             window.history.back();
-                       '''}
+                       '''},
+            {'label':'清空条件','editor':'com-op-submit','type':'default',
+             'action':'''
+             var vc = ex.vueParStore(scope.ps.vc,function(vc){return vc.basename && vc.basename.startsWith("live-")}).vc; 
+            var table = vc.$root.lastsibe(vc) ;
+            table.childStore.search_args={}; table.childStore.search();window.history.back();'''}
         ]
         return ops
     def set_filter(self,table_filter):
@@ -21,12 +26,19 @@ class FilterForm(object):
             if head['editor'] in ['com-select-filter','com-filter-select']:
                 head['editor'] ='com-field-select'
                 heads.append(head)
-            if head['editor'] in ['com-date-datetimefield-range-filter']:
+            if head['editor'] in ['com-date-datetimefield-range-filter',]:
                 heads.append({
                     'name':'_start_%s'%head['name'],'label':'开始'+head['label'],'editor':'com-field-date'
                 })
                 heads.append({
                      'name':'_end_%s'%head['name'],'label':'结束'+head['label'],'editor':'com-field-date'
+                })
+            if head['editor'] in ['com-filter-datetime-range']:
+                heads.append({
+                    'name':'_start_%s'%head['name'],'label':'开始'+head['label'],'editor':'com-field-datetime'
+                })
+                heads.append({
+                     'name':'_end_%s'%head['name'],'label':'结束'+head['label'],'editor':'com-field-datetime'
                 })
             if head['editor'] in ['com-filter-text']:
                 head['editor'] = 'com-field-linetext'
@@ -58,8 +70,8 @@ class ModelTableMobile(ModelTable):
             named_ctx[editor_director] = form_ctx
 
         ctx.update( {
-            'table_editor':'com-ctn-table-van-cell',
-            'block_click':'var dynctx =named_ctx[%(edit_form)s];dynctx.table_par=scope.ps;dynctx.row=scope.row;dynctx.title=dynctx.row._label;live_root.open_live("live_fields",dynctx)'%{'edit_form':editor_director},
+            'table_editor': 'com-list-row-cell',#'com-ctn-table-van-cell',
+            'block_click':'var dynctx =named_ctx["%(edit_form)s"];dynctx.table_par=scope.ps;dynctx.row=scope.row;dynctx.title=dynctx.row._label;live_root.open_live("live_fields",dynctx)'%{'edit_form':editor_director},
         }) 
         return ctx
 
@@ -88,7 +100,7 @@ class ModelTableMobile(ModelTable):
                   'icon_editor':'com-nav-vant-icon',
                  'icon_ctx':{'name':'search'},
                  'level':'rigth-top',
-                  'action':'scope.head.filter_ctx.title="查询条件";scope.head.filter_ctx.row=scope.ps.search_args;live_root.open_live("live_fields",scope.head.filter_ctx)',
+                  'action':'scope.head.filter_ctx.title="查询条件";scope.head.filter_ctx.row=scope.ps.search_args;live_root.open_fade("live_fields",scope.head.filter_ctx)',
                      'filter_ctx':filter_obj.get_head_context()}
             ]
         return ops

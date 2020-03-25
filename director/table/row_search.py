@@ -10,6 +10,7 @@ class SelectSearch(object):
     exact_names = []
     model=''
     field_sort=[]
+    db_map={} # 用户 raw sql 查询时，映射字段到 数据库字段
     def __init__(self,q,user = None,allowed_names = [], kw = {}):
         self.valid_name=  self.names + self.exact_names  #[x for x in self.names if x in allowed_names]
         self.crt_user=user
@@ -30,7 +31,10 @@ class SelectSearch(object):
         if sorted_name:
             ls=[]
             for name in sorted_name:
-                ls.append( self.get_option(name) )
+                option = self.get_option(name)
+                if name in self.exact_names:
+                    option['exact_search'] = True
+                ls.append( option )
                 #ls.append({'value': name, 'label': _(self.model._meta.get_field(name).verbose_name) })
             dc = {
                 'options':ls,
@@ -70,7 +74,7 @@ class SelectSearch(object):
             if q_str == None:
                 # 相当于 清空查询集
                 query = query.filter(pk = None)
-            if isinstance(q_str,dict):
+            elif isinstance(q_str,dict):
                 query = query.filter(**q_str)
             else:
                 exp = self.get_express(q_str)
@@ -87,3 +91,14 @@ class SelectSearch(object):
         else:
             raise UserWarning('没有指定查询字段')
         return Q(**exp)
+    
+    def inject_sql(self,where_list,params):
+        if self.q and self.qf:
+            db_field = self.db_map.get(self.qf,self.qf)
+            if self.qf in self.exact_names:
+                #where_list.append( '%s = %s'%(db_field,self.q) )
+                where_list.append( db_field +" = %s" )
+                params.append('%s'%self.q)
+            else:
+                where_list.append( db_field +" like %s" )
+                params.append('%%%s%%'%self.q)

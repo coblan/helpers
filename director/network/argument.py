@@ -17,8 +17,11 @@ def get_argument(request,outtype='obj'):
     """
     
     if request.method=='POST':
-        if request.body and re.match('{.+}|\[.+\]',request.body.decode('utf-8')):
-            dc=json.loads(request.body.decode('utf-8'))
+        if request.body and request.body.strip().decode('utf-8').startswith(('{','[')):
+            try:
+                dc=json.loads(request.body.decode('utf-8'))
+            except Exception as e:
+                raise UserWarning(str(e) )
         else:
             dc = request.POST.dict()
         #else:
@@ -44,18 +47,13 @@ def url2dict(url:str) -> dict:
     return dict(parse.parse_qsl(parse.urlsplit(url).query))
 
 def sign_args(kws,secret):
+    "排序参数，并且签名"
     sign_str = ''
     for k,v in sorted(kws.items(),key=lambda p:p[0]):
         if v:
             sign_str += '{key}={value}&'.format(key=k,value=v)
     sign_str = sign_str + 'secret=' + secret
     return hashlib.md5(sign_str.encode('utf-8')).hexdigest().upper()   
-
-def null_break(value,name):
-    if value is None or (isinstance(value,str) and value.strip() ==''):
-        return True
-    else:
-        return False
 
 def validate_argument(dc,validate_dict={},eliminate = False):
     if isinstance(dc,DotObj):
@@ -86,13 +84,22 @@ def validate_argument(dc,validate_dict={},eliminate = False):
                 dc.pop(k)
     return DotObj( dc )
 
+def null_break(value,name):
+    "如果是None值，就退出验证栈"
+    if value is None or (isinstance(value,str) and value.strip() ==''):
+        return True
+    else:
+        return False
+    
 def not_null(value,name):
+    
     if value is None or (isinstance(value,str) and value.strip() ==''):
         raise UserWarning('%s should not be null'%name)
     return value
 
 
 def model_instance(model,field='pk'):
+    "判断value是否是model instance(默认使用pk值查询)"
     def _model_validator(value,name):
         try:
             if value:
@@ -126,6 +133,7 @@ def timestamp_span(span):
     return _fun
 
 def default(def_value):
+    "设置默认值,与not_null 相互排斥"
     def _default(value,name):
         if value is None or value =='':
             return def_value
@@ -140,6 +148,7 @@ def dot_list_str(value,name):
         return ','.join(value)
 
 def is_list(value,name):
+    "value是否为list"
     if not value:
         return []
     if not isinstance(value,(list,tuple)):

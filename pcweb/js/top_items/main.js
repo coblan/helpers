@@ -1,0 +1,6 @@
+import *  as  caption from './caption'
+import *  as  caption2 from './caption2'
+import *  as  list from './list'
+import *  as  article from './article'
+import *  as  msg_panel from './msg_panel'
+import *  as  list_one_page from './list_one_page'

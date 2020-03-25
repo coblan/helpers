@@ -84,8 +84,10 @@ class ModelFields(forms.ModelForm):
             self.crt_user = crt_user
             
         # if pk is None:
-        if dc.get('pk') != None:
+        if dc.get('pk') != None and dc.get('id') != '':
             pk=dc.get('pk')
+        elif dc.get('id') !=None and dc.get('id') != '':
+            pk = dc.get('id')
         form_kw={}
         if 'instance' not in kw:
             if pk=='-1':  # -1 表示 最后一个记录 （一般用不到）
@@ -117,15 +119,17 @@ class ModelFields(forms.ModelForm):
         if dc.get('meta_change_fields'):
             meta_change_fields = dc.get('meta_change_fields').split(',')
         
+        simdc = sim_dict(inst)
         for k in dict(dc):
             if k in self.readonly or (meta_change_fields and k not in meta_change_fields ):
-                if hasattr(inst, "%s_id" % k):  # 如果是ForeignKey，必须要pk值才能通过 form验证
-                    fieldcls = inst.__class__._meta.get_field(k)
-                    if isinstance(fieldcls, models.ForeignKey):
-                        dc[k] = getattr(inst, "%s_id" % k)
-                        continue
-                if hasattr(inst,k):
-                    dc[k] =  getattr(inst , k)  
+                dc[k] = simdc.get(k)
+                #if hasattr(inst, "%s_id" % k):  # 如果是ForeignKey，必须要pk值才能通过 form验证
+                    #fieldcls = inst.__class__._meta.get_field(k)
+                    #if isinstance(fieldcls, models.ForeignKey):
+                        #dc[k] = getattr(inst, "%s_id" % k)
+                        #continue
+                #if hasattr(inst,k):
+                    #dc[k] =  getattr(inst , k)  
             
         # 强制保存字段，不验证是否改变,并且其他字段都不能改变
         #if dc.get('meta_change_fields'):
@@ -144,7 +148,10 @@ class ModelFields(forms.ModelForm):
         self.kw.update(dc)
 
         super(ModelFields,self).__init__(dc,*args,**form_kw)
-        
+        if not self.instance.pk:
+            self.is_create = True
+        else:
+            self.is_create = False
         self.pop_fields()
         self.init_value()
         
@@ -153,14 +160,27 @@ class ModelFields(forms.ModelForm):
         # 有事直接利用table的rows，而table进行了一定的修改显示，这些字段都是readonly的，所以要过滤掉这些字段，否则会造成严重后果。
         #self.changed_data = [x for x in self.changed_data if x not in self.readonly]
         # 保留下instance的原始值,用于记录日志 
-        self.before_changed_data = sim_dict(self.instance, include= self.changed_data)
+        self.before_changed_data = {k:v for k,v in simdc.items() if k in self.changed_data} # sim_dict(self.instance, include= self.changed_data)
         #self.org_db_dict = mark_dict(self.instance.__dict__,keys= self.fields.keys())
         
     
     def clean(self):
+        """
+        数据过期检查
+           overlaped_fields  用于排除掉不需要检查的字段。
+           meta_key_fields   用于设定只检查哪些字段
+           
+           meta_change_fields 在__init__函数中，不在meta_change_fields中的字段会被还原，只剩下变化的，所以这里不需要检测了。
+           
+        """
         super().clean()
         overlaped_fields = []
+        if self.kw.get('meta_change_fields'): 
+            return 
         if self.kw.get('meta_overlap_fields'):
+            if self.kw.get('meta_overlap_fields') =='__all__':
+                # 表示覆盖所有字段，意味着不再做过期检查
+                return
             overlaped_fields+= self.kw.get('meta_overlap_fields').split(',')
         if self.overlap_fields:
             overlaped_fields += self.overlap_fields
@@ -169,18 +189,20 @@ class ModelFields(forms.ModelForm):
             #fields_name =  self.kw.get('meta_hash_fields').split(',') 
             #crt_mark_dc = make_mark_dict(self.instance.__dict__,fields_name)
             crt_mark_dc= self.get_org_dict()
-            #ls = self.permit.changeable_fields()
-            #ls = [x for x in ls if x in self.fields.keys()]
-            #ls =[x for x in ls if x not in self.readonly]
-            #ls = [x for x in ls if x not in self.overlap_fields]
-            if self.kw.get('meta_change_fields'):
-                meta_change_fields = self.kw.get('meta_change_fields').split(',')
-                dif_dc = dif_mark_dict(crt_mark_dc,self.kw.get('meta_org_dict'),include= meta_change_fields)
+
+            if self.kw.get('meta_key_fields'):
+                meta_key_fields = self.kw.get('meta_key_fields').split(',')
+                dif_dc = dif_mark_dict(crt_mark_dc,self.kw.get('meta_org_dict'),include= meta_key_fields)
             else:
                 dif_dc = dif_mark_dict(crt_mark_dc, self.kw.get('meta_org_dict'),exclude= overlaped_fields)
             
             if dif_dc:
-                keys = [self.fields.get(key).label for key in dif_dc.keys()]
+                keys =[]
+                for key in dif_dc.keys():
+                    fld =self.fields.get(key)
+                    if fld:
+                        keys.append(fld.label)
+                #keys = [self.fields.get(key).label for key in dif_dc.keys() ]
                 raise OutDateException('(%s)的%s已经发生了变化,请确认后再进行操作!'%(self.instance,keys) )
     
     def get_org_dict(self,row=None):
@@ -349,7 +371,7 @@ class ModelFields(forms.ModelForm):
             
             dc = {'name':k,'label':str(v.label),
                   'help_text':str(v.help_text),
-                  'editor':'linetext'}
+                  'editor':'com-field-linetext'}
                   
             if hasattr(v,'required'):
                 dc['required'] = v.required   
@@ -536,8 +558,8 @@ class ModelFields(forms.ModelForm):
                 'pk': self.instance.pk,
                 'kind': op or 'extra_log',
                 'user': self.crt_user.username if self.crt_user.is_authenticated else 'anonymous',
-                'before': self.before_changed_data,
-                'after': after_changed_data,
+                '_before': self.before_changed_data,
+                '_after': after_changed_data,
             }
             if extra_log:
                 dc.update(extra_log)
@@ -567,7 +589,7 @@ class ModelFields(forms.ModelForm):
                 'pk':pk, 
                 'kind':'delete', 
                 'user': self.crt_user.username if self.crt_user.is_authenticated else 'anonymous',
-                'before':before_del_data,                 
+                '_before':before_del_data,                 
             }
             if ex_del_log:
                 dc.update(ex_del_log)

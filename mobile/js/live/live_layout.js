@@ -1,4 +1,4 @@
-require('./styl/live_fields.styl')
+require('./styl/live_layout.styl')
 
 var live_layout = {
     props:['ctx'],

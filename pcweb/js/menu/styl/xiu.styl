@@ -1,0 +1,49 @@
+.com-xiu-menu
+  background-color white
+  height 66px
+  line-height 66px
+  vertical-align middle
+  position: fixed;
+  z-index 10000
+  top: 0;
+  left: 0;
+  width var(--app-width)
+
+  .web-wrap
+    display flex
+  .brand
+    display inline-block
+
+  .menu
+    display inline-block
+    text-align right
+    flex-grow 100
+    .action
+      display inline-block
+      padding 0 20px
+      font-size 18px
+      a
+        text-decoration: none
+        color #7b7b7b
+        display inline-block
+        position relative
+        &:hover,&.active
+          color #c65624
+          &::after
+            content ''
+            display block
+            position absolute
+            height 2px
+            width 100%
+            background-color #c65624
+            bottom 5px
+  .right-ops
+    margin 0 10px
+    min-width 100px
+
+  @media (min-width: 1500px)
+    .brand
+      position absolute
+      left 20px
+    .menu
+      text-align left

@@ -8,6 +8,9 @@ Vue.component('com-field-linetext',{
     autosize
     :error-message="head.error"
     :readonly="head.readonly"
+    :maxlength="head.maxlength"
+     :right-icon="head.help_text?'question-o':''"
+    @click-right-icon="$toast(head.help_text)"
   >
   </van-field>`,
     mounted:function(){

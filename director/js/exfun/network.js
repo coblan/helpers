@@ -105,6 +105,9 @@ export var network ={
 
 
         }
+        if(typeof data == "object"){
+            data = JSON.stringify(data)
+        }
         return $.post(url,data,wrap_callback)
     },
     load_js:function(src,success){
@@ -152,16 +155,22 @@ export var network ={
         }
     },
     load_js_list:function(js_list,success){
-        var length = js_list.length
-        ex.each(js_list,function(js){
-            ex.load_js(js,function(){
-                length -=1
-                if(length ==0){
-                    success()
-                }
-            })
+        return new Promise( (resolve,reject)=>{
+            var length = js_list.length
+            ex.each(js_list,function(js){
+                ex.load_js(js,function(){
+                    length -=1
+                    if(length ==0){
+                        if(success){
+                            success()
+                        }
+                        resolve()
+                    }
+                })
 
+            })
         })
+
     },
     load_css:function (src) {
         var name = btoa(src)
@@ -192,7 +201,7 @@ export var network ={
         })
 
     },
-    load_img(url) {
+    load_image(url) {
         var img = new Image();
         img.src = url;
 
@@ -214,11 +223,17 @@ export var network ={
     },
     director_call:function(director_name,kws,callback){
         //var post_data=[{fun:"director_call",director_name:director_name,kws:kws}]
+        if(ex.isEmpty(kws)){
+            var post_data = {}
+        }else{
+            var post_data= JSON.stringify(kws)
+        }
+
         if(callback){
             //ex.post('/d/ajax',JSON.stringify(post_data),function(resp){
             //    callback( resp.director_call )
             //})
-            ex.post('/dapi/'+director_name,JSON.stringify(kws),function(resp){
+            ex.post('/dapi/'+director_name,post_data,function(resp){
                 if(resp.success){
                     callback( resp.data )
                 }
@@ -231,10 +246,14 @@ export var network ={
                     //        resolve(resp.director_call)
                     //    }
                     //)
-                ex.post('/dapi/'+director_name,JSON.stringify(kws)).then(
+                ex.post('/dapi/'+director_name,post_data).then(
                     function(resp){
                         if(resp.success) {
-                            resolve(resp.data)
+                            if(resp._question){
+                                ex.eval(resp._question,{director_name:director_name,kws:kws,resolve:resolve})
+                            }else{
+                                resolve(resp.data)
+                            }
                         }
                     }
                 )
@@ -243,7 +262,16 @@ export var network ={
         }
 
     },
-
+    director(director_name){
+        let handler = {
+            get: function(target, attr_name){
+                return function (kws){
+                    return ex.director_call('d.director_element_call',{director_name:director_name,attr_name:attr_name,kws:kws})
+                }
+            }
+        };
+        return new Proxy({},handler)
+    },
     download:function(strPath){
             var varExt = strPath.split('.');
             //alert(varExt.length);
@@ -263,7 +291,7 @@ export var network ={
             }
             return false;
     },
-    uploadfile({url,}={}){
+    uploadfile({url,accept}={}){
         this.__upload_url =url
         return new Promise((resolve,reject)=>{
             ex.__on_filechange=function(event){
@@ -278,13 +306,19 @@ export var network ={
             }
 
             if(!window._director_uploadfile_input){
-                $('body').append('<input type="file" id="__director-upload-file-input" style="display: none">')
+                $('body').append('<input type="file" id="__director-upload-file-input" style="display: none" >')
                 $('#__director-upload-file-input').change(function(event){
                     ex.__on_filechange(event)
                 })
                 window._director_uploadfile_input=true
+                if(accept){
+                    $('#__director-upload-file-input').attr('accept',accept)
+                }
                 $('#__director-upload-file-input').click()
             }else{
+                if(accept){
+                    $('#__director-upload-file-input').attr('accept',accept)
+                }
                 $('#__director-upload-file-input').click()
             }
 

@@ -17,6 +17,21 @@ var cfg={
         width:$(window).width(),
         height:$(window).height(),
     },
+    prompt(mycfg){
+        //{
+        //    formType: 2,
+        //        value: '初始值',
+        //    title: '请输入值',
+        //    area: ['800px', '350px'] //自定义文本域宽高
+        //}
+        mycfg = mycfg || {}
+        return new Promise(function(resolve,reject){
+            layer.prompt(mycfg,function(val, index){
+                resolve(val)
+                layer.close(index);
+            });
+        })
+    },
     showMsg:function(msg){
         return new Promise((resolve,reject)=>{
             layer.alert(msg,function(index){
@@ -128,6 +143,13 @@ var cfg={
             var callback = function(e){
                 close_fun()
                 resolve(e)
+                //if(e){
+                    //close_fun()
+                    //resolve(e)
+                //}else{
+                    //close_fun()
+                    //reject(e)
+                //}
             }
             ctx.ops_loc = ctx.ops_loc || 'bottom'
             var winindex = pop_layer(ctx,editor,callback,option)
@@ -156,12 +178,32 @@ var cfg={
         layer.open(dc);
     },
     confirm:function(msg){
+
         return new Promise(function(resolve,reject){
-            layer.confirm(msg, {icon: 3, title:'提示'}, function(index){
+            var index =layer.confirm(msg,
+                {icon: 3,
+                    title:'提示',
+                    end:function(){
+                        ex.remove(cfg.layer_index_stack,index)
+                        }
+            }, function(index){
                 layer.close(index);
                 resolve()
             });
+            cfg.layer_index_stack.push(index);
         })
+    },
+    select(msg,actions,option){
+        var index=0
+        var btns= ex.map(actions,action=>{return action.label})
+        var funclist= ex.map(actions,action=>{return (function(){ ex.eval(action.action,{index:index,option:option})  })})
+        index = layer.confirm(msg, {
+            btn: btns ,//按钮
+            end:function(){
+                ex.remove(cfg.layer_index_stack,index)
+            }
+        },...funclist);
+        cfg.layer_index_stack.push(index);
     }
 }
 

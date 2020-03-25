@@ -16,8 +16,8 @@ class BaseFieldProc(object):
         self.field=field
         if not self.field and self.model and name:
             self.field = self.model._meta.get_field(name)
-        catch = get_request_cache()
-        self.request = catch.get('request')
+            
+        self.request = get_request_cache().get('request')
         self.crt_user= self.request.user
         
     def to_dict(self,inst,name):
@@ -103,6 +103,11 @@ class BaseFieldProc(object):
             return  {}      # 如果是空字符串，就表示不过滤
         elif value is None:
             return {'%s__isnull'%name:True}
+        elif isinstance(value,(list,tuple)):
+            if value:  # 如果是空数组，就表示不过滤
+                return {'%s__in'%name:value}
+            else:
+                return {}
         else:
             return {name:value}
 
@@ -111,6 +116,22 @@ class BaseFieldProc(object):
         if q_str == '':
             return None
         return q_str
+    
+    def filter_inject_sql(self,name,filter_args):    
+        if filter_args.get(name) != None and filter_args.get(name) != '':
+            '''未完工，需要测试compare 组件功能'''
+            compare_name = '_%s_compare'%name
+            if compare_name in filter_args:
+                cv = str( filter_args.get(compare_name) )
+                if cv == '0':
+                    return  '%s = %s'%(name,filter_args.get(name) )
+                elif cv == '1':
+                    return '%s >= %s'%(name,filter_args.get(name) )
+                elif cv == '-1':
+                    return '%s <= %s'%(name,filter_args.get(name) )
+            return '%s = %s'%(name,filter_args.get(name) )
+        else:
+            return ''
 
 
 def model_to_name(model):

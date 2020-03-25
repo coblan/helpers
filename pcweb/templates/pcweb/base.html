@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+{% load static %}
+{% load jsonify %}
+{% load ctxvalue %}
+{% load rpdot %}
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    {{ customize_meta | safe }}
+
+        <script src="{{ js_config.js_lib.jquery }}"></script>
+        <script src="{{ js_config.js_lib.vuejs }}"></script>
+        <script src="{{ js_config.js_lib.exfun }}"></script>
+        <script src="{{ js_config.js_lib.nprogress }}"></script>
+        <link href="{{ js_config.js_lib.nprogress_css }}" rel="stylesheet">
+
+
+    {% block head-content %}
+        <title>标题</title>
+    {% endblock %}
+    <script>
+        (function(){
+            document.onreadystatechange = function(){
+                NProgress.configure({ showSpinner: false });
+                NProgress.start();
+                console.log(document.readyState);
+                if(document.readyState == "Uninitialized"){
+                    NProgress.set(1);
+                }
+                if(document.readyState == "Interactive"){
+                    NProgress.set(0.5);
+                }
+                if(document.readyState == "complete"){
+                    NProgress.done();
+                }
+            }
+        })();
+
+        window.onbeforeunload=function(){
+            NProgress.start();
+            setInterval(function(){
+                NProgress.inc()
+            },300)
+        }
+
+    </script>
+    <style>
+        .bar{
+            background: #dd453b !important;
+        }
+
+        .treeview:last-child ul{
+            padding-bottom: 60px;
+        }
+    </style>
+</head>
+
+{% include 'director/reverse.html' %}
+
+<script>
+    document.title = page_label
+    if(js_config.is_debug){
+        Vue.config.devtools = true
+    }
+</script>
+
+<body >
+{% block page_body %}
+<div>
+    hello world
+</div>
+{% endblock %}
+
+
+</body>
+
+{% for lib in extra_js %}
+<script src='{{ lib | ctxvalue:js_config.js_lib }}'></script>
+{% endfor %}
+
+<script>
+    init_express={{ init_express | jsonify }}
+    if(init_express){
+        ex.eval(init_express)
+    }
+</script>
+</html>

@@ -108,20 +108,33 @@ export var com_file_uploader = {
             }
             var upload_url=this.cfg.upload_url
 
-            //show_upload()
-
-            cfg.show_load()
+            //cfg.show_load()
+            var ps = {
+                progress:0,
+            }
+            cfg.pop_vue_com('com-pop-progress',{ps:ps,label:'上传中!'}, {
+                title:false,
+                area: ['300px', '80px'],
+                shade: 0.01,
+                closeBtn:0,
+                resize:false,
+                //skin:'background-none',
+        })
             fl.uploads(file_list,upload_url,function(resp){
-                cfg.hide_load()
+                ps.progress = 100
                 if(resp){
                     if(self.cfg.multiple){
                         self.add_value(resp)
                     }else{
                         self.set_value(resp)
                     }
-
                 }
                 //hide_upload(300)
+            },(progress)=>{
+                //console.log(progress)
+                if(progress <1){
+                    ps.progress = parseInt( progress *100 )
+                }
             })
         },
         set_value:function(value){

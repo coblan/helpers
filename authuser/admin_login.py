@@ -67,7 +67,7 @@ class Login(object):
     def check_code(self):
         org_code = get_value(self.code_key,gte=self.code_life) # 30分钟内
         if  org_code:
-            if  org_code.lower() != self.row.get('validate_code').lower():
+            if  org_code.lower() != self.row.get('validate_code','').lower():
                 return False
         return True
 

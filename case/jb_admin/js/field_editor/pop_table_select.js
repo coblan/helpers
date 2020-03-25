@@ -26,6 +26,10 @@ var pop_table_select =  {
                 ex.eval(this.head.init_express,{head:this.head,row:this.row})
             }
             cfg.pop_vue_com('com-table-panel',this.head.table_ctx).then(foreign_row=>{
+                    if(!foreign_row){
+                        console.log('break table panel')
+                        return
+                    }
                     if(self.head.after_select){
                         ex.eval(self.head.after_select,{selected_row:foreign_row,row:self.row})
                     }else if(self.head.select_field){
@@ -34,6 +38,8 @@ var pop_table_select =  {
                         Vue.set(self.row,self.head.name,foreign_row.pk)
                     }
                     Vue.set(self.row,'_'+self.head.name+'_label',foreign_row._label)
+            }).catch(()=>{
+                console.log('break table panel')
             })
             //var win_close = cfg.pop_middle('com-table-panel',this.head.table_ctx,function(foreign_row){
             //    if(self.head.action){

@@ -36,13 +36,12 @@ var mix_fields_data ={
         ex.each(this.heads,function(head){
             if(typeof head.readonly=='string'){
                 head._org_readonly=head.readonly
-                var is_readonly = ex.eval(head._org_readonly,{row:self.row})
-                Vue.set(head,'readonly',is_readonly)
-                //head.readonly=ex.eval(head._org_readonly,{row:self.row})
+                //var is_readonly = ex.eval(head._org_readonly,{row:self.row})
+                //Vue.set(head,'readonly',is_readonly)
             }
             if(typeof head.required=='string'){
                 head._org_required=head.required
-                head.required=ex.eval(head._org_required,{row:self.row})
+                //head.required=ex.eval(head._org_required,{row:self.row})
             }
             //if(typeof head.show=='string'){
             //    head._org_show=head.show
@@ -55,11 +54,11 @@ var mix_fields_data ={
             var self=this
             ex.each(self.heads,function(head){
                 if( head._org_readonly){
-                    var is_readonly = ex.eval(head._org_readonly,{row:self.row})
+                    var is_readonly = ex.eval(head._org_readonly,{row:self.row,head:head})
                     Vue.set(head,'readonly',is_readonly)
                 }
                 if( head._org_required){
-                    head.required=ex.eval(head._org_required,{row:self.row})
+                    head.required=ex.eval(head._org_required,{row:self.row,head:head})
                 }
             })
 
@@ -68,7 +67,7 @@ var mix_fields_data ={
                 if (head.sublevel){
                     return false
                 }else if(head.show){
-                    return ex.eval(head.show,{row:self.row})
+                    return ex.eval(head.show,{row:self.row,head:head})
                 }else{
                     return true
                 }
@@ -189,9 +188,13 @@ var mix_fields_data ={
             var post_data=[{fun:'save_row',row:this.row}]
             this.old_row=ex.copy(this.row)
             var p = new Promise((resolve,reject)=>{
-                ex.post('/d/ajax',JSON.stringify(post_data), (resp) =>{
+                //ex.post('/d/ajax',JSON.stringify(post_data), (resp) =>{
+                ex.director_call('d.save_row',{row:this.row}).then( (resp) =>{
                     cfg.hide_load()
-                    var rt = resp.save_row
+                    delete self.row.meta_overlap_fields
+                    delete self.row.meta_change_fields
+
+                    var rt = resp //resp.save_row
                     if(rt.errors){
                         //cfg.hide_load()
                         self.setErrors(rt.errors)
@@ -214,7 +217,7 @@ var mix_fields_data ={
                             //self.updateRowBk(self.row._director_name,{pk:self.row.pk})
                         }, function(index){
                             layer.close(index)
-                            self.row.meta_hash_fields=''
+                            self.row.meta_overlap_fields='__all__'
                             self.submit()
                         });
                         //cfg.showMsg(rt._outdate)
@@ -247,11 +250,15 @@ var mix_fields_data ={
             //ex.assign(this.row,new_row)
             //TODO 配合 table_pop_fields ，tab-fields 统一处理 after_save的问题
             if(this.par_row){
-                if(this.par_row._director_name == new_row._director_name && this.par_row.pk == new_row.pk){
-                    ex.vueAssign(this.par_row,new_row)
+                if(this.par_row._director_name == new_row._director_name){
+                    if(this.par_row.pk == new_row.pk){
+                        ex.vueAssign(this.par_row,new_row)
+                    }else if(!this.par_row.pk){
+                        ex.vueAssign(this.par_row,new_row)
+                        this.parStore.update_or_insert(this.par_row)
+                    }
                 }
             }
-
         },
         showErrors:function(errors){
             // 落到 nice validator去

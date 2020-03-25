@@ -4,6 +4,7 @@ from django.db import models
 from helpers.director.shortcut import field_map
 from helpers.director.model_func.field_proc import BaseFieldProc
 import re
+from django.utils import timezone
 
 class MultiPictureField(models.TextField):
     pass
@@ -37,8 +38,8 @@ class MultiPictureProc(BaseFieldProc):
     
     def dict_field_head(self,head):
         head['editor']='com-field-multi-picture'
-        head['up_url']='/d/upload?path=general_upload/images'
-        
+        #head['up_url']='/d/upload?path=general_upload/images'
+        head['up_url']='/d/upload?path=general_upload/%s'%timezone.now().strftime('%Y%m')
         return head
 
 field_map[MultiPictureField]=MultiPictureProc

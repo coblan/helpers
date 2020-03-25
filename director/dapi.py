@@ -1,4 +1,4 @@
-from helpers.director.ajax import save_row
+#from helpers.director.ajax import save_row
 from helpers.director.decorator import get_request_cache
 from django.http import JsonResponse
 from .shortcut import director_view
@@ -6,11 +6,11 @@ from helpers.director.base_data import director
 from .model_func.wirtedb import permit_save_model
 from django.core.exceptions import ValidationError
 from .fields.fields import ModelFields,OutDateException
+from django.core.exceptions import PermissionDenied
 
 def director_save_row(row):
-     request = get_request_cache()['request']
-     user = request.user
-     rt_dc = save_row(row,user,request)
+     #rt_dc = save_row(row,user,request)
+     rt_dc = save_row(row)
      if 'errors' in rt_dc:
           errors = {}
           for k,v in rt_dc['errors'].items():
@@ -30,6 +30,8 @@ def save_row(row):
           return {'success':True,'status':'success','row':dc}
      except ValidationError as e:
           return {'errors':dict(e)}
+     except PermissionDenied as e:
+          raise UserWarning(str(e))
      except OutDateException as e:
           return {'_outdate':str(e)}
 
@@ -64,8 +66,16 @@ def save_rows(rows):
           return {'errors':dict(e),}   
      except OutDateException as e:
           return {'_outdate':str(e)}
+     except PermissionDenied as e :
+          raise UserWarning(str(e))
 
 @director_view('d.get_head_context')
 def get_head_context(director_name):
      dcls = director.get(director_name)
      return dcls().get_head_context()
+
+@director_view('d.director_element_call')
+def director_element_call(director_name,attr_name,kws):
+     dcls = director.get(director_name)
+     obj = dcls()
+     return getattr(obj,attr_name)(**kws)

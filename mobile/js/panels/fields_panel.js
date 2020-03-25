@@ -27,7 +27,7 @@ Vue.component('com-fields-panel',{
     </template>
     <template v-else>
      <van-cell-group   >
-        <component v-for="head in heads" :is="head.editor" :head="head" :row="row"></component>
+        <component v-for="head in normed_heads" :is="head.editor" :head="head" :row="row"></component>
     </van-cell-group>
     </template>
 
@@ -40,6 +40,13 @@ Vue.component('com-fields-panel',{
        </div>
     </van-cell-group>
     </div>`,
+    mounted(){
+        this.$on('finish',(row)=>{
+            if(this.ctx.row){
+                ex.vueAssign(this.ctx.row,row)
+            }
+        })
+    },
     computed:{
         grouped_heads_bucket:function(){
             var out_bucket = []
