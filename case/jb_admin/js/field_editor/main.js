@@ -18,3 +18,6 @@ import * as color from  './color'
 import * as number from  './number'
 import * as richtext from  './richtext'
 import * as split_text from  './split_text'
+
+import int_field from './int.vue'
+Vue.component('com-field-int',int_field)
