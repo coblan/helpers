@@ -4,6 +4,8 @@ from django.db import models
 import json
 from django.forms import CharField
 from helpers.director.data_format.json_format import DirectorEncoder
+from helpers.director.shortcut import field_map
+from helpers.director.model_func.field_proc import BaseFieldProc
 
 class JsonAbleField(models.TextField):
     """
@@ -34,3 +36,33 @@ class JsonFormField(CharField):
     """
     def clean(self, value):
         return value
+
+class JsonAbleProc(BaseFieldProc):
+    '''
+    '''
+    def clean_field(self,dc,name):
+        """
+        """
+        value = dc.get(name)
+        if value:
+            return json.loads(value)
+        else:
+            return value
+
+    def to_dict(self, inst, name):
+        value = getattr(inst,name)
+        if value:
+            return {name: json.dumps(value,cls=DirectorEncoder) }
+        else:
+            return {name: value}
+        
+    #def dict_table_head(self,head): 
+        #head['editor']='com-table-link'
+        #return head
+    
+    #def dict_field_head(self,head):
+        #head['editor']='com-field-plain-file'
+        
+        #return head
+
+field_map[JsonAbleField]=JsonAbleProc
