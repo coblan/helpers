@@ -26,7 +26,7 @@ export  function pop_layer (com_ctx,component_name,callback,layerConfig){
                 </div>`,
         end: function () {
             if(callback){
-                callback(null)
+                callback('__end_by_user')
             }
             ex.remove(cfg.layer_index_stack,opened_layer_index)
         }
