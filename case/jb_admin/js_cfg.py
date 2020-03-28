@@ -1,6 +1,6 @@
 from helpers.director.base_data import js_tr_list, js_lib_list
 from django.utils.translation import ugettext as _
-from helpers.maintenance.update_static_timestamp import js_stamp_dc
+from helpers.maintenance.update_static_timestamp import js_stamp_dc,static_url
 from django.conf import settings
 def get_tr():
     return {
@@ -17,14 +17,14 @@ js_tr_list.append(get_tr)
 
 def get_lib(request): 
     if settings.DEBUG:
-        vue='/static/lib/vue2.5/vue.js'
+        vue= static_url('lib/vue2.5/vue.js')
     else:
-        vue = '/static/lib/vue2.5/vue.min.js'
+        vue = static_url ( 'lib/vue2.5/vue.min.js' )
         
     dc = {
-        'jquery': '/static/lib/jquery3.2.1.min.js',
+        'jquery': static_url( 'lib/jquery3.2.1.min.js'),
         'vuejs': vue,
-        'vuex': '/static/lib/vuex.min.js', 
+        'vuex': static_url( 'lib/vuex.min.js'), 
 
         'font_awesome': '/static/lib/font-awesome4.7/font-awesome4.7.min.css',
         'bootstrap_css': '/static/lib/bootstrap.min.css',
@@ -73,7 +73,7 @@ def get_lib(request):
         #'md5': 'https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.min.js',
         
         #'jb_admin_pack_js': '/static/js/jb_admin.pack.js?t=%s&t2=123'%js_stamp_dc.get('jb_admin_pack_js'),
-        'jb_admin': '/static/js/jb_admin.pack.js?t=%s&t2=123'%js_stamp_dc.get('jb_admin_pack_js'),
+        'jb_admin': static_url( 'js/jb_admin.pack.js?t=%s&t2=123'%js_stamp_dc.get('jb_admin_pack_js') ),
         #'swiper': 'https://cdn.bootcss.com/Swiper/4.3.0/js/swiper.min.js',
         #'swiper_css': 'https://cdn.bootcss.com/Swiper/4.3.0/css/swiper.min.css',  
         'swiper': '/static/lib/swiper/js/swiper.min.js',

@@ -1,5 +1,8 @@
 require('./styl/block_ctn.styl')
-
+/*
+* 块容器
+* 用户存放页面中有标题和副标题的块
+* */
 Vue.component('com-top-block-ctn',{
     props:['ctx'],
     template:`<div class="com-top-block-ctn">
