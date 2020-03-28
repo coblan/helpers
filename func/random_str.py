@@ -27,5 +27,7 @@ def get_str(length=15):
     return ''.join([random.choice(a) for i in range(length)])
 
 def get_random_number(length= 6): 
-    a = '1234567890'  
-    return ''.join([random.choice(a) for i in range(length)])
+    a = '123456789' 
+    a1 = '1234567890'
+    rt = random.choice(a) + ''.join([random.choice(a1) for i in range(length-1)])
+    return rt
