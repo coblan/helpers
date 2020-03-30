@@ -1,11 +1,10 @@
 from helpers.director.base_data import  js_lib_list
 from django.utils.translation import ugettext as _
-from helpers.maintenance.update_static_timestamp import js_stamp_dc
-
+from helpers.maintenance.short_cut import js_stamp_dc,static_url
 
 def get_lib(request): 
     dc = {
-        'pcweb': '/static/js/pcweb.pack.js?t=%s&v=1'%js_stamp_dc.get('pcweb_pack_js'), 
+        'pcweb': static_url( 'js/pcweb.pack.js?t=%s&v=1'%js_stamp_dc.get('pcweb_pack_js') ), 
     }
     return dc
 

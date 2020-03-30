@@ -1,0 +1,1 @@
+from .update_static_timestamp import static_url,js_stamp_dc

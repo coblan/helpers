@@ -4,7 +4,7 @@ require('./styl/caption.styl')
 * |------|
 * |描述  |
 *
-* hover时，边框变化
+* hover时，边框变化，每行4个
 * */
 Vue.component('com-ti-caption',{
     props:['ctx'],
@@ -14,8 +14,12 @@ Vue.component('com-ti-caption',{
         <div class="title" v-text="ctx.title"></div>
         <div class="sub-title" v-text="ctx.sub_title"></div>
     </div>
-
     </div>`,
+    mounted(){
+        if(this.ctx.css){
+            ex.append_css(this.ctx.css)
+        }
+    },
     computed:{
         mystyle(){
             return {

@@ -3,6 +3,7 @@
 import os
 from django.conf import settings
 from helpers.func.dot_dict import DotObj
+import urllib
 
 def get_static_obj(path):
     if not os.path.exists(path):
@@ -30,6 +31,8 @@ def get_static_dc(path):
     
     return dc
 
+def static_url(path):
+    return urllib.parse.urljoin(settings.STATIC_URL,path)
 
 org_static_file_path=os.path.join(settings.BASE_DIR,'static')
 volatile_static_file_path=os.path.join(org_static_file_path,'js')
