@@ -4,6 +4,9 @@
 </template>
 <script>
 export default {
-    props:['ctx']
+    props:['ctx'],
+    methods:{
+        
+    }
 }
 </script>
