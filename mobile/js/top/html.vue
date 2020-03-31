@@ -6,7 +6,7 @@
 export default {
     props:['ctx'],
     methods:{
-        
+
     }
 }
 </script>
