@@ -36,16 +36,17 @@
 <style scoped lang="scss">
 .com-top-caption  {
    display: flex;
+    width: var( --app-width );
 }
 .img-container{
-    width: 40vw;
+    width: 40%;
     margin: .2rem;
-    height: 40vw;
+    height: calc( var( --app-width ) * 40% );
     background-size: cover;
     background-position: center;
 }
 .content{
-    width: 50vw;
+    width: 50%;
     padding: .2rem;
     line-height: .5rem;
     color: #5a5a5a;
