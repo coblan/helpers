@@ -105,6 +105,9 @@ export var network ={
 
 
         }
+        if(typeof data == "object"){
+            data = JSON.stringify(data)
+        }
         return $.post(url,data,wrap_callback)
     },
     load_js:function(src,success){

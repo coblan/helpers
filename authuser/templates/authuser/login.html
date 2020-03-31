@@ -218,7 +218,7 @@
 
 </style>
 
-<img src="/static/authuser/image/login_bg.jpg" alt="" style="width: 100%;height: 50%">
+<img src='{% static "authuser/image/login_bg.jpg" %}' alt="" style="width: 100%;height: 50%">
 
 <div id='there' class="flex" style="position: relative">
     <div class="flex" style="position: absolute;bottom:-100px;left:50%;transform: translateX(-50%);
@@ -234,13 +234,13 @@
             <div class="fa-input">
                 <input type="text" id="username" name="username" class="form-control"  :placeholder="page_cfg.login_item" v-model="row.username">
                 <div style="position: absolute;left: 7px;top:3px">
-                    <img src="/static/authuser/image/login_ic_username.png" alt="" style="width: 12px">
+                    <img src='{% static "authuser/image/login_ic_username.png" %}'  alt="" style="width: 12px">
                 </div>
             </div>
             <div class="fa-input">
                 <input type="password" id="password" name="password" class="form-control"  placeholder="密码" v-model="row.password">
                 <div style="position: absolute;left: 7px;top:3px">
-                    <img src="/static/authuser/image/login_ic_password.png" alt="" style="width: 12px">
+                    <img src= '{% static "authuser/image/login_ic_password.png" %}'   alt="" style="width: 12px">
                 </div>
             </div>
             <div class="fa-input" v-if="row.validate_img">
@@ -250,7 +250,7 @@
                 </div>
 
                 <div style="position: absolute;left: 7px;top:3px">
-                    <img src="/static/authuser/image/validate.png" alt="" style="width: 12px">
+                    <img src='{% static "authuser/image/validate.png" %}'   alt="" style="width: 12px">
                 </div>
             </div>
             <div style="margin: 1em 0;">
@@ -265,8 +265,8 @@
 </div>
 
         </div>
-        <img src="/static/authuser/image/login_shawdow.png" alt="" style="position: absolute;right: -30px;bottom: 0;width: 30px">
-        <img src="/static/authuser/image/login_shawdow.png" alt="" style="position: absolute;left: -30px;bottom: 0;width: 30px;transform: scaleX(-1)">
+        <img src= '{% static "authuser/image/login_shawdow.png" %}' alt="" style="position: absolute;right: -30px;bottom: 0;width: 30px">
+        <img src= '{% static "authuser/image/login_shawdow.png" %}' alt="" style="position: absolute;left: -30px;bottom: 0;width: 30px;transform: scaleX(-1)">
 
         <!--<img src="/static/authuser/image/login_logo.png" alt=""-->
              <!--style="position: absolute;top:-4em;left:50%;transform: translateX(-50%);width: 16em;">-->

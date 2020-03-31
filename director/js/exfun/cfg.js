@@ -142,7 +142,12 @@ var cfg={
         return new Promise(function(resolve,reject){
             var callback = function(e){
                 close_fun()
-                resolve(e)
+                if(e != '__end_by_user'){
+                    resolve(e)
+                }else{
+                    reject()
+                }
+
                 //if(e){
                     //close_fun()
                     //resolve(e)

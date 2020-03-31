@@ -22,6 +22,7 @@ import inspect
 from helpers.director.exceptions.unauth401 import UnAuth401Exception
 from .data_format.json_format import DirectorEncoder
 from .exceptions.question import QuestionException
+from helpers.func.d_import import import_element
 
 import logging
 req_log = logging.getLogger('general_log')
@@ -96,7 +97,12 @@ def general_upload(request):
     if request.GET.get('director'):
         UploadView=director.get(request.GET.get('director'))
         return UploadView().asView(request)
-    return GeneralUpload().asView(request)
+    if getattr(settings,'FILE_SAVER'):
+        uploader_str = getattr(settings,'FILE_SAVER').get('class')
+        uploader = import_element(uploader_str)
+        return uploader().asView(request)
+    else:
+        return GeneralUpload().asView(request)
 
 @csrf_exempt
 def ckeditor(request): 
@@ -125,19 +131,17 @@ def director_view(request,director_name):
     try:
         kws = argument.get_argument(request,outtype='dict')
         if inspect.isfunction(directorEnt):
-            wraped_directorEnt = transactionall(directorEnt)
-            #try:
-            rt = wraped_directorEnt(**kws)
-            #except TypeError as e:
-                ## 如果调用函数少了参数，就会报这个异常
-                #raise UserWarning(str(e))
+            rt = directorEnt(**kws)
+            # 2020/3/18 去掉统一的事务，免得造成异步性能不足和死锁
+            #wraped_directorEnt = transactionall(directorEnt)
+            #rt = wraped_directorEnt(**kws)
         else:
             # directorEnt is class
             obj = directorEnt(**kws)
             if hasattr(obj,'get_data_context'):
-                wraped_directorEnt = transactionall(obj.get_data_context)
+                wraped_directorEnt = obj.get_data_context # transactionall(obj.get_data_context)
             else:
-                wraped_directorEnt = transactionall(obj.get_context)
+                wraped_directorEnt = obj.get_context # transactionall(obj.get_context)
             rt = wraped_directorEnt()
         if isinstance(rt,HttpResponse):
             # 直接返回
