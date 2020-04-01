@@ -97,7 +97,7 @@ def general_upload(request):
     if request.GET.get('director'):
         UploadView=director.get(request.GET.get('director'))
         return UploadView().asView(request)
-    if getattr(settings,'FILE_SAVER'):
+    if getattr(settings,'FILE_SAVER',None):
         uploader_str = getattr(settings,'FILE_SAVER').get('class')
         uploader = import_element(uploader_str)
         return uploader().asView(request)
