@@ -643,7 +643,9 @@ class ModelTable(object):
     
     def footer_by_dict(self, dc): 
         """
-        将 {'field':'sumvalue'} 形式的字典，转换为
+        2020/3/17 现在前端做了处理，footer直接传字典就可以解析了。这个函数应该无用了。
+        
+        由于elment-ui table只能接受数组作为footer，这里将 {'field':'sumvalue'} 形式的字典，转换为
         [sumvalue] 这样的数组，便于前端element table 的foot 显示。
         
         """
