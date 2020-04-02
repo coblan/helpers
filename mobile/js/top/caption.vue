@@ -1,5 +1,5 @@
 <template>
-    <div class="com-top-caption" :class="ctx.class">
+    <div class="com-top-caption" :class="ctx.class" @click="on_click()">
         <div v-if="ctx.location !='right'" class="img-container" :style="image_bg">
 
         </div>
@@ -30,6 +30,13 @@
                     'background-image':'url('+this.ctx.image_url +')'
                 }
             }
+        },
+        methods:{
+            on_click(){
+                if(this.ctx.action){
+                    ex.eval(this.ctx.action,{head:this.ctx})
+                }
+            }
         }
     }
 </script>
@@ -37,6 +44,7 @@
 .com-top-caption  {
    display: flex;
     width: var( --app-width );
+    min-height: 3rem;
 }
 .img-container{
     width: 40%;
