@@ -1,0 +1,15 @@
+.ab-center{
+  position: absolute;
+  top:50%;
+  left: 50%;
+  transform: translate(-50%);
+}
+.ab-h-center{
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.after-nav-content{
+  height: calc( var(--app-height) - 50px);
+  overflow: auto;
+}
