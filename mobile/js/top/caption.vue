@@ -7,7 +7,7 @@
         <div class="content">
             <div class="mytitle" v-if="ctx.title" v-text="ctx.title"></div>
             <div class="sub-title">
-                <div v-html="ctx.sub_title"></div>
+                <div v-text="ctx.sub_title"></div>
             </div>
         </div>
         <div v-if="ctx.location=='right'" class="img-container" :style="image_bg">

@@ -1,5 +1,22 @@
 import re
 
+import re
+from django.utils.html import strip_tags
+
+def textify(html):
+    # Remove html tags and continuous whitespaces 
+    text_only = re.sub('[ \t]+', ' ', strip_tags(html))
+    text_only = re.sub('&nbsp',' ',text_only)
+    # Strip single spaces in the beginning of each line
+    return text_only.replace('\n ', '\n').strip()
+
+#html = render_to_string('email/confirmation.html', {
+    #'foo': 'hello',
+    #'bar': 'world',
+#})
+#text = textify(html)
+
+
 tag_end_re = re.compile(r'(\w+)[^>]*>')
 entity_end_re = re.compile(r'(\w+;)')
 
