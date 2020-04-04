@@ -10,3 +10,11 @@ export default {
     }
 }
 </script>
+<style lang="scss">
+.com-top-html{
+    img{
+        max-width: 100%;
+        height: auto;
+    }
+}
+</style>
