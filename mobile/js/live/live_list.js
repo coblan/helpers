@@ -30,7 +30,9 @@ var live_list={
     </van-pull-refresh>
     </van-list>
 
-
+     <div v-if="ctx.footer" class="footer-content">
+         <component :is="ctx.footer.editor"  :ctx="ctx.footer"></component>
+     </div>
 
     </div>`,
     data(){
