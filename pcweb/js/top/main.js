@@ -8,3 +8,4 @@ import  com_html from  './html.vue'
 import com_list from './list.vue'
 
 Vue.component('com-top-list',com_list)
+Vue.component('com-top-html',com_html)
