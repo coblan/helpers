@@ -2,13 +2,21 @@
   padding   20px
   border-bottom 1px solid #f8f8f8
   display flex
+  transition all .2s ease-in
+  &:hover
+    background: #f7f7f7;
+    -webkit-box-shadow: 0 0 30px rgba(0,0,0,0.1);
+    box-shadow: 0 0 30px rgba(0,0,0,0.15);
+    -webkit-transform: translate3d(0, 0px, -2px);
+    transform: translate3d(0, 1px, -2px);
+
 
   img
     width 140px
     height 110px
     flex-shrink 0
   .content
-    margin-left 10px
+    margin-left 15px
     //display inline-block
     vertical-align top
     .title
