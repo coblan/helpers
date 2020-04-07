@@ -53,7 +53,8 @@ class MongoTable(PlainTable):
         #'Event'
     
         #for item in spiderman['Ticket'].find(self.filter_args).sort( [('EventDateTime',1)]).skip(start_index).limit(self.perpage):
-        for item in self.model.find(self.filter_args).skip(start_index).limit(self.perpage):
+        
+        for item in self.model.find(self.filter_args).sort( [('_id',-1)]).skip(start_index).limit(self.perpage):
             dc = {
                 'pk':item.get('_id')
             }
