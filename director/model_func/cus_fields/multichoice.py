@@ -54,7 +54,7 @@ class MultiChoiceProc(CharProc):
             myvalue = dc[name]
             
         if self.field.full_choice :
-            whole_values = [x[0] for x in self.field.my_choices]
+            whole_values = [str( x[0] ) for x in self.field.my_choices]
             for x in whole_values:
                 if not x in myvalue:
                     return seperator.join( [str(x) for x in myvalue])

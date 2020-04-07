@@ -3,6 +3,10 @@
         <com-uis-nav-bar :title="ctx.title" :back="can_back" :back_action="ctx.back_action"></com-uis-nav-bar>
         <div class="content" v-html="ctx.content">
         </div>
+
+        <div v-if="ctx.footer" class="footer-content">
+            <component :is="ctx.footer.editor"  :ctx="ctx.footer"></component>
+        </div>
     </div>
 </template>
 <script>
@@ -17,13 +21,23 @@
     }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
     .com-live-html{
         background-color: white;
-    }
+        display:flex;
+        flex-direction:column;
+
     .content{
         padding: .3rem .2rem;
-        height: calc( var(--app-height) - 80px );
+        /*height: calc( var(--app-height) - 80px );*/
         overflow: auto;
+
+        img{
+            max-width: 100%;
+            height: auto;
+        }
+        }
+
     }
+
 </style>
