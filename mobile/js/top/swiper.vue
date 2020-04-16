@@ -1,7 +1,7 @@
 <template>
     <div class="com-top-swiper" :class="ctx.class">
         <van-swipe class="my-swipe" :autoplay="5000" indicator-color="white">
-            <van-swipe-item v-for="item in ctx.items">
+            <van-swipe-item v-for="item in ctx.items" @click="on_click(item)">
                 <div class="img-container" :style="get_style(item.image_url)">
                     <div v-if="item.label" class="ab-h-center image-label" v-text="item.label"></div>
                 </div>
@@ -20,6 +20,11 @@
         methods:{
             get_style(image_url){
                 return {'background-image':'url('+image_url +')'}
+            },
+            on_click(item){
+                if(item.action){
+                    ex.eval(item.action,{head:this.ctx})
+                }
             }
         }
     }
@@ -29,7 +34,7 @@
     .img-container{
         background-size: cover;
         background-position: center;
-        width: var( --app-width );
+        width: 100%;
         height: 5rem;
     }
     .image-label{

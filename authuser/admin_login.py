@@ -31,7 +31,7 @@ class LoginFormPage(FieldsPage):
                 'title': '用户登录',
                 'subtitle': '欢迎登录后台管理系统',
                 #'regist_url': '%s/regist' % self.engin.engin_url,
-                'copyright': 'Copyright @2018  All Right Reserve',
+                'copyright': 'Copyright @%s  All Right Reserve'%timezone.now().year,
                 'heads': self.get_heads(),
                 'login_item': '用户名',
                 },

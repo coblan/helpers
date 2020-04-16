@@ -6,7 +6,7 @@ Vue.component('com-li-article',{
     <img :src="ctx.cover" alt="">
     <div class="content">
         <span class="title" :class="{clickable:has_action}" v-text="ctx.title" @click="on_click()"></span>
-        <div class="html" v-html="ctx._content_label"></div>
+        <div class="sub-title" v-text="ctx.sub_title"></div>
     </div>
     </div>`,
     data(){

@@ -4,6 +4,7 @@ from helpers.director.shortcut import field_map
 from helpers.director.model_func.field_proc import BaseFieldProc
 import re
 from django.utils.text import Truncator
+from helpers.func.html import textify,truncatehtml
 
 class RichtextField(models.TextField):
     pass
@@ -16,7 +17,7 @@ class RichtextProc(BaseFieldProc):
         value = getattr(inst,name,'')
         return {
             name:value,
-            '_%s_label'%name:Truncator(value).chars(20, html=True)
+            '_%s_label'%name: textify( truncatehtml(value,20) ) # Truncator(value).chars(20, html=True) )
         }
     
     def clean_field(self,dc,name):
