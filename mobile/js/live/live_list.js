@@ -4,7 +4,7 @@ require('./styl/live_list.styl')
 * 具备滚动加载功能
 *
 * */
-var live_list={
+export var live_list={
     props:['ctx'],
     basename:'live-list',
     template:`<div class="com-live-list" >
@@ -65,14 +65,7 @@ var live_list={
         }
     },
     mounted(){
-        if(this.ctx.css){
-            ex.append_css(this.ctx.css)
-        }
-        if(this.ctx.init_express){
-            ex.eval(this.ctx.init_express,{self:this,cs:this.childStore})
-        }else  if(!this.ctx.rows || this.ctx.rows.length==0){
-            this.childStore.search()
-        }
+       this.init()
     },
     computed:{
         is_page(){
@@ -88,6 +81,16 @@ var live_list={
         }
     },
     methods:{
+        init(){
+            if(this.ctx.css){
+                ex.append_css(this.ctx.css)
+            }
+            if(this.ctx.init_express){
+                ex.eval(this.ctx.init_express,{self:this,cs:this.childStore})
+            }else  if(!this.ctx.rows || this.ctx.rows.length==0){
+                this.childStore.search()
+            }
+        },
         onRefresh(){
             console.log('刷新')
             this.childStore.search().then(()=>{
@@ -113,13 +116,15 @@ var live_list={
             }
         },
         onPullingUp(){
-            this.childStore.addNextPage().then(()=>{
+            this.childStore.addNextPage().then((new_rows)=>{
                 this.$refs.scroll.forceUpdate()
+                this.childStore.$emit('finish-search',new_rows)
             })
         },
         onPullingDown(){
-            this.childStore.search().then(()=>{
+            this.childStore.search().then((new_rows)=>{
                 this.$refs.scroll.forceUpdate()
+                this.childStore.$emit('finish-search',new_rows)
             })
         },
     },
