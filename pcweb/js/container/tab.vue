@@ -28,7 +28,7 @@
         methods:{
             is_show(tab){
                 if(this.crt_tab == tab.label){
-                    tab._show_editor = tab.editor
+                    Vue.set(tab,'_show_editor',tab.editor)
                     return true
                 }else{
                     return false
