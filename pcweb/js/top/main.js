@@ -6,6 +6,8 @@ import *  as  lay_main_small from './lay_main_small'
 //import *  as  my_html from './html'
 import  com_html from  './html.vue'
 import com_list from './list.vue'
+import  com_image_top_pad from  './image_top_pad.vue'
 
 Vue.component('com-top-list',com_list)
 Vue.component('com-top-html',com_html)
+Vue.component('com-top-image-top-pad',com_image_top_pad)
