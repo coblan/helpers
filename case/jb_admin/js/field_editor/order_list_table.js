@@ -55,7 +55,12 @@ var order_list =  {
     mixins:[mix_table_data,mix_ele_table_adapter],
     data:function(){
         if(this.row[this.head.name]){
-            var rows = JSON.parse(this.row[this.head.name])
+            var value = this.row[this.head.name]
+            if(typeof(value) =='string'){
+                var rows = JSON.parse(value)
+            }else{
+                var rows = value
+            }
         }else{
             var rows = []
         }

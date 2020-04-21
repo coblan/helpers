@@ -324,4 +324,9 @@ export var network ={
 
         })
     },
+    refresh_row(row){
+        return ex.director_call(row._director_name,{pk:row.pk}).then(resp=>{
+            ex.vueAssign(row,resp.row)
+        })
+    }
 }

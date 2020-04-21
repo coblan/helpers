@@ -12,7 +12,7 @@ class JsonAbleField(models.TextField):
     默认值 default可以直接设置python对象，例如{},[]
     """
     def  from_db_value(self,value, expression, connection,ctx):
-        return json.loads(value)
+        return json.loads(value,)
     
     def get_prep_value(self,value):
         return json.dumps(value,cls=DirectorEncoder)
@@ -49,12 +49,12 @@ class JsonAbleProc(BaseFieldProc):
         else:
             return value
 
-    def to_dict(self, inst, name):
-        value = getattr(inst,name)
-        if value:
-            return {name: json.dumps(value,cls=DirectorEncoder) }
-        else:
-            return {name: value}
+    #def to_dict(self, inst, name):
+        #value = getattr(inst,name)
+        #if value:
+            #return {name: json.dumps(value,cls=DirectorEncoder) }
+        #else:
+            #return {name: value}
         
     #def dict_table_head(self,head): 
         #head['editor']='com-table-link'
