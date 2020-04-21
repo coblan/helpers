@@ -10,6 +10,10 @@
                 <span class="mylabel" v-text="tab.label"></span>
             </div>
         </div>
+        <div>
+            <component v-for="tab in ctx.tabs" :key="tab.label" v-show="is_show(tab)"
+                       :is="tab._show_editor|| 'com-ui-blank'" :ctx="tab"></component>
+        </div>
 
     </div>
 </template>
@@ -22,6 +26,14 @@
             }
         },
         methods:{
+            is_show(tab){
+                if(this.crt_tab == tab.label){
+                    tab._show_editor = tab.editor
+                    return true
+                }else{
+                    return false
+                }
+            },
             on_click(tab){
                 this.crt_tab = tab.label
             }
