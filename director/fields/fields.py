@@ -1,7 +1,7 @@
 # encoding:utf-8
 from __future__ import unicode_literals
 from django import forms
-from ..model_func.dictfy import form_to_head,to_dict, sim_dict,delete_related_query,model_to_name,from_dict,name_to_model,field_map
+from ..model_func.dictfy import form_to_head,to_dict, sim_dict,delete_related_query,model_to_name,from_dict,name_to_model,field_map,field_label
 from django.http import Http404
 import json
 from django.db import models
@@ -47,6 +47,7 @@ class ModelFields(forms.ModelForm):
     extra_mixins=[]
     hide_fields = []
     overlap_fields=[]  # 这些字段不会被同步检查
+    readonly_change_warning = []
     show_pk=False
     nolimit=False
     @classmethod
@@ -119,18 +120,6 @@ class ModelFields(forms.ModelForm):
         if dc.get('meta_change_fields'):
             meta_change_fields = dc.get('meta_change_fields').split(',')
         
-        simdc = sim_dict(inst)
-        for k in dict(dc):
-            if k in self.readonly or (meta_change_fields and k not in meta_change_fields ):
-                dc[k] = simdc.get(k)
-                #if hasattr(inst, "%s_id" % k):  # 如果是ForeignKey，必须要pk值才能通过 form验证
-                    #fieldcls = inst.__class__._meta.get_field(k)
-                    #if isinstance(fieldcls, models.ForeignKey):
-                        #dc[k] = getattr(inst, "%s_id" % k)
-                        #continue
-                #if hasattr(inst,k):
-                    #dc[k] =  getattr(inst , k)  
-            
         # 强制保存字段，不验证是否改变,并且其他字段都不能改变
         #if dc.get('meta_change_fields'):
             #force_change_fields = dc.get('meta_change_fields').split(',')
@@ -142,9 +131,30 @@ class ModelFields(forms.ModelForm):
                         #dc[k] = getattr(inst, "%s_id" % k)
                         #continue
                     #dc[k] = getattr(form_kw['instance'] , k)  
-                    
+        
+        # 修正参数
         dc = self._clean_dict(dc)
-        dc=self.clean_dict(dc)        
+        dc=self.clean_dict(dc)   
+        
+        # 修正只读字段 
+        simdc = sim_dict(inst)
+        readonly_waring = []
+        for k in dict(dc):
+            if k in self.readonly or (meta_change_fields and k not in meta_change_fields ):
+                if k in self.readonly_change_warning and dc[k] != simdc.get(k):
+                    readonly_waring.append(k)
+                dc[k] = simdc.get(k)
+                #if hasattr(inst, "%s_id" % k):  # 如果是ForeignKey，必须要pk值才能通过 form验证
+                    #fieldcls = inst.__class__._meta.get_field(k)
+                    #if isinstance(fieldcls, models.ForeignKey):
+                        #dc[k] = getattr(inst, "%s_id" % k)
+                        #continue
+                #if hasattr(inst,k):
+                    #dc[k] =  getattr(inst , k)  
+        if readonly_waring and  not dc.get('meta_overlap_fields') == '__all__' :
+            raise OutDateException('(%s)的%s已经发生了变化,请确认后再进行操作!'%(inst,[field_label(inst.__class__,k ) for k in readonly_waring] ) )
+        
+        
         self.kw.update(dc)
 
         super(ModelFields,self).__init__(dc,*args,**form_kw)
@@ -203,7 +213,7 @@ class ModelFields(forms.ModelForm):
                     if fld:
                         keys.append(fld.label)
                 #keys = [self.fields.get(key).label for key in dif_dc.keys() ]
-                raise OutDateException('(%s)的%s已经发生了变化,请确认后再进行操作!'%(self.instance,keys) )
+                raise OutDateException('(%s)的%s已经发生了变化,请确认后再进行操作!'%(self.instance, [field_label(self.instance.__class__, x ) for x in keys]       ) )
     
     def get_org_dict(self,row=None):
         if not row:
