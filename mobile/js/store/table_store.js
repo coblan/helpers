@@ -16,17 +16,24 @@ var table_store={
             this.search_args._page=1
             return this.getRows()
         },
+        filter_load_row(rows){
+            return rows
+        },
         getRows(){
             var post_data=[{fun:'get_rows',director_name:this.director_name,search_args:this.search_args}]
             cfg.show_load()
             return ex.post('/d/ajax',JSON.stringify(post_data)).then(resp=> {
                 cfg.hide_load()
-                this.rows = resp.get_rows.rows
+                this.rows = this.filter_load_row( resp.get_rows.rows )
                 this.parents = resp.get_rows.parents
                 ex.vueAssign( this.row_pages,resp.get_rows.row_pages)
+                return this.rows
             })
         },
         addNextPage(){
+            /**
+             * 无限加载时，需要不断的添加
+             */
             this.search_args._page += 1
             var post_data=[{fun:'get_rows',director_name:this.director_name,search_args:this.search_args}]
             return ex.post('/d/ajax',JSON.stringify(post_data)).then(resp=> {
@@ -35,11 +42,14 @@ var table_store={
                 ex.vueAssign( this.row_pages,resp.get_rows.row_pages)
                 this.search_args._page = this.row_pages.crt_page
                 if(row_pages.crt_page< max_page){
-                    this.rows = this.rows.concat(resp.get_rows.rows)
+                    var new_rows = resp.get_rows.rows
                 }else{
                     var space =  this.rows.length - (max_page-1)*row_pages.perpage
-                    this.rows = this.rows.concat(resp.get_rows.rows.slice(space))
+                    var new_rows = resp.get_rows.rows.slice(space)
                 }
+                new_rows = this.filter_load_row(new_rows)
+                this.rows = this.rows.concat(new_rows)
+                return new_rows
             })
         },
         newRow(_director_name,pre_set){
