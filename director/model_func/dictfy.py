@@ -25,6 +25,10 @@ def model_to_name(model):
 
 def name_to_model(app_model_string):
     return apps.get_model(app_model_string)
+ 
+def field_label(model,key):
+    field = model._meta.get_field(key)
+    return field.verbose_name
     
 
 def to_dict(instance,filt_attr=None,include=None,exclude=None,hash_keys=None,form=False,):

@@ -277,6 +277,7 @@ var table_store={
                         resolve()
                     }
                 }).then(function(){
+                    debugger
                     //  弹出编辑框/ 或者不弹出
                         var first_sel_row = self.selected[0]
                         var one_row={}
@@ -315,7 +316,12 @@ var table_store={
             )
 
             function after_proc({new_row,field_store,pop_fields_win_index}){
-                // 编辑后，提交
+                /*
+                 编辑后，提交
+
+                @new_row : 编辑后的 cache_row ,
+                * */
+
                 var cache_rows = ex.copy(self.selected)
                 ex.each(cache_rows ,function(row){
                     ex.assign(row,new_row)
@@ -324,15 +330,13 @@ var table_store={
                         row._director_name=kws.fields_ctx.director_name
                     }
                 })
-                //var post_data=[{fun:'save_rows',rows:cache_rows}]
                 cfg.show_load()
-                //ex.post('/d/ajax',JSON.stringify(post_data),function(resp){
                 ex.director_call('d.save_rows',{rows:cache_rows}).then((resp)=>{
                     cfg.hide_load()
-                    ex.each(self.selected,(row)=>{
-                        delete  row.meta_overlap_fields
-                        delete row.meta_change_fields
-                    })
+                    //ex.each(self.selected,(row)=>{
+                    //    delete  row.meta_overlap_fields
+                    //    delete row.meta_change_fields
+                    //})
                     if(resp._outdate){
                         layer.confirm(resp._outdate, {
                             icon:3,
@@ -343,14 +347,30 @@ var table_store={
                             }
                         }, function(index, layero){
                             layer.close(index)
-                            self.search()
-                        }, function(index){
-                            debugger
-                            layer.close(index)
-                            ex.each(self.selected,row=>{
-                                row.meta_overlap_fields='__all__'
+                            var pk_list = ex.map(self.selected,(row)=>{return row.pk})
+                            self.search().then(()=>{
+                                /* 还原 selected
+                                 并且更新弹出窗口的cache_row(也就是new_row)的数据.
+                                 关于new_row,是在上一层函数中生成，并且排除了_开始的字段。在有弹出窗框时，new_row是selected[0],
+                                 没有弹出框时,new_row可能没有字段，所以更新new_row时，需要判断 new_row[k] != undefined以免多增加了字段。
+                                 */
+                                self.selected = ex.filter(self.rows,(row)=>{return ex.isin(row.pk,pk_list)})
+                                if(self.selected){
+                                    for(var k in self.selected[0]){
+                                        if(! k. startsWith('_')&& new_row[k] != undefined ){
+                                            new_row[k]= self.selected[0][k]
+                                        }
+                                    }
+                                }
                             })
-                            self.selected_set_and_save(kws,true)
+                        }, function(index){
+                            layer.close(index)
+                            //ex.each(self.selected,row=>{
+                            //    row.meta_overlap_fields='__all__'
+                            //})
+                            new_row.meta_overlap_fields = '__all__'
+                            after_proc({new_row,field_store,pop_fields_win_index})
+                            //self.selected_set_and_save(kws,true)
                         });
                         return
                     }else  if( !resp.errors){
@@ -401,6 +421,7 @@ var table_store={
                                 layer.close(index)
                             }
                         }, function (index, layero) {
+                        debugger
                             layer.close(index)
                             self.search()
                         }, function (index) {

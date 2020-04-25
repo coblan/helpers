@@ -210,6 +210,7 @@ var mix_fields_data ={
                                layer.close(index)
                             }
                         }, function(index, layero){
+                            debugger
                             layer.close(index)
                             ex.director_call(self.row._director_name,{pk:self.row.pk}).then(resp=>{
                                 ex.vueAssign(self.row,resp.row)
