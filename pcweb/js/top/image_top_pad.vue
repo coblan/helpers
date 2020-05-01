@@ -1,14 +1,22 @@
 <template>
     <div class="com-top-image-top-pad" :class="ctx.class">
-        <div class="web-wrap">
+      <div v-if="ctx.full_width"  >
+        <div class="head">
+            <img :src="ctx.image_url" alt="">
+        </div>
+        <div class="content web-wrap">
+            <component :is="ctx.inn_editor" :ctx="ctx.inn_ctx"></component>
+        </div>
+    </div>
+        <div v-else class="web-wrap" >
             <div class="head">
                 <img :src="ctx.image_url" alt="">
             </div>
             <div class="content">
                 <component :is="ctx.inn_editor" :ctx="ctx.inn_ctx"></component>
             </div>
-
         </div>
+
     </div>
 </template>
 <script>
