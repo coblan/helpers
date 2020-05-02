@@ -3,9 +3,11 @@ require('./styl/list.styl')
 Vue.component('com-ti-list',{
     props:['ctx'],
     template:`<div class="com-ti-list">
-    <div >
-        <!--<span v-text="row.title"></span>-->
+    <div v-if="rows.length!=0">
         <component v-for="row in rows" :is="ctx.item_editor" :ctx="row"></component>
+    </div>
+    <div v-else style="line-height: 400px;text-align: center">
+        <span>暂无数据</span>
     </div>
     <div>
          <el-pagination
@@ -35,6 +37,9 @@ Vue.component('com-ti-list',{
     },
     mounted(){
         this.search()
+        if(this.ctx.on_mounted){
+            ex.eval(this.ctx.on_mounted,{vc:this})
+        }
     },
     methods:{
         handleSizeChange(val){
@@ -52,7 +57,13 @@ Vue.component('com-ti-list',{
             return this.get_rows()
         },
         get_rows(){
-            return ex.director_call(this.ctx.director_name,{_page:this.row_pages.crt_page,_perpage:this.row_pages.perpage}).then((resp)=>{
+            var postdata={_page:this.row_pages.crt_page,_perpage:this.row_pages.perpage}
+            if(this.ctx.preset){
+                Object.assign(postdata, ex.eval( this.ctx.preset ) )
+            }
+            cfg.show_load()
+            return ex.director_call(this.ctx.director_name,postdata).then((resp)=>{
+                cfg.hide_load()
                 this.rows = resp.rows
                 this.row_pages = resp.row_pages
             })
