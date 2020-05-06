@@ -53,7 +53,11 @@ export default {
             return this.get_rows()
         },
         get_rows(){
-            return ex.director_call(this.ctx.director_name,{_page:this.row_pages.crt_page,_perpage:this.row_pages.perpage}).then((resp)=>{
+            var postdata={_page:this.row_pages.crt_page,_perpage:this.row_pages.perpage}
+            if(this.ctx.preset){
+                Object.assign(postdata, ex.eval( this.ctx.preset ) )
+            }
+            return ex.director_call(this.ctx.director_name,postdata).then((resp)=>{
                 this.rows = resp.rows
             this.row_pages = resp.row_pages
         })

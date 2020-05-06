@@ -1,14 +1,22 @@
 <template>
     <div class="com-top-image-top-pad" :class="ctx.class">
-        <div class="web-wrap">
+      <div v-if="ctx.full_width"  >
+        <div class="head">
+            <img :src="ctx.image_url" alt="">
+        </div>
+        <div class="content web-wrap">
+            <component :is="ctx.inn_editor" :ctx="ctx.inn_ctx"></component>
+        </div>
+    </div>
+        <div v-else class="web-wrap" >
             <div class="head">
                 <img :src="ctx.image_url" alt="">
             </div>
             <div class="content">
                 <component :is="ctx.inn_editor" :ctx="ctx.inn_ctx"></component>
             </div>
-
         </div>
+
     </div>
 </template>
 <script>
@@ -22,6 +30,7 @@
     }
 </script>
 <style lang="scss" scoped>
+
 .head{
     position: relative;
     height: 300px;
@@ -34,9 +43,9 @@
     }
 }
 .content{
-    -moz-box-shadow:0px 0px 17px #ABABAB; -webkit-box-shadow:0px 0px 17px #ABABAB; box-shadow:0px 0px 17px #ABABAB;
+    -moz-box-shadow:0px 0px 10px #ABABAB; -webkit-box-shadow:0px 0px 10px #ABABAB; box-shadow:0px 0px 10px #ABABAB;
     border-radius: 10px;
-    background-color: white;
+    background-color: #f8f8f8;
     min-height: 500px;
     width: 80%;
     margin: auto;
