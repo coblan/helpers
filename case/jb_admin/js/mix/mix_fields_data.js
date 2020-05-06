@@ -215,7 +215,6 @@ var mix_fields_data ={
                             ex.director_call(self.row._director_name,{pk:self.row.pk}).then(resp=>{
                                 ex.vueAssign(self.row,resp.row)
                             })
-                            //self.updateRowBk(self.row._director_name,{pk:self.row.pk})
                         }, function(index){
                             layer.close(index)
                             self.row.meta_overlap_fields='__all__'
