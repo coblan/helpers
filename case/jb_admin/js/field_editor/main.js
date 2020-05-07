@@ -22,6 +22,7 @@ import * as split_text from  './split_text'
 
 import int_field from './int.vue'
 import  password from  './password.vue'
-
+import  select from  './select.vue'
 Vue.component('com-field-int',int_field)
 Vue.component('com-field-password',password)
+Vue.component('com-field-select',select)
