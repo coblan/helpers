@@ -147,19 +147,14 @@ var cfg={
                 }else{
                     reject()
                 }
-
-                //if(e){
-                    //close_fun()
-                    //resolve(e)
-                //}else{
-                    //close_fun()
-                    //reject(e)
-                //}
             }
             ctx.ops_loc = ctx.ops_loc || 'bottom'
             var winindex = pop_layer(ctx,editor,callback,option)
             var close_fun = function (){
                 layer.close(winindex)
+            }
+            if (option.return_index){
+                option.return_index(winindex)
             }
         })
     },

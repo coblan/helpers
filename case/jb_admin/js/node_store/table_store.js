@@ -309,6 +309,17 @@ var table_store={
                                 var dc = {new_row:new_row,field_store:store,pop_fields_win_index:win_index}
                                 after_proc(dc)
                             })
+
+                            //debugger
+                            //var win_index=0
+                            //kws.fields_ctx.row=one_row
+                            //kws.fields_ctx.row._director_name = kws.fields_ctx.director_name
+                            //kws.fields_ctx.save_express="scope.vc."
+                            //cfg.pop_vue_com('com-form-one',kws.fields_ctx,{return_index:(index)=>{win_index=index}}).then((row)=>{
+                            //        var dc = {new_row:new_row,field_store:store,pop_fields_win_index:win_index}
+                            //        after_proc(dc)
+                            //})
+
                         }else{
                             after_proc({new_row:one_row})
                         }
@@ -333,10 +344,6 @@ var table_store={
                 cfg.show_load()
                 ex.director_call('d.save_rows',{rows:cache_rows}).then((resp)=>{
                     cfg.hide_load()
-                    //ex.each(self.selected,(row)=>{
-                    //    delete  row.meta_overlap_fields
-                    //    delete row.meta_change_fields
-                    //})
                     if(resp._outdate){
                         layer.confirm(resp._outdate, {
                             icon:3,
@@ -397,6 +404,8 @@ var table_store={
                         if(kws.after_error){
                             ex.eval(kws.after_error,{fs:field_store,errors:resp.errors})
                         }else{
+                            debugger
+                            field_store.vc
                             cfg.showError(JSON.stringify( resp.errors))
                         }
 
