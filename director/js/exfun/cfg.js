@@ -142,6 +142,7 @@ var cfg={
         return new Promise(function(resolve,reject){
             var callback = function(e){
                 close_fun()
+                // 用户点击layer的叉叉退出弹出框时,e==__end_by_user
                 if(e != '__end_by_user'){
                     resolve(e)
                 }else{
@@ -152,9 +153,6 @@ var cfg={
             var winindex = pop_layer(ctx,editor,callback,option)
             var close_fun = function (){
                 layer.close(winindex)
-            }
-            if (option.return_index){
-                option.return_index(winindex)
             }
         })
     },

@@ -156,14 +156,22 @@ var nice_validator={
                 real_input.trigger("showmsg", ["error", errors[k].join(';')]);
             }
 
+            var no_name_error=[]
             for(var k in errors){
                 var head = ex.findone(this.heads,{name:k})
-                if(head && head.validate_showError){
-                    ex.eval(head.validate_showError,{head:this.head,msg:errors[k].join(';')})
+                if(head){
+                    if(head.validate_showError){
+                        ex.eval(head.validate_showError,{head:this.head,msg:errors[k].join(';')})
+                    }else{
+                        $(this.$el).find('[name='+k+']').trigger("showmsg", ["error", errors[k].join(';')]);
+                    }
                 }else{
-                    $(this.$el).find('[name='+k+']').trigger("showmsg", ["error", errors[k].join(';')]);
+                    //$(this.$el).find('[name='+k+']').trigger("showmsg", ["error", errors[k].join(';')]);
+                    no_name_error.push(errors[k].join(';'))
                 }
-
+            }
+            if(no_name_error.length > 0){
+                cfg.showError( no_name_error.join(';'))
             }
         }
     }
