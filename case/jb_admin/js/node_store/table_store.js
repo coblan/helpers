@@ -305,17 +305,31 @@ var table_store={
                                     one_row[head.name]=self.selected[0][head.name]
                                 }
                             })
-                            var win_index = pop_edit_local(one_row,kws.fields_ctx,function(new_row,store){
-                                var dc = {new_row:new_row,field_store:store,pop_fields_win_index:win_index}
+                            var win_index = pop_edit_local(one_row,kws.fields_ctx,function(e){
+                                if(e == '__end_by_user'){
+                                    return
+                                }
+                                var dc = {new_row:e.row,field_vc:e.vc,pop_fields_win_index:win_index}
                                 after_proc(dc)
                             })
+
+                            //debugger
+                            //var win_index=0
+                            //kws.fields_ctx.row=one_row
+                            //kws.fields_ctx.row._director_name = kws.fields_ctx.director_name
+                            //kws.fields_ctx.save_express="scope.vc."
+                            //cfg.pop_vue_com('com-form-one',kws.fields_ctx,{return_index:(index)=>{win_index=index}}).then((row)=>{
+                            //        var dc = {new_row:new_row,field_store:store,pop_fields_win_index:win_index}
+                            //        after_proc(dc)
+                            //})
+
                         }else{
                             after_proc({new_row:one_row})
                         }
                 }
             )
 
-            function after_proc({new_row,field_store,pop_fields_win_index}){
+            function after_proc({new_row,field_vc,pop_fields_win_index}){
                 /*
                  编辑后，提交
 
@@ -333,10 +347,6 @@ var table_store={
                 cfg.show_load()
                 ex.director_call('d.save_rows',{rows:cache_rows}).then((resp)=>{
                     cfg.hide_load()
-                    //ex.each(self.selected,(row)=>{
-                    //    delete  row.meta_overlap_fields
-                    //    delete row.meta_change_fields
-                    //})
                     if(resp._outdate){
                         layer.confirm(resp._outdate, {
                             icon:3,
@@ -369,7 +379,7 @@ var table_store={
                             //    row.meta_overlap_fields='__all__'
                             //})
                             new_row.meta_overlap_fields = '__all__'
-                            after_proc({new_row,field_store,pop_fields_win_index})
+                            after_proc({new_row,field_vc,pop_fields_win_index})
                             //self.selected_set_and_save(kws,true)
                         });
                         return
@@ -395,9 +405,14 @@ var table_store={
 
                     }else{
                         if(kws.after_error){
-                            ex.eval(kws.after_error,{fs:field_store,errors:resp.errors})
+                            ex.eval(kws.after_error,{fs:field_vc.childStore,errors:resp.errors})
                         }else{
-                            cfg.showError(JSON.stringify( resp.errors))
+                            if (field_vc){
+                                //field_vc.setErrors(resp.errors)
+                                field_vc.showErrors(resp.errors)
+                            }else{
+                                cfg.showError(JSON.stringify( resp.errors))
+                            }
                         }
 
                     }
