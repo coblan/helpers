@@ -5,8 +5,9 @@ Vue.component('com-xiu-menu',{
     <div class="web-wrap">
         <div class="brand" v-html="parStore.vc.head_bar_data.brand"></div>
         <div class="menu">
-            <div class="action"  v-for="action in parStore.vc.menu">
-                <a :class="{'active':is_active(action)}" :href="action.url" v-text="action.label"></a>
+            <div class="action"  v-for="action in ctx.menu">
+                <a v-if="action.url"  :class="{'active':is_active(action)}" :href="action.url" v-text="action.label"></a>
+                <a v-else="" :class="{'active':is_active(action)}"  href="#" @click="on_click(action)" v-text="action.label"></a>
             </div>
         </div>
         <div class="right-ops">
@@ -16,6 +17,7 @@ Vue.component('com-xiu-menu',{
     </div>
 
     </div>`,
+    props:['ctx'],
     data(){
         return {
             parStore:ex.vueParStore(this)
@@ -31,6 +33,9 @@ Vue.component('com-xiu-menu',{
         });
     },
     methods:{
+        on_click(action){
+            ex.eval(action.action,{head:action})
+        },
         is_active:function(action){
             if (action.url == location.pathname){
                 return true
