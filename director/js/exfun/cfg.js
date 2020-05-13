@@ -1,5 +1,6 @@
 require('./scss/cfg.scss')
 
+import {pop_layer} from './cfg/pop_layer.js'
 
 $(document).ready(function () { }).keydown(
     function (e) {
