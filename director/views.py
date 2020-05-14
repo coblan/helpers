@@ -160,7 +160,7 @@ def director_view(request,director_name):
         rt = HttpResponse(json.dumps(dc,ensure_ascii=False,cls=DirectorEncoder),content_type="application/json") 
         #rt = JsonResponse({'success':False,'msg':str(e)})
     except PermissionDenied as e:
-        rt = HttpResponse(str(e))
+        rt = HttpResponse(str(e),status=403)
 
     return rt
     
