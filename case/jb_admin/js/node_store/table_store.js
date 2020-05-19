@@ -31,8 +31,13 @@ var table_store={
             })
         })
         if(this.head){
+            // 以后后端插入的脚本，全部以 {fun}_express 形式命名。
+            // [TODO] 这里的 init_express 为了兼容老的代码，以后准备移除
             if(this.head.init_express){
                 ex.eval(this.head.init_express,{par_row:this.par_row,ps:this,vc:this.vc})
+            }
+            if (this.head.created_express){
+                ex.eval(this.head.created_express,{par_row:this.par_row,ps:this,vc:this.vc})
             }
         }
 
