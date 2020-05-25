@@ -106,7 +106,12 @@ def general_upload(request):
 
 @csrf_exempt
 def ckeditor(request): 
-    return Ckeditor().RecieveView(request)
+    if getattr(settings,'CKEDITOR_SAVER',None):
+        uploader_str = getattr(settings,'CKEDITOR_SAVER').get('class')
+        uploader = import_element(uploader_str)
+        return uploader().RecieveView(request)
+    else:
+        return Ckeditor().RecieveView(request)
 
 
 def export_excel(request): 
