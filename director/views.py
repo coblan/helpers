@@ -97,8 +97,8 @@ def general_upload(request):
     if request.GET.get('director'):
         UploadView=director.get(request.GET.get('director'))
         return UploadView().asView(request)
-    if getattr(settings,'FILE_SAVER',None):
-        uploader_str = getattr(settings,'FILE_SAVER').get('class')
+    if getattr(settings,'MEDIA_SAVER',None):
+        uploader_str = getattr(settings,'MEDIA_SAVER').get('class')
         uploader = import_element(uploader_str)
         return uploader().asView(request)
     else:
@@ -106,7 +106,12 @@ def general_upload(request):
 
 @csrf_exempt
 def ckeditor(request): 
-    return Ckeditor().RecieveView(request)
+    if getattr(settings,'CKEDITOR_SAVER',None):
+        uploader_str = getattr(settings,'CKEDITOR_SAVER').get('class')
+        uploader = import_element(uploader_str)
+        return uploader().RecieveView(request)
+    else:
+        return Ckeditor().RecieveView(request)
 
 
 def export_excel(request): 

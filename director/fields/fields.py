@@ -211,7 +211,8 @@ class ModelFields(forms.ModelForm):
                 for key in dif_dc.keys():
                     fld =self.fields.get(key)
                     if fld:
-                        key_labels.append(fld.verbose_name)
+                        key_labels.append(fld.label)
+                        #key_labels.append(fld.verbose_name)
                         #keys.append(fld.label)
                     else:
                         # field中找不到，只能返回 key值
