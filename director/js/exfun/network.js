@@ -263,14 +263,27 @@ export var network ={
 
     },
     director(director_name){
-        let handler = {
-            get: function(target, attr_name){
-                return function (kws){
-                    return ex.director_call('d.director_element_call',{director_name:director_name,attr_name:attr_name,kws:kws})
-                }
+        // 为了兼容性，暂时屏蔽 Proxy 版本的代码
+        //let handler = {
+        //    get: function(target, attr_name){
+        //        return function (kws){
+        //            if(kws == undefined){
+        //                kws = {}
+        //            }
+        //            return ex.director_call('d.director_element_call',{director_name:director_name,attr_name:attr_name,kws:kws})
+        //        }
+        //    }
+        //};
+        //return new Proxy({},handler)
+
+        return {
+            call(methed,kws){
+                  if(kws == undefined){
+                       kws = {}
+                   }
+                 return ex.director_call('d.director_element_call',{director_name:director_name,attr_name:methed,kws:kws})
             }
-        };
-        return new Proxy({},handler)
+        }
     },
     download:function(strPath){
             var varExt = strPath.split('.');
