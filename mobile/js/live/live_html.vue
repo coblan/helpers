@@ -28,6 +28,7 @@
         flex-direction:column;
 
     .content{
+        line-height: .5rem;
         padding: .3rem .2rem;
         /*height: calc( var(--app-height) - 80px );*/
         overflow: auto;

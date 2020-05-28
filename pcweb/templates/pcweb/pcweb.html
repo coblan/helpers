@@ -20,19 +20,20 @@
     tops= {{ tops | jsonify }}
     footer = {{ footer | jsonify | default:'{}' }}
     $(function(){
+        live_root_store =  new Vue({
+            data(){
+                return {
+                    option:{},
+                }
+            }
+        })
 
-         new Vue({
+        live_root=new Vue({
             el:'#main-panel',
             data: function(){
                 var self =this
-                var childStore = new Vue({
-                    data(){
-                        return {
-                            option:{},
-                            vc:self
-                        }
-                    }
-                })
+                var childStore =live_root_store
+                childStore.vc = this
                 window.rootParStore=childStore
                 return {
                     childStore:childStore,
