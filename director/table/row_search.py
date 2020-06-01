@@ -12,8 +12,8 @@ class SelectSearch(object):
     field_sort=[]
     db_map={} # 用户 raw sql 查询时，映射字段到 数据库字段
     def __init__(self,q,user = None,allowed_names = [], kw = {}):
-        self.valid_name=  self.names + self.exact_names  #[x for x in self.names if x in allowed_names]
         self.crt_user=user
+        self.valid_name=  self.names + self.exact_names  #[x for x in self.names if x in allowed_names]
         self._names=[x for x in self.names if x in allowed_names]        
         self.q=q
         self.qf = kw.get('_qf')

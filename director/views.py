@@ -97,8 +97,8 @@ def general_upload(request):
     if request.GET.get('director'):
         UploadView=director.get(request.GET.get('director'))
         return UploadView().asView(request)
-    if getattr(settings,'FILE_SAVER',None):
-        uploader_str = getattr(settings,'FILE_SAVER').get('class')
+    if getattr(settings,'MEDIA_SAVER',None):
+        uploader_str = getattr(settings,'MEDIA_SAVER').get('class')
         uploader = import_element(uploader_str)
         return uploader().asView(request)
     else:
@@ -106,7 +106,12 @@ def general_upload(request):
 
 @csrf_exempt
 def ckeditor(request): 
-    return Ckeditor().RecieveView(request)
+    if getattr(settings,'CKEDITOR_SAVER',None):
+        uploader_str = getattr(settings,'CKEDITOR_SAVER').get('class')
+        uploader = import_element(uploader_str)
+        return uploader().RecieveView(request)
+    else:
+        return Ckeditor().RecieveView(request)
 
 
 def export_excel(request): 
@@ -160,7 +165,7 @@ def director_view(request,director_name):
         rt = HttpResponse(json.dumps(dc,ensure_ascii=False,cls=DirectorEncoder),content_type="application/json") 
         #rt = JsonResponse({'success':False,'msg':str(e)})
     except PermissionDenied as e:
-        rt = HttpResponse(str(e))
+        rt = HttpResponse(str(e),status=403)
 
     return rt
     

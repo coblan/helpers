@@ -207,13 +207,20 @@ class ModelFields(forms.ModelForm):
                 dif_dc = dif_mark_dict(crt_mark_dc, self.kw.get('meta_org_dict'),exclude= overlaped_fields)
             
             if dif_dc:
-                keys =[]
+                key_labels =[]
                 for key in dif_dc.keys():
                     fld =self.fields.get(key)
                     if fld:
-                        keys.append(fld.label)
+                        key_labels.append(fld.label)
+                        #key_labels.append(fld.verbose_name)
+                        #keys.append(fld.label)
+                    else:
+                        # field中找不到，只能返回 key值
+                        key_labels.append(key)
+                        
                 #keys = [self.fields.get(key).label for key in dif_dc.keys() ]
-                raise OutDateException('(%s)的%s已经发生了变化,请确认后再进行操作!'%(self.instance, [field_label(self.instance.__class__, x ) for x in keys]       ) )
+                raise OutDateException('(%s)的%s已经发生了变化,请确认后再进行操作!'%(self.instance, key_labels ) )
+                #raise OutDateException('(%s)的%s已经发生了变化,请确认后再进行操作!'%(self.instance, [field_label(self.instance.__class__, x ) for x in keys]       ) )
     
     def get_org_dict(self,row=None):
         if not row:

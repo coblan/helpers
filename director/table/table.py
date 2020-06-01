@@ -135,14 +135,14 @@ class RowFilter(object):
     def __init__(self,dc,user,allowed_names,kw={}):
         # 为了让前端不显示
         self.model_allowed_names =  allowed_names
-        
-        # [todo] 应该把属于 model的字段，利用allowd_names 过滤掉
-        self.names = self.names + self.range_fields #+ [x.get('name') for x in self.range_fields]
-        self.valid_name= self.names  #[x for x in self.names if x in allowed_names]
         self.crt_user=user
+        # [todo] 应该把属于 model的字段，利用allowd_names 过滤掉
+        self.total_names = self.names + self.range_fields #+ [x.get('name') for x in self.range_fields]
+        #self.valid_name= self.names  #[x for x in self.names if x in allowed_names]
+        
         #self._names=[x for x in self.names if x in allowed_names]        
         self.filter_args={}
-        for k in self.names:
+        for k in self.total_names:
             compare_name = '_%s_compare'%k
             v = dc.pop(k,'')
             if compare_name in kw:
@@ -177,7 +177,7 @@ class RowFilter(object):
             field_names = [f.name for f in self.model._meta.get_fields()]
         else:
             field_names = []
-        for name in self.valid_name:
+        for name in self.total_names:
             # 先查找 proc
             proc_cls = None
             if has_model:
@@ -211,10 +211,10 @@ class RowFilter(object):
         extraHead= self.getExtraHead()
         normal_heads = []
         extrahead_dict = {x['name']: x  for x in extraHead }
-        valid_model_names = [x for x in self.names if x in self.model_allowed_names]
+        valid_model_names = [x for x in self.total_names if x in self.model_allowed_names]
         send_to_front_names = valid_model_names + [x['name'] for x in extraHead]
         
-        for proc_cls,name in zip(self.get_proc_list() ,self.valid_name):
+        for proc_cls,name in zip(self.get_proc_list() ,self.total_names):
             if name in extrahead_dict:
                 # 为了性能考虑，如果有head了，就不进行自动生成head了，并且排除掉那些不在model里面的字段
                 #normal_heads.append(dc[name])
@@ -260,7 +260,7 @@ class RowFilter(object):
     def get_query(self,query):
         self.query=query
         arg_dc = {}
-        for proc_cls,name in zip(self.get_proc_list() ,self.valid_name):
+        for proc_cls,name in zip(self.get_proc_list() ,self.total_names):
             tmp_dc = proc_cls().filter_clean_filter_arg(name ,self.filter_args )
             arg_dc.update( tmp_dc )
             # 由 field_map处理， 移除filter_args的同名字段
@@ -390,9 +390,9 @@ class ModelTable(object):
         self.custom_permit()
         allowed_names=self.permited_fields()
         
-        self.row_sort=self.sort(row_sort,crt_user,allowed_names,kw)
-        self.row_filter=self.filters(row_filter, crt_user, allowed_names,kw) 
-        self.row_search = self.search( row_search,crt_user,allowed_names,kw)
+        self.row_sort=self.sort(row_sort,self.crt_user,allowed_names,kw)
+        self.row_filter=self.filters(row_filter, self.crt_user, allowed_names,kw) 
+        self.row_search = self.search( row_search,self.crt_user,allowed_names,kw)
         if not self.row_filter.model:
             self.row_filter.model=self.model
         if not self.row_search.model:
@@ -428,14 +428,14 @@ class ModelTable(object):
         row_sort = kw.pop('_sort','').split(',')
         row_sort=list( filter(lambda x: x!='',row_sort) )
         q=kw.pop('_q',None)
-        row_filter={}
-        for k in cls.filters.names:
-            arg = kw.pop(k,'')
-            #if arg is not None:
-            row_filter[k]=arg
+        #row_filter={}
+        #for k in cls.filters.names:
+            #arg = kw.pop(k,'')
+            #row_filter[k]=arg
         user = user or get_request_cache()['request'].user
         kw.update(kws)
-        return cls(page,row_sort,row_filter,q,user,perpage=perpage,**kw)
+        #return cls(page,row_sort,row_filter,q,user,perpage=perpage,**kw)
+        return cls(page,row_sort,kw,q,user,perpage=perpage,**kw)
     
     @classmethod
     def clean_search_args(cls,search_args):
