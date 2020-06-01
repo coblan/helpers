@@ -212,9 +212,9 @@ class GroupForm(ModelFields):
             heads.append({
                 'name':'ui',
                 'editor':'com-field-select',
-                'label':'权限视图',
+                'label':'权限分组',
                 'options':director.get('permit.ui_options'),
-                'help_text':'鉴于权限选择的复杂性和重要性，对权限进行了不同侧重点的整理，不同视图对应不同侧重点。',
+                'help_text':'保存时，会移除不在当前选中组中的权限。不选择分组，代表所有权限都有效。',
                 'event_slots':[
                     {'event':'input','express':'''cfg.show_load();
                      ex.director_call("permit.options",{ui:scope.event}).then((res)=>{cfg.hide_load();scope.ps.$emit("permit_options_changed", res)}) ''' },
@@ -254,15 +254,22 @@ class GroupForm(ModelFields):
                 'permit':self.instance.permitmodel.names
             }
             
-            if not getattr(self.__class__,'exposed_permit',None):
-                exposed_permit =[]
-                permit_options = director.get('permit.options')()
-                for item in permit_options:
-                    exposed_permit += list( get_all_permit(item))
-                self.__class__ . exposed_permit = exposed_permit
-            else :
-                exposed_permit = self.__class__ . exposed_permit
+            # 原来设想的是把系统备选的有效权限缓存在class上，这样只需要提取一次。
+            # 现在因为有 ui的影响，且操作权限并发不会太大，所以暂时不缓存。
+            #if not getattr(self.__class__,'exposed_permit',None):
+                #exposed_permit =[]
+                #permit_options = director.get('permit.options')(self.kw.get('ui'))
+                #for item in permit_options:
+                    #exposed_permit += list( get_all_permit(item))
+                #self.__class__ . exposed_permit = exposed_permit
+            #else :
+                #exposed_permit = self.__class__ . exposed_permit
                 
+            exposed_permit =[]
+            permit_options = director.get('permit.options')(self.kw.get('ui'))
+            for item in permit_options:
+                exposed_permit += list( get_all_permit(item))
+            
             valid_permit_ls = [x for x in self.kw.get('permit') if x in exposed_permit]
             self.instance.permitmodel.names = ';'.join( valid_permit_ls ) 
             self.instance.permitmodel.save()
