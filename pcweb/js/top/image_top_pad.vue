@@ -44,11 +44,11 @@
 }
 .content{
     -moz-box-shadow:0px 0px 10px #ABABAB; -webkit-box-shadow:0px 0px 10px #ABABAB; box-shadow:0px 0px 10px #ABABAB;
-    border-radius: 10px;
-    background-color: #f8f8f8;
+    border-radius: 5px;
+    background-color: white;
     min-height: 500px;
     width: 80%;
     margin: auto;
-    padding: 40px 20px 20px 20px;
+    /*padding: 40px 20px 20px 20px;*/
 }
 </style>
