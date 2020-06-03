@@ -8,7 +8,10 @@ var field_multi_chosen={
       }
     },
     template:`<div class="com-field-multi-select2"  :style="head.style">
-    <span v-if="head.readonly" v-text="label_text" ></span>
+    <!--<span v-if="head.readonly" v-text="label_text" ></span>-->
+    <div v-if="head.readonly">
+      <el-tag v-for="label in label_list" v-text="label" size="mini"></el-tag>
+    </div>
     <input type="text" :name="head.name" style="display: none" v-model="row[head.name]">
     <div v-show="!head.readonly">
         <select multiple="multiple"  class="select2 field-multi-select2 form-control" :id="'id_'+head.name">
@@ -61,13 +64,35 @@ var field_multi_chosen={
         value:function(){
             return this.row[this.head.name]
         },
-        label_text:function(){
-            var opt = ex.findone(this.head.options,{value:this.row[this.head.name]})
-            if(opt){
-                return opt.label
+        label_list(){
+            if(this.row[this.head.name]){
+                var label_list = ex.map(this.row[this.head.name],(item)=>{
+                    return ex.findone(this.head.options,{value:item}).label
+                })
+                return label_list
             }else{
-                return ''
+                return []
             }
+        },
+        label_text:function(){
+            if(this.row[this.head.name]){
+                debugger
+                var label_list = ex.map(this.row[this.head.name],(item)=>{
+                    debugger
+                    return ex.findone(this.head.options,{value:item}).label
+                })
+                return label_list.join(';')
+            }else{
+                return '---'
+            }
+
+
+            //var opt = ex.findone(this.head.options,{value:this.row[this.head.name]})
+            //if(opt){
+            //    return opt.label
+            //}else{
+            //    return ''
+            //}
         },
         order_options:function(){
             if (this.head.order){
