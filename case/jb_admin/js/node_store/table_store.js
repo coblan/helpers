@@ -476,6 +476,7 @@ var table_store={
         },
         export_excel:function(head){
             var self=this
+            var head = head || {}
             var search_args = ex.copy(self.search_args)
             search_args._perpage= head.count || 5000
             var post_data=[{fun:'get_excel',director_name:self.director_name,search_args:search_args}]
