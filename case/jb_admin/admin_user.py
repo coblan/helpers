@@ -212,9 +212,9 @@ class GroupForm(ModelFields):
             heads.append({
                 'name':'ui',
                 'editor':'com-field-select',
-                'label':'权限分组',
+                'label':'权限过滤',
                 'options':director.get('permit.ui_options'),
-                'help_text':'保存时，会移除不在当前选中组中的权限。不选择分组，代表所有权限都有效。',
+                'help_text':'保存时会移除不在当前选择中的权限。不选择，代表所有权限都可选择',
                 'event_slots':[
                     {'event':'input','express':'''cfg.show_load();
                      ex.director_call("permit.options",{ui:scope.event}).then((res)=>{cfg.hide_load();scope.ps.$emit("permit_options_changed", res)}) ''' },

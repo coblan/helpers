@@ -110,10 +110,9 @@ class BaseEngine(object):
         if need_login and not self.login_authorized(request):
             return redirect(self.login_url+'?next='+request.get_full_path())
         
-        if hasattr(page_cls, 'need_staff'):
-            self.need_staff = page_cls.need_staff
-        if self.need_staff and not request.user.is_staff:
-            raise PermissionDenied('Need staff to access this page!')
+        if not request.user.is_staff:
+            if getattr(page_cls, 'need_staff',True) or self.need_staff:
+                raise PermissionDenied('Need staff to access this page!')
         
         try:
             page=page_cls(request, engin = self)
