@@ -113,9 +113,9 @@ class BaseEngine(object):
         if not request.user.is_staff:
             if hasattr(page_cls, 'need_staff'):
                 if getattr(page_cls, 'need_staff'):
-                    raise PermissionDenied('只有员工才能登陆后台界面!')
+                    raise PermissionDenied('只有职员才能登陆后台界面!')
             elif self.need_staff:
-                raise PermissionDenied('只有员工才能登陆后台界面!')
+                raise PermissionDenied('只有职员才能登陆后台界面!')
         
         try:
             page=page_cls(request, engin = self)
