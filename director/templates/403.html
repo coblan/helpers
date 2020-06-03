@@ -1,8 +1,19 @@
-{% if exception %}
-<h1>403</h1>
+<div class="pannel">
+
+  {% if exception %}
+  <h1>403</h1>
   <p>{{ exception }}</p>
-{% else %}
+  {% else %}
   <p>403</p>
-{% endif %}
+  {% endif %}
+
+</div>
+
 
 <a href="/accounts/login">切换用户</a>
+<style>
+.pannel{
+  background-color: #0a6ebd;
+  color: white;
+}
+</style>
