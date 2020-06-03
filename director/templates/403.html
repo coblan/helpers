@@ -1,19 +1,37 @@
 <div class="pannel">
-
+ <h1>403</h1>
   {% if exception %}
-  <h1>403</h1>
-  <p>{{ exception }}</p>
+  <div class="no-permit">{{ exception }}</div>
   {% else %}
-  <p>403</p>
+  <div class="no-permit">没有权限</div>
   {% endif %}
 
+
+  <div style="margin-top: 40px">
+    <div>您可以试试以下操作:</div>
+    <ul>
+      <li><a href="/accounts/login">切换用户</a></li>
+      <li>联系管理员提升您的权限</li>
+    </ul>
+
+  </div>
 </div>
 
 
-<a href="/accounts/login">切换用户</a>
+
 <style>
 .pannel{
-  background-color: #0a6ebd;
-  color: white;
+  /*background-color: #0a6ebd;*/
+  /*color: white;*/
+  width: 80%;
+
+  margin: auto;
+  padding: 20px;
 }
+  .title{
+
+  }
+  .no-permit{
+    color: red;
+  }
 </style>
