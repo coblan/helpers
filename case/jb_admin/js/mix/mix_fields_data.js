@@ -25,7 +25,9 @@ var mix_fields_data ={
             if(this.head.css){
                 ex.append_css(this.head.css)
             }
-            if(this.head.init_express){
+            if(this.head.mounted_express){
+                ex.eval(this.head.mounted_express,{row:this.row,ps:this.parStore,cs:this.childStore,vc:this})
+            }else if(this.head.init_express){
                 ex.eval(this.head.init_express,{row:this.row,ps:this.parStore,cs:this.childStore,vc:this})
             }
             ex.vueEventRout(this,this.head.event_slots)

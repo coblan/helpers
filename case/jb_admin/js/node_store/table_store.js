@@ -310,6 +310,8 @@ var table_store={
                                     one_row[head.name]=self.selected[0][head.name]
                                 }
                             })
+                            // 将当前的ps 传递到弹出框中
+                            kws.fields_ctx.pop_vc = self
                             var win_index = pop_edit_local(one_row,kws.fields_ctx,function(e){
                                 if(e == '__end_by_user'){
                                     return
