@@ -11,6 +11,7 @@
         props:['head','search_args','config'],
         data:function(){
             var self=this
+
             return {
                 order:this.head.order || false,
                 parStore:ex.vueParStore(this)
@@ -39,7 +40,9 @@
 
         },
         methods:{
+            hello(){
 
+            }
         }
     }
 </script>
