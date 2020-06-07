@@ -62,6 +62,7 @@ class BaseEngine(object):
     title = 'Admin'
     prefer='pc'
     login_url=getattr( settings,'LOGIN_URL','/accounts/login')
+    logout_url = '/accounts/logout'
     need_login = True
     menu_search = True
     home = '/' # 当前engine的主页，没有目的的时候，可以往这里跳
@@ -195,7 +196,7 @@ class BaseEngine(object):
             'brand':self.brand,
             'mini_brand':self.mini_brand ,
             'header_bar_widgets': [
-                {'editor': 'com-headbar-user-info', 'first_name': username, 'username': username,},
+                {'editor': 'com-headbar-user-info', 'first_name': username, 'username': username,'logout_url':self.logout_url },
                 ],
         }
     def get_page_cls(self,name):
