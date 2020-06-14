@@ -183,6 +183,20 @@ ex.assign(cfg,{
             //    layer.close(winindex)
             //}
         })
+    },
+    outdate_confirm(title,refresh,force_save){
+        vant.Dialog.confirm({
+                title: '数据过期',
+                message: title,
+                confirmButtonText:'刷新数据',
+                cancelButtonText:'强制保存',
+            })
+            .then(() => {
+                refresh()
+            })
+            .catch(() => {
+                force_save()
+            });
     }
 })
 

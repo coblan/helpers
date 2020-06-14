@@ -203,26 +203,36 @@ var mix_fields_data ={
                         self.showErrors(rt.errors)
                         //reject(rt.errors)
                     }else if(rt._outdate){
-                        //cfg.hide_load()
-                        layer.confirm(rt._outdate, {
-                            icon:3,
-                            title:'提示',
-                            btn: ['刷新数据', '仍然保存', '取消'] //可以无限个按钮
-                            ,btn3: function(index, layero){
-                               layer.close(index)
-                            }
-                        }, function(index, layero){
-                            debugger
-                            layer.close(index)
-                            ex.director_call(self.row._director_name,{pk:self.row.pk}).then(resp=>{
-                                ex.vueAssign(self.row,resp.row)
-                            })
-                        }, function(index){
-                            layer.close(index)
-                            self.row.meta_overlap_fields='__all__'
-                            self.submit()
-                        });
-                        //cfg.showMsg(rt._outdate)
+                        cfg.outdate_confirm(
+                            rt._outdate,
+                            function() {
+                                ex.director_call(self.row._director_name, {pk: self.row.pk}).then(resp=> {
+                                    ex.vueAssign(self.row, resp.row)
+                                })
+                            },function(){
+                                    self.row.meta_overlap_fields='__all__'
+                                    self.submit()
+                                }
+                        )
+                        //layer.confirm(rt._outdate, {
+                        //    icon:3,
+                        //    title:'提示',
+                        //    btn: ['刷新数据', '仍然保存', '取消'] //可以无限个按钮
+                        //    ,btn3: function(index, layero){
+                        //       layer.close(index)
+                        //    }
+                        //}, function(index, layero){
+                        //    layer.close(index)
+                        //    ex.director_call(self.row._director_name,{pk:self.row.pk}).then(resp=>{
+                        //        ex.vueAssign(self.row,resp.row)
+                        //    })
+                        //}, function(index){
+                        //    layer.close(index)
+                        //    self.row.meta_overlap_fields='__all__'
+                        //    self.submit()
+                        //});
+
+
                     }else{
                         ex.vueAssign(self.row,rt.row)
                         if(this.head && this.head.after_save && typeof this.head.after_save =='string'){
