@@ -10,7 +10,8 @@
   <div style="margin-top: 40px">
     <div>您可以试试以下操作:</div>
     <ul>
-      <li><a href="/accounts/login">切换用户</a></li>
+        <!--{{ request.META.TMP }}-->
+      <li><a href='{{ request.engin.login_url|default:"/accounts/login" }} '>切换用户</a></li>
       <li>联系管理员提升您的权限</li>
     </ul>
 

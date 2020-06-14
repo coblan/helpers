@@ -103,13 +103,18 @@ class BaseEngine(object):
         page_cls = self.get_page_cls(name)
         #if not page_cls:
             #raise Http404()
-
+        
         if hasattr(page_cls, 'need_login'):
             need_login = page_cls.need_login
         else:
             need_login = self.need_login
         if need_login and not self.login_authorized(request):
             return redirect(self.login_url+'?next='+request.get_full_path())
+        
+        # 用在403页面内
+        request.engin={
+            'login_url':self.login_url+'?next='+request.get_full_path()
+        }
         
         if not request.user.is_staff:
             if hasattr(page_cls, 'need_staff'):
