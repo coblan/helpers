@@ -9,6 +9,12 @@
   left: 50%;
   transform: translateX(-50%);
 }
+.ab-v-center{
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
 .after-nav-content{
   height: calc( var(--app-height) - 50px);
   overflow: auto;
