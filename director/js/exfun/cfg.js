@@ -188,7 +188,11 @@ var cfg={
             }, function(index){
                 layer.close(index);
                 resolve()
-            });
+            },function(index){
+                    layer.close(index);
+                    reject()
+                });
+
             cfg.layer_index_stack.push(index);
         })
     },
