@@ -1,7 +1,7 @@
 Vue.component('com-field-richtext',{
     props:['row','head'],
     template:`<div class="com-field-richtext">
-            <span v-if='head.readonly' v-text='row[head.name]'></span>
+            <div v-if='head.readonly' v-html='row[head.name]'></div>
             <div v-else>
                 <ckeditor ref="ck" :style="head.style" v-model="row[head.name]"
                 :maxlength='head.maxlength'

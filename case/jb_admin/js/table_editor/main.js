@@ -14,6 +14,10 @@ import * as multi_row from  './multi_row.js'
 import * as color from  './color.js'
 import * as icon_cell from  './icon_cell.js'
 
+import  com_tag from './tag_map.vue'
+
+Vue.component('com-table-tag-map',com_tag)
+
 /*
 
 按钮组

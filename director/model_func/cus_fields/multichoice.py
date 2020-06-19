@@ -52,7 +52,7 @@ class MultiChoiceProc(CharProc):
             myvalue = [x for x in dc[name].split(seperator) if x]
         else:
             myvalue = dc[name]
-            
+        myvalue = [ str(x) for x in myvalue]
         if self.field.full_choice :
             whole_values = [str( x[0] ) for x in self.field.my_choices]
             for x in whole_values:
@@ -79,7 +79,7 @@ class MultiChoiceProc(CharProc):
         dc = dict(self.field.my_choices)
         out_list = []
         for k,v in dc.items():
-            out_list.append({'value':k,'label':v})
+            out_list.append({'value':str(k),'label':v})
         return out_list
     
     

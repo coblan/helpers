@@ -111,6 +111,7 @@
                      },500)
                 },
                 open_fade(com,editor_ctx){
+                    // 渐变的打开页面
                     this.tranName ='fade'
                     this.open_live(com,editor_ctx,{back_animate:'fade'})
                     setTimeout(()=>{
@@ -118,6 +119,7 @@
                      },500)
                 },
                 open_live(com,ctx,option){
+                    // 滑动的打开页面
                     if(this.loading){
                         return
                     }else{
@@ -238,6 +240,19 @@
 //                    if(index >0){
 //                        return this.$children[index-1]
 //                    }
+                },
+                liveVc(vc){
+                        //获取vc的 live_vc 容器
+                    var live_vc = vc
+                    while (live_vc.$parent){
+                        var com_name = live_vc.$parent.$options.name
+                        if(ex.findone(this.stack,{editor:com_name})){
+                            return live_vc
+                        }else{
+                            live_vc = live_vc.$parent
+                        }
+                    }
+
                 },
                 open_page(url){
 //                    var t = new Date().getTime()

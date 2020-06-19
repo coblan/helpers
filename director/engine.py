@@ -62,6 +62,7 @@ class BaseEngine(object):
     title = 'Admin'
     prefer='pc'
     login_url=getattr( settings,'LOGIN_URL','/accounts/login')
+    logout_url = '/accounts/logout'
     need_login = True
     menu_search = True
     home = '/' # 当前engine的主页，没有目的的时候，可以往这里跳
@@ -102,7 +103,7 @@ class BaseEngine(object):
         page_cls = self.get_page_cls(name)
         #if not page_cls:
             #raise Http404()
-
+        
         if hasattr(page_cls, 'need_login'):
             need_login = page_cls.need_login
         else:
@@ -110,10 +111,17 @@ class BaseEngine(object):
         if need_login and not self.login_authorized(request):
             return redirect(self.login_url+'?next='+request.get_full_path())
         
-        if hasattr(page_cls, 'need_staff'):
-            self.need_staff = page_cls.need_staff
-        if self.need_staff and not request.user.is_staff:
-            raise PermissionDenied('Need staff to access this page!')
+        # 用在403页面内
+        request.engin={
+            'login_url':self.login_url+'?next='+request.get_full_path()
+        }
+        
+        if not request.user.is_staff:
+            if hasattr(page_cls, 'need_staff'):
+                if getattr(page_cls, 'need_staff'):
+                    raise PermissionDenied('只有职员才能登陆后台界面!')
+            elif self.need_staff:
+                raise PermissionDenied('只有职员才能登陆后台界面!')
         
         try:
             page=page_cls(request, engin = self)
@@ -193,7 +201,7 @@ class BaseEngine(object):
             'brand':self.brand,
             'mini_brand':self.mini_brand ,
             'header_bar_widgets': [
-                {'editor': 'com-headbar-user-info', 'first_name': username, 'username': username,},
+                {'editor': 'com-headbar-user-info', 'first_name': username, 'username': username,'logout_url':self.logout_url },
                 ],
         }
     def get_page_cls(self,name):

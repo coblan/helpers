@@ -3,13 +3,12 @@ require('./styl/datetime_range.styl')
 var com_datetime_range={
     props:['head','search_args'],
     data:function(){
-
         //var start=this.search_args['_start_'+this.head.name]
         //var end=this.search_args['_end_'+this.head.name]
         return {
             heads:[
-                {name:'_start_'+this.head.name,placeholder:'开始时间'},
-                {name:'_end_'+this.head.name,placeholder:'结束时间'}
+                {name:'_start_'+this.head.name,placeholder:'开始时间',clearable:this.head.clearable},
+                {name:'_end_'+this.head.name,placeholder:'结束时间',clearable:this.head.clearable}
             ]
         }
     },

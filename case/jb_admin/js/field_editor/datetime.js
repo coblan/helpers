@@ -9,6 +9,7 @@ var lay_datetime={
       :placeholder="head.placeholder"
       align="right"
       size="small"
+      :clearable="can_clear"
       value-format="yyyy-MM-dd HH:mm:ss"
       :picker-options="pickerOptions">
     </el-date-picker>
@@ -54,6 +55,15 @@ var lay_datetime={
     },
     mounted:function(){
         var self=this
+    },
+    computed:{
+        can_clear(){
+            if(this.head.clearable ==undefined){
+                return true
+            }else{
+                return this.head.clearable
+            }
+        }
     }
 }
 

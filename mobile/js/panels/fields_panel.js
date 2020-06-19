@@ -11,7 +11,7 @@ Vue.component('com-fields-panel',{
             childStore:childStore,
             parStore:ex.vueParStore(this),
             heads:this.ctx.heads,
-            par_row:this.ctx.row, // 外面的row 缓存起来
+            par_row:this.ctx.par_row, // 外面的row 缓存起来
             row:row,
             ops:this.ctx.ops || [],
             fields_group:this.ctx.fields_group || [],

@@ -132,10 +132,8 @@ class ModelFields(forms.ModelForm):
                         #continue
                     #dc[k] = getattr(form_kw['instance'] , k)  
         
-        # 修正参数
-        dc = self._clean_dict(dc)
-        dc=self.clean_dict(dc)   
-        
+
+        # todict -> ui -> todict(compare) -> adapte_dict
         # 修正只读字段 
         simdc = sim_dict(inst)
         readonly_waring = []
@@ -153,6 +151,10 @@ class ModelFields(forms.ModelForm):
                     #dc[k] =  getattr(inst , k)  
         if readonly_waring and  not dc.get('meta_overlap_fields') == '__all__' :
             raise OutDateException('(%s)的%s已经发生了变化,请确认后再进行操作!'%(inst,[field_label(inst.__class__,k ) for k in readonly_waring] ) )
+        
+        # 修正参数
+        dc = self._clean_dict(dc)
+        dc=self.clean_dict(dc) 
         
         
         self.kw.update(dc)

@@ -1,4 +1,4 @@
-from .table import ModelTable, PageNum
+from .table import ModelTable, PageNum,evalue_container
 
 class SimTable(ModelTable):
     """
@@ -40,7 +40,7 @@ class SimTable(ModelTable):
             'rows': rows,
             'row_pages' : self.getRowPages(),
             'row_sort':row_sort,
-            'row_filters':  self.getRowFilters(), #ls,
+            'row_filters':  evalue_container( self.getRowFilters() ), #ls,
             #'search_tip':self.row_search.get_context(),
             'director_name':director_name,
             'ops' : ops,

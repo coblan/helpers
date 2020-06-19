@@ -1,8 +1,38 @@
-{% if exception %}
-<h1>403</h1>
-  <p>{{ exception }}</p>
-{% else %}
-  <p>403</p>
-{% endif %}
+<div class="pannel">
+ <h1>403</h1>
+  {% if exception %}
+  <div class="no-permit">{{ exception }}</div>
+  {% else %}
+  <div class="no-permit">没有权限</div>
+  {% endif %}
 
-<a href="/accounts/login">切换用户</a>
+
+  <div style="margin-top: 40px">
+    <div>您可以试试以下操作:</div>
+    <ul>
+        <!--{{ request.META.TMP }}-->
+      <li><a href='{{ request.engin.login_url|default:"/accounts/login" }} '>切换用户</a></li>
+      <li>联系管理员提升您的权限</li>
+    </ul>
+
+  </div>
+</div>
+
+
+
+<style>
+.pannel{
+  /*background-color: #0a6ebd;*/
+  /*color: white;*/
+  width: 80%;
+
+  margin: auto;
+  padding: 20px;
+}
+  .title{
+
+  }
+  .no-permit{
+    color: red;
+  }
+</style>
