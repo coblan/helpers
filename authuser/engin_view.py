@@ -4,6 +4,8 @@ from . base_data import auth_page_dc
 class AuthEngine(BaseEngine):
     url_name = 'authengine'
     need_login = False
+    need_staff = False
+    access_from_internet = True
     
 
 

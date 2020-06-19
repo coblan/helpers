@@ -38,7 +38,8 @@ class PageNum(object):
         #self.totalpage = max(totalpage,1)
         
         # 需要研究下，为什么有时 len(query) != query.count()  ，例如 jb.maindb.ticket_admin.TicketparlayTable
-        #self.count =  query.count() #len(query) #
+
+        #self.count = len(query) # query.count() #len(query) #
         #crt_page= max(1,int( self.pageNumber))
         #start = (crt_page -1)*self.perPage
         #end = min(crt_page*self.perPage, self.count)
@@ -399,6 +400,8 @@ class ModelTable(object):
             self.row_search.model=self.model
         myperpage =  self.kw.get('_perpage',perpage)
         self.pagenum = self.pagenator(pageNumber=self.page,perpage=myperpage)
+        self.pagenum.ps = self
+        
         self.footer = {}
         self.is_export_excel = False
         

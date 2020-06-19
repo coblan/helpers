@@ -41,7 +41,7 @@ var user_info={
                                     <a href="/accounts/pswd" class="btn btn-default btn-flat" v-text="tr.change_password"></a>
                                 </div>
                                 <div class="pull-right">
-                                    <a href="/accounts/logout" class="btn btn-default btn-flat" v-text="tr.logout"></a>
+                                    <a :href="head.logout_url" class="btn btn-default btn-flat" v-text="tr.logout"></a>
                                 </div>
                             </li>
                         </ul>

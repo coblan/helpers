@@ -310,6 +310,8 @@ var table_store={
                                     one_row[head.name]=self.selected[0][head.name]
                                 }
                             })
+                            // 将当前的ps 传递到弹出框中
+                            kws.fields_ctx.pop_vc = self
                             var win_index = pop_edit_local(one_row,kws.fields_ctx,function(e){
                                 if(e == '__end_by_user'){
                                     return
@@ -476,6 +478,7 @@ var table_store={
         },
         export_excel:function(head){
             var self=this
+            var head = head || {}
             var search_args = ex.copy(self.search_args)
             search_args._perpage= head.count || 5000
             var post_data=[{fun:'get_excel',director_name:self.director_name,search_args:search_args}]
