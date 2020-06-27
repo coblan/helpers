@@ -106,12 +106,22 @@ var ckeditor = {
 			var self=this
 			if(! self.ckeditor_loaded){
 				self.ckeditor_setvalue_queue=function(){
-					self.editor.setData(v)
-					self.editor.resetDirty()
+					self.editor.setData(v, {
+						callback: function() {
+							this.resetDirty(); // true
+						}
+					})
+
+					//self.editor.setData(v)
+					//self.editor.resetDirty()
 				}
 			}else{
-				self.editor.setData(v)
-				self.editor.resetDirty()
+				self.editor.setData(v, {
+					callback: function() {
+						this.resetDirty(); // true
+					}
+				})
+
 			}
 
 		}
