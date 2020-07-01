@@ -4,16 +4,23 @@
         <div class="head">
             <img :src="ctx.image_url" alt="">
         </div>
-        <div class="content web-wrap">
-            <component :is="ctx.inn_editor" :ctx="ctx.inn_ctx"></component>
-        </div>
+          <div class="content web-wrap">
+              <slot name="content">
+                  内容的自定义组件
+                  <!--<component :is="ctx.inn_editor" :ctx="ctx.inn_ctx"></component>-->
+              </slot>
+          </div>
+
     </div>
         <div v-else class="web-wrap" >
             <div class="head">
                 <img :src="ctx.image_url" alt="">
             </div>
             <div class="content">
-                <component :is="ctx.inn_editor" :ctx="ctx.inn_ctx"></component>
+                <slot name="content">
+                    内容的自定义组件
+                    <!--<component :is="ctx.inn_editor" :ctx="ctx.inn_ctx"></component>-->
+                </slot>
             </div>
         </div>
 

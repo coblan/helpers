@@ -22,7 +22,7 @@
                             createElement('template',{
                                 slot:dc.name,
                             },[
-                                createElement(dc.editor,{props:dc } )
+                                createElement(dc.editor,{props:{ctx:dc} } )
                             ])
                     )
                 }else if(dc.editors){
@@ -31,9 +31,9 @@
                                 slot:dc.name,
                             },ex.map(dc.editors,item=>{
                                         if(item.editor){
-                                            return createElement(item.editor,{props:item }  )
+                                            return createElement(item.editor,{props:{ctx:item} }  )
                                         }else{
-                                            return createElement('div',item.html  )
+                                            return  createElement(slot_html,{props:{html:item.html}} )
                                         }
                               } )
                             )
