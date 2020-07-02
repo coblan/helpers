@@ -10,4 +10,9 @@ require('./scss/text.scss')
 require('./scss/link.scss')
 
 
+import slot_wrap from './slot_wrap.vue'
+
+Vue.component('com-slot-wrap',slot_wrap)
+
+
 
