@@ -41,7 +41,11 @@ var tab_table={
                     }
                 },
                 getRows:function(){
-                    if(vc.tab_head.pre_set){
+                    if(vc.tab_head.search_filter){
+                        var search_filter = ex.eval(vc.tab_head.search_filter,{par_row:vc.par_row,vc:vc,ps:this})
+                        ex.assign(this.search_args,search_filter)
+                    }else if(vc.tab_head.pre_set){
+                            // pre_set 含义不够清晰，被search_filter 替代了
                         var pre_set = ex.eval(vc.tab_head.pre_set,{par_row:vc.par_row,vc:vc,ps:this})
                         ex.assign(this.search_args,pre_set)
                     }else if(vc.tab_head.tab_field){ // 下面是老的调用，
