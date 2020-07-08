@@ -1,9 +1,14 @@
 var pop_table_select =  {
     props:['row','head'],
     template:`<div>
-        <span  v-text="label"></span>
+
         <input type="text" v-model="row[head.name]" style="display: none;" :id="'id_'+head.name" :name="head.name">
-        <span v-if="!head.readonly" class="clickable" @click="open_win"><i class="fa fa-search"></i></span>
+
+  <el-tag :closable="!head.readonly" v-if="row[head.name]" @close="clear()">
+   <span  v-text="label"></span>
+</el-tag>
+
+        <span v-if="!head.readonly && ! row[head.name]" class="clickable" @click="open_win"><i class="fa fa-search"></i></span>
     </div>`,
     computed:{
         label:function(){
@@ -20,6 +25,9 @@ var pop_table_select =  {
         //})
     },
     methods:{
+        clear(){
+            this.row[this.head.name] = null
+        },
         open_win:function(){
             var self=this
             if(this.head.init_express){
