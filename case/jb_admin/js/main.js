@@ -126,4 +126,7 @@ import * as livepage_main from  './livepage/main.js'
 import * as table_operator_main from  './table_operator/main'
 
 import * as table_filter_main from './table_filter/main'
+
+import * as page_com_main from './page_com/main'
+import * as table_chart_editor_main from './table_chart_editor/main'
 //import * as pop_win_main from './pop_win/main'

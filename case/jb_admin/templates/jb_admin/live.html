@@ -21,7 +21,12 @@ $(function() {
             }
         },
         created(){
-            this.open_live(window[editor],editor_ctx)
+            if(window[editor]){
+                this.open_live(window[editor],editor_ctx)
+            }else{
+                this.open_com(editor,editor_ctx)
+            }
+
         },
         methods:{
             pop_stack(){
@@ -40,6 +45,9 @@ $(function() {
                 }
                 Vue.set( this.$options.components,com_name,big_com)
                 this.stack.push({editor:com_name,ctx:ctx,label:label || com.label || ctx.title  })
+            },
+            open_com(com_name,ctx,label){
+                this.stack.push({editor:com_name,ctx:ctx,label:label||ctx.label || ctx.title })
             }
         },
         components:{},

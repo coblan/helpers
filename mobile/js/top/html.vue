@@ -5,8 +5,17 @@
 <script>
 export default {
     props:['ctx'],
+    data(){
+        return {
+            parStore:ex.vueParStore(this)
+        }
+    },
+    mounted(){
+        if(this.ctx.css){
+            ex.append_css(this.ctx.css)
+        }
+    },
     methods:{
-
     }
 }
 </script>

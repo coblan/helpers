@@ -5,13 +5,14 @@ var tab_fields={
         var ctx = this.tab_head.fields_ctx
         ex.assign(ctx,{
             par_row:this.par_row,
-            init_express:this.tab_head.init_express
+            init_express:this.tab_head.init_express,
+            mounted_express:this.tab_head.mounted_express,
         })
         return {
             ctx:ctx
         }
     },
-    template:`<div class="com-tab-fields-v1 com-tab-fields" style="position: absolute;top:0;left:0;bottom: 0;right:0;overflow: auto;">
+    template:`<div class="com-tab-fields-v1 com-tab-fields com-tab-form" style="position: absolute;top:0;left:0;bottom: 0;right:0;overflow: auto;">
     <com-form-one :ctx="ctx"></com-form-one>
     </div>`,
     mounted(){
@@ -22,3 +23,4 @@ var tab_fields={
 }
 
 Vue.component('com-tab-fields-v1',tab_fields)
+Vue.component('com-tab-form',tab_fields)

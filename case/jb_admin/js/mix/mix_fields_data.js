@@ -7,6 +7,8 @@ var mix_fields_data ={
     },
     mounted:function(){
         var self=this
+
+        // TODO 把这段代码去掉
         ex.assign(this.op_funs,{
             save:function(){
                 //self.save()
