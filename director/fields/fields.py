@@ -325,8 +325,15 @@ class ModelFields(forms.ModelForm):
         if self.permit.changeable_fields():
             ls += [
                 {
-                'name':'save','editor':'com-field-op-btn','label':'保存', 'icon': 'fa-save',
-                'class':'btn btn-info btn-sm',
+                #'name':'save',
+                #'editor':'com-field-op-btn',
+                'editor':'com-btn',
+                'type':'primary',
+                'icon':'el-icon-receiving',
+                'label':'保存', 
+                'action':'scope.ps.vc.save()'
+                #'icon': 'fa-save',
+                #'class':'btn btn-info btn-sm',
             },
                 # 暂时屏蔽，需要考虑清楚 页面兼容性问题
                 #{

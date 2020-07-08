@@ -57,7 +57,7 @@ export  var fields_all_in_one={
         </div>
     </div>
     <div class="oprations bottom" v-if="ops_loc=='bottom'">
-        <component v-for="op in normed_ops" :is="op.editor" :ref="'op_'+op.name" :head="op" @operation="on_operation(op)"></component>
+        <component v-for="op in normed_ops" :is="op.editor" :ref="'op_'+op.name" :head="op" :ctx="op" @operation="on_operation(op)"></component>
     </div>
     </div>`,
 
