@@ -1,19 +1,22 @@
 <template>
     <span class="com-btn">
-        <el-button size="small" :type="ctx.type" @click="on_click()">
+        <el-button size="small" :type="my_ctx.type" @click="on_click()">
             <slot name="content">
-                <i v-if="ctx.icon" :class="ctx.icon"></i>
-                <span v-text="ctx.label"></span>
+                <i v-if="my_ctx.icon" :class="my_ctx.icon"></i>
+                <span v-text="my_ctx.label"></span>
             </slot>
         </el-button>
     </span>
 </template>
 <script>
     export default {
-        props:['ctx'],
+        props:['ctx','head'],
         data(){
+
             return {
-                parStore:ex.vueParStore(this)
+                parStore:ex.vueParStore(this),
+                // TODO 剔除某些老组件后，需要移除 head的引用
+                my_ctx:this.ctx?this.ctx:this.head,
             }
         },
         mounted(){
