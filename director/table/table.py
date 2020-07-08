@@ -869,10 +869,16 @@ class ModelTable(object):
         fields_ctx.update({
             'ops_loc':'bottom'
         })
-        return [{'name':'add_new',
-                 'editor':'com-op-btn',
-                 'icon': 'fa-plus',
-                 'class':'btn btn-primary btn-sm',
+        return [
+            {
+                'name':'add_new',
+                 #'editor':'com-op-btn',
+                 #'icon': 'fa-plus',
+                 #'class':'btn btn-primary btn-sm',
+                 'editor':'com-btn',
+                 'action':'scope.ps.add_new(scope.head)',
+                 'icon':'el-icon-plus',
+                 'type':'primary',
                  'label':'创建',
                  'pre_set':'', # 预先设置的字段,一般用于com-tab-table下的创建
                  'fields_ctx':fields_ctx,

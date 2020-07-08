@@ -7,6 +7,7 @@ var ele_operations={
                            :is="op.editor"
                            :ref="'op_'+op.name"
                            :head="op"
+                           :ctx="op"
                            :key="index"
                            :disabled="is_disable(op)"
                            v-show="is_show(op)"

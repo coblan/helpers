@@ -27,7 +27,7 @@ var tab_fields={
     template:`<div class="com-tab-fields flex-v"  style="position: absolute;top:0;left:0;bottom: 0;right:0;overflow: auto;">
 
    <div class="oprations" >
-        <component v-for="op in ops" :is="op.editor" :ref="'op_'+op.name" :head="op" @operation="on_operation(op)"></component>
+        <component v-for="op in ops" :is="op.editor" :ref="'op_'+op.name" :head="op" :ctx="op" @operation="on_operation(op)"></component>
     </div>
     <div style="overflow: auto;" class="flex-grow fields-area">
         <div v-if="heads[0].name !='_meta_head'" class='field-panel suit' id="form" >

@@ -1,6 +1,6 @@
 <template>
     <span class="com-btn">
-        <el-button size="small" :type="my_ctx.type" @click="on_click()">
+        <el-button size="mini" :type="my_ctx.type" @click="on_click()">
             <slot name="content">
                 <i v-if="my_ctx.icon" :class="my_ctx.icon"></i>
                 <span v-text="my_ctx.label"></span>
@@ -24,6 +24,7 @@
         },
         methods:{
             on_click(){
+                debugger
                 if(this.ctx.action){
                     ex.eval(this.ctx.action,{head:this.ctx,ps:this.parStore})
                 }
@@ -34,6 +35,6 @@
 
 <style scoped lang="scss">
 .com-btn{
-    margin: 0 2px;
+    margin: 0 1px;
 }
 </style>

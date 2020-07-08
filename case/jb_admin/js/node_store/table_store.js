@@ -412,6 +412,7 @@ var table_store={
 
                     }else{
                         if(kws.after_error){
+                            // 有弹出fields框时，设置 after_error ，显示错误
                             ex.eval(kws.after_error,{fs:field_vc.childStore,errors:resp.errors})
                         }else{
                             if (field_vc){
