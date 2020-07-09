@@ -325,7 +325,7 @@ class ModelFields(forms.ModelForm):
         if self.permit.changeable_fields():
             ls += [
                 {
-                #'name':'save',
+                'name':'save',
                 #'editor':'com-field-op-btn',
                 'editor':'com-btn',
                 'type':'primary',
