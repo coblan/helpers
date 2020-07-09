@@ -1,18 +1,37 @@
 var pop_table_select =  {
     props:['row','head'],
-    template:`<div>
+    template:`<div class="com-field-pop-table-select">
 
         <input type="text" v-model="row[head.name]" style="display: none;" :id="'id_'+head.name" :name="head.name">
 
-  <el-tag :closable="!head.readonly" v-if="row[head.name]" @close="clear()">
+  <el-tag :closable=" can_clear" v-if="row[head.name]" @close="clear()">
    <span  v-text="label"></span>
 </el-tag>
 
-        <span v-if="!head.readonly && ! row[head.name]" class="clickable" @click="open_win"><i class="fa fa-search"></i></span>
+        <span v-if="show_search" class="clickable" @click="open_win"><i class="fa fa-search"></i></span>
     </div>`,
     computed:{
         label:function(){
             return this.row['_'+this.head.name+'_label']
+        },
+        can_clear(){
+            if(this.head.readonly){
+                return false
+            }
+            if(this.head.clearable==undefined){
+                return true
+            }else{
+                return this.head.clearable
+            }
+        },
+        show_search(){
+            if(this.head.readonly){
+                return false
+            }else if(! this.can_clear){
+                return true
+            }else{
+                return Boolean(this.row[this.head.name])
+            }
         }
     },
     mounted:function(){
@@ -26,7 +45,13 @@ var pop_table_select =  {
     },
     methods:{
         clear(){
-            this.row[this.head.name] = null
+            if(this.head.clear_express){
+                ex.eval(this.head.clear_express,{head:this.head,row:this.row})
+            }else{
+                Vue.delete(this.row,this.head.name)
+                Vue.delete(this.row,'_'+this.head.name+'_label')
+                //this.row[this.head.name] = null
+            }
         },
         open_win:function(){
             var self=this
