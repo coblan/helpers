@@ -49,7 +49,8 @@ export  var pop_fields={
             }
 
                var win= pop_edit_local(self.rowData,fields_ctx,function(resp) {
-                   ex.assign(self.rowData,resp.row)
+                   //ex.assign(self.rowData,resp.row)
+                   ex.vueAssign(self.rowData,resp.row)
                     //self.$emit('on-custom-comp',{fun:'edit_over'} )
                    layer.close(win)
                 })
