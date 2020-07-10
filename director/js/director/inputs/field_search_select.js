@@ -1,3 +1,7 @@
+/*
+*  这个模块被淘汰了。新的 com-field-search-select 在 jbadmin中使用element组件构建
+*  但是这个模块 是按照第一个字母来搜索的， 这个与element不一样，element用的任意字母。介于此，这个模块以后可能会用得上。
+* */
 var search_select = {
     props:['row','head'],
     data:function(){

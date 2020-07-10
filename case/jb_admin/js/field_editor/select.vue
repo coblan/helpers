@@ -1,14 +1,22 @@
 <template>
     <div class="com-field-select">
         <span v-if='head.readonly' v-text='get_label(head.options,row[head.name])'></span>
-        <select v-else v-model='row[head.name]'  :id="'id_'+head.name" :name="head.name"  :class="['form-control input-sm',{ novalue: ! is_select}] ">
-            <!--<option v-if="head.required"  :value="undefined" disabled selected style='display:none;' class="placeholder" v-text="head.placeholder"></option>-->
-            <!--<option v-else  :value="undefined" selected style="color: #b8b8b8" class="placeholder" v-text="head.placeholder"></option>-->
-            <option v-if="head.required"  :value="novalue" disabled selected style='display:none;color: #b8b8b8' class="placeholder" v-text="head.placeholder"></option>
-            <option v-else   :value="novalue" selected style="color: #b8b8b8" class="placeholder" v-text="head.placeholder"></option>
+        <el-select v-else v-model="row[head.name]" placeholder="请选择" size="small" :clearable="!head.required" :id="'id_'+head.name" :name="head.name">
+            <el-option
+                    v-for="item in normed_options"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value">
+            </el-option>
+        </el-select>
+        <!--<select v-else v-model='row[head.name]'  :id="'id_'+head.name" :name="head.name"  :class="['form-control input-sm',{ novalue: ! is_select}] ">-->
+            <!--&lt;!&ndash;<option v-if="head.required"  :value="undefined" disabled selected style='display:none;' class="placeholder" v-text="head.placeholder"></option>&ndash;&gt;-->
+            <!--&lt;!&ndash;<option v-else  :value="undefined" selected style="color: #b8b8b8" class="placeholder" v-text="head.placeholder"></option>&ndash;&gt;-->
+            <!--<option v-if="head.required"  :value="novalue" disabled selected style='display:none;color: #b8b8b8' class="placeholder" v-text="head.placeholder"></option>-->
+            <!--<option v-else   :value="novalue" selected style="color: #b8b8b8" class="placeholder" v-text="head.placeholder"></option>-->
 
-            <option v-for='opt in normed_options' :value='opt.value' v-text='opt.label'></option>
-        </select>
+            <!--<option v-for='opt in normed_options' :value='opt.value' v-text='opt.label'></option>-->
+        <!--</select>-->
     </div>
 </template>
 <script>

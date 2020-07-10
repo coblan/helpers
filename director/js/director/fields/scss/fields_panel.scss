@@ -30,6 +30,26 @@ msg-bottom  nice validator的位置在下面，默认在右侧
   }
 }
 
+.field_input{
+  input{
+    width: 23rem;
+  }
+
+
+  flex-grow:0;
+  align-self:center;
+  padding:5px 20px;
+  input {
+    /*max-width:25em;*/
+  }
+  /*.ckeditor{*/
+  /*padding: 20px;*/
+  /*}*/
+  .multi-chosen{
+    width: 30em;
+  }
+}
+
 .field-panel.suit{
   background-color: #F5F5F5;
   //max-width:80%;
@@ -70,25 +90,7 @@ msg-bottom  nice validator的位置在下面，默认在右侧
       word-break: break-all;
     }
 
-      .field_input{
-        input[type=text],input[type=number]{
-          width: 23rem;
-        }
 
-
-        flex-grow:0;
-        align-self:center;
-        padding:5px 20px;
-        input {
-          /*max-width:25em;*/
-        }
-      /*.ckeditor{*/
-          /*padding: 20px;*/
-      /*}*/
-      .multi-chosen{
-        width: 30em;
-      }
-    }
     &:first-child .control-label{
         border-top: 5px solid #FFF;
     }

@@ -27,10 +27,10 @@ var pop_table_select =  {
         show_search(){
             if(this.head.readonly){
                 return false
-            }else if(! this.can_clear){
+            }else if(this.head.clearable==false ){
                 return true
             }else{
-                return Boolean(this.row[this.head.name])
+                return !Boolean(this.row[this.head.name])
             }
         }
     },
