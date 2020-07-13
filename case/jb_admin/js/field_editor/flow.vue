@@ -1,16 +1,19 @@
 <template>
     <div class="com-field-flow">
-        <div class="mermaid" v-text="graph"></div>
 
-        <span style="color: #8c8c8c;font-size: 90%">当前可选项:</span>
-        <el-select v-if="next_options.length>0" v-model="row[head.name]" placeholder="请选择" size="small" :clearable="!head.required" :id="'id_'+head.name" :name="head.name">
-            <el-option
-                    v-for="item in next_options"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value">
-            </el-option>
-        </el-select>
+        <div class="mermaid" v-text="graph"></div>
+        <div style="margin-left: 20px">
+            <span style="color: #8c8c8c;font-size: 90%">当前可选项:</span>
+            <el-select v-if="next_options.length>0" v-model="row[head.name]" placeholder="请选择" size="small" :clearable="!head.required" :id="'id_'+head.name" :name="head.name">
+                <el-option
+                        v-for="item in next_options"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value">
+                </el-option>
+            </el-select>
+        </div>
+
     </div>
 </template>
 <script>
@@ -89,5 +92,7 @@
     }
 </script>
 <style scoped lang="scss">
-
+.com-field-flow{
+    display: flex;
+}
 </style>
