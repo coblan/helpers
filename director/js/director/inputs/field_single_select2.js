@@ -128,4 +128,4 @@ Vue.component('com-field-single-select2', function (resolve, reject) {
     })
 })
 
-Vue.component('com-field-single-select2',field_sigle_chosen)
+//Vue.component('com-field-single-select2',field_sigle_chosen)

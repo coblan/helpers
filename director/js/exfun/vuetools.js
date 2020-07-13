@@ -21,6 +21,11 @@ export var  vuetool = {
             Vue.set(old_row,key,new_row[key])
         }
     },
+    vueDelete(obj,nameList){
+        ex.each(nameList,name=>{
+            Vue.delete(obj,name)
+        })
+    },
     vueBroadCall:function(self,fun,kws){
         var rt =[]
         cusBroadCall(self,fun,kws,rt)

@@ -73,3 +73,4 @@ var multi_row = {
 
 
 Vue.component('com-field-multi-row',multi_row)
+Vue.component('com-table-multi-row',multi_row)
