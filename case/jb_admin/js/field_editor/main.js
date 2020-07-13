@@ -25,9 +25,11 @@ import  password from  './password.vue'
 import  select from  './select.vue'
 import field_bool from  './bool.vue'
 import  radio from  './radio.vue'
+import  flow from  './flow.vue'
 
 Vue.component('com-field-int',int_field)
 Vue.component('com-field-password',password)
 Vue.component('com-field-select',select)
 Vue.component('com-field-bool',field_bool)
 Vue.component('com-field-radio',radio)
+Vue.component('com-field-flow',flow)
