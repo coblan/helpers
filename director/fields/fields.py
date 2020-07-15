@@ -331,7 +331,7 @@ class ModelFields(forms.ModelForm):
                 'type':'primary',
                 'icon':'el-icon-receiving',
                 'label':'保存', 
-                'action':'scope.ps.vc.save()'
+                'action':'scope.ps.vc.submit()'
                 #'icon': 'fa-save',
                 #'class':'btn btn-info btn-sm',
             },
