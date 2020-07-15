@@ -4,6 +4,7 @@ from hashlib import md5
 
 from base64 import b64encode
 import json
+from django.utils import timezone
 
 def hash_dict(dc,keys=None):
     ls =[]
@@ -38,7 +39,10 @@ def make_mark_dict(dc,keys=None):
             #v='false'
         #if v is None:
             #v='null'
-        out_dc[k] = str(v)
+        if isinstance(v,timezone.datetime):
+            out_dc[k] = v.strftime('%y-%m-%d %H:%M:%S')
+        else:
+            out_dc[k] = str(v)
     return out_dc
 
 def dif_mark_dict(dc,mark,include=None,exclude=[]):
