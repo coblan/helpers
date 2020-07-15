@@ -1,6 +1,7 @@
 <template>
     <div class="com-field-el-select" :class="head.class">
-        <el-select v-model="row[head.name]" filterable placeholder="请选择" size="small" :clearable="!head.required">
+        <el-select v-model="row[head.name]" filterable placeholder="请选择" size="small" :clearable="!head.required"
+                   :id="'id_'+head.name" :name="head.name">
             <el-option
                     v-for="item in normed_options"
                     :key="item.value"
