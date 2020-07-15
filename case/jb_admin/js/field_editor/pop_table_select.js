@@ -7,8 +7,8 @@ var pop_table_select =  {
   <el-tag :closable=" can_clear" v-if="row[head.name]" @close="clear()">
    <span  v-text="label"></span>
 </el-tag>
-    <!--<span v-if="!head.readonly" class="clickable" @click="open_win"><i class="fa fa-search"></i></span>-->
-         <span v-if="show_search" class="clickable" @click="open_win"><i class="fa fa-search"></i></span>
+    <span v-if="!head.readonly" class="clickable" @click="open_win"><i class="fa fa-search"></i></span>
+         <!--<span v-if="show_search" class="clickable" @click="open_win"><i class="fa fa-search"></i></span>-->
     </div>`,
     computed:{
         label:function(){
