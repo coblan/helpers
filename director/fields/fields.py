@@ -47,7 +47,8 @@ class ModelFields(forms.ModelForm):
     extra_mixins=[]
     hide_fields = []
     overlap_fields=[]  # 这些字段不会被同步检查
-    readonly_change_warning = []
+    readonly_change_warning = [] # 普通保存时，后台会恢复只读字段的值，但是有时有些只读字段，
+                                 #在后台发现改变时，需要警告前端，作废此次保存。因为这些字段值可能是前端做判断的依据。
     show_pk=False
     nolimit=False
     @classmethod
@@ -151,6 +152,8 @@ class ModelFields(forms.ModelForm):
                     #dc[k] =  getattr(inst , k)  
         if readonly_waring and  not dc.get('meta_overlap_fields') == '__all__' :
             raise OutDateException('(%s)的%s已经发生了变化,请确认后再进行操作!'%(inst,[field_label(inst.__class__,k ) for k in readonly_waring] ) )
+        
+        # 真正的验证各个参数是否过期，是在clean函数中进行的。
         
         # 修正参数
         dc = self._clean_dict(dc)
@@ -331,7 +334,7 @@ class ModelFields(forms.ModelForm):
                 'type':'primary',
                 'icon':'el-icon-receiving',
                 'label':'保存', 
-                'action':'scope.ps.vc.save()'
+                'action':'scope.ps.vc.submit()'
                 #'icon': 'fa-save',
                 #'class':'btn btn-info btn-sm',
             },

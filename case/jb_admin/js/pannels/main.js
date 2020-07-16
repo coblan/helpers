@@ -14,4 +14,4 @@ import * as charts_main from  './charts/main'
 import  pop_progress from  './pop_progress.vue'
 import  static1 from  './static1.vue'
 Vue.component('com-pop-progress',pop_progress)
-Vue.component('com-panel-static1',static1)
+Vue.component('com-pan-static1',static1)
