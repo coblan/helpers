@@ -1,6 +1,8 @@
 <template>
     <span class="com-btn">
-        <el-button size="mini" :type="my_ctx.type" @click="on_click()" :disabled="is_disabled" :plain="my_ctx.plain">
+        <el-button size="mini" :type="my_ctx.type" @click="on_click()"
+                   :title="ctx.title"
+                   :disabled="is_disabled" :plain="my_ctx.plain">
             <slot name="content">
                 <i v-if="my_ctx.icon" :class="my_ctx.icon"></i>
                 <span v-text="my_ctx.label"></span>
