@@ -657,6 +657,7 @@ class Fields(ModelFields):
         }
         # 太复杂，暂时不要权限
         self.nolimit = True
+
     
     def add_error(self,key,msg):
         if key not in self._errors:
@@ -695,7 +696,9 @@ class Fields(ModelFields):
     
     def get_org_dict(self,row=None):
         if not row:
-            row= self.dict_row()
+            # fields 的数据获取来自于非db orm类型。如果需要过期检查，需要定制该函数，手动去获取该行数据。
+            return {}
+            #row= self.dict_row()
         return make_mark_dict(row)
     
     def clean_dict(self, dc): 
