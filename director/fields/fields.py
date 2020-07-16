@@ -701,7 +701,16 @@ class Fields(ModelFields):
     def get_operations(self):
         ls=[]
         ls.append({
-            'name':'save','editor':'com-field-op-btn','label':'保存', 'icon': 'fa-save','class':'btn btn-info'
+            'name':'save',
+            'editor':'com-btn',
+            'label':'保存',
+            'type':'success',
+            'icon':'el-icon-receiving',
+            'action':'debugger;scope.ps.vc.submit()',
+            #'editor':'com-field-op-btn',
+            #'label':'保存', 
+            #'icon': 'fa-save',
+            #'class':'btn btn-info'
         })
         return ls 
     

@@ -901,7 +901,7 @@ class ModelTable(object):
                  #'style': 'color:red',
                  #'icon': 'fa-times',
                  'type':'danger',
-                 'plain':True,
+                 #'plain':True,
                  'icon':'el-icon-delete',
                  'row_match':'many_row',
                  #'disabled':'!scope.ps.has_select', 
