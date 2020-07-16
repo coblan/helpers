@@ -8,8 +8,12 @@ uuidChars = ("a", "b", "c", "d", "e", "f",
        "6", "7", "8", "9", "A", "B", "C", "D", "E", "F", "G", "H", "I",
        "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V",
        "W", "X", "Y", "Z")
-def short_uuid():
-  uuid = str(uuid1()).replace('-', '')
+def short_uuid(u=4):
+  if u== 4:
+    uuid_cal = uuid4
+  elif u ==1:
+    uuid_cal = uuid1
+  uuid = str(uuid_cal()).replace('-', '')
   result = ''
   for i in range(0,8):
     sub = uuid[i * 4: i * 4 + 4]
