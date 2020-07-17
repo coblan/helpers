@@ -25,7 +25,7 @@ var line_text={
             //}
             //var options = self.head.options .concat(items)
             var bb = $(this.$el).find('.my-input-field').selectize({
-                delimiter: ',',
+                delimiter: this.head.splitter ||  ',',
                 persist: false,
                 create: true,
                 //items:items,
@@ -57,7 +57,10 @@ var line_text={
                 //    bb[0].selectize.removeOption(ii)
                 //})
                 //bb[0].selectize.clearOptions()
-                bb[0].selectize.addOption(self.head.options)
+                if(self.head.options){
+                    bb[0].selectize.addOption(self.head.options)
+                }
+
                 //bb[0].selectize.setValue(items, true)
             })
 
