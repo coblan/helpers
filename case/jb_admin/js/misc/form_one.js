@@ -3,7 +3,12 @@ require('./scss/form_one.scss')
 export  var fields_all_in_one={
     props:['ctx'],
     data:function(){
-        var data_row = ex.copy(this.ctx.row  || {} )
+        if (this.ctx.director_name){
+            var def_row = {_director_name:this.ctx.director_name}
+        }else{
+            var def_row = {}
+        }
+        var data_row = ex.copy(this.ctx.row  || def_row )
         var self=this
         var childStore = new Vue({
             data:{

@@ -516,6 +516,7 @@ class ModelTable(object):
     
     def get_data_context(self):
         rows =  self.get_rows()
+        self.rows_count = len(rows)
         if self.only_simple_data():
             out_dc ={
                 'rows':rows,
@@ -1183,5 +1184,11 @@ class PlainTable(ModelTable):
         return {}
     
     def getRowPages(self): 
-        return {}  
+        per_page = math.ceil(self.rows_count /100) *100 
+        return {
+            'total':self.rows_count,
+            'perPage':per_page,
+            'options':[per_page],
+            'crt_page':1,
+        }  
         
