@@ -50,7 +50,7 @@ export  var pop_fields={
                     'name':'save','editor':'com-field-op-btn','label':'确定', 'icon': 'fa-save',
                 }],
                 extra_mixin:[],
-                genPar:self,
+                genVc:self,
             }
 
                var win= pop_edit_local(self.rowData,fields_ctx,function(resp) {

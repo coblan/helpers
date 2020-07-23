@@ -131,7 +131,7 @@ var order_list =  {
                 ops:[{
                     'name':'save','editor':'com-field-op-btn','label':'确定', 'icon': 'fa-save',
                 }],
-                genPar:self,
+                genVc:self,
                 par_row:this.row,
             }
             cfg.pop_vue_com('com-form-one',fields_ctx).then((row)=>{
