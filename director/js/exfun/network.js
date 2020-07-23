@@ -228,8 +228,33 @@ export var network ={
         }else{
             var post_data= JSON.stringify(kws)
         }
+        if (callback && typeof callback =='object'){
+            var option = callback
+        }else{
+            var option ={}
+        }
+        if(option.catch ){
+            window._director_catch =  window._director_catch || {}
+            var key = md5(director_name+JSON.stringify(kws))
 
-        if(callback){
+            if(window._director_catch[key]){
+                var catch_value = window._director_catch[key]
+                if(Array.isArray( catch_value) && typeof catch_value[0] =='function' ){
+                    // 表示前面的请求还在进行中
+                    return new Promise((resolve,reject)=>{
+                        catch_value.push((resp)=>{
+                            resolve(resp)
+                        })
+                    })
+                }else{
+                    return Promise.resolve(catch_value)
+                }
+            }else {
+                // 第一个 请求 放个空函数，触发后面的 往 catch里面 插入 function
+                window._director_catch[key] = [()=>{}]
+            }
+        }
+        if(callback && typeof callback=='function'){
             //ex.post('/d/ajax',JSON.stringify(post_data),function(resp){
             //    callback( resp.director_call )
             //})
@@ -253,6 +278,16 @@ export var network ={
                                 ex.eval(resp._question,{director_name:director_name,kws:kws,resolve:resolve})
                             }else{
                                 resolve(resp.data)
+                                // 缓存代码
+                                if(option.catch ){
+                                    var catch_value = window._director_catch[key]
+                                    if(Array.isArray( catch_value) && typeof catch_value[0] =='function' ){
+                                        ex.each( window._director_catch[key],func=>{
+                                            func(resp.data)
+                                        })
+                                    }
+                                    window._director_catch[key] = resp.data
+                                }
                             }
                         }
                     }

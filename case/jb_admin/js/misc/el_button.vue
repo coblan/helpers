@@ -41,7 +41,7 @@
                     if(this.ctx.row_match && !this.parStore.check_selected(this.ctx)){
                         return
                     }
-                    ex.eval(this.ctx.action,{head:this.ctx,ps:this.parStore})
+                    ex.eval(this.ctx.action,{head:this.ctx,ps:this.parStore,vc:this})
                 }
             }
         }

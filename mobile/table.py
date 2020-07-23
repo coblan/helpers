@@ -66,12 +66,14 @@ class ModelTableMobile(ModelTable):
             fom = fieldCls()
             form_ctx = fom.get_head_context()
             if 'after_save' not in form_ctx:
-                form_ctx['after_save']='cfg.toast("保存成功"); scope.vc.ctx.table_par.update_or_insert(scope.row);'
+                form_ctx['after_save']='cfg.toast("保存成功"); scope.vc.ctx.genStore.update_or_insert(scope.row);'
             named_ctx[editor_director] = form_ctx
 
         ctx.update( {
             'table_editor': 'com-list-row-cell',#'com-ctn-table-van-cell',
-            'block_click':'var dynctx =named_ctx["%(edit_form)s"];dynctx.table_par=scope.ps;dynctx.row=scope.row;dynctx.title=dynctx.row._label;live_root.open_live("live_fields",dynctx)'%{'edit_form':editor_director},
+            'block_click':''' var dynctx =named_ctx["%(edit_form)s"];
+            dynctx.genStore=scope.ps;dynctx.row=scope.row;dynctx.title=dynctx.row._label;live_root.open_live("live_fields",dynctx) 
+            ''' %{'edit_form':editor_director},
         }) 
         return ctx
 
@@ -88,7 +90,7 @@ class ModelTableMobile(ModelTable):
                  'icon_editor':'com-nav-vant-icon',
                  'icon_ctx':{'name':'plus'},
                  'level':'rigth-top',
-                 'action':'scope.ps.newRow().then((row)=>{var fields_ctx = named_ctx["%(editor_director_name)s"]; fields_ctx.row=row;fields_ctx.table_par=scope.ps; live_root.open_live("live_fields",fields_ctx)   })'%{'editor_director_name':director_name+'.edit'}}
+                 'action':'scope.ps.newRow().then((row)=>{var fields_ctx = named_ctx["%(editor_director_name)s"]; fields_ctx.row=row;fields_ctx.genStore=scope.ps; live_root.open_live("live_fields",fields_ctx)   })'%{'editor_director_name':director_name+'.edit'}}
             ]
         
         filter_obj = self.filterForm()

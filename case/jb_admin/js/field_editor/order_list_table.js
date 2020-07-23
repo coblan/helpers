@@ -70,6 +70,7 @@ var order_list =  {
             row_sort:{},
             heads:this.head.table_heads,
             selected:[],
+            parStore:ex.vueParStore(this),
         }
 
     },
@@ -131,13 +132,8 @@ var order_list =  {
                     'name':'save','editor':'com-field-op-btn','label':'确定', 'icon': 'fa-save',
                 }],
                 genPar:self,
+                par_row:this.row,
             }
-           //var win= pop_edit_local(self.crt_row,fields_ctx,function(resp) {
-           //     var new_row=resp
-           //     ex.vueAssign(self.crt_row,new_row)
-           //    self.rows.push(self.crt_row)
-           //    layer.close(win)
-           // })
             cfg.pop_vue_com('com-form-one',fields_ctx).then((row)=>{
                 if(row){
                   self.rows.push(row)
