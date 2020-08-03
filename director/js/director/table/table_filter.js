@@ -20,7 +20,7 @@ import * as com_select from './filters/com_select.js'
 //import * as com_date_range from './filters/com_date_range.js'
 import * as related_select from './filters/related_select.js'
 import * as date_datetimefield_range from './filters/date_datetimefield_range'
-import * as filter_search_select from './filters/filter_search_select'
+//import * as filter_search_select from './filters/filter_search_select'
 import * as filter_date from './filters/filter_date'
 import * as filter_single_select2 from './filters/filter_single_select2'
 

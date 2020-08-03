@@ -61,6 +61,10 @@ var ele_table= {
             if(head.style){
                 ex.append_css(head.style)
             }
+            if(head.css){
+                ex.append_css(head.css)
+            }
+
         })
     },
 

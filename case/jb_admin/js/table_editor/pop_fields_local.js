@@ -23,7 +23,11 @@ export  var pop_fields={
             var value = this.rowData[this.field]
             this.head  = ex.findone(table_par.heads,{name:this.field})
         }
-
+    },
+    data(){
+        return {
+            parStore : ex.vueParStore(this)
+        }
     },
     computed:{
         show_text:function(){
@@ -45,7 +49,8 @@ export  var pop_fields={
                 ops:[{
                     'name':'save','editor':'com-field-op-btn','label':'确定', 'icon': 'fa-save',
                 }],
-                extra_mixin:[]
+                extra_mixin:[],
+                genVc:self,
             }
 
                var win= pop_edit_local(self.rowData,fields_ctx,function(resp) {
@@ -70,42 +75,3 @@ var show_label={
         return show_label.text
     }
 }
-
-//var get_row={
-//    use_table_row:function(callback,row,kws){
-//        callback(row)
-//    },
-//    get_table_row:function(callback,row,kws){
-//        var cache_row=ex.copy(row)
-//        callback(cache_row)
-//    },
-//    get_with_relat_field:function(callback,row,kws){
-//        var director_name=kws.director_name
-//        var relat_field = kws.relat_field
-//
-//        var dc ={fun:'get_row',director_name:director_name}
-//        dc[relat_field] = row[relat_field]
-//        var post_data=[dc]
-//        cfg.show_load()
-//        ex.post('/d/ajax',JSON.stringify(post_data),function(resp){
-//            cfg.hide_load()
-//            callback(resp.get_row)
-//        })
-//
-//    }
-//}
-//
-//var after_save={
-//    do_nothing:function(self,new_row,old_row,table){
-//    },
-//    update_or_insert:function(self,new_row,old_row){
-//        self.$emit('on-custom-comp',{name:'update_or_insert',new_row:new_row,old_row:old_row})
-//        //if(! old_row.pk) {
-//        //    table.rows.splice(0, 0, new_row)
-//        //}else{
-//        //    ex.assign(table.rowData,new_row)
-//        //}
-//
-//
-//    }
-//}
