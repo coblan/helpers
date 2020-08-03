@@ -83,6 +83,14 @@ class UserFields(ModelFields):
             })
         return ls
     
+    def dict_row(self, inst):
+        if not inst.pk:
+            return {
+                'is_staff':True
+            }
+        else:
+            return {}
+        
     def clean_save(self): 
         if self.kw.get('user_password'):
             pswd =  self.kw.get('user_password')
