@@ -33,9 +33,9 @@ var cfg={
             });
         })
     },
-    showMsg:function(msg){
+    showMsg:function(msg,options){
         return new Promise((resolve,reject)=>{
-            layer.alert(msg,function(index){
+            layer.alert(msg,options,function(index){
                 //do something
                 layer.close(index);
                 resolve()
