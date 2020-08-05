@@ -82,7 +82,7 @@ var field={
             layer.close(this.msg_index)
         },
         show_expalain(msg){
-            cfg.showMsg(msg,{title:'提示',area:'800px'})
+            cfg.showMsg(msg,{title:'提示',area:'700px'})
             //ELEMENT.MessageBox({message:msg,dangerouslyUseHTMLString:true,})
         }
     },

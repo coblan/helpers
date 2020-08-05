@@ -34,12 +34,22 @@ var cfg={
         })
     },
     showMsg:function(msg,options){
+
         return new Promise((resolve,reject)=>{
-            layer.alert(msg,options,function(index){
-                //do something
-                layer.close(index);
-                resolve()
-            });
+            if(options){
+                layer.alert(msg,options,function(index){
+                    //do something
+                    layer.close(index);
+                    resolve()
+                });
+            }else{
+                layer.alert(msg,function(index){
+                    //do something
+                    layer.close(index);
+                    resolve()
+                });
+            }
+
         })
 
     },
