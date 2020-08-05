@@ -21,7 +21,7 @@ from helpers.func.collection.container import evalue_container
 from django.db import transaction
 import logging
 from helpers.director.decorator import get_request_cache
-from ..model_func.hash_dict import hash_dict,make_mark_dict,dif_mark_dict
+from ..model_func.hash_dict import hash_dict,make_mark_dict,dif_mark_dict,adapt_type
 
 
 # sql_log 可能没有什么用
@@ -140,7 +140,7 @@ class ModelFields(forms.ModelForm):
         readonly_waring = []
         for k in dict(dc):
             if k in self.readonly or (meta_change_fields and k not in meta_change_fields ):
-                if k in self.readonly_change_warning and dc[k] != simdc.get(k):
+                if k in self.readonly_change_warning and adapt_type(dc[k]) != adapt_type( simdc.get(k)):
                     readonly_waring.append(k)
                 dc[k] = simdc.get(k)
                 #if hasattr(inst, "%s_id" % k):  # 如果是ForeignKey，必须要pk值才能通过 form验证
