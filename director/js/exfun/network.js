@@ -265,13 +265,17 @@ export var network ={
 
             })
         }else{
+            var post_url = '/dapi/'+director_name
+            if(option.transaction != undefined){
+                post_url = ex.appendSearch(post_url,{transaction:option.transaction})
+            }
             return new Promise(function(resolve,reject){
                     //ex.post('/d/ajax',JSON.stringify(post_data)).then(
                     //    function(resp){
                     //        resolve(resp.director_call)
                     //    }
                     //)
-                ex.post('/dapi/'+director_name,post_data).then(
+                ex.post(post_url,post_data).then(
                     function(resp){
                         if(resp.success) {
                             if(resp._question){

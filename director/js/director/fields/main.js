@@ -80,6 +80,9 @@ var field={
         },
         hide_msg:function(){
             layer.close(this.msg_index)
+        },
+        show_expalain(msg){
+            cfg.show_msg(msg)
         }
     },
     template:`
@@ -99,6 +102,11 @@ var field={
                 <span class="help-text" v-if="head.help_text" @mouseenter="show_msg(head.help_text,$event)" @mouseleave="hide_msg()">
                     <i style="color: #3780af;position: relative;"  class="fa fa-question-circle" ></i>
                 </span>
+                 <span class="help-text" v-if="head.explain_text" @mouseenter="show_expalain(head.explain_text)" @mouseleave="hide_msg()">
+                    <i style="color: #3780af;position: relative;"  class="fa fa-exclamation-circle" ></i>
+                </span>
+
+
 
 		</div>
 
