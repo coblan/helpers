@@ -10,7 +10,13 @@ var com_select = {
         var self=this
         return {
             order:this.head.order || false,
-            parStore:ex.vueParStore(this)
+            parStore:ex.vueParStore(this),
+            options:this.head.options || [],
+        }
+    },
+    watch:{
+        options(v){
+            this.$refs.select2.inn_options = v
         }
     },
     mounted:function(){
@@ -18,7 +24,9 @@ var com_select = {
         if(this.head.event_slots){
             ex.vueEventRout(self)
         }
-
+        if(this.head.mounted_express){
+            ex.eval(this.head.mounted_express,{vc:this})
+        }
     },
     methods:{
         get_options:function({post_data={}}){
