@@ -4,7 +4,7 @@ import * as line_text from  './line_text'
 import * as phone_code from  './phone_code'
 import * as month from  './month'
 
-import * as blocktext from  './blocktext'
+
 import * as cascader from  './cascader'
 import * as field_date from  './date'
 import * as pop_tree_select from  './pop_tree_select'
@@ -28,6 +28,9 @@ import  radio from  './radio.vue'
 import search_select from  './search_select.vue'
 import  flow from  './flow.vue'
 import  pop_table_multi_select from  './pop_table_multi_select.vue'
+import  blocktext from  './blocktext.vue'
+
+Vue.component('com-field-blocktext',blocktext)
 Vue.component('com-field-radio',radio)
 Vue.component('com-field-int',int_field)
 Vue.component('com-field-password',password)
