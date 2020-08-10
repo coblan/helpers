@@ -372,6 +372,7 @@ class ModelTable(object):
     selectable = True
     nolimit = False
     simple_dict = False
+    export_related = True
     def __init__(self,page=1,row_sort=[],row_filter={},row_search= '',crt_user=None,perpage=None,**kw):
         """
         kw['search_args']只是一个记录，在获取到rows时，一并返回前端页面，便于显示。
@@ -841,7 +842,7 @@ class ModelTable(object):
         
         #[todo] 这里需要弄清楚原理
         #[todo] 优化，是否select_related,select_related的field限定在输出的head中
-        if not query._fields:  # 如果这个属性部位空，证明已经调用了.values() or .values_list()
+        if not query._fields and self.export_related:  # 如果这个属性部位空，证明已经调用了.values() or .values_list()
             for f in self.model._meta.get_fields():
                 if f.name in head_nams and isinstance(f, (models.ForeignKey,models.OneToOneField)):
                     query = query.select_related(f.name)        
