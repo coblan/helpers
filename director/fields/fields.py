@@ -568,19 +568,24 @@ class ModelFields(forms.ModelForm):
             detail=','.join(self.changed_data)
         
         #with transaction.atomic():
-        extra_log = self.clean_save()
+        #extra_log = self.clean_save()
         if self.instance.pk is None:
             op='add'
             detail=''
             # 2020/07/30 屏蔽这里 后面直接就是保存
-            #self.instance.save() # if instance is a new row , need save first then manytomany_relationship can create 
+            # 2020/08/06  开启，该行不能屏蔽，因为manytomany 必须先保存才能生成 relation对象
+            self.instance.save() # if instance is a new row , need save first then manytomany_relationship can create 
             
-        # 2020/07/30 屏蔽这里，原因是其把clean_save里面修改的值给还原了。
-        #for k in self.changed_data:
-            ### 测试时看到self.instance已经赋值了，下面这行代码可能没用,但是需要考虑下新建时 manytomany foreignkey 这些情况
-            #if k in self.kw:  # 排除开那些前端没有传递，而是后端model 默认生成的值
-                              ## 这些默认的值不能用 cleaned_data.get 来获取，因为他们是空
-                #setattr(self.instance,k, self.cleaned_data.get(k) )
+        # 2020/07/30 屏蔽这里，原因是其把clean_save里面修改的值给还原了
+        # 2020/08/06 开启，因为manytomany 需要 这样处理一下，才能 赋值
+        for k in self.changed_data:
+            ## 测试时看到self.instance已经赋值了，下面这行代码可能没用,但是需要考虑下新建时 manytomany foreignkey 这些情况
+            if k in self.kw:  # 排除开那些前端没有传递，而是后端model 默认生成的值
+                              # 这些默认的值不能用 cleaned_data.get 来获取，因为他们是空
+                setattr(self.instance,k, self.cleaned_data.get(k) )
+        # 2020/08/06 从571行挪到这里，以免 last row 代码覆盖了 clean_save的修改
+        # 在clean_save 中 不能使用 pk==None来判断是否为创建row，应该使用self.is_create==Ture 来判断
+        extra_log = self.clean_save()
         self.instance.save()
             
         if op or extra_log:
