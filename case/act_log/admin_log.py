@@ -20,8 +20,8 @@ class GeneralLogPage(TablePage):
             return head
         
         class filters(RowFilter):
-            names =['message','process']
-            icontains = ['message','process']
+            names =['message','level','process',]
+            icontains = ['message','level','process',]
             range_fields = ['createtime']
 
 class GeneralLogForm(ModelFields):
