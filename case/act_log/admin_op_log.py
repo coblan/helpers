@@ -3,7 +3,7 @@ from .models import BackendOperation
 
 class BackendOperationPage(TablePage):
     def get_label(self):
-        return '后台操作日志'
+        return '操作日志'
     
     def get_template(self, prefer=None):
         return 'jb_admin/table.html'
@@ -11,7 +11,7 @@ class BackendOperationPage(TablePage):
     class tableCls(ModelTable):
         model = BackendOperation
         exclude =[]
-        
+        pop_edit_fields = ['id']
         def dict_head(self, head):
             width = {
                 'model':150,
