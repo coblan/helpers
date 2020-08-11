@@ -20,6 +20,10 @@ class BackendOperationPage(TablePage):
             if head['name'] in width:
                 head['width'] = width[head['name']]
             return head
+        class filters(RowFilter):
+            names = ['model','content','createuser']
+            icontains = ['model','content','createuser']
+            range_fields = ['createtime']
 
 class BackendOperationForm(ModelFields):
     class Meta:
