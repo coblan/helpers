@@ -49,7 +49,7 @@
                 }
             },
             on_blur(){
-                if (this.rowData[this.field].trim() ==''){
+                if (this.rowData[this.field] ==''){
                     if(this.head.required){
                         this.rowData[this.field] = this.orgin_value
                     }
