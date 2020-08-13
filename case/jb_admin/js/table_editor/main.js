@@ -18,6 +18,8 @@ import  com_tag from './tag_map.vue'
 
 Vue.component('com-table-tag-map',com_tag)
 
+import * as table_input_main from './table_input/main'
+
 /*
 
 按钮组

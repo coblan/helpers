@@ -42,6 +42,8 @@ def make_mark_dict(dc,keys=None):
             #v='null'
         if isinstance(v,(timezone.datetime,datetime.datetime)):
             out_dc[k] = v.strftime('%Y-%m-%d %H:%M:%S')
+        if v is None:
+            out_dc[k] = ''
         else:
             out_dc[k] = str(v)
     return out_dc
