@@ -57,10 +57,14 @@
                 this.rowData[this.field] = parseInt( this.rowData[this.field] )
                 if(this.orgin_value != this.rowData[this.field] ) {
                     this.step = 'upload'
-                    save_row(this.rowData).then(()=>{
+                    save_row(this.rowData).then((row)=>{
+                        this.orgin_value = this.rowData[ this.field]
+                    }).catch(()=>{
+                        this.rowData[ this. field] = this.orgin_value
+                    }).finally (()=>{
                         this.step = "read"
-                        this.orgin_value = this.rowData[this.field]
                     })
+
                 }else{
                     this.step = "read"
                 }

@@ -1,7 +1,7 @@
 <template>
     <div class="com-table-input-int" >
 
-        <el-checkbox v-model="rowData[field]"></el-checkbox>
+        <el-checkbox @change="on_change" v-model="rowData[field]"></el-checkbox>
         <span v-show="step=='upload'"><i class="el-icon-loading"></i></span>
         <div v-show="step=='upload'" class="overlap"></div>
     </div>
@@ -16,32 +16,51 @@
                 step:'read',
             }
         },
-        computed:{
-            myvalue(){
-                return this.rowData[ this. field]
-            }
-        },
-        watch:{
-            myvalue(v){
-                this.step = 'upload'
-                save_row(this.rowData).then(()=>{
-                    this.step = "read"
-                 })
-            }
-        },
+//        computed:{
+//            myvalue(){
+//                return this.rowData[ this. field]
+//            }
+//        },
+//        watch:{
+//            myvalue(v){
+//                this.step = 'upload'
+//                save_row(this.rowData).then((row)=>{
+//                    this.org_value = this.rowData[ this. field]
+//                }).catch(()=>{
+//                    this.rowData[ this. field] = this.org_value
+//                 }).finally (()=>{
+//                    this.step = "read"
+//                })
+//            }
+//        },
         methods:{
-            on_click(){
+            on_change(){
                 Vue.nextTick(()=>{
-                    if(this.org_value !=this.rowData[ this. field] ) {
-                        this.step = 'upload'
-                        save_row(this.rowData).then(()=>{
+                    this.step = 'upload'
+                        save_row(this.rowData).then((row)=>{
+                            this.org_value = this.rowData[ this. field]
+                    }).catch((ss)=>{
+                            this.rowData[ this. field] = this.org_value
+                    }).finally (()=>{
                             this.step = "read"
-                        this.orgin_value = this.rowData[this.field]
-                        })
-                    }
+                    })
                 })
-
             }
+//            on_click(){
+//
+//                Vue.nextTick(()=>{
+//                    if(this.org_value !=this.rowData[ this. field] ) {
+//                        this.step = 'upload'
+//                        this.orgin_value = this.rowData[this.field]
+//                    debugger
+//                        save_row(this.rowData).finally(()=>{
+//                            debugger
+//                            this.step = "read"
+//                        })
+//                    }
+//                })
+//
+//            }
         }
     }
 </script>

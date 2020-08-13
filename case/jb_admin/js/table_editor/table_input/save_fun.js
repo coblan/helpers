@@ -1,10 +1,10 @@
 export function save_row(row){
     var p = new Promise((resolve,reject)=>{
-        ex.director_call('d.save_row',{row:row}).then( (resp) =>{
-
+      return  ex.director_call('d.save_row',{row:row}).then( (resp) =>{
             var rt = resp //resp.save_row
             if(rt.errors){
                cfg.showMsg(rt.errors)
+                reject()
             }else if(rt._outdate){
                 cfg.outdate_confirm(
                     rt._outdate,
@@ -17,11 +17,13 @@ export function save_row(row){
                         save_row(row)
                     }
                 )
+                reject()
             }else{
-                //ex.vueAssign(row,rt.row)
-                resolve(rt.row)
+                resolve(rt.row )
             }
-        })
+        }).catch(()=>{
+          reject()
+      })
     })
     return p
 }

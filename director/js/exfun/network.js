@@ -37,12 +37,14 @@ export var network ={
             var p = new Promise(function(resolve,reject){
                 ex._post(url,data,function(resp){
                     resolve(resp)
+                },(rt)=>{
+                    reject(rt)
                 })
             })
             return p
         }
     },
-    _post:function(url,data,callback){
+    _post:function(url,data,callback,fail){
         var self=this
         var wrap_callback=function (resp) {
             var msg = []
@@ -86,6 +88,9 @@ export var network ={
             //if (resp.status && typeof resp.status == 'string' && resp.status != 'success') {
             if (!success) {
                 cfg.hide_load() // sometime
+                if(fail){
+                    fail(rt)
+                }
             } else {
                 var rt = callback(resp)
                 if(rt==false){
@@ -233,31 +238,28 @@ export var network ={
         }else{
             var option ={}
         }
-        if(option.catch ){
-            window._director_catch =  window._director_catch || {}
+        if(option.cache ){
+            window._director_cache =  window._director_cache || {}
             var key = md5(director_name+JSON.stringify(kws))
 
-            if(window._director_catch[key]){
-                var catch_value = window._director_catch[key]
-                if(Array.isArray( catch_value) && typeof catch_value[0] =='function' ){
+            if(window._director_cache[key]){
+                var cache_value = window._director_cache[key]
+                if(Array.isArray( cache_value) && typeof cache_value[0] =='function' ){
                     // 表示前面的请求还在进行中
                     return new Promise((resolve,reject)=>{
-                        catch_value.push((resp)=>{
+                        cache_value.push((resp)=>{
                             resolve(resp)
                         })
                     })
                 }else{
-                    return Promise.resolve(catch_value)
+                    return Promise.resolve(cache_value)
                 }
             }else {
-                // 第一个 请求 放个空函数，触发后面的 往 catch里面 插入 function
-                window._director_catch[key] = [()=>{}]
+                // 第一个 请求 放个空函数，触发后面的 往 cache里面 插入 function
+                window._director_cache[key] = [()=>{}]
             }
         }
         if(callback && typeof callback=='function'){
-            //ex.post('/d/ajax',JSON.stringify(post_data),function(resp){
-            //    callback( resp.director_call )
-            //})
             ex.post('/dapi/'+director_name,post_data,function(resp){
                 if(resp.success){
                     callback( resp.data )
@@ -269,13 +271,9 @@ export var network ={
             if(option.transaction != undefined){
                 post_url = ex.appendSearch(post_url,{transaction:option.transaction})
             }
+
             return new Promise(function(resolve,reject){
-                    //ex.post('/d/ajax',JSON.stringify(post_data)).then(
-                    //    function(resp){
-                    //        resolve(resp.director_call)
-                    //    }
-                    //)
-                ex.post(post_url,post_data).then(
+             return   ex.post(post_url,post_data).then(
                     function(resp){
                         if(resp.success) {
                             if(resp._question){
@@ -283,20 +281,21 @@ export var network ={
                             }else{
                                 resolve(resp.data)
                                 // 缓存代码
-                                if(option.catch ){
-                                    var catch_value = window._director_catch[key]
-                                    if(Array.isArray( catch_value) && typeof catch_value[0] =='function' ){
-                                        ex.each( window._director_catch[key],func=>{
+                                if(option.cache ){
+                                    var cache_value = window._director_cache[key]
+                                    if(Array.isArray( cache_value) && typeof cache_value[0] =='function' ){
+                                        ex.each( window._director_cache[key],func=>{
                                             func(resp.data)
                                         })
                                     }
-                                    window._director_catch[key] = resp.data
+                                    window._director_cache[key] = resp.data
                                 }
                             }
                         }
                     }
-                )
-
+                ).catch(()=>{
+                     reject()
+                })
             })
         }
 
