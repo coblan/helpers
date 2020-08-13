@@ -180,7 +180,7 @@ def parser_excel(url,dispatch_head,valid_row=[]):
         
         is_valid = True
         for ff in valid_row:
-            if dc.get(ff,None) is None:
+            if dc.get(ff,None) in [None,'']:
                 is_valid=False
                 break
         if is_valid:
