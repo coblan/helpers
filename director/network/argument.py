@@ -140,6 +140,13 @@ def default(def_value):
         else:
             return value
     return _default
+
+def remove_dot(value,name):
+    " 1,234.00 转换为  1234.00"
+    if isinstance(value,str):
+        return value.replace(',','')
+    else:
+        return value
         
 def dot_list_str(value,name):
     if not value:
