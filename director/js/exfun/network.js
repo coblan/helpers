@@ -11,12 +11,10 @@ class  DirectorCall{
         this.kws = kws
     }
     run(){
-        debugger
         var p = this.check_cache()
         if(p){
             return p
         }
-        debugger
         var url = this.get_url()
         var data = this.adapt_data(this.kws)
         return this.post(url,data)
@@ -25,13 +23,12 @@ class  DirectorCall{
         // this.on_fail
     }
     check_cache(){
-        debugger
         if(this.option.cache ){
             window._director_cache =  window._director_cache || {}
-            var key = md5(this.director_name+JSON.stringify(this.kws))
+            this.cache_key = md5(this.director_name+JSON.stringify(this.kws))
 
-            if(window._director_cache[key]){
-                var cache_value = window._director_cache[key]
+            if(window._director_cache[this.cache_key]){
+                var cache_value = window._director_cache[this.cache_key]
                 if(Array.isArray( cache_value) && typeof cache_value[0] =='function' ){
                     // 表示前面的请求还在进行中
                     return new Promise((resolve,reject)=>{
@@ -44,7 +41,7 @@ class  DirectorCall{
                 }
             }else {
                 // 第一个 请求 放个空函数，触发后面的 往 cache里面 插入 function
-                window._director_cache[key] = [()=>{}]
+                window._director_cache[this.cache_key] = [()=>{}]
             }
         }
     }
@@ -57,7 +54,6 @@ class  DirectorCall{
         return post_data
     }
     post(url,data){
-        debugger
         var p = new Promise((resolve,reject)=>{
             this.resolve = resolve
             this.reject = reject
@@ -87,13 +83,13 @@ class  DirectorCall{
     }
     cache_resp(resp){
         if(this.option.cache ){
-            var cache_value = window._director_cache[key]
+            var cache_value = window._director_cache[this.cache_key]
             if(Array.isArray( cache_value) && typeof cache_value[0] =='function' ){
-                ex.each( window._director_cache[key],func=>{
+                ex.each( window._director_cache[this.cache_key],func=>{
                     func(resp.data)
                 })
             }
-            window._director_cache[key] = resp.data
+            window._director_cache[this.cache_key] = resp.data
         }
     }
     on_fail(rt){
@@ -122,18 +118,6 @@ export var network ={
                 })
             })
         }
-        //var wrap_callback=function (resp) {
-        //    if (resp.msg) {
-        //        self.show_msg(resp.msg)
-        //    }
-        //    if (resp.status && typeof resp.status == 'string' && resp.status != 'success') {
-        //        cfg.hide_load()
-        //        return
-        //    } else {
-        //        callback(resp)
-        //    }
-        //}
-        //return $.get(url,wrap_callback)
     },
     post:function(url,data,callback){
         if(callback){
@@ -312,6 +296,7 @@ export var network ={
 
     },
     load_image(url) {
+        // 可以用来预加载图片
         var img = new Image();
         img.src = url;
 
@@ -345,7 +330,6 @@ export var network ={
                 }
             })
         }else{
-            debugger
             var worker = new DirectorCall(director_name,kws,callback)
             return worker.run()
         }
