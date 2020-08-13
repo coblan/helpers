@@ -20,6 +20,9 @@ class ExcelFields(ModelFields):
                 director_name:self.get_head_context()
             })
     
+    def _clean_dict(self, dc):
+        return dc
+    
     def clean(self):
         pass
     
@@ -29,15 +32,16 @@ class ExcelFields(ModelFields):
         `ctx.row.par_row_pk = scope.ps.vc.par_row.pk` 用于从前端环境提取变量信息，可以overwrite该行代码
         """
         self_director_name = self.get_director_name()
+
         return '''
         var ctx = named_ctx["%(director_name)s"]
-        ex.uploadfile({accept:".xlsx"})
-            .then((resp)=>{return ex.director("%(director_name)s").parse_excel_head({url:resp[0],par_row:scope.ps.vc.par_row.pk}) } )
+        ex.uploadfile({accept:".xlsx, .xls, .csv"})
+            .then((resp)=>{return ex.director("%(director_name)s").call("parse_excel_head",{url:resp[0],par_row:scope.ps.vc.par_row.pk}) } )
             .then((resp)=>{ 
                 ex.each(ctx.heads,head=>{head.options=resp.options});
                 ctx.row=resp.row;
                 ctx.row.par_row_pk = scope.ps.vc.par_row.pk
-                cfg.pop_vue_com('com-form-one',ctx)
+                return cfg.pop_vue_com('com-form-one',ctx)
             }).then(()=>{
                scope.ps.search()
             })
@@ -176,7 +180,7 @@ def parser_excel(url,dispatch_head,valid_row=[]):
         
         is_valid = True
         for ff in valid_row:
-            if dc.get(ff,None) is None:
+            if dc.get(ff,None) in [None,'']:
                 is_valid=False
                 break
         if is_valid:

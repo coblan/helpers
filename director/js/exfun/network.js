@@ -347,7 +347,7 @@ export var network ={
         return new Promise((resolve,reject)=>{
             ex.__on_filechange=function(event){
                 let new_selected_files = event.target.files
-                var up_url = ex.__upload_url || '/d/upload?path=general_upload/userfile'
+                var up_url = ex.__upload_url || '/d/upload?path=general_upload&split=date'
                 cfg.show_load()
                 ex.uploads(new_selected_files,up_url,function(url_list){
                     cfg.hide_load()
