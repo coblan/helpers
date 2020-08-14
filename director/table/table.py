@@ -907,8 +907,14 @@ class ModelTable(object):
                  #'plain':True,
                  'icon':'el-icon-delete',
                  'row_match':'many_row',
-                 #'disabled':'!scope.ps.has_select', 
+                 'disabled':'!scope.ps.has_select', 
                  'visible': self.permit.can_del(),},
+                {'name':'refresh',
+                 'editor':'com-btn',
+                 'label':'刷新',
+                 'calss':'refresh-btn',
+                 'css':'.refresh-btn{float:right}',
+                 'action':'scope.ps.search()'}
                 ]      
     
     def getExcelRows(self):

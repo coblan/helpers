@@ -203,7 +203,7 @@ def parse_xls(path):
     data = xlrd.open_workbook(path)
     table = data.sheets()[0]
     ls =[]
-    for i in range(1,table.nrows):
+    for i in range(0,table.nrows):
         ls.append(table.row_values(i))
     return ls
 
