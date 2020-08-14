@@ -912,8 +912,12 @@ class ModelTable(object):
                 {'name':'refresh',
                  'editor':'com-btn',
                  'label':'刷新',
-                 'calss':'refresh-btn',
-                 'css':'.refresh-btn{float:right}',
+                 'class':'com-btn-refresh-btn',
+                 'icon':'el-icon-refresh',
+                 'css':'.com-btn-refresh-btn{float:right}',
+                 'type':'success',
+                 'plain':True,
+                 'visible':self.filters ==RowFilter,
                  'action':'scope.ps.search()'}
                 ]      
     

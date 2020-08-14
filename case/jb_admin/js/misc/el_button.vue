@@ -1,5 +1,5 @@
 <template>
-    <span class="com-btn">
+    <span class="com-btn" :class="my_ctx.class">
         <el-button size="mini" :type="my_ctx.type" @click="on_click()"
                    :title="ctx.title"
                    :disabled="is_disabled" :plain="my_ctx.plain">
@@ -32,7 +32,9 @@
             }
         },
         mounted(){
-
+            if(this.ctx.css){
+                ex.append_css(this.ctx.css)
+            }
         },
         methods:{
             on_click(){
