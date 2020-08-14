@@ -29,7 +29,7 @@ def SET(scope):
               'class': 'logging.StreamHandler',
               'stream': sys.stdout
               }, 
-          
+           # pip instll concurrent-log-handler   异步日志框架
           'error_warning':{
               'level': 'WARNING',
               'class': 'concurrent_log_handler.ConcurrentRotatingFileHandler',
