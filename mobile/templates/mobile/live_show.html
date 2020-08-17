@@ -322,12 +322,19 @@
         /*transform: translate(0, 0);*/
         /*z-index: -1;*/
     /*}*/
+
     .slide-left-leave-active {
         position: absolute;
         width: 100%;
         -webkit-transform: translate(-50%, 0);
         transform: translate(-50%, 0);
     }
+    .slide-right-enter-to{
+        z-index:-1
+    }
+    /*.slide-left-leave-to !* .fade-leave-active below version 2.1.8 *! {*/
+        /*!*z-index:-1*!*/
+    /*}*/
 
     .slide-right-enter{
         position: absolute;
