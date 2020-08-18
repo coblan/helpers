@@ -98,7 +98,7 @@ class  DirectorCall{
     get_url(){
         var post_url = '/dapi/'+this.director_name
         if(this.option.transaction != undefined){
-            post_url = ex.appendSearch(post_url,{transaction:option.transaction})
+            post_url = ex.appendSearch(post_url,{transaction:this.option.transaction})
         }
         return post_url
     }
