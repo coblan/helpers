@@ -11,6 +11,10 @@ class GeneralLogPage(TablePage):
         model = GeneralLog
         exclude =[]
         pop_edit_fields = ['id']
+        
+        def get_operation(self):
+            return []
+        
         def dict_head(self, head):
             width = {
                 'message':400,

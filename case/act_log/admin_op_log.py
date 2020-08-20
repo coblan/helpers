@@ -12,6 +12,10 @@ class BackendOperationPage(TablePage):
         model = BackendOperation
         exclude =[]
         pop_edit_fields = ['id']
+        
+        def get_operation(self):
+            return []
+        
         def dict_head(self, head):
             width = {
                 'model':150,
