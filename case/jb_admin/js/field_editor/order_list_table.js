@@ -2,18 +2,16 @@ var order_list =  {
     props:['row','head'],
     template:`<div class="com-field-table-list">
     <div>
-        <button @click="add_new()" class="btn btn-default btn-xs">
+        <button @click="add_new()" class="btn btn-default btn-xs" v-if="head.can_create!=undefined?head.can_create:true">
             <i style="color: green" class="fa fa-plus-circle"></i>
         </button>
-        <button @click="delete_rows()" :disabled="selected.length==0" class="btn btn-default btn-xs">
+        <button @click="delete_rows()" :disabled="selected.length==0" class="btn btn-default btn-xs" v-if="head.can_delete!=undefined?head.can_delete:true">
             <i style="color: red" class="fa fa-minus-circle"></i>
         </button>
         <div style="display: inline-block;position: relative;vertical-align: top">
             <textarea :name="head.name" v-model="row[head.name]"  style="display: none"></textarea>
         </div>
     </div>
-
-
                     <el-table ref="core_table" class="table"
                               :data="rows"
                               border
