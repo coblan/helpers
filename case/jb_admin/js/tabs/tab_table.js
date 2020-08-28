@@ -86,7 +86,8 @@ var tab_table={
     },
 
     template:`<div class="com-tab-table flex-v" style="position: absolute;top:0;left:0;bottom: 0;right:0;overflow: auto;padding-bottom: 1em;">
-       <div v-if="childStore.row_filters.length > 0" style="background-color: #fbfbf8;padding: 8px 1em;border-radius: 4px;margin-top: 8px">
+       <div v-if="childStore.row_filters.length > 0"
+       style="background-color: #fbfbf8;padding: 2px 1em;border-radius: 4px;">
             <com-table-filters></com-table-filters>
         </div>
         <div  v-if="childStore.ops.length>0 ">

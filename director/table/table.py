@@ -870,9 +870,23 @@ class ModelTable(object):
     def get_operation(self):
         director_name = self.get_director_name()
         #model_form = model_dc[self.model].get('fields')
+        
+        refresh_action = {'name':'refresh',
+                 'editor':'com-btn',
+                 'label':'刷新',
+                 'class':'com-btn-refresh-btn',
+                 'icon':'el-icon-refresh',
+                 'css':'.com-btn-refresh-btn{float:right}',
+                 'type':'success',
+                 'plain':True,
+                 'visible':self.filters ==RowFilter,
+                 'action':'scope.ps.search()'}
+        
         fieldCls = director.get(director_name+'.edit')     
         if not fieldCls:
-            return []
+            return [
+                refresh_action
+            ]
         fieldobj=fieldCls(crt_user=self.crt_user)
         fields_ctx = fieldobj.get_head_context()
         fields_ctx.update({
@@ -915,16 +929,7 @@ class ModelTable(object):
                  'row_match':'many_row',
                  'disabled':'!scope.ps.has_select', 
                  'visible': self.permit.can_del(),},
-                {'name':'refresh',
-                 'editor':'com-btn',
-                 'label':'刷新',
-                 'class':'com-btn-refresh-btn',
-                 'icon':'el-icon-refresh',
-                 'css':'.com-btn-refresh-btn{float:right}',
-                 'type':'success',
-                 'plain':True,
-                 'visible':self.filters ==RowFilter,
-                 'action':'scope.ps.search()'}
+                refresh_action,
                 ]      
     
     def getExcelRows(self):
