@@ -135,7 +135,10 @@ def timestamp_span(span):
 def default(def_value):
     "设置默认值,与not_null 相互排斥"
     def _default(value,name):
-        if value is None or value =='':
+        adpt_value = value
+        if isinstance(value,str):
+            adpt_value = value.strip()        
+        if value is None or adpt_value =='':
             return def_value
         else:
             return value
