@@ -79,7 +79,7 @@ class MultiChoiceProc(CharProc):
         dc = dict(self.field.my_choices)
         out_list = []
         for k,v in dc.items():
-            out_list.append({'value':str(k),'label':v})
+            out_list.append({'value':k,'label':v})
         return out_list
     
     
