@@ -435,15 +435,7 @@ class ModelFields(forms.ModelForm):
                 mapper=field_map[model_field.__class__]
                 mapper(self.instance, name = k,model=self._meta.model).dict_field_head(dc)    
                 
-            dc = self.dict_head(dc)
-            
-            #if hasattr(v, 'choices') and 'options' not in dc :
-                #options_name = '%(fieldName)s.options'% {'fieldName':fieldName}
-                #catch = get_request_cache()
-                #if not catch.get(options_name):
-                    #catch[options_name]=[{'value':val,'label':str(lab)} for val,lab in v.choices]                
-                #dc['options'] = catch[options_name]
-            
+            #dc = self.dict_head(dc)
             out.append(dc)
         return out
     
@@ -459,6 +451,7 @@ class ModelFields(forms.ModelForm):
             heads=[]
         heads += self._base_dict_fieldmap_heads()
         heads.extend(self.getExtraHeads())
+        heads = [self.dict_head(head) for head in heads]
         
         self.heads = heads
         for name in self.get_readonly_fields():
