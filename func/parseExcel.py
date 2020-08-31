@@ -212,7 +212,16 @@ def parse_xls(path):
     table = data.sheets()[0]
     ls =[]
     for i in range(0,table.nrows):
-        ls.append(table.row_values(i))
+        rowList =[]
+        rowListObj = table.row(i)
+        for obj in rowListObj:
+            if obj.value and str(obj).startswith('xldate'):
+                rt = xlrd.xldate.xldate_as_datetime(obj.value, xlrd.Book.datemode)
+                rowList.append(rt . strftime('%Y-%m-%d'))
+            else:
+                rowList.append(obj.value)
+        ls.append(rowList)
+        #ls.append(table.row_values(i))
     return ls
 
 def parse_csv(path):
