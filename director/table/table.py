@@ -920,7 +920,18 @@ class ModelTable(object):
                 {'name':'delete_selected',
                  'editor':'com-btn',
                  'label':'删除',
-                 'action':'if(scope.ps.check_selected(scope.head)){scope.ps.delete_selected()}',
+                 'action':'''cfg.show_load();ex.director_call("d.delete_query_related",{rows:scope.ps.selected}).then((resp)=>{
+                     cfg.hide_load();
+                     if(resp.length>0){
+                         cfg.pop_vue_com("com-pan-delete-query-message",{msg_list:resp,genStore:scope.ps,title:"删除关联确认"})
+                     }else{
+                        cfg.confirm("确认删除选中项").then(()=>{
+                            scope.ps.delete_selected()
+                        })
+                     }
+                    
+                 });  ''' ,
+                 # if(scope.ps.check_selected(scope.head)){scope.ps.delete_selected()}
                  #'style': 'color:red',
                  #'icon': 'fa-times',
                  'type':'danger',

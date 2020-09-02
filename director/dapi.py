@@ -7,6 +7,7 @@ from .model_func.wirtedb import permit_save_model
 from django.core.exceptions import ValidationError
 from .fields.fields import ModelFields,OutDateException
 from django.core.exceptions import PermissionDenied
+from .model_func.dictfy import delete_related_query
 
 def director_save_row(row):
      #rt_dc = save_row(row,user,request)
@@ -79,3 +80,17 @@ def director_element_call(director_name,attr_name,kws):
      dcls = director.get(director_name)
      obj = dcls()
      return getattr(obj,attr_name)(**kws)
+
+@director_view('d.delete_query_related')
+def search_delete_related(rows):
+     out_ls =[]
+     for row in rows:
+          fields_cls = director.get(row['_director_name'])
+          fields_obj = fields_cls(dc = row)
+          inst = fields_obj.instance
+          ls = delete_related_query(inst)
+          if ls:
+               out_ls.append(
+                    {'str':str(inst),'related':ls}
+               )
+     return out_ls
