@@ -11,6 +11,9 @@ class ExcelFields(ModelFields):
     
     def save_form()
     '''
+    def __init__(self,  *args, **kw):
+        super().__init__(*args, **kw)
+        self.set_named_ctx()
     
     def set_named_ctx(self):
         director_name = self.get_director_name()
@@ -23,6 +26,8 @@ class ExcelFields(ModelFields):
     def _clean_dict(self, dc):
         return dc
     
+    def is_valid(self):
+        return True
     def clean(self):
         pass
     
@@ -48,23 +53,29 @@ class ExcelFields(ModelFields):
         '''%{'director_name':self_director_name}
     
     def parse_excel_head(self,url,**kws):
-        heads_names = get_excel_head(url)
+        excelHeads = get_excel_head(url)
         heads =[]
-        for index,name in enumerate(heads_names):
-            heads.append({'value':index,'label':name,})
+        for index,name in enumerate(excelHeads):
+            heads.append({'value':index,'label':name.strip(),})
         
         row ={
             '_director_name':self.get_director_name(),
             'meta__url':url
         }
         for head in self.get_heads():
-            index = get_match_index(head['label'], heads_names)
-            if index:
+            index = self.get_match_index(head, excelHeads)
+            if index is not None:
                 row[head['name']] = index
         return {
             'options':heads,
             'row':row
             }
+    
+    def get_match_index(self,head,excelHeads):
+        if head['label'] in excelHeads:
+            return excelHeads.index(head['label'])
+        #for head in form_heads:
+        return None    
     
     def dict_head(self, head):
         head['editor']='com-field-select'
@@ -90,6 +101,7 @@ class ExcelFields(ModelFields):
         @valid_row: list  每行，必须要有该字段才算是有效行 
         '''
         return parser_excel(url, dispatch_head,valid_row)
+    
     #def save_form(self):
         #url = self.kw.pop('meta__url')
         #record = self.kw.pop('record')
@@ -142,11 +154,7 @@ def url2path(url):
     path = os.path.join( os.path.dirname(settings.BASE_DIR),url[1:] )
     return path
 
-def get_match_index(head_name,heads):
-    if head_name in heads:
-        return heads.index(head_name)
-    #for head in form_heads:
-    return None
+
 
 def parser_excel(url,dispatch_head,valid_row=[]):
     '''
@@ -204,7 +212,16 @@ def parse_xls(path):
     table = data.sheets()[0]
     ls =[]
     for i in range(0,table.nrows):
-        ls.append(table.row_values(i))
+        rowList =[]
+        rowListObj = table.row(i)
+        for obj in rowListObj:
+            if obj.value and str(obj).startswith('xldate'):
+                rt = xlrd.xldate.xldate_as_datetime(obj.value, xlrd.Book.datemode)
+                rowList.append(rt . strftime('%Y-%m-%d'))
+            else:
+                rowList.append(obj.value)
+        ls.append(rowList)
+        #ls.append(table.row_values(i))
     return ls
 
 def parse_csv(path):
