@@ -584,7 +584,7 @@ var table_store={
         delete_selected:function(){
             var self=this
             return new Promise((resolve,reject)=>{
-                layer.confirm('真的删除吗?', {icon: 3, title:'确认'}, function(index) {
+                layer.confirm('确认删除选中项?', {icon: 3, title:'确认'}, function(index) {
                     layer.close(index);
                     //var ss = layer.load(2);
                     cfg.show_load()

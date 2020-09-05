@@ -925,9 +925,7 @@ class ModelTable(object):
                      if(resp.length>0){
                          cfg.pop_vue_com("com-pan-delete-query-message",{msg_list:resp,genStore:scope.ps,title:"删除关联确认"})
                      }else{
-                        cfg.confirm("确认删除选中项").then(()=>{
-                            scope.ps.delete_selected()
-                        })
+                        scope.ps.delete_selected()
                      }
                     
                  });  ''' ,
