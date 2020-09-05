@@ -223,7 +223,8 @@ var table_store={
             this.search()
         },
         update_rows_from_db(rows){
-            ex.director_call('d.get_row_form_db',{rows:rows}).then((resp)=>{
+            var out_row=ex.map(rows,row=>{return {pk:row.pk,_director_name:row._director_name}})
+            ex.director_call('d.get_row_form_db',{rows:out_row}).then((resp)=>{
                 this.update_rows(resp)
             })
         },
