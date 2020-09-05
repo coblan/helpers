@@ -222,6 +222,11 @@ var table_store={
             this.search_args._par=par
             this.search()
         },
+        update_rows_from_db(rows){
+            ex.director_call('d.get_row_form_db',{rows:rows}).then((resp)=>{
+                this.update_rows(resp)
+            })
+        },
         update_or_insert:function(new_row,old_row){
             // 如果是更新，不用输入old_row，old_row只是用来判断是否是创建的行为
             // 不用 old_row 了， 只需要判断 pk 是否在rows里面即可。

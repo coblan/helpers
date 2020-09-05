@@ -44,6 +44,11 @@ def get_row(director_name,pk=None,**kws):
      fields_obj = fields_cls(pk=pk, **kws)
      return fields_obj.get_row()
 
+@director_view('d.get_row_form_db')
+def get_row_form_db(rows):
+     out_rows = [get_row(row.get('_director_name'),row.get('pk')) for row in rows]
+     return out_rows
+
 @director_view('d.get_rows')
 def get_rows(director_name,search_args={},user=None):
      table_cls = director.get(director_name)
