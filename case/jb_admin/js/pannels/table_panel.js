@@ -50,9 +50,15 @@ var table_panel={
             ex.vueEventRout(this,this.ctx.event_slots)
         }
         // 如果有复杂的需求，则被 table_store.init_express接管
-        if(!this.childStore.head.init_express){
+        // TODO 2020/9/7 修改为 mounted_express ,可能有兼容性问题
+        if(this.ctx.mounted_express){
+            ex.eval(this.ctx.mounted_express,{vc:this})
+        }else{
             this.childStore.search()
         }
+        //if(!this.childStore.head.init_express){
+        //    this.childStore.search()
+        //}
     },
     methods:{
         get_custom_store:function(base_table_panel_store){
