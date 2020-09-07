@@ -42,7 +42,7 @@ class TablePage(object):
             ctx=self.table.get_data_context()
         else:
             ctx = self.table.get_context()
-            ctx['extra_js'] = self.extra_js
+            ctx['extra_js'] = list( self.extra_js )
         #ctx['can_add']=self.permit.can_add()
         #ctx['can_del']=self.permit.can_del()
         #if self.permit.changeable_fields:

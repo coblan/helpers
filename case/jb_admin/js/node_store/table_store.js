@@ -222,6 +222,12 @@ var table_store={
             this.search_args._par=par
             this.search()
         },
+        update_rows_from_db(rows){
+            var out_row=ex.map(rows,row=>{return {pk:row.pk,_director_name:row._director_name}})
+            ex.director_call('d.get_row_form_db',{rows:out_row}).then((resp)=>{
+                this.update_rows(resp)
+            })
+        },
         update_or_insert:function(new_row,old_row){
             // 如果是更新，不用输入old_row，old_row只是用来判断是否是创建的行为
             // 不用 old_row 了， 只需要判断 pk 是否在rows里面即可。
@@ -584,7 +590,7 @@ var table_store={
         delete_selected:function(){
             var self=this
             return new Promise((resolve,reject)=>{
-                layer.confirm('真的删除吗?', {icon: 3, title:'确认'}, function(index) {
+                layer.confirm('确认删除选中项?', {icon: 3, title:'确认'}, function(index) {
                     layer.close(index);
                     //var ss = layer.load(2);
                     cfg.show_load()
