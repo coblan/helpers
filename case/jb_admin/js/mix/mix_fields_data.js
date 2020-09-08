@@ -27,11 +27,15 @@ var mix_fields_data ={
             if(this.head.css){
                 ex.append_css(this.head.css)
             }
-            if(this.head.mounted_express){
-                ex.eval(this.head.mounted_express,{row:this.row,ps:this.parStore,cs:this.childStore,vc:this})
-            }else if(this.head.init_express){
-                ex.eval(this.head.init_express,{row:this.row,ps:this.parStore,cs:this.childStore,vc:this})
+            var mounted_express = this.head.mounted_express || this.head.init_express
+            if (mounted_express){
+                ex.eval(mounted_express,{row:this.row,ps:this.parStore,cs:this.childStore,vc:this,par_row:this.par_row})
             }
+            //if(this.head.mounted_express){
+            //    ex.eval(this.head.mounted_express,{row:this.row,ps:this.parStore,cs:this.childStore,vc:this})
+            //}else if(this.head.init_express){
+            //    ex.eval(this.head.init_express,{row:this.row,ps:this.parStore,cs:this.childStore,vc:this})
+            //}
             ex.vueEventRout(this,this.head.event_slots)
         }
     },
