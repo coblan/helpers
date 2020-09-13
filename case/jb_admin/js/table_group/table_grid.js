@@ -267,7 +267,7 @@ var ele_table= {
             setTimeout(()=>{
                 this.parStore.e_table.doLayout()
                 //this.$refs.e_table.doLayout()
-            },50)
+            },500)
         },
         on_sort_change(event){
             if(this._sort_has_changed ){
