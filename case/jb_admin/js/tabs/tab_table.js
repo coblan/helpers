@@ -68,7 +68,7 @@ var tab_table={
         ex.vueEventRout(this,this.tab_head.event_slots)
         // 如果有复杂的需求，则被 table_store.init_express接管
         if(!this.childStore.head.init_express){
-            Vue.nextTict(()=>{
+            Vue.nextTick(()=>{
                 this.childStore.search()
             })
         }
