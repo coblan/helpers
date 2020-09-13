@@ -260,10 +260,14 @@ var ele_table= {
             }
         },
         on_data_updated(){
-            Vue.nextTick(()=>{
+            //Vue.nextTick(()=>{
+            //    this.parStore.e_table.doLayout()
+            //    //this.$refs.e_table.doLayout()
+            //}) // 如果数据返回过快，可能显示出问题
+            setTimeout(()=>{
                 this.parStore.e_table.doLayout()
                 //this.$refs.e_table.doLayout()
-            })
+            },50)
         },
         on_sort_change(event){
             if(this._sort_has_changed ){
