@@ -1,0 +1,1 @@
+import  pannel_main from './panel'
