@@ -133,8 +133,9 @@ var table_store={
             var fields_ctx=kws.fields_ctx
             var dc = {fun:'get_row',director_name:fields_ctx.director_name}
 
-            if(kws.pre_set){
-                var pre_set = ex.eval(kws.pre_set,{vc:self.vc,ps:self,search_args:self.search_args})
+            var preset_express= kws.preset_express || kws.pre_set
+            if(preset_express){
+                var pre_set = ex.eval(preset_express,{vc:self.vc,ps:self,search_args:self.search_args})
                 ex.assign(dc,pre_set)
             }else if(kws.init_fields){ // 老的的调用，准备移除
                 ex.assign(dc,kws.init_fields)
@@ -262,8 +263,14 @@ var table_store={
             self.$emit('row.update_or_insert',[rows])
         },
         check_selected(head){
-            var row_match_fun = head.row_match || 'many_row'
-            return row_match[row_match_fun](this, head)
+            return new Promise((resolve,reject)=>{
+                var row_match_fun = head.row_match || 'many_row'
+                if(row_match[row_match_fun](this, head)) {
+                    resolve()
+                }else{
+                    reject()
+                }
+            })
         },
         selected_set_and_save:function(kws,resend){
             /*

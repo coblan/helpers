@@ -100,16 +100,16 @@ class BaseFieldProc(object):
     def filter_clean_filter_arg(self, name,search_args):
         value = search_args.get(name,'')
         if value == '':
-            return  {}      # 如果是空字符串，就表示不过滤
+            search_args.pop(name)      # 如果是空字符串，就表示不过滤
         elif value is None:
-            return {'%s__isnull'%name:True}
+            search_args.pop(name)
+            search_args['%s__isnull'%name] = True
         elif isinstance(value,(list,tuple)):
+            search_args.pop(name) 
             if value:  # 如果是空数组，就表示不过滤
-                return {'%s__in'%name:value}
-            else:
-                return {}
-        else:
-            return {name:value}
+                search_args['%s__in'%name] = value
+
+        return search_args
 
     
     def filter_clean_search(self, q_str):

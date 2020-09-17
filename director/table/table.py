@@ -262,14 +262,15 @@ class RowFilter(object):
         self.query=query
         arg_dc = {}
         for proc_cls,name in zip(self.get_proc_list() ,self.total_names):
-            tmp_dc = proc_cls().filter_clean_filter_arg(name ,self.filter_args )
-            arg_dc.update( tmp_dc )
+            #tmp_dc = proc_cls().filter_clean_filter_arg(name ,self.filter_args )
+            proc_cls().filter_clean_filter_arg(name ,self.filter_args )  # 2020/9/17 修改成 有函数 deep 修改 filter_args
+            #arg_dc.update( tmp_dc )
             # 由 field_map处理， 移除filter_args的同名字段
-            self.filter_args.pop(name,None)
+            #self.filter_args.pop(name,None)
             #value =  self.filter_args.get(name, None)
             #if value != None:
                 #dc[name] = proc_cls().filter_clean_filter_arg(value ) 
-        self.filter_args.update(arg_dc)
+        #self.filter_args.update(arg_dc)
         self.filter_args = self.clean_search_args(self.filter_args)
         #arg_dc = {k: v for k, v in self.filter_args.items() if v != None}
         

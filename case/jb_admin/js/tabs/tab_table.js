@@ -41,11 +41,11 @@ var tab_table={
                     }
                 },
                 getRows:function(){
-                    if(vc.tab_head.search_filter){
-                        var search_filter = ex.eval(vc.tab_head.search_filter,{par_row:vc.par_row,vc:vc,ps:this})
+                    if(vc.tab_head.filter_express){
+                        var search_filter = ex.eval(vc.tab_head.filter_express,{par_row:vc.par_row,vc:vc,ps:this})
                         ex.assign(this.search_args,search_filter)
                     }else if(vc.tab_head.pre_set){
-                            // pre_set 含义不够清晰，被search_filter 替代了
+                            // pre_set 含义不够清晰，被 filter_express 替代了
                         var pre_set = ex.eval(vc.tab_head.pre_set,{par_row:vc.par_row,vc:vc,ps:this})
                         ex.assign(this.search_args,pre_set)
                     }else if(vc.tab_head.tab_field){ // 下面是老的调用，
@@ -68,7 +68,9 @@ var tab_table={
         ex.vueEventRout(this,this.tab_head.event_slots)
         // 如果有复杂的需求，则被 table_store.init_express接管
         if(!this.childStore.head.init_express){
-            this.childStore.search()
+            Vue.nextTick(()=>{
+                this.childStore.search()
+            })
         }
     },
     methods:{

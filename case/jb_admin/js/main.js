@@ -131,4 +131,6 @@ import * as page_com_main from './page_com/main'
 import * as table_chart_editor_main from './table_chart_editor/main'
 
 import  * as table_local_input from './table_editor/local_input/main'
+
+import * as layout_main from './layout'
 //import * as pop_win_main from './pop_win/main'

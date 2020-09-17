@@ -48,7 +48,9 @@ class DateTimeProc(BaseFieldProc):
         v= search_args.get('%s__lte'%name)
         if v and len(v) ==10:
             v+= ' 23:59:59'
-            return {'%s__lte'%name:v}
+            search_args.pop(name)
+            search_args['%s__lte'%name] = v 
+            return search_args
         else:
             return super().filter_clean_filter_arg(name,search_args)
 
