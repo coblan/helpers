@@ -80,6 +80,16 @@ var table_store={
         },
         search:function(){
             this.search_args._page=1
+
+            if(this.advise_heads){
+                var advise_heads_str=this.advise_heads.join(',')
+                if(this.advise_heads_cookie_path){
+                    var cookie_str=`advise_heads=${advise_heads_str};path=${this.advise_heads_cookie_path}`
+                    document.cookie = cookie_str
+                }
+                this.search_args._page=1
+                this.search_args._advise_heads=advise_heads_str
+            }
             return this.getRows()
         },
         getRows:function(){

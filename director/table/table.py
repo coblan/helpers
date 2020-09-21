@@ -421,6 +421,8 @@ class ModelTable(object):
         row_filter:key=value&..
         """
         kw = request.GET.dict()
+        if request.COOKIES.get('advise_heads'):
+            kw['_advise_heads'] = kw.get('_advise_heads') or request.COOKIES.get('advise_heads')
         return cls.gen_from_search_args(kw,request.user)
 
     @classmethod

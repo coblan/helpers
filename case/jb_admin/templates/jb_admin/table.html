@@ -11,6 +11,7 @@
     search_args={{ search_args | jsonify | default:'{}'  }}
     parents = {{ parents | jsonify | default:'[]' }}
     advise_heads = {{ advise_heads | jsonify | default:'[]' }}
+    advise_heads_cookie_path= '{{ advise_heads_cookie_path }}' || null
 
     option= {{ option | jsonify }}
     table_layout={{ table_layout | jsonify }}
@@ -48,6 +49,7 @@
                 named_ctx:named_ctx,
                 event_slots:event_slots,
                 advise_heads:advise_heads,
+                advise_heads_cookie_path:advise_heads_cookie_path,
                 option:option,
                 table_layout:table_layout,
             }
