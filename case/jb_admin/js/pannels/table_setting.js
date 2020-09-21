@@ -149,16 +149,13 @@ var table_setting_panel = {
                     setTimeout(()=>{
                         this.ctx.table_ps.search()
                     },50)
+                    this.set_cookie_advise_heads()
                     break
                 }
             }
             // advise_heads发生变换时，可能需要设置cookie (如果新老heads有交叉的情况，上面[1]会触发search解决这个问题)
             if(this.advise_heads.length != this.ctx.table_ps.advise_heads.length){
-                var advise_heads_str=this.advise_heads.join(',')
-                if(this.ctx.table_ps.advise_heads_cookie_path){
-                    var cookie_str=`advise_heads=${advise_heads_str};path=${this.ctx.table_ps.advise_heads_cookie_path}`
-                    document.cookie = cookie_str
-                }
+                this.set_cookie_advise_heads()
             }
 
             this.ctx.table_ps.advise_heads = this.advise_heads
@@ -199,17 +196,28 @@ var table_setting_panel = {
                 },200)
             }
             this.$emit('finish')
-
-
-
-
         },
         clear_format(){
             var key = '_table_settings_'+ this.ctx.table_ps.director_name
             localStorage.clear(key)
+            this.clear_cookie_advise_heads()
+
             this.$emit('finish')
             cfg.show_load()
             location.reload()
+        },
+        set_cookie_advise_heads(){
+            var advise_heads_str=this.advise_heads.join(',')
+            if(this.ctx.table_ps.advise_heads_cookie_path){
+                var cookie_str=`advise_heads=${advise_heads_str};path=${this.ctx.table_ps.advise_heads_cookie_path}`
+                document.cookie = cookie_str
+            }
+        },
+        clear_cookie_advise_heads(){
+            if(this.ctx.table_ps.advise_heads_cookie_path){
+                var cookie_str=`advise_heads=;path=${this.ctx.table_ps.advise_heads_cookie_path};Max-Age=0`
+                document.cookie = cookie_str
+            }
         }
     }
 }
