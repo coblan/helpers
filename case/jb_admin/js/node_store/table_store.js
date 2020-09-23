@@ -307,7 +307,7 @@ var table_store={
                         resolve()
                     }
                 }).then(function(){
-                    debugger
+
                     //  弹出编辑框/ 或者不弹出
                         var first_sel_row = self.selected[0]
                         var one_row={}
@@ -319,8 +319,9 @@ var table_store={
                             //    one_row.meta_overlap_fields= first_sel_row.meta_overlap_fields
                             //}
 
-                        }else if(kws.pre_set){
-                            var dc = ex.eval(kws.pre_set)
+                        }else if(kws.pre_set || kws.preset_express){
+                            var preset_express = kws.preset_express || kws.pre_set
+                            var dc = ex.eval(preset_express)
                             ex.assign(one_row,dc)
                             //if(! first_sel_row.meta_overlap_fields){
                             //    one_row.meta_overlap_fields = Object.keys(dc).join(',')

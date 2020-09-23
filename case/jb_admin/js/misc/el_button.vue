@@ -37,13 +37,19 @@
             }
         },
         methods:{
-            on_click(){
-                if(this.ctx.action){
+             on_click(){
+                if(this.ctx.click_express || this.ctx.action){
+
+                    var click_express = this.ctx.click_express ||this.ctx.action
                     // 在table组件中，会先检查选中的row。
-                    if(this.ctx.row_match && !this.parStore.check_selected(this.ctx)){
-                        return
+                    if(this.ctx.row_match){
+                        var p = this.parStore.check_selected(this.ctx)
+                    }else{
+                       var p = Promise.resolve()
                     }
-                    ex.eval(this.ctx.action,{head:this.ctx,ps:this.parStore,vc:this})
+                    p.then(()=>{
+                        ex.eval(click_express,{head:this.ctx,ps:this.parStore,vc:this})
+                     })
                 }
             }
         }
