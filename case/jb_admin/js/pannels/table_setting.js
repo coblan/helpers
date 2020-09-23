@@ -223,7 +223,7 @@ var table_setting_panel = {
 }
 
 Vue.component('com-panel-table-setting',function(resolve,reject){
-    ex.load_js_list([js_config.js_lib.sortablejs,'https://cdnjs.cloudflare.com/ajax/libs/Vue.Draggable/2.20.0/vuedraggable.umd.min.js'],()=>{
+    ex.load_js_list([js_config.js_lib.sortablejs,js_config.js_lib.vuedraggable],()=>{
         resolve(table_setting_panel)
     })
 })

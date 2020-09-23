@@ -88,7 +88,8 @@ def get_lib(request):
         #'selectizejs_css':'https://cdn.jsdelivr.net/npm/selectize@0.12.6/dist/css/selectize.css',
         'selectizejs_css':'https://cdn.jsdelivr.net/npm/selectize@0.12.6/dist/css/selectize.default.css',
         'cropper_css':'/static/lib/cropper2.3.4.min.css',
-        'cropper':'/static/lib/cropper2.3.4.min.js'
+        'cropper':'/static/lib/cropper2.3.4.min.js',
+        'vuedraggable':'https://cdn.jsdelivr.net/npm/vuedraggable@2.24.1/dist/vuedraggable.umd.min.js',# 'https://cdnjs.cloudflare.com/ajax/libs/Vue.Draggable/2.20.0/vuedraggable.umd.min.js'
     }
     if request.META['ACCESS_FROM_INTERNET']:
 
