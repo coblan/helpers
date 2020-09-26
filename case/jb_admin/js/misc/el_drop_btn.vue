@@ -62,14 +62,14 @@
 //            }
         },
         methods:{
-            set_btn_group_disable(){
-                $(this.$el).find('.el-button').addClass('is-disabled')
-                $(this.$el).find('.el-button').prop('disabled',true)
-            },
-            clear_btn_group_disable(){
-                $(this.$el).find('.el-button').removeClass('is-disabled')
-                $(this.$el).find('.el-button').prop('disabled',false)
-            },
+//            set_btn_group_disable(){
+//                $(this.$el).find('.el-button').addClass('is-disabled')
+//                $(this.$el).find('.el-button').prop('disabled',true)
+//            },
+//            clear_btn_group_disable(){
+//                $(this.$el).find('.el-button').removeClass('is-disabled')
+//                $(this.$el).find('.el-button').prop('disabled',false)
+//            },
 //            set_drop_disable(value ){
 //                if(value){
 //                    $(this.$el).find('.el-dropdown__caret-button').addClass('is-disabled')
