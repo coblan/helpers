@@ -11,6 +11,7 @@ class  DirectorCall{
         this.kws = kws
     }
     run(){
+        this.check_clear_old_cache()
         var p = this.check_cache()
         if(p){
             return p
@@ -22,7 +23,15 @@ class  DirectorCall{
         // this.on_success
         // this.on_fail
     }
+    check_clear_old_cache(){
+        if(this.option.clear_old_cache){
+            this.cache_key = md5(this.director_name+JSON.stringify(this.kws))
+            window._director_cache =  window._director_cache || {}
+            delete window._director_cache[this.cache_key]
+        }
+    }
     check_cache(){
+
         if(this.option.cache ){
             window._director_cache =  window._director_cache || {}
             this.cache_key = md5(this.director_name+JSON.stringify(this.kws))
