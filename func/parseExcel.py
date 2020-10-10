@@ -72,6 +72,10 @@ class ExcelFields(ModelFields):
             }
     
     def get_match_index(self,head,excelHeads):
+        """
+        @head:  列选项头  {'name': 'InvoiceCode', 'label': '发票代码','editor':'com-field-select' ....}
+        @excelHeads: ['col_name1','col_name2','col_name3']
+        """
         if head['label'] in excelHeads:
             return excelHeads.index(head['label'])
         #for head in form_heads:
