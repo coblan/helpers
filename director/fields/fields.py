@@ -653,7 +653,12 @@ class Fields(ModelFields):
         dc=self.clean_dict(dc) 
         self.kw=dc.copy()
         self.kw.update(kw)
-        self.crt_user = crt_user
+        if pk is not None:
+            self.kw['pk'] = pk
+        if not crt_user:
+            self.crt_user = get_request_cache()['request'].user
+        else:
+            self.crt_user = crt_user  
         self._errors={
         }
         # 太复杂，暂时不要权限
