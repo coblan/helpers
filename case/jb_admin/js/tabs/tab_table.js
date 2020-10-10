@@ -21,7 +21,7 @@ var tab_table={
                     advise_heads:heads_ctx.advise_heads || [],
                     selected:[],
                     del_info:[],
-                    search_args: {},
+                    search_args: heads_ctx.search_args || {},
                     vc:vc,
                     parStore:ex.vueParStore(vc)
                 }
