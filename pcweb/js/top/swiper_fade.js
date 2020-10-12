@@ -13,7 +13,7 @@ var swiper_fade={
       <!--</el-carousel>-->
       <div class="swiper-container">
             <div class="swiper-wrapper">
-             <component class="swiper-slide" v-for="item in ctx.items" :is="item.editor" :ctx="item"></component>
+             <component class="swiper-slide" v-for="item in ctx.items" :key='item.name' :is="item.editor" :ctx="item"></component>
            </div>
            <!-- Add Pagination -->
             <div class="swiper-pagination swiper-pagination-white"></div>
