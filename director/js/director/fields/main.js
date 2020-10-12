@@ -80,6 +80,10 @@ var field={
         },
         hide_msg:function(){
             layer.close(this.msg_index)
+        },
+        show_expalain(msg){
+            cfg.showMsg(msg,{title:'提示',area:'700px'})
+            //ELEMENT.MessageBox({message:msg,dangerouslyUseHTMLString:true,})
         }
     },
     template:`
@@ -99,6 +103,11 @@ var field={
                 <span class="help-text" v-if="head.help_text" @mouseenter="show_msg(head.help_text,$event)" @mouseleave="hide_msg()">
                     <i style="color: #3780af;position: relative;"  class="fa fa-question-circle" ></i>
                 </span>
+                 <span class="help-text clickable" v-if="head.explain_text" @click="show_expalain(head.explain_text)" >
+                    <i style="color: #3780af;position: relative;"  class="fa fa-exclamation-circle" ></i>
+                </span>
+
+
 
 		</div>
 

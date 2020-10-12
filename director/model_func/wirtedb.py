@@ -15,8 +15,9 @@ def permit_save_model(user,row,**kw):
     fields_cls = director.get(row['_director_name'])
     fields_obj = fields_cls(dc = row,crt_user=user,**kw)
     if fields_obj.is_valid():
-        with transaction.atomic():
-            fields_obj.save_form()
+        #with transaction.atomic():  # 现在 transaction 由外部请求参数控制，因为有可能有不可逆转的情况，
+        #                              例如在save_form里面调用了三方api，在本地保存了api返回情况。这是即便是本地报错，也不能回退。
+        fields_obj.save_form()
         return fields_obj
     else:
         raise ValidationError(fields_obj.get_errors() )

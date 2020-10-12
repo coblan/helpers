@@ -18,12 +18,19 @@ var com_select = {
     `,
     data:function(){
         var self=this
+        if(this.head.ctx_name){
+            // TODO 删除这个老的兼容
+            var options = named_ctx[this.head.ctx_name]
+        }else{
+            var options = this.head.options
+        }
+
         return {
             order:this.head.order || false,
-            parStore:ex.vueParStore(this)
+            parStore:ex.vueParStore(this),
+            options:options,
         }
     },
-
     computed:{
         myplaceholder(){
             if(this.head.show_label){
@@ -35,13 +42,13 @@ var com_select = {
         myvalue:function(){
             return this.search_args[this.head.name]
         },
-        options:function(){
-            if(this.head.ctx_name){
-                return named_ctx[this.head.ctx_name]
-            }else{
-                return this.head.options
-            }
-        }
+        //options:function(){
+        //    if(this.head.ctx_name){
+        //        return named_ctx[this.head.ctx_name]
+        //    }else{
+        //        return this.head.options
+        //    }
+        //}
     },
     watch:{
         myvalue:function(v){
@@ -73,6 +80,10 @@ var com_select = {
         //}
         if(this.head.event_slots){
             this.set_event_slot()
+        }
+
+        if(this.head.mounted_express){
+            ex.eval(this.head.mounted_express,{vc:this})
         }
 
     },

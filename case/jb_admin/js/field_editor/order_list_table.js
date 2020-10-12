@@ -2,18 +2,16 @@ var order_list =  {
     props:['row','head'],
     template:`<div class="com-field-table-list">
     <div>
-        <button @click="add_new()" class="btn btn-default btn-xs">
+        <button @click="add_new()" class="btn btn-default btn-xs" v-if="head.can_create!=undefined?head.can_create:true">
             <i style="color: green" class="fa fa-plus-circle"></i>
         </button>
-        <button @click="delete_rows()" :disabled="selected.length==0" class="btn btn-default btn-xs">
+        <button @click="delete_rows()" :disabled="selected.length==0" class="btn btn-default btn-xs" v-if="head.can_delete!=undefined?head.can_delete:true">
             <i style="color: red" class="fa fa-minus-circle"></i>
         </button>
         <div style="display: inline-block;position: relative;vertical-align: top">
             <textarea :name="head.name" v-model="row[head.name]"  style="display: none"></textarea>
         </div>
     </div>
-
-
                     <el-table ref="core_table" class="table"
                               :data="rows"
                               border
@@ -70,6 +68,7 @@ var order_list =  {
             row_sort:{},
             heads:this.head.table_heads,
             selected:[],
+            parStore:ex.vueParStore(this),
         }
 
     },
@@ -130,14 +129,9 @@ var order_list =  {
                 ops:[{
                     'name':'save','editor':'com-field-op-btn','label':'确定', 'icon': 'fa-save',
                 }],
-                genPar:self,
+                genVc:self,
+                par_row:this.row,
             }
-           //var win= pop_edit_local(self.crt_row,fields_ctx,function(resp) {
-           //     var new_row=resp
-           //     ex.vueAssign(self.crt_row,new_row)
-           //    self.rows.push(self.crt_row)
-           //    layer.close(win)
-           // })
             cfg.pop_vue_com('com-form-one',fields_ctx).then((row)=>{
                 if(row){
                   self.rows.push(row)

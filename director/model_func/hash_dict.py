@@ -4,6 +4,8 @@ from hashlib import md5
 
 from base64 import b64encode
 import json
+from django.utils import timezone
+import datetime
 
 def hash_dict(dc,keys=None):
     ls =[]
@@ -38,7 +40,12 @@ def make_mark_dict(dc,keys=None):
             #v='false'
         #if v is None:
             #v='null'
-        out_dc[k] = str(v)
+        if isinstance(v,(timezone.datetime,datetime.datetime)):
+            out_dc[k] = v.strftime('%Y-%m-%d %H:%M:%S')
+        if v is None:
+            out_dc[k] = ''
+        else:
+            out_dc[k] = str(v)
     return out_dc
 
 def dif_mark_dict(dc,mark,include=None,exclude=[]):
@@ -49,6 +56,13 @@ def dif_mark_dict(dc,mark,include=None,exclude=[]):
             continue
         if k in exclude:
             continue
-        if k in dc and str(dc[k]) != v:
-            dif_dc[k] = v
+        
+        if k in dc and adapt_type(dc[k]) != adapt_type(v):
+            dif_dc[k] = adapt_type(v)
     return dif_dc
+
+def adapt_type(v):
+    if isinstance(v,(datetime.datetime,timezone.datetime)):
+        return v.strftime('%Y-%m-%d %H:%M:%S')
+    else:
+        return str(v)

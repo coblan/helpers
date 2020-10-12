@@ -21,7 +21,7 @@ from helpers.func.collection.container import evalue_container
 from django.db import transaction
 import logging
 from helpers.director.decorator import get_request_cache
-from ..model_func.hash_dict import hash_dict,make_mark_dict,dif_mark_dict
+from ..model_func.hash_dict import hash_dict,make_mark_dict,dif_mark_dict,adapt_type
 
 
 # sql_log 可能没有什么用
@@ -47,7 +47,8 @@ class ModelFields(forms.ModelForm):
     extra_mixins=[]
     hide_fields = []
     overlap_fields=[]  # 这些字段不会被同步检查
-    readonly_change_warning = []
+    readonly_change_warning = [] # 普通保存时，后台会恢复只读字段的值，但是有时有些只读字段，
+                                 #在后台发现改变时，需要警告前端，作废此次保存。因为这些字段值可能是前端做判断的依据。
     show_pk=False
     nolimit=False
     @classmethod
@@ -139,7 +140,7 @@ class ModelFields(forms.ModelForm):
         readonly_waring = []
         for k in dict(dc):
             if k in self.readonly or (meta_change_fields and k not in meta_change_fields ):
-                if k in self.readonly_change_warning and dc[k] != simdc.get(k):
+                if k in self.readonly_change_warning and adapt_type(dc[k]) != adapt_type( simdc.get(k)):
                     readonly_waring.append(k)
                 dc[k] = simdc.get(k)
                 #if hasattr(inst, "%s_id" % k):  # 如果是ForeignKey，必须要pk值才能通过 form验证
@@ -151,6 +152,8 @@ class ModelFields(forms.ModelForm):
                     #dc[k] =  getattr(inst , k)  
         if readonly_waring and  not dc.get('meta_overlap_fields') == '__all__' :
             raise OutDateException('(%s)的%s已经发生了变化,请确认后再进行操作!'%(inst,[field_label(inst.__class__,k ) for k in readonly_waring] ) )
+        
+        # 真正的验证各个参数是否过期，是在clean函数中进行的。
         
         # 修正参数
         dc = self._clean_dict(dc)
@@ -325,8 +328,15 @@ class ModelFields(forms.ModelForm):
         if self.permit.changeable_fields():
             ls += [
                 {
-                'name':'save','editor':'com-field-op-btn','label':'保存', 'icon': 'fa-save',
-                'class':'btn btn-info btn-sm',
+                'name':'save',
+                #'editor':'com-field-op-btn',
+                'editor':'com-btn',
+                'type':'primary',
+                'icon':'el-icon-receiving',
+                'label':'保存', 
+                'action':'scope.ps.vc.submit()'
+                #'icon': 'fa-save',
+                #'class':'btn btn-info btn-sm',
             },
                 # 暂时屏蔽，需要考虑清楚 页面兼容性问题
                 #{
@@ -425,15 +435,7 @@ class ModelFields(forms.ModelForm):
                 mapper=field_map[model_field.__class__]
                 mapper(self.instance, name = k,model=self._meta.model).dict_field_head(dc)    
                 
-            dc = self.dict_head(dc)
-            
-            #if hasattr(v, 'choices') and 'options' not in dc :
-                #options_name = '%(fieldName)s.options'% {'fieldName':fieldName}
-                #catch = get_request_cache()
-                #if not catch.get(options_name):
-                    #catch[options_name]=[{'value':val,'label':str(lab)} for val,lab in v.choices]                
-                #dc['options'] = catch[options_name]
-            
+            #dc = self.dict_head(dc)
             out.append(dc)
         return out
     
@@ -449,6 +451,7 @@ class ModelFields(forms.ModelForm):
             heads=[]
         heads += self._base_dict_fieldmap_heads()
         heads.extend(self.getExtraHeads())
+        heads = [self.dict_head(head) for head in heads]
         
         self.heads = heads
         for name in self.get_readonly_fields():
@@ -558,16 +561,24 @@ class ModelFields(forms.ModelForm):
             detail=','.join(self.changed_data)
         
         #with transaction.atomic():
-        extra_log = self.clean_save()
+        #extra_log = self.clean_save()
         if self.instance.pk is None:
             op='add'
             detail=''
-            self.instance.save() # if instance is a new row , need save first then manytomany_relationship can create   
+            # 2020/07/30 屏蔽这里 后面直接就是保存
+            # 2020/08/06  开启，该行不能屏蔽，因为manytomany 必须先保存才能生成 relation对象
+            self.instance.save() # if instance is a new row , need save first then manytomany_relationship can create 
+            
+        # 2020/07/30 屏蔽这里，原因是其把clean_save里面修改的值给还原了
+        # 2020/08/06 开启，因为manytomany 需要 这样处理一下，才能 赋值
         for k in self.changed_data:
             ## 测试时看到self.instance已经赋值了，下面这行代码可能没用,但是需要考虑下新建时 manytomany foreignkey 这些情况
             if k in self.kw:  # 排除开那些前端没有传递，而是后端model 默认生成的值
                               # 这些默认的值不能用 cleaned_data.get 来获取，因为他们是空
                 setattr(self.instance,k, self.cleaned_data.get(k) )
+        # 2020/08/06 从571行挪到这里，以免 last row 代码覆盖了 clean_save的修改
+        # 在clean_save 中 不能使用 pk==None来判断是否为创建row，应该使用self.is_create==Ture 来判断
+        extra_log = self.clean_save()
         self.instance.save()
             
         if op or extra_log:
@@ -642,11 +653,17 @@ class Fields(ModelFields):
         dc=self.clean_dict(dc) 
         self.kw=dc.copy()
         self.kw.update(kw)
-        self.crt_user = crt_user
+        if pk is not None:
+            self.kw['pk'] = pk
+        if not crt_user:
+            self.crt_user = get_request_cache()['request'].user
+        else:
+            self.crt_user = crt_user  
         self._errors={
         }
         # 太复杂，暂时不要权限
         self.nolimit = True
+
     
     def add_error(self,key,msg):
         if key not in self._errors:
@@ -685,7 +702,9 @@ class Fields(ModelFields):
     
     def get_org_dict(self,row=None):
         if not row:
-            row= self.dict_row()
+            # fields 的数据获取来自于非db orm类型。如果需要过期检查，需要定制该函数，手动去获取该行数据。
+            return {}
+            #row= self.dict_row()
         return make_mark_dict(row)
     
     def clean_dict(self, dc): 
@@ -694,7 +713,16 @@ class Fields(ModelFields):
     def get_operations(self):
         ls=[]
         ls.append({
-            'name':'save','editor':'com-field-op-btn','label':'保存', 'icon': 'fa-save','class':'btn btn-info'
+            'name':'save',
+            'editor':'com-btn',
+            'label':'保存',
+            'type':'success',
+            'icon':'el-icon-receiving',
+            'action':'scope.ps.vc.submit()',
+            #'editor':'com-field-op-btn',
+            #'label':'保存', 
+            #'icon': 'fa-save',
+            #'class':'btn btn-info'
         })
         return ls 
     

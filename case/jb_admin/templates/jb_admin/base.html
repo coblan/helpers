@@ -471,7 +471,10 @@ desired effect
     <!--</footer>-->
 
     <!-- Control Sidebar -->
-    <aside class="control-sidebar control-sidebar-dark">
+
+    <aside class="control-sidebar control-sidebar-dark" >
+        <!--自己加的，为了关闭右侧滑动面板-->
+        <div class="right-sidebar-mask" style="position: absolute;top:0;right: 0;height:100vh;width:100vw;z-index:-1" href="#" data-toggle="control-sidebar"></div>
         <!-- Create the tabs -->
         <!--<ul class="nav nav-tabs nav-justified control-sidebar-tabs">-->
             <!--<li class="active"><a href="#control-sidebar-home-tab" data-toggle="tab"><i class="fa fa-home"></i></a></li>-->
@@ -551,7 +554,9 @@ desired effect
     <!-- /.control-sidebar -->
     <!-- Add the sidebar's background. This div must be placed
     immediately after the control sidebar -->
-    <div class="control-sidebar-bg"></div>
+
+    <div class="control-sidebar-bg" ></div>
+
 </div>
 <!-- ./wrapper -->
 
@@ -703,4 +708,12 @@ desired effect
     }
 </script>
 
+<style>
+    .right-sidebar-mask{
+        display: none;
+    }
+    .control-sidebar-open .right-sidebar-mask{
+        display: block;
+    }
+</style>
 </html>

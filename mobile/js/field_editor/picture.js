@@ -31,6 +31,10 @@ export var com_picture = {
         </div>
     </van-cell>`,
     data(){
+        // 移动端默认控制图片大小
+        if (!this.head.maxspan){
+            Vue.set(this.head,'maxspan', 1000)
+        }
         return {
         }
     },

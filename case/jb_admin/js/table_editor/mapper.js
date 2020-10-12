@@ -7,8 +7,7 @@ options:{
 var mapper = {
     props:['rowData','field','index'],
     template:`<span class="com-table-mapper" v-text="show_data"></span>`,
-    created:function(){
-        // find head from parent table
+    beforeCreate(){
         var table_par = this.$parent
         while (true){
             if (table_par.heads){
@@ -20,13 +19,21 @@ var mapper = {
             }
         }
         this.table_par = table_par
-        this.head= ex.findone(this.table_par.heads,{name:this.field})
+        //this.heads =
+        //this.head= ex.findone(this.table_par.heads,{name:this.field})
     },
-    //mounted(){
-    //    if(this.head.css){
-    //        ex.append_css(this.head.css)
-    //    }
-    //},
+    data(){
+        this.head= ex.findone(this.table_par.heads,{name:this.field})
+        return {
+            options:this.head.options || [],
+            parStore:ex.vueParStore(this)
+        }
+    },
+    mounted(){
+        if( this.head.mounted_express){
+            ex.eval(this.head.mounted_express,{vc:this,})
+        }
+    },
     computed:{
         //myclass(){
         //    if(this.head.class){
@@ -38,7 +45,7 @@ var mapper = {
         show_data:function(){
             if(this.table_par){
                 var value = this.rowData[this.field]
-                var options = this.head.options
+                var options = this.options
                 var opt = ex.findone(options,{value:value})
                 if(opt){
                     return opt['label']

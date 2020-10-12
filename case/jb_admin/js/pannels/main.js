@@ -12,4 +12,10 @@ import * as chart from  './chart.js'
 import * as charts_main from  './charts/main'
 
 import  pop_progress from  './pop_progress.vue'
+import  static1 from  './static1.vue'
+
+import  delete_query_related from  './delete_query_related.vue'
+
 Vue.component('com-pop-progress',pop_progress)
+Vue.component('com-pan-static1',static1)
+Vue.component('com-pan-delete-query-message',delete_query_related)

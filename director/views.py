@@ -135,19 +135,37 @@ def director_view(request,director_name):
         directorEnt = director.get(director_name)
     try:
         kws = argument.get_argument(request,outtype='dict')
+        if request.GET.get('transaction') == '0':
+            need_transaction = False
+        else:
+            need_transaction = True
+            
         if inspect.isfunction(directorEnt):
-            rt = directorEnt(**kws)
-            # 2020/3/18 去掉统一的事务，免得造成异步性能不足和死锁
-            #wraped_directorEnt = transactionall(directorEnt)
-            #rt = wraped_directorEnt(**kws)
+            # 2020/7/6 再次开启 事务
+            if need_transaction:
+                wraped_directorEnt = transactionall(directorEnt)
+                rt = wraped_directorEnt(**kws)
+            else:
+                rt = directorEnt(**kws)
+                # 2020/3/18 去掉统一的事务，免得造成异步性能不足和死锁
         else:
             # directorEnt is class
             obj = directorEnt(**kws)
+            
             if hasattr(obj,'get_data_context'):
-                wraped_directorEnt = obj.get_data_context # transactionall(obj.get_data_context)
+                real_func = obj.get_data_context
+                #wraped_directorEnt = transactionall(obj.get_data_context) # obj.get_data_context # 
             else:
-                wraped_directorEnt = obj.get_context # transactionall(obj.get_context)
-            rt = wraped_directorEnt()
+                real_func = obj.get_context
+                #wraped_directorEnt = transactionall(obj.get_context) # obj.get_context # 
+                
+            if need_transaction:
+                wraped_directorEnt = transactionall(real_func)
+                rt = wraped_directorEnt()
+            else:
+                rt = real_func()
+            #rt = wraped_directorEnt()
+            
         if isinstance(rt,HttpResponse):
             # 直接返回
             pass

@@ -14,7 +14,7 @@ var el_tab = {
                                  :name="tab.name">
                         <span slot="label" v-text="tab.label" ></span>
                         <!--<span v-if="!tab._loaded"></span>-->
-                        <component :is="tab.com || tab.editor" :tab_head="tab"
+                        <component :is="tab.editor || tab.com " :tab_head="tab"
                                    :par_row="ctx.par_row"
                                    :ref="'_tab_'+tab.name" @tab-event="up_event($event)"></component>
 
@@ -22,7 +22,7 @@ var el_tab = {
                     </el-tab-pane>
                 </el-tabs>
 
-                <component v-else v-for="tab in ctx.tabs"  :is="tab.com" :tab_head="tab"
+                <component v-else v-for="tab in ctx.tabs"  :is="tab.editor || tab.com " :tab_head="tab"
                            :par_row="ctx.par_row"
                            :ref="'_tab_'+tab.name" @tab-event="up_event($event)"></component>
     </div>`,

@@ -7,6 +7,7 @@ from .model_func.wirtedb import permit_save_model
 from django.core.exceptions import ValidationError
 from .fields.fields import ModelFields,OutDateException
 from django.core.exceptions import PermissionDenied
+from .model_func.dictfy import delete_related_query
 
 def director_save_row(row):
      #rt_dc = save_row(row,user,request)
@@ -42,6 +43,11 @@ def get_row(director_name,pk=None,**kws):
      fields_cls = director.get(director_name)
      fields_obj = fields_cls(pk=pk, **kws)
      return fields_obj.get_row()
+
+@director_view('d.get_row_form_db')
+def get_row_form_db(rows):
+     out_rows = [get_row(row.get('_director_name'),row.get('pk')) for row in rows]
+     return out_rows
 
 @director_view('d.get_rows')
 def get_rows(director_name,search_args={},user=None):
@@ -79,3 +85,17 @@ def director_element_call(director_name,attr_name,kws):
      dcls = director.get(director_name)
      obj = dcls()
      return getattr(obj,attr_name)(**kws)
+
+@director_view('d.delete_query_related')
+def search_delete_related(rows):
+     out_ls =[]
+     for row in rows:
+          fields_cls = director.get(row['_director_name'])
+          fields_obj = fields_cls(dc = row)
+          inst = fields_obj.instance
+          ls = delete_related_query(inst)
+          if ls:
+               out_ls.append(
+                    {'str':str(inst),'related':ls}
+               )
+     return out_ls

@@ -2,8 +2,8 @@ require('./styl/multi_row.styl')
 
 var multi_row = {
     props:['rowData','field','index'],
-    template:`<div class="com-field-multi-row">
-    <div class="myrow" v-for="(row,rindex) in rowData[head.rows_field]" >
+    template:`<div class="com-table-multi-row">
+    <div class="myrow" v-for="(row,rindex) in rows" >
         <component :is="head.row_editor" :rowData="row" :field="head.name" :index="rindex"></component>
     </div>
     </div>`,
@@ -15,14 +15,34 @@ var multi_row = {
     },
 
     mounted(){
+        // 如果整行的高度不是由 本插件撑起来的时候，改列内容会跑到中间，看起来比较怪异，所以设置 顶部对齐
+        $(this.$el).parent().parent().css("vertical-align", "top")
         setTimeout(()=>{
             this.update_title()
         },1000)
         this.parStore.$on('header-dragend',this.on_drag)
     },
     computed:{
+        rows(){
+            if(! Boolean(this.rowData[this.head.rows_field])){
+                return []
+            }
+            if( typeof this.rowData[this.head.rows_field] =='string'){
+                var rows = JSON.parse(this.rowData[this.head.rows_field])
+            }else{
+                var rows = this.rowData[this.head.rows_field]
+            }
+            return rows
+        },
         mydata(){
-            var rows = this.rowData[this.head.rows_field]
+            //debugger
+            //if( typeof this.rowData[this.head.rows_field] =='string'){
+            //    var rows = JSON.parse(this.rowData[this.head.rows_field])
+            //}else{
+            //    var rows = this.rowData[this.head.rows_field]
+            //}
+            var rows =  this.rows ;//this.rowData[this.head.rows_field]
+
             return  ex.map(rows,(row)=>{return row[this.field]})
         }
     },
@@ -73,3 +93,4 @@ var multi_row = {
 
 
 Vue.component('com-field-multi-row',multi_row)
+Vue.component('com-table-multi-row',multi_row)

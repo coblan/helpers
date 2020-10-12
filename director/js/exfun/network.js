@@ -4,6 +4,116 @@ import {hook_ajax_msg,hook_ajax_csrf,show_upload,hide_upload} from './network/aj
 hook_ajax_msg()
 hook_ajax_csrf()
 
+class  DirectorCall{
+    constructor(director_name,kws,option){
+        this.option = option || {}
+        this.director_name = director_name
+        this.kws = kws
+    }
+    run(){
+        this.check_clear_old_cache()
+        var p = this.check_cache()
+        if(p){
+            return p
+        }
+        var url = this.get_url()
+        var data = this.adapt_data(this.kws)
+        return this.post(url,data)
+        // this.on_question
+        // this.on_success
+        // this.on_fail
+    }
+    check_clear_old_cache(){
+        if(this.option.clear_old_cache){
+            this.cache_key = md5(this.director_name+JSON.stringify(this.kws))
+            window._director_cache =  window._director_cache || {}
+            delete window._director_cache[this.cache_key]
+        }
+    }
+    check_cache(){
+
+        if(this.option.cache ){
+            window._director_cache =  window._director_cache || {}
+            this.cache_key = md5(this.director_name+JSON.stringify(this.kws))
+
+            if(window._director_cache[this.cache_key]){
+                var cache_value = window._director_cache[this.cache_key]
+                if(Array.isArray( cache_value) && typeof cache_value[0] =='function' ){
+                    // 表示前面的请求还在进行中
+                    return new Promise((resolve,reject)=>{
+                        cache_value.push((resp)=>{
+                            resolve(resp)
+                        })
+                    })
+                }else{
+                    return Promise.resolve(cache_value)
+                }
+            }else {
+                // 第一个 请求 放个空函数，触发后面的 往 cache里面 插入 function
+                window._director_cache[this.cache_key] = [()=>{}]
+            }
+        }
+    }
+    adapt_data(kws){
+        if(ex.isEmpty(kws)){
+            var post_data = {}
+        }else{
+            var post_data= JSON.stringify(kws)
+        }
+        return post_data
+    }
+    post(url,data){
+        var p = new Promise((resolve,reject)=>{
+            this.resolve = resolve
+            this.reject = reject
+
+            ex._post(url,data,(resp)=>{
+                if(resp.success){
+                    if(resp._question){
+                        this.on_question(resp)
+                    }else{
+                        this.on_success(resp)
+                    }
+                }
+
+            },(rt)=>{
+                this.on_fail(rt)
+            })
+        })
+        return p
+    }
+    on_question(resp){
+        ex.eval(resp._question,{director_name:director_name,kws:this.kws,resolve:this.resolve})
+    }
+    on_success(resp){
+        this.resolve(resp.data)
+        // 缓存代码
+        this.cache_resp(resp)
+    }
+    cache_resp(resp){
+        if(this.option.cache ){
+            var cache_value = window._director_cache[this.cache_key]
+            if(Array.isArray( cache_value) && typeof cache_value[0] =='function' ){
+                ex.each( window._director_cache[this.cache_key],func=>{
+                    func(resp.data)
+                })
+            }
+            window._director_cache[this.cache_key] = resp.data
+        }
+    }
+    on_fail(rt){
+        this.reject(rt)
+    }
+    get_url(){
+        var post_url = '/dapi/'+this.director_name
+        if(this.option.transaction != undefined){
+            post_url = ex.appendSearch(post_url,{transaction:this.option.transaction})
+        }
+        return post_url
+    }
+
+}
+
 export var network ={
     get:function(url,callback){
         //replace $.get
@@ -17,18 +127,6 @@ export var network ={
                 })
             })
         }
-        //var wrap_callback=function (resp) {
-        //    if (resp.msg) {
-        //        self.show_msg(resp.msg)
-        //    }
-        //    if (resp.status && typeof resp.status == 'string' && resp.status != 'success') {
-        //        cfg.hide_load()
-        //        return
-        //    } else {
-        //        callback(resp)
-        //    }
-        //}
-        //return $.get(url,wrap_callback)
     },
     post:function(url,data,callback){
         if(callback){
@@ -37,12 +135,14 @@ export var network ={
             var p = new Promise(function(resolve,reject){
                 ex._post(url,data,function(resp){
                     resolve(resp)
+                },(rt)=>{
+                    reject(rt)
                 })
             })
             return p
         }
     },
-    _post:function(url,data,callback){
+    _post:function(url,data,callback,fail){
         var self=this
         var wrap_callback=function (resp) {
             var msg = []
@@ -86,6 +186,9 @@ export var network ={
             //if (resp.status && typeof resp.status == 'string' && resp.status != 'success') {
             if (!success) {
                 cfg.hide_load() // sometime
+                if(fail){
+                    fail(rt)
+                }
             } else {
                 var rt = callback(resp)
                 if(rt==false){
@@ -202,6 +305,7 @@ export var network ={
 
     },
     load_image(url) {
+        // 可以用来预加载图片
         var img = new Image();
         img.src = url;
 
@@ -223,45 +327,96 @@ export var network ={
     },
     director_call:function(director_name,kws,callback){
         //var post_data=[{fun:"director_call",director_name:director_name,kws:kws}]
-        if(ex.isEmpty(kws)){
-            var post_data = {}
-        }else{
-            var post_data= JSON.stringify(kws)
-        }
-
-        if(callback){
-            //ex.post('/d/ajax',JSON.stringify(post_data),function(resp){
-            //    callback( resp.director_call )
-            //})
+        if(callback && typeof callback=='function'){
+                if(ex.isEmpty(kws)){
+                    var post_data = {}
+                }else{
+                    var post_data= JSON.stringify(kws)
+                }
             ex.post('/dapi/'+director_name,post_data,function(resp){
                 if(resp.success){
                     callback( resp.data )
                 }
-
             })
         }else{
-            return new Promise(function(resolve,reject){
-                    //ex.post('/d/ajax',JSON.stringify(post_data)).then(
-                    //    function(resp){
-                    //        resolve(resp.director_call)
-                    //    }
-                    //)
-                ex.post('/dapi/'+director_name,post_data).then(
-                    function(resp){
-                        if(resp.success) {
-                            if(resp._question){
-                                ex.eval(resp._question,{director_name:director_name,kws:kws,resolve:resolve})
-                            }else{
-                                resolve(resp.data)
-                            }
-                        }
-                    }
-                )
-
-            })
+            var worker = new DirectorCall(director_name,kws,callback)
+            return worker.run()
         }
-
     },
+    //director_call:function(director_name,kws,callback){
+    //    //var post_data=[{fun:"director_call",director_name:director_name,kws:kws}]
+    //    if(ex.isEmpty(kws)){
+    //        var post_data = {}
+    //    }else{
+    //        var post_data= JSON.stringify(kws)
+    //    }
+    //    if (callback && typeof callback =='object'){
+    //        var option = callback
+    //    }else{
+    //        var option ={}
+    //    }
+    //    if(option.cache ){
+    //        window._director_cache =  window._director_cache || {}
+    //        var key = md5(director_name+JSON.stringify(kws))
+    //
+    //        if(window._director_cache[key]){
+    //            var cache_value = window._director_cache[key]
+    //            if(Array.isArray( cache_value) && typeof cache_value[0] =='function' ){
+    //                // 表示前面的请求还在进行中
+    //                return new Promise((resolve,reject)=>{
+    //                    cache_value.push((resp)=>{
+    //                        resolve(resp)
+    //                    })
+    //                })
+    //            }else{
+    //                return Promise.resolve(cache_value)
+    //            }
+    //        }else {
+    //            // 第一个 请求 放个空函数，触发后面的 往 cache里面 插入 function
+    //            window._director_cache[key] = [()=>{}]
+    //        }
+    //    }
+    //    if(callback && typeof callback=='function'){
+    //        ex.post('/dapi/'+director_name,post_data,function(resp){
+    //            if(resp.success){
+    //                callback( resp.data )
+    //            }
+    //
+    //        })
+    //    }else{
+    //        var post_url = '/dapi/'+director_name
+    //        if(option.transaction != undefined){
+    //            post_url = ex.appendSearch(post_url,{transaction:option.transaction})
+    //        }
+    //
+    //        return new Promise(function(resolve,reject){
+    //         return   ex.post(post_url,post_data).then(
+    //                function(resp){
+    //                    if(resp.success) {
+    //                        if(resp._question){
+    //                            ex.eval(resp._question,{director_name:director_name,kws:kws,resolve:resolve})
+    //                        }else{
+    //                            resolve(resp.data)
+    //                            // 缓存代码
+    //                            if(option.cache ){
+    //                                var cache_value = window._director_cache[key]
+    //                                if(Array.isArray( cache_value) && typeof cache_value[0] =='function' ){
+    //                                    ex.each( window._director_cache[key],func=>{
+    //                                        func(resp.data)
+    //                                    })
+    //                                }
+    //                                window._director_cache[key] = resp.data
+    //                            }
+    //                        }
+    //                    }
+    //                }
+    //            ).catch(()=>{
+    //                 reject()
+    //            })
+    //        })
+    //    }
+    //
+    //},
     director(director_name){
         // 为了兼容性，暂时屏蔽 Proxy 版本的代码
         //let handler = {
@@ -309,7 +464,7 @@ export var network ={
         return new Promise((resolve,reject)=>{
             ex.__on_filechange=function(event){
                 let new_selected_files = event.target.files
-                var up_url = ex.__upload_url || '/d/upload?path=general_upload/userfile'
+                var up_url = ex.__upload_url || '/d/upload?path=general_upload&split=date'
                 cfg.show_load()
                 ex.uploads(new_selected_files,up_url,function(url_list){
                     cfg.hide_load()

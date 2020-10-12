@@ -27,19 +27,24 @@
 
     fields_logic={
         el:'#there',
-        data:{
-            page_label:page_label,
-            heads:heads,
-            row:row,
-            director_name:director_name,
+        data(){
+            var childStore = new Vue()
+            childStore.vc = this
+            return {
+                childStore:childStore,
+                page_label:page_label,
+                heads:heads,
+                row:row,
+                director_name:director_name,
 
-            ops:ops,
-            
-            tabgroup:{
-                crt:'main',
-                tabs:tabs
-            },
-            tr:cfg.tr
+                ops:ops,
+
+                tabgroup:{
+                    crt:'main',
+                    tabs:tabs
+                },
+                tr:cfg.tr
+            }
 
 
         },
@@ -179,6 +184,7 @@
                            :is="op.editor"
                            :ref="'op_'+op.name"
                            :head="op"
+                           :ctx="op"
                            :disabled="get_attr(op.disabled)"
                            v-show="! get_attr(op.hide)"
                            @operation="on_operation(op)"></component>

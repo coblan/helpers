@@ -10,7 +10,7 @@ export  var os = function() {
         isPc = !isPhone && !isAndroid && !isSymbian;
     return {
         isTablet: isTablet,
-        isPhone: isPhone,
+        isiPhone: isPhone,
         isAndroid : isAndroid,
         isPc : isPc
     };

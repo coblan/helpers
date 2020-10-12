@@ -34,7 +34,7 @@ var table_setting_panel = {
 
     <div class="mybtn-panel">
          <el-button size="small" @click="clear_format()">恢复默认</el-button>
-         <el-button type="primary" size="small" @click="make_catch()">确定</el-button>
+         <el-button type="primary" size="small" @click="change_advise_heads()">确定</el-button>
     </div>
 
     </div>`,
@@ -123,7 +123,7 @@ var table_setting_panel = {
                 return  ex.isin(head.name,children)
             })
         },
-        make_catch(){
+        change_advise_heads(){
             this.advise_heads = []
             this.advise_order = []
             for(var key in this.heads_bucket){
@@ -142,8 +142,21 @@ var table_setting_panel = {
             //    this.advise_order = this.advise_order.concat(mylist)
             //})
 
-
-
+            // [1]如果 增加了 不存在的 head，必须重新获取数据
+            for(var i=0;i<this.advise_heads.length;i++){
+                var head_name = this.advise_heads[i]
+                if(!ex.isin(head_name,this.ctx.table_ps.advise_heads)){
+                    setTimeout(()=>{
+                        this.ctx.table_ps.search()
+                    },50)
+                    this.set_cookie_advise_heads()
+                    break
+                }
+            }
+            // advise_heads发生变换时，可能需要设置cookie (如果新老heads有交叉的情况，上面[1]会触发search解决这个问题)
+            if(this.advise_heads.length != this.ctx.table_ps.advise_heads.length){
+                this.set_cookie_advise_heads()
+            }
 
             this.ctx.table_ps.advise_heads = this.advise_heads
             if(this.advise_order.length >0){
@@ -175,6 +188,7 @@ var table_setting_panel = {
 
                 this.ctx.table_ps.heads = []
                 this.ctx.table_ps.rows=[]
+
                 setTimeout(()=>{
                     this.ctx.table_ps.heads =tmp
                     this.ctx.table_ps.rows= tmp_rows
@@ -186,15 +200,30 @@ var table_setting_panel = {
         clear_format(){
             var key = '_table_settings_'+ this.ctx.table_ps.director_name
             localStorage.clear(key)
+            this.clear_cookie_advise_heads()
+
             this.$emit('finish')
             cfg.show_load()
             location.reload()
+        },
+        set_cookie_advise_heads(){
+            var advise_heads_str=this.advise_heads.join(',')
+            if(this.ctx.table_ps.advise_heads_cookie_path){
+                var cookie_str=`advise_heads=${advise_heads_str};path=${this.ctx.table_ps.advise_heads_cookie_path}`
+                document.cookie = cookie_str
+            }
+        },
+        clear_cookie_advise_heads(){
+            if(this.ctx.table_ps.advise_heads_cookie_path){
+                var cookie_str=`advise_heads=;path=${this.ctx.table_ps.advise_heads_cookie_path};Max-Age=0`
+                document.cookie = cookie_str
+            }
         }
     }
 }
 
 Vue.component('com-panel-table-setting',function(resolve,reject){
-    ex.load_js_list([js_config.js_lib.sortablejs,'https://cdnjs.cloudflare.com/ajax/libs/Vue.Draggable/2.20.0/vuedraggable.umd.min.js'],()=>{
+    ex.load_js_list([js_config.js_lib.sortablejs,js_config.js_lib.vuedraggable],()=>{
         resolve(table_setting_panel)
     })
 })

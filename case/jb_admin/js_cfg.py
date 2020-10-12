@@ -88,13 +88,14 @@ def get_lib(request):
         #'selectizejs_css':'https://cdn.jsdelivr.net/npm/selectize@0.12.6/dist/css/selectize.css',
         'selectizejs_css':'https://cdn.jsdelivr.net/npm/selectize@0.12.6/dist/css/selectize.default.css',
         'cropper_css':'/static/lib/cropper2.3.4.min.css',
-        'cropper':'/static/lib/cropper2.3.4.min.js'
+        'cropper':'/static/lib/cropper2.3.4.min.js',
+        'vuedraggable':'https://cdn.jsdelivr.net/npm/vuedraggable@2.24.1/dist/vuedraggable.umd.min.js',# 'https://cdnjs.cloudflare.com/ajax/libs/Vue.Draggable/2.20.0/vuedraggable.umd.min.js'
     }
     if request.META['ACCESS_FROM_INTERNET']:
 
         dc.update( {
-            #'vuejs': 'https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.min.js',
-            'vuejs':   'https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js',
+            'vuejs': 'https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js',
+            #'vuejs':   'https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js',
             #'jquery':'https://cdn.jsdelivr.net/npm/jquery@2.2.4/dist/jquery.min.js',
             'jquery': 'https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js',
             'vuex': 'https://cdn.jsdelivr.net/npm/vuex@3.0.1/dist/vuex.min.js', 

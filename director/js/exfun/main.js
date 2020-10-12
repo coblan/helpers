@@ -14,6 +14,8 @@ import {rabbit} from  './rabbit'
 import {sys} from  './sys'
 import  * as defPromise from  './defPromise'
 import  {os} from  './os'
+import {localCatch} from  './catch'
+
 var ex={
     assign:function (dst,src) {
         for(var key in src){
@@ -37,9 +39,9 @@ ex.assign(ex,layout)
 ex.assign(ex,file_proc)
 ex.assign(ex,rabbit)
 ex.assign(ex,sys)
+ex.assign(ex,localCatch)
 
 ex.os = os
-
 ex.sortOrder=sortOrder
 ex.DefPromise = defPromise.default
 //ex.md5=md5

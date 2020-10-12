@@ -3,7 +3,12 @@ require('./scss/form_one.scss')
 export  var fields_all_in_one={
     props:['ctx'],
     data:function(){
-        var data_row = ex.copy(this.ctx.row  || {} )
+        if (this.ctx.director_name){
+            var def_row = {_director_name:this.ctx.director_name}
+        }else{
+            var def_row = {}
+        }
+        var data_row = ex.copy(this.ctx.row  || def_row )
         var self=this
         var childStore = new Vue({
             data:{
@@ -30,7 +35,7 @@ export  var fields_all_in_one={
     mixins:[mix_fields_data,mix_nice_validator],
     template:`<div class="com-form-one flex-v" :class="head.class">
    <div class="oprations" v-if="ops_loc=='up'">
-        <component v-for="op in ops" :is="op.editor" :ref="'op_'+op.name" :head="op" @operation="on_operation(op)"></component>
+        <component v-for="op in ops" :is="op.editor" :ref="'op_'+op.name" :ctx="op" :head="op" @operation="on_operation(op)"></component>
     </div>
     <div style="overflow: auto;" class="flex-grow fields-area">
             <!--有分组的情况-->
@@ -57,7 +62,7 @@ export  var fields_all_in_one={
         </div>
     </div>
     <div class="oprations bottom" v-if="ops_loc=='bottom'">
-        <component v-for="op in normed_ops" :is="op.editor" :ref="'op_'+op.name" :head="op" @operation="on_operation(op)"></component>
+        <component v-for="op in normed_ops" :key="op.name" :is="op.editor" :ref="'op_'+op.name" :head="op" :ctx="op" @operation="on_operation(op)"></component>
     </div>
     </div>`,
 

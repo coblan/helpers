@@ -64,6 +64,9 @@ var ele_table= {
             if(head.style){
                 ex.append_css(head.style)
             }
+            if(head.css){
+                ex.append_css(head.css)
+            }
         })
         ex.each(this.parStore.selected,row=>{
             this.parStore.e_table.toggleRowSelection(row)

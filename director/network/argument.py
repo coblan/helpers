@@ -36,26 +36,15 @@ def get_argument(request,outtype='obj'):
         return dc
     else:
         return DotObj( dc )
-
-def dict2url(dc:dict) -> str:
-    outls =[]
-    for k,v in dc.items():
-        outls.append('%s=%s'%(k,v) )  
-    return '&'.join(outls)
-
-def url2dict(url:str) -> dict:
-    return dict(parse.parse_qsl(parse.urlsplit(url).query))
-
-def sign_args(kws,secret):
-    "排序参数，并且签名"
-    sign_str = ''
-    for k,v in sorted(kws.items(),key=lambda p:p[0]):
-        if v:
-            sign_str += '{key}={value}&'.format(key=k,value=v)
-    sign_str = sign_str + 'secret=' + secret
-    return hashlib.md5(sign_str.encode('utf-8')).hexdigest().upper()   
-
+    
 def validate_argument(dc,validate_dict={},eliminate = False):
+    """
+    验证@dc 满足validate_dict 的需求
+    
+     argument.validate_argument(row,{
+                'InvoiceNum':[argument.int_str],
+            })
+    """
     if isinstance(dc,DotObj):
         dc=dc.__dict__
     org_dc = dict(dc)
@@ -83,6 +72,26 @@ def validate_argument(dc,validate_dict={},eliminate = False):
             if k not in validate_dict:
                 dc.pop(k)
     return DotObj( dc )
+
+def dict2url(dc:dict) -> str:
+    outls =[]
+    for k,v in dc.items():
+        outls.append('%s=%s'%(k,v) )  
+    return '&'.join(outls)
+
+def url2dict(url:str) -> dict:
+    return dict(parse.parse_qsl(parse.urlsplit(url).query))
+
+def sign_args(kws,secret):
+    "排序参数，并且签名"
+    sign_str = ''
+    for k,v in sorted(kws.items(),key=lambda p:p[0]):
+        if v:
+            sign_str += '{key}={value}&'.format(key=k,value=v)
+    sign_str = sign_str + 'secret=' + secret
+    return hashlib.md5(sign_str.encode('utf-8')).hexdigest().upper()   
+
+
 
 def null_break(value,name):
     "如果是None值，就退出验证栈"
@@ -135,11 +144,21 @@ def timestamp_span(span):
 def default(def_value):
     "设置默认值,与not_null 相互排斥"
     def _default(value,name):
-        if value is None or value =='':
+        adpt_value = value
+        if isinstance(value,str):
+            adpt_value = value.strip()        
+        if value is None or adpt_value =='':
             return def_value
         else:
             return value
     return _default
+
+def remove_dot(value,name):
+    " 1,234.00 转换为  1234.00"
+    if isinstance(value,str):
+        return value.replace(',','')
+    else:
+        return value
         
 def dot_list_str(value,name):
     if not value:
