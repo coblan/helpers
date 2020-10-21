@@ -25,8 +25,14 @@ class BackendOperationPage(TablePage):
                 head['width'] = width[head['name']]
             return head
         class filters(RowFilter):
-            names = ['model','content','createuser']
+            names = ['model','inst_pk','content','createuser']
             icontains = ['model','content','createuser']
+            def dict_head(self, head):
+                if head['name'] == 'inst_pk':
+                    head['editor'] = 'com-filter-exact-text'
+                    head['options'] =[]
+                return head
+            
             range_fields = ['createtime']
 
 class BackendOperationForm(ModelFields):
