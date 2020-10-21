@@ -19,9 +19,10 @@ class GeneralLog(models.Model):
 class BackendOperation(models.Model):
     createtime = models.DateTimeField(verbose_name='创建时间',)
     model = models.CharField('相关表', max_length=100, blank=True,)  # Field name made lowercase.
+    inst_pk = models.IntegerField('主键',null=True,blank=True)
+    op= models.CharField('操作',max_length=50,blank=True)
     content = models.TextField(verbose_name='内容', blank=True)  # Field name made lowercase.
     createuser = models.CharField('操作人', max_length=100, blank=True)  # Field name made lowercase.
-
 
     class Meta:
         indexes = [
