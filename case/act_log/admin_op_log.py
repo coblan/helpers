@@ -10,8 +10,9 @@ class BackendOperationPage(TablePage):
     
     class tableCls(ModelTable):
         model = BackendOperation
-        exclude =[]
-        pop_edit_fields = ['id']
+        exclude =['id']
+        pop_edit_fields = ['createtime']
+        selectable = False
         
         def get_operation(self):
             return []
@@ -20,10 +21,17 @@ class BackendOperationPage(TablePage):
             width = {
                 'model':150,
                 'content':600,
+                 'createtime':180,
             }
             if head['name'] in width:
                 head['width'] = width[head['name']]
             return head
+        
+        def dict_row(self, inst):
+            return {
+                'createtime':inst.createtime.strftime('%y-%m-%d %H:%M:%S.%f')
+            }
+        
         class filters(RowFilter):
             names = ['model','inst_pk','content','createuser']
             icontains = ['model','content','createuser']

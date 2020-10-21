@@ -9,8 +9,9 @@ class GeneralLogPage(TablePage):
     
     class tableCls(ModelTable):
         model = GeneralLog
-        exclude =[]
-        pop_edit_fields = ['id']
+        exclude =['id']
+        pop_edit_fields = ['createtime']
+        selectable = False
         
         def get_operation(self):
             return []
@@ -18,10 +19,16 @@ class GeneralLogPage(TablePage):
         def dict_head(self, head):
             width = {
                 'message':400,
+                'createtime':180,
             }
             if head['name'] in width:
                 head['width'] = width.get(head['name'])
             return head
+        
+        def dict_row(self, inst):
+            return {
+                'createtime':inst.createtime.strftime('%y-%m-%d %H:%M:%S.%f')
+            }
         
         class filters(RowFilter):
             names =['message','level','process',]

@@ -14,6 +14,9 @@ class GeneralLog(models.Model):
         indexes = [
             models.Index(fields=['createtime']),
         ]
+    
+    def __str__(self):
+        return '普通日志'
 
 
 class BackendOperation(models.Model):
@@ -28,3 +31,6 @@ class BackendOperation(models.Model):
         indexes = [
             models.Index(fields=['createtime']),
         ]
+    
+    def __str__(self):
+        return '操作日志'    
