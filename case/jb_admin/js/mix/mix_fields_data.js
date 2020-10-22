@@ -74,8 +74,9 @@ var mix_fields_data ={
             var heads = ex.filter(self.heads,function(head){
                 if (head.sublevel){
                     return false
-                }else if(head.show){
-                    return ex.eval(head.show,{row:self.row,head:head})
+                }else if(head.show || head.show_express){
+                    var show_express = head.show_express || head.show
+                    return ex.eval(show_express,{row:self.row,head:head})
                 }else{
                     return true
                 }
@@ -91,8 +92,9 @@ var mix_fields_data ={
         },
         normed_ops(){
             return ex.filter(this.ops,op=>{
-                if(op.show){
-                    return ex.eval(op.show,{vc:this})
+                if(op.show || op.show_express){
+                    var show_express= op.show_express || op.show
+                    return ex.eval( show_express ,{vc:this})
                 }else{
                     return true
                 }

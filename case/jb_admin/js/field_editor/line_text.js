@@ -28,8 +28,9 @@ var line_text={
         if(this.head.css){
             ex.append_css(this.head.css)
         }
-        if(this.head.on_mounted){
-            ex.eval(this.head.on_mounted,{vc:this})
+        var mounted_express = this.head.mounted_express || this.head.on_mounted
+        if(mounted_express){
+            ex.eval(mounted_express,{vc:this})
         }
     }
 }

@@ -3,7 +3,15 @@ var filter_input = {
     props:['head','search_args','config'],
     template:`<div class="com-filter-input">
     <span v-if="head.show_label"><span  v-text="head.label"></span>:</span>
-        <input @keyup.enter="parStore.search()" type="text" v-model='search_args[head.name]' class="form-control input-sm" :placeholder="myplaceholder">
+
+        <el-input class="input-with-select"
+                  :placeholder="myplaceholder"
+                  @keyup.native.13="parStore.search()"
+                  size="small"
+                  maxlength="200"
+                  v-model="search_args[head.name]">
+        </el-input>
+        <!--<input @keyup.enter="parStore.search()" type="text" v-model='search_args[head.name]' class="form-control input-sm" :placeholder="myplaceholder">-->
     </div>
     `,
     data:function(){
