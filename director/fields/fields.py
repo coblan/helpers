@@ -632,7 +632,7 @@ class ModelFields(forms.ModelForm):
         return {}
     
     def save_log(self, dc): 
-        modelfields_log.info(json.dumps(dc, cls=DirectorEncoder))
+        modelfields_log.info(json.dumps(dc, cls=DirectorEncoder,ensure_ascii=False))
     
     def get_pop_edit_ctx(self,getrow='{pk:scope.vc.par_row.pk}',):
         ctx = self.get_head_context()
