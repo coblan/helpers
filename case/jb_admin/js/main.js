@@ -128,7 +128,7 @@ import * as table_operator_main from  './table_operator/main'
 import * as table_filter_main from './table_filter/main'
 
 import * as page_com_main from './page_com/main'
-import * as table_chart_editor_main from './table_chart_editor/main'
+
 
 import  * as table_local_input from './table_editor/local_input/main'
 
