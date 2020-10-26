@@ -2,8 +2,8 @@
     <div class="com-field-select">
         <span v-if='head.readonly' v-text='get_label(head.options,row[head.name])'></span>
         <div v-else>
-            <input type="text" style="display: none" :id="'id_'+head.name" :name="head.name" v-model="row[head.name]">
-            <el-select  v-model="row[head.name]" :filterable="head.filterable" :placeholder="head.placeholder" size="small" :clearable="!head.required" >
+            <input type="text" style="display: none" :id="'id_'+head.name" :name="head.name" v-model="row[head.name]"><!-- :clearable="!head.required"-->
+            <el-select  v-model="row[head.name]" :filterable="head.filterable" :placeholder="head.placeholder" size="small"  clearable>
                 <el-option
                         v-for="item in normed_options"
                         :key="item.value"
