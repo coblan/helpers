@@ -183,7 +183,7 @@ def parser_excel(url,dispatch_head,valid_row=[]):
         #if count >0:
         dc={}
         for k,v in dispatch_head.items():
-            if not k.startswith(('_','meta_')):
+            if not k.startswith(('_','meta_')) and v!='':
                 index = int(v)
                 
                 dc[k]=row[index]

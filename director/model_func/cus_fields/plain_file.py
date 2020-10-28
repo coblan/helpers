@@ -6,7 +6,9 @@ import re
 from django.utils.text import Truncator
 
 class PlainFileField(models.CharField):
-    pass
+    def __init__(self,accept='', **kwargs): 
+        super().__init__( **kwargs)
+        self.accept = accept
 
 class PlainFileProc(BaseFieldProc):
     '''
@@ -23,7 +25,13 @@ class PlainFileProc(BaseFieldProc):
     
     def dict_field_head(self,head):
         head['editor']='com-field-plain-file'
-        
+        head['config']={
+            #'multiple':False,
+            'accept':self.field.accept,
+            #'upload_url':'/d/upload?path=public/activity', 
+           #'media\public\activity'
+            #'upload_url':reverse('app_pkg_upload')
+        }         
         return head
 
 field_map[PlainFileField]=PlainFileProc

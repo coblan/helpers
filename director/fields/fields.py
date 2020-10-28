@@ -590,13 +590,14 @@ class ModelFields(forms.ModelForm):
                 'user': self.crt_user.username if self.crt_user.is_authenticated else 'anonymous',
                 '_before': self.before_changed_data,
                 '_after': after_changed_data,
+                '_label':{x:self.fields.get(x).label for x in self.changed_data},
             }
             if extra_log:
                 dc.update(extra_log)
             if self.op_log:
                 dc.update(self.op_log)
             #sql_log.info(json.dumps(dc,cls=DirectorEncoder)) 
-            modelfields_log.info(json.dumps(dc,cls=DirectorEncoder))
+            modelfields_log.info(json.dumps(dc,cls=DirectorEncoder,ensure_ascii=False))
         self.after_save()
         return self.instance
     
@@ -631,7 +632,7 @@ class ModelFields(forms.ModelForm):
         return {}
     
     def save_log(self, dc): 
-        modelfields_log.info(json.dumps(dc, cls=DirectorEncoder))
+        modelfields_log.info(json.dumps(dc, cls=DirectorEncoder,ensure_ascii=False))
     
     def get_pop_edit_ctx(self,getrow='{pk:scope.vc.par_row.pk}',):
         ctx = self.get_head_context()
