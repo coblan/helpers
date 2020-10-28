@@ -68,7 +68,7 @@ def SET(scope):
               'propagate': False,
           },
           'django': {
-              'handlers': ['console', 'error_warning'] , #'djangoout_warning', 'mail_admins', 'elk_warning'],
+              'handlers': ['console', ] , #'djangoout_warning', 'mail_admins', 'elk_warning'],
               'level': 'INFO',
               'propagate': True,
               },          
