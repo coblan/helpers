@@ -109,8 +109,6 @@ import * as header_main from  './header/main.js'
 
 //ui
 import * as stack_widget from './misc/stack_widget'
-import * as el_tab_widget from './misc/el_tab_widget'
-
 // store
 //import * as table_store from './store/table_store'
 
