@@ -1,6 +1,6 @@
 
 <template>
-    <div class="com-field-blocktext">
+    <div class="com-field-blocktext" :class="head.class">
         <pre class="mypre" v-if='head.readonly' v-text='row[head.name]'></pre>
             <textarea :style="head.style" v-else :maxlength="head.maxlength" class="form-control input-sm"
                       :name="head.name"
@@ -11,6 +11,14 @@
 <script>
 export default {
     props:['row','head'],
+    mounted(){
+        if(this.head.mounted_express){
+            ex.eval(this.head.mounted_express,{vc:this,})
+        }
+        if(this.head.css){
+            ex.append_css(this.head.css)
+        }
+    }
 }
 </script>
 <style scoped lang="scss">
