@@ -6,7 +6,7 @@ from .. .base_data import field_map
 from django.utils.translation import ugettext as _
 from ..dictfy  import model_to_name,name_to_model
 from helpers.director.middleware.request_cache import get_request_cache
-from pypinyin import lazy_pinyin
+#from pypinyin import lazy_pinyin
 
 class ForeignProc(BaseFieldProc):
     def to_dict(self,inst,name):
@@ -48,7 +48,7 @@ class ForeignProc(BaseFieldProc):
                 ls=this_field.get_choices()
                 ls=ls[1:]
                 options = [{'value':x[0],'label':x[1]} for x in ls] 
-                options=sorted(options,key=lambda item: ''.join(lazy_pinyin(item.get('label'))) )
+                #options=sorted(options,key=lambda item: ''.join(lazy_pinyin(item.get('label'))) )
                 catch[option_name] = options
                 return options
             options= mychoice_func  
