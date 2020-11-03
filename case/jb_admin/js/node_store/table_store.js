@@ -40,7 +40,6 @@ var table_store={
                 ex.eval(this.head.created_express,{par_row:this.par_row,ps:this,vc:this.vc})
             }
         }
-
     },
     computed:{
         changed:function(){
