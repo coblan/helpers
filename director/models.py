@@ -45,7 +45,7 @@ EDITOR_TYPE=(
 )
 
 class KVModel(models.Model):
-    key=models.CharField('key',max_length=200,blank=True,unique=True)
+    key=models.CharField('key',max_length=100,blank=True,unique=True)
     value=models.TextField(verbose_name='value',blank=True)
     update = models.DateTimeField(auto_now=True)
     #update=models.DateTimeField(auto_now=True)
