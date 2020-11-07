@@ -46,12 +46,17 @@
                     return this.row[this.head.name]
                 },
                 set(v){
-                    if(v ){
+                    if(/^\d+$/.test(v)){
                         Vue.set(this.row,this.head.name,parseInt(v))
-//                        this.row[this.head.name] = parseInt(v)
                     }else{
-                        this.row[this.head.name] =v
+                        Vue.set(this.row,this.head.name,'')
                     }
+//                    if(v ){
+//                        Vue.set(this.row,this.head.name,parseInt(v))
+////                        this.row[this.head.name] = parseInt(v)
+//                    }else{
+//                        this.row[this.head.name] =v
+//                    }
                 }
             }
         },
