@@ -33,6 +33,10 @@ Vue.component('com-field-select',{
         }
     },
     mounted:function(){
+        if(this.head.mounted_express){
+            ex.eval(this.head.mounted_express,{vc:this,row:this.row,head:this.head})
+        }
+
         if(!this.head.validate_showError){
             Vue.set(this.head,'error','')
             this.head.validate_showError="scope.head.error=scope.msg"
