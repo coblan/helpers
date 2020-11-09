@@ -590,7 +590,7 @@ class ModelFields(forms.ModelForm):
                 'user': self.crt_user.username if self.crt_user.is_authenticated else 'anonymous',
                 '_before': self.before_changed_data,
                 '_after': after_changed_data,
-                '_label':{x:self.fields.get(x).label for x in self.changed_data},
+                '_label':{x: str( self.fields.get(x).label) for x in self.changed_data},
             }
             if extra_log:
                 dc.update(extra_log)

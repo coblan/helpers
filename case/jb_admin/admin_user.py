@@ -72,6 +72,11 @@ class UserFields(ModelFields):
             head['editor'] = 'com-field-multi-chosen'
         if head['name'] == 'username':
             head['label']='账号'
+            head['help_text'] = '填写字母,数字或者下划线(_),长度为2~50'
+            head['fv_rule'] = 'length(2~50);regexp(^\w+$ , 只能有字母,数字和下划线)' #
+            #express = ''
+            #msg = ''
+            #head['fv_rule']='length(2~50);express(%s , %s)'%( express.decode('utf-8'),msg.decode('utf-8'))
         return head
 
     def getExtraHeads(self):
