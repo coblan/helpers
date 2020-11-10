@@ -24,4 +24,3 @@ var submit_btn = {
 }
 
 Vue.component('com-op-submit',submit_btn)
-Vue.component('com-btn',submit_btn)
