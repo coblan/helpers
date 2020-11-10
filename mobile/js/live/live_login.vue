@@ -1,5 +1,6 @@
 <template>
-    <div class="live-login">
+    <div class="live-login"
+         :style="{backgroundImage:'url(/static/mobile/76f93439-7072-45dd-b257-c09603e01ad7_thumb.jpg)'}">
         <div class="login-form">
             <div class="title">
                 <span v-html="ctx.title"></span>
@@ -70,9 +71,9 @@
 .live-login{
     position: relative;
     height: var(--app-height);
-    background: url("/static/mobile/76f93439-7072-45dd-b257-c09603e01ad7_thumb.jpg");
     background-size: 100% 100%;
     color: white;
+    /*background-image: url('@/static/mobile/76f93439-7072-45dd-b257-c09603e01ad7_thumb.jpg');*/
 
 }
 .login-form{

@@ -1,14 +1,14 @@
 var path = require( 'path' );
 
 var webpack = require('D:/coblan/webcode/node_modules/webpack')
-
 //const VueLoaderPlugin = require('D:/coblan/webcode/node_modules/vue-loader/lib/plugin')
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 
+var webpack = require('webpack')
 module.exports =
 {
     //context:__dirname,
-    mode:'production', // 'development', //
+    mode: 'production', // 'development', //
     entry: {
         mobile:'./main.js',
     },
@@ -20,7 +20,8 @@ module.exports =
     watch: true,
     resolve:{
         alias: {
-            jb_admin: path.resolve(__dirname,"../../case/jb_admin/js")
+            jb_admin: path.resolve(__dirname,"../../case/jb_admin/js"),
+            //'@':path.resolve('..')
         },
         modules:["D:/coblan/webcode/node_modules"],
     },
@@ -31,6 +32,10 @@ module.exports =
     },
     module: {
         rules: [
+            //{
+            //    test: /\.(png|jpg|gif)$/,
+            //    loader: 'url-loader?limit=10000&name=../images/[name].[ext]'
+            //},
             {
                 test: /\.vue$/,
                 loader: 'vue-loader'
@@ -52,7 +57,8 @@ module.exports =
                 test: /\.scss$/,
                 use: [{
                     loader: "style-loader" // creates style nodes from JS strings
-                }, {
+                },
+                    {
                     loader: "css-loader" // translates CSS into CommonJS
                 }, {
                     loader: "sass-loader" // compiles Sass to CSS
@@ -87,7 +93,6 @@ module.exports =
     },
     plugins: [
         new VueLoaderPlugin(),
-
 
         //new UglifyJSPlugin()
         //new webpack.DefinePlugin({
