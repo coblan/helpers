@@ -35,11 +35,15 @@ class ModelFieldsMobile(ModelFields):
 class FieldsMobile(Fields):
     def get_operations(self):
         return [
-            { 'name':'save','editor':'com-op-submit','label':'确定', 
+            { 'name':'save',
+              #'editor':'com-op-submit',
+              'editor':'com-btn',
+              'label':'确定', 
               'default_after_save':'''cfg.toast("保存成功");
               if(scope.ps.vc.par_row){
                     ex.vueAssign(scope.ps.vc.par_row,row)
                     } 
               ''',
-              'action':'if(!scope.ps.vc.ctx.after_save){scope.ps.vc.ctx.after_save=scope.head.default_after_save}; scope.ps.vc.submit()'}
+              'click_express':'if(!scope.ps.vc.ctx.after_save){scope.ps.vc.ctx.after_save=scope.head.default_after_save}; scope.ps.vc.submit()'}              
+              #'action':'if(!scope.ps.vc.ctx.after_save){scope.ps.vc.ctx.after_save=scope.head.default_after_save}; scope.ps.vc.submit()'}
         ]
