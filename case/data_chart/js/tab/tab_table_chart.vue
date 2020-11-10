@@ -97,7 +97,6 @@
             })
             },
             draw_item(item){
-                debugger
                 var myChart = echarts.init($(this.$el).find('.mychart-' + item.name)[0]);
 
                 if (item.x) {
