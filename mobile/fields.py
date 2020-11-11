@@ -39,11 +39,11 @@ class FieldsMobile(Fields):
               #'editor':'com-op-submit',
               'editor':'com-btn',
               'label':'确定', 
-              'default_after_save':'''cfg.toast("保存成功");
+              'default_after_save':'''cfg.toast("操作成功");
               if(scope.ps.vc.par_row){
                     ex.vueAssign(scope.ps.vc.par_row,row)
                     } 
               ''',
-              'click_express':'if(!scope.ps.vc.ctx.after_save){scope.ps.vc.ctx.after_save=scope.head.default_after_save}; scope.ps.vc.submit()'}              
+              'click_express':'if(!scope.ps.vc.ctx.after_save && !scope.ps.vc.ctx.after_save_express){scope.ps.vc.ctx.after_save_express=scope.head.default_after_save}; scope.ps.vc.submit()'}              
               #'action':'if(!scope.ps.vc.ctx.after_save){scope.ps.vc.ctx.after_save=scope.head.default_after_save}; scope.ps.vc.submit()'}
         ]
