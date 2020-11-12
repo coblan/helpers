@@ -9,6 +9,7 @@
         <div v-else>
             <van-cell :title="cell.label" :is-link="has_link(cell)" v-for="cell in ctx.cells" @click="onclick(cell)"/>
         </div>
+       <component v-if="ctx.bottom_editors" v-for="item in ctx.bottom_editors" :is="item.editor" :ctx="item"></component>
     </div>
 
 
