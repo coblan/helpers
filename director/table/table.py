@@ -1010,17 +1010,21 @@ class RawTable(ModelTable):
         self.bucket=[]
         if sql:
             with connections[self.model.objects.db].cursor() as cursor:
-                cursor.execute( sql ,self.params)
-                
-                try:
-                    self.bucket.append( self.get_result(cursor) )
-                except ProgrammingError as e:
-                    pass
-                while  cursor.nextset():
+                if isinstance(sql,list):
+                    for item in sql:
+                        cursor.execute(item.get('sql'),item.get('params',[]))
+                        self.bucket.append( self.get_result(cursor) )
+                else:
+                    cursor.execute( sql ,self.params,)
                     try:
                         self.bucket.append( self.get_result(cursor) )
                     except ProgrammingError as e:
                         pass
+                    while  cursor.nextset():
+                        try:
+                            self.bucket.append( self.get_result(cursor) )
+                        except ProgrammingError as e:
+                            pass
                         
             self.pagenum.count = self.bucket[1][0]['count']
             if len(self.bucket)>2:
