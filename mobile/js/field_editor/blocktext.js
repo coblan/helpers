@@ -7,28 +7,48 @@ Vue.component('com-field-blocktext',{
     :readonly="head.readonly"
     :placeholder="normed_placeholder"
     :name="head.name"
+    @blur="on_blur"
   ></van-field>`,
     data(){
         return {
-            inn_value:this.row[this.head.name]
+            inn_value:this.row[this.head.name] || ''
+        }
+    },
+    methods:{
+        on_blur(){
+            Vue.set(this.row,this.head.name,this.inn_value)
         }
     },
     watch:{
-        inn_value(v){
-            if(v != this.row[this.head.name]){
-                this.row[this.head.name] = v
-            }
-        },
-        out_value(v){
-            if(v !=this.inn_value){
-                Vue.set(this,'inn_value',v)
-            }
+        row:{
+            handler(nv){
+                Vue.nextTick(()=>{
+                    if(this.row[this.head.name]){
+                        this.inn_value = this.row[this.head.name]
+                    }else{
+                        this.inn_value = ''
+                    }
+                })
+
+
+            },
+            deep:true
         }
+        //inn_value(v){
+        //    if(v != this.row[this.head.name]){
+        //        this.row[this.head.name] = v
+        //    }
+        //},
+        //out_value(v){
+        //    if(v !=this.inn_value){
+        //        Vue.set(this,'inn_value',v)
+        //    }
+        //}
     },
     computed:{
-        out_value(){
-            return   this.row[this.head.name]
-        },
+        //out_value(){
+        //    return   this.row[this.head.name]
+        //},
         normed_placeholder:function(){
             if(! this.head.readonly){
                 return this.head.placeholder || '请输入'+this.head.label
@@ -38,6 +58,9 @@ Vue.component('com-field-blocktext',{
         }
     },
     mounted(){
+        if(this.head.mounted_express){
+            ex.eval(this.head.mounted_express,{vc:this,row:this.row,head:this.head})
+        }
         var org = this.row[this.head.name]
         this.row[this.head.name] +='.'
         setTimeout(()=>{
