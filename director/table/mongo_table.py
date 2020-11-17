@@ -27,7 +27,7 @@ class MongoTable(PlainTable):
                 else:
                     self.filter_args['EventDateTime'].update(query)
         for name in self.value_filter:
-            if self.search_args.get(name):
+            if self.search_args.get(name) or self.search_args.get(name)==0:
                 self._filter_value(name, self.search_args.get(name))
         
         if self.search_args.get('_qf') and  self.search_args.get('_q') !='':
