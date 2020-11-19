@@ -83,6 +83,11 @@ def SET(scope):
               'level': 'DEBUG',
               'propagate': False,              
               },
+          'operation': {
+              'handlers': ['backend_operation'] , # 'elk_debug'],
+              'level': 'DEBUG',
+              'propagate': False,              
+              },          
       }
     }
     

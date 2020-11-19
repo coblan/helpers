@@ -58,11 +58,17 @@ export function get_proper_size(){
     var wh=$(window).height()
     var width = 0
     var height = 0
-    if(ww>1400){width = '1000px'}
+    if(ww > 1800){width = '1200px'}
+    else if(ww>1600){width = '1100px'}
+    else if(ww>1500){width = '1050px'}
+    else if(ww>1400){width = '1000px'}
+    else if(ww>1200){width = '900px'}
     else if(ww>900){ width ='800px'}
     else {width=ww*0.9+'px'}
 
-    if(wh>1200){height ='800px' }
+    if (wh > 1400){height ='1000px'}
+    else if(wh>1300){height ='900px' }
+    else if(wh>1200){height ='800px' }
     else if(wh>700){height = '600px'}
     else {height=wh*0.9+'px'}
     return [width,height]
