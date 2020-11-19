@@ -1,5 +1,6 @@
 from helpers.director.shortcut import TablePage,ModelTable,ModelFields,page_dc,RowFilter,director
 from .models import GeneralLog
+from django.conf import settings
 
 class GeneralLogPage(TablePage):
     def get_label(self):
@@ -34,6 +35,12 @@ class GeneralLogPage(TablePage):
             names =['message','level','process',]
             icontains = ['message','level','process',]
             range_fields = ['createtime']
+            
+            #def clean_search_args(self, search_args):
+                #if search_args.get('message'):
+                    #if settings.DATABASES['default']['ENGINE'] =='django.db.backends.mysql':
+                        #search_args['message__search'] = search_args.pop('message')
+                #return search_args
 
 class GeneralLogForm(ModelFields):
     class Meta:
