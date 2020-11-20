@@ -36,6 +36,7 @@ from . import js_cfg
 from . import dapi
 from helpers.func.sim_signal import sim_signal
 from .base_data import inspect_dict
+from . import model_adapte
 
 # 定制User表的显示方式
 def get_first_name(self):
