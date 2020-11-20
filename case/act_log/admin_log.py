@@ -36,11 +36,11 @@ class GeneralLogPage(TablePage):
             icontains = ['message','level','process',]
             range_fields = ['createtime']
             
-            #def clean_search_args(self, search_args):
-                #if search_args.get('message'):
-                    #if settings.DATABASES['default']['ENGINE'] =='django.db.backends.mysql':
-                        #search_args['message__search'] = search_args.pop('message')
-                #return search_args
+            def clean_search_args(self, search_args):
+                if search_args.get('message'):
+                    if getattr(settings,'DB_FULL_SEARCH',False):
+                        search_args['message__search'] = search_args.pop('message')
+                return search_args
 
 class GeneralLogForm(ModelFields):
     class Meta:
