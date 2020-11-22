@@ -10,7 +10,7 @@ var webpack = require('webpack')
 module.exports =
 {
     //context:__dirname,
-    mode:'development', // 'production', //
+    mode: 'production', //'development', //
     entry: {
         data_chart:'./main.js',
     },

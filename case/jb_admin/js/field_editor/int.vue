@@ -4,7 +4,7 @@
         <div  v-else class="form-inline">
 
 
-            <el-input v-model="row[head.name]" size="small" :placeholder="head.placeholder" :readonly="head.readonly"
+            <el-input v-model="mydata" size="small" :placeholder="head.placeholder" :readonly="head.readonly"
                       :name="head.name"
                       :id="'id_'+head.name"
                       @keypress.native="isNumber($event)"
@@ -37,16 +37,36 @@
         props:['row','head'],
         data(){
           return {
-              mydata:this.row[this.head.name]
+//              mydata:this.row[this.head.name]
           }
         },
-        watch:{
-          mydata(v){
-              if(v || v==0){
-                  this.row[this.head.name] = parseInt(v)
-              }
-          }
+        computed:{
+            mydata:{
+                get(){
+                    return this.row[this.head.name]
+                },
+                set(v){
+                    if(/^\d+$/.test(v)){
+                        Vue.set(this.row,this.head.name,parseInt(v))
+                    }else{
+                        Vue.set(this.row,this.head.name,'')
+                    }
+//                    if(v ){
+//                        Vue.set(this.row,this.head.name,parseInt(v))
+////                        this.row[this.head.name] = parseInt(v)
+//                    }else{
+//                        this.row[this.head.name] =v
+//                    }
+                }
+            }
         },
+//        watch:{
+//          mydata(v){
+//              if(v || v==0){
+//                  this.row[this.head.name] = parseInt(v)
+//              }
+//          }
+//        },
         created(){
         },
         mounted(){

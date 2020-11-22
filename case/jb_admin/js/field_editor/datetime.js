@@ -1,10 +1,10 @@
 var lay_datetime={
     props:['row','head'],
     template:`<div class="com-field-datetime">
-    <span class="readonly-info" v-show='head.readonly' v-text='row[head.name]'></span>
+    <span class="readonly-info" v-show='head.readonly' v-text='inn_data'></span>
       <el-date-picker
         v-if="!head.readonly"
-      v-model="row[head.name]"
+      v-model= inn_data
       type="datetime"
       :placeholder="head.placeholder"
       align="right"
@@ -15,8 +15,32 @@ var lay_datetime={
     </el-date-picker>
     <input style="display: none" type="text" :name="head.name" :id="'id_'+head.name" v-model="row[head.name]">
                </div>`,
+    //watch:{
+    //    row:{
+    //        handle(nv){
+    //            debugger
+    //            this.inn_data =this.row[this.head.name]
+    //        },
+    //        deep:true,
+    //    }
+    //},
+    watch:{
+        out_data(nv){
+            this.inn_data = nv
+        },
+        inn_data(nv){
+            this.row[this.head.name] = nv
+        }
+    },
+    //methods:{
+    //    on_blur(){
+    //        this.row[this.head.name] =  this.inn_data
+    //    }
+    //},
     data(){
+        Vue.set(this.row,this.head.name,this.row[this.head.name]||'')
         return {
+            inn_data:this.row[this.head.name],
             pickerOptions: {
                 shortcuts: [{
                     text: '今天',
@@ -57,6 +81,9 @@ var lay_datetime={
         var self=this
     },
     computed:{
+        out_data(){
+           return this.row[this.head.name]
+        },
         can_clear(){
             if(this.head.clearable ==undefined){
                 return true

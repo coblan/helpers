@@ -16,15 +16,17 @@ class MobileLogin(FieldsPage):
     
     def get_context(self):
         ctx = super().get_context()
-        ctx.update({
+        dc = {
             'title':'用户登录',
-            'footer':[
+            'after_save':'location=search_args.next;cfg.toast("登录成功!")'
+        }
+        if  getattr(self.engin,'can_regist',True):
+            dc['footer'] =  [
                 {'label':'忘记密码','action':'cfg.toast("请联系管理员重置密码!")'},
                 {'label':'立即注册','action':'location="/mb/regist"'}
-            ],
-            #'init_express':'scope.row._director_name="mb-login-form"',
-            'after_save':'location=search_args.next;cfg.toast("登录成功!")'
-        })
+            ]
+
+        ctx.update(dc)
         return {
             'editor_ctx':ctx,
             'editor': 'live_login', #'live_fields',

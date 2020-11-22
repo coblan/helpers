@@ -90,7 +90,12 @@ var order_list =  {
     watch:{
         out_row_this_field:function(){
             if(this.row[this.head.name]){
-                this.rows = JSON.parse(this.row[this.head.name])
+                if(typeof this.row[this.head.name] =='string'){
+                    this.rows = JSON.parse(this.row[this.head.name])
+                }else{
+                    this.rows = this.row[this.head.name]
+                }
+
             }else{
                 this.rows = []
             }

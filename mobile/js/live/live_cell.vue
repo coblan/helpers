@@ -9,6 +9,7 @@
         <div v-else>
             <van-cell :title="cell.label" :is-link="has_link(cell)" v-for="cell in ctx.cells" @click="onclick(cell)"/>
         </div>
+       <component v-if="ctx.bottom_editors" v-for="item in ctx.bottom_editors" :is="item.editor" :ctx="item"></component>
     </div>
 
 
@@ -31,11 +32,13 @@
         },
         methods:{
             has_link(cell){
-                return cell.action ? true : false
+                var click_express = cell.click_express || cell.action
+                return click_express ? true : false
             },
             onclick(cell){
-                if(cell.action){
-                    ex.eval(cell.action,{head:cell})
+                var click_express = cell.click_express || cell.action
+                if(cell.click_express){
+                    ex.eval(cell.click_express,{head:cell})
                 }
             },
         }

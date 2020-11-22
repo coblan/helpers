@@ -3,7 +3,7 @@ Vue.component('com-field-select',{
     template:`<div class="com-field-select van-cell" :class="{'van-cell--required':head.required && !head.readonly,'readonly':head.readonly}">
        <div style="position: relative">
         <van-popup  v-model="show" position="bottom">
-                <van-picker :columns="head.options" :default-index="crt_index"
+                <van-picker :columns="normed_options" :default-index="crt_index"
                 cancel-button-text="清空"
                 @confirm="onConfirm" @cancel="clear()" value-key="label" show-toolbar></van-picker>
           </van-popup>
@@ -27,12 +27,18 @@ Vue.component('com-field-select',{
     </div>
 `,
     data:function(){
+        Vue.set(this.row,this.head.name,this.row[this.head.name] ||  '')
         return {
             parStore:ex.vueParStore(this),
-            show:false
+            show:false,
+            options:this.head.options || [],
         }
     },
     mounted:function(){
+        if(this.head.mounted_express){
+            ex.eval(this.head.mounted_express,{vc:this,row:this.row,head:this.head})
+        }
+
         if(!this.head.validate_showError){
             Vue.set(this.head,'error','')
             this.head.validate_showError="scope.head.error=scope.msg"
@@ -49,9 +55,29 @@ Vue.component('com-field-select',{
         }
     },
     computed:{
+        normed_options(){
+            /*
+             head.hide_related_field设置 隐藏与 row.hide_related_field 相等的选项
+             * */
+            var self=this
+            if(this.head.option_show_express){
+                var array = ex.filter(this.options,(item)=>{
+                    return ex.eval(this.head.option_show_express,{option:item,row:self.row,ps:self.parStore,vc:self})
+                })
+            }else {
+                var array = ex.filter(this.options,(item)=>{
+                    if(item.show_express){
+                        return ex.eval(item.show_express,{option:item,row:self.row,ps:self.parStore,vc:self})
+                    }else{
+                        return true
+                    }
+                })
+            }
+            return array
+        },
         crt_index:function(){
             let value = this.row[this.head.name]
-            let value_list = this.head.options.map((opetion)=>{
+            let value_list = this.options.map((opetion)=>{
                 return opetion.value
             })
             return value_list.indexOf(value)
@@ -60,8 +86,9 @@ Vue.component('com-field-select',{
             return this.row[this.head.name]
         },
         show_label:function(){
+
             let value = this.row[this.head.name]
-            let find = ex.findone(this.head.options,{value:value})
+            let find = ex.findone(this.options,{value:value})
             var label = value
             if(find){
                 label = find.label
