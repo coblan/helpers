@@ -84,7 +84,7 @@ class UserFields(ModelFields):
         if  'password' in self.permit.changeable_fields():
             ls.append({
                 'name': 'user_password', 'label': '用户密码', 'editor': 'com-field-linetext', 'required': '!scope.row.pk',
-                'fv_msg':'新建用户必须输入密码！','help_text':'如果填写,将会直接替换原来的用户密码'
+                'fv_msg':'新建用户必须输入密码！','help_text':'原有密码已被隐藏。输入框留空,则不会修改原有密码;如填写,将会覆盖原有密码。'
             })
         return ls
     
