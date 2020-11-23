@@ -12,7 +12,8 @@ if getattr(settings,'DB_FULL_SEARCH',False) and  \
             lhs, lhs_params = self.process_lhs(compiler, connection)
             rhs, rhs_params = self.process_rhs(compiler, connection)
             params = lhs_params + rhs_params
-            return 'MATCH (%s) AGAINST (%s IN BOOLEAN MODE)' % (lhs, rhs), params
+            #return 'MATCH (%s) AGAINST (%s IN BOOLEAN MODE)' % (lhs, rhs), params
+            return 'MATCH (%s) AGAINST (%s)' % (lhs, rhs), params
     
     models.CharField.register_lookup(Search)
     models.TextField.register_lookup(Search)
