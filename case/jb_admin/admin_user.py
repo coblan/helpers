@@ -1,13 +1,13 @@
 
 from django.contrib import admin
 from django.contrib.auth.models import Group,User
-from helpers.director.shortcut import TablePage,ModelTable,page_dc,model_dc,ModelFields, director,RowFilter,director_view,director
+from helpers.director.shortcut import TablePage,ModelTable,page_dc,model_dc,ModelFields, director,RowFilter,director_view,director,director_element
 from helpers.director.models import PermitModel 
 import re
 from . import  js_cfg
 from django.utils.translation import ugettext as _
 from helpers.director.shortcut import model_to_name, model_full_permit, add_permits, model_read_permit,RowSearch
-from django.db.models import Count
+from django.db.models import Count,F
 import json
 # Register your models here.
 class UserPage(TablePage):
@@ -84,7 +84,7 @@ class UserFields(ModelFields):
         if  'password' in self.permit.changeable_fields():
             ls.append({
                 'name': 'user_password', 'label': '用户密码', 'editor': 'com-field-linetext', 'required': '!scope.row.pk',
-                'fv_msg':'新建用户必须输入密码！','help_text':'如果填写,将会直接替换原来的用户密码'
+                'fv_msg':'新建用户必须输入密码！','help_text':'原有密码已被隐藏。输入框留空,则不会修改原有密码;如填写,将会覆盖原有密码。'
             })
         return ls
     
@@ -150,6 +150,32 @@ class GroupPage(TablePage):
                 {'name':'user_count','label':'用户数'},
             ]
         
+        def get_operation(self):
+            ops = super().get_operation()
+            ops += [
+                {'name':'export_group','label':'导出权限分组','editor':'com-btn',
+                 'click_express':'''
+                 if(scope.ps.selected.length==0){var msg="确定要导出全部权限分组?"} 
+                 else{var msg="确认要导出这"+scope.ps.selected.length + "个权限分组?"}
+                 cfg.confirm(msg).then(()=>{
+                     cfg.show_load();
+                     return ex.director("GroupExport").call("export",{groups:ex.map(scope.ps.selected,item=>{return item.pk })})
+                 }).then((permit_list)=>{
+                     cfg.hide_load();
+                     ex.saveLocalFile(JSON.stringify(permit_list),'groups.json')
+                 })'''},
+                {'name':'export_group','label':'导入权限分组','editor':'com-btn',
+                 'click_express':'''ex.readLocalFile(".json").then((text)=>{
+                    var groups = JSON.parse(text)
+                    cfg.show_load();
+                    return ex.director("GroupExport").call("import_",{groups:groups})
+                 }).then(()=>{
+                    cfg.hide_load();
+                    scope.ps.search()
+                 }) ''' },
+            ]
+            return ops
+        
         #def dict_head(self, head):
             
             #if head['name']=='name':
@@ -211,6 +237,31 @@ class GroupUserList(UserPage.tableCls):
     @classmethod
     def get_edit_director_name(cls):
         return UserPage.tableCls.get_edit_director_name()
+
+@director_element('GroupExport')
+class GroupExport(object):
+    def export(self,groups=None):
+        if groups:
+            query = Group.objects.filter(pk__in=groups)
+        else:
+            query = Group.objects.all()
+        outls = []
+        for inst in query.annotate(permit=F('permitmodel__names')):
+            outls.append({'id':inst.pk,'name':inst.name,'permit':inst.permit})
+            #PermitModel
+        return outls
+    
+    def import_(self,groups):
+        for group in groups:
+            inst,_ = Group.objects.get_or_create(pk = group.get('id'))
+            inst.name= group.get('name')
+            inst.save()
+            p_inst , _ = PermitModel.objects.get_or_create(group= inst)
+            p_inst.names = group.get('permit','')
+            p_inst.save()
+            
+        
+
 
 class GroupForm(ModelFields):
     field_sort = ['name']

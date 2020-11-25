@@ -6,7 +6,6 @@ from django.db import models
 from django.utils.translation import ugettext as _
 from .model_func.jsonfield import JsonField
 
-
 class LogModel(models.Model):
     "操作日志"
     operation = models.CharField('操作类型',max_length=100,blank=True)

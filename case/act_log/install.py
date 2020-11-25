@@ -79,12 +79,12 @@ def SET(scope):
               'propagate': False,            
               },
           'ModelFields.save_form': {
-              'handlers': ['backend_operation'] , # 'elk_debug'],
+              'handlers': ['backend_operation','console',] , # 'elk_debug'],
               'level': 'DEBUG',
               'propagate': False,              
               },
           'operation': {
-              'handlers': ['backend_operation'] , # 'elk_debug'],
+              'handlers': ['backend_operation','console',] , # 'elk_debug'],
               'level': 'DEBUG',
               'propagate': False,              
               },          
