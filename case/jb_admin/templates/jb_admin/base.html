@@ -136,11 +136,12 @@ desired effect
 {% include 'director/reverse.html' %}
 
 <script>
-    if(js_config.is_debug){
+    /*if(js_config.is_debug){
         Vue.config.devtools = true
     }else{
         Vue.config.devtools = false
     }
+    */
 
     menu= {{menu| jsonify}}
     menu_search={{ menu_search | jsonify}}
