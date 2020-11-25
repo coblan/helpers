@@ -41,11 +41,19 @@ class ExcelFields(ModelFields):
         return '''
         var ctx = named_ctx["%(director_name)s"]
         ex.uploadfile({accept:".xlsx, .xls, .csv"})
-            .then((resp)=>{return ex.director("%(director_name)s").call("parse_excel_head",{url:resp[0],par_row:scope.ps.vc.par_row.pk}) } )
+            .then((resp)=>{
+               debugger;
+               if(scope.ps.vc.par_row){
+                  return ex.director("%(director_name)s").call("parse_excel_head",{url:resp[0],par_row:scope.ps.vc.par_row.pk})
+               }else{
+                  return ex.director("%(director_name)s").call("parse_excel_head",{url:resp[0]}) 
+               } })
             .then((resp)=>{ 
                 ex.each(ctx.heads,head=>{head.options=resp.options});
                 ctx.row=resp.row;
-                ctx.row.par_row_pk = scope.ps.vc.par_row.pk
+                if(scope.ps.vc.par_row){
+                   ctx.row.par_row_pk = scope.ps.vc.par_row.pk
+                }
                 return cfg.pop_vue_com('com-form-one',ctx)
             }).then(()=>{
                scope.ps.search()
@@ -106,20 +114,19 @@ class ExcelFields(ModelFields):
         '''
         return parser_excel(url, dispatch_head,valid_row)
     
-    #def save_form(self):
-        #url = self.kw.pop('meta__url')
-        #record = self.kw.pop('record')
-        #out_list = []
-        #for row in parser_excel(url,self.kw,valid_row=['id_code']):
-            #row.update({
-                 #'record_id':record
-            #} )
-            #out_list.append(Salary(**row))
-        ##print(out_list)
-        #try:
-            #Salary.objects.bulk_create(out_list)
-        #except Exception as e:
-            #raise UserWarning(str(e))
+    def save_form(self):
+        """ 普通的报错逻辑 , 如果有 par_row_pk 字段的话，需要重写 save_form 的row数据"""
+        url = self.kw.pop('meta__url')
+     
+        out_list = []
+        model = self._meta.model
+        for row in self.parser_excel(url,self.kw):
+            out_list.append(model(**row))
+
+        try:
+            model.objects.bulk_create(out_list)
+        except Exception as e:
+            raise UserWarning(str(e))
 
 @director_view('func.get_excel_head')
 def get_excel_head(url):
@@ -222,6 +229,12 @@ def parse_xls(path):
             if obj.value and str(obj).startswith('xldate'):
                 rt = xlrd.xldate.xldate_as_datetime(obj.value, xlrd.Book.datemode)
                 rowList.append(rt . strftime('%Y-%m-%d'))
+            elif str(obj).startswith('number'):
+                # 排除 123 解析成 123.0 这种问题
+                if int(obj.value) == obj.value:
+                    rowList.append(int( obj.value))
+                else:
+                    rowList.append(obj.value)
             else:
                 rowList.append(obj.value)
         ls.append(rowList)

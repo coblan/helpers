@@ -28,12 +28,14 @@ var operations={
         this.table_par = table_par
         this. head  = ex.findone(this.table_par.heads,{name:this.field})
     },
-    //data:function(){
-        //var self=this
-        //return {
-        //    parStore:ex.vueParStore(self)
-        //}
-    //},
+    data:function(){
+        var self=this
+        var childStore= new Vue()
+        childStore.vc = this
+        return {
+            childStore:childStore
+        }
+    },
     mounted:function(){
         this.parStore = ex.vueParStore(this)
     },

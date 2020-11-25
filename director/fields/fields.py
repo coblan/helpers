@@ -392,13 +392,15 @@ class ModelFields(forms.ModelForm):
     
     def _base_dict_fieldmap_heads(self): 
         out = []
+        model_meta = self._meta.model._meta
         for k,v in self.fields.items():
             #if isinstance(include,(tuple,list)) and k not in include:
                 #continue
             if k in self.hide_fields:
                 continue
             
-            dc = {'name':k,'label':str(v.label),
+            dc = {'name':k,
+                  'label': str( model_meta.get_field(k).verbose_name ) , # str(v.label),
                   'help_text':str(v.help_text),
                   'editor':'com-field-linetext'}
                   

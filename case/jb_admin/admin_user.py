@@ -179,7 +179,7 @@ class GroupPage(TablePage):
                 head['width'] = width.get(head['name'])
             if head['name'] =='user_count':
                 head['editor'] = 'com-table-click'
-                head['table_ctx'] =UserPage.tableCls().get_head_context()
+                head['table_ctx'] =GroupUserList().get_head_context()
                 head['table_ctx'].update({
                     #'init_express':'ex.director_call(scope.vc.ctx.director_name,{car_no:scope.vc.par_row.car_no}).then(res=>ex.vueAssign(scope.row,res))',
                     #'after_save':'scope.vc.par_row.car_no =scope.row.car_no; scope.vc.par_row.has_washed=scope.row.has_washed ',
@@ -200,7 +200,17 @@ class GroupPage(TablePage):
                 'user_count':inst.user_count
             })
             return dc
-        
+
+class GroupUserList(UserPage.tableCls):
+    def get_operation(self):
+        return [
+            #{'name':'create_user','label':'创建用户','editor':'com-btn'},
+            #{'name':'add_user','label':'添加用户','editor':'com-btn'},
+        ]
+    
+    @classmethod
+    def get_edit_director_name(cls):
+        return UserPage.tableCls.get_edit_director_name()
 
 class GroupForm(ModelFields):
     field_sort = ['name']
@@ -338,6 +348,7 @@ director.update({
     'user.picker':UserPicker,
     'jb_group': GroupPage.tableCls,
     'jb_group.edit': GroupForm,
+    'groupuserlist':GroupUserList,
 })
 
 page_dc.update({
