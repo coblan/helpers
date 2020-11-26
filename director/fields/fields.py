@@ -167,6 +167,13 @@ class ModelFields(forms.ModelForm):
             self.is_create = True
         else:
             self.is_create = False
+        #if not self.is_create:
+            ## 有时候 self.changed_data 会错误包含其他字段
+            ## 有问题，因为有些 foreignkey  或者 onetoone字段 读取的时候不存在，报异常
+            #for name in list( self.changed_data ):
+                #if getattr(self.instance,name) == dc.get(name):
+                    #self.changed_data.remove(name)
+        
         self.pop_fields()
         self.init_value()
         
@@ -392,13 +399,15 @@ class ModelFields(forms.ModelForm):
     
     def _base_dict_fieldmap_heads(self): 
         out = []
+        model_meta = self._meta.model._meta
         for k,v in self.fields.items():
             #if isinstance(include,(tuple,list)) and k not in include:
                 #continue
             if k in self.hide_fields:
                 continue
             
-            dc = {'name':k,'label':str(v.label),
+            dc = {'name':k,
+                  'label': str( model_meta.get_field(k).verbose_name ) , # str(v.label),
                   'help_text':str(v.help_text),
                   'editor':'com-field-linetext'}
                   
@@ -590,7 +599,7 @@ class ModelFields(forms.ModelForm):
                 'user': self.crt_user.username if self.crt_user.is_authenticated else 'anonymous',
                 '_before': self.before_changed_data,
                 '_after': after_changed_data,
-                '_label':{x:self.fields.get(x).label for x in self.changed_data},
+                '_label':{x: str( self.fields.get(x).label) for x in self.changed_data},
             }
             if extra_log:
                 dc.update(extra_log)

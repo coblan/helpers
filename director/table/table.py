@@ -613,7 +613,7 @@ class ModelTable(object):
                 #head['options']=catch.get(options_name)
                 
         heads=evalue_container(heads)
-  
+        heads = sorted(heads,key=lambda head: head.get('order',0))
         return heads
     
     def get_model_heads(self): 
@@ -623,7 +623,7 @@ class ModelTable(object):
         model_name = model_to_name(self.model)
         for field in self.model._meta.get_fields():
             if isinstance(field,models.Field): # 可能是为了排除 related_object
-                dc= {'name':field.name,'label':_(field.verbose_name)}
+                dc= {'name':field.name,'label':str(field.verbose_name) }  #  _(field.verbose_name)
                 
                 fieldName = model_name + '.' + field.name
                 if fieldName in field_map:
@@ -1010,17 +1010,21 @@ class RawTable(ModelTable):
         self.bucket=[]
         if sql:
             with connections[self.model.objects.db].cursor() as cursor:
-                cursor.execute( sql ,self.params)
-                
-                try:
-                    self.bucket.append( self.get_result(cursor) )
-                except ProgrammingError as e:
-                    pass
-                while  cursor.nextset():
+                if isinstance(sql,list):
+                    for item in sql:
+                        cursor.execute(item.get('sql'),item.get('params',[]))
+                        self.bucket.append( self.get_result(cursor) )
+                else:
+                    cursor.execute( sql ,self.params,)
                     try:
                         self.bucket.append( self.get_result(cursor) )
                     except ProgrammingError as e:
                         pass
+                    while  cursor.nextset():
+                        try:
+                            self.bucket.append( self.get_result(cursor) )
+                        except ProgrammingError as e:
+                            pass
                         
             self.pagenum.count = self.bucket[1][0]['count']
             if len(self.bucket)>2:

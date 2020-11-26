@@ -22,7 +22,7 @@ class IntProc(BaseFieldProc):
             head['options']=options
             head['editor'] = 'com-field-select'
         else:
-            head['editor'] = 'com-field-number'
+            head['editor'] = 'com-field-int'
             valid_rules.append('integer')
             head['fv_rule'] = ';'.join(valid_rules)
             

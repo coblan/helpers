@@ -6,7 +6,6 @@ from django.db import models
 from django.utils.translation import ugettext as _
 from .model_func.jsonfield import JsonField
 
-
 class LogModel(models.Model):
     "操作日志"
     operation = models.CharField('操作类型',max_length=100,blank=True)
@@ -45,7 +44,7 @@ EDITOR_TYPE=(
 )
 
 class KVModel(models.Model):
-    key=models.CharField('key',max_length=200,blank=True,unique=True)
+    key=models.CharField('key',max_length=100,blank=True,unique=True)
     value=models.TextField(verbose_name='value',blank=True)
     update = models.DateTimeField(auto_now=True)
     #update=models.DateTimeField(auto_now=True)

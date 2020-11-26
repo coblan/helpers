@@ -72,6 +72,11 @@ var tab_table={
                 this.childStore.search()
             })
         }
+
+        if(this.tab_head.mounted_express){
+            ex.eval(this.tab_head.mounted_express,{vc:this,ps:this.parStore,cs:this.childStore,par_row:this.par_row})
+        }
+
     },
     methods:{
         on_show:function (){

@@ -243,7 +243,10 @@ var mix_fields_data ={
 
                     }else{
                         ex.vueAssign(self.row,rt.row)
-                        if(this.head && this.head.after_save && typeof this.head.after_save =='string'){
+                        if(this.head && this.head.after_save_express){
+                            ex.eval(this.head.after_save_express,{ps:self.parStore,vc:self,row:rt.row})
+                        }else  if(this.head && this.head.after_save && typeof this.head.after_save =='string'){
+                            // 老的调用，新的使用 after_save_express
                             ex.eval(this.head.after_save,{ps:self.parStore,vc:self,row:rt.row})
                         }else{
                             // 调用组件默认的

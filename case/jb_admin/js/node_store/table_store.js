@@ -40,7 +40,6 @@ var table_store={
                 ex.eval(this.head.created_express,{par_row:this.par_row,ps:this,vc:this.vc})
             }
         }
-
     },
     computed:{
         changed:function(){
@@ -178,6 +177,9 @@ var table_store={
                     cfg.pop_vue_com('com-form-one',fields_ctx).then(row=>{
                         if(row){
                           self.update_or_insert(row)
+                            if(kws.after_save_express){
+                                ex.eval(kws.after_save_express,{vc:self.vc,ps:self,search_args:self.search_args,row:row})
+                            }
                         }
                     })
                     //var win=pop_fields_layer(crt_row,fields_ctx,function(new_row){
