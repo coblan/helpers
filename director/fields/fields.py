@@ -167,11 +167,12 @@ class ModelFields(forms.ModelForm):
             self.is_create = True
         else:
             self.is_create = False
-        if not self.is_create:
-            # 有时候 self.changed_data 会错误包含其他字段
-            for name in list( self.changed_data ):
-                if getattr(self.instance,name) == dc.get(name):
-                    self.changed_data.remove(name)
+        #if not self.is_create:
+            ## 有时候 self.changed_data 会错误包含其他字段
+            ## 有问题，因为有些 foreignkey  或者 onetoone字段 读取的时候不存在，报异常
+            #for name in list( self.changed_data ):
+                #if getattr(self.instance,name) == dc.get(name):
+                    #self.changed_data.remove(name)
         
         self.pop_fields()
         self.init_value()
