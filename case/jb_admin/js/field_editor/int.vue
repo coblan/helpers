@@ -4,10 +4,11 @@
         <div  v-else class="form-inline">
 
 
-            <el-input v-model="mydata" size="small" :placeholder="head.placeholder" :readonly="head.readonly"
+            <el-input v-model="row[head.name]" size="small" :placeholder="head.placeholder" :readonly="head.readonly"
                       :name="head.name"
                       :id="'id_'+head.name"
                       @keypress.native="isNumber($event)"
+                      @blur.native="on_blur"
                       :autofocus="head.autofocus">
                 <template slot="prepend" >
                     <span  v-if="head.prefix" v-html="head.prefix"></span>
@@ -36,30 +37,34 @@
     export default {
         props:['row','head'],
         data(){
+//            Vue.set(this.row,this.head.name,this.row[this.head.name] || '')
           return {
 //              mydata:this.row[this.head.name]
           }
         },
-        computed:{
-            mydata:{
-                get(){
-                    return this.row[this.head.name]
-                },
-                set(v){
-                    if(/^\d+$/.test(v)){
-                        Vue.set(this.row,this.head.name,parseInt(v))
-                    }else{
-                        Vue.set(this.row,this.head.name,'')
-                    }
-//                    if(v ){
-//                        Vue.set(this.row,this.head.name,parseInt(v))
-////                        this.row[this.head.name] = parseInt(v)
-//                    }else{
-//                        this.row[this.head.name] =v
-//                    }
-                }
-            }
+        created(){
+            this.head.fv_rule +=';integer'
         },
+//        computed:{
+//            mydata:{
+//                get(){
+//                    return this.row[this.head.name]
+//                },
+//                set(v,ov){
+//                    if(/^-*\d+$/.test(v)){
+//                        Vue.set(this.row,this.head.name,parseInt(v))
+//                    }else{
+//                        Vue.set(this.row,this.head.name,ov)
+//                    }
+////                    if(v ){
+////                        Vue.set(this.row,this.head.name,parseInt(v))
+//////                        this.row[this.head.name] = parseInt(v)
+////                    }else{
+////                        this.row[this.head.name] =v
+////                    }
+//                }
+//            }
+//        },
 //        watch:{
 //          mydata(v){
 //              if(v || v==0){
@@ -73,6 +78,9 @@
 
         },
         methods:{
+//            on_blur(){
+//                this.row[this.head.name] =
+//            },
             isNumber:function(evt){
                 evt = (evt) ? evt : window.event;
                 var charCode = (evt.which) ? evt.which : evt.keyCode;
