@@ -83,9 +83,18 @@
     .has_navibar{
         padding-top:66px;
     }
+    .seo-link{
+        position:absolute;
+        height:0;
+        width:0;
+        overflow:hidden;
+    }
 </style>
 <div id="main-panel">
-
+    <div class='navi seo-link'>
+    {% for item in seo_url %}
+      <a href="{{ item.url }}">{{ item.label }}</a>
+    {% endfor %}</div>
     <component class="header-bar" :is="navibar.editor" :ctx="navibar"></component>
     <!--<com-xiu-menu></com-xiu-menu>-->
 
