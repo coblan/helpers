@@ -49,11 +49,11 @@ def expand_permit_names(names):
     return inn_names  
 
 
-def model_read_permit(model): 
+def model_read_permit(model,write=[]): 
     fields = model._meta.get_fields()
     permit = {
         'read': [f.name for f in fields],
-        'write': [],
+        'write': write,
         '_can_create': False,
         '_can_delete': False,
     }
