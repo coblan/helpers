@@ -2,7 +2,7 @@ require('./styl/swiper_fade.styl')
 
 var swiper_fade={
     props:['ctx'],
-    template:`<div class="com-top-swiper-fade" >
+    template:`<div class="com-top-swiper-fade" :class="ctx.class">
     <div class="bg-image" :style="mystyle"></div>
 
     <div class = 'web-wrap'>
@@ -30,6 +30,9 @@ var swiper_fade={
         }
     },
     mounted(){
+        if(this.ctx.css){
+            ex.append_css(this.ctx.css)
+        }
         var self =this
         Vue.nextTick(()=>{
             var swiper = new Swiper($(this.$el).find('.swiper-container'), {
