@@ -40,7 +40,7 @@ var swiper_fade={
                 effect: 'fade',
                 loop: true,
                 autoplay: {
-                    delay: 5000,
+                    delay: this.ctx.delay || 5000,
                     disableOnInteraction: false,
                 },
 
