@@ -17,14 +17,14 @@ class IntProc(BaseFieldProc):
 
     def dict_field_head(self, head): 
         options = self.get_options() 
-        valid_rules = [validator.get_validate_str()  for validator in self.field.validators if hasattr( validator,'get_validate_str') ]
+        #valid_rules = [validator.get_validate_str()  for validator in self.field.validators if hasattr( validator,'get_validate_str') ]
         if options:
             head['options']=options
             head['editor'] = 'com-field-select'
         else:
             head['editor'] = 'com-field-int'
-            valid_rules.append('integer')
-            head['fv_rule'] = ';'.join(valid_rules)
+            #valid_rules.append('integer')
+            #head['fv_rule'] = ';'.join(valid_rules)
             
         return head
     
