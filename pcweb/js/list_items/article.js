@@ -3,21 +3,23 @@ require('./styl/article.styl')
 Vue.component('com-li-article',{
     props:['ctx'],
     template:`<div class="com-li-article">
-    <img :src="ctx.cover" alt="">
+    <img :src="row.cover" alt="">
     <div class="content">
-        <span class="title" :class="{clickable:has_action}" v-text="ctx.title" @click="on_click()"></span>
-        <div class="sub-title" v-text="ctx.sub_title"></div>
+        <span v-if="ctx.click_express" class="title" :class="{clickable:has_action}" v-text="row.title" @click="on_click()"></span>
+         <a v-if="ctx.link_express" class="title" :class="{clickable:has_action}" v-text="row.title" :href="get_link()"></a>
+        <div class="sub-title" v-text="row.sub_title"></div>
     </div>
     </div>`,
     data(){
 
         return {
-            parStore:ex.vueParStore(this)
+            parStore:ex.vueParStore(this),
+            row:this.ctx.row
         }
     },
     computed:{
         has_action(){
-            if(this.parStore.vc.ctx.action){
+            if(this.ctx.click_express){
                 return true
             }else{
                 return false
@@ -25,10 +27,13 @@ Vue.component('com-li-article',{
         }
     },
     methods:{
+        get_link(){
+            return ex.eval(this.ctx.link_express,{vc:this})
+        },
         on_click(){
-            var action= this.parStore.vc.ctx.action
-            if(action){
-                ex.eval(action,{row:this.ctx})
+
+            if(this.ctx.click_express){
+                ex.eval(this.ctx.click_express,{row:this.row})
             }
         }
     }
