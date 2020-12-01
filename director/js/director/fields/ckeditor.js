@@ -72,7 +72,7 @@ var ck_complex = {
 	filebrowserImageUploadUrl: '/d/ckeditor_image',// '/_face/ckeditor_upload_image', // Will be replace by imageUploadUrl when upload_image
 	extraPlugins : 'justify,codesnippet,lineutils,mathjax,colorbutton,uploadimage,font,autogrow,html5video,widget,widgetselection,clipboard,lineutils', //autogrow,
 	mathJaxLib : 'https://cdn.mathjax.org/mathjax/2.6-latest/MathJax.js?config=TeX-AMS_HTML',
-	extraAllowedContent :'img[class]',
+	extraAllowedContent :'img[class],strong[onclick]',
 	autoGrow_maxHeight : 600,
 	autoGrow_minHeight:200,
 	autoGrow_onStartup:true,
@@ -255,7 +255,7 @@ var edit_level = {
 	//removePlugins: 'html5video,forms,flash,a11yhelp,scayt,wsc,language,preview,print,save,saveall,template,newpage,templates',
 	removePlugins: 'iframe,forms,flash,a11yhelp,scayt,wsc,language,preview,print,save,saveall,template,newpage,templates',
 	mathJaxLib : '//cdn.mathjax.org/mathjax/2.6-latest/MathJax.js?config=TeX-AMS_HTML',
-	extraAllowedContent :'img[class]',
+	extraAllowedContent :'img[class],strong[onclick]',
 	autoGrow_maxHeight : 600,
 	autoGrow_minHeight:200,
 	autoGrow_onStartup:true,
