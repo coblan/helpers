@@ -58,8 +58,17 @@ def evalue_list(ls,**kw):
         #tmp = copy.deepcopy(item)  # deepcopy 有性能问题
         #tmp=evalue_container(tmp,**kw)
         
+        # 先运行一下 visible 排除那些 不需要的运算
+        if isinstance(item,dict) and 'visible' in item:
+            visible= item.get('visible')
+            if inspect.isfunction(visible):
+                visible=run_func(visible,liveitem=item,**kw)
+            if not visible:
+                continue  
+        # 再求职 dict
         tmp=evalue_container(item,**kw)
         
+        # 再运行一下 visible ，考虑到那些 需要 检查 len(children) ==0 需要 求值后才能判断
         if isinstance(tmp,dict) and 'visible' in tmp:
             visible= tmp.get('visible')
             if inspect.isfunction(visible):

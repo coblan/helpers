@@ -36,10 +36,12 @@ from . import js_cfg
 from . import dapi
 from helpers.func.sim_signal import sim_signal
 from .base_data import inspect_dict
+from . import model_adapte
 
 # 定制User表的显示方式
 def get_first_name(self):
-    return self.first_name + '(%s)'%self.username
+    return self.first_name or self.username
+    #return self.first_name + '(%s)'%self.username
 
 User.add_to_class("__str__", get_first_name)
 User._meta.get_field('first_name').verbose_name = '昵称'

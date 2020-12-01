@@ -53,11 +53,14 @@ export  var pop_fields={
                 genVc:self,
             }
 
-               var win= pop_edit_local(self.rowData,fields_ctx,function(resp) {
+               var win= pop_edit_local(self.rowData,fields_ctx,(resp)=> {
                    //ex.assign(self.rowData,resp.row)
                    ex.vueAssign(self.rowData,resp.row)
                     //self.$emit('on-custom-comp',{fun:'edit_over'} )
                    layer.close(win)
+                   if(resp.row && this.head.after_save_express){
+                       ex.eval(this.head.after_save_express,{vc:this})
+                   }
                 })
 
         }

@@ -1,6 +1,6 @@
 var submit_btn = {
     props:['head'],
-    template:`<van-button com-op-submit :type="head.type || 'primary'" @click="on_click()" size="large">
+    template:`<van-button class="com-op-submit" :type="head.type || 'primary'" @click="on_click()" size="large">
             <span v-text="head.label || '确定'"></span>
         </van-button>`,
     data:function(){
@@ -11,8 +11,9 @@ var submit_btn = {
     },
     methods:{
         on_click:function(){
-            if(this.head.action){
-                ex.eval(this.head.action,{ps:this.parStore,head:this.head})
+            var click_express = this.head.click_express || this.head.action
+            if( click_express ){
+                ex.eval( click_express ,{ps:this.parStore,head:this.head,vc:this})
             }else{
                 this.$emit('action')
             }

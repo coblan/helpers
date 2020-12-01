@@ -27,11 +27,15 @@ var mix_fields_data ={
             if(this.head.css){
                 ex.append_css(this.head.css)
             }
-            if(this.head.mounted_express){
-                ex.eval(this.head.mounted_express,{row:this.row,ps:this.parStore,cs:this.childStore,vc:this})
-            }else if(this.head.init_express){
-                ex.eval(this.head.init_express,{row:this.row,ps:this.parStore,cs:this.childStore,vc:this})
+            var mounted_express = this.head.mounted_express || this.head.init_express
+            if (mounted_express){
+                ex.eval(mounted_express,{row:this.row,ps:this.parStore,cs:this.childStore,vc:this,par_row:this.par_row})
             }
+            //if(this.head.mounted_express){
+            //    ex.eval(this.head.mounted_express,{row:this.row,ps:this.parStore,cs:this.childStore,vc:this})
+            //}else if(this.head.init_express){
+            //    ex.eval(this.head.init_express,{row:this.row,ps:this.parStore,cs:this.childStore,vc:this})
+            //}
             ex.vueEventRout(this,this.head.event_slots)
         }
     },
@@ -70,8 +74,9 @@ var mix_fields_data ={
             var heads = ex.filter(self.heads,function(head){
                 if (head.sublevel){
                     return false
-                }else if(head.show){
-                    return ex.eval(head.show,{row:self.row,head:head})
+                }else if(head.show || head.show_express){
+                    var show_express = head.show_express || head.show
+                    return ex.eval(show_express,{row:self.row,head:head})
                 }else{
                     return true
                 }
@@ -87,8 +92,9 @@ var mix_fields_data ={
         },
         normed_ops(){
             return ex.filter(this.ops,op=>{
-                if(op.show){
-                    return ex.eval(op.show,{vc:this})
+                if(op.show || op.show_express){
+                    var show_express= op.show_express || op.show
+                    return ex.eval( show_express ,{vc:this})
                 }else{
                     return true
                 }
@@ -237,7 +243,10 @@ var mix_fields_data ={
 
                     }else{
                         ex.vueAssign(self.row,rt.row)
-                        if(this.head && this.head.after_save && typeof this.head.after_save =='string'){
+                        if(this.head && this.head.after_save_express){
+                            ex.eval(this.head.after_save_express,{ps:self.parStore,vc:self,row:rt.row})
+                        }else  if(this.head && this.head.after_save && typeof this.head.after_save =='string'){
+                            // 老的调用，新的使用 after_save_express
                             ex.eval(this.head.after_save,{ps:self.parStore,vc:self,row:rt.row})
                         }else{
                             // 调用组件默认的

@@ -262,14 +262,15 @@ class RowFilter(object):
         self.query=query
         arg_dc = {}
         for proc_cls,name in zip(self.get_proc_list() ,self.total_names):
-            tmp_dc = proc_cls().filter_clean_filter_arg(name ,self.filter_args )
-            arg_dc.update( tmp_dc )
+            #tmp_dc = proc_cls().filter_clean_filter_arg(name ,self.filter_args )
+            proc_cls().filter_clean_filter_arg(name ,self.filter_args )  # 2020/9/17 修改成 有函数 deep 修改 filter_args
+            #arg_dc.update( tmp_dc )
             # 由 field_map处理， 移除filter_args的同名字段
-            self.filter_args.pop(name,None)
+            #self.filter_args.pop(name,None)
             #value =  self.filter_args.get(name, None)
             #if value != None:
                 #dc[name] = proc_cls().filter_clean_filter_arg(value ) 
-        self.filter_args.update(arg_dc)
+        #self.filter_args.update(arg_dc)
         self.filter_args = self.clean_search_args(self.filter_args)
         #arg_dc = {k: v for k, v in self.filter_args.items() if v != None}
         
@@ -420,6 +421,8 @@ class ModelTable(object):
         row_filter:key=value&..
         """
         kw = request.GET.dict()
+        if request.COOKIES.get('advise_heads'):
+            kw['_advise_heads'] = kw.get('_advise_heads') or request.COOKIES.get('advise_heads')
         return cls.gen_from_search_args(kw,request.user)
 
     @classmethod
@@ -610,7 +613,7 @@ class ModelTable(object):
                 #head['options']=catch.get(options_name)
                 
         heads=evalue_container(heads)
-  
+        heads = sorted(heads,key=lambda head: head.get('order',0))
         return heads
     
     def get_model_heads(self): 
@@ -620,7 +623,7 @@ class ModelTable(object):
         model_name = model_to_name(self.model)
         for field in self.model._meta.get_fields():
             if isinstance(field,models.Field): # 可能是为了排除 related_object
-                dc= {'name':field.name,'label':_(field.verbose_name)}
+                dc= {'name':field.name,'label':str(field.verbose_name) }  #  _(field.verbose_name)
                 
                 fieldName = model_name + '.' + field.name
                 if fieldName in field_map:
@@ -703,12 +706,18 @@ class ModelTable(object):
                         head['fields_ctx'].update({
                             #'after_save':'scope.vc.par_row.car_no =scope.row.car_no; scope.vc.par_row.has_washed=scope.row.has_washed ',
                             #'init_express':'cfg.show_load(),ex.director_call(scope.vc.ctx.director_name,{pk:scope.vc.par_row.pk}).then((res)=>{cfg.hide_load();ex.vueAssign(scope.row,res.row)})',
-                            'mounted_express':'ex.vueAssign(scope.row,ex.copy(scope.vc.par_row))',
+                           
                             #'mounted_express':'ex.vueAssign(scope.row,scope.vc.par_row)',
                             #'after_save':'ex.vueAssign( scope.vc.par_row,scope.row)',
-                            'ops_loc':'bottom'
+                            'ops_loc':'bottom',
+                            # 把初始化row放到 action里面去了 [1]
+                            #'mounted_express':'ex.vueAssign(scope.row,ex.copy(scope.vc.par_row))',
                         })
-                        head['action'] = 'scope.head.fields_ctx.genVc=scope.vc;scope.head.fields_ctx.title=scope.row._label;scope.head.fields_ctx.par_row=scope.row;cfg.pop_vue_com("com-form-one",scope.head.fields_ctx)'
+                        head['action'] = ''' scope.head.fields_ctx.genVc=scope.vc;
+                        scope.head.fields_ctx.title=scope.row._label;
+                        scope.head.fields_ctx.par_row=scope.row;
+                        scope.head.fields_ctx.row = ex.copy(scope.row); // [1] 如果不是编辑par_row ，可以修改这行
+                        cfg.pop_vue_com("com-form-one",scope.head.fields_ctx)'''
                     
         return heads
     
@@ -864,9 +873,23 @@ class ModelTable(object):
     def get_operation(self):
         director_name = self.get_director_name()
         #model_form = model_dc[self.model].get('fields')
+        
+        refresh_action = {'name':'refresh',
+                 'editor':'com-btn',
+                 'label':'刷新',
+                 'class':'com-btn-refresh-btn',
+                 'icon':'el-icon-refresh',
+                 'css':'.com-btn-refresh-btn{float:right}',
+                 'type':'success',
+                 'plain':True,
+                 'visible':self.filters ==RowFilter,
+                 'action':'scope.ps.search()'}
+        
         fieldCls = director.get(director_name+'.edit')     
         if not fieldCls:
-            return []
+            return [
+                refresh_action
+            ]
         fieldobj=fieldCls(crt_user=self.crt_user)
         fields_ctx = fieldobj.get_head_context()
         fields_ctx.update({
@@ -900,7 +923,16 @@ class ModelTable(object):
                 {'name':'delete_selected',
                  'editor':'com-btn',
                  'label':'删除',
-                 'action':'if(scope.ps.check_selected(scope.head)){scope.ps.delete_selected()}',
+                 'action':'''cfg.show_load();ex.director_call("d.delete_query_related",{rows:scope.ps.selected}).then((resp)=>{
+                     cfg.hide_load();
+                     if(resp.length>0){
+                         cfg.pop_vue_com("com-pan-delete-query-message",{msg_list:resp,genStore:scope.ps,title:"删除关联确认"})
+                     }else{
+                        scope.ps.delete_selected()
+                     }
+                    
+                 });  ''' ,
+                 # if(scope.ps.check_selected(scope.head)){scope.ps.delete_selected()}
                  #'style': 'color:red',
                  #'icon': 'fa-times',
                  'type':'danger',
@@ -909,16 +941,7 @@ class ModelTable(object):
                  'row_match':'many_row',
                  'disabled':'!scope.ps.has_select', 
                  'visible': self.permit.can_del(),},
-                {'name':'refresh',
-                 'editor':'com-btn',
-                 'label':'刷新',
-                 'class':'com-btn-refresh-btn',
-                 'icon':'el-icon-refresh',
-                 'css':'.com-btn-refresh-btn{float:right}',
-                 'type':'success',
-                 'plain':True,
-                 'visible':self.filters ==RowFilter,
-                 'action':'scope.ps.search()'}
+                refresh_action,
                 ]      
     
     def getExcelRows(self):
@@ -987,17 +1010,21 @@ class RawTable(ModelTable):
         self.bucket=[]
         if sql:
             with connections[self.model.objects.db].cursor() as cursor:
-                cursor.execute( sql ,self.params)
-                
-                try:
-                    self.bucket.append( self.get_result(cursor) )
-                except ProgrammingError as e:
-                    pass
-                while  cursor.nextset():
+                if isinstance(sql,list):
+                    for item in sql:
+                        cursor.execute(item.get('sql'),item.get('params',[]))
+                        self.bucket.append( self.get_result(cursor) )
+                else:
+                    cursor.execute( sql ,self.params,)
                     try:
                         self.bucket.append( self.get_result(cursor) )
                     except ProgrammingError as e:
                         pass
+                    while  cursor.nextset():
+                        try:
+                            self.bucket.append( self.get_result(cursor) )
+                        except ProgrammingError as e:
+                            pass
                         
             self.pagenum.count = self.bucket[1][0]['count']
             if len(self.bucket)>2:

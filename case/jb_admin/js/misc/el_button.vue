@@ -1,10 +1,13 @@
 <template>
     <span class="com-btn" :class="my_ctx.class">
-        <el-button size="mini" :type="my_ctx.type" @click="on_click()"
-                   :title="ctx.title"
-                   :disabled="is_disabled" :plain="my_ctx.plain">
+        <el-button :size="my_ctx.size || 'mini' " :type="my_ctx.type" @click="on_click()"
+                   :title="my_ctx.title"
+                   :icon="my_ctx.icon"
+                   :disabled="is_disabled"
+                   :plain="my_ctx.plain"
+                   :circle ="my_ctx.shape=='circle'">
             <slot name="content">
-                <i v-if="my_ctx.icon" :class="my_ctx.icon"></i>
+                <i v-if="my_ctx.fa_icon" :class="my_ctx.fa_icon"></i>
                 <span v-text="my_ctx.label"></span>
             </slot>
         </el-button>
@@ -32,18 +35,24 @@
             }
         },
         mounted(){
-            if(this.ctx.css){
-                ex.append_css(this.ctx.css)
+            if(this.my_ctx.css){
+                ex.append_css(this.my_ctx.css)
             }
         },
         methods:{
-            on_click(){
-                if(this.ctx.action){
+             on_click(){
+                if(this.my_ctx.click_express || this.my_ctx.action){
+
+                    var click_express = this.my_ctx.click_express ||this.my_ctx.action
                     // 在table组件中，会先检查选中的row。
-                    if(this.ctx.row_match && !this.parStore.check_selected(this.ctx)){
-                        return
+                    if(this.my_ctx.row_match){
+                        var p = this.parStore.check_selected(this.my_ctx)
+                    }else{
+                       var p = Promise.resolve()
                     }
-                    ex.eval(this.ctx.action,{head:this.ctx,ps:this.parStore,vc:this})
+                    p.then(()=>{
+                        ex.eval(click_express,{head:this.my_ctx,ps:this.parStore,vc:this})
+                     })
                 }
             }
         }

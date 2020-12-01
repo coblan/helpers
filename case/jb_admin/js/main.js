@@ -109,8 +109,6 @@ import * as header_main from  './header/main.js'
 
 //ui
 import * as stack_widget from './misc/stack_widget'
-import * as el_tab_widget from './misc/el_tab_widget'
-
 // store
 //import * as table_store from './store/table_store'
 
@@ -128,5 +126,9 @@ import * as table_operator_main from  './table_operator/main'
 import * as table_filter_main from './table_filter/main'
 
 import * as page_com_main from './page_com/main'
-import * as table_chart_editor_main from './table_chart_editor/main'
+
+
+import  * as table_local_input from './table_editor/local_input/main'
+
+import * as layout_main from './layout'
 //import * as pop_win_main from './pop_win/main'

@@ -4,7 +4,7 @@ Vue.component('com-ti-list',{
     props:['ctx'],
     template:`<div class="com-ti-list">
     <div v-if="rows.length!=0">
-        <component v-for="row in rows" :is="ctx.item_editor" :ctx="row"></component>
+        <component v-for="row in rows" :is="ctx.item_ctx.editor" :ctx="get_item_ctx(ctx.item_ctx,row)"></component>
     </div>
     <div v-else style="line-height: 400px;text-align: center">
         <span>暂无数据</span>
@@ -42,6 +42,13 @@ Vue.component('com-ti-list',{
         }
     },
     methods:{
+    get_item_ctx(head,row){
+        var dc={}
+        ex.vueAssign(dc,head)
+        dc.row=row
+        return dc
+        
+    },
         handleSizeChange(val){
             this.row_pages.perpage=val
             cfg.show_load()

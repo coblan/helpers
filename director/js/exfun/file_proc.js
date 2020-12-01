@@ -64,5 +64,67 @@ export var  file_proc={
 
         })
 
+    },
+    readLocalFile({accept='',encode='utf-8'}){
+        return new Promise((resolve,reject)=>{
+            ex.__on_filechange=function(event){
+                let files = event.target.files
+                var loadCount = 0 // 已读取文件数量
+                // 读取单个文件
+                var out_text=''
+                var loadAFile = function(file) {
+                    var reader = new FileReader()
+                    reader.onload = function(e) {
+                        var r = this.result
+                        out_text += r
+                        loadCount++
+                        if (loadCount == files.length) {
+                            console.log('读取完毕')
+                            $('#_hide_file_input').val('')
+                            resolve(out_text)
+                        }
+                    }
+                    reader.readAsText(file, encode) // 以文本形式读取
+
+                }
+                for (var i = 0; i < files.length; i++) {
+                    loadAFile(files[i])
+                }
+
+            }
+
+            if(!window._hide_file_input){
+                $('body').append('<input type="file" id="_hide_file_input" style="display: none" >')
+                $('#_hide_file_input').change(function(event){
+                    ex.__on_filechange(event)
+                })
+                window._director_uploadfile_input=true
+                //if(accept){
+                    $('#_hide_file_input').attr('accept',accept)
+                //}
+                $('#_hide_file_input').click()
+            }else{
+                //if(accept){
+                    $('#_hide_file_inputt').attr('accept',accept)
+                //}
+                $('#_hide_file_input').click()
+            }
+        })
+
+    },
+    saveLocalFile  (content, filename) {
+        // 创建隐藏的可下载链接
+        var eleLink = document.createElement('a');
+        eleLink.download = filename;
+        eleLink.style.display = 'none';
+        // 字符内容转变成blob地址
+        var blob = new Blob([content]);
+        eleLink.href = URL.createObjectURL(blob);
+        // 触发点击
+        document.body.appendChild(eleLink);
+        eleLink.click();
+        // 然后移除
+        document.body.removeChild(eleLink);
     }
+
 }

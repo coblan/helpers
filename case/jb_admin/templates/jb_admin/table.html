@@ -11,6 +11,7 @@
     search_args={{ search_args | jsonify | default:'{}'  }}
     parents = {{ parents | jsonify | default:'[]' }}
     advise_heads = {{ advise_heads | jsonify | default:'[]' }}
+    advise_heads_cookie_path= '{{ advise_heads_cookie_path }}' || null
 
     option= {{ option | jsonify }}
     table_layout={{ table_layout | jsonify }}
@@ -48,6 +49,7 @@
                 named_ctx:named_ctx,
                 event_slots:event_slots,
                 advise_heads:advise_heads,
+                advise_heads_cookie_path:advise_heads_cookie_path,
                 option:option,
                 table_layout:table_layout,
             }
@@ -274,7 +276,8 @@
     <div id="main-page" class="rows-block flex-v flex-grow" v-show="childStore.tab_stack.length == 0">
 
 
-        <div v-if="childStore.row_filters.length > 0" style="background-color: #fbfbf8;padding: 8px 1em;border-radius: 4px;margin-top: 8px">
+        <div v-if="childStore.row_filters.length > 0"
+             style="background-color: #fbfbf8;padding: 2px 1em;border-radius: 4px;">
             <!--<com-filter class="flex" :heads="row_filters" :search_args="search_args"-->
             <!--@submit="search()"></com-filter>-->
             <com-table-filters></com-table-filters>

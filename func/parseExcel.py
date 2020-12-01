@@ -11,6 +11,9 @@ class ExcelFields(ModelFields):
     
     def save_form()
     '''
+    def __init__(self,  *args, **kw):
+        super().__init__(*args, **kw)
+        self.set_named_ctx()
     
     def set_named_ctx(self):
         director_name = self.get_director_name()
@@ -23,6 +26,8 @@ class ExcelFields(ModelFields):
     def _clean_dict(self, dc):
         return dc
     
+    def is_valid(self):
+        return True
     def clean(self):
         pass
     
@@ -36,11 +41,19 @@ class ExcelFields(ModelFields):
         return '''
         var ctx = named_ctx["%(director_name)s"]
         ex.uploadfile({accept:".xlsx, .xls, .csv"})
-            .then((resp)=>{return ex.director("%(director_name)s").call("parse_excel_head",{url:resp[0],par_row:scope.ps.vc.par_row.pk}) } )
+            .then((resp)=>{
+               debugger;
+               if(scope.ps.vc.par_row){
+                  return ex.director("%(director_name)s").call("parse_excel_head",{url:resp[0],par_row:scope.ps.vc.par_row.pk})
+               }else{
+                  return ex.director("%(director_name)s").call("parse_excel_head",{url:resp[0]}) 
+               } })
             .then((resp)=>{ 
                 ex.each(ctx.heads,head=>{head.options=resp.options});
                 ctx.row=resp.row;
-                ctx.row.par_row_pk = scope.ps.vc.par_row.pk
+                if(scope.ps.vc.par_row){
+                   ctx.row.par_row_pk = scope.ps.vc.par_row.pk
+                }
                 return cfg.pop_vue_com('com-form-one',ctx)
             }).then(()=>{
                scope.ps.search()
@@ -48,23 +61,33 @@ class ExcelFields(ModelFields):
         '''%{'director_name':self_director_name}
     
     def parse_excel_head(self,url,**kws):
-        heads_names = get_excel_head(url)
+        excelHeads = get_excel_head(url)
         heads =[]
-        for index,name in enumerate(heads_names):
-            heads.append({'value':index,'label':name,})
+        for index,name in enumerate(excelHeads):
+            heads.append({'value':index,'label':name.strip(),})
         
         row ={
             '_director_name':self.get_director_name(),
             'meta__url':url
         }
         for head in self.get_heads():
-            index = get_match_index(head['label'], heads_names)
-            if index:
+            index = self.get_match_index(head, excelHeads)
+            if index is not None:
                 row[head['name']] = index
         return {
             'options':heads,
             'row':row
             }
+    
+    def get_match_index(self,head,excelHeads):
+        """
+        @head:  列选项头  {'name': 'InvoiceCode', 'label': '发票代码','editor':'com-field-select' ....}
+        @excelHeads: ['col_name1','col_name2','col_name3']
+        """
+        if head['label'] in excelHeads:
+            return excelHeads.index(head['label'])
+        #for head in form_heads:
+        return None    
     
     def dict_head(self, head):
         head['editor']='com-field-select'
@@ -90,20 +113,20 @@ class ExcelFields(ModelFields):
         @valid_row: list  每行，必须要有该字段才算是有效行 
         '''
         return parser_excel(url, dispatch_head,valid_row)
-    #def save_form(self):
-        #url = self.kw.pop('meta__url')
-        #record = self.kw.pop('record')
-        #out_list = []
-        #for row in parser_excel(url,self.kw,valid_row=['id_code']):
-            #row.update({
-                 #'record_id':record
-            #} )
-            #out_list.append(Salary(**row))
-        ##print(out_list)
-        #try:
-            #Salary.objects.bulk_create(out_list)
-        #except Exception as e:
-            #raise UserWarning(str(e))
+    
+    def save_form(self):
+        """ 普通的报错逻辑 , 如果有 par_row_pk 字段的话，需要重写 save_form 的row数据"""
+        url = self.kw.pop('meta__url')
+     
+        out_list = []
+        model = self._meta.model
+        for row in self.parser_excel(url,self.kw):
+            out_list.append(model(**row))
+
+        try:
+            model.objects.bulk_create(out_list)
+        except Exception as e:
+            raise UserWarning(str(e))
 
 @director_view('func.get_excel_head')
 def get_excel_head(url):
@@ -142,11 +165,7 @@ def url2path(url):
     path = os.path.join( os.path.dirname(settings.BASE_DIR),url[1:] )
     return path
 
-def get_match_index(head_name,heads):
-    if head_name in heads:
-        return heads.index(head_name)
-    #for head in form_heads:
-    return None
+
 
 def parser_excel(url,dispatch_head,valid_row=[]):
     '''
@@ -171,7 +190,7 @@ def parser_excel(url,dispatch_head,valid_row=[]):
         #if count >0:
         dc={}
         for k,v in dispatch_head.items():
-            if not k.startswith(('_','meta_')):
+            if not k.startswith(('_','meta_')) and v!='':
                 index = int(v)
                 
                 dc[k]=row[index]
@@ -204,7 +223,22 @@ def parse_xls(path):
     table = data.sheets()[0]
     ls =[]
     for i in range(0,table.nrows):
-        ls.append(table.row_values(i))
+        rowList =[]
+        rowListObj = table.row(i)
+        for obj in rowListObj:
+            if obj.value and str(obj).startswith('xldate'):
+                rt = xlrd.xldate.xldate_as_datetime(obj.value, xlrd.Book.datemode)
+                rowList.append(rt . strftime('%Y-%m-%d'))
+            elif str(obj).startswith('number'):
+                # 排除 123 解析成 123.0 这种问题
+                if int(obj.value) == obj.value:
+                    rowList.append(int( obj.value))
+                else:
+                    rowList.append(obj.value)
+            else:
+                rowList.append(obj.value)
+        ls.append(rowList)
+        #ls.append(table.row_values(i))
     return ls
 
 def parse_csv(path):

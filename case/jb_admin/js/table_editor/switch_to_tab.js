@@ -22,6 +22,7 @@ var switch_to_tab = {
     },
     methods:{
         goto_tab:function(){
+        // todo: 把 tab_name 和  ctx_name 用 switch_express 替换
             if(this.head.tab_name_express){
                 var tab_name = ex.eval(this.head.tab_name_express,{par_row:this.rowData,head:this.head})
             }else{
@@ -32,7 +33,10 @@ var switch_to_tab = {
             }else{
                 var ctx_name = this.head.ctx_name
             }
-
+            // TODO 替代上面的
+            //if(this.head.switch_express){
+                //ex.eval(this.head.switch_express,{par_row:this.rowData,head:this.head})
+            //}
             this.$emit('on-custom-comp',
                 {
                     fun:'switch_to_tab',

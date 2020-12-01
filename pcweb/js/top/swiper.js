@@ -13,16 +13,3 @@ Vue.component('com-top-swiper',{
     </div>`
 })
 
-Vue.component('com-swiper-image',{
-    props:['ctx'],
-    template:`<div class="com-swiper-image" :style="mystyle">
-    <div class="mylabel" v-if="ctx.label" v-text="ctx.label"></div>
-    </div>`,
-    computed:{
-        mystyle(){
-            return {
-                'background-image':'url('+this.ctx.image_url+')'
-            }
-        }
-    }
-})

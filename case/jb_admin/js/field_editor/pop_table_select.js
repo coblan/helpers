@@ -42,6 +42,9 @@ var pop_table_select =  {
         //        name:'required;'
         //    }
         //})
+        if(this.head.mounted_express){
+            ex.eval(this.head.mounted_express,{vc:this,head:this.head,row:this.row})
+        }
     },
     methods:{
         clear(){
@@ -55,8 +58,10 @@ var pop_table_select =  {
         },
         open_win:function(){
             var self=this
-            if(this.head.init_express){
-                ex.eval(this.head.init_express,{head:this.head,row:this.row})
+            if(this.head.init_express || this.head.pop_express){
+                // init_express 老的调用方式
+                var pop_express = this.head.pop_express || this.head.init_express
+                ex.eval(this.head.pop_express,{head:this.head,row:this.row})
             }
             cfg.pop_vue_com('com-table-panel',this.head.table_ctx).then(foreign_row=>{
                     if(!foreign_row){

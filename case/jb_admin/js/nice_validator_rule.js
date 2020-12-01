@@ -20,8 +20,14 @@ $.validator.config({
         ip: [/^((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){3}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})$/i, '请填写有效的 IP 地址'],
 
         regexp:function(element, param) {
-            var exp = new RegExp(param)
-            return exp.test(element.value) || '不满足规则'
+            if(param.length==2){
+                var exp = new RegExp(param[0])
+                var msg = param[1]
+            }else{
+                var exp = new RegExp(param[0])
+                var msg = '不满足规则'
+            }
+            return exp.test(element.value) || msg
         },
         express:function(element, param) {
             // 举例

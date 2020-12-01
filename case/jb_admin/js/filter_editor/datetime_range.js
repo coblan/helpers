@@ -17,9 +17,9 @@ var com_datetime_range={
                     <!--<input class="start form-control input-sm " v-model="start" readonly-->
                         <!--style="background-color: white;width: 12em"-->
                         <!--placeholder="开始时间">-->
-                    <com-field-datetime :head="heads[0]" :row="search_args"></com-field-datetime>
+                    <com-field-datetime :head="heads[0]" :row.sync="search_args"></com-field-datetime>
                     <div style="display: inline-block;margin: 0 2px;" >-</div>
-                     <com-field-datetime :head="heads[1]" :row="search_args"></com-field-datetime>
+                     <com-field-datetime :head="heads[1]" :row.sync="search_args"></com-field-datetime>
                     <!--<input class="end form-control input-sm"  v-model="end"  readonly-->
                      <!--style="background-color: white;width: 12em"-->
                      <!--placeholder="结束时间">-->

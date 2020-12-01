@@ -21,7 +21,7 @@ var tab_table={
                     advise_heads:heads_ctx.advise_heads || [],
                     selected:[],
                     del_info:[],
-                    search_args: {},
+                    search_args: heads_ctx.search_args || {},
                     vc:vc,
                     parStore:ex.vueParStore(vc)
                 }
@@ -41,11 +41,11 @@ var tab_table={
                     }
                 },
                 getRows:function(){
-                    if(vc.tab_head.search_filter){
-                        var search_filter = ex.eval(vc.tab_head.search_filter,{par_row:vc.par_row,vc:vc,ps:this})
+                    if(vc.tab_head.filter_express){
+                        var search_filter = ex.eval(vc.tab_head.filter_express,{par_row:vc.par_row,vc:vc,ps:this})
                         ex.assign(this.search_args,search_filter)
                     }else if(vc.tab_head.pre_set){
-                            // pre_set 含义不够清晰，被search_filter 替代了
+                            // pre_set 含义不够清晰，被 filter_express 替代了
                         var pre_set = ex.eval(vc.tab_head.pre_set,{par_row:vc.par_row,vc:vc,ps:this})
                         ex.assign(this.search_args,pre_set)
                     }else if(vc.tab_head.tab_field){ // 下面是老的调用，
@@ -68,8 +68,15 @@ var tab_table={
         ex.vueEventRout(this,this.tab_head.event_slots)
         // 如果有复杂的需求，则被 table_store.init_express接管
         if(!this.childStore.head.init_express){
-            this.childStore.search()
+            Vue.nextTick(()=>{
+                this.childStore.search()
+            })
         }
+
+        if(this.tab_head.mounted_express){
+            ex.eval(this.tab_head.mounted_express,{vc:this,ps:this.parStore,cs:this.childStore,par_row:this.par_row})
+        }
+
     },
     methods:{
         on_show:function (){
@@ -86,7 +93,8 @@ var tab_table={
     },
 
     template:`<div class="com-tab-table flex-v" style="position: absolute;top:0;left:0;bottom: 0;right:0;overflow: auto;padding-bottom: 1em;">
-       <div v-if="childStore.row_filters.length > 0" style="background-color: #fbfbf8;padding: 8px 1em;border-radius: 4px;margin-top: 8px">
+       <div v-if="childStore.row_filters.length > 0"
+       style="background-color: #fbfbf8;padding: 2px 1em;border-radius: 4px;">
             <com-table-filters></com-table-filters>
         </div>
         <div  v-if="childStore.ops.length>0 ">

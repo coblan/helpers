@@ -40,7 +40,6 @@ var table_store={
                 ex.eval(this.head.created_express,{par_row:this.par_row,ps:this,vc:this.vc})
             }
         }
-
     },
     computed:{
         changed:function(){
@@ -80,6 +79,16 @@ var table_store={
         },
         search:function(){
             this.search_args._page=1
+
+            if(this.advise_heads){
+                var advise_heads_str=this.advise_heads.join(',')
+                //if(this.advise_heads_cookie_path){
+                //    var cookie_str=`advise_heads=${advise_heads_str};path=${this.advise_heads_cookie_path}`
+                //    document.cookie = cookie_str
+                //}
+                this.search_args._page=1
+                this.search_args._advise_heads=advise_heads_str
+            }
             return this.getRows()
         },
         getRows:function(){
@@ -133,8 +142,9 @@ var table_store={
             var fields_ctx=kws.fields_ctx
             var dc = {fun:'get_row',director_name:fields_ctx.director_name}
 
-            if(kws.pre_set){
-                var pre_set = ex.eval(kws.pre_set,{vc:self.vc,ps:self,search_args:self.search_args})
+            var preset_express= kws.preset_express || kws.pre_set
+            if(preset_express){
+                var pre_set = ex.eval(preset_express,{vc:self.vc,ps:self,search_args:self.search_args})
                 ex.assign(dc,pre_set)
             }else if(kws.init_fields){ // 老的的调用，准备移除
                 ex.assign(dc,kws.init_fields)
@@ -167,6 +177,9 @@ var table_store={
                     cfg.pop_vue_com('com-form-one',fields_ctx).then(row=>{
                         if(row){
                           self.update_or_insert(row)
+                            if(kws.after_save_express){
+                                ex.eval(kws.after_save_express,{vc:self.vc,ps:self,search_args:self.search_args,row:row})
+                            }
                         }
                     })
                     //var win=pop_fields_layer(crt_row,fields_ctx,function(new_row){
@@ -222,6 +235,12 @@ var table_store={
             this.search_args._par=par
             this.search()
         },
+        update_rows_from_db(rows){
+            var out_row=ex.map(rows,row=>{return {pk:row.pk,_director_name:row._director_name}})
+            ex.director_call('d.get_row_form_db',{rows:out_row}).then((resp)=>{
+                this.update_rows(resp)
+            })
+        },
         update_or_insert:function(new_row,old_row){
             // 如果是更新，不用输入old_row，old_row只是用来判断是否是创建的行为
             // 不用 old_row 了， 只需要判断 pk 是否在rows里面即可。
@@ -256,8 +275,14 @@ var table_store={
             self.$emit('row.update_or_insert',[rows])
         },
         check_selected(head){
-            var row_match_fun = head.row_match || 'many_row'
-            return row_match[row_match_fun](this, head)
+            return new Promise((resolve,reject)=>{
+                var row_match_fun = head.row_match || 'many_row'
+                if(row_match[row_match_fun](this, head)) {
+                    resolve()
+                }else{
+                    reject()
+                }
+            })
         },
         selected_set_and_save:function(kws,resend){
             /*
@@ -284,7 +309,7 @@ var table_store={
                         resolve()
                     }
                 }).then(function(){
-                    debugger
+
                     //  弹出编辑框/ 或者不弹出
                         var first_sel_row = self.selected[0]
                         var one_row={}
@@ -296,8 +321,9 @@ var table_store={
                             //    one_row.meta_overlap_fields= first_sel_row.meta_overlap_fields
                             //}
 
-                        }else if(kws.pre_set){
-                            var dc = ex.eval(kws.pre_set)
+                        }else if(kws.pre_set || kws.preset_express){
+                            var preset_express = kws.preset_express || kws.pre_set
+                            var dc = ex.eval(preset_express)
                             ex.assign(one_row,dc)
                             //if(! first_sel_row.meta_overlap_fields){
                             //    one_row.meta_overlap_fields = Object.keys(dc).join(',')
@@ -584,7 +610,7 @@ var table_store={
         delete_selected:function(){
             var self=this
             return new Promise((resolve,reject)=>{
-                layer.confirm('真的删除吗?', {icon: 3, title:'确认'}, function(index) {
+                layer.confirm('确认删除选中项?', {icon: 3, title:'确认'}, function(index) {
                     layer.close(index);
                     //var ss = layer.load(2);
                     cfg.show_load()

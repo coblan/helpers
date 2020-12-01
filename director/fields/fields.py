@@ -167,6 +167,13 @@ class ModelFields(forms.ModelForm):
             self.is_create = True
         else:
             self.is_create = False
+        #if not self.is_create:
+            ## 有时候 self.changed_data 会错误包含其他字段
+            ## 有问题，因为有些 foreignkey  或者 onetoone字段 读取的时候不存在，报异常
+            #for name in list( self.changed_data ):
+                #if getattr(self.instance,name) == dc.get(name):
+                    #self.changed_data.remove(name)
+        
         self.pop_fields()
         self.init_value()
         
@@ -392,13 +399,15 @@ class ModelFields(forms.ModelForm):
     
     def _base_dict_fieldmap_heads(self): 
         out = []
+        model_meta = self._meta.model._meta
         for k,v in self.fields.items():
             #if isinstance(include,(tuple,list)) and k not in include:
                 #continue
             if k in self.hide_fields:
                 continue
             
-            dc = {'name':k,'label':str(v.label),
+            dc = {'name':k,
+                  'label': str( model_meta.get_field(k).verbose_name ) , # str(v.label),
                   'help_text':str(v.help_text),
                   'editor':'com-field-linetext'}
                   
@@ -435,15 +444,7 @@ class ModelFields(forms.ModelForm):
                 mapper=field_map[model_field.__class__]
                 mapper(self.instance, name = k,model=self._meta.model).dict_field_head(dc)    
                 
-            dc = self.dict_head(dc)
-            
-            #if hasattr(v, 'choices') and 'options' not in dc :
-                #options_name = '%(fieldName)s.options'% {'fieldName':fieldName}
-                #catch = get_request_cache()
-                #if not catch.get(options_name):
-                    #catch[options_name]=[{'value':val,'label':str(lab)} for val,lab in v.choices]                
-                #dc['options'] = catch[options_name]
-            
+            #dc = self.dict_head(dc)
             out.append(dc)
         return out
     
@@ -459,6 +460,7 @@ class ModelFields(forms.ModelForm):
             heads=[]
         heads += self._base_dict_fieldmap_heads()
         heads.extend(self.getExtraHeads())
+        heads = [self.dict_head(head) for head in heads]
         
         self.heads = heads
         for name in self.get_readonly_fields():
@@ -597,13 +599,14 @@ class ModelFields(forms.ModelForm):
                 'user': self.crt_user.username if self.crt_user.is_authenticated else 'anonymous',
                 '_before': self.before_changed_data,
                 '_after': after_changed_data,
+                '_label':{x: str( self.fields.get(x).label) for x in self.changed_data},
             }
             if extra_log:
                 dc.update(extra_log)
             if self.op_log:
                 dc.update(self.op_log)
             #sql_log.info(json.dumps(dc,cls=DirectorEncoder)) 
-            modelfields_log.info(json.dumps(dc,cls=DirectorEncoder))
+            modelfields_log.info(json.dumps(dc,cls=DirectorEncoder,ensure_ascii=False))
         self.after_save()
         return self.instance
     
@@ -638,7 +641,7 @@ class ModelFields(forms.ModelForm):
         return {}
     
     def save_log(self, dc): 
-        modelfields_log.info(json.dumps(dc, cls=DirectorEncoder))
+        modelfields_log.info(json.dumps(dc, cls=DirectorEncoder,ensure_ascii=False))
     
     def get_pop_edit_ctx(self,getrow='{pk:scope.vc.par_row.pk}',):
         ctx = self.get_head_context()
@@ -660,7 +663,12 @@ class Fields(ModelFields):
         dc=self.clean_dict(dc) 
         self.kw=dc.copy()
         self.kw.update(kw)
-        self.crt_user = crt_user
+        if pk is not None:
+            self.kw['pk'] = pk
+        if not crt_user:
+            self.crt_user = get_request_cache()['request'].user
+        else:
+            self.crt_user = crt_user  
         self._errors={
         }
         # 太复杂，暂时不要权限
