@@ -1,6 +1,9 @@
 <template>
     <div class="com-layout-div" :class="ctx.class">
-        <component class="myitem" v-for="item in ctx.items" :is="item.editor" :key="item.name" :ctx="item"></component>
+        <b v-if="ctx.label" v-text="ctx.label"></b>
+        <div class="div-wrap">
+            <component class="div-item" v-for="item in ctx.items" :is="item.editor" :key="item.name" :ctx="item"></component>
+        </div>
     </div>
 </template>
 <script>

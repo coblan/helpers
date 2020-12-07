@@ -226,7 +226,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _fie
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n//\n//\n//\n//\n//\n/* harmony default export */ __webpack_exports__[\"default\"] = ({\n  props: ['ctx'],\n  mounted: function mounted() {\n    if (this.ctx.css) {\n      ex.append_css(this.ctx.css);\n    }\n  }\n});\n\n//# sourceURL=webpack:///./layout/layout_div.vue?D:/coblan/webcode/node_modules/babel-loader/lib??ref--1!D:/coblan/webcode/node_modules/vue-loader/lib??vue-loader-options");
+eval("__webpack_require__.r(__webpack_exports__);\n//\n//\n//\n//\n//\n//\n//\n//\n/* harmony default export */ __webpack_exports__[\"default\"] = ({\n  props: ['ctx'],\n  mounted: function mounted() {\n    if (this.ctx.css) {\n      ex.append_css(this.ctx.css);\n    }\n  }\n});\n\n//# sourceURL=webpack:///./layout/layout_div.vue?D:/coblan/webcode/node_modules/babel-loader/lib??ref--1!D:/coblan/webcode/node_modules/vue-loader/lib??vue-loader-options");
 
 /***/ }),
 
@@ -1629,7 +1629,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) *
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"render\", function() { return render; });\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"staticRenderFns\", function() { return staticRenderFns; });\nvar render = function() {\n  var _vm = this\n  var _h = _vm.$createElement\n  var _c = _vm._self._c || _h\n  return _c(\n    \"div\",\n    { staticClass: \"com-layout-div\", class: _vm.ctx.class },\n    _vm._l(_vm.ctx.items, function(item) {\n      return _c(item.editor, {\n        key: item.name,\n        tag: \"component\",\n        staticClass: \"myitem\",\n        attrs: { ctx: item }\n      })\n    }),\n    1\n  )\n}\nvar staticRenderFns = []\nrender._withStripped = true\n\n\n\n//# sourceURL=webpack:///./layout/layout_div.vue?D:/coblan/webcode/node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!D:/coblan/webcode/node_modules/vue-loader/lib??vue-loader-options");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"render\", function() { return render; });\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"staticRenderFns\", function() { return staticRenderFns; });\nvar render = function() {\n  var _vm = this\n  var _h = _vm.$createElement\n  var _c = _vm._self._c || _h\n  return _c(\"div\", { staticClass: \"com-layout-div\", class: _vm.ctx.class }, [\n    _vm.ctx.label\n      ? _c(\"b\", { domProps: { textContent: _vm._s(_vm.ctx.label) } })\n      : _vm._e(),\n    _vm._v(\" \"),\n    _c(\n      \"div\",\n      { staticClass: \"div-wrap\" },\n      _vm._l(_vm.ctx.items, function(item) {\n        return _c(item.editor, {\n          key: item.name,\n          tag: \"component\",\n          staticClass: \"div-item\",\n          attrs: { ctx: item }\n        })\n      }),\n      1\n    )\n  ])\n}\nvar staticRenderFns = []\nrender._withStripped = true\n\n\n\n//# sourceURL=webpack:///./layout/layout_div.vue?D:/coblan/webcode/node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!D:/coblan/webcode/node_modules/vue-loader/lib??vue-loader-options");
 
 /***/ }),
 
