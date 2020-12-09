@@ -37,7 +37,7 @@ export  var fields_all_in_one={
    <div class="oprations" v-if="ops_loc=='up'">
         <component v-for="op in ops" :is="op.editor" :ref="'op_'+op.name" :ctx="op" :head="op" @operation="on_operation(op)"></component>
     </div>
-    <div style="overflow: auto;" class="flex-grow fields-area">
+    <div style="overflow: auto;" :class="{'box box-success':ops_loc=='up'}" class="flex-grow fields-area">
             <!--有分组的情况-->
            <div v-if="fields_group" >
                 <div v-for="group in grouped_heads_bucket" :class="'group_'+group.name" v-if="group.heads.length > 0">
