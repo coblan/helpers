@@ -178,31 +178,35 @@
     <div id="main-page" class="rows-block flex-v flex-grow" v-show="tabgroup.crt =='main'" style="max-height: calc( 100% - 20px);">
 
 
-        <div  v-if="ops.length>0">
-            <div class="oprations" v-show="tabgroup.crt == 'main'" style="padding: 5px">
-                <component v-for="op in ops"
-                           :is="op.editor"
-                           :ref="'op_'+op.name"
-                           :head="op"
-                           :ctx="op"
-                           :disabled="get_attr(op.disabled)"
-                           v-show="! get_attr(op.hide)"
-                           @operation="on_operation(op)"></component>
-            </div>
-        </div>
+        <!--<div  v-if="ops.length>0">-->
+            <!--<div class="oprations" v-show="tabgroup.crt == 'main'" style="padding: 5px">-->
+                <!--<component v-for="op in ops"-->
+                           <!--:is="op.editor"-->
+                           <!--:ref="'op_'+op.name"-->
+                           <!--:head="op"-->
+                           <!--:ctx="op"-->
+                           <!--:disabled="get_attr(op.disabled)"-->
+                           <!--v-show="! get_attr(op.hide)"-->
+                           <!--@operation="on_operation(op)"></component>-->
+            <!--</div>-->
+        <!--</div>-->
 
 
-        <div class="box box-success flex-v flex-grow" style="position: relative;overflow: auto;">
+        <!--<div class="box box-success flex-v flex-grow" style="position: relative;overflow: auto;">-->
 
                 {% block fields_content %}
 
-                <div class='field-panel suit' style="margin:1em;padding-bottom:3em ">
-                    <field  v-for='head in heads' :key="head.name" :head="head" :row='row'></field>
-                </div>
+                <!--<div class='field-panel suit' style="margin:1em;padding-bottom:3em ">-->
+                    <!--<field  v-for='head in heads' :key="head.name" :head="head" :row='row'></field>-->
+                <!--</div>-->
+
+        <div  style="margin:1em;padding-bottom:3em ">
+            <com-form-one :ctx="{heads:heads,row:row,ops:ops}"></com-form-one>
+        </div>
 
                 {% endblock %}
 
-        </div>
+        <!--</div>-->
     </div>
     <div id="tab-wrap" v-if="tabgroup.crt!='main'" class="flex-grow" style="position: relative">
 

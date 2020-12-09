@@ -728,7 +728,7 @@ class Fields(ModelFields):
             'label':'保存',
             'type':'success',
             'icon':'el-icon-receiving',
-            'action':'scope.ps.vc.submit()',
+            'click_express':'scope.ps.vc.submit()',
             #'editor':'com-field-op-btn',
             #'label':'保存', 
             #'icon': 'fa-save',
