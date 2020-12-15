@@ -13,8 +13,10 @@ function def_proc_error(jqxhr) {
             location = ex.appendSearch(js_config.login_url || '/accounts/login' ,{next:encodeURIComponent(location.href)})
         } else if(jqxhr.status !=0){
             alert(jqxhr.statusText+':code is;'+jqxhr.status+jqxhr.responseText)
+            throw(jqxhr.statusText+':code is;'+jqxhr.status+jqxhr.responseText)
         }else{
             alert('maybe server offline,error code is '+jqxhr.status)
+            throw('maybe server offline,error code is '+jqxhr.status)
         }
         //hide_upload()
         cfg.hide_load()
