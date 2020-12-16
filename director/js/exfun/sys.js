@@ -15,6 +15,9 @@ export var sys = {
             webApp: u.indexOf('Safari') == -1, //是否web应该程序，没有头部与底部
             weixin: u.indexOf('MicroMessenger') > -1, //是否微信
             qq: u.match(/\sQQ/i) == " qq" //是否QQ
-        }
+        },
+        sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+      }
 
 }

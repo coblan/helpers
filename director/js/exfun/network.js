@@ -1,8 +1,22 @@
 
 import {hook_ajax_msg,hook_ajax_csrf,show_upload,hide_upload} from './network/ajax_fun.js'
 
-hook_ajax_msg()
+//hook_ajax_msg()  // 该函数原本目标是处理ajax请求错误，现在，在ex._post 的fail里面实现了  错误处理
 hook_ajax_csrf()
+
+function def_proc_error(jqxhr) {
+    if(! window.iclosed){
+        if(jqxhr.status==401){
+            location = ex.appendSearch(js_config.login_url || '/accounts/login' ,{next:encodeURIComponent(location.href)})
+        } else if(jqxhr.status !=0){
+            alert(jqxhr.statusText+':code is;'+jqxhr.status+jqxhr.responseText)
+        }else{
+            alert('maybe server offline,error code is '+jqxhr.status)
+        }
+        //hide_upload()
+        cfg.hide_load()
+    }
+}
 
 class  DirectorCall{
     constructor(director_name,kws,option){
@@ -211,7 +225,20 @@ export var network ={
         if(typeof data == "object"){
             data = JSON.stringify(data)
         }
-        return $.post(url,data,wrap_callback)
+        //return $.post(url,data,wrap_callback)
+        $.ajax({
+            url: url,
+            type: "post",
+            data:  data,
+            dataType: "json",
+            success: wrap_callback,
+            error: function(jqxhr){
+                def_proc_error(jqxhr)
+                if(fail){
+                    fail(jqxhr)
+                }
+            }
+        });
     },
     load_js:function(src,success){
         if(success){
