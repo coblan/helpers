@@ -870,7 +870,7 @@ class ModelTable(object):
     def inn_filter(self,query):
         return query
     
-    def get_operation(self):
+    def get_operations(self):
         director_name = self.get_director_name()
         #model_form = model_dc[self.model].get('fields')
         
@@ -942,7 +942,12 @@ class ModelTable(object):
                  'disabled':'!scope.ps.has_select', 
                  'visible': self.permit.can_del(),},
                 refresh_action,
-                ]      
+                ]     
+        
+    
+    def get_operation(self):
+        '兼容老的调用,'
+        return self.get_operations()
     
     def getExcelRows(self):
         return self.get_rows()
