@@ -10,13 +10,17 @@ var nice_validator={
     },
     computed:{
         head_fv_rules(){
+            // 这个函数只是起到了监控 fv_rule变化的作用，实际上 没有用到这个函数
             var ls=[]
             ex.each(this.heads,head=>{
-                var tmp=''
+                var tmp=':'
                 if(head.required){
                     tmp+='required'
                 }
-                if(head.fv_rule){
+                if(head.fv_express){
+                    // 只是触发检测 row变化
+                    tmp += ex.eval(head.fv_express,{ps:this,row:this.row})
+                }else if(head.fv_rule){
                     tmp += head.fv_rule
                 }
                 ls.push(head.name+ tmp)
@@ -77,12 +81,14 @@ var nice_validator={
         update_nice:function(){
             var self=this
             var validate_fields={}
-            ex.each(this.heads,function(head){
+            ex.each(this.heads,(head)=>{
                 var ls=[]
                 if(head.readonly){
                     return
                 }
-                if(head.fv_rule){
+                if(head.fv_express){
+                    ls.push( ex.eval(head.fv_express,{ps:this,row:this.row}) )
+                }else if(head.fv_rule){
                     ls.push(head.fv_rule)
                 }
                 if( head.required){
@@ -90,7 +96,6 @@ var nice_validator={
                         ls.push('required')
                     }
                 }
-
                 if(head.validate_showError){
                     validate_fields[head.name]={
                         rule:ls.join(';'),
@@ -111,7 +116,6 @@ var nice_validator={
 
                         }
                 }
-
             })
             this.nice_validator =$(this.$el).validator({
                 fields: validate_fields,

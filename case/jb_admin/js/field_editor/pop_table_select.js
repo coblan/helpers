@@ -68,14 +68,17 @@ var pop_table_select =  {
                         console.log('break table panel')
                         return
                     }
-                    if(self.head.after_select){
-                        ex.eval(self.head.after_select,{selected_row:foreign_row,row:self.row})
+                    
+                    Vue.set(self.row,'_'+self.head.name+'_label',foreign_row._label)
+                    Vue.set(self.row,self.head.name,foreign_row.pk)
+                    
+                    var after_select_express = self.head.after_select_express||self.head.after_select
+                    if(after_select_express){
+                        ex.eval(after_select_express,{selected_row:foreign_row,row:self.row})
                     }else if(self.head.select_field){
                         Vue.set(self.row,self.head.name,foreign_row[self.head.select_field])
-                    }else{
-                        Vue.set(self.row,self.head.name,foreign_row.pk)
                     }
-                    Vue.set(self.row,'_'+self.head.name+'_label',foreign_row._label)
+                    
             }).catch(()=>{
                 console.log('break table panel')
             })
