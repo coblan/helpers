@@ -323,7 +323,7 @@ var table_store={
 
                         }else if(kws.pre_set || kws.preset_express){
                             var preset_express = kws.preset_express || kws.pre_set
-                            var dc = ex.eval(preset_express)
+                            var dc = ex.eval(preset_express,{ps:self,vc:self.vc})
                             ex.assign(one_row,dc)
                             //if(! first_sel_row.meta_overlap_fields){
                             //    one_row.meta_overlap_fields = Object.keys(dc).join(',')
@@ -333,7 +333,8 @@ var table_store={
                         }
 
                         if(kws.fields_ctx){
-                            ex.map(kws.fields_ctx.heads,function(head){
+                            // 确保 前面 preset_express设置过的字段，这里不会被替换
+                            ex.each(kws.fields_ctx.heads,(head)=>{
                                 if(!head.name.startsWith('_') && one_row[head.name]==undefined){
                                     one_row[head.name]=self.selected[0][head.name]
                                 }
@@ -439,9 +440,9 @@ var table_store={
                         }
 
                     }else{
-                        if(kws.after_error){
+                        if(kws.save_error_express){
                             // 有弹出fields框时，设置 after_error ，显示错误
-                            ex.eval(kws.after_error,{fs:field_vc.childStore,errors:resp.errors})
+                            ex.eval(kws.save_error_express,{vc:field_vc,errors:resp.errors})
                         }else{
                             if (field_vc){
                                 //field_vc.setErrors(resp.errors)
