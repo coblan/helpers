@@ -1,9 +1,14 @@
 <template>
-    <div class="com-field-select">
-        <span v-if='head.readonly' v-text='get_label(head.options,row[head.name])'></span>
+    <div class="com-field-select" :class="head.class">
+        <span v-if='head.readonly' v-text='get_label'></span>
         <div v-else>
             <input type="text" style="display: none" :id="'id_'+head.name" :name="head.name" v-model="row[head.name]"><!-- :clearable="!head.required"-->
-            <el-select  v-model="row[head.name]" :filterable="head.filterable" :placeholder="head.placeholder" size="small"  :clearable="!head.required">
+            <el-select  v-model="row[head.name]"
+                        :filterable="head.multiple ||  head.filterable "
+                        :placeholder="head.placeholder"
+                        size="small"
+                        :multiple="head.multiple"
+                        :clearable="!head.multiple && !head.required">
                 <el-option
                         v-for="item in normed_options"
                         :key="item.value"
@@ -12,15 +17,6 @@
                 </el-option>
                 </el-select>
         </div>
-
-        <!--<select v-else v-model='row[head.name]'  :id="'id_'+head.name" :name="head.name"  :class="['form-control input-sm',{ novalue: ! is_select}] ">-->
-            <!--&lt;!&ndash;<option v-if="head.required"  :value="undefined" disabled selected style='display:none;' class="placeholder" v-text="head.placeholder"></option>&ndash;&gt;-->
-            <!--&lt;!&ndash;<option v-else  :value="undefined" selected style="color: #b8b8b8" class="placeholder" v-text="head.placeholder"></option>&ndash;&gt;-->
-            <!--<option v-if="head.required"  :value="novalue" disabled selected style='display:none;color: #b8b8b8' class="placeholder" v-text="head.placeholder"></option>-->
-            <!--<option v-else   :value="novalue" selected style="color: #b8b8b8" class="placeholder" v-text="head.placeholder"></option>-->
-
-            <!--<option v-for='opt in normed_options' :value='opt.value' v-text='opt.label'></option>-->
-        <!--</select>-->
     </div>
 </template>
 <script>
@@ -74,6 +70,10 @@
             }
             ex.vueEventRout(this)
 
+            if(this.head.css){
+                ex.append_css(this.head.css)
+            }
+
         },
 
         watch:{
@@ -83,6 +83,7 @@
         },
 
         computed:{
+
             novalue(){
                 if(this.row[this.head.name] ==0){
                     var novalue = undefined
@@ -139,7 +140,35 @@
 
 //                return self.orderBy(array,'label')
 
-            }
+            },
+            get_label(){
+                var value=this.row[this.head.name]
+                if(value !=0 && !value){
+                    return ''
+                }
+                if(this.head.multiple){
+                    var list = ex.map(value,item=>{
+                                var option = ex.findone(this.options,{value:item})
+                                if(option){
+                                    return option.label
+                                }else{
+                                    return item
+                                }
+
+
+                            })
+                    return list.join(';')
+                } else{
+                    //                var option = ex.findone(options,{value:value})
+                    var option = ex.findone(this.options,{value:value})
+                    if(!option){
+                        return '---'
+                    }else{
+                        return option.label
+                    }
+                }
+
+            },
         },
         methods:{
             update_options:function(post_data){
@@ -152,14 +181,7 @@
                     })
                 }
             },
-            get_label:function(options,value){
-                var option = ex.findone(options,{value:value})
-                if(!option){
-                    return '---'
-                }else{
-                    return option.label
-                }
-            },
+
             orderBy:function(array,key){
                 if(this.head.order || this.cfg.order){
                     return order_by_key(array,key)
@@ -179,5 +201,12 @@
     option{
         color: black;
     }
+
+    }
+
+</style>
+<style lang="scss">
+    .el-select-dropdown li.selected{
+        display: none;
     }
 </style>

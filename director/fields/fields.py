@@ -491,6 +491,7 @@ class ModelFields(forms.ModelForm):
                 heads.remove(head)
                 heads= [head]+heads
                 break
+        heads = sorted(heads,key=lambda head: head.get('order',0))
         return heads
     
     def can_access(self):

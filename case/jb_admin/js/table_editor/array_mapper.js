@@ -3,23 +3,47 @@
 [1,2,3] -> '小王;小张;小赵'
 
 * */
+import {find_par} from './table_funs/common'
 var array_mapper = {
     props:['rowData','field','index'],
     template:`<span v-text="show_data"></span>`,
-    created:function(){
-        // find head from parent table
-        var table_par = this.$parent
-        while (true){
-            if (table_par.heads){
-                break
-            }
-            table_par = table_par.$parent
-            if(!table_par){
-                break
-            }
+    //created:function(){
+    //    // find head from parent table
+    //    var table_par = this.$parent
+    //    while (true){
+    //        if (table_par.heads){
+    //            break
+    //        }
+    //        table_par = table_par.$parent
+    //        if(!table_par){
+    //            break
+    //        }
+    //    }
+    //    this.table_par = table_par
+    //    this.head = ex.findone(this.table_par.heads,{name:this.field})
+    //},
+    data(){
+        find_par(this)
+        //var table_par = this.$parent
+        //while (true){
+        //    if (table_par.heads){
+        //        break
+        //    }
+        //    table_par = table_par.$parent
+        //    if(!table_par){
+        //        break
+        //    }
+        //}
+        //this.table_par = table_par
+        //this.head = ex.findone(this.table_par.heads,{name:this.field})
+      return {
+          options: this.head. options
+      }
+    },
+    mounted(){
+        if(this.head.mounted_express){
+            ex.eval(this.head.mounted_express,{vc:this,head:this.head,row:this.rowData})
         }
-        this.table_par = table_par
-        this.head = ex.findone(this.table_par.heads,{name:this.field})
     },
     computed:{
         show_data:function(){
@@ -34,7 +58,7 @@ var array_mapper = {
                     var values=parse_input[this.head.parse_input](values)
                 }
                 var value_labels=ex.map(values,function(value){
-                    var item = ex.findone(self.head.options,{value:value})
+                    var item = ex.findone(self.options,{value:value})
                     if(item){
                         return item.label
                     }else{
