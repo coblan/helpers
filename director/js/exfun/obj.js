@@ -39,5 +39,10 @@ export var obj_control={
         //        ex.mergeObject()
         //    })
         //}
+    },
+    update_row(row){
+        return ex.diretor_call('d.get_row',{pk:row.pk,director_name:row._director_name}).then((rt_row)=>{
+            ex.vueAssign(row,rt_row)
+        })
     }
 }
