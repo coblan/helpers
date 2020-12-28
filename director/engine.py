@@ -65,7 +65,7 @@ class BaseEngine(object):
     logout_url = '/accounts/logout'
     need_login = True
     menu_search = True
-    ui_theme=''
+    ui_theme='skin-blue'
     home = '/' # 当前engine的主页，没有目的的时候，可以往这里跳
     
     root_page='/'   # 被home 替代了

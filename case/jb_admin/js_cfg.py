@@ -146,7 +146,7 @@ def get_lib(request):
             })
         
         # 由于早期没有ui_theme属性，方式用到了jb_admin作为管理界面的，默认加上skin-blue作为其主题
-        request.META['ENGIN'].ui_theme = request.META['ENGIN'].ui_theme or 'skin-blue'
+        #request.META['ENGIN'].ui_theme = request.META['ENGIN'].ui_theme or 'skin-blue'
         #if request.META['ENGIN'].ui_theme:
             #admin_theme_dc = {
                 #'skin-black':'https://cdn.jsdelivr.net/npm/admin-lte@2.4.10/dist/css/skins/skin-black.min.css',
