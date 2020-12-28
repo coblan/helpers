@@ -25,7 +25,7 @@
     <!-- Theme style -->
     <script src="{{ js_config.js_lib.adminlte }}"></script>
     <link rel="stylesheet" href="{{ js_config.js_lib.adminlte_css }}">
-    <link rel="stylesheet" href="{{ js_config.js_lib.adminlte_blue_css }}">
+    <link rel="stylesheet" href="{{ js_config.js_lib.adminlte_them_css }}">
     <script src="{{ js_config.js_lib.moment }}"></script>
 
     <script src="{{ js_config.js_lib.exfun }}"></script>
@@ -174,7 +174,7 @@ desired effect
         overflow-y: hidden;
     }
 </style>
-<body class="hold-transition skin-blue sidebar-mini">
+<body class="hold-transition {{ ui_theme }} sidebar-mini">
 <script>
     if(sessionStorage.getItem('sidebar-collapse')){
         $('body').addClass('sidebar-collapse')

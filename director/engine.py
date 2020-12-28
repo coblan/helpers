@@ -65,6 +65,7 @@ class BaseEngine(object):
     logout_url = '/accounts/logout'
     need_login = True
     menu_search = True
+    ui_theme=''
     home = '/' # 当前engine的主页，没有目的的时候，可以往这里跳
     
     root_page='/'   # 被home 替代了
@@ -167,7 +168,8 @@ class BaseEngine(object):
             else:
                 template=page.template
             #ctx=self.get_ctx(ctx)
-            ctx['template']=template
+            ctx['template']= template
+            ctx['ui_theme'] = self.ui_theme
             if hasattr(page,'get_label'):
                 ctx['page_label'] =page.get_label()
             ctx['head_bar_data']=self.get_head_bar_data(request)
@@ -233,6 +235,7 @@ class BaseEngine(object):
         
         lib_dc = {}
         self.request.META['ACCESS_FROM_INTERNET'] = self.access_from_internet
+        self.request.META['ENGIN'] = self
         for fun in js_lib_list:
             lib_dc.update(fun(self.request))
         return {

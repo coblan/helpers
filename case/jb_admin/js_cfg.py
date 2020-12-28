@@ -109,7 +109,9 @@ def get_lib(request):
             'nice_validator_css': 'https://cdn.jsdelivr.net/npm/nice-validator@1.1.4/dist/jquery.validator.css',
             'adminlte': 'https://cdn.jsdelivr.net/npm/admin-lte@2.4.10/dist/js/adminlte.min.js',
             'adminlte_css': 'https://cdn.jsdelivr.net/npm/admin-lte@2.4.10/dist/css/AdminLTE.min.css',
-            'adminlte_blue_css': 'https://cdn.jsdelivr.net/npm/admin-lte@2.4.10/dist/css/skins/skin-blue.min.css',            
+            #'adminlte_them_css':'https://cdn.jsdelivr.net/npm/admin-lte@2.4.10/dist/css/skins/skin-blue.min.css',
+            'adminlte_them_css':'https://cdn.jsdelivr.net/npm/admin-lte-css@2.4.3/dist/css/skins/_all-skins.min.css',
+            
             'nprogress': 'https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js',
             'nprogress_css': 'https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.css',   
             
@@ -142,6 +144,18 @@ def get_lib(request):
             dc.update({
                 'vue':'https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.min.js'
             })
+            
+        #if request.META['ENGIN'].ui_theme:
+            #admin_theme_dc = {
+                #'skin-black':'https://cdn.jsdelivr.net/npm/admin-lte@2.4.10/dist/css/skins/skin-black.min.css',
+                #'skin-blue': 'https://cdn.jsdelivr.net/npm/admin-lte@2.4.10/dist/css/skins/skin-blue.min.css',
+                #'skin-red': 'https://cdn.jsdelivr.net/npm/admin-lte@2.4.10/dist/css/skins/skin-red.min.css',
+                #'skin-green': 'https://cdn.jsdelivr.net/npm/admin-lte@2.4.10/dist/css/skins/skin-green.min.css',
+            #}
+            #dc.update({
+                #'adminlte_them_css':admin_theme_dc.get( request.META['ENGIN'].ui_theme  )
+            #})
+           
   
     return dc
 
