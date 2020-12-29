@@ -144,7 +144,9 @@ def get_lib(request):
             dc.update({
                 'vue':'https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.min.js'
             })
-            
+        
+        # 由于早期没有ui_theme属性，方式用到了jb_admin作为管理界面的，默认加上skin-blue作为其主题
+        #request.META['ENGIN'].ui_theme = request.META['ENGIN'].ui_theme or 'skin-blue'
         #if request.META['ENGIN'].ui_theme:
             #admin_theme_dc = {
                 #'skin-black':'https://cdn.jsdelivr.net/npm/admin-lte@2.4.10/dist/css/skins/skin-black.min.css',
