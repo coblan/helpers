@@ -206,7 +206,14 @@
 
 </style>
 <style lang="scss">
-    .el-select-dropdown li.selected{
+     .el-select-dropdown.is-multiple li.selected{
         display: none;
     }
+
+     .com-field-select{
+         .el-input--small .el-input__inner {
+             min-height: 32px;
+         }
+     }
+
 </style>
