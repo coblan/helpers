@@ -68,11 +68,12 @@ class LoginForm(forms.ModelForm):
             else:
                 self.add_error('username',_('user has been disabled'))
         else:
-            try:
-                user=User.objects.get(username=username)
-                self.add_error('password',_('user exist,but password not match'))
-            except User.DoesNotExist:
-                self.add_error('username',_('user not exist'))
+            self.add_error("password",_('User not exist or password not correct'))
+            #try:
+                #user=User.objects.get(username=username)
+                #self.add_error('password',_('user exist,but password not match'))
+            #except User.DoesNotExist:
+                #self.add_error('username',_('user not exist'))
         
     
     
