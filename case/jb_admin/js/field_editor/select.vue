@@ -211,9 +211,7 @@
     }
 
      .com-field-select{
-         .el-input--small .el-input__inner {
-             min-height: 32px;
-         }
+
      }
 
 </style>
