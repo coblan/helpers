@@ -59,7 +59,7 @@ class Login(object):
 
         ```
         
-            /dapi/do_login     POST
+        [POST]    /dapi/do_login     
         
             参数:
             {"username":"xx","password":"xxx"}
@@ -74,11 +74,11 @@ class Login(object):
             }
          ```
         
-调用登录接口后，有多种方式携带登录信息。
+用户登录后，有多种方式携带登录信息进行其他api的请求。
       
 1. 直接用cookies。后台已经自动设置和http请求的cookies，如果携带cookies请求，可以直接请求其他api接口。
 
-2. 采用token。如果传递cookies有困难，直接将token放在http的header中，进行请求字段名为 `Authorization:token`
+2. 采用token。如果传递cookies有困难，直接将token放在http的header中，进行请求.字段名为 `Authorization:token`
 
 3. 如果设置header有困难，可以直接挂在url上请求，例如 : `api_url?token=xxx`
 
