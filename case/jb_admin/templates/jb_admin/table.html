@@ -219,21 +219,23 @@
 
     function update_cnt_size(){
 //        var cnt_ht =  Math.max( $(document).height(),window.innerHeight)
-        var cnt_ht =  window.innerHeight
+        var cnt_ht =  window.innerHeight ;//$('body').height() ;//
         $('#there').height(cnt_ht -80)
     }
     $(function () {
         update_cnt_size()
-//        $('.main-tab-content').height(window.innerHeight -230)
+
         $(window).resize(function(){
             update_cnt_size()
         });
-//        $(document).resize(update_cnt_size)
 
         if(extra_table_logic){
             table_logic.mixins.push(window[extra_table_logic])
         }
-        table=new Vue(table_logic)
+//        setTimeout(()=>{
+            table=new Vue(table_logic)
+//        },1000)
+
 
     })
 

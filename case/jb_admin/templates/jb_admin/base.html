@@ -171,8 +171,37 @@ desired effect
 </script>
 <style>
     .wrapper{
-        overflow-y: hidden;
+        /*overflow-y: hidden;*/
     }
+    .sidebar{
+        position: absolute;
+        top: 50px;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        overflow-y: auto;
+    }
+    .sidebar-collapse  .sidebar{
+        position: static;
+        overflow: inherit;
+    }
+    .sidebar::-webkit-scrollbar {
+        width: 6px!important;
+        height: 6px!important;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none
+    }
+
+    .sidebar::-webkit-scrollbar-thumb {
+        cursor: pointer;
+        background: rgba(238, 238, 238, 0.75)
+    }
+
+    .sidebar::-webkit-scrollbar-thumb:hover {
+        background: rgba(153,153,153,.4)
+    }
+
 </style>
 <body class="hold-transition {{ ui_theme }} sidebar-mini">
 <script>
