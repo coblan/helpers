@@ -145,7 +145,7 @@ class Login(object):
         clear_value(self.code_key)
         
         return {'success':True,
-                'token':self.request.COOKIES.get('sessionid')# self.request.session.session_key
+                'token': self.request.session._get_or_create_session_key() ,# self.request.session.session_key
                 }
 
 
