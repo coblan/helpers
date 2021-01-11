@@ -5,6 +5,8 @@ from helpers.authuser.forms import LoginForm
 from django.contrib import auth
 from django.contrib.auth.models import User
 from helpers.authuser.admin_regist import RegistFormPage
+from django.utils.translation import ugettext as _
+
 class MobileRegist(FieldsPage):
     need_login=False
     
@@ -12,12 +14,12 @@ class MobileRegist(FieldsPage):
         return 'mobile/live.html'
     
     def get_label(self):
-        return '用户注册'
+        return _('用户注册')
     
     def get_context(self):
         ctx = super().get_context()
         ctx.update({
-            'title':'用户注册',
+            'title':_('用户注册'),
             #'init_express':'scope.row._director_name="mb-login-form"',
             #'after_save':'cfg.toast("登录成功");setTimeout(function(){location=search_args.next},1500)'
         })
@@ -35,9 +37,9 @@ class MobileRegist(FieldsPage):
         def dict_head(self, head): 
             if head['name'] == 'password':
                 head['editor'] = 'com-field-password'
-                head['fv_rule'] = '密码:'
+                head['fv_rule'] = _('密码:')
             if head['name']=='username':
-                head['placeholder'] ='用户名/手机号码'
+                head['placeholder'] =_('用户名/手机号码')
             return head
 
 director.update({
