@@ -47,7 +47,7 @@ class Login(object):
     
     @staticmethod
     @director_view('do_login')
-    def run(row):
+    def run(**row):
         """
         为了实现token登录，需要添加中间件
         MIDDLEWARE = [
@@ -144,7 +144,9 @@ class Login(object):
         clear_value(self.count_key)
         clear_value(self.code_key)
         
-        return {'success':True,'token':self.request.session.session_key}
+        return {'success':True,
+                'token':self.request.COOKIES.get('sessionid')# self.request.session.session_key
+                }
 
 
     #def w(self,errors):
