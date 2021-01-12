@@ -40,14 +40,23 @@ class LoginFormPage(FieldsPage):
         ctx.update(dc)
         return ctx
 
-
+@director_view('username/login')
+def login(username , password):
+    row={"username":username,'password':password}
+    rt= Login.run(row)
+    if 'errors' in rt:
+        dc ={}
+        for k,v in rt['errors'].items():
+            dc[k] = ';'.join(v)
+        rt['errors'] = dc
+    return rt
 
 class Login(object):
     
     
     @staticmethod
     @director_view('do_login')
-    def run(username , password):
+    def run(row):
         """
         为了实现token登录，需要添加中间件
         MIDDLEWARE = [
@@ -97,7 +106,7 @@ class Login(object):
     });
 ```
         """    
-        row={"username":username,'password':password}
+        
         loger = Login(row)
 
         if not loger.check_code():
