@@ -47,7 +47,7 @@ class Login(object):
     
     @staticmethod
     @director_view('do_login')
-    def run(username,password):
+    def run(username , password):
         """
         为了实现token登录，需要添加中间件
         MIDDLEWARE = [
