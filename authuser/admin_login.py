@@ -47,7 +47,7 @@ class Login(object):
     
     @staticmethod
     @director_view('do_login')
-    def run(**row):
+    def run(username,password):
         """
         为了实现token登录，需要添加中间件
         MIDDLEWARE = [
@@ -96,7 +96,8 @@ class Login(object):
         }
     });
 ```
-        """        
+        """    
+        row={"username":username,'password':password}
         loger = Login(row)
 
         if not loger.check_code():
