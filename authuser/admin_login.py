@@ -40,7 +40,16 @@ class LoginFormPage(FieldsPage):
         ctx.update(dc)
         return ctx
 
-
+@director_view('username/login')
+def login(username , password):
+    row={"username":username,'password':password}
+    rt= Login.run(row)
+    if 'errors' in rt:
+        dc ={}
+        for k,v in rt['errors'].items():
+            dc[k] = ';'.join(v)
+        rt['errors'] = dc
+    return rt
 
 class Login(object):
     
@@ -96,7 +105,8 @@ class Login(object):
         }
     });
 ```
-        """        
+        """    
+        
         loger = Login(row)
 
         if not loger.check_code():
@@ -144,7 +154,9 @@ class Login(object):
         clear_value(self.count_key)
         clear_value(self.code_key)
         
-        return {'success':True,'token':self.request.session.session_key}
+        return {'success':True,
+                'token': self.request.session._get_or_create_session_key() ,# self.request.session.session_key
+                }
 
 
     #def w(self,errors):
