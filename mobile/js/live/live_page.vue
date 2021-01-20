@@ -7,7 +7,7 @@
 
         <div class="body-content">
             <div class="body-inn">
-                <component :is="head.editor" v-for="head in ctx.layout_editors" :ctx="head"></component>
+                <component :is="head.editor" v-for="head in ctx.bodys" :ctx="head"></component>
             </div>
 
         </div>
@@ -57,11 +57,12 @@
     background-color:#f9f9f9;
     min-height: var(--app-height);
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
 
     .body-content{
         flex-grow: 100;
         width: 100%;
+        position: relative;
     }
     .body-inn{
         position: absolute;
