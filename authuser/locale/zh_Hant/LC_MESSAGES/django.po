@@ -17,20 +17,30 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-
-#: .\helpers\director\admin.py:214
-msgid "permit name has been exist"
+#: .\helpers\authuser\admin_regist.py:60 .\helpers\authuser\forms.py:24
+msgid "need password"
 msgstr ""
 
-#: .\helpers\director\model_func\dictfy.py:232
-msgid "ID"
+#: .\helpers\authuser\admin_regist.py:67 .\helpers\authuser\forms.py:31
+msgid "two password should be same"
 msgstr ""
 
-#: .\helpers\director\model_func\model_validator.py:8
-#, python-format
-msgid "%(value)s is not integer number"
+#: .\helpers\authuser\admin_regist.py:74
+msgid "username already exist"
 msgstr ""
 
-#: .\helpers\director\model_func\model_validator.py:15
-msgid "must input string"
+#: .\helpers\authuser\admin_regist.py:86
+msgid "Validate Code error"
+msgstr ""
+
+#: .\helpers\authuser\forms.py:38
+msgid "username has been exist"
+msgstr ""
+
+#: .\helpers\authuser\forms.py:69
+msgid "user has been disabled"
+msgstr ""
+
+#: .\helpers\authuser\forms.py:71
+msgid "User not exist or password not correct"
 msgstr ""
