@@ -15,7 +15,7 @@
             </div>
 
             <div style="padding-top: .3rem">
-                <van-button type="primary" size="large" @click="do_login" v-text="tr('登录')"></van-button>
+                <van-button type="primary" size="large" @click="do_login" ><span v-text="tr('登录')"></span></van-button>
             </div>
 
         </div>
