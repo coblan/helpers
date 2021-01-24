@@ -10,14 +10,21 @@
                 @touchmove.stop
         >
             <van-pull-refresh  v-model="freshing" @refresh="onRefresh">
-                <component class="content-wrap" :is="table_editor" :heads="ctx.heads" :rows="childStore.rows"  @select="triggerBlockClick($event)"></component>
+                <component  class="content-wrap" :is="table_editor" :heads="ctx.heads"
+                            :class="{'loading':loading,}"
+                            :rows="childStore.rows"  @select="triggerBlockClick($event)"></component>
+                <!--<row_cell v-else  class="content-wrap"  :heads="ctx.heads" :rows="childStore.rows"  @select="triggerBlockClick($event)"></row_cell>-->
             </van-pull-refresh>
         </van-list>
     </div>
 </template>
 <script>
+    import row_cell from '../container/row_cell.vue'
     export default {
         props:['ctx'],
+        components:{
+            row_cell
+        },
         data(){
             var childStore = new Vue(table_store)
             childStore.rows= this.ctx. rows || []
@@ -32,7 +39,7 @@
                 loading:false,
                 finished:false,
                 childStore:childStore,
-                table_editor: this.ctx.table_editor || 'com-ctn-table-van-cell',
+                table_editor: this.ctx.table_editor || 'row_cell',
                 scrollOptions: {
                     /* lock x-direction when scrolling horizontally and  vertically at the same time */
                     directionLockThreshold: 0,
@@ -61,14 +68,20 @@
                 if(this.ctx.init_express){
                     ex.eval(this.ctx.init_express,{self:this,cs:this.childStore})
                 }else  if(!this.ctx.rows || this.ctx.rows.length==0){
-                    this.childStore.search()
+                    this.loading=true
+                    this.childStore.search().then(()=>{
+                        this.loading= false
+                    })
+
                 }
             },
             onRefresh(){
                 console.log('刷新')
+                this.loading = true
                 this.childStore.search().then(()=>{
                     this.freshing = false
-                this.finished=false
+                    this.loading = false
+                    this.finished=false
             })
 
             },
@@ -89,12 +102,14 @@
                 }
             },
             onPullingUp(){
+
                 this.childStore.addNextPage().then((new_rows)=>{
                     this.$refs.scroll.forceUpdate()
                 this.childStore.$emit('finish-search',new_rows)
             })
             },
             onPullingDown(){
+
                 this.childStore.search().then((new_rows)=>{
                     this.$refs.scroll.forceUpdate()
                 this.childStore.$emit('finish-search',new_rows)
@@ -106,9 +121,13 @@
 </script>
 <style lang="scss">
     .com-top-html{
-    img{
-        max-width: 100%;
-        height: auto;
+        img{
+            max-width: 100%;
+            height: auto;
+        }
     }
+    .content-wrap{
+        height: 100%;
+        width: 100%;
     }
 </style>
