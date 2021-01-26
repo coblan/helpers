@@ -3,7 +3,7 @@ require('./styl/list.styl')
 Vue.component('com-ti-list',{
     props:['ctx'],
     template:`<div class="com-ti-list">
-    <div v-if="rows.length!=0">
+    <div v-if="rows.length!=0" class="list-rows">
         <component v-for="row in rows" :is="ctx.item_ctx.editor" :ctx="get_item_ctx(ctx.item_ctx,row)"></component>
     </div>
     <div v-else style="line-height: 400px;text-align: center">
