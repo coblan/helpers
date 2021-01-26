@@ -29,8 +29,6 @@ Vue.component('com-field-blocktext',{
                         this.inn_value = ''
                     }
                 })
-
-
             },
             deep:true
         }

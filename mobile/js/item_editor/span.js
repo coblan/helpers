@@ -1,6 +1,6 @@
 Vue.component('com-table-span',{
     props:['head','row'],
-    template:`<span class="com-item-span" :class="cssclass" v-text="row[head.name]" @click="on_click()"></span>`,
+    template:`<span class="com-item-span" :style="mystyle" :class="cssclass" v-text="row[head.name]" @click="on_click()"></span>`,
     data(){
         var parStore = ex.vueParStore(this)
         return {
@@ -18,6 +18,13 @@ Vue.component('com-table-span',{
                 return ex.eval(this.head.class_express,{row:this.row,head:this.head})
             }else{
                 return this.head.class
+            }
+        },
+        mystyle(){
+            if(this.head.width){
+                return {'width':this.head.width}
+            }else{
+                return {}
             }
         }
     },
