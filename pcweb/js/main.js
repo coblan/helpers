@@ -9,4 +9,4 @@ import *  as  container_main from './container/main'
 import *  as  uis_main from './uis/main'
 
 require('./pcweb.styl')
-require('./xiu.styl')
+//require('./xiu.styl')

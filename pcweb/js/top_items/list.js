@@ -3,8 +3,8 @@ require('./styl/list.styl')
 Vue.component('com-ti-list',{
     props:['ctx'],
     template:`<div class="com-ti-list">
-    <div v-if="rows.length!=0">
-        <component v-for="row in rows" :is="ctx.item_ctx.editor" :ctx="get_item_ctx(ctx.item_ctx,row)"></component>
+    <div v-if="rows.length!=0" class="list-rows">
+        <component v-for="row in rows" :key="row.pk || row.id || row.name" :is="ctx.item_ctx.editor" :ctx="get_item_ctx(ctx.item_ctx,row)"></component>
     </div>
     <div v-else style="line-height: 400px;text-align: center">
         <span>暂无数据</span>
