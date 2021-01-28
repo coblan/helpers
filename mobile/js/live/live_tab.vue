@@ -31,7 +31,7 @@
 </script>
 <style lang="scss" scoped>
     .com-live-tab{
-        width: 100vw;
+        width: var(--app-width);
         height: var(--app-height );
         display: flex;
         flex-direction: column;
