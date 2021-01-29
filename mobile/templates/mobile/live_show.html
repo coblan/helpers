@@ -306,7 +306,7 @@
         top:0;
         -webkit-transform: translate(100%, 0);
         transform: translate(100%, 0);
-        z-index: 1000000;
+        z-index: 100;
     }
     /*.slide-left-enter-active{*/
         /*position: absolute;*/
@@ -323,13 +323,18 @@
         /*z-index: -1;*/
     /*}*/
 
+    .slide-left-leave-to{
+        display: none;
+    }
     .slide-left-leave-active {
         position: absolute;
         width: 100%;
         -webkit-transform: translate(-50%, 0);
         transform: translate(-50%, 0);
         opacity: 0.5;
+        display: block;
     }
+
     /*.slide-right-enter-to{*/
         /*z-index:-1*/
     /*}*/
