@@ -442,6 +442,7 @@
     <transition-group :name="tranName" @after-leave="onAfterLeave">
         <component :ref="ctx.editor" v-for="(ctx,index) in total_stack" :key="ctx.editor"
                    class="child-view"
+                   :style="{zIndex:-index}"
                    v-show="index==crt_index"
                    :is="ctx.editor" :ctx="ctx.ctx" ></component>
     </transition-group>
