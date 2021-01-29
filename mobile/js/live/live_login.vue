@@ -105,6 +105,7 @@
             /*color: #665656;*/
             display:inline-block;
             margin-left: .3rem;
+            border: 0;
             background-color: transparent;
 
             &::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
