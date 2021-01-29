@@ -328,7 +328,7 @@
         width: 100%;
         -webkit-transform: translate(-50%, 0);
         transform: translate(-50%, 0);
-        opacity: 0.1;
+        opacity: 0.5;
     }
     /*.slide-right-enter-to{*/
         /*z-index:-1*/
@@ -336,7 +336,9 @@
     /*.slide-left-leave-to !* .fade-leave-active below version 2.1.8 *! {*/
         /*!*z-index:-1*!*/
     /*}*/
-
+    slide-left-leave-to{
+        display: none;
+    }
     .slide-right-enter{
         position: absolute;
         width: 100%;
@@ -432,12 +434,14 @@
     .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
         opacity: 0;
     }
-
 </style>
 <div id="main-panel">
 
     <transition-group :name="tranName" @after-leave="onAfterLeave">
-        <component :ref="ctx.editor" v-for="(ctx,index) in total_stack" :key="ctx.editor" class="child-view" v-show="index==crt_index" :is="ctx.editor" :ctx="ctx.ctx" ></component>
+        <component :ref="ctx.editor" v-for="(ctx,index) in total_stack" :key="ctx.editor"
+                   class="child-view"
+                   v-show="index==crt_index"
+                   :is="ctx.editor" :ctx="ctx.ctx" ></component>
     </transition-group>
         <!--<template v-for="(ctx,index) in stack">-->
             <!--<transition :name="tranName">-->
