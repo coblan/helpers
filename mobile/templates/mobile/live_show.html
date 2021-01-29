@@ -297,7 +297,7 @@
     .child-view {
         width: 100%;
         height: 100%;
-        transition: transform .6s cubic-bezier(.55,0,.1,1),opacity  .5s  ease-in-out;
+        transition: transform .6s cubic-bezier(.55,0,.1,1);
     /*,opacity  .5s  ease-in-out*/
         /*transition: transform 30000s cubic-bezier(.55,0,.1,1);*/
     }
@@ -327,15 +327,13 @@
     .slide-left-leave-to{
         display: none;
     }
-    .slide-left{
-        opacity: 1;
-    }
+
     .slide-left-leave-active {
         position: absolute;
         width: 100%;
         -webkit-transform: translate(-50%, 0);
         transform: translate(-50%, 0);
-        opacity: 0.5;
+        opacity: 0.6;
         display: block;
         /*transition:  opacity  .5s  ease-in-out;*/
     }
