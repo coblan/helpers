@@ -439,10 +439,9 @@
 </style>
 <div id="main-panel">
 
-    <transition-group :name="tranName" @after-leave="onAfterLeave">
+    <transition-group :name="tranName" @after-leave="onAfterLeave" mode="out-in">
         <component :ref="ctx.editor" v-for="(ctx,index) in total_stack" :key="ctx.editor"
                    class="child-view"
-                   :style="{zIndex:-index}"
                    v-show="index==crt_index"
                    :is="ctx.editor" :ctx="ctx.ctx" ></component>
     </transition-group>
