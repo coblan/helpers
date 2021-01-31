@@ -49,6 +49,9 @@ def wrap(fun,key):
             return fun(*arg,**kws)
     return _fun
 
+def tranactionDefault(fun):
+    return wrap(fun,'default')
+
 def transactionall(fun):
     keys = settings.DATABASES.keys()
     def _fun(*args,**kws):
@@ -77,7 +80,7 @@ def ajax_views(request,app=None):
         #for key in keys:
             #fun = _fun()
         #with transaction.atomic(using=maindb):
-        wraped_ajax_router = transactionall(ajax_router)
+        wraped_ajax_router =  tranactionDefault(ajax_router)
         rt= wraped_ajax_router(request, ajax_module.get_global())
         #rt = ajax_router(request, ajax_module.get_global())
             
@@ -143,7 +146,7 @@ def director_view(request,director_name):
         if inspect.isfunction(directorEnt):
             # 2020/7/6 再次开启 事务
             if need_transaction:
-                wraped_directorEnt = transactionall(directorEnt)
+                wraped_directorEnt = tranactionDefault(directorEnt)
                 rt = wraped_directorEnt(**kws)
             else:
                 rt = directorEnt(**kws)
@@ -160,7 +163,7 @@ def director_view(request,director_name):
                 #wraped_directorEnt = transactionall(obj.get_context) # obj.get_context # 
                 
             if need_transaction:
-                wraped_directorEnt = transactionall(real_func)
+                wraped_directorEnt = tranactionDefault(real_func)
                 rt = wraped_directorEnt()
             else:
                 rt = real_func()
