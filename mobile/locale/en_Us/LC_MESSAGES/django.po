@@ -1,0 +1,86 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-02-02 02:15+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: .\helpers\mobile\login_page.py:11
+msgid "请输入账号"
+msgstr ""
+
+#: .\helpers\mobile\login_page.py:12
+msgid "请输入密码"
+msgstr ""
+
+#: .\helpers\mobile\login_page.py:13 .\helpers\mobile\login_page.py:57
+msgid "登录"
+msgstr ""
+
+#: .\helpers\mobile\login_page.py:26 .\helpers\mobile\login_page.py:31
+msgid "用户登录"
+msgstr ""
+
+#: .\helpers\mobile\login_page.py:32
+msgid "登录成功"
+msgstr ""
+
+#: .\helpers\mobile\login_page.py:37
+msgid "忘记密码"
+msgstr ""
+
+#: .\helpers\mobile\login_page.py:37
+msgid "请联系管理员重置密码!"
+msgstr ""
+
+#: .\helpers\mobile\login_page.py:38
+msgid "立即注册"
+msgstr ""
+
+#: .\helpers\mobile\login_page.py:51
+msgid "账号"
+msgstr ""
+
+#: .\helpers\mobile\login_page.py:52
+msgid "密码"
+msgstr ""
+
+#: .\helpers\mobile\login_page.py:69
+msgid "必须输入账号和密码"
+msgstr ""
+
+#: .\helpers\mobile\login_page.py:75
+msgid "账号不可用"
+msgstr ""
+
+#: .\helpers\mobile\login_page.py:79
+msgid "密码错误"
+msgstr ""
+
+#: .\helpers\mobile\login_page.py:81
+msgid "用户不存在"
+msgstr ""
+
+#: .\helpers\mobile\regist_page.py:17 .\helpers\mobile\regist_page.py:22
+msgid "用户注册"
+msgstr ""
+
+#: .\helpers\mobile\regist_page.py:40
+msgid "密码:"
+msgstr ""
+
+#: .\helpers\mobile\regist_page.py:42
+msgid "用户名/手机号码"
+msgstr ""
