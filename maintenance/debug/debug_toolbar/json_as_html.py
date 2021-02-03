@@ -1,3 +1,4 @@
+
 # from django.http import HttpResponse
 # import json  
 
@@ -30,16 +31,15 @@
         # return response
 
 from django.conf import settings
+from django.utils.deprecation import MiddlewareMixin
 
-
-class JsonAsHTML(object):
+class JsonAsHTML(MiddlewareMixin):
     '''
     View a JSON response in your browser as HTML
     Useful for viewing stats using Django Debug Toolbar 
 
     This middleware should be place AFTER Django Debug Toolbar middleware   
     '''
-
     def process_response(self, request, response):
 
         #not for production or production like environment 

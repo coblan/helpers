@@ -15,7 +15,7 @@
             </div>
 
             <div style="padding-top: .3rem">
-                <van-button type="primary" size="large" @click="do_login" v-text="tr('登录')"></van-button>
+                <van-button type="primary" size="large" @click="do_login" ><span v-text="tr('登录')"></span></van-button>
             </div>
 
         </div>
@@ -105,6 +105,7 @@
             /*color: #665656;*/
             display:inline-block;
             margin-left: .3rem;
+            border: 0;
             background-color: transparent;
 
             &::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */

@@ -902,7 +902,7 @@ class ModelTable(object):
                  #'icon': 'fa-plus',
                  #'class':'btn btn-primary btn-sm',
                  'editor':'com-btn',
-                 'action':'scope.head.fields_ctx.genVc=scope.vc;scope.ps.add_new(scope.head)',
+                 'click_express':'scope.head.fields_ctx.genVc=scope.vc;scope.ps.add_new(scope.head)',
                  'icon':'el-icon-plus',
                  'type':'primary',
                  'label':'创建',
@@ -923,7 +923,7 @@ class ModelTable(object):
                 {'name':'delete_selected',
                  'editor':'com-btn',
                  'label':'删除',
-                 'action':'''cfg.show_load();ex.director_call("d.delete_query_related",{rows:scope.ps.selected}).then((resp)=>{
+                 'click_express':'''cfg.show_load();ex.director_call("d.delete_query_related",{rows:scope.ps.selected}).then((resp)=>{
                      cfg.hide_load();
                      if(resp.length>0){
                          cfg.pop_vue_com("com-pan-delete-query-message",{msg_list:resp,genStore:scope.ps,title:"删除关联确认"})

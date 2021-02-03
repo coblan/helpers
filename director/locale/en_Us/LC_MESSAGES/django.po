@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-02-03 13:28+0800\n"
+"POT-Creation-Date: 2021-02-02 02:15+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,13 +23,29 @@ msgstr ""
 
 #: .\helpers\director\model_func\dictfy.py:232
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #: .\helpers\director\model_func\model_validator.py:8
 #, python-format
 msgid "%(value)s is not integer number"
-msgstr ""
+msgstr "%(value)s is not integer number"
 
 #: .\helpers\director\model_func\model_validator.py:15
 msgid "must input string"
-msgstr ""
+msgstr "must input string"
+
+#: .\helpers\director\templates\403.html:8
+msgid "禁止访问"
+msgstr "Access Forbidden"
+
+#: .\helpers\director\templates\403.html:14
+msgid "您可以试试以下操作"
+msgstr "You can try the following"
+
+#: .\helpers\director\templates\403.html:17
+msgid "切换账号"
+msgstr "Switch Account"
+
+#: .\helpers\director\templates\403.html:19
+msgid "联系管理员提升您的权限"
+msgstr "Contact your administrator to promote your permissions"

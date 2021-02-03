@@ -22,8 +22,9 @@
         props:['ctx'],
         methods:{
             on_click(head){
-                if(head.action){
-                    ex.eval(head.action,{head:head})
+                var click_express = head.click_express || head.action
+                if(click_express){
+                    ex.eval(click_express,{head:head})
                 }
             }
         }
