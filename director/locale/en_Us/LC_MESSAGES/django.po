@@ -23,16 +23,16 @@ msgstr ""
 
 #: .\helpers\director\model_func\dictfy.py:232
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #: .\helpers\director\model_func\model_validator.py:8
 #, python-format
 msgid "%(value)s is not integer number"
-msgstr ""
+msgstr "%(value)s is not integer number"
 
 #: .\helpers\director\model_func\model_validator.py:15
 msgid "must input string"
-msgstr ""
+msgstr "must input string"
 
 #: .\helpers\director\templates\403.html:8
 msgid "禁止访问"
