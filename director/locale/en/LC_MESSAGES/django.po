@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-02-05 12:12+0800\n"
+"POT-Creation-Date: 2021-02-03 15:50+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,55 +17,43 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: .\helpers\director\admin.py:47
-msgid "昵称"
-msgstr ""
-
-#: .\helpers\director\admin.py:48
-msgid "账号"
-msgstr ""
-
-#: .\helpers\director\admin.py:74
-msgid "包含用户"
-msgstr ""
-
 #: .\helpers\director\admin.py:214
 msgid "permit name has been exist"
 msgstr ""
 
 #: .\helpers\director\js_cfg.py:7
 msgid "收起"
-msgstr ""
+msgstr "collapse"
 
 #: .\helpers\director\js_cfg.py:8
 msgid "更多"
-msgstr ""
+msgstr "more"
 
 #: .\helpers\director\model_func\dictfy.py:232
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #: .\helpers\director\model_func\model_validator.py:8
 #, python-format
 msgid "%(value)s is not integer number"
-msgstr ""
+msgstr "%(value)s is not integer number"
 
 #: .\helpers\director\model_func\model_validator.py:15
 msgid "must input string"
-msgstr ""
+msgstr "must input string"
 
 #: .\helpers\director\templates\403.html:8
 msgid "禁止访问"
-msgstr ""
+msgstr "Access Forbidden"
 
 #: .\helpers\director\templates\403.html:14
 msgid "您可以试试以下操作"
-msgstr ""
+msgstr "You can try the following"
 
 #: .\helpers\director\templates\403.html:17
 msgid "切换账号"
-msgstr ""
+msgstr "Switch Account"
 
 #: .\helpers\director\templates\403.html:19
 msgid "联系管理员提升您的权限"
-msgstr ""
+msgstr "Contact your administrator to promote your permissions"
