@@ -623,7 +623,7 @@ class ModelTable(object):
         model_name = model_to_name(self.model)
         for field in self.model._meta.get_fields():
             if isinstance(field,models.Field): # 可能是为了排除 related_object
-                dc= {'name':field.name,'label':str(field.verbose_name) }  #  _(field.verbose_name)
+                dc= {'name':field.name,'label': str(field.verbose_name) }  #_(str(field.verbose_name)) }  #  _(field.verbose_name)
                 
                 fieldName = model_name + '.' + field.name
                 if fieldName in field_map:

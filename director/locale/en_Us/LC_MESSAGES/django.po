@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-02-02 02:15+0800\n"
+"POT-Creation-Date: 2021-02-03 15:50+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,6 +20,14 @@ msgstr ""
 #: .\helpers\director\admin.py:214
 msgid "permit name has been exist"
 msgstr ""
+
+#: .\helpers\director\js_cfg.py:7
+msgid "收起"
+msgstr "collapse"
+
+#: .\helpers\director\js_cfg.py:8
+msgid "更多"
+msgstr "more"
 
 #: .\helpers\director\model_func\dictfy.py:232
 msgid "ID"

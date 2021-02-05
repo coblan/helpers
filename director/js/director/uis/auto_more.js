@@ -15,8 +15,8 @@ Vue.component('com-auto-more',{
         </div>
 
         <div class="toggle-btn clickable" @click="toggle()">
-            <span v-if="expanded">收起</span>
-            <span v-else>更多</span>
+            <span v-if="expanded" v-text="tr('收起')"></span>
+            <span v-else v-text="tr('更多')"></span>
         </div>
     </div>`,
     mounted:function(){
@@ -27,6 +27,9 @@ Vue.component('com-auto-more',{
 
     },
     methods:{
+        tr(wd){
+           return js_config.tr[wd] || wd
+        },
         update_size(){
             var self=this
             if(!self.height){
