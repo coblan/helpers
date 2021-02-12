@@ -23,7 +23,9 @@ import  switch_btn from './switch.vue'
 
 import  field_number from './field_number.vue'
 import  field_int from './int.vue'
+import  banner from './banner.vue'
 Vue.component('com-field-number',field_number)
 Vue.component('com-field-int',field_int)
 Vue.component('com-field-validate-code',validate_code)
 Vue.component('com-field-switch',switch_btn)
+Vue.component('com-field-banner',banner)

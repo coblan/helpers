@@ -11,6 +11,7 @@ def get_tr():
         'change_password':_('Change Password'),
         'logout':_('LogOut'),
         'login':_('LogIn'), 
+        'element_translation_js':_('element_translation_js')
     }
 
 js_tr_list.append(get_tr)

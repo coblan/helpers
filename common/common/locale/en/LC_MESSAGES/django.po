@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-02-02 02:15+0800\n"
+"POT-Creation-Date: 2021-02-05 12:12+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,7 +16,6 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
 
 #: .\helpers\common\common\department.py:11
 msgid "department name"
@@ -32,52 +31,52 @@ msgstr ""
 
 #: .\helpers\common\common\employee.py:38
 msgid "account"
-msgstr "账号"
+msgstr ""
 
 #: .\helpers\common\common\employee.py:40
 msgid "employee id"
-msgstr "员工号"
+msgstr ""
 
 #: .\helpers\common\common\employee.py:46
 msgid "unnamed employee"
-msgstr "未命名员工"
+msgstr ""
 
 #: .\helpers\common\common\human.py:13
 msgid "male"
-msgstr "男"
+msgstr ""
 
 #: .\helpers\common\common\human.py:14
 msgid "femal"
-msgstr "女"
+msgstr ""
 
 #: .\helpers\common\common\human.py:18
 msgid "name"
-msgstr "姓名"
+msgstr ""
 
 #: .\helpers\common\common\human.py:19
 msgid "age"
-msgstr "年龄"
+msgstr ""
 
 #: .\helpers\common\common\human.py:20
 msgid "head image"
-msgstr "头像"
+msgstr ""
 
 #: .\helpers\common\common\human.py:21
 msgid "id  number"
-msgstr "身份证"
+msgstr ""
 
 #: .\helpers\common\common\human.py:22
 msgid "address"
-msgstr "地址"
+msgstr ""
 
 #: .\helpers\common\common\human.py:23
 msgid "gen"
-msgstr "性别"
+msgstr ""
 
 #: .\helpers\common\common\human.py:24
 msgid "phone"
-msgstr "电话"
+msgstr ""
 
 #: .\helpers\common\common\human.py:31
 msgid "basic info"
-msgstr "基本信息"
+msgstr ""
