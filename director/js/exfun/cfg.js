@@ -65,8 +65,11 @@ var cfg={
     toast(msg,...parm){
         layer.msg(msg,...parm)
     },
-    tr:{
-        'picture_size_excceed':'图片大小不能超过{maxsize}'
+    //tr:{
+    //    'picture_size_excceed':'图片大小不能超过{maxsize}'
+    //},
+    tr(wd){
+        return js_config.tr[wd] || wd
     },
 
     show_cloak:function(){
