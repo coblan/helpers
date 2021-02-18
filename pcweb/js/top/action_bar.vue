@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="web-wrap action-panel">
-            <div class="action" :class="{active:crt_action == act.label}" @click="on_click(act)" v-for="act in ctx.actions">
+            <div class="action" :class="{active:crt_label == act.label}" @click="on_click(act)" v-for="act in ctx.actions">
                 <span v-text="act.label"></span>
             </div>
         </div>
@@ -13,12 +13,17 @@
         props:['ctx'],
         data(){
             return {
-                crt_action: this.ctx.actions[0].label
+                crt_label: this.ctx.actions[0].label
+            }
+        },
+        mounted(){
+            if(this.ctx.mounted_express){
+                ex.eval(this.ctx.mounted_express,{vc:this,head:this.ctx})
             }
         },
         methods:{
             on_click(act){
-                this.crt_action = act.label
+                this.crt_label = act.label
                 ex.eval(act.action)
             }
         }

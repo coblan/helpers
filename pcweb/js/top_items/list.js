@@ -36,10 +36,17 @@ Vue.component('com-ti-list',{
         }
     },
     mounted(){
-        this.search()
-        if(this.ctx.on_mounted){
-            ex.eval(this.ctx.on_mounted,{vc:this})
+        if(this.ctx.mounted_express){
+            ex.eval(this.ctx.mounted_express,{vc:this,head:this.ctx})
+        }else{
+            // 老的调用,废弃
+            this.search()
+            if(this.ctx.on_mounted){
+                ex.eval(this.ctx.on_mounted,{vc:this})
+            }
         }
+
+
     },
     methods:{
     get_item_ctx(head,row){

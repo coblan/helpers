@@ -6,5 +6,9 @@ Vue.component('com-ti-article',{
     <div class="title" v-text="ctx.row.title"></div>
     <div class="article-content" v-html="ctx.row.content"></div>
     </div>`,
-
+    mounted(){
+        if(this.ctx.mounted_express){
+            ex.eval(this.ctx.mounted_express,{vc:this,head:this.ctx})
+        }
+    }
 })
