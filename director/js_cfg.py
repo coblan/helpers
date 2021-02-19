@@ -5,7 +5,10 @@ from django.utils.translation import ugettext as _
 def get_tr():
     return {
         '收起':_('收起'),
-        "更多":_("更多")
+        "更多":_("更多"),
+        "确认":_("确认"),
+        "确定":_("确定"),
+        "取消":_("取消"),
     }
 js_tr_list.append(get_tr)
 

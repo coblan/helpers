@@ -194,7 +194,8 @@ var cfg={
         return new Promise(function(resolve,reject){
             var index =layer.confirm(msg,
                 {icon: 3,
-                    title:'提示',
+                    title:cfg.tr('确认'),
+                    btn: [cfg.tr("确定"), cfg.tr("取消")],
                     end:function(){
                         ex.remove(cfg.layer_index_stack,index)
                         }

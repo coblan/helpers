@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-02-18 14:37+0800\n"
+"POT-Creation-Date: 2021-02-18 18:39+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -60,3 +60,20 @@ msgstr "Start Time"
 #: .\helpers\case\jb_admin\js_cfg.py:16
 msgid "结束时间"
 msgstr "End Time"
+
+#: .\helpers\case\jb_admin\uidict.py:8
+msgid "确定要导出EXCEL?"
+msgstr "Confirm export EXCEL?"
+
+#: .\helpers\case\jb_admin\uidict.py:16
+msgid "导出最大条数"
+msgstr "Number of export"
+
+#: .\helpers\case\jb_admin\uidict.py:16
+#, python-format
+msgid "请输入小于%(max_length)s的正整数"
+msgstr "Please input integer small than %(max_length)s"
+
+#: .\helpers\case\jb_admin\uidict.py:19 .\helpers\case\jb_admin\uidict.py:22
+msgid "导出Excel"
+msgstr "Export Excel"
