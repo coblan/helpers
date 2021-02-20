@@ -24,6 +24,8 @@ from django.forms.models import fields_for_model
 from helpers.director.exceptions.unauth401 import UnAuth401Exception
 from django.db import connections
 from django.db.utils import ProgrammingError
+from helpers.director.model_func.func import str_lazy_label
+
 class PageNum(object):
     perPage=20
     def __init__(self,pageNumber=1,perpage=None,kw={}):
@@ -997,7 +999,7 @@ class ModelTable(object):
         wb = Workbook()
         ws = wb.active
         for row in out_rows:
-            ws.append(row)        
+            ws.append([str_lazy_label(x)  for x in row ])        
         
         return wb
 
