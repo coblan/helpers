@@ -13,7 +13,8 @@ def get_tr():
         'login':_('LogIn'), 
         'element_translation_js':_('element_translation_js'),
         '开始时间':_("开始时间"),
-        '结束时间':_("结束时间")
+        '结束时间':_("结束时间"),
+        "请选择":_("请选择")
     }
 
 js_tr_list.append(get_tr)
