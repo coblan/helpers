@@ -4,6 +4,7 @@ from datetime import datetime,date
 from decimal import Decimal
 from django.conf import settings
 import base64
+from helpers.director.model_func.func import is_lazy_label
 
 #if getattr(settings, 'GEO'):
     #from helpers.func.geo import poly2dict
@@ -26,7 +27,7 @@ class DirectorEncoder(json.JSONEncoder):
             return obj.strftime("%Y-%m-%d")  
         elif isinstance(obj, Decimal):
             return str(obj)
-        elif  obj.__module__=='django.utils.functional' and  obj.__class__.__name__ =='__proxy__':
+        elif is_lazy_label(obj):
             # models.py里面的verbose_name使用的 django lazy_gettext 
             return str(obj)
         else:
