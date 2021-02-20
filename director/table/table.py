@@ -976,7 +976,7 @@ class ModelTable(object):
             if 'options' in head and head['options']:
                 head['options_dict'] = {}
                 for opt in head['options']:
-                    head['options_dict'][opt['value']] = opt['label']
+                    head['options_dict'][opt['value']] = opt['label'] 
         out_rows.append(excel_row)
         
         # 这里开始写数据
@@ -999,6 +999,8 @@ class ModelTable(object):
         wb = Workbook()
         ws = wb.active
         for row in out_rows:
+            #ws.append(row)
+            # 有可能是models.py lazy翻译的
             ws.append([str_lazy_label(x)  for x in row ])        
         
         return wb
