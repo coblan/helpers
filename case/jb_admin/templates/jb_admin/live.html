@@ -11,7 +11,7 @@ editor_ctx = {{ editor_ctx | jsonify }}
 
 $(function() {
 
-    root_live = new Vue({
+  live_root = new Vue({
         el: '#there',
         data: function () {
             var search_args = ex.parseSearch()
@@ -79,6 +79,9 @@ $(function() {
             }
         }
     })
+    
+    // 兼容老的调用
+    root_live= live_root
 })
 
 
