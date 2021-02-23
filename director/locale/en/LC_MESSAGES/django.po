@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-02-19 17:49+0800\n"
+"POT-Creation-Date: 2021-02-22 18:15+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -33,6 +33,10 @@ msgstr "included user"
 
 #: .\helpers\director\admin.py:214
 msgid "permit name has been exist"
+msgstr ""
+
+#: .\helpers\director\fields\fields.py:729
+msgid "保存"
 msgstr ""
 
 #: .\helpers\director\js_cfg.py:7
@@ -80,15 +84,15 @@ msgstr "%(value)s is not integer number"
 msgid "must input string"
 msgstr "must input string"
 
-#: .\helpers\director\table\table.py:879
+#: .\helpers\director\table\table.py:881
 msgid "刷新"
 msgstr "refresh"
 
-#: .\helpers\director\table\table.py:908
+#: .\helpers\director\table\table.py:910
 msgid "创建"
 msgstr "create"
 
-#: .\helpers\director\table\table.py:925
+#: .\helpers\director\table\table.py:927
 msgid "删除"
 msgstr "delete"
 

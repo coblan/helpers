@@ -726,7 +726,7 @@ class Fields(ModelFields):
         ls.append({
             'name':'save',
             'editor':'com-btn',
-            'label':'保存',
+            'label':_('保存'),
             'type':'success',
             'icon':'el-icon-receiving',
             'click_express':'scope.ps.vc.submit()',
