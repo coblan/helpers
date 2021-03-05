@@ -8,7 +8,7 @@ from django.utils import timezone
 
 import hashlib
 
-if getattr(settings,'REDIS_CACHE'):
+if getattr(settings,'REDIS_CACHE',None):
     import redis
     dc = settings.REDIS_CACHE
     redis_conn = redis.Redis(host=dc['host'], port=dc['port'], decode_responses=True,db=dc['db'],password=dc['password']) 
