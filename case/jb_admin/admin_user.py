@@ -59,6 +59,7 @@ class UserPage(TablePage):
                 
             
 class UserFields(ModelFields):
+    "具有权限性的创建和修改用户资料"
     hide_fields = ['date_joined']
     class Meta:
         model=User
@@ -72,7 +73,7 @@ class UserFields(ModelFields):
             head['editor'] = 'com-field-multi-chosen'
         if head['name'] == 'username':
             head['label']='账号'
-            head['help_text'] = '填写字母,数字或者下划线(_),长度为2~50'
+            head['help_text'] = '作为登录账号,只能填写字母,数字或者下划线(_),长度为2~50'
             head['fv_rule'] = 'length(2~50);regexp(^\w+$ , 只能有字母,数字和下划线)' #
             #express = ''
             #msg = ''
@@ -102,7 +103,18 @@ class UserFields(ModelFields):
             target_user = self.instance
             target_user.set_password(pswd)
             #target_user.save()            
-            
+
+class NoLimitUserForm(UserFields):
+    """ 在某些场合可能会创建新的用户或者修改下级用户，但是又不需要创建人员权限过大，所以不能赋予其user.edit权限,
+    所以你用这个nolimitUserForm创建和修改别的用户信息,
+    很显然这个类不能有自己的dirctor_name,不能被前端调用，只能由后端代码调用"""
+    nolimit = True
+    
+    @classmethod
+    def get_director_name(cls):
+        return UserFields.get_director_name()
+
+ 
 class UserPicker(ModelTable):
     model = User
     exclude = []

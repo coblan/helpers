@@ -20,7 +20,7 @@ var multi_select = {
             collapse-tags
             style="margin-left: 20px;"
             size="small"
-            placeholder="请选择">
+            :placeholder="placeholder">
             <el-option
             disabled
             :label="head.label"
@@ -35,6 +35,7 @@ var multi_select = {
             </el-option>
        </el-select>
     </div> `,
+
     computed:{
         options:function(){
             if(this.head.ctx_name){
@@ -42,6 +43,9 @@ var multi_select = {
             }else{
                 return this.head.options
             }
+        },
+        placeholder(){
+            return cfg.tr("请选择")
         }
     },
 

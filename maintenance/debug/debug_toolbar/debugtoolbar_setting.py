@@ -14,19 +14,22 @@ AUTO_URL(globals())
 def SET(scope):
     scope['DEBUG_TOOLBAR']=True
     scope['INSTALLED_APPS'].extend(['debug_toolbar',])
-    scope['MIDDLEWARE_CLASSES'].extend([
-        'debug_toolbar.middleware.DebugToolbarMiddleware',
-        'helpers.maintenance.debug.debug_toolbar.json_as_html.JsonAsHTML',
-        ])
-    #scope['MIDDLEWARE'].extend( [
-        #'debug_toolbar.middleware.DebugToolbarMiddleware',
-    #]   )
+    if 'MIDDLEWARE_CLASSES' in scope:
+        scope['MIDDLEWARE_CLASSES'].extend([
+            'debug_toolbar.middleware.DebugToolbarMiddleware',
+            'helpers.maintenance.debug.debug_toolbar.json_as_html.JsonAsHTML',
+            ])
+    else:
+        scope['MIDDLEWARE'].extend( [
+            'debug_toolbar.middleware.DebugToolbarMiddleware',
+            'helpers.maintenance.debug.debug_toolbar.json_as_html.JsonAsHTML',
+        ]   )
  
     #scope['DEBUG_TOOLBAR_CONFIG'] ={}
 
     scope['INTERNAL_IPS'] =['127.0.0.1']
     DEBUG_TOOLBAR_PANELS = [
-        #'ddt_request_history.panels.request_history.RequestHistoryPanel',  # Here it is 
+        'ddt_request_history.panels.request_history.RequestHistoryPanel',  # Here it is 
         'debug_toolbar.panels.versions.VersionsPanel',
         'debug_toolbar.panels.timer.TimerPanel',
         'debug_toolbar.panels.settings.SettingsPanel',

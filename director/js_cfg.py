@@ -1,5 +1,16 @@
 from helpers.director.base_data import js_tr_list, js_lib_list
 from helpers.maintenance.update_static_timestamp import js_stamp_dc,static_url
+from django.utils.translation import ugettext as _
+
+def get_tr():
+    return {
+        '收起':_('收起'),
+        "更多":_("更多"),
+        "确认":_("确认"),
+        "确定":_("确定"),
+        "取消":_("取消"),
+    }
+js_tr_list.append(get_tr)
 
 def get_lib(request): 
     dc = {

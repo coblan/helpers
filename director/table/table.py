@@ -24,6 +24,8 @@ from django.forms.models import fields_for_model
 from helpers.director.exceptions.unauth401 import UnAuth401Exception
 from django.db import connections
 from django.db.utils import ProgrammingError
+from helpers.director.model_func.func import str_lazy_label
+
 class PageNum(object):
     perPage=20
     def __init__(self,pageNumber=1,perpage=None,kw={}):
@@ -623,7 +625,7 @@ class ModelTable(object):
         model_name = model_to_name(self.model)
         for field in self.model._meta.get_fields():
             if isinstance(field,models.Field): # 可能是为了排除 related_object
-                dc= {'name':field.name,'label':str(field.verbose_name) }  #  _(field.verbose_name)
+                dc= {'name':field.name,'label': str(field.verbose_name) }  #_(str(field.verbose_name)) }  #  _(field.verbose_name)
                 
                 fieldName = model_name + '.' + field.name
                 if fieldName in field_map:
@@ -876,7 +878,7 @@ class ModelTable(object):
         
         refresh_action = {'name':'refresh',
                  'editor':'com-btn',
-                 'label':'刷新',
+                 'label':_('刷新'),
                  'class':'com-btn-refresh-btn',
                  'icon':'el-icon-refresh',
                  'css':'.com-btn-refresh-btn{float:right}',
@@ -902,10 +904,10 @@ class ModelTable(object):
                  #'icon': 'fa-plus',
                  #'class':'btn btn-primary btn-sm',
                  'editor':'com-btn',
-                 'action':'scope.head.fields_ctx.genVc=scope.vc;scope.ps.add_new(scope.head)',
+                 'click_express':'scope.head.fields_ctx.genVc=scope.vc;scope.ps.add_new(scope.head)',
                  'icon':'el-icon-plus',
                  'type':'primary',
-                 'label':'创建',
+                 'label':_('创建'),
                  'pre_set':'', # 预先设置的字段,一般用于com-tab-table下的创建
                  'fields_ctx':fields_ctx,
                  'visible': self.permit.can_add(),
@@ -922,8 +924,8 @@ class ModelTable(object):
                  #'visible': self.permit.can_del(),},
                 {'name':'delete_selected',
                  'editor':'com-btn',
-                 'label':'删除',
-                 'action':'''cfg.show_load();ex.director_call("d.delete_query_related",{rows:scope.ps.selected}).then((resp)=>{
+                 'label':_('删除'),
+                 'click_express':'''cfg.show_load();ex.director_call("d.delete_query_related",{rows:scope.ps.selected}).then((resp)=>{
                      cfg.hide_load();
                      if(resp.length>0){
                          cfg.pop_vue_com("com-pan-delete-query-message",{msg_list:resp,genStore:scope.ps,title:"删除关联确认"})
@@ -974,7 +976,7 @@ class ModelTable(object):
             if 'options' in head and head['options']:
                 head['options_dict'] = {}
                 for opt in head['options']:
-                    head['options_dict'][opt['value']] = opt['label']
+                    head['options_dict'][opt['value']] = opt['label'] 
         out_rows.append(excel_row)
         
         # 这里开始写数据
@@ -997,7 +999,9 @@ class ModelTable(object):
         wb = Workbook()
         ws = wb.active
         for row in out_rows:
-            ws.append(row)        
+            #ws.append(row)
+            # 有可能是models.py lazy翻译的
+            ws.append([str_lazy_label(x)  for x in row ])        
         
         return wb
 

@@ -11,6 +11,8 @@
 <script src="{{ js_config.js_lib.nice_validator }}"></script>
 <link rel="stylesheet" href="{{ js_config.js_lib.nice_validator_css }}">
 
+{% include 'director/reverse.html' %}
+
 <script type="text/javascript">
     if('hide_load' in parent){
         parent.hide_load()
@@ -90,6 +92,9 @@
                 }
             },
             methods:{
+                tr(wd){
+                  return cfg.tr(wd)
+                },
                 submit_info:function () {
 
                 if(! this.validateor.isValid()){
@@ -241,14 +246,14 @@
                 </div>
             </div>
             <div class="fa-input">
-                <input type="password" id="password" name="password" class="form-control"  placeholder="密码" v-model="row.password">
+                <input type="password" id="password" name="password" class="form-control"  :placeholder=tr("密码") v-model="row.password">
                 <div style="position: absolute;left: 7px;top:3px">
                     <img src= '{% static "authuser/image/login_ic_password.png" %}'   alt="" style="width: 12px">
                 </div>
             </div>
             <div class="fa-input" v-if="row.validate_img">
                 <div style="display: flex">
-                    <input type="text" id="validate_code" name="validate_code" class="form-control"  placeholder="验证码" v-model="row.validate_code">
+                    <input type="text" id="validate_code" name="validate_code" class="form-control"  :placeholder=tr("验证码") v-model="row.validate_code">
                     <img :src="row.validate_img" alt="">
                 </div>
 
@@ -257,11 +262,10 @@
                 </div>
             </div>
             <div style="margin: 1em 0;">
-                <input type="checkbox" id="auto_login" v-model="row.auto_login"/><label for="auto_login" style="font-weight: 400;">
-                下次自动登录</label>
+                <input type="checkbox" id="auto_login" v-model="row.auto_login"/><label for="auto_login" style="font-weight: 400;" v-text="tr('下次自动登录')"></label>
             </div>
 
-            <button class="btn btn-primary login" name="test" type="button" value="val" @click='submit_info()'>登录</button>
+            <button class="btn btn-primary login" name="test" type="button" value="val" @click='submit_info()' v-text="tr('登录')"></button>
 
 <div v-if="page_cfg.regist_url" style="text-align: right;padding-top: 1em ">
     <a :href="page_cfg.regist_url">立即注册</a>

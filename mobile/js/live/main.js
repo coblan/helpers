@@ -14,6 +14,7 @@ import  live_html from './live_html.vue'
 import  live_search from './live_search.vue'
 import  live_search_list from './live_search_list.vue'
 import  live_page from './live_page.vue'
+import  live_tab from './live_tab.vue'
 
 window.live_login = live_login
 window.live_cell = live_cell
@@ -22,5 +23,6 @@ window.live_html = live_html
 window.live_search = live_search
 window.live_search_list = live_search_list
 window.live_page = live_page
+window.live_tab = live_tab
 
 //Vue.component('com-live-login',live_login)
