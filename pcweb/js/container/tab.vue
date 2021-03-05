@@ -12,12 +12,19 @@
         </div>
         <div>
             <component v-for="tab in ctx.tabs" :key="tab.label" v-show="is_show(tab)"
-                       :is="tab._show_editor|| 'com-ui-blank'" :ctx="tab"></component>
+                       :is="tab.editor || tab._show_editor|| 'com-ui-blank'" :ctx="tab"></component>
         </div>
 
     </div>
 </template>
 <script>
+    /*
+    ctx={
+       tabs:[
+           {label:'标签页一','editor:'bbc'}:
+       ]
+    }
+    * */
     export default {
         props:['ctx'],
         data(){

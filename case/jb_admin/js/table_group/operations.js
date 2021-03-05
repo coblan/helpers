@@ -57,3 +57,5 @@ var ele_operations={
 
 var count = 0
 Vue.component('com-table-operations',ele_operations)
+console.log('import operation')
+import  pagination from  './pagination.vue'
