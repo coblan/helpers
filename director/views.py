@@ -153,6 +153,7 @@ def director_view(request,director_name):
             
         if inspect.isfunction(directorEnt):
             # 2020/7/6 再次开启 事务
+            # 2021/3/7 加入默认事务配置，sportscenter有多个库连接，但是sports库才是主库。原来采用default库，造成重大问题
             if need_transaction:         
                 db_names=  getattr(settings,'REQUEST_TRANSACTION_DB',['default'])
                 wraped_directorEnt = tranactionDbs(directorEnt,db_names)
