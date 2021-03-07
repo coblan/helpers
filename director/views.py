@@ -52,6 +52,14 @@ def wrap(fun,key):
 def tranactionDefault(fun):
     return wrap(fun,'default')
 
+def tranactionDbs(fun,keys):
+    def _fun(*args,**kws):
+        _fun1 = fun
+        for key in keys:
+            _fun1 = wrap(_fun1, key)
+        return _fun1(*args,**kws)
+    return _fun   
+
 def transactionall(fun):
     keys = settings.DATABASES.keys()
     def _fun(*args,**kws):
@@ -145,8 +153,10 @@ def director_view(request,director_name):
             
         if inspect.isfunction(directorEnt):
             # 2020/7/6 再次开启 事务
-            if need_transaction:
-                wraped_directorEnt = tranactionDefault(directorEnt)
+            if need_transaction:         
+                db_names=  getattr(settings,'REQUEST_TRANSACTION_DB',['default'])
+                wraped_directorEnt = tranactionDbs(directorEnt,db_names)
+                #wraped_directorEnt = tranactionDefault(directorEnt)
                 rt = wraped_directorEnt(**kws)
             else:
                 rt = directorEnt(**kws)
