@@ -16,3 +16,11 @@
         }
     }
 </script>
+<style scoped lang="scss">
+.div-item{
+    margin: 2px;
+    vertical-align: top;
+}
+</style>
+
+

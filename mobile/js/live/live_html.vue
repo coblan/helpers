@@ -25,6 +25,7 @@
     .com-live-html{
         background-color: white;
         display:flex;
+        height: var(--app-height);
         flex-direction:column;
 
     .content{

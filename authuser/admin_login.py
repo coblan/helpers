@@ -12,14 +12,15 @@ from .forms import LoginForm
 from helpers.director.kv import get_value,set_value,clear_value
 from django.utils import timezone
 from helpers.authuser.validate_code import code_and_url
+from django.utils.translation import gettext as _
 
 class LoginFormPage(FieldsPage):
     template = 'authuser/login.html'
     
     def get_heads(self): 
         return [
-            {'name':'username','editor':'linetext','autofocus':True,'placeholder':'用户名'},
-            {'name':'password','editor':'password','placeholder':'用户密码',},
+            {'name':'username','editor':'linetext','autofocus':True,'placeholder':_('用户名')},
+            {'name':'password','editor':'password','placeholder':_('用户密码'),},
         ]
     
     def get_context(self): 
@@ -28,18 +29,28 @@ class LoginFormPage(FieldsPage):
         dc={
             'page_cfg': {     
                 'next':next_url,
-                'title': '用户登录',
-                'subtitle': '欢迎登录后台管理系统',
+                'title': _('用户登录'),
+                'subtitle': _('欢迎登录后台管理系统'),
                 #'regist_url': '%s/regist' % self.engin.engin_url,
                 'copyright': 'Copyright @%s  All Right Reserve'%timezone.now().year,
                 'heads': self.get_heads(),
-                'login_item': '用户名',
+                'login_item': _('用户名'),
                 },
         } 
         
         ctx.update(dc)
         return ctx
 
+@director_view('username/login')
+def login(username , password):
+    row={"username":username,'password':password}
+    rt= Login.run(row)
+    if 'errors' in rt:
+        dc ={}
+        for k,v in rt['errors'].items():
+            dc[k] = ';'.join(v)
+        rt['errors'] = dc
+    return rt
 
 class Login(object):
     
@@ -47,12 +58,62 @@ class Login(object):
     @staticmethod
     @director_view('do_login')
     def run(row):
+        """
+        为了实现token登录，需要添加中间件
+        MIDDLEWARE = [
+           'helpers.director.middleware.tokenuser.TokenUser',
+           ...
+        ]
+    
+        ##调用接口登录
+
+        ```
+        
+        [POST]    /dapi/do_login     
+        
+            参数:
+            {"username":"xx","password":"xxx"}
+        
+            返回:
+            {
+                "data": {
+                    "token": "i7u62v4o5340950xt3jguyilxgmodvxp",
+                    "success": true
+                },
+                "success": true
+            }
+         ```
+        
+用户登录后，有多种方式携带登录信息进行其他api的请求。
+      
+1. 直接用cookies。后台已经自动设置和http请求的cookies，如果携带cookies请求，可以直接请求其他api接口。
+
+2. 采用token。如果传递cookies有困难，直接将token放在http的header中，进行请求.字段名为 `Authorization:token`
+
+3. 如果设置header有困难，可以直接挂在url上请求，例如 : `api_url?token=xxx`
+
+
+**跨域问题**
+
+在浏览器中肯会存在跨域问题。后端进行了设置是允许跨域请求的，但是浏览器默认是不允许传递cookies等敏感信息，所以需要进行一定的设置。
+以jquery的请求为例,需要设置`withCredentials: true`
+        
+``` 
+    $.ajax({
+        url: a_cross_domain_url,
+        xhrFields: {
+            withCredentials: true
+        }
+    });
+```
+        """    
+        
         loger = Login(row)
 
         if not loger.check_code():
             code,url = code_and_url()
             set_value(loger.code_key, code)
-            return {'success':False,'errors':{'validate_code':['验证码错误']},'validate_img':url}
+            return {'success':False,'errors':{'validate_code':[_('验证码错误')]},'validate_img':url}
         rt= loger.check_and_login()
         return rt
 
@@ -94,7 +155,9 @@ class Login(object):
         clear_value(self.count_key)
         clear_value(self.code_key)
         
-        return {'success':True,'token':self.request.session.session_key}
+        return {'success':True,
+                'token': self.request.session._get_or_create_session_key() ,# self.request.session.session_key
+                }
 
 
     #def w(self,errors):

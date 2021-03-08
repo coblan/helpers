@@ -14,9 +14,9 @@
         computed:{
             mytype(){
                 if(this.head.class_express){
-                    return ex.eval( this.head.class_express,{row:this.rowData})
+                    return ex.eval( this.head.class_express,{row:this.rowData}) || 'info'
                 }else{
-                    return this.head.class_map[ this.rowData[this.field]  ]
+                    return this.head.class_map[ this.rowData[this.field]  ] || 'info'
                 }
 
             },

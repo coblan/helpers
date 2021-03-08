@@ -171,8 +171,37 @@ desired effect
 </script>
 <style>
     .wrapper{
-        overflow-y: hidden;
+        /*overflow-y: hidden;*/
     }
+    .sidebar{
+        position: absolute;
+        top: 50px;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        overflow-y: auto;
+    }
+    .sidebar-collapse  .sidebar{
+        position: static;
+        overflow: inherit;
+    }
+    .sidebar::-webkit-scrollbar {
+        width: 6px!important;
+        height: 6px!important;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none
+    }
+
+    .sidebar::-webkit-scrollbar-thumb {
+        cursor: pointer;
+        background: rgba(238, 238, 238, 0.75)
+    }
+
+    .sidebar::-webkit-scrollbar-thumb:hover {
+        background: rgba(153,153,153,.4)
+    }
+
 </style>
 <body class="hold-transition {{ ui_theme }} sidebar-mini">
 <script>
@@ -692,6 +721,17 @@ desired effect
 <!--<script src="https://unpkg.com/element-ui/lib/index.js"></script>-->
 <script src="{{ js_config.js_lib.element }}"></script>
 <link href="{{ js_config.js_lib.element_css }}" rel="stylesheet">
+{% if js_config.tr.element_translation_js != "element_translation_js" %}
+    <script src="{{ js_config.tr.element_translation_js }}"></script>
+    <script>
+    ELEMENT.locale(ELEMENT.lang.en)
+    <!--if(js_config.tr.element_translation_js!=''){-->
+        <!--ex.eval(js_config.tr.element_translation_js)-->
+    <!--}-->
+    </script>
+{% endif %}
+
+
 <!--<link href="https://unpkg.com/element-ui/lib/theme-chalk/index.css" rel="stylesheet">-->
 <!--<script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.min.js"></script>-->
 
@@ -714,5 +754,6 @@ desired effect
     .control-sidebar-open .right-sidebar-mask{
         display: block;
     }
+ 
 </style>
 </html>

@@ -3,7 +3,9 @@ require('./styl/article.styl')
 Vue.component('com-li-article',{
     props:['ctx'],
     template:`<div class="com-li-article">
-    <img :src="row.cover" alt="">
+    <div class="img-ctn" :style="{'background-image':'url('+row.cover+')'}">
+    </div>
+    <!--<img :src="row.cover" alt="">-->
     <div class="content">
         <span v-if="ctx.click_express" class="title" :class="{clickable:has_action}" v-text="row.title" @click="on_click()"></span>
          <a v-if="ctx.link_express" class="title" :class="{clickable:has_action}" v-text="row.title" :href="get_link()"></a>

@@ -160,7 +160,7 @@ def upload_permit(request):
     permits = json.loads(data)
     
     for permit in permits:
-        permit_obj,_=PermitModel.objects.get_or_create(name=permit['name'])
+        permit_obj,is_created =PermitModel.objects.get_or_create(name=permit['name'])
         permit_obj.permit=permit['permit']
         permit_obj.desp=permit['desp']
         permit_obj.save() 
@@ -184,7 +184,7 @@ def upload_group(request):
     data=catch.getvalue()
     groups = json.loads(data)
     for gp in groups:
-        gp_obj,_=Group.objects.get_or_create(name=gp['name'])
+        gp_obj,is_created =Group.objects.get_or_create(name=gp['name'])
         permits=PermitModel.objects.filter(name__in=gp['permit'])
         gp_obj.permitmodel_set.add(*list(permits))
         gp_obj.save()

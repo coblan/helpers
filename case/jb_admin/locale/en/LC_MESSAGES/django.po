@@ -1,0 +1,83 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-02-22 18:15+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: .\helpers\case\jb_admin\admin_user.py:16
+msgid "User"
+msgstr "User"
+
+#: .\helpers\case\jb_admin\js_cfg.py:7
+msgid "Basic Setting"
+msgstr "Basic Setting"
+
+#: .\helpers\case\jb_admin\js_cfg.py:8
+msgid "Language"
+msgstr "Language"
+
+#: .\helpers\case\jb_admin\js_cfg.py:9
+msgid "back"
+msgstr "Back"
+
+#: .\helpers\case\jb_admin\js_cfg.py:10
+msgid "Refresh"
+msgstr "Refresh"
+
+#: .\helpers\case\jb_admin\js_cfg.py:11
+msgid "Change Password"
+msgstr "Change Password"
+
+#: .\helpers\case\jb_admin\js_cfg.py:12
+msgid "LogOut"
+msgstr "LogOut"
+
+#: .\helpers\case\jb_admin\js_cfg.py:13
+msgid "LogIn"
+msgstr "LogIn"
+
+#: .\helpers\case\jb_admin\js_cfg.py:14
+msgid "element_translation_js"
+msgstr "https://cdn.jsdelivr.net/npm/element-ui@2.14.1/lib/umd/locale/en.js"
+
+#: .\helpers\case\jb_admin\js_cfg.py:15
+msgid "开始时间"
+msgstr "Start Time"
+
+#: .\helpers\case\jb_admin\js_cfg.py:16
+msgid "结束时间"
+msgstr "End Time"
+
+#: .\helpers\case\jb_admin\js_cfg.py:17
+msgid "请选择"
+msgstr "please select"
+
+#: .\helpers\case\jb_admin\uidict.py:8
+msgid "确定要导出EXCEL?"
+msgstr "Confirm export EXCEL?"
+
+#: .\helpers\case\jb_admin\uidict.py:16
+msgid "导出最大条数"
+msgstr "Number of export"
+
+#: .\helpers\case\jb_admin\uidict.py:16
+#, python-format
+msgid "请输入小于%(max_length)s的正整数"
+msgstr "Please input integer small than %(max_length)s"
+
+#: .\helpers\case\jb_admin\uidict.py:19 .\helpers\case\jb_admin\uidict.py:22
+msgid "导出Excel"
+msgstr "Export Excel"

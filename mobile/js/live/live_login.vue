@@ -7,15 +7,15 @@
             </div>
             <div class="row">
                 <van-icon name="user-o"  />
-                <input type="text" v-model="username" placeholder="请输入账号">
+                <input type="text" v-model="username" :placeholder="tr('请输入账号')">
             </div>
             <div class="row">
                 <van-icon name="lock"  />
-                <input type="password" v-model="password" placeholder="请输入密码">
+                <input type="password" v-model="password" :placeholder="tr('请输入密码')">
             </div>
 
             <div style="padding-top: .3rem">
-                <van-button type="primary" size="large" @click="do_login">登录</van-button>
+                <van-button type="primary" size="large" @click="do_login" ><span v-text="tr('登录')"></span></van-button>
             </div>
 
         </div>
@@ -42,6 +42,9 @@
             }
         },
         methods:{
+            tr(wd){
+                return js_config.tr[wd] ||wd
+            },
             do_login(){
                 var post_row = { username:this.username,password:this.password,_director_name:this.ctx.director_name }
                 cfg.show_load()
@@ -102,6 +105,7 @@
             /*color: #665656;*/
             display:inline-block;
             margin-left: .3rem;
+            border: 0;
             background-color: transparent;
 
             &::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */

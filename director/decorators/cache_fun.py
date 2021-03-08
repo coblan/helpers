@@ -8,51 +8,60 @@ from django.utils import timezone
 
 import hashlib
 
+if getattr(settings,'REDIS_CACHE',None):
+    import redis
+    dc = settings.REDIS_CACHE
+    redis_conn = redis.Redis(host=dc['host'], port=dc['port'], decode_responses=True,db=dc['db'],password=dc['password']) 
+else:
+    redis_conn = None
+
 def cache_redis(ex=None,cache_key=None): 
     """
     把函数的返回结果缓存在redis中
     """
     def _fun(fun):
-        def _fun2(*args,**kws): 
-            if not cache_key:
-                key = '%s.%s'%(fun.__module__ ,fun.__name__) 
-                if args:
-                    for item in args:
-                        key += '%s_%s'%(item.__class__.__name__, id(item) )
-                if kws:
-                    m = hashlib.md5()
-                    kws_str = json.dumps(kws, sort_keys=True)
-                    m.update(kws_str.encode('utf-8')) #参数必须是byte类型，否则报Unicode-objects must be encoded before hashing错误
-                    md5value=m.hexdigest()            
-                    key += '_'+md5value
-    
-                cache_name = 'cache:fun:%s'%key
-            else:
-                cache_name = cache_key
-            rt = redis_conn.get(cache_name.encode('utf-8'))
-            if not rt:
-                #lock_key = 'lock:fun:%s'%key
-                #created = lock_created(lock_key,1)
-                #if created:
-                rt_obj = fun(*args, **kws)
-                rt = json.dumps(rt_obj)
-                redis_conn.set(cache_name,rt,ex=ex)
-                #clear_value(lock_key)
-                #else:
-                    #count = 0
-                    #while(True):
-                        #if count>10000:
-                            #raise UserWarning('缓存等待同步函数执行完成超时')
-                        #count +=200
-                        #time.sleep(200)
-                        #if not get_value(lock_key):
-                            #rt = redis_conn.get(cache_name.encode('utf-8'))
-                            #rt_obj =json.loads(rt.decode('utf-8'))
-            else:
-                rt_obj = json.loads(rt.decode('utf-8'))
-            return rt_obj
-      
-        return _fun2
+        if redis_conn:
+            def _fun2(*args,**kws): 
+                if not cache_key:
+                    key = '%s.%s'%(fun.__module__ ,fun.__name__) 
+                    if args:
+                        for item in args:
+                            key += '%s_%s'%(item.__class__.__name__, id(item) )
+                    if kws:
+                        m = hashlib.md5()
+                        kws_str = json.dumps(kws, sort_keys=True)
+                        m.update(kws_str.encode('utf-8')) #参数必须是byte类型，否则报Unicode-objects must be encoded before hashing错误
+                        md5value=m.hexdigest()            
+                        key += '_'+md5value
+        
+                    cache_name = 'cache:fun:%s'%key
+                else:
+                    cache_name = cache_key
+                rt = redis_conn.get(cache_name)
+                if not rt:
+                    #lock_key = 'lock:fun:%s'%key
+                    #created = lock_created(lock_key,1)
+                    #if created:
+                    rt_obj = fun(*args, **kws)
+                    rt = json.dumps(rt_obj,ensure_ascii=False)
+                    redis_conn.set(cache_name,rt,ex=ex)
+                    #clear_value(lock_key)
+                    #else:
+                        #count = 0
+                        #while(True):
+                            #if count>10000:
+                                #raise UserWarning('缓存等待同步函数执行完成超时')
+                            #count +=200
+                            #time.sleep(200)
+                            #if not get_value(lock_key):
+                                #rt = redis_conn.get(cache_name.encode('utf-8'))
+                                #rt_obj =json.loads(rt.decode('utf-8'))
+                else:
+                    rt_obj = json.loads(rt)
+                return rt_obj
+            return _fun2
+        else:
+            return fun
     return _fun
 
 def cache_in_db(ex=None,cache_key=None): 

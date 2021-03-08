@@ -15,6 +15,7 @@ import {sys} from  './sys'
 import  * as defPromise from  './defPromise'
 import  {os} from  './os'
 import {localCatch} from  './catch'
+import {utile} from  './utile'
 
 var ex={
     assign:function (dst,src) {
@@ -40,7 +41,7 @@ ex.assign(ex,file_proc)
 ex.assign(ex,rabbit)
 ex.assign(ex,sys)
 ex.assign(ex,localCatch)
-
+ex.assign(ex,utile)
 ex.os = os
 ex.sortOrder=sortOrder
 ex.DefPromise = defPromise.default
