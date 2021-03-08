@@ -81,6 +81,9 @@
 {% for lib in extra_js %}
 <script src='{{ lib | ctxvalue:js_config.js_lib }}'></script>
 {% endfor %}
+{% for lib in extra_css %}
+<link href='{{ lib | ctxvalue:js_config.js_lib }}' rel="stylesheet">
+{% endfor %}
 
 <script>
     init_express={{ init_express | jsonify }}
