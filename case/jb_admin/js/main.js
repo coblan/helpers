@@ -6,6 +6,7 @@ require('./scss/table_page.scss')
 require('./scss/element_ex.scss')
 require('./scss/share.scss')
 require('./scss/layer.scss')
+require('./scss/my_bootstrap.scss')
 
 require('./styl/adminlte.styl')
 

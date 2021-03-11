@@ -29,6 +29,7 @@ import search_select from  './search_select.vue'
 import  flow from  './flow.vue'
 import  pop_table_multi_select from  './pop_table_multi_select.vue'
 import  blocktext from  './blocktext.vue'
+import  head_shower from  './head_shower.vue'
 
 Vue.component('com-field-blocktext',blocktext)
 Vue.component('com-field-radio',radio)
@@ -39,3 +40,4 @@ Vue.component('com-field-bool',field_bool)
 Vue.component('com-field-search-select',search_select)
 Vue.component('com-field-flow',flow)
 Vue.component('com-field-pop-table-multi-select',pop_table_multi_select)
+Vue.component('com-field-head-shower',head_shower)
