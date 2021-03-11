@@ -126,7 +126,7 @@ def get_lib(request):
             'md5': 'https://cdn.jsdelivr.net/npm/blueimp-md5@2.10.0/js/md5.min.js',
             'swiper': 'https://cdn.jsdelivr.net/npm/swiper@4.5.0/dist/js/swiper.min.js',
             'swiper_css': 'https://cdn.jsdelivr.net/npm/swiper@4.5.0/dist/css/swiper.min.css',  
-            'echarts':'https://cdn.jsdelivr.net/npm/echarts@4.2.1/dist/echarts.min.js',
+            'echarts':'https://cdn.jsdelivr.net/npm/echarts@4.9.0/dist/echarts.min.js',#'https://cdn.jsdelivr.net/npm/echarts@4.2.1/dist/echarts.min.js',
             'chosen':'https://cdn.jsdelivr.net/npm/chosen-js@1.8.7/chosen.jquery.min.js',
             'chosen_css':'https://cdn.jsdelivr.net/npm/chosen-js@1.8.7/chosen.min.css',
             #'ckeditor':'https://cdn.jsdelivr.net/npm/ckeditor@4.11.4/ckeditor.js',
