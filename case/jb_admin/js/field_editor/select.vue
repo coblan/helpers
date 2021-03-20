@@ -31,7 +31,7 @@
                 ex.assign(inn_config, this.head.config)
             }
 
-            this.head.placeholder = this.head.placeholder || '请选择'
+            this.head.placeholder = this.head.placeholder || cfg.tr('请选择')
 
             return {
                 model: this.row[this.head.name],
@@ -206,12 +206,16 @@
 
 </style>
 <style lang="scss">
-     .el-select-dropdown.is-multiple li.selected{
+    .el-select-dropdown.is-multiple li.selected{
         display: none;
     }
 
      .com-field-select{
 
      }
-
+.com-filter-multi-select{
+    .el-select-dropdown.is-multiple li.selected{
+        display: block;
+    }
+}
 </style>

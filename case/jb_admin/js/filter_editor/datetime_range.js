@@ -7,8 +7,8 @@ var com_datetime_range={
         //var end=this.search_args['_end_'+this.head.name]
         return {
             heads:[
-                {name:'_start_'+this.head.name,placeholder:'开始时间',clearable:this.head.clearable},
-                {name:'_end_'+this.head.name,placeholder:'结束时间',clearable:this.head.clearable}
+                {name:'_start_'+this.head.name,placeholder:cfg.tr('开始时间'),clearable:this.head.clearable},
+                {name:'_end_'+this.head.name,placeholder:cfg.tr('结束时间'),clearable:this.head.clearable}
             ]
         }
     },

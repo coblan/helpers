@@ -12,14 +12,15 @@ from .forms import LoginForm
 from helpers.director.kv import get_value,set_value,clear_value
 from django.utils import timezone
 from helpers.authuser.validate_code import code_and_url
+from django.utils.translation import gettext as _
 
 class LoginFormPage(FieldsPage):
     template = 'authuser/login.html'
     
     def get_heads(self): 
         return [
-            {'name':'username','editor':'linetext','autofocus':True,'placeholder':'用户名'},
-            {'name':'password','editor':'password','placeholder':'用户密码',},
+            {'name':'username','editor':'linetext','autofocus':True,'placeholder':_('用户名')},
+            {'name':'password','editor':'password','placeholder':_('用户密码'),},
         ]
     
     def get_context(self): 
@@ -28,12 +29,12 @@ class LoginFormPage(FieldsPage):
         dc={
             'page_cfg': {     
                 'next':next_url,
-                'title': '用户登录',
-                'subtitle': '欢迎登录后台管理系统',
+                'title': _('用户登录'),
+                'subtitle': _('欢迎登录后台管理系统'),
                 #'regist_url': '%s/regist' % self.engin.engin_url,
                 'copyright': 'Copyright @%s  All Right Reserve'%timezone.now().year,
                 'heads': self.get_heads(),
-                'login_item': '用户名',
+                'login_item': _('用户名'),
                 },
         } 
         
@@ -112,7 +113,7 @@ class Login(object):
         if not loger.check_code():
             code,url = code_and_url()
             set_value(loger.code_key, code)
-            return {'success':False,'errors':{'validate_code':['验证码错误']},'validate_img':url}
+            return {'success':False,'errors':{'validate_code':[_('验证码错误')]},'validate_img':url}
         rt= loger.check_and_login()
         return rt
 

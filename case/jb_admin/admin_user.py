@@ -265,10 +265,10 @@ class GroupExport(object):
     
     def import_(self,groups):
         for group in groups:
-            inst,_ = Group.objects.get_or_create(pk = group.get('id'))
+            inst,is_created = Group.objects.get_or_create(pk = group.get('id'))
             inst.name= group.get('name')
             inst.save()
-            p_inst , _ = PermitModel.objects.get_or_create(group= inst)
+            p_inst , is_created = PermitModel.objects.get_or_create(group= inst)
             p_inst.names = group.get('permit','')
             p_inst.save()
             
