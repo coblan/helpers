@@ -10,6 +10,10 @@
 
             </van-tab>
         </van-tabs>
+        <div v-if="ctx.footer" class="footer-content">
+            <component :is="ctx.footer.editor"  :ctx="ctx.footer"></component>
+        </div>
+
     </div>
 </template>
 <script>

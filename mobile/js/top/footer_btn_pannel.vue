@@ -18,8 +18,9 @@
     export default{
         props:['ctx'],
         data(){
+            let active_index = this.ctx.items.indexOf(ex.findone(this.ctx.items,{name:this.ctx.active}))
           return {
-              myactive:this.ctx.active
+              myactive:active_index
           }
         },
         methods:{
