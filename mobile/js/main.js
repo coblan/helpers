@@ -1,6 +1,7 @@
 require('./scss/element_table.scss')
 require('./scss/base.scss')   // 单位宽度等
 require('./scss/share.scss')
+require('./scss/vant_adapt.scss')
 
 require('./styl/list.styl')
 require('./styl/vant_conf.styl')

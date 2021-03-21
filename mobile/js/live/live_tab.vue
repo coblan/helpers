@@ -41,6 +41,7 @@
         flex-direction: column;
         .tab-com{
             flex-grow: 100;
+            position: relative;
         }
         .inn-wrap{
             position: absolute;
