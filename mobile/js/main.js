@@ -41,3 +41,6 @@ import * as top_main from './top/main.js'
 
 import * as content_main from './content/main.js'
 
+//import pull_list from 'weblib/mb/pull_list.vue'
+//Vue.component('com-pull-list',pull_list)
+

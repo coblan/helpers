@@ -35,7 +35,9 @@
     </div>
 </template>
 <script>
-    import {live_list} from './live_list'
+    //TODO pull_list 替换到 Livelist的内容
+//    import pull_list from '../container/pull_list.vue'
+    import live_list from './live_cell.vue'
     export default {
         props:['ctx'],
         basename:'live-search-list',
