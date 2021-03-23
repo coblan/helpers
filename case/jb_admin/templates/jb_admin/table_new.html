@@ -4,37 +4,32 @@
 
 {% block page_content %}
 
-<!--<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">-->
-
 <script type="text/javascript">
 
-    //	row_filters=
-    //	placeholder =
-    //	row_sort=
-    //	heads=
-    //	rows=
-    //	row_pages =
-
-    //	can_add=
-    //	can_del=
-    //	search_args=ex.parseSearch()
-    //	search字段从 search_args._q 来取值
     extra_table_logic='{{ extra_table_logic }}'
     footer={{ footer |jsonify }}
     search_args={{ search_args | jsonify | default:'{}'  }}
     parents = {{ parents | jsonify | default:'[]' }}
+    advise_heads = {{ advise_heads | jsonify | default:'[]' }}
+    advise_heads_cookie_path= '{{ advise_heads_cookie_path }}' || null
 
+    option= {{ option | jsonify }}
+    table_layout={{ table_layout | jsonify }}
+    selectable = {{ selectable | jsonify }}
     // 这个变量留着，兼容老的调用。。准备把它移除
-    tabs={{ tabs | jsonify | default:'[]' }}
-    named_tabs={{ named_tabs | jsonify | default:'{}' }}
+//    tabs={{ tabs | jsonify | default:'[]' }}
+//    named_tabs={{ named_tabs | jsonify | default:'{}' }}
+    event_slots = {{ event_slots | jsonify | default:'[]' }}
+
     childStore_event_slot={{ childStore_event_slot | jsonify |default:'{}' }}
 
-//    eventBus = new Vue({})
+    //    eventBus = new Vue({})
 
 
-    var real_table_store = {
+    var base_table_store = {
         data:function(){
             return {
+                selectable:selectable,
                 parents:parents,
                 page_label:page_label,
                 heads:heads,
@@ -48,16 +43,26 @@
                 search_args:search_args,
                 //---------table_page---------
                 tab_stack:[],
-                tabs:tabs,
-                named_tabs:named_tabs,
+//                tabs:tabs,
+//                named_tabs:named_tabs,
                 //-------------------
-                named_ctx:named_ctx
+                named_ctx:named_ctx,
+                event_slots:event_slots,
+                advise_heads:advise_heads,
+                advise_heads_cookie_path:advise_heads_cookie_path,
+                option:option,
+                table_layout:table_layout,
             }
         },
         mixins:[table_store,table_page_store],
 
     }
 
+    {% block custom-store %}
+
+    real_table_store = base_table_store
+
+    {% endblock %}
 
     table_logic={
         el:'#there',
@@ -66,44 +71,18 @@
 //            this.childStore=new Vue(real_table_store)
         },
         data:{
-           childStore : new Vue(real_table_store),
+            childStore : new Vue(real_table_store),
 
             parents:parents,
             page_label:page_label,
-//            heads:heads,
-//            rows:rows,
-//            row_filters:row_filters,
-//            row_sort:row_sort,
-//            row_pages:row_pages,
-//            director_name:director_name,
-//            footer:footer,
-////            model_name:model_name,
-//            selected:[],
-//            search_args:search_args, //ex.parseSearch(),
-//            ops:ops,
-//            crt_row:{},
-//
-//            tab_stack:[],
-//            tabs:tabs,
-//            named_tabs:named_tabs,
-
-            tr:cfg.tr
-
+            tr:cfg.tr,
 
         },
         mixins:[mix_table_data,mix_ele_table_adapter],
 
-//        created:function(){
-//            var store_name='table_'+ex.get_uid()
-//            this.$store.registerModule(store_name, table_store)
-//            this.store_name = store_name
-//        },
         mounted:function(){
             var self=this
-
-//            this.$store.state[store_name].childbus.$on('update_or_insert',function(){
-//                console.log('jjyy')
-//            })
+            this.childStore.vc=this
             ex.assign(this.op_funs,{
                 row_changed:function(kws){
                     var row= kws.row
@@ -135,10 +114,11 @@
                     self.crt_row= kws.row
                 },
                 update_or_insert:function(kws){
-                    var new_row = kws.new_row
-                    var old_row= kws.old_row
-                    self.update_or_insert(new_row,old_row)
-                    self.crt_row=new_row
+//                    var new_row = kws.new_row
+//                    var old_row= kws.old_row
+//                    self.update_or_insert(new_row,old_row)
+                    self.childStore.update_or_insert(kws.new_row)
+                    self.crt_row=kws.new_row
                 },
                 get_childs:function(kws){
                     // head:{fun:
@@ -158,11 +138,16 @@
                 var names =[]
                 var last_stack=null
                 ex.each(this.childStore.tab_stack,function(stack){
-                    if(last_stack){
-                        var last_crt_tab = ex.findone(last_stack.tabs,{name:last_stack.crt_tab_name})
-                        names.push(last_crt_tab.label)
+                    if(stack){
+                        var last_crt_tab = ex.findone(stack.tabs,{name:stack.crt_tab_name})
+//                        names.push(last_crt_tab.label)
+                        if(stack.par_row._label){
+                            names.push(last_crt_tab.label+"("+stack.par_row._label+")")
+                        }else{
+                            names.push(last_crt_tab.label)
+                        }
                     }
-                    last_stack = stack
+//                    last_stack = stack
                 })
                 return names
 
@@ -232,21 +217,23 @@
 
     function update_cnt_size(){
 //        var cnt_ht =  Math.max( $(document).height(),window.innerHeight)
-        var cnt_ht =  window.innerHeight
+        var cnt_ht =  window.innerHeight ;//$('body').height() ;//
         $('#there').height(cnt_ht -80)
     }
     $(function () {
         update_cnt_size()
-//        $('.main-tab-content').height(window.innerHeight -230)
+
         $(window).resize(function(){
             update_cnt_size()
         });
-//        $(document).resize(update_cnt_size)
 
         if(extra_table_logic){
             table_logic.mixins.push(window[extra_table_logic])
         }
-        table=new Vue(table_logic)
+//        setTimeout(()=>{
+            table=new Vue(table_logic)
+//        },1000)
+
 
     })
 
@@ -289,35 +276,36 @@
     <div id="main-page" class="rows-block flex-v flex-grow" v-show="childStore.tab_stack.length == 0">
 
 
-        <div v-if="childStore.row_filters.length > 0" style="background-color: #fbfbf8;padding: 8px 1em;border-radius: 4px;margin-top: 8px">
-            <!--<com-filter class="flex" :heads="row_filters" :search_args="search_args"-->
-                        <!--@submit="search()"></com-filter>-->
-            <com-table-filters></com-table-filters>
+        <com-d-table :filter-heads='childStore.row_filters'
+                     :table-rows="childStore.rows"
+                     :table-heads="childStore.heads"
+                     :row-sort="childStore.row_sort"
+                     :row-pages="childStore.row_pages"
+                     :director-name="childStore.director_name"
+                     :search-args="childStore.search_args"
+                    ></com-d-table>
 
-        </div>
-        <div  v-if="childStore.ops.length>0 && childStore.tab_stack.length ==0">
-            <com-table-operations></com-table-operations>
-        </div>
+        <!--<div v-if="childStore.row_filters.length > 0"-->
+             <!--style="background-color: #fbfbf8;padding: 2px 1em;border-radius: 4px;">-->
+            <!--<com-table-filters></com-table-filters>-->
 
-        <div v-if="childStore.parents.length>0">
-            <com-table-parents></com-table-parents>
-        </div>
+        <!--</div>-->
+        <!--<div  v-if="childStore.ops.length>0 && childStore.tab_stack.length ==0">-->
+            <!--<com-table-operations></com-table-operations>-->
+        <!--</div>-->
 
-        <!--<ol v-if="childStore.parents.length>0" class="breadcrumb jb-table-parent">-->
-            <!--<li v-for="par in childStore.parents"><a href="#" @click="get_childs(par)"  v-text="par.label"></a></li>-->
-        <!--</ol>-->
+        <!--<div v-if="childStore.parents.length>0">-->
+            <!--<com-table-parents></com-table-parents>-->
+        <!--</div>-->
 
-        <div class="box box-success flex-v flex-grow" style="margin-bottom: 0">
-            <div class="table-wraper flex-grow" style="position: relative;">
-                {% block table_content %}
-                <com-table-rows></com-table-rows>
-                </div>
-
-                {% endblock %}
-            </div>
-            <div style="background-color: white;">
-                <com-table-pagination></com-table-pagination>
-            </div>
+        <!--<div class="box box-success flex-v flex-grow" style="margin-bottom: 0">-->
+            <!--<div class="table-wraper flex-grow" style="position: relative;">-->
+                <!--<com-table-rows></com-table-rows>-->
+            <!--</div>-->
+        <!--</div>-->
+        <!--<div style="background-color: white;">-->
+            <!--<com-table-pagination></com-table-pagination>-->
+        <!--</div>-->
     </div>
 
     <div id="tab-wrap"  v-if="childStore.tab_stack.length>0" class="flex-grow" style="position: relative">
@@ -334,10 +322,11 @@
     .main-tab-content{
 
     }
-
-
     .fake-suit th{
         white-space: nowrap;
+    }
+    .main-page{
+        overflow: auto;
     }
 
 </style>

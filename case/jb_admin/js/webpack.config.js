@@ -10,7 +10,7 @@ var webpack = require('webpack')
 module.exports =
 {
     //context:__dirname,
-    mode:'production', //'development', //
+    mode:'development', // 'production', //
     entry: {
         jb_admin:'./main.js',
     },
@@ -22,7 +22,8 @@ module.exports =
     watch: true,
     resolve:{
         alias: {
-            jb_admin: path.resolve(__dirname,"../../case/jb_admin/js")
+            jb_admin: path.resolve(__dirname,"../../case/jb_admin/js"),
+            webcase:'D:/coblan/webcase'
         },
         modules:["D:/coblan/webcode/node_modules"],
     },
