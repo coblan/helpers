@@ -68,23 +68,23 @@ def SET(scope):
               'propagate': False,
           },
           'django': {
-              'handlers': ['console', ] , #'djangoout_warning', 'mail_admins', 'elk_warning'],
+              'handlers': [] , # 'console', 'djangoout_warning', 'mail_admins', 'elk_warning'],
               'level': 'INFO',
               'propagate': True,
               },          
   
           'general_log': {
-              'handlers': ['console', 'general_log', ] ,# 'elk_info' ],  #'djangoout_warning',
+              'handlers': [ 'general_log', ] ,# 'console','elk_info' ],  #'djangoout_warning',
               'level': 'DEBUG',
               'propagate': False,            
               },
           'ModelFields.save_form': {
-              'handlers': ['backend_operation','console',] , # 'elk_debug'],
+              'handlers': ['backend_operation',] , # 'console', 'elk_debug'],
               'level': 'DEBUG',
               'propagate': False,              
               },
           'operation': {
-              'handlers': ['backend_operation','console',] , # 'elk_debug'],
+              'handlers': ['backend_operation'] , # ,'console','elk_debug'],
               'level': 'DEBUG',
               'propagate': False,              
               },          

@@ -18,8 +18,9 @@
     export default{
         props:['ctx'],
         data(){
+            let active_index = this.ctx.items.indexOf(ex.findone(this.ctx.items,{name:this.ctx.active}))
           return {
-              myactive:this.ctx.active
+              myactive:active_index
           }
         },
         methods:{
@@ -35,10 +36,12 @@
 
 <style scoped lang="scss">
     .com-top-footer-btn-pannel{
-        position: absolute;
+        position: relative;
+        height: 50px;
+        width: 100%;
         /*top: calc( var(--app-height) - 50px);*/
-        bottom: 0;
-        left: 0;
-        right: 0;
+        /*bottom: 0;*/
+        /*left: 0;*/
+        /*right: 0;*/
     }
 </style>

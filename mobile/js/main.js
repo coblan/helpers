@@ -1,6 +1,7 @@
 require('./scss/element_table.scss')
 require('./scss/base.scss')   // 单位宽度等
 require('./scss/share.scss')
+require('./scss/vant_adapt.scss')
 
 require('./styl/list.styl')
 require('./styl/vant_conf.styl')
@@ -39,4 +40,7 @@ import * as layout_editor_main from './layout_editor/main.js'
 import * as top_main from './top/main.js'
 
 import * as content_main from './content/main.js'
+
+//import pull_list from 'weblib/mb/pull_list.vue'
+//Vue.component('com-pull-list',pull_list)
 
