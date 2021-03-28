@@ -23,7 +23,7 @@ module.exports =
     resolve:{
         alias: {
             jb_admin: path.resolve(__dirname,"../../case/jb_admin/js"),
-            webcase:'D:/coblan/webcase'
+            webcase:'D:/coblan/webcase',
         },
         modules:["D:/coblan/webcode/node_modules"],
     },
@@ -49,6 +49,9 @@ module.exports =
                     options: {
                         presets:[
                             require.resolve('@babel/preset-env')
+                        ],
+                        plugins: [
+                            require.resolve("@babel/plugin-transform-runtime")
                         ]
 
                     }

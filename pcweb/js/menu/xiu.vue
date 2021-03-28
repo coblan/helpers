@@ -7,7 +7,7 @@
                 <div class="menu">
                     <div class="action"  v-for="action in ctx.menu">
                         <a v-if="action.url"  :class="{'active':is_active(action)}" :href="action.url" v-text="action.label"></a>
-                        <a v-else="" :class="{'active':is_active(action)}"  href="#" @click="on_click(action)" v-text="action.label"></a>
+                        <a v-else :class="{'active':is_active(action)}"  href="#" @click="on_click(action)" v-text="action.label"></a>
                     </div>
                 </div>
                 <div class="right-ops">

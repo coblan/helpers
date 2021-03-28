@@ -99,3 +99,13 @@ def search_delete_related(rows):
                     {'str':str(inst),'related':ls}
                )
      return out_ls
+
+
+@director_view('d.delete_rows')
+def del_rows(rows):
+     for row in rows:
+          fields_cls = director.get(row.get('_director_name'))
+          fields_obj = fields_cls(row)
+          fields_obj.del_form()
+     rows_only_pk=[{'pk':x['pk']} for x in rows]
+     return rows_only_pk
