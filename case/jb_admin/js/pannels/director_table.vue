@@ -1,6 +1,7 @@
 <template>
     <div class="com-d-table flex-v">
-        <dfilter :heads="filterHeads" @search="search_page(1)" :search-args="searchArgs"></dfilter>
+        <dfilter :heads="filterHeads" @search="search_page(1)" :search-args="searchArgs"
+        :search-label="seach_label"></dfilter>
         <d-operation :heads="operationHeads"></d-operation>
         <div class="box box-success flex-v flex-grow" style="margin-bottom: 0">
             <!--<div class="table-wraper flex-grow" >-->
@@ -8,6 +9,7 @@
                         :heads="tableHeads"
                         :rows="tableRows"
                         :selected="selected"
+                        :footer="footer"
                         :row-Sort="rowSort" :search-args="searchArgs"></dtable>
             <!--</div>-->
         </div>
@@ -51,6 +53,9 @@
                 default:()=>[]
             },
             directorName:{},
+            footer:{
+                default:()=>{}
+            }
 
         },
         data (){
@@ -84,13 +89,11 @@
                         return self.delete_selected()
                     },
                     selected_set_and_save(kws){
-                        debugger
                         return self.selected_set_and_save(kws)
                     }
                 }
             })
             childStore.vc = this
-            window.vc = this
             return {
                 selected:[],
                 childStore:childStore,
@@ -100,6 +103,11 @@
 //            this.$nextTick(()=>{
 //                this.childStore.selected = this.$refs.dtable.selected
 //            })
+        },
+        computed:{
+            seach_label(){
+                return cfg.tr.search
+            }
         },
         methods:{
             search(){
@@ -113,7 +121,8 @@
                     this.tableRows.splice(0,this.tableRows.length,...resp.rows)
                     ex.vueAssign( this.rowPages,resp.row_pages)
                     ex.vueAssign(this.searchArgs,resp.search_args)
-
+                    ex.vueAssign(this.footer,resp.footer)
+//                    this.footer = resp.footer
                 })
 
 //                ex.director_call('d.get_rows',post_data,function(resp){
