@@ -60,6 +60,14 @@
                 computed:{
                     has_select(){
                         return self.selected.length !=0
+                    },
+                    selected:{
+                        get(){
+                            return self.selected
+                        },
+                        set(v){
+                            self.selected = v
+                        }
                     }
                 },
                 methods:{
@@ -74,6 +82,10 @@
                     },
                     delete_selected(){
                         return self.delete_selected()
+                    },
+                    selected_set_and_save(kws){
+                        debugger
+                        return self.selected_set_and_save(kws)
                     }
                 }
             })
@@ -85,9 +97,9 @@
             }
         },
         mounted(){
-            this.$nextTick(()=>{
-                this.childStore.selected = this.$refs.dtable.selected
-            })
+//            this.$nextTick(()=>{
+//                this.childStore.selected = this.$refs.dtable.selected
+//            })
         },
         methods:{
             search(){
