@@ -1,7 +1,7 @@
 import {old} from './old.js'
 import {network} from './network.js'
 import {urlparse} from './urlparse.js'
-import {collection} from  './collection.js'
+//import {collection} from  './collection.js'
 import * as path from './patch.js'
 import {cookie} from './cookie.js'
 import {obj_control} from  './obj'
@@ -16,6 +16,8 @@ import  * as defPromise from  './defPromise'
 import  {os} from  './os'
 import {localCatch} from  './catch'
 import {utile} from  './utile'
+
+import {collection} from  'weblib/ex/collection.js'
 
 var ex={
     assign:function (dst,src) {

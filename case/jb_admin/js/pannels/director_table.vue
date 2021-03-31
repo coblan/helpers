@@ -7,6 +7,8 @@
             <!--<div class="table-wraper flex-grow" >-->
                 <dtable ref="dtable" class="my-d-table"
                         :heads="tableHeads"
+                        :adviseHeads="adviseHeads"
+                        :directorName="directorName"
                         :rows="tableRows"
                         :selected="selected"
                         :footer="footer"
@@ -22,6 +24,7 @@
     import dfilter from 'webcase/director/table/dfilter.vue'
     import dpagination from 'webcase/director/table/dpagination.vue'
     import table_mix from './director_table/table_mix'
+
     export default {
         components:{
             dtable,
@@ -46,6 +49,10 @@
             rowSort:{
                 default:()=>{return {}}
             },
+            adviseHeads:{
+                default:()=>[]
+            },
+            adviseHeadsCookiePath:{},
             rowPages:{
                 default:()=>{return {}}
             },
@@ -60,7 +67,7 @@
         },
         data (){
             var self =this
-
+            var vc = this
             let childStore = new Vue({
                 computed:{
                     has_select(){
@@ -72,6 +79,37 @@
                         },
                         set(v){
                             self.selected = v
+                        }
+                    },
+                    heads:{
+                        get(){
+                            return self.tableHeads
+                        },
+                        set(v){
+                            // tableSetting组件里面会闪一下，刷新界面
+                            ex.arrayReplace(self.tableHeads,v)
+//                            self.tableHeads = v
+                        }
+                    },
+                    advise_heads(){
+                        return vc.$refs.dtable.advise_heads
+                    },
+                    advise_heads_cookie_path(){
+                        return vc.adviseHeadsCookiePath
+                    },
+                    advise_order(){
+                        return vc.$refs.dtable.advise_order
+                    },
+                    director_name(){
+                        return vc.directorName
+                    },
+                    rows:{
+                        get(){
+                            return vc.tableRows
+                        },
+                        set(v){
+                            ex.arrayReplace(vc.tableRows,v)
+//                            vc.tableRows=v
                         }
                     }
                 },
@@ -90,6 +128,9 @@
                     },
                     selected_set_and_save(kws){
                         return self.selected_set_and_save(kws)
+                    },
+                    loadAdviseInfo(){
+                        self.$refs.dtable.loadAdviseInfo()
                     }
                 }
             })
@@ -118,7 +159,8 @@
                 cfg.show_load()
                 ex.director_call('d.get_rows',{director_name:this.directorName,search_args:this.searchArgs}).then(resp=>{
                     cfg.hide_load()
-                    this.tableRows.splice(0,this.tableRows.length,...resp.rows)
+//                    this.tableRows.splice(0,this.tableRows.length,...resp.rows)
+                    ex.arrayReplace(this.tableRows,resp.rows)
                     ex.vueAssign( this.rowPages,resp.row_pages)
                     ex.vueAssign(this.searchArgs,resp.search_args)
                     ex.vueAssign(this.footer,resp.footer)

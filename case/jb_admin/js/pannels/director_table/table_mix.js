@@ -188,7 +188,7 @@ export default {
         clearSelection(){
             //this.selected.splice(0,this.selected.length)
             this.selected = []
-        }
+        },
 
     }
 
