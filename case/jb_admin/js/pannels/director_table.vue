@@ -12,8 +12,9 @@
                         :rows="tableRows"
                         :selected="selected"
                         :footer="footer"
-                        :row-Sort="rowSort" :search-args="searchArgs"></dtable>
-            <!--</div>-->
+                        @search="search_page(1)"
+                        :row-Sort="rowSort" ></dtable>
+            <!--</div>   :search-args="searchArgs"-->
         </div>
         <dpagination :row-pages="rowPages" @goto-page="search_page($event)" :search-args="searchArgs"></dpagination>
     </div>
@@ -24,6 +25,22 @@
     import dfilter from 'webcase/director/table/dfilter.vue'
     import dpagination from 'webcase/director/table/dpagination.vue'
     import table_mix from './director_table/table_mix'
+
+    /*
+    *
+    * table_settings原理
+    *
+    *参与组件:导入的dtable,cfg.pop_vue_com弹出的dsetings(com-d-table-setting)组件
+    * dtable 启动时，判断传入的adviseHeads如果不为空，就在localstoreage里面加载advise配置，并初始化自身的advise_heads,advise_order给norm_heads调用
+    *点击按钮弹出dsetting界面，dsetting从table_ps拿到director_name和总的heads,advise_heads_cookie_path,读取localstorage配置初始化自己的advise_heads,advise_order
+    * 修改配置后保存到localstorage,如果有advise_heads_cookie_path,则把advise_heads写入cookies
+    *
+    * 经过table_ps路由调用dtable.reloadAdviseInfo(),从localstorage重新加载配置，初始化advise_heads等参数
+    * 如果遇到与原始adviseHeads中不存在的head,这触发@search时间
+    *
+    * com-d-table接受到@search事件，触发重新加载数据
+    *
+    * */
 
     export default {
         components:{
@@ -92,7 +109,7 @@
                         }
                     },
                     advise_heads(){
-                        return vc.$refs.dtable.advise_heads
+                        return vc.adviseHeads // .$refs.dtable.advise_heads
                     },
                     advise_heads_cookie_path(){
                         return vc.adviseHeadsCookiePath
@@ -108,7 +125,7 @@
                             return vc.tableRows
                         },
                         set(v){
-                            ex.arrayReplace(vc.tableRows,v)
+                            ex.array.replace(vc.tableRows,v)
 //                            vc.tableRows=v
                         }
                     }
@@ -129,8 +146,8 @@
                     selected_set_and_save(kws){
                         return self.selected_set_and_save(kws)
                     },
-                    loadAdviseInfo(){
-                        self.$refs.dtable.loadAdviseInfo()
+                    reloadAdviseInfo(){
+                        self.$refs.dtable.reloadAdviseInfo()
                     }
                 }
             })
@@ -157,10 +174,11 @@
             search_page(page){
                 this.searchArgs._page = page
                 cfg.show_load()
+                this.searchArgs._advise_heads= this.$refs.dtable.advise_heads
                 ex.director_call('d.get_rows',{director_name:this.directorName,search_args:this.searchArgs}).then(resp=>{
                     cfg.hide_load()
 //                    this.tableRows.splice(0,this.tableRows.length,...resp.rows)
-                    ex.arrayReplace(this.tableRows,resp.rows)
+                    ex.array.replace(this.tableRows,resp.rows)
                     ex.vueAssign( this.rowPages,resp.row_pages)
                     ex.vueAssign(this.searchArgs,resp.search_args)
                     ex.vueAssign(this.footer,resp.footer)
