@@ -3,6 +3,7 @@
         <dfilter :heads="filterHeads" @search="search_page(1)" :search-args="searchArgs"
         :search-label="seach_label"></dfilter>
         <d-operation :heads="operationHeads"></d-operation>
+        <dparent :parents="parents" @click-parent="getChilds($event)"></dparent>
         <div class="box box-success flex-v flex-grow" style="margin-bottom: 0">
             <!--<div class="table-wraper flex-grow" >-->
                 <dtable ref="dtable" class="my-d-table"
@@ -25,6 +26,7 @@
     import dfilter from 'webcase/director/table/dfilter.vue'
     import dpagination from 'webcase/director/table/dpagination.vue'
     import table_mix from './director_table/table_mix'
+    import dparent from 'webcase/director/table/dparent.vue'
 
     /*
     *
@@ -47,7 +49,8 @@
             dtable,
             dfilter,
             dpagination,
-            dOperation
+            dOperation,
+            dparent,
         },
         mixins:[table_mix],
         props:{
@@ -79,6 +82,9 @@
             directorName:{},
             footer:{
                 default:()=>{}
+            },
+            parents:{
+                default:()=>[]
             }
 
         },
@@ -87,6 +93,9 @@
             var vc = this
             let childStore = new Vue({
                 computed:{
+                    search_args(){
+                        return self.searchArgs
+                    },
                     has_select(){
                         return self.selected.length !=0
                     },
@@ -131,6 +140,9 @@
                     }
                 },
                 methods:{
+                    switch_to_tab(kws){
+                        self.switchToTab(kws)
+                    },
                     add_new(kws){
                         self.addNew(kws)
                     },
@@ -148,6 +160,9 @@
                     },
                     reloadAdviseInfo(){
                         self.$refs.dtable.reloadAdviseInfo()
+                    },
+                    getChilds(par){
+                        self.getChilds(par)
                     }
                 }
             })
@@ -168,9 +183,7 @@
             }
         },
         methods:{
-            search(){
-                this.search_page(1)
-            },
+
             search_page(page){
                 this.searchArgs._page = page
                 cfg.show_load()
@@ -182,6 +195,7 @@
                     ex.vueAssign( this.rowPages,resp.row_pages)
                     ex.vueAssign(this.searchArgs,resp.search_args)
                     ex.vueAssign(this.footer,resp.footer)
+                    ex.array.replace(this.parents,resp.parents)
 //                    this.footer = resp.footer
                 })
 

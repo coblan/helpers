@@ -189,6 +189,49 @@ export default {
             //this.selected.splice(0,this.selected.length)
             this.selected = []
         },
+        getChilds:function(par){
+            this.searchArgs._par=par
+            this.search()
+        },
+        search(){
+            this.search_page(1)
+        },
+        switchToTab:function(kws){
+            // 从 table_page_store 移过来的。因为 live_table 可能有这个需求
+            var self=this
+            var tabs=named_ctx[kws.ctx_name]
+            if(!tabs){
+                throw `named_ctx. ${kws.ctx_name} 不存在，检查是否传入`
+            }
+
+            var canfind = ex.findone(tabs,{name:kws.tab_name})
+            if(!kws.tab_name || !canfind ){
+                kws.tab_name = tabs[0].name
+            }
+
+            if(window.root_live){
+                // keeplive 页面
+                root_live.open_live(live_el_tab,{tabs:tabs,title:kws.par_row._label,crt_tab_name:kws.tab_name,par_row:kws.par_row,last_ps:self})
+            }else{
+                root_store.$emit('switch-to-tab',{
+                    widget:'com-widget-el-tab' ,
+                    tabs:tabs,
+                    crt_tab_name:kws.tab_name,
+                    par_row:kws.par_row,
+
+                })
+                // 传统 页面
+                //self.tab_stack.push( {
+                //    widget:'com-widget-el-tab' ,
+                //    tabs:tabs,
+                //    crt_tab_name:kws.tab_name,
+                //    par_row:kws.par_row,
+                //
+                //})
+            }
+            // 这里暂时打开，以后移除
+            self.crt_row=kws.par_row
+        },
 
     }
 
