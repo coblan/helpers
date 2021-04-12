@@ -289,7 +289,7 @@
     <div id="main-page" class="rows-block flex-v flex-grow" v-show="childStore.tab_stack.length == 0">
 
 
-        <com-d-table :filter-heads='childStore.row_filters'
+        <com-d-table class="flex-grow"  :filter-heads='childStore.row_filters'
                      :table-rows="childStore.rows"
                      :table-heads="childStore.heads"
                      :row-sort="childStore.row_sort"
