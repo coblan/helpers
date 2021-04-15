@@ -14,7 +14,8 @@
                         :selected="selected"
                         :footer="footer"
                         @search="search_page(1)"
-                        :row-Sort="rowSort" ></dtable>
+                        @sort-changed="sortChange"
+                        :row-sort="rowSort" ></dtable>
             <!--</div>   :search-args="searchArgs"-->
         </div>
         <dpagination :row-pages="rowPages" @goto-page="search_page($event)" :search-args="searchArgs"></dpagination>

@@ -233,6 +233,25 @@ export default {
             self.crt_row=kws.par_row
         },
 
+        //  element table 专用方法
+        sortChange(params){
+            //{ column, prop, order }
+            var self=this
+//                this.$refs.e_table.clearSort()
+//                ex.each(this.row_sort.sortable,function(name){
+            if(params.prop){
+                if(params.order=='ascending'){
+                    self.searchArgs._sort=params.prop
+                }else if(params.order=='descending'){
+                    self.searchArgs._sort='-'+params.prop
+                }
+            }else{
+                self.searchArgs._sort=''
+            }
+            this.search()
+//                })
+
+        },
     }
 
 }
