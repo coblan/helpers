@@ -93,6 +93,11 @@
             var self =this
             var vc = this
             let childStore = new Vue({
+                data(){
+                    return {
+                        name:'d-table-store'
+                    }
+                },
                 computed:{
                     search_args(){
                         return self.searchArgs

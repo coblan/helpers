@@ -6,7 +6,7 @@ export default {
             var fields_ctx=kws.fields_ctx
             var dc = {director_name:fields_ctx.director_name}
             if(kws.preset_express){
-                var pre_set = ex.eval(kws.preset_express,{vc:self.vc,ps:self,search_args:self.searchArgs})
+                var pre_set = ex.eval(kws.preset_express,{vc:self,ps:self.childStore,search_args:self.searchArgs})
                 ex.assign(dc,pre_set)
             }
             cfg.show_load()
@@ -17,7 +17,7 @@ export default {
              if(row){
                  self.update_or_insert(row)
                  if(kws.after_save_express){
-                     ex.eval(kws.after_save_express,{vc:self.vc,ps:self.childStore,search_args:self.searchArgs,row:row})
+                     ex.eval(kws.after_save_express,{vc:self,ps:self.childStore,search_args:self.searchArgs,row:row})
                  }
              }
         },
