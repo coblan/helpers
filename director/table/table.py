@@ -616,7 +616,25 @@ class ModelTable(object):
                 
         heads=evalue_container(heads)
         heads = sorted(heads,key=lambda head: head.get('order',0))
-        return heads
+        
+        # start: 实现order_after排序
+        heads_dict={}
+        for head in heads:
+            order_after = head.get('order_after')
+            if order_after:
+                if order_after not in heads_dict:
+                    heads_dict[order_after] =[]
+                heads_dict[order_after].append(head)
+        
+        out_heads =[]
+        for head in list( heads):
+            if head.get('order_after'):
+                continue
+            out_heads.append(head)
+            if head['name'] in heads_dict:
+                out_heads.extend(heads_dict[head['name']])
+        # end:
+        return out_heads
     
     def get_model_heads(self): 
         ls = self.permited_fields()   

@@ -4,7 +4,8 @@
         :search-label="seach_label"></dfilter>
         <d-operation :heads="operationHeads"></d-operation>
         <dparent :parents="parents" @click-parent="getChilds($event)"></dparent>
-        <div class="box box-success flex-v flex-grow" style="margin-bottom: 0">
+        <div class="box box-success flex-grow" style="margin-bottom: 0">
+            <!--flex-v flex-grow-->
             <!--<div class="table-wraper flex-grow" >-->
                 <dtable ref="dtable" class="my-d-table"
                         :heads="tableHeads"
@@ -93,6 +94,11 @@
             var self =this
             var vc = this
             let childStore = new Vue({
+                data(){
+                    return {
+                        name:'d-table-store'
+                    }
+                },
                 computed:{
                     search_args(){
                         return self.searchArgs
@@ -229,8 +235,8 @@
     height: 100%;
 }
 .my-d-table{
-    position: absolute;
-    height: 100%;
-    width: 100%;
+    /*position: absolute;*/
+    /*height: 100%;*/
+    /*width: 100%;*/
 }
 </style>
