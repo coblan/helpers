@@ -141,6 +141,9 @@
                     }
                 },
                 methods:{
+                    export_excel(head){
+                        self.exportExcel(head)
+                    },
                     switch_to_tab(kws){
                         self.switchToTab(kws)
                     },

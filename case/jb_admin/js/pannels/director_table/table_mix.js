@@ -233,6 +233,21 @@ export default {
             self.crt_row=kws.par_row
         },
 
+        exportExcel(head){
+            debugger
+            var self=this
+            var head = head || {}
+            var search_args = ex.copy(self.searchArgs)
+            search_args._perpage= head.count || 5000
+            var post_data=[{fun:'get_excel',director_name:self.directorName,search_args:search_args}]
+            cfg.show_load()
+            ex.post('/d/ajax',JSON.stringify(post_data),function(resp){
+                cfg.hide_load()
+                var url = resp.get_excel.file_url
+                ex.download(url)
+            })
+        },
+
         //  element table 专用方法
         sortChange(params){
             //{ column, prop, order }
