@@ -90,7 +90,7 @@ var field={
     		<div :class='["form-group field",{"error":head.error}]' v-if="head" style="position: relative;">
                 <label :for="'id_'+head.name"  class="control-label" v-if='head.label && head.label!=""'>
                     <span class="label-content" v-html="head.label"></span>
-                    <span class="req_star" v-if='head.required'>*</span>
+                    <span class="req_star" v-if='head.required&& !head.readonly'>*</span>
                 </label>
                 <div class="field_input" :class="{'has-help':head.show_help}">
                     <component :is='head.editor'
