@@ -22,7 +22,7 @@ from django.db import transaction
 import logging
 from helpers.director.decorator import get_request_cache
 from ..model_func.hash_dict import hash_dict,make_mark_dict,dif_mark_dict,adapt_type
-
+from helpers.func.collection.ex import findone,find_index
 
 # sql_log 可能没有什么用
 #sql_log = logging.getLogger('director.sql_op')
@@ -484,8 +484,21 @@ class ModelFields(forms.ModelForm):
                     if head['name'] == k:
                         tmp_heads.append(head)
             heads=tmp_heads
+        
+        # start: 实现 after_fields 排序
+        after_fields_list =[]
+        after_dict = {}
+        for head in heads:
+            if head.get('after_fields'):
+                after_fields_list.extend(head.get('after_fields'))
+                after_dict[head['name']]=[findone(heads, {'name':x}) for x in head.get('after_fields')]
+        
+        lefts = [x for x in heads if x['name'] not in after_fields_list ]
+        for k,v in after_dict.items():
+            index = find_index(lefts,{'name':k})
+            lefts[index:index] = v       
             
-        heads=evalue_container(heads)
+        heads=evalue_container(lefts)
         for head in heads:
             if head['name']=='_meta_head':
                 heads.remove(head)

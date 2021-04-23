@@ -1,6 +1,9 @@
 <template>
     <div :class="['com-field-int','field-'+head.name,head.class]" >
-        <span v-if='head.readonly && !head.prefix && !head.suffix' v-text='row[head.name]'></span>
+        <span v-if='head.readonly && !head.prefix ' >
+            <span v-text='row[head.name]'></span>
+            <span v-text="head.suffix"></span>
+        </span>
         <div  v-else class="form-inline">
 
 
