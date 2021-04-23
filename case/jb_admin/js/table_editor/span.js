@@ -33,8 +33,8 @@ var label_shower = {
     },
     methods:{
         on_click:function(){
-            if(this.head.action){
-                ex.eval(this.head.action,{row:this.rowData,head:this.head,ps:this.parStore})
+            if(this.head.click_express){
+                ex.eval(this.head.click_express,{row:this.rowData,head:this.head,ps:this.parStore})
             }
         }
     }
