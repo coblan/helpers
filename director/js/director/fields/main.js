@@ -92,7 +92,7 @@ var field={
                     <span class="label-content" v-html="head.label"></span>
                     <span class="req_star" v-if='head.required'>*</span>
                 </label>
-                <div class="field_input">
+                <div class="field_input" :class="{'has-help':head.show_help}">
                     <component :is='head.editor'
                         @field-event="$emit('field-event',$event)"
                         :row='row'
@@ -110,9 +110,6 @@ var field={
                  <span class="help-text clickable" v-if="head.explain_text" @click="show_expalain(head.explain_text)" >
                     <i style="color: #3780af;position: relative;"  class="fa fa-exclamation-circle" ></i>
                 </span>
-
-
-
 		</div>
 
 

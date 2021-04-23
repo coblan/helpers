@@ -139,7 +139,12 @@ var mix_fields_data ={
             }
             ex.each(this.heads,function(head){
                 if(errors[head.name]){
-                    Vue.set(head,'error',errors[head.name].join(';'))
+                    if(typeof errors[head.name] =='string' ){
+                        var error_msg =errors[head.name]
+                    }else{
+                        var error_msg = errors[head.name].join(';')
+                    }
+                    Vue.set(head,'error',error_msg )
                     delete errors[head.name]
 
                 }else if(head.error){
@@ -153,9 +158,6 @@ var mix_fields_data ={
 
             if(!ex.isEmpty(errors)){
                 cfg.showMsg(  JSON.stringify(errors)  )
-                //layer.alert(
-                //    JSON.stringify(errors)
-                //)
             }
 
         },

@@ -65,21 +65,22 @@ export default {
             if(kws.confirm_msg){
                 await cfg.confirm(kws.confirm_msg)
             }
-            var first_sel_row = self.selected[0]
-            var one_row={}
-            let preset_express = kws.preset_express  //|| kws.pre_set
-             if(preset_express ){
-                var dc = ex.eval(preset_express,{ps:this.childStore,vc:this})
-                ex.assign(one_row,dc)
+            //var first_sel_row = self.selected[0]
+            if(kws.preset_express){
+                var one_row = ex.eval(preset_express,{ps:this.childStore,vc:this})
+            }else{
+                var one_row = {}
             }
             // 有弹出编辑窗口的需求
             if(kws.fields_ctx){
                 // 确保 前面 preset_express设置过的字段，这里不会被替换
-                ex.each(kws.fields_ctx.heads,(head)=>{
-                    if(!head.name.startsWith('_') && one_row[head.name]==undefined){
-                        one_row[head.name]=self.selected[0][head.name]
-                    }
-                })
+                //ex.each(kws.fields_ctx.heads,(head)=>{
+                //    if(!head.name.startsWith('_') && one_row[head.name]==undefined){
+                //        one_row[head.name]=self.selected[0][head.name]
+                //    }
+                //})
+                ex.vueAssign(one_row,self.selected[0])
+
                 // 将当前的ps 传递到弹出框中
                 kws.fields_ctx.pop_vc = self
                 var win_index = pop_edit_local(one_row,kws.fields_ctx,function(e){
@@ -103,10 +104,11 @@ export default {
                 var cache_rows = ex.copy(self.selected)
                 ex.each(cache_rows ,function(row){
                     ex.assign(row,new_row)
-                    if(kws.fields_ctx && kws.fields_ctx.director_name){
-                        row._cache_director_name = row._director_name // [1] 有可能是用的特殊的 direcotor
-                        row._director_name=kws.fields_ctx.director_name
-                    }
+                    // 2021/4/22去掉根据弹出框fields的ctx 切换director_name.因为如果有用ctx保存的需求，可以直接弹出fields框。
+                    //if(kws.fields_ctx && kws.fields_ctx.director_name){
+                    //    row._cache_director_name = row._director_name // [1] 有可能是用的特殊的 direcotor
+                    //    row._director_name=kws.fields_ctx.director_name
+                    //}
                 })
                 cfg.show_load()
                 ex.director_call('d.save_rows',{rows:cache_rows}).then((resp)=>{
@@ -155,10 +157,10 @@ export default {
                             }
                         }
                         ex.each(resp,function(new_row){
-                            // [1]  这里还原回去
-                            if(new_row._cache_director_name){
-                                new_row._director_name = new_row._cache_director_name
-                            }
+                            //  [1]  这里还原回去 // 注释原因见上面的[1]
+                            //if(new_row._cache_director_name){
+                            //    new_row._director_name = new_row._cache_director_name
+                            //}
                             self.update_or_insert(new_row)
                         })
 
