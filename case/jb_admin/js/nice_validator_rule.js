@@ -41,9 +41,10 @@ $.validator.config({
             }else{
                 var msg =  '不满足规则'
             }
-            return ex.eval(real_param,{value:element.value,element:element}) ||  msg
+            return ex.eval(real_param,{value:element.value,element:element,vld:this}) ||  msg
         },
         myremote:function(element, param){
+            // 应该没啥用了，因为和express一样的功能
             var real_param = ex.atou(param[0])
             return ex.eval(real_param,{value:element.value,element:element})
         },

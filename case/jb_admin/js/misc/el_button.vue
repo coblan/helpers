@@ -25,9 +25,9 @@
         },
         computed:{
             is_disabled(){
-
-                if(this.my_ctx .disabled){
-                    return  ex.eval(this.my_ctx.disabled,{ps:this.parStore})
+                var disabled_express = this.my_ctx .disabled_express || this.my_ctx .disabled
+                if(disabled_express){
+                    return  ex.eval(disabled_express,{ps:this.parStore})
                 }else{
                     return false
                 }
