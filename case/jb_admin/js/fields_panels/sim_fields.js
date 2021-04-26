@@ -77,7 +77,8 @@ export var com_sim_fields = {
     //},
     components:window._baseInput,
     mixins:[mix_fields_data,mix_nice_validator],
-    template:` <div :class="['field-panel sim-fields',{'msg-bottom':small_srn}]"
+    //{'msg-bottom':small_srn}
+    template:` <div :class="['field-panel sim-fields',]"
     style="text-align:center;">
            <table class="table-fields">
         <tr v-for="head in normed_heads">
