@@ -61,12 +61,27 @@ var mix_fields_data ={
         normed_heads:function(){
             var self=this
             ex.each(self.heads,function(head){
+
                 if( head._org_readonly){
                     var is_readonly = ex.eval(head._org_readonly,{row:self.row,head:head})
                     Vue.set(head,'readonly',is_readonly)
                 }
                 if( head._org_required){
                     head.required=ex.eval(head._org_required,{row:self.row,head:head})
+                }
+
+                // 新的 readonly 动态判断
+                if(head.readonly_express){
+                    var is_readonly = ex.eval(head.readonly_express,{row:self.row,head:head})
+                    Vue.set(head,'readonly',is_readonly)
+                }
+                if( head.required_express){
+                    var required=ex.eval(head.required_express,{row:self.row,head:head})
+                    Vue.set(head,'required',required)
+                }
+                if(head.help_text_express){
+                    var help_text=ex.eval(head.help_text_express,{row:self.row,head:head})
+                    Vue.set(head,'help_text',help_text)
                 }
             })
 
@@ -207,6 +222,7 @@ var mix_fields_data ={
                     delete self.row.meta_change_fields
 
                     var rt = resp //resp.save_row
+                    debugger
                     if(rt.errors){
                         //cfg.hide_load()
                         self.setErrors(rt.errors)

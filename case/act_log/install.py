@@ -1,9 +1,12 @@
 
 import os
 import sys
-def SET(scope):
+def SET(scope,path=None):
     BASE_DIR= scope['BASE_DIR']
-    LOG_PATH= os.path.join( os.path.dirname(BASE_DIR),'log')
+    if not path:
+        LOG_PATH= os.path.join( os.path.dirname(BASE_DIR),'log')
+    else:
+        LOG_PATH=path
 
     LOGGING = {
       'version': 1, # 标示配置模板版本，int 类型，目前只接收 `1`这个值。
