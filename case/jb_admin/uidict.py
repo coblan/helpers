@@ -1,5 +1,6 @@
 from helpers.maintenance.update_static_timestamp import static_url
 from django.utils.translation import ugettext as _
+import base64
 
 def op_excel(max_length=2000,default_length=1000,length=None):
     if length:
@@ -29,25 +30,14 @@ def op_excel(max_length=2000,default_length=1000,length=None):
 
 
 def pop_edit_current_row():
+    "在前端table中，弹出窗口编辑row"
     return ''' scope.head.fields_ctx.genVc=scope.vc;
                 scope.head.fields_ctx.title=scope.row._label;
                 scope.head.fields_ctx.par_row=scope.row;
                 scope.head.fields_ctx.row = ex.copy(scope.row); // [1] 如果不是编辑par_row ，可以修改这行
                 cfg.pop_vue_com("com-form-one" ,scope.head.fields_ctx)'''
-    
-    #head['fields_ctx'] = fields_ctx
-    #head['fields_ctx'].update({
-        ##'after_save':'scope.vc.par_row.car_no =scope.row.car_no; scope.vc.par_row.has_washed=scope.row.has_washed ',
-        ##'init_express':'cfg.show_load(),ex.director_call(scope.vc.ctx.director_name,{pk:scope.vc.par_row.pk}).then((res)=>{cfg.hide_load();ex.vueAssign(scope.row,res.row)})',
-       
-        ##'mounted_express':'ex.vueAssign(scope.row,scope.vc.par_row)',
-        ##'after_save':'ex.vueAssign( scope.vc.par_row,scope.row)',
-        #'ops_loc':'bottom',
-        ## 把初始化row放到 action里面去了 [1]
-        ##'mounted_express':'ex.vueAssign(scope.row,ex.copy(scope.vc.par_row))',
-        #})
-    
-    #head.update({
-        #''
-        #'click_express':
-    #})
+
+def nice_express(express,msg):
+    express = base64.b64encode(express.encode('utf-8'))
+    msg = base64.b64encode(msg.encode('utf-8'))
+    return'express(%s , %s)'%( express.decode('utf-8'),msg.decode('utf-8'))

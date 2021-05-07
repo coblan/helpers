@@ -60,7 +60,6 @@
 //						callback(resp.changepswd)
 					ex.director_call('authuser.changepswd',{row:this.row}).then(function (rt) {
 						cfg.hide_load()
-
 //						var rt = resp.changepswd
 						if(rt.validate_img){
 							Vue.set(self.row,'validate_img',rt.validate_img)
@@ -118,8 +117,9 @@
 			<h2 class='form-signin-heading' style="text-align: center;">修改您( <span v-text="username"></span> )的密码:</h2>
 			<hr>
 			<div style="max-width: 20em;margin: auto">
-				<com-sim-fields class="msg-bottom" ref="panel"  :heads="heads" :row="row" ok-btn="修改" @submit="save"></com-sim-fields>
+				<com-sim-fields  ref="panel"  :heads="heads" :row="row" ok-btn="修改" @submit="save"></com-sim-fields>
 			</div>
+			<!--class="msg-bottom"-->
 
 			<!--<h2 class='form-signin-heading' style="text-align: center;">更改 <span v-text="username"></span> 密码</h2>-->
 		</div>

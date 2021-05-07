@@ -40,7 +40,7 @@ var op_a = {
 
             if(v){
                 this.interval_index = setInterval(()=>{
-                    ex.eval(this.head.action,{ps:this.parStore})
+                    ex.eval(this.head.action_express,{ps:this.parStore})
                 },v)
             }
         },
