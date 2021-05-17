@@ -7,6 +7,18 @@ def findone(collection,dc):
         if find:
             return doc
 
+def find_index(collection,dc):
+    count =0
+    for doc in collection:
+        count += 1
+        find=True
+        for k,v in dc.items():
+            if doc.get(k)!=v:
+                find=False
+        if find:
+            return count
+    return -1
+
 def locate(path):
     ls = path.split('.')
     try:

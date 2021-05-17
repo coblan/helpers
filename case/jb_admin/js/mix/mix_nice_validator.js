@@ -98,6 +98,7 @@ var nice_validator={
                 }
                 if(head.validate_showError){
                     validate_fields[head.name]={
+                        row:self.row,
                         rule:ls.join(';'),
                         msg:head.fv_msg,
                         msgClass:'hide',
@@ -106,13 +107,16 @@ var nice_validator={
                             ex.eval(head.validate_showError,{msg:b.msg,head:head})
                         },
                         valid : function(element, result){
-                             ex.eval(head.validate_clearError,{head:head})
+                            ex.eval(head.validate_clearError,{head:head})
                          }
                     }
                 }else{
                         validate_fields[head.name]={
+                            row:self.row,
                             rule:ls.join(';'),
                             msg:head.fv_msg,
+                            valid:function(element, result){
+                             }
 
                         }
                 }
@@ -162,16 +166,21 @@ var nice_validator={
 
             var no_name_error=[]
             for(var k in errors){
+                if(typeof errors[k] =='string'){
+                    var error_msg = errors[k]
+                }else{
+                    var error_msg = errors[k].join(';')
+                }
                 var head = ex.findone(this.heads,{name:k})
                 if(head){
                     if(head.validate_showError){
-                        ex.eval(head.validate_showError,{head:this.head,msg:errors[k].join(';')})
+                        ex.eval(head.validate_showError,{head:this.head,msg:error_msg })
                     }else{
-                        $(this.$el).find('[name='+k+']').trigger("showmsg", ["error", errors[k].join(';')]);
+                        $(this.$el).find('[name='+k+']').trigger("showmsg", ["error", error_msg ]);
                     }
                 }else{
                     //$(this.$el).find('[name='+k+']').trigger("showmsg", ["error", errors[k].join(';')]);
-                    no_name_error.push(errors[k].join(';'))
+                    no_name_error.push({k:error_msg} )
                 }
             }
             if(no_name_error.length > 0){

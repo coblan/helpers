@@ -90,9 +90,9 @@ var field={
     		<div :class='["form-group field",{"error":head.error}]' v-if="head" style="position: relative;">
                 <label :for="'id_'+head.name"  class="control-label" v-if='head.label && head.label!=""'>
                     <span class="label-content" v-html="head.label"></span>
-                    <span class="req_star" v-if='head.required'>*</span>
+                    <span class="req_star" v-if='head.required&& !head.readonly'>*</span>
                 </label>
-                <div class="field_input">
+                <div class="field_input" :class="{'has-help':head.show_help}">
                     <component :is='head.editor'
                         @field-event="$emit('field-event',$event)"
                         :row='row'
@@ -100,15 +100,16 @@ var field={
                     </component>
                 </div>
                 <slot></slot>
-                <span class="help-text" v-if="head.help_text" @mouseenter="show_msg(head.help_text,$event)" @mouseleave="hide_msg()">
-                    <i style="color: #3780af;position: relative;"  class="fa fa-question-circle" ></i>
-                </span>
+                <template v-if="head.help_text && !head.readonly">
+                   <span v-if="head.show_help" style="color: gray;font-size: 80%;padding-top: 15px;" v-html="head.help_text"></span>
+                   <span v-else class="help-text"  @mouseenter="show_msg(head.help_text,$event)" @mouseleave="hide_msg()">
+                        <i style="color: #3780af;position: relative;"  class="fa fa-question-circle" ></i>
+                    </span>
+                </template>
+
                  <span class="help-text clickable" v-if="head.explain_text" @click="show_expalain(head.explain_text)" >
                     <i style="color: #3780af;position: relative;"  class="fa fa-exclamation-circle" ></i>
                 </span>
-
-
-
 		</div>
 
 

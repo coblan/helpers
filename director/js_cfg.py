@@ -9,6 +9,7 @@ def get_tr():
         "确认":_("确认"),
         "确定":_("确定"),
         "取消":_("取消"),
+        'picture_size_excceed':_('图片大小不能超过{maxsize}')
     }
 js_tr_list.append(get_tr)
 

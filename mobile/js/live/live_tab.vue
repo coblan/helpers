@@ -10,6 +10,10 @@
 
             </van-tab>
         </van-tabs>
+        <div v-if="ctx.footer" class="footer-content">
+            <component :is="ctx.footer.editor"  :ctx="ctx.footer"></component>
+        </div>
+
     </div>
 </template>
 <script>
@@ -37,6 +41,7 @@
         flex-direction: column;
         .tab-com{
             flex-grow: 100;
+            position: relative;
         }
         .inn-wrap{
             position: absolute;

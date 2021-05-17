@@ -3,7 +3,6 @@ require('./scss/com_search_select.scss')
 var com_search = {
     props:['head','search_args'],
     data:function(){
-        debugger
         if(! this.search_args._q){
             Vue.set(this.search_args,'_q','')
         }

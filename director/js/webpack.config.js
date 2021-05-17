@@ -23,7 +23,8 @@ module.exports =
     watch: true,
     resolve:{
         alias: {
-            jb_admin: path.resolve(__dirname,"../../case/jb_admin/js")
+            jb_admin: path.resolve(__dirname,"../../case/jb_admin/js"),
+            weblib:'D:/coblan/weblib',
         },
         modules:["D:/coblan/webcode/node_modules"],
     },

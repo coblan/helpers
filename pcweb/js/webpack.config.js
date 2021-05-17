@@ -59,7 +59,7 @@ module.exports =
                 }]
             },
             {
-                test: /\.styl$/,
+                test: /\.styl(us)?$/,
                 use: [
                     {
                         loader: "style-loader" // creates style nodes from JS strings

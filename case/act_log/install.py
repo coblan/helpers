@@ -1,9 +1,12 @@
 
 import os
 import sys
-def SET(scope):
+def SET(scope,path=None):
     BASE_DIR= scope['BASE_DIR']
-    LOG_PATH= os.path.join( os.path.dirname(BASE_DIR),'log')
+    if not path:
+        LOG_PATH= os.path.join( os.path.dirname(BASE_DIR),'log')
+    else:
+        LOG_PATH=path
 
     LOGGING = {
       'version': 1, # 标示配置模板版本，int 类型，目前只接收 `1`这个值。
@@ -68,23 +71,23 @@ def SET(scope):
               'propagate': False,
           },
           'django': {
-              'handlers': ['console', ] , #'djangoout_warning', 'mail_admins', 'elk_warning'],
+              'handlers': [] , # 'console', 'djangoout_warning', 'mail_admins', 'elk_warning'],
               'level': 'INFO',
               'propagate': True,
               },          
   
           'general_log': {
-              'handlers': ['console', 'general_log', ] ,# 'elk_info' ],  #'djangoout_warning',
+              'handlers': [ 'general_log', ] ,# 'console','elk_info' ],  #'djangoout_warning',
               'level': 'DEBUG',
               'propagate': False,            
               },
           'ModelFields.save_form': {
-              'handlers': ['backend_operation','console',] , # 'elk_debug'],
+              'handlers': ['backend_operation',] , # 'console', 'elk_debug'],
               'level': 'DEBUG',
               'propagate': False,              
               },
           'operation': {
-              'handlers': ['backend_operation','console',] , # 'elk_debug'],
+              'handlers': ['backend_operation'] , # ,'console','elk_debug'],
               'level': 'DEBUG',
               'propagate': False,              
               },          

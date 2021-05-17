@@ -25,6 +25,7 @@ from helpers.director.exceptions.unauth401 import UnAuth401Exception
 from django.db import connections
 from django.db.utils import ProgrammingError
 from helpers.director.model_func.func import str_lazy_label
+from helpers.func.collection.ex import findone,find_index
 
 class PageNum(object):
     perPage=20
@@ -616,7 +617,41 @@ class ModelTable(object):
                 
         heads=evalue_container(heads)
         heads = sorted(heads,key=lambda head: head.get('order',0))
-        return heads
+        
+        # start: 实现 after_fields 排序
+        after_fields_list =[]
+        after_dict = {}
+        for head in heads:
+            if head.get('after_fields'):
+                after_fields_list.extend(head.get('after_fields'))
+                after_dict[head['name']]=[findone(heads, {'name':x}) for x in head.get('after_fields')]
+        
+        lefts = [x for x in heads if x['name'] not in after_fields_list ]
+        for k,v in after_dict.items():
+            index = find_index(lefts,{'name':k})
+            lefts[index:index] = v
+        return lefts
+                
+        
+        
+        
+        #heads_dict={}
+        #for head in heads:
+            #order_after = head.get('order_after')
+            #if order_after:
+                #if order_after not in heads_dict:
+                    #heads_dict[order_after] =[]
+                #heads_dict[order_after].append(head)
+        
+        #out_heads =[]
+        #for head in list( heads):
+            #if head.get('order_after'):
+                #continue
+            #out_heads.append(head)
+            #if head['name'] in heads_dict:
+                #out_heads.extend(heads_dict[head['name']])
+        # end:
+        #return out_heads
     
     def get_model_heads(self): 
         ls = self.permited_fields()   

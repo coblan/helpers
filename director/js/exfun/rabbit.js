@@ -51,15 +51,18 @@ export var rabbit={
             this._stomp_client = Stomp.client(ctx.url);
             var on_connect = (x)=> {
                 //gb.toast("websocket 链接成功")
-                ex.each(this._stomp_socket_list,(socket)=>{
-                    socket.peekListen()
+                ex.each(this._lstool_list,(lstool)=>{
+                    lstool.peekListen()
                 })
+
             };
 
             var on_error =  (e)=> {
                 console.log(e)
-
-                setTimeout(function () {
+                ex.each(this._lstool_list,(lstool)=>{
+                    lstool.cacheListened()
+                })
+                setTimeout( ()=> {
                     this._stomp_client = Stomp.client(ctx.url);
                     this._stomp_client.connect(ctx.user, ctx.pswd, on_connect, on_error, '/');
                 }, 10000)
@@ -68,13 +71,13 @@ export var rabbit={
         })
     },
     _stomp_client:null,
-    _stomp_socket_list:[],
+    _lstool_list:[],
     stompListen(url,callback){
-        var socket = new ListenTool(this, ele => {
+        var lstool = new ListenTool(this, ele => {
             return this._stomp_client.subscribe(url, callback);
         });
-        socket.addListen(url)
-        this._stomp_socket_list.push(socket)
+        lstool.addListen(url)
+        this._lstool_list.push(lstool)
     }
 }
 

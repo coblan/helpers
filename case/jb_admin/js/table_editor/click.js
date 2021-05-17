@@ -27,7 +27,9 @@ var my_click = {
     },
     methods:{
         on_click:function(){
-            ex.eval(this.head.action,{row:this.rowData,head:this.head,ps:this.parStore,vc:this})
+            var click_express= this.head.click_express || this.head.action
+
+            ex.eval(click_express,{row:this.rowData,head:this.head,ps:this.parStore,vc:this})
             //this.$emit('on-custom-comp',{name:this.head.fun,row:this.rowData,head:this.head})
         }
     }

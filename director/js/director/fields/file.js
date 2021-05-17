@@ -401,7 +401,6 @@ var img_uploader={
         },
         validate:function(img_fl){
             //重载该函数，验证文件
-
             if(this.cfg.maxsize){
                 if(img_fl.size > this.cfg.maxsize){
                     if(this.cfg.maxsize > 1024*1024){

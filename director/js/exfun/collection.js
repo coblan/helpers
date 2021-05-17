@@ -1,3 +1,4 @@
+// 该模块移到  weblib
 export var collection={
     findone:function (collection,obj_or_func) {
 
