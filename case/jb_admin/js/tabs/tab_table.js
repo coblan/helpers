@@ -5,9 +5,17 @@ var tab_table={
     data:function(){
         var vc = this
         var heads_ctx = this.tab_head.table_ctx
+        // 后面加的，为了控制tab的table是否自动加载
+        if(this.tab_head.autoload==undefined){
+            var autoload=true
+        }else{
+            var autoload=this.tab_head.autoload
+        }
+
         var my_table_store ={
             data:function(){
                 return {
+                    autoload:autoload,
                     head:heads_ctx,
                     heads:heads_ctx.heads,
                     row_filters:heads_ctx.row_filters,
@@ -58,6 +66,8 @@ var tab_table={
                 },
             }
         }
+
+
         return {
             childStore:new Vue(my_table_store),
             parStore:ex.vueParStore(vc),
@@ -68,9 +78,13 @@ var tab_table={
         ex.vueEventRout(this,this.tab_head.event_slots)
         // 如果有复杂的需求，则被 table_store.init_express接管
         if(!this.childStore.head.init_express){
-            Vue.nextTick(()=>{
-                this.childStore.search()
-            })
+
+            if(this.autoload){
+                Vue.nextTick(()=>{
+                    this.childStore.search()
+                })
+            }
+
         }
 
         if(this.tab_head.mounted_express){
