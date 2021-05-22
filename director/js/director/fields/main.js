@@ -100,7 +100,7 @@ var field={
                     </component>
                 </div>
                 <slot></slot>
-                <template v-if="head.help_text">
+                <template v-if="head.help_text && !head.readonly">
                    <span v-if="head.show_help" style="color: gray;font-size: 80%;padding-top: 15px;" v-html="head.help_text"></span>
                    <span v-else class="help-text"  @mouseenter="show_msg(head.help_text,$event)" @mouseleave="hide_msg()">
                         <i style="color: #3780af;position: relative;"  class="fa fa-question-circle" ></i>

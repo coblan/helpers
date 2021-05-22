@@ -79,7 +79,8 @@ export default {
                 //        one_row[head.name]=self.selected[0][head.name]
                 //    }
                 //})
-                ex.vueAssign(one_row,self.selected[0])
+
+                //ex.vueAssign(one_row,self.selected[0])
 
                 // 将当前的ps 传递到弹出框中
                 kws.fields_ctx.pop_vc = self

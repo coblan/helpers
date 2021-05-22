@@ -53,6 +53,8 @@ from .base_data import js_tr_list,js_lib_list
 from django.views.decorators.csrf import csrf_exempt
 from helpers.director.middleware.request_cache import get_request_cache
 
+gb={}
+
 class BaseEngine(object):
     _pages=None
     menu={}
@@ -74,9 +76,12 @@ class BaseEngine(object):
     
     @classmethod
     def as_view(cls):
-        if not getattr(cls,'_singleton',None):
-            cls._singleton = cls()
-        return cls._singleton.view
+        if cls.__name__ not in gb:
+            gb[cls.__name__] = cls()
+        return gb[cls.__name__].view
+        #if not getattr(cls,'_singleton',None):
+            #cls._singleton = cls()
+        #return cls._singleton.view
     
     @classmethod
     def add_pages(cls,dc):

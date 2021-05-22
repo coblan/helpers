@@ -21,6 +21,8 @@ import * as split_text from  './split_text'
 
 
 import int_field from './int.vue'
+import  int_bool from  './int_bool.vue'
+
 import  password from  './password.vue'
 import  select from  './select.vue'
 import field_bool from  './bool.vue'
@@ -31,9 +33,11 @@ import  pop_table_multi_select from  './pop_table_multi_select.vue'
 import  blocktext from  './blocktext.vue'
 import  head_shower from  './head_shower.vue'
 
+
 Vue.component('com-field-blocktext',blocktext)
 Vue.component('com-field-radio',radio)
 Vue.component('com-field-int',int_field)
+Vue.component('com-field-int-bool',int_bool)
 Vue.component('com-field-password',password)
 Vue.component('com-field-select',select)
 Vue.component('com-field-bool',field_bool)
