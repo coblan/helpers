@@ -38,6 +38,7 @@ base_store={
                 crt_tab_name:kws.tab_name,
             })
         },
+
         pop_tab_stack:function(){
 
             if( this.tab_stack.length != 0){
@@ -127,7 +128,6 @@ base_store={
 
         methods:{
 
-
             on_tab_event:function(e){
                 this.op_funs[e.name](e)
             },
@@ -188,8 +188,8 @@ base_store={
 
 
 //        fields=new Vue(fields_logic)
-        window.live_root = new Vue(fields_logic)
-
+        window.root_live = new Vue(fields_logic)
+//        root_live= live_root
     })
 
 </script>

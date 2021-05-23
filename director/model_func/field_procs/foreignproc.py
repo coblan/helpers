@@ -18,7 +18,7 @@ class ForeignProc(BaseFieldProc):
         if foreign:
             return {
                 name:  getattr(inst,name + '_id', '') , #foreign.pk,
-                '_%s_model'%name:model_to_name(foreign.__class__),
+                #'_%s_model'%name:model_to_name(foreign.__class__),
                 '_%s_label'%name:str(foreign)
             }
         else:

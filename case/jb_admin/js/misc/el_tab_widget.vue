@@ -39,7 +39,10 @@
             //        Vue.set(tab,'_loaded',false)
             //    }
             //})
+            var childStore = new Vue()
+            childStore.vc = this
             return {
+//                childStore:childStore,
                 is_mounted:false
             }
         },
@@ -89,6 +92,10 @@
                 //}
                 this.ctx.crt_tab_name=name
 
+//                Vue.nextTick(()=>{
+//                    this.$refs['_tab_'+this.ctx.crt_tab_name][0].$emit('tab-show',name)
+//                })
+
                 //var self =this
                 //if(this.is_mounted){
                 //    Vue.nextTick(function(){
@@ -99,7 +106,10 @@
                 //}
             },
             handleClick(tab, event) {
-                this.show_tab(tab.name)
+                if(this.crt_tab_name != tab.name){
+                    this.show_tab(tab.name)
+                    this.$emit('click-tab',name)
+                }
             },
             up_event:function(event){
                 this.$emit('win-event',event)
