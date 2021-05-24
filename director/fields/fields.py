@@ -83,7 +83,8 @@ class ModelFields(forms.ModelForm):
         # 2021/5/24 挪到这里
         dc = self._clean_dict(dc)
         dc=self.clean_dict(dc) 
-        self.kw.update(dc)
+        if dc.get('instance'):
+            self.kw['instance'] = dc.pop('instance')
         
         if not crt_user:
             #self.crt_user=dc.get('crt_user')
@@ -175,7 +176,7 @@ class ModelFields(forms.ModelForm):
         # 参数的修正挪到最上面
         #dc = self._clean_dict(dc)
         #dc=self.clean_dict(dc) 
-        #self.kw.update(dc)        
+        self.kw.update(dc)        
 
 
         super(ModelFields,self).__init__(dc,*args,**form_kw)
