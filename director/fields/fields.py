@@ -78,6 +78,12 @@ class ModelFields(forms.ModelForm):
         
         """
         self.kw = kw.copy()
+        # 修正参数
+        
+        # 2021/5/24 挪到这里
+        dc = self._clean_dict(dc)
+        dc=self.clean_dict(dc) 
+        self.kw.update(dc)
         
         if not crt_user:
             #self.crt_user=dc.get('crt_user')
@@ -86,17 +92,22 @@ class ModelFields(forms.ModelForm):
             self.crt_user = crt_user
             
         # if pk is None:
-        if dc.get('pk') != None and dc.get('id') != '':
+        if dc.get('pk') != None and dc.get('pk') != '':
             pk=dc.get('pk')
         elif dc.get('id') !=None and dc.get('id') != '':
             pk = dc.get('id')
+        else:
+            if self.kw.get('instance'):
+                pk = self.kw['instance'].pk
+            else:
+                pk = None
         if not pk:
             self.is_create = True
         else:
             self.is_create = False 
                 
         form_kw={}
-        if 'instance' not in kw:
+        if 'instance' not in self.kw:
             if pk=='-1':  # -1 表示 最后一个记录 （一般用不到）
                 form_kw['instance']=self._meta.model.objects.last()
             elif pk != None:  # 很多时候，pk=0 是已经创建了
@@ -115,7 +126,7 @@ class ModelFields(forms.ModelForm):
                 init_dc = {k:v for k,v in self.kw.items() if k in field_names}
                 form_kw['instance'] = self._meta.model(**init_dc) #(**self.kw)
         else:
-            form_kw['instance']=kw.pop('instance')
+            form_kw['instance']=self.kw.pop('instance')
         
         self.custom_permit()
          # 强制 readonly的字段，不能修改
@@ -161,12 +172,11 @@ class ModelFields(forms.ModelForm):
         
         # 真正的验证各个参数是否过期，是在clean函数中进行的。
         
-        # 修正参数
-        dc = self._clean_dict(dc)
-        dc=self.clean_dict(dc) 
-        
-        
-        self.kw.update(dc)
+        # 参数的修正挪到最上面
+        #dc = self._clean_dict(dc)
+        #dc=self.clean_dict(dc) 
+        #self.kw.update(dc)        
+
 
         super(ModelFields,self).__init__(dc,*args,**form_kw)
         # 2021-05-07 挪到上面
