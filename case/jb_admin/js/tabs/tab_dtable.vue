@@ -2,7 +2,7 @@
     <div class="com-tab-table flex-v" style="position: absolute;top:0;left:0;bottom: 0;right:0;overflow: auto;padding-bottom: 1em;">
         <director_table
                 :filter-heads='head.row_filters'
-                :table-rows="head.rows"
+                :table-rows="rows"
                 :table-heads="head.heads"
                 :row-sort="head.row_sort"
                 :row-pages="head.row_pages"
@@ -28,8 +28,10 @@
         data(){
             var heads_ctx = this.tab_head.table_ctx
             heads_ctx.search_args= heads_ctx.search_args || {}
+            var rows= ex.copy( heads_ctx.rows )
             return {
                 head:heads_ctx,
+                rows:rows,
                 parStore:ex.vueParStore(this),
             }
         },

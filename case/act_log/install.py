@@ -1,7 +1,7 @@
 
 import os
 import sys
-def SET(scope,path=None):
+def SET(scope,path=None,extra_cfg={}):
     BASE_DIR= scope['BASE_DIR']
     if not path:
         LOG_PATH= os.path.join( os.path.dirname(BASE_DIR),'log')
@@ -93,7 +93,11 @@ def SET(scope,path=None):
               },          
       }
     }
-    
+    if 'handlers' in extra_cfg:
+        LOGGING['handlers'] .update(extra_cfg.get('handlers'))
+    if 'loggers' in extra_cfg:
+        LOGGING['loggers'].update(extra_cfg.get('loggers'))
+        
     scope.update({
         'LOGGING':LOGGING,
     })

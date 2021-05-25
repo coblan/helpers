@@ -509,8 +509,12 @@ class ModelFields(forms.ModelForm):
         for head in heads:
             if head.get('after_fields'):
                 after_fields_list.extend(head.get('after_fields'))
-                after_dict[head['name']]=[findone(heads, {'name':x}) for x in head.get('after_fields')]
-        
+                after_dict[head['name']]=[] 
+                for item in head.get('after_fields'):
+                    item_head = findone(heads, {'name':item})
+                    if item_head:
+                        after_dict[head['name']].append(item_head)
+                
         lefts = [x for x in heads if x['name'] not in after_fields_list ]
         for k,v in after_dict.items():
             index = find_index(lefts,{'name':k})
