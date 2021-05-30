@@ -34,8 +34,3 @@ export default {
         border: none;
     }
 </style>
-
-Vue.component('com-field-blocktext',{
-        props:['row','head'],
-        template: ``,
-})

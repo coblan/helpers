@@ -77,7 +77,9 @@
 //        },
 
         mounted(){
-
+            if(this.head.mounted_express){
+                ex.eval(this.head.mounted_express,{vc:this})
+            }
         },
         methods:{
 //            on_blur(){
