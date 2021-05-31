@@ -91,8 +91,9 @@ def sim_dict(instance,filt_attr=None,include=None,exclude=None,include_pk=True):
                     continue
                 #if hasattr(mapper,'get_label'):
                     #out['_%s_label'%field.name]=mapper.get_label(instance,field.name)
-                if isinstance(out.get(field.name),list):
-                    # 如果遇到 manytomany的情况，是一个list
+                #if isinstance(out.get(field.name),list):
+                    ## 如果遇到 manytomany的情况，是一个list
+                if isinstance(field,models.ManyToManyField):
                     out['_%s_label'%field.name]=[str(x) for x in out[field.name]]
                 
                 # 下面生成 _{name}_label

@@ -18,6 +18,7 @@ import {localCatch} from  './catch'
 import {utile} from  './utile'
 
 import {collection} from  'weblib/ex/collection.js'
+var dayjs = require('dayjs')
 
 var ex={
     assign:function (dst,src) {
@@ -26,6 +27,7 @@ var ex={
         }
         return dst
     },
+    dayjs:dayjs
 }
 
 //import {md5} from  './md5.min'

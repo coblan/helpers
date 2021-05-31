@@ -42,22 +42,53 @@ var lay_datetime={
         return {
             inn_data:this.row[this.head.name],
             pickerOptions: {
-                shortcuts: [{
-                    text: '今天',
+                shortcuts: [
+                    {
+                        text: '当前时间',
+                        onClick(picker) {
+                            var d = new Date();
+                            picker.$emit('pick', d);
+                        }
+                    },
+                    {
+                        text: '5分钟前',
+                        onClick(picker) {
+                            //var d = new Date();
+                            var outd = ex.dayjs().subtract(5,'minute')
+                            picker.$emit('pick', outd.toDate());
+                        }
+                    },
+                    {
+                        text: '15分钟前',
+                        onClick(picker) {
+                            //var d = new Date();
+                            var outd = ex.dayjs().subtract(15,'minute')
+                            picker.$emit('pick', outd.toDate());
+                        }
+                    },
+                    {
+                        text: '30分钟前',
+                        onClick(picker) {
+                            var outd = ex.dayjs().subtract(30,'minute')
+                            picker.$emit('pick', outd.toDate());
+                        }
+                    },
+                    {
+                        text: '1小时前',
+                        onClick(picker) {
+                            var outd = ex.dayjs().subtract(60,'minute')
+                            picker.$emit('pick', outd.toDate() );
+                        }
+                    },
+                    {
+                    text: '今天零时',
                     onClick(picker) {
                         var d = new Date();
                         d.setHours(0,0,0,0);
                         picker.$emit('pick', d);
                     }
-                }, {
-                    text: '昨天',
-                    onClick(picker) {
-                        const date = new Date();
-                        date.setTime(date.getTime() - 3600 * 1000 * 24);
-                        date.setHours(0,0,0,0);
-                        picker.$emit('pick', date);
-                    }
-                }, {
+                },
+                 {
                     text: '一周前',
                     onClick(picker) {
                         const date = new Date();
@@ -66,14 +97,25 @@ var lay_datetime={
                         picker.$emit('pick', date);
                     }
                 },{
-                    text: '30天前',
-                    onClick(picker) {
-                        const date = new Date();
-                        date.setTime(date.getTime() - 3600 * 1000 * 24 * 30);
-                        date.setHours(0,0,0,0);
-                        picker.$emit('pick', date);
-                    }
-                }]
+                        text: '本月初',
+                        onClick(picker) {
+                            var outd = ex.dayjs().startOf('month')
+                            picker.$emit('pick', outd.toDate());
+                        }
+                  }, {
+                        text: '上月当天',
+                        onClick(picker) {
+                            var outd = ex.dayjs().subtract(1,'month').startOf('day')
+                            picker.$emit('pick', outd.toDate());
+                        }
+                    },
+                    {
+                        text: '上月初',
+                        onClick(picker) {
+                            var outd = ex.dayjs().subtract(1,'month').startOf('month')
+                            picker.$emit('pick', outd.toDate());
+                        }
+                    },]
             },
         }
     },
