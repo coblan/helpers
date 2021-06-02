@@ -40,7 +40,7 @@
             }
         },
         methods:{
-             on_click(){
+              on_click(){
                 if(this.my_ctx.click_express || this.my_ctx.action){
 
                     var click_express = this.my_ctx.click_express ||this.my_ctx.action
@@ -51,6 +51,10 @@
                        var p = Promise.resolve()
                     }
                     p.then(()=>{
+                        if(this.my_ctx.confirm_msg){
+                            return cfg.confirm(this.my_ctx.confirm_msg)
+                        }
+                    }).then(()=>{
                         ex.eval(click_express,{head:this.my_ctx,ps:this.parStore,vc:this})
                      })
                 }

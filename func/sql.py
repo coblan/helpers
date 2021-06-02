@@ -21,3 +21,12 @@ def exec_sql(sql,lower_key=True):
         rows.append(row_dc)
     
     return rows 
+
+def read_cursor(cursor):
+    rows = []
+    for row in cursor:
+        row_dc = {}
+        for index, head in enumerate(cursor.description):
+            row_dc[head[0]] = row[index]
+        rows.append(row_dc)    
+    return rows

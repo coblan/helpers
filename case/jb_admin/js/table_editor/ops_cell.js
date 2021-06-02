@@ -41,7 +41,7 @@ var operations={
     },
     computed:{
         normed_heads(){
-            ex.filter(this.head.ops,item=>{
+            return ex.filter(this.head.ops,item=>{
                 if(item.show_express){
                     return ex.eval(item.show_express,{vc:this})
                 }else{

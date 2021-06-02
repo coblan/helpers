@@ -92,8 +92,9 @@ class ModelFields(forms.ModelForm):
         else:
             self.crt_user = crt_user
             
-        # if pk is None:
-        if dc.get('pk') != None and dc.get('pk') != '':
+        if pk is not None:
+            pass
+        elif dc.get('pk') != None and dc.get('pk') != '':
             pk=dc.get('pk')
         elif dc.get('id') !=None and dc.get('id') != '':
             pk = dc.get('id')
