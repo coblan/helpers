@@ -5,7 +5,7 @@ import random
 import os
 
 def arial_font(size):
-    return ImageFont.truetype(font='arial.ttf',size=size)
+    return ImageFont.truetype(font='./fonts/arial.ttf',size=size)
 
 def code_and_url():
     """生成图像验证码
