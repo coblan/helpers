@@ -4,7 +4,13 @@ from PIL import Image,ImageDraw,ImageFont,ImageFilter
 import random
 import os
 
+def arial_font(size):
+    return ImageFont.truetype(font='arial.ttf',size=size)
+
 def code_and_url():
+    """生成图像验证码
+    
+    """
     font = os.path.join( os.path.dirname(__file__), 'fonts', 'arial.ttf')
     image, code = create_validate_code(font_type= font)
     
