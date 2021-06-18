@@ -14,16 +14,31 @@
                 :parents="head.parents"
                 :search-args="head.search_args"
                 ref="dtable"
+                :extend-obj="extendObj"
         ></director_table>
     </div>
 </template>
 
 <script>
     import  director_table from  '../pannels/director_table.vue'
+    const { ref, reactive,computed ,onMounted,getCurrentInstance } = VueCompositionAPI
     export default {
         props:['tab_head','par_row'],
         components:{
             director_table,
+        },
+        setup(porps){
+//            var dtable = ref(null)
+//            onMounted(()=>{
+//                debugger
+//                console.log(dtable.value)
+//            })
+            return {
+//                dtable:dtable,
+                extendObj:{
+                    par_row:porps.par_row
+                }
+            }
         },
         data(){
             var heads_ctx = this.tab_head.table_ctx

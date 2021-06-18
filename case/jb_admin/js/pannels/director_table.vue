@@ -23,6 +23,8 @@
     </div>
 </template>
 <script>
+    const { ref, reactive,computed ,onMounted,getCurrentInstance } = VueCompositionAPI
+
     import dtable from 'webcase/director/table/dtable.vue'
     import dOperation from 'webcase/director/table/doperation.vue'
     import dfilter from 'webcase/director/table/dfilter.vue'
@@ -55,7 +57,15 @@
             dparent,
         },
         mixins:[table_mix],
+        setup(props){
+            if(props.extendObj){
+                return props.extendObj
+            }else{
+                return {}
+            }
+        },
         props:{
+            extendObj:{},
             filterHeads:{
                 default:()=>{return []}
             },
@@ -208,24 +218,6 @@
                     ex.array.replace(this.parents,resp.parents)
 //                    this.footer = resp.footer
                 })
-
-//                ex.director_call('d.get_rows',post_data,function(resp){
-//                    cfg.hide_load()
-//                    self.selected = []
-//                    self.rows = resp.rows
-//                    ex.vueAssign( self.row_pages,resp.row_pages)
-//                    ex.vueAssign(self.search_args,resp.search_args)
-//                    self.footer=resp.footer
-//                    self.parents=resp.parents
-//                    self.table_layout=resp.table_layout
-//                    if(self.after_get_rows){
-//                        ex.eval(self.after_get_rows,{ps:self,resp:resp})
-//                    }
-//                    self.$emit('data-updated-backend')
-//                    resolve(resp)
-//                })
-
-//                this.$refs.dtable.search()
             }
         }
     }
