@@ -810,7 +810,7 @@ class ModelTable(object):
             if isinstance(inst,models.Model):
                 cus_dict = self.dict_row( inst)
                 if self.only_simple_data():
-                    dc = sim_dict(inst, include=permit_fields,filt_attr=cus_dict)
+                    dc = sim_dict(inst, include=permit_fields,filt_attr=cus_dict,include_pk=False)
                 else:
                     dc= to_dict(inst, include=permit_fields,filt_attr=cus_dict)
                     dc .update({

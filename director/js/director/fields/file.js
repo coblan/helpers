@@ -272,9 +272,12 @@ var img_uploader={
             </file-input>
             <!--<img-crop class='input' v-if='cfg.crop' v-model='img_files' :config="crop_config">-->
             <!--</img-crop>-->
-            <div style="padding: 40px" @click="select()">
-                <a class='choose'>Choose</a>
-            </div>
+            <slot name="choose">
+                <div style="padding: 40px" @click="select()">
+                    <a class='choose'>Choose</a>
+                </div>
+            </slot>
+
             <div v-if='url' class="closeDiv">
                 <div class="close" @click='clear()'>
                     <i class="fa fa-times-circle" aria-hidden="true" style="color:red;position:relative;left:30px;"></i>

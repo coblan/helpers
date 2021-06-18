@@ -7,6 +7,8 @@ import json
 from django.core.exceptions import ObjectDoesNotExist
 from .middleware.request_cache import get_request_cache
 from functools import wraps
+from helpers.director.exceptions.unauth401 import UnAuth401Exception
+
 
 def need_login(fun):
     @wraps(fun)
@@ -15,7 +17,8 @@ def need_login(fun):
         if request.user.is_authenticated():
             return fun(*args,**kw)
         else:
-            return HttpResponse('Unauthorized', status=401)
+            raise UnAuth401Exception('Unauthorized')
+            #return HttpResponse('Unauthorized', status=401)
             #raise PermissionDenied('Need login !')
         
     return _fun

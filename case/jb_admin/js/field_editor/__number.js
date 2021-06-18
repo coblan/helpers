@@ -17,25 +17,10 @@ var number = {
                    <span  v-if="head.suffix" v-html="head.suffix"></span>
                  </template>
             </el-input>
-
-          <!--<div class="input-group" >-->
-              <!--<div class="input-group-addon" v-if="head.prefix" v-html="head.prefix"></div>-->
-                <!--<input  type="text" class="form-control input-sm" v-model="row[head.name]" :id="'id_'+head.name"-->
-                                <!--:style="{width:head.width}"-->
-                                <!--:name="head.name" :step="head.step"-->
-                                 <!--@keypress="isNumber($event)"-->
-                                <!--:readonly="head.readonly"-->
-                                <!--:placeholder="head.placeholder" :autofocus="head.autofocus">-->
-              <!--<div class="input-group-addon" v-if="head.suffix" v-html="head.suffix"></div>-->
-          <!--</div>-->
        </div>
 
          </div>`,
-    created(){
-        //if(this.head.fv_rule==undefined){
-        //    Vue.set(this.head,'fv_rule','digit(4)')
-        //}
-    },
+
     mounted(){
         //if(this.head.width){
         //    var width = this.head.width
