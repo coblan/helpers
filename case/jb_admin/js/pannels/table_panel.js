@@ -53,7 +53,7 @@ var table_panel={
         // TODO 2020/9/7 修改为 mounted_express ,可能有兼容性问题
         if(this.ctx.mounted_express){
             ex.eval(this.ctx.mounted_express,{vc:this})
-        }else{
+        }else if(this.ctx.autoload || this.ctx.autoload ==undefined){
             this.childStore.search()
         }
         //if(!this.childStore.head.init_express){
