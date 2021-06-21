@@ -14,7 +14,7 @@
                 :parents="head.parents"
                 :search-args="head.search_args"
                 ref="dtable"
-                :extend-obj="extendObj"
+                :extend-logic="extend_logic"
         ></director_table>
     </div>
 </template>
@@ -35,7 +35,7 @@
 //            })
             return {
 //                dtable:dtable,
-                extendObj:{
+                extend_logic:{
                     par_row:porps.par_row
                 }
             }

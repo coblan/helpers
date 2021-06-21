@@ -56,7 +56,7 @@
     }
 
     export default {
-        props:['row','head','extendObj'],
+        props:['row','head','extendLogic'],
         components:{
             lineText,
         },
@@ -67,8 +67,8 @@
           }
         },
         setup(props){
-            if(props.extendObj){
-                return props.extendObj
+            if(props.extendLogic){
+                return props.extendLogic
             }else{
                 return  new IntInputLogic().setup(props)
             }

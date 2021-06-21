@@ -1,5 +1,5 @@
 <template>
-    <int-input class="com-field-number" :head="head" :row="row" :extend-obj="extend_obj"></int-input>
+    <int-input class="com-field-number" :head="head" :row="row" :extend-logic="extend_logic"></int-input>
 </template>
 <script>
     import intInput ,{IntInputLogic} from './int.vue'
@@ -11,7 +11,7 @@
           }
             setup(props){
                 return {
-                    extend_obj:super.setup(props)
+                    extend_logic:super.setup(props)
                 }
             }
             isNumber(evt){

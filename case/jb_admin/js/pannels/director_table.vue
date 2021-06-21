@@ -58,14 +58,14 @@
         },
         mixins:[table_mix],
         setup(props){
-            if(props.extendObj){
-                return props.extendObj
+            if(props.extendLogic){
+                return props.extendLogic
             }else{
                 return {}
             }
         },
         props:{
-            extendObj:{},
+            extendLogic:{},
             filterHeads:{
                 default:()=>{return []}
             },
