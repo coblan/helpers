@@ -48,61 +48,23 @@
     *
     * */
 
-    export default {
-        components:{
-            dtable,
-            dfilter,
-            dpagination,
-            dOperation,
-            dparent,
-        },
-        mixins:[table_mix],
-        setup(props){
-            if(props.extendLogic){
-                return props.extendLogic
-            }else{
-                return {}
+    class DTableLogic{
+        setup(porps){
+            const vc = getCurrentInstance()
+            this.selected = ref([])
+            var childStore = this.setParStore(vc)
+            debugger;
+            onMounted(()=>{
+            
+            })
+            return {
+                childStore:childStore,
+                selected: this.selected
             }
-        },
-        props:{
-            extendLogic:{},
-            filterHeads:{
-                default:()=>{return []}
-            },
-            searchArgs:{
-                default:()=>{return {}}
-            },
-            tableRows:{
-                default:()=>{return []}
-            },
-            tableHeads:{
-                default:()=>{return []}
-            },
-            rowSort:{
-                default:()=>{return {}}
-            },
-            adviseHeads:{
-                default:()=>[]
-            },
-            adviseHeadsCookiePath:{},
-            rowPages:{
-                default:()=>{return {}}
-            },
-            operationHeads:{
-                default:()=>[]
-            },
-            directorName:{},
-            footer:{
-                default:()=>{}
-            },
-            parents:{
-                default:()=>[]
-            }
-
-        },
-        data (){
-            var self =this
-            var vc = this
+        }
+        setParStore(vc){
+            var self = vc
+            var logic = this
             let childStore = new Vue({
                 data(){
                     return {
@@ -111,9 +73,11 @@
                 },
                 computed:{
                     search_args(){
-                        return self.searchArgs
+                        debugger
+                        return vc.props.searchArgs
                     },
                     has_select(){
+                        debugger;
                         return self.selected.length !=0
                     },
                     selected:{
@@ -170,7 +134,7 @@
                         self.search_page(1)
                     },
                     check_selected(head){
-                      return self.check_selected(head)
+                        return self.check_selected(head)
                     },
                     delete_selected(){
                         return self.delete_selected()
@@ -186,10 +150,154 @@
                     }
                 }
             })
-            childStore.vc = this
+            childStore.vc = vc
+            return childStore
+        }
+    }
+
+    export default {
+        components:{
+            dtable,
+            dfilter,
+            dpagination,
+            dOperation,
+            dparent,
+        },
+        mixins:[table_mix],
+        setup(props){
+            debugger;
+            if(props.extendLogic){
+                return props.extendLogic
+            }else{
+                return new DTableLogic().setup(props)
+            }
+        },
+        props:{
+            extendLogic:{},
+            filterHeads:{
+                default:()=>{return []}
+            },
+            searchArgs:{
+                default:()=>{return {}}
+            },
+            tableRows:{
+                default:()=>{return []}
+            },
+            tableHeads:{
+                default:()=>{return []}
+            },
+            rowSort:{
+                default:()=>{return {}}
+            },
+            adviseHeads:{
+                default:()=>[]
+            },
+            adviseHeadsCookiePath:{},
+            rowPages:{
+                default:()=>{return {}}
+            },
+            operationHeads:{
+                default:()=>[]
+            },
+            directorName:{},
+            footer:{
+                default:()=>{}
+            },
+            parents:{
+                default:()=>[]
+            }
+
+        },
+        data (){
+//            var self =this
+//            var vc = this
+//            let childStore = new Vue({
+//                data(){
+//                    return {
+//                        name:'d-table-store'
+//                    }
+//                },
+//                computed:{
+//                    search_args(){
+//                        return self.searchArgs
+//                    },
+//                    has_select(){
+//                        return self.selected.length !=0
+//                    },
+//                    selected:{
+//                        get(){
+//                            return self.selected
+//                        },
+//                        set(v){
+//                            self.selected = v
+//                        }
+//                    },
+//                    heads:{
+//                        get(){
+//                            return self.tableHeads
+//                        },
+//                        set(v){
+//                            // tableSetting组件里面会闪一下，刷新界面
+//                            ex.arrayReplace(self.tableHeads,v)
+////                            self.tableHeads = v
+//                        }
+//                    },
+//                    advise_heads(){
+//                        return vc.adviseHeads // .$refs.dtable.advise_heads
+//                    },
+//                    advise_heads_cookie_path(){
+//                        return vc.adviseHeadsCookiePath
+//                    },
+//                    advise_order(){
+//                        return vc.$refs.dtable.advise_order
+//                    },
+//                    director_name(){
+//                        return vc.directorName
+//                    },
+//                    rows:{
+//                        get(){
+//                            return vc.tableRows
+//                        },
+//                        set(v){
+//                            ex.array.replace(vc.tableRows,v)
+////                            vc.tableRows=v
+//                        }
+//                    }
+//                },
+//                methods:{
+//                    export_excel(head){
+//                        self.exportExcel(head)
+//                    },
+//                    switch_to_tab(kws){
+//                        self.switchToTab(kws)
+//                    },
+//                    add_new(kws){
+//                        self.addNew(kws)
+//                    },
+//                    search(){
+//                        self.search_page(1)
+//                    },
+//                    check_selected(head){
+//                      return self.check_selected(head)
+//                    },
+//                    delete_selected(){
+//                        return self.delete_selected()
+//                    },
+//                    selected_set_and_save(kws){
+//                        return self.selected_set_and_save(kws)
+//                    },
+//                    reloadAdviseInfo(){
+//                        self.$refs.dtable.reloadAdviseInfo()
+//                    },
+//                    getChilds(par){
+//                        self.getChilds(par)
+//                    }
+//                }
+//            })
+//            childStore.vc = this
             return {
-                selected:[],
-                childStore:childStore,
+//                selected:[]
+//                childStore:childStore,
             }
         },
         mounted(){
