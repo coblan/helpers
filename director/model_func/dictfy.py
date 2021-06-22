@@ -14,7 +14,11 @@ from .field_proc import BaseFieldProc
 from .hash_dict import hash_dict,make_mark_dict
 from ..base_data import field_map
 
-
+def get_choice_label(instance,field_name):
+    field =  instance._meta.get_field(field_name)
+    value = getattr(instance,field_name,None)
+    dc = dict(field.choices)
+    return dc.get(value)
 
 def model_to_name(model):
     """
