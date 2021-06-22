@@ -21,10 +21,36 @@
 <script>
     import  director_table from  './director_table.vue'
     const { ref, reactive,computed ,onMounted,getCurrentInstance } = VueCompositionAPI
+
+    class BackendTable{
+        extendSetup(){
+            return {}
+        }
+        setup(props){
+            this. dtable = ref(null)
+            this.connect_dtable_event()
+            return {
+                dtable:this.dtable,
+                extendLogic:this.extendSetup(),
+            }
+        }
+        connect_dtable_event(){
+            const vc = getCurrentInstance()
+            onMounted(()=>{
+                this.dtable.value.childStore.$on('finish',(data)=>{
+                    vc.emit('finish',data)
+                })
+            })
+        }
+
+    }
     export default {
         components:{
             director_table,
         },
-        props:['ctx','extendLogic']
+        props:['ctx','extendLogic'],
+        setup(props){
+            return new BackendTable().setup(props)
+        }
     }
 </script>

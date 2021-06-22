@@ -25,11 +25,11 @@
     export class IntInputLogic extends LineTextLogic{
         constructor(){
             super()
-            this.fv_rule=';integer'
+           this.fv_rule=';integer'
         }
         setup(props){
             if(this.fv_rule){
-                props.head.fv_rule += this.fv_rule
+                Vue.set(props.head,'fv_rule',this.fv_rule) //  props.head.fv_rule = this.fv_rule
             }
             super.setup(props)
             return {

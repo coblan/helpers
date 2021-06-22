@@ -63,7 +63,7 @@ var pop_table_select =  {
                 var pop_express = this.head.pop_express || this.head.init_express
                 ex.eval(this.head.pop_express,{head:this.head,row:this.row})
             }
-            cfg.pop_vue_com('com-table-panel',this.head.table_ctx).then(foreign_row=>{
+            cfg.pop_vue_com( 'com-backend-table'/*'com-table-panel'*/,this.head.table_ctx).then(foreign_row=>{
                     if(!foreign_row){
                         console.log('break table panel')
                         return
