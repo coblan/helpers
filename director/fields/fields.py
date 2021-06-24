@@ -77,6 +77,12 @@ class ModelFields(forms.ModelForm):
         * 前端设置默认值： 在 table的 add_new 操作中 添加 pre_set 。注意 foreignkey 需要加 _id
         
         """
+        if not crt_user:
+            #self.crt_user=dc.get('crt_user')
+            self.crt_user = get_request_cache()['request'].user
+        else:
+            self.crt_user = crt_user
+            
         self.kw = kw.copy()
         # 修正参数
         
@@ -86,11 +92,7 @@ class ModelFields(forms.ModelForm):
         if dc.get('instance'):
             self.kw['instance'] = dc.pop('instance')
         
-        if not crt_user:
-            #self.crt_user=dc.get('crt_user')
-            self.crt_user = get_request_cache()['request'].user
-        else:
-            self.crt_user = crt_user
+
             
         if pk is not None:
             pass
