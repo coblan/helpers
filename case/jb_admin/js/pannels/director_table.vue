@@ -49,10 +49,11 @@
     * */
 
     class DTableLogic{
-        setup(porps){
+        getSetup(props){
             const vc = getCurrentInstance()
 
             return {
+
             }
         }
         setParStore(vc){
@@ -65,11 +66,9 @@
                 },
                 computed:{
                     search_args(){
-                        debugger
-                        return vc.props.searchArgs
+                        return vc.searchArgs
                     },
                     has_select(){
-                        debugger;
                         return self.selected.length !=0
                     },
                     selected:{
@@ -82,7 +81,6 @@
                     },
                     heads:{
                         get(){
-                            debugger
                             return self.tableHeads
                         },
                         set(v){
@@ -159,7 +157,7 @@
         mixins:[table_mix],
         setup(props){
             if(props.extendLogic){
-                return props.extendLogic
+                return new props.extendLogic().getSetup(props)
             }else{
                 return  {} //new DTableLogic().setup(props)
             }

@@ -26,7 +26,7 @@
         extendSetup(){
             return {}
         }
-        setup(props){
+        getSetup(props){
             this. dtable = ref(null)
             this.connect_dtable_event()
             return {
@@ -50,7 +50,8 @@
         },
         props:['ctx','extendLogic'],
         setup(props){
-            return new BackendTable().setup(props)
+
+            return new BackendTable().getSetup(props)
         }
     }
 </script>
