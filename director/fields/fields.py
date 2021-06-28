@@ -157,8 +157,10 @@ class ModelFields(forms.ModelForm):
         # todict -> ui -> todict(compare) -> adapte_dict
         readonly_waring = []
         simdc = sim_dict(inst)
+        # 由于 multichoice.fullchoice 造成 数据库 出入不一致,所以加入以下_clean代码，将simdc再次还原为数据库数据。（simdc是走了to_dict转换函数的）
+        # TODO:可能会在以后移除这里的_clean_dict,因为应该保持数据库数据的 数据库->前端->后端 的一致性，就算显示需求，也应该利用_label等特殊字段。
         simdc = self._clean_dict(simdc)
-        simdc = self.clean_dict(simdc) 
+        #simdc = self.clean_dict(simdc) 
         
         if meta_change_fields or self.readonly:
             # 修正只读字段 
