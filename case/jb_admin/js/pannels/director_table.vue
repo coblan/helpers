@@ -48,61 +48,15 @@
     *
     * */
 
-    export default {
-        components:{
-            dtable,
-            dfilter,
-            dpagination,
-            dOperation,
-            dparent,
-        },
-        mixins:[table_mix],
-        setup(props){
-            if(props.extendLogic){
-                return props.extendLogic
-            }else{
-                return {}
-            }
-        },
-        props:{
-            extendLogic:{},
-            filterHeads:{
-                default:()=>{return []}
-            },
-            searchArgs:{
-                default:()=>{return {}}
-            },
-            tableRows:{
-                default:()=>{return []}
-            },
-            tableHeads:{
-                default:()=>{return []}
-            },
-            rowSort:{
-                default:()=>{return {}}
-            },
-            adviseHeads:{
-                default:()=>[]
-            },
-            adviseHeadsCookiePath:{},
-            rowPages:{
-                default:()=>{return {}}
-            },
-            operationHeads:{
-                default:()=>[]
-            },
-            directorName:{},
-            footer:{
-                default:()=>{}
-            },
-            parents:{
-                default:()=>[]
-            }
+  export  class DTableLogic{
+        getSetup(props){
+            const vc = getCurrentInstance()
+            return {
 
-        },
-        data (){
-            var self =this
-            var vc = this
+            }
+        }
+        setParStore(vc){
+            var self = vc
             let childStore = new Vue({
                 data(){
                     return {
@@ -111,7 +65,7 @@
                 },
                 computed:{
                     search_args(){
-                        return self.searchArgs
+                        return vc.searchArgs
                     },
                     has_select(){
                         return self.selected.length !=0
@@ -170,7 +124,7 @@
                         self.search_page(1)
                     },
                     check_selected(head){
-                      return self.check_selected(head)
+                        return self.check_selected(head)
                     },
                     delete_selected(){
                         return self.delete_selected()
@@ -186,10 +140,69 @@
                     }
                 }
             })
-            childStore.vc = this
+            childStore.vc = vc
+            return childStore
+        }
+    }
+
+    export default {
+        components:{
+            dtable,
+            dfilter,
+            dpagination,
+            dOperation,
+            dparent,
+        },
+        mixins:[table_mix],
+        setup(props){
+            if(props.extendLogic){
+                return new props.extendLogic().getSetup(props)
+            }else{
+                return  {} //new DTableLogic().setup(props)
+            }
+        },
+        props:{
+            extendLogic:{},
+            filterHeads:{
+                default:()=>{return []}
+            },
+            searchArgs:{
+                default:()=>{return {}}
+            },
+            tableRows:{
+                default:()=>{return []}
+            },
+            tableHeads:{
+                default:()=>{return []}
+            },
+            rowSort:{
+                default:()=>{return {}}
+            },
+            adviseHeads:{
+                default:()=>[]
+            },
+            adviseHeadsCookiePath:{},
+            rowPages:{
+                default:()=>{return {}}
+            },
+            operationHeads:{
+                default:()=>[]
+            },
+            directorName:{},
+            footer:{
+                default:()=>{}
+            },
+            parents:{
+                default:()=>[]
+            }
+
+        },
+        data (){
+        var vc = this
+        var logic = new DTableLogic()
             return {
                 selected:[],
-                childStore:childStore,
+                childStore: logic.setParStore(vc) //childStore,
             }
         },
         mounted(){

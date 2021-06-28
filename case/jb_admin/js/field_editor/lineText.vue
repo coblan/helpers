@@ -27,7 +27,7 @@
         constructor(){
 
         }
-        setup(props){
+        getSetup(props){
             this.plain_mounted(props)
             return {
 
@@ -49,7 +49,7 @@
     export default {
         props:['row','head'],
         setup(props){
-            return new LineTextLogic().setup(props)
+            return new LineTextLogic().getSetup(props)
         }
     }
 </script>

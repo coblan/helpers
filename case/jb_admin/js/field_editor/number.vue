@@ -9,12 +9,7 @@
               super()
               this.fv_rule=null
           }
-            setup(props){
-                return {
-                    extend_logic:super.setup(props)
-                }
-            }
-            isNumber(evt){
+          isNumber(evt){
                 evt = (evt) ? evt : window.event;
                 var charCode = (evt.which) ? evt.which : evt.keyCode;
                 if ((charCode >= 48 && charCode <= 57) || charCode== 46 || charCode== 45) {
@@ -34,7 +29,10 @@
             intInput
         },
         setup(props){
-            return new NumberLogic().setup(props)
+//            return new NumberLogic().setup(props)
+            return {
+                extend_logic:NumberLogic
+            }
         }
     }
 </script>

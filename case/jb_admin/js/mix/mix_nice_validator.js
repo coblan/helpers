@@ -29,7 +29,7 @@ var nice_validator={
         }
     },
     watch:{
-        head_fv_rules(){
+        head_fv_rules(nv,ov){
             this.update_nice()
         }
     },

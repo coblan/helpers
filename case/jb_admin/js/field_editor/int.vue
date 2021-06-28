@@ -25,16 +25,17 @@
     export class IntInputLogic extends LineTextLogic{
         constructor(){
             super()
-            this.fv_rule=';integer'
+           this.fv_rule=';integer'
         }
-        setup(props){
+        getSetup(props){
             if(this.fv_rule){
-                props.head.fv_rule += this.fv_rule
+                Vue.set(props.head,'fv_rule',this.fv_rule) //  props.head.fv_rule = this.fv_rule
             }
-            super.setup(props)
-            return {
+            var dc = super.getSetup(props)
+            Object.assign(dc,{
                 isNumber:this.isNumber
-            }
+            })
+            return dc
         }
         isNumber(evt){
             evt = (evt) ? evt : window.event;
@@ -68,9 +69,9 @@
         },
         setup(props){
             if(props.extendLogic){
-                return props.extendLogic
+                return new  props.extendLogic().getSetup(props)
             }else{
-                return  new IntInputLogic().setup(props)
+                return  new IntInputLogic().getSetup(props)
             }
 
 
