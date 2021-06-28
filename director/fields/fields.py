@@ -155,23 +155,26 @@ class ModelFields(forms.ModelForm):
         
 
         # todict -> ui -> todict(compare) -> adapte_dict
-   
-        # 修正只读字段 
-        simdc = sim_dict(inst)
         readonly_waring = []
-        for k in dict(dc):
-            if k in self.readonly or (meta_change_fields and k not in meta_change_fields ):
-                if k in self.readonly_change_warning and adapt_type(dc[k]) != adapt_type( simdc.get(k)):
-                    readonly_waring.append(k)
-                dc[k] = simdc.get(k)
-                #if hasattr(inst, "%s_id" % k):  # 如果是ForeignKey，必须要pk值才能通过 form验证
-                    #fieldcls = inst.__class__._meta.get_field(k)
-                    #if isinstance(fieldcls, models.ForeignKey):
-                        #dc[k] = getattr(inst, "%s_id" % k)
-                        #continue
-                #if hasattr(inst,k):
-                    #dc[k] =  getattr(inst , k)  
-        if readonly_waring and  not dc.get('meta_overlap_fields') == '__all__' :
+        simdc = sim_dict(inst)
+        simdc = self._clean_dict(simdc)
+        simdc = self.clean_dict(simdc) 
+        
+        if meta_change_fields or self.readonly:
+            # 修正只读字段 
+            for k in dict(dc):
+                if k in self.readonly or (meta_change_fields and k not in meta_change_fields ):
+                    if k in self.readonly_change_warning and adapt_type(dc[k]) != adapt_type( simdc.get(k)):
+                        readonly_waring.append(k)
+                    dc[k] = simdc.get(k)
+                    #if hasattr(inst, "%s_id" % k):  # 如果是ForeignKey，必须要pk值才能通过 form验证
+                        #fieldcls = inst.__class__._meta.get_field(k)
+                        #if isinstance(fieldcls, models.ForeignKey):
+                            #dc[k] = getattr(inst, "%s_id" % k)
+                            #continue
+                    #if hasattr(inst,k):
+                        #dc[k] =  getattr(inst , k)  
+        if readonly_waring : # and  not dc.get('meta_overlap_fields') == '__all__' : 这个有安全隐患 ，所以去掉
             raise OutDateException('(%s)的%s已经发生了变化,请确认后再进行操作!'%(inst,[field_label(inst.__class__,k ) for k in readonly_waring] ) )
         
         # 真正的验证各个参数是否过期，是在clean函数中进行的。
