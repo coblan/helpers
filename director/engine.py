@@ -67,7 +67,7 @@ class BaseEngine(object):
     menu_search = True
     ui_theme='skin-blue'
     home = '/' # 当前engine的主页，没有目的的时候，可以往这里跳
-    
+    static_url=settings.STATIC_URL
     root_page='/'   # 被home 替代了
     access_from_internet = getattr(settings,'ACCESS_FROM_INTERNET',False)
     need_staff = False
@@ -245,6 +245,7 @@ class BaseEngine(object):
             'js_lib':lib_dc,
             'is_debug':settings.DEBUG,
             'login_url':self.login_url,
+            'static_url':self.static_url,
         }
     
 
