@@ -86,9 +86,12 @@ class GeneralUpload(BasicReciever):
     """
     def getParDir(self):
         path = self.request.GET.get('path','general_upload')
-        split = self.request.GET.get('split')
+        split = self.request.GET.get('split','')
         today = datetime.today().date()
-        if split=='month':
+        if split=='month' or \
+           (split =='' and path.startswith('general_upload')):
+            # 对于以前的上传路径，统一增加默认split=month是更加合理的
+            # 如果遇到用户自定义了path，应该都不是以 general_upload 开始,所以排除开split默认值的影响
             path = os.path .join(path,today.strftime('%Y_%m'))
         elif split =='date':
             path = os.path.join(path,today.strftime('%Y_%m_%d'))

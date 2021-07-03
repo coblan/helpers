@@ -13,6 +13,8 @@ from helpers.director.kv import get_value,set_value,clear_value
 from django.utils import timezone
 from helpers.authuser.validate_code import code_and_url
 from django.utils.translation import gettext as _
+from django.conf import settings
+from helpers.func.d_import import import_element
 
 class LoginFormPage(FieldsPage):
     template = 'authuser/login.html'
@@ -44,7 +46,7 @@ class LoginFormPage(FieldsPage):
 @director_view('username/login')
 def login(username , password):
     row={"username":username,'password':password}
-    rt= Login.run(row)
+    rt= run(row)
     if 'errors' in rt:
         dc ={}
         for k,v in rt['errors'].items():
@@ -52,71 +54,72 @@ def login(username , password):
         rt['errors'] = dc
     return rt
 
-class Login(object):
-    
-    
-    @staticmethod
-    @director_view('do_login')
-    def run(row):
-        """
-        为了实现token登录，需要添加中间件
-        MIDDLEWARE = [
-           'helpers.director.middleware.tokenuser.TokenUser',
-           ...
-        ]
-    
-        ##调用接口登录
 
-        ```
-        
-        [POST]    /dapi/do_login     
-        
-            参数:
-            {"username":"xx","password":"xxx"}
-        
-            返回:
-            {
-                "data": {
-                    "token": "i7u62v4o5340950xt3jguyilxgmodvxp",
-                    "success": true
-                },
+@director_view('do_login')
+def run(row):
+    """
+    为了实现token登录，需要添加中间件
+    MIDDLEWARE = [
+       'helpers.director.middleware.tokenuser.TokenUser',
+       ...
+    ]
+
+    ##调用接口登录
+
+    ```
+    
+    [POST]    /dapi/do_login     
+    
+        参数:
+        {"username":"xx","password":"xxx"}
+    
+        返回:
+        {
+            "data": {
+                "token": "i7u62v4o5340950xt3jguyilxgmodvxp",
                 "success": true
-            }
-         ```
-        
-用户登录后，有多种方式携带登录信息进行其他api的请求。
-      
-1. 直接用cookies。后台已经自动设置和http请求的cookies，如果携带cookies请求，可以直接请求其他api接口。
-
-2. 采用token。如果传递cookies有困难，直接将token放在http的header中，进行请求.字段名为 `Authorization:token`
-
-3. 如果设置header有困难，可以直接挂在url上请求，例如 : `api_url?token=xxx`
-
-
-**跨域问题**
-
-在浏览器中肯会存在跨域问题。后端进行了设置是允许跨域请求的，但是浏览器默认是不允许传递cookies等敏感信息，所以需要进行一定的设置。
-以jquery的请求为例,需要设置`withCredentials: true`
-        
-``` 
-    $.ajax({
-        url: a_cross_domain_url,
-        xhrFields: {
-            withCredentials: true
+            },
+            "success": true
         }
-    });
-```
-        """    
-        
+     ```
+    
+     用户登录后，有多种方式携带登录信息进行其他api的请求。
+           
+     1. 直接用cookies。后台已经自动设置和http请求的cookies，如果携带cookies请求，可以直接请求其他api接口。
+     
+     2. 采用token。如果传递cookies有困难，直接将token放在http的header中，进行请求.字段名为 `Authorization:token`
+     
+     3. 如果设置header有困难，可以直接挂在url上请求，例如 : `api_url?token=xxx`
+     
+     
+     **跨域问题**
+     
+     在浏览器中肯会存在跨域问题。后端进行了设置是允许跨域请求的，但是浏览器默认是不允许传递cookies等敏感信息，所以需要进行一定的设置。
+     以jquery的请求为例,需要设置`withCredentials: true`
+             
+     ``` 
+         $.ajax({
+             url: a_cross_domain_url,
+             xhrFields: {
+                 withCredentials: true
+             }
+         });
+     ```
+    """    
+    if getattr(settings,'DIRECTOR_LOGIN_BACKEND',None):
+        loginClass = import_element(settings.DIRECTOR_LOGIN_BACKEND)
+        loger = loginClass(row)
+    else:
         loger = Login(row)
 
-        if not loger.check_code():
-            code,url = code_and_url()
-            set_value(loger.code_key, code)
-            return {'success':False,'errors':{'validate_code':[_('验证码错误')]},'validate_img':url}
-        rt= loger.check_and_login()
-        return rt
+    if not loger.check_code():
+        code,url = code_and_url()
+        set_value(loger.code_key, code)
+        return {'success':False,'errors':{'validate_code':[_('验证码错误')]},'validate_img':url}
+    rt= loger.check_and_login()
+    return rt
 
+class Login(object):
 
     def __init__(self,row):
         self.request = get_request_cache()['request']

@@ -53,6 +53,8 @@ from .base_data import js_tr_list,js_lib_list
 from django.views.decorators.csrf import csrf_exempt
 from helpers.director.middleware.request_cache import get_request_cache
 
+gb={}
+
 class BaseEngine(object):
     _pages=None
     menu={}
@@ -67,16 +69,19 @@ class BaseEngine(object):
     menu_search = True
     ui_theme='skin-blue'
     home = '/' # 当前engine的主页，没有目的的时候，可以往这里跳
-    static_url=settings.STATIC_URL
+    
     root_page='/'   # 被home 替代了
     access_from_internet = getattr(settings,'ACCESS_FROM_INTERNET',False)
     need_staff = False
     
     @classmethod
     def as_view(cls):
-        if not getattr(cls,'_singleton',None):
-            cls._singleton = cls()
-        return cls._singleton.view
+        if cls.__name__ not in gb:
+            gb[cls.__name__] = cls()
+        return gb[cls.__name__].view
+        #if not getattr(cls,'_singleton',None):
+            #cls._singleton = cls()
+        #return cls._singleton.view
     
     @classmethod
     def add_pages(cls,dc):
@@ -245,7 +250,7 @@ class BaseEngine(object):
             'js_lib':lib_dc,
             'is_debug':settings.DEBUG,
             'login_url':self.login_url,
-            'static_url':self.static_url,
+            'static_url':settings.STATIC_URL,
         }
     
 

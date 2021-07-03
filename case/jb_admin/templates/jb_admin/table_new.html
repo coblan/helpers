@@ -64,6 +64,9 @@
 
     {% endblock %}
 
+    root_store = new Vue({})
+
+
     table_logic={
         el:'#there',
         created:function(){
@@ -78,60 +81,64 @@
             tr:cfg.tr,
 
         },
-        mixins:[mix_table_data,mix_ele_table_adapter],
+        //mixins:[mix_table_data,mix_ele_table_adapter],
 
         mounted:function(){
             var self=this
             this.childStore.vc=this
             ex.assign(this.op_funs,{
-                row_changed:function(kws){
-                    var row= kws.row
-                    if(!ex.isin(row,self.changed_rows)){
-                        self.changed_rows.push(row)
-                    }
-                },
-                row_changed_undo_act:function(kws){
-                    var md5= ex.hashDict(kws.row)
-                    if(md5 == kws.row._hash){
-                        ex.remove(self.changed_rows,{pk:kws.row.pk})
-                    }
-                },
-                switch_to_tab:function(kws){
-
-                    if(kws.named_tabs){
-                        // 传入named_tabs，造成tabs的切换
-                        var next_tabs = self.named_tabs[kws.named_tabs]
-                    }else {
-                        var next_tabs = self.tabs
-                    }
-                    self.tab_stack.push( {
-                        widget:'com-widget-el-tab' ,
-                        tabs:next_tabs,
-                        crt_tab_name:kws.tab_name,
-                        par_row:kws.row,
-
-                    })
-                    self.crt_row= kws.row
-                },
-                update_or_insert:function(kws){
-//                    var new_row = kws.new_row
-//                    var old_row= kws.old_row
-//                    self.update_or_insert(new_row,old_row)
-                    self.childStore.update_or_insert(kws.new_row)
-                    self.crt_row=kws.new_row
-                },
-                get_childs:function(kws){
-                    // head:{fun:
-                    var value =kws.row[kws.head.field]
-                    self.search_args._par=value
-                    self.search()
-                }
+//                row_changed:function(kws){
+//                    var row= kws.row
+//                    if(!ex.isin(row,self.changed_rows)){
+//                        self.changed_rows.push(row)
+//                    }
+//                },
+//                row_changed_undo_act:function(kws){
+//                    var md5= ex.hashDict(kws.row)
+//                    if(md5 == kws.row._hash){
+//                        ex.remove(self.changed_rows,{pk:kws.row.pk})
+//                    }
+//                },
+//                switch_to_tab:function(kws){
+//
+//                    if(kws.named_tabs){
+//                        // 传入named_tabs，造成tabs的切换
+//                        var next_tabs = self.named_tabs[kws.named_tabs]
+//                    }else {
+//                        var next_tabs = self.tabs
+//                    }
+//                    self.tab_stack.push( {
+//                        widget:'com-widget-el-tab' ,
+//                        tabs:next_tabs,
+//                        crt_tab_name:kws.tab_name,
+//                        par_row:kws.row,
+//
+//                    })
+//                    self.crt_row= kws.row
+//                },
+//                update_or_insert:function(kws){
+////                    var new_row = kws.new_row
+////                    var old_row= kws.old_row
+////                    self.update_or_insert(new_row,old_row)
+//                    self.childStore.update_or_insert(kws.new_row)
+//                    self.crt_row=kws.new_row
+//                },
+//                get_childs:function(kws){
+//                    // head:{fun:
+//                    var value =kws.row[kws.head.field]
+//                    self.search_args._par=value
+//                    self.search()
+//                }
 
             })
 
 //            eventBus.$on('switch_to_tab',this.op_funs.switch_to_tab)
 
             self.$on('operation',self.on_operation)
+            Vue.nextTick(()=>{
+                root_store.$on('switch-to-tab',this.open_stack_tab)
+            })
+
         },
         computed:{
             pathable_tab_names:function(){
@@ -155,7 +162,12 @@
 
         },
         methods:{
-
+            open_stack_tab(tab_ctx){
+                this.childStore.tab_stack.push(tab_ctx)
+            },
+            pop_tab_stack(){
+                this.childStore.tab_stack.pop()
+            },
 //            on_td_event:function(e){
 //                this.op_funs[e.name](e)
 //            },
@@ -165,21 +177,22 @@
 //            on_select_group_change:function(sel,v){
 //                this.selected= sel
 //            },
-            pop_tab_stack:function(){
-
-                if( this.tab_stack.length != 0){
-                    this.tab_stack.pop()
-                }
+//            pop_tab_stack:function(){
+//
+//                if( this.tab_stack.length != 0){
+//                    this.tab_stack.pop()
+//                }
 //                if(this.tab_stack.length==0){
 //                    this.tabgroup.crt='_main'
 //                    this.tabgroup.crt_tabs=[]
 //                }
-                var self=this
-                Vue.nextTick(function(){
-                    self.$refs.e_table.doLayout()
-                })
 
-            },
+//                var self=this
+//                Vue.nextTick(function(){
+//                    self.$refs.e_table.doLayout()
+//                })
+
+//            },
 
 //            show_tab:function(name){
 //                this.tabgroup.crt = name
@@ -265,7 +278,7 @@
         <button type="button"
                 class="btn btn-warning btn-xs"
                 v-show="childStore.tab_stack.length > 0"
-                @click="childStore.pop_tab_stack()">
+                @click="pop_tab_stack()">
             <i class="fa fa-arrow-circle-o-left fa-lg"></i><span v-text="tr.back"></span></button>
     </div>
 
@@ -276,13 +289,17 @@
     <div id="main-page" class="rows-block flex-v flex-grow" v-show="childStore.tab_stack.length == 0">
 
 
-        <com-d-table :filter-heads='childStore.row_filters'
+        <com-d-table class="flex-grow"  :filter-heads='childStore.row_filters'
                      :table-rows="childStore.rows"
                      :table-heads="childStore.heads"
                      :row-sort="childStore.row_sort"
                      :row-pages="childStore.row_pages"
+                     :advise-heads="childStore.advise_heads"
+                     :advise-heads-cookie-path="childStore.advise_heads_cookie_path"
                      :director-name="childStore.director_name"
                      :operation-heads="childStore.ops"
+                     :footer="childStore.footer"
+                     :parents="childStore.parents"
                      :search-args="childStore.search_args"
                     ></com-d-table>
 
@@ -310,10 +327,7 @@
     </div>
 
     <div id="tab-wrap"  v-if="childStore.tab_stack.length>0" class="flex-grow" style="position: relative">
-
-        <com-widget-stack :ctx_list="childStore.tab_stack" @win-event="on_tab_event($event)"></com-widget-stack>
-
-
+        <com-widget-stack ref="widget_stack" :ctx_list="childStore.tab_stack" @win-event="on_tab_event($event)"></com-widget-stack>
     </div>
 
     {% endblock %}

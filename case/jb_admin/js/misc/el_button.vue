@@ -25,9 +25,9 @@
         },
         computed:{
             is_disabled(){
-
-                if(this.my_ctx .disabled){
-                    return  ex.eval(this.my_ctx.disabled,{ps:this.parStore})
+                var disabled_express = this.my_ctx .disabled_express || this.my_ctx .disabled
+                if(disabled_express){
+                    return  ex.eval(disabled_express,{ps:this.parStore})
                 }else{
                     return false
                 }
@@ -40,7 +40,7 @@
             }
         },
         methods:{
-             on_click(){
+              on_click(){
                 if(this.my_ctx.click_express || this.my_ctx.action){
 
                     var click_express = this.my_ctx.click_express ||this.my_ctx.action
@@ -51,6 +51,10 @@
                        var p = Promise.resolve()
                     }
                     p.then(()=>{
+                        if(this.my_ctx.confirm_msg){
+                            return cfg.confirm(this.my_ctx.confirm_msg)
+                        }
+                    }).then(()=>{
                         ex.eval(click_express,{head:this.my_ctx,ps:this.parStore,vc:this})
                      })
                 }

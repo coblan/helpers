@@ -175,12 +175,31 @@ def is_list(value,name):
     else:
         return value
 
+def list_unique(value,name):
+    tmp =[]
+    for inst in value:
+        if inst in tmp:
+            raise UserWarning('%s不能重复'%name)
+        else:
+            tmp.append(inst)
+    return value
+
+def list_unique_pass_none(value,name):
+    "不检查None形的重复"
+    tmp =[]
+    for inst in value:
+        if inst in tmp:
+            raise UserWarning('%s不能重复'%name)
+        elif inst:
+            tmp.append(inst)
+    return value
+
 def failmsg(fun,msg):
     "定制自定义的消息"
     def _fun(value,name):
         try :
             return fun(value,name)
-        except UserWarning:
+        except UserWarning as e:
             raise UserWarning(msg)
     return _fun
 

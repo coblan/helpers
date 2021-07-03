@@ -10,7 +10,7 @@ var webpack = require('webpack')
 module.exports =
 {
     //context:__dirname,
-    mode:'development', // 'production', //
+    mode: 'development', //'production', //
     entry: {
         jb_admin:'./main.js',
     },

@@ -164,15 +164,17 @@ def director_view(request,director_name):
                 # 2020/3/18 去掉统一的事务，免得造成异步性能不足和死锁
         else:
             # directorEnt is class
-            obj = directorEnt(**kws)
-            
-            if hasattr(obj,'get_data_context'):
+            if hasattr(directorEnt,'gen_from_search_args'):
+                # 表示是 modeltable子类
+                obj = directorEnt.gen_from_search_args(kws)
                 real_func = obj.get_data_context
-                #wraped_directorEnt = transactionall(obj.get_data_context) # obj.get_data_context # 
             else:
+                obj = directorEnt(**kws)
                 real_func = obj.get_context
-                #wraped_directorEnt = transactionall(obj.get_context) # obj.get_context # 
-                
+            #if hasattr(obj,'get_data_context'):
+                #real_func = obj.get_data_context
+            #else:
+                #real_func = obj.get_context
             if need_transaction:
                 wraped_directorEnt = tranactionDefault(real_func)
                 rt = wraped_directorEnt()

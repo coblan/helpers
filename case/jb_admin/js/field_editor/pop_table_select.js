@@ -63,7 +63,7 @@ var pop_table_select =  {
                 var pop_express = this.head.pop_express || this.head.init_express
                 ex.eval(this.head.pop_express,{head:this.head,row:this.row})
             }
-            cfg.pop_vue_com('com-table-panel',this.head.table_ctx).then(foreign_row=>{
+            cfg.pop_vue_com( 'com-backend-table'/*'com-table-panel'*/,this.head.table_ctx).then(foreign_row=>{
                     if(!foreign_row){
                         console.log('break table panel')
                         return
@@ -82,21 +82,7 @@ var pop_table_select =  {
             }).catch(()=>{
                 console.log('break table panel')
             })
-            //var win_close = cfg.pop_middle('com-table-panel',this.head.table_ctx,function(foreign_row){
-            //    if(self.head.action){
-            //        ex.eval(self.head.action,{new_row:foreign_row,row:self.row})
-            //    }else if(self.head.select_field){
-            //        Vue.set(self.row,self.head.name,foreign_row[self.head.select_field])
-            //    }else{
-            //        Vue.set(self.row,self.head.name,foreign_row[self.head.name])
-            //    }
-            //        Vue.set(self.row,'_'+self.head.name+'_label',foreign_row._label)
-            //    win_close()
-            //})
         },
-        //isValid:function(){
-        //    return this.validator.isValid()
-        //}
     }
 }
 

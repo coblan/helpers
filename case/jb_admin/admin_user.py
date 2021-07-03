@@ -1,7 +1,7 @@
 
 from django.contrib import admin
 from django.contrib.auth.models import Group,User
-from helpers.director.shortcut import TablePage,ModelTable,page_dc,model_dc,ModelFields, director,RowFilter,director_view,director,director_element
+from helpers.director.shortcut import TablePage,ModelTable,page_dc,model_dc,ModelFields, director,RowFilter,director_view,director,director_element,get_request_cache
 from helpers.director.models import PermitModel 
 import re
 from . import  js_cfg
@@ -21,6 +21,19 @@ class UserPage(TablePage):
         pop_edit_fields = ['username']
         fields_sort = ['id','username','first_name','groups','is_superuser','is_staff','is_active','last_login']
         
+        def get_head_context(self):
+            ctx = super().get_head_context()
+            get_request_cache()['named_ctx'].update({
+                'jb-user-tabs':[
+                    {'name':'account',
+                    'label':'基本信息',
+                     'editor':'com-tab-form',
+                     'mounted_express':'ex.vueAssign(scope.vc.row,scope.par_row)',
+                     'fields_ctx':UserFields().get_head_context()}
+                ]
+            })
+            return ctx
+        
         def dict_head(self, head): 
             width={
                 'username':120,
@@ -34,10 +47,10 @@ class UserPage(TablePage):
                 head['editor'] = 'com-table-array-mapper'
                 head['options'] = [{'value': group.pk, 'label': str(group),} for group in Group.objects.all()]
     
-            #if head['name'] == 'username':
-                #head['label']='账号'
-                #head['editor'] = 'com-table-click'
-                #head['action'] = ''
+            if head['name'] == 'username':
+                head['label']='账号'
+                head['editor'] = 'com-table-click'
+                head['click_express'] = "scope.ps.switch_to_tab({ctx_name:'jb-user-tabs',tab_name:'account',par_row:scope.row})"
             return head
         
         def inn_filter(self, query):

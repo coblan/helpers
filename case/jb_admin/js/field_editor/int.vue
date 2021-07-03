@@ -1,9 +1,6 @@
 <template>
-    <div :class="['com-field-int','field-'+head.name,head.class]" >
-        <span v-if='head.readonly && !head.prefix && !head.suffix' v-text='row[head.name]'></span>
-        <div  v-else class="form-inline">
-
-
+    <line-text class="com-field-int" :row="row" :head="head">
+        <template v-slot:inputbody>
             <el-input v-model="row[head.name]" size="small" :placeholder="head.placeholder" :readonly="head.readonly"
                       :name="head.name"
                       :id="'id_'+head.name"
@@ -17,86 +14,72 @@
                     <span  v-if="head.suffix" v-html="head.suffix"></span>
                 </template>
             </el-input>
-
-            <!--<div class="input-group" >-->
-                <!--<div class="input-group-addon" v-if="head.prefix" v-html="head.prefix"></div>-->
-                <!--<input  type="text" class="form-control input-sm" v-model="mydata" :id="'id_'+head.name"-->
-                        <!--:style="{width:head.width}"-->
-                        <!--:name="head.name" :step="head.step"-->
-                        <!--@keypress="isNumber($event)"-->
-                        <!--:readonly="head.readonly"-->
-                        <!--:placeholder="head.placeholder" :autofocus="head.autofocus">-->
-                <!--<div class="input-group-addon" v-if="head.suffix" v-html="head.suffix"></div>-->
-            <!--</div>-->
-        </div>
-
-    </div>
+        </template>
+    </line-text>
 </template>
 
 <script>
+    import lineText from './lineText.vue'
+    import {LineTextLogic} from './lineText.vue'
+
+    export class IntInputLogic extends LineTextLogic{
+        constructor(){
+            super()
+           this.fv_rule=';integer'
+        }
+        getSetup(props){
+            if(this.fv_rule){
+                Vue.set(props.head,'fv_rule',this.fv_rule) //  props.head.fv_rule = this.fv_rule
+            }
+            var dc = super.getSetup(props)
+            Object.assign(dc,{
+                isNumber:this.isNumber
+            })
+            return dc
+        }
+        isNumber(evt){
+            evt = (evt) ? evt : window.event;
+            var charCode = (evt.which) ? evt.which : evt.keyCode;
+            if(charCode== 46){
+                return evt.preventDefault();
+            }
+
+            if ((charCode >= 48 && charCode <= 57) || charCode== 46 || charCode== 45) {
+                if(charCode==46 && this.row[this.head.name].indexOf('.')!=-1){
+                    return evt.preventDefault();
+                }else{
+                    return true
+                }
+            }else{
+                return evt.preventDefault();
+            }
+        }
+    }
+
     export default {
-        props:['row','head'],
+        props:['row','head','extendLogic'],
+        components:{
+            lineText,
+        },
         data(){
 //            Vue.set(this.row,this.head.name,this.row[this.head.name] || '')
           return {
 //              mydata:this.row[this.head.name]
           }
         },
-        created(){
-            this.head.fv_rule +=';integer'
-        },
-//        computed:{
-//            mydata:{
-//                get(){
-//                    return this.row[this.head.name]
-//                },
-//                set(v,ov){
-//                    if(/^-*\d+$/.test(v)){
-//                        Vue.set(this.row,this.head.name,parseInt(v))
-//                    }else{
-//                        Vue.set(this.row,this.head.name,ov)
-//                    }
-////                    if(v ){
-////                        Vue.set(this.row,this.head.name,parseInt(v))
-//////                        this.row[this.head.name] = parseInt(v)
-////                    }else{
-////                        this.row[this.head.name] =v
-////                    }
-//                }
-//            }
-//        },
-//        watch:{
-//          mydata(v){
-//              if(v || v==0){
-//                  this.row[this.head.name] = parseInt(v)
-//              }
-//          }
-//        },
+        setup(props){
+            if(props.extendLogic){
+                return new  props.extendLogic().getSetup(props)
+            }else{
+                return  new IntInputLogic().getSetup(props)
+            }
 
-        mounted(){
 
         },
         methods:{
 //            on_blur(){
 //                this.row[this.head.name] =
 //            },
-            isNumber:function(evt){
-                evt = (evt) ? evt : window.event;
-                var charCode = (evt.which) ? evt.which : evt.keyCode;
-                if(charCode== 46){
-                    return evt.preventDefault();
-                }
-
-                if ((charCode >= 48 && charCode <= 57) || charCode== 46 || charCode== 45) {
-                    if(charCode==46 && this.row[this.head.name].indexOf('.')!=-1){
-                        return evt.preventDefault();
-                    }else{
-                        return true
-                    }
-                }else{
-                    return evt.preventDefault();
-                }
-            }
         }
     }
 </script>

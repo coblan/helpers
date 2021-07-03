@@ -10,7 +10,7 @@ const VueLoaderPlugin = require('vue-loader/lib/plugin');
 module.exports =
 {
     //context:__dirname,
-    mode: 'development', //'production', //
+    mode: 'production', //'development', //
     entry: {
         director:'./director/director.js',
         exfun:'./exfun/main.js'
@@ -23,7 +23,9 @@ module.exports =
     watch: true,
     resolve:{
         alias: {
-            jb_admin: path.resolve(__dirname,"../../case/jb_admin/js")
+            jb_admin: path.resolve(__dirname,"../../case/jb_admin/js"),
+            weblib:'D:/coblan/weblib',
+            webcase:'D:/coblan/webcase',
         },
         modules:["D:/coblan/webcode/node_modules"],
     },

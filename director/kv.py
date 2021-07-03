@@ -28,6 +28,9 @@ def set_value(key,value):
 def clear_value(key):
     KVModel.objects.filter(key=key).delete()
 
+def update_value(key,oldvalue,newvalue):
+    return KVModel.objects.filter(key=key,value=oldvalue).update(value=newvalue)
+
 def lock_created(key,value):
     obj,created = KVModel.objects.update_or_create(key=key,defaults={'value':value})
     return created

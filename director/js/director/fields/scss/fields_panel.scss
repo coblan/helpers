@@ -136,23 +136,46 @@ msg-bottom  nice validator的位置在下面，默认在右侧
 
 }
 
-.field-panel {
-    .msg-box.n-right{
+/*.field-panel {*/
+    /*.msg-box.n-right{*/
+        /*position: absolute;*/
+        /*left: 100%;*/
+        /*transform:translate(40px,-10px);*/
+        /*top:50%;*/
+    /*}*/
+    /*.has-help{*/
+        /*.msg-box.n-right{*/
+            /*position: absolute;*/
+            /*left: -50px;*/
+            /*transform:translate(40px,10px);*/
+       /*}*/
+    /*}*/
+/*}*/
+
+.field_input:not(.has-help){
+      .msg-box.n-right{
         position: absolute;
         left: 100%;
         transform:translate(40px,-10px);
         top:50%;
-    }
+     }
+}
+.field_input.has-help{
+      .msg-box.n-right{
+          position: absolute;
+          left: 0;
+          bottom:0;
+     }
 }
 
-.field-panel.msg-bottom{
-    .msg-box.n-right{
-      position: absolute;
-      left: 3px;
-      bottom: 0;
-      transform:translate(0,12px);
-    }
-}
+/*.field-panel.msg-bottom{*/
+    /*.msg-box.n-right{*/
+      /*position: absolute;*/
+      /*left: 3px;*/
+      /*bottom: 0;*/
+      /*transform:translate(0,12px);*/
+    /*}*/
+/*}*/
 
 
 .field_input{

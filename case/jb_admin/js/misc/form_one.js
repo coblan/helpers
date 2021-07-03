@@ -8,6 +8,10 @@ export  var fields_all_in_one={
         }else{
             var def_row = {}
         }
+        if(this.ctx.preset){
+            // 弹窗编辑窗时，可以利用preset传入par_row.pk等信息
+            ex.vueAssign(def_row,this.ctx.preset)
+        }
         var data_row = ex.copy(this.ctx.row  || def_row )
         var self=this
         var childStore = new Vue({

@@ -60,6 +60,7 @@
                 if(this.head.init_express){
                     ex.eval(this.head.init_express,{head:this.head,row:this.row})
                 }
+                // 用到的时候，替换成 com-backend-table
                 cfg.pop_vue_com('com-table-panel',this.head.table_ctx).then(foreign_row=>{
                     if(!foreign_row){
                     console.log('break table panel')

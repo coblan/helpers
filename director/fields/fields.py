@@ -22,7 +22,7 @@ from django.db import transaction
 import logging
 from helpers.director.decorator import get_request_cache
 from ..model_func.hash_dict import hash_dict,make_mark_dict,dif_mark_dict,adapt_type
-
+from helpers.func.collection.ex import findone,find_index
 
 # sql_log 可能没有什么用
 #sql_log = logging.getLogger('director.sql_op')
@@ -77,21 +77,41 @@ class ModelFields(forms.ModelForm):
         * 前端设置默认值： 在 table的 add_new 操作中 添加 pre_set 。注意 foreignkey 需要加 _id
         
         """
-        self.kw = kw.copy()
-        
         if not crt_user:
             #self.crt_user=dc.get('crt_user')
             self.crt_user = get_request_cache()['request'].user
         else:
             self.crt_user = crt_user
             
-        # if pk is None:
-        if dc.get('pk') != None and dc.get('id') != '':
+        self.kw = kw.copy()
+        # 修正参数
+        
+        # 2021/5/24 挪到这里
+        dc = self._clean_dict(dc)
+        dc=self.clean_dict(dc) 
+        if dc.get('instance'):
+            self.kw['instance'] = dc.pop('instance')
+        
+
+            
+        if pk is not None:
+            pass
+        elif dc.get('pk') != None and dc.get('pk') != '':
             pk=dc.get('pk')
         elif dc.get('id') !=None and dc.get('id') != '':
             pk = dc.get('id')
+        else:
+            if self.kw.get('instance'):
+                pk = self.kw['instance'].pk
+            else:
+                pk = None
+        if not pk:
+            self.is_create = True
+        else:
+            self.is_create = False 
+                
         form_kw={}
-        if 'instance' not in kw:
+        if 'instance' not in self.kw:
             if pk=='-1':  # -1 表示 最后一个记录 （一般用不到）
                 form_kw['instance']=self._meta.model.objects.last()
             elif pk != None:  # 很多时候，pk=0 是已经创建了
@@ -110,7 +130,7 @@ class ModelFields(forms.ModelForm):
                 init_dc = {k:v for k,v in self.kw.items() if k in field_names}
                 form_kw['instance'] = self._meta.model(**init_dc) #(**self.kw)
         else:
-            form_kw['instance']=kw.pop('instance')
+            form_kw['instance']=self.kw.pop('instance')
         
         self.custom_permit()
          # 强制 readonly的字段，不能修改
@@ -135,38 +155,44 @@ class ModelFields(forms.ModelForm):
         
 
         # todict -> ui -> todict(compare) -> adapte_dict
-        # 修正只读字段 
-        simdc = sim_dict(inst)
         readonly_waring = []
-        for k in dict(dc):
-            if k in self.readonly or (meta_change_fields and k not in meta_change_fields ):
-                if k in self.readonly_change_warning and adapt_type(dc[k]) != adapt_type( simdc.get(k)):
-                    readonly_waring.append(k)
-                dc[k] = simdc.get(k)
-                #if hasattr(inst, "%s_id" % k):  # 如果是ForeignKey，必须要pk值才能通过 form验证
-                    #fieldcls = inst.__class__._meta.get_field(k)
-                    #if isinstance(fieldcls, models.ForeignKey):
-                        #dc[k] = getattr(inst, "%s_id" % k)
-                        #continue
-                #if hasattr(inst,k):
-                    #dc[k] =  getattr(inst , k)  
-        if readonly_waring and  not dc.get('meta_overlap_fields') == '__all__' :
+        simdc = sim_dict(inst)
+        # 由于 multichoice.fullchoice 造成 数据库 出入不一致,所以加入以下_clean代码，将simdc再次还原为数据库数据。（simdc是走了to_dict转换函数的）
+        # TODO:可能会在以后移除这里的_clean_dict,因为应该保持数据库数据的 数据库->前端->后端 的一致性，就算显示需求，也应该利用_label等特殊字段。
+        simdc = self._clean_dict(simdc)
+        #simdc = self.clean_dict(simdc) 
+        
+        if meta_change_fields or self.readonly:
+            # 修正只读字段 
+            for k in dict(dc):
+                if k in self.readonly or (meta_change_fields and k not in meta_change_fields ):
+                    if k in self.readonly_change_warning and adapt_type(dc[k]) != adapt_type( simdc.get(k)):
+                        readonly_waring.append(k)
+                    dc[k] = simdc.get(k)
+                    #if hasattr(inst, "%s_id" % k):  # 如果是ForeignKey，必须要pk值才能通过 form验证
+                        #fieldcls = inst.__class__._meta.get_field(k)
+                        #if isinstance(fieldcls, models.ForeignKey):
+                            #dc[k] = getattr(inst, "%s_id" % k)
+                            #continue
+                    #if hasattr(inst,k):
+                        #dc[k] =  getattr(inst , k)  
+        if readonly_waring : # and  not dc.get('meta_overlap_fields') == '__all__' : 这个有安全隐患 ，所以去掉
             raise OutDateException('(%s)的%s已经发生了变化,请确认后再进行操作!'%(inst,[field_label(inst.__class__,k ) for k in readonly_waring] ) )
         
         # 真正的验证各个参数是否过期，是在clean函数中进行的。
         
-        # 修正参数
-        dc = self._clean_dict(dc)
-        dc=self.clean_dict(dc) 
-        
-        
-        self.kw.update(dc)
+        # 参数的修正挪到最上面
+        #dc = self._clean_dict(dc)
+        #dc=self.clean_dict(dc) 
+        self.kw.update(dc)        
+
 
         super(ModelFields,self).__init__(dc,*args,**form_kw)
-        if not self.instance.pk:
-            self.is_create = True
-        else:
-            self.is_create = False
+        # 2021-05-07 挪到上面
+        #if not self.instance.pk:
+            #self.is_create = True
+        #else:
+            #self.is_create = False
         #if not self.is_create:
             ## 有时候 self.changed_data 会错误包含其他字段
             ## 有问题，因为有些 foreignkey  或者 onetoone字段 读取的时候不存在，报异常
@@ -484,8 +510,25 @@ class ModelFields(forms.ModelForm):
                     if head['name'] == k:
                         tmp_heads.append(head)
             heads=tmp_heads
+        
+        # start: 实现 after_fields 排序
+        after_fields_list =[]
+        after_dict = {}
+        for head in heads:
+            if head.get('after_fields'):
+                after_fields_list.extend(head.get('after_fields'))
+                after_dict[head['name']]=[] 
+                for item in head.get('after_fields'):
+                    item_head = findone(heads, {'name':item})
+                    if item_head:
+                        after_dict[head['name']].append(item_head)
+                
+        lefts = [x for x in heads if x['name'] not in after_fields_list ]
+        for k,v in after_dict.items():
+            index = find_index(lefts,{'name':k})
+            lefts[index:index] = v       
             
-        heads=evalue_container(heads)
+        heads=evalue_container(lefts)
         for head in heads:
             if head['name']=='_meta_head':
                 heads.remove(head)
@@ -551,6 +594,9 @@ class ModelFields(forms.ModelForm):
     def dict_head(self,head):
         return head      
     
+    def clean_create(self):
+        pass
+    
     def save_form(self):
         """
         call by model render engin
@@ -575,17 +621,21 @@ class ModelFields(forms.ModelForm):
         if self.instance.pk is None:
             op='add'
             detail=''
+            self.clean_create()
             # 2020/07/30 屏蔽这里 后面直接就是保存
             # 2020/08/06  开启，该行不能屏蔽，因为manytomany 必须先保存才能生成 relation对象
             self.instance.save() # if instance is a new row , need save first then manytomany_relationship can create 
             
         # 2020/07/30 屏蔽这里，原因是其把clean_save里面修改的值给还原了
-        # 2020/08/06 开启，因为manytomany 需要 这样处理一下，才能 赋值
+        # [2020/08/06] 开启，因为manytomany 需要 这样处理一下，才能 赋值 
         for k in self.changed_data:
             ## 测试时看到self.instance已经赋值了，下面这行代码可能没用,但是需要考虑下新建时 manytomany foreignkey 这些情况
             if k in self.kw:  # 排除开那些前端没有传递，而是后端model 默认生成的值
                               # 这些默认的值不能用 cleaned_data.get 来获取，因为他们是空
-                setattr(self.instance,k, self.cleaned_data.get(k) )
+                # 2021/4/30 根据 [2020/08/06] 说明,现在改为只针对manytomany字段进行处理。
+                # TODO 遇到manytomany时，测试一下是否必须要重新复制一次。
+                if self.instance._meta.get_field(k).__class__ in [models.ManyToManyField]:
+                    setattr(self.instance,k, self.cleaned_data.get(k) )
         # 2020/08/06 从571行挪到这里，以免 last row 代码覆盖了 clean_save的修改
         # 在clean_save 中 不能使用 pk==None来判断是否为创建row，应该使用self.is_create==Ture 来判断
         extra_log = self.clean_save()

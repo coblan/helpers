@@ -22,3 +22,9 @@ Vue.component('com-pan-delete-query-message',delete_query_related)
 
 import  director_table_1 from  './director_table.vue'
 Vue.component('com-d-table',director_table_1)
+
+import d_table_setting from 'webcase/director/table/dsetting.vue'
+Vue.component('com-d-table-setting',d_table_setting)
+
+import  backendTable from './backendTable.vue'
+Vue.component('com-backend-table',backendTable)

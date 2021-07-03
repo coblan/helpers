@@ -14,7 +14,11 @@ from .field_proc import BaseFieldProc
 from .hash_dict import hash_dict,make_mark_dict
 from ..base_data import field_map
 
-
+def get_choice_label(instance,field_name):
+    field =  instance._meta.get_field(field_name)
+    value = getattr(instance,field_name,None)
+    dc = dict(field.choices)
+    return dc.get(value)
 
 def model_to_name(model):
     """
@@ -91,8 +95,9 @@ def sim_dict(instance,filt_attr=None,include=None,exclude=None,include_pk=True):
                     continue
                 #if hasattr(mapper,'get_label'):
                     #out['_%s_label'%field.name]=mapper.get_label(instance,field.name)
-                if isinstance(out.get(field.name),list):
-                    # 如果遇到 manytomany的情况，是一个list
+                #if isinstance(out.get(field.name),list):
+                    ## 如果遇到 manytomany的情况，是一个list
+                if isinstance(field,models.ManyToManyField):
                     out['_%s_label'%field.name]=[str(x) for x in out[field.name]]
                 
                 # 下面生成 _{name}_label
