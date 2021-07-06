@@ -19,6 +19,11 @@
     menu={{ menu | jsonify }}
     tops= {{ tops | jsonify }}
     footer = {{ footer | jsonify | default:'{}' }}
+
+    root_store = new Vue({})
+    root_store.menu = menu
+    root_store.footer = footer
+
     $(function(){
         live_root_store =  new Vue({
             data(){

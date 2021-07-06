@@ -250,6 +250,7 @@ class BaseEngine(object):
             'js_lib':lib_dc,
             'is_debug':settings.DEBUG,
             'login_url':self.login_url,
+            'static_url':settings.STATIC_URL,
         }
     
 
