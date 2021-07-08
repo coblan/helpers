@@ -57,14 +57,15 @@ export default {
              // 路线：弹出->编辑->update前端（缓存的）row->保存->后台->成功->update前端row->关闭窗口
              * */
             // head: row_match:many_row ,
+            debugger
             var self=this
-            if(!this.check_selected(kws)){
-                return
-            }
+            //if(!this.check_selected(kws)){
+            //    return
+            //}
             //如果有确认信息，弹框确认
-            if(kws.confirm_msg){
-                await cfg.confirm(kws.confirm_msg)
-            }
+            //if(kws.confirm_msg){
+            //    await cfg.confirm(kws.confirm_msg)
+            //}
             //var first_sel_row = self.selected[0]
             if(kws.preset_express){
                 var one_row = ex.eval(kws.preset_express,{ps:this.childStore,vc:this})
