@@ -156,11 +156,12 @@ class ModelFields(forms.ModelForm):
 
         # todict -> ui -> todict(compare) -> adapte_dict
         readonly_waring = []
-        orgin_simdc = sim_dict(inst)
+        simdc = sim_dict(inst)
+        orgin_simdc = dict(simdc)  # 将可json化的结果保存下来，后面记录日志会用到。simdc被clean处理过，可能不能json化了
+            
         #n1 由于 multichoice.fullchoice, -1代表全部，出库的时候，转换为[1,2,3], 而数据库中是-1,造成数据库 出入不一致,所以加入以下_clean代码，将simdc再次还原为数据库数据。（simdc是走了to_dict转换函数的）
         #n2 TODO:可能会在以后移除这里的_clean_dict,因为应该保持数据库数据的 数据库->前端->后端 的一致性，就算显示需求，也应该利用_label等特殊字段。
-        #n3 2021/7/9日移除，TODO 在sports 中 单独处理fullchoice
-        simdc = self._clean_dict(orgin_simdc)
+        simdc = self._clean_dict(simdc)
         #simdc = self.clean_dict(simdc) 
         
         if meta_change_fields or self.readonly:
@@ -209,6 +210,7 @@ class ModelFields(forms.ModelForm):
         # 保留下instance的原始值,用于记录日志;
         # 因为simdc被clean函数处理过，可能不能json化，所以使用 orgin_simdc。后面 orgin_simdc 用于保存日志
         self.before_changed_data = {k:v for k,v in orgin_simdc.items() if k in self.changed_data} # sim_dict(self.instance, include= self.changed_data)
+       
         #self.org_db_dict = mark_dict(self.instance.__dict__,keys= self.fields.keys())
         
     
