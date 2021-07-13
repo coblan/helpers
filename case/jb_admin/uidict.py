@@ -3,6 +3,8 @@ from django.utils.translation import ugettext as _
 import base64
 
 def op_excel(max_length=2000,default_length=1000,length=None):
+    """在table页面导出excel的按钮
+    """
     if length:
         action ='''cfg.confirm("%(msg)s").then(()=>{
                        scope.ps.export_excel({count:%(length)s}) 
@@ -41,3 +43,4 @@ def nice_express(express,msg):
     express = base64.b64encode(express.encode('utf-8'))
     msg = base64.b64encode(msg.encode('utf-8'))
     return'express(%s , %s)'%( express.decode('utf-8'),msg.decode('utf-8'))
+

@@ -48,10 +48,9 @@
     *
     * */
 
-    class DTableLogic{
+  export  class DTableLogic{
         getSetup(props){
-            const vc = getCurrentInstance()
-
+//            const vc = getCurrentInstance()
             return {
 
             }

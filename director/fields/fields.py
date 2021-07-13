@@ -77,6 +77,12 @@ class ModelFields(forms.ModelForm):
         * 前端设置默认值： 在 table的 add_new 操作中 添加 pre_set 。注意 foreignkey 需要加 _id
         
         """
+        if not crt_user:
+            #self.crt_user=dc.get('crt_user')
+            self.crt_user = get_request_cache()['request'].user
+        else:
+            self.crt_user = crt_user
+            
         self.kw = kw.copy()
         # 修正参数
         
@@ -86,11 +92,7 @@ class ModelFields(forms.ModelForm):
         if dc.get('instance'):
             self.kw['instance'] = dc.pop('instance')
         
-        if not crt_user:
-            #self.crt_user=dc.get('crt_user')
-            self.crt_user = get_request_cache()['request'].user
-        else:
-            self.crt_user = crt_user
+
             
         if pk is not None:
             pass
@@ -153,23 +155,30 @@ class ModelFields(forms.ModelForm):
         
 
         # todict -> ui -> todict(compare) -> adapte_dict
-   
-        # 修正只读字段 
-        simdc = sim_dict(inst)
         readonly_waring = []
-        for k in dict(dc):
-            if k in self.readonly or (meta_change_fields and k not in meta_change_fields ):
-                if k in self.readonly_change_warning and adapt_type(dc[k]) != adapt_type( simdc.get(k)):
-                    readonly_waring.append(k)
-                dc[k] = simdc.get(k)
-                #if hasattr(inst, "%s_id" % k):  # 如果是ForeignKey，必须要pk值才能通过 form验证
-                    #fieldcls = inst.__class__._meta.get_field(k)
-                    #if isinstance(fieldcls, models.ForeignKey):
-                        #dc[k] = getattr(inst, "%s_id" % k)
-                        #continue
-                #if hasattr(inst,k):
-                    #dc[k] =  getattr(inst , k)  
-        if readonly_waring and  not dc.get('meta_overlap_fields') == '__all__' :
+        simdc = sim_dict(inst)
+        orgin_simdc = dict(simdc)  # 将可json化的结果保存下来，后面记录日志会用到。simdc被clean处理过，可能不能json化了
+            
+        #n1 由于 multichoice.fullchoice, -1代表全部，出库的时候，转换为[1,2,3], 而数据库中是-1,造成数据库 出入不一致,所以加入以下_clean代码，将simdc再次还原为数据库数据。（simdc是走了to_dict转换函数的）
+        #n2 TODO:可能会在以后移除这里的_clean_dict,因为应该保持数据库数据的 数据库->前端->后端 的一致性，就算显示需求，也应该利用_label等特殊字段。
+        simdc = self._clean_dict(simdc)
+        #simdc = self.clean_dict(simdc) 
+        
+        if meta_change_fields or self.readonly:
+            # 修正只读字段 
+            for k in dict(dc):
+                if k in self.readonly or (meta_change_fields and k not in meta_change_fields ):
+                    if k in self.readonly_change_warning and adapt_type(dc[k]) != adapt_type( simdc.get(k)):
+                        readonly_waring.append(k)
+                    dc[k] = simdc.get(k)
+                    #if hasattr(inst, "%s_id" % k):  # 如果是ForeignKey，必须要pk值才能通过 form验证
+                        #fieldcls = inst.__class__._meta.get_field(k)
+                        #if isinstance(fieldcls, models.ForeignKey):
+                            #dc[k] = getattr(inst, "%s_id" % k)
+                            #continue
+                    #if hasattr(inst,k):
+                        #dc[k] =  getattr(inst , k)  
+        if readonly_waring : # and  not dc.get('meta_overlap_fields') == '__all__' : 这个有安全隐患 ，所以去掉
             raise OutDateException('(%s)的%s已经发生了变化,请确认后再进行操作!'%(inst,[field_label(inst.__class__,k ) for k in readonly_waring] ) )
         
         # 真正的验证各个参数是否过期，是在clean函数中进行的。
@@ -198,10 +207,10 @@ class ModelFields(forms.ModelForm):
         
         self.op_log={}
         
-        # 有事直接利用table的rows，而table进行了一定的修改显示，这些字段都是readonly的，所以要过滤掉这些字段，否则会造成严重后果。
-        #self.changed_data = [x for x in self.changed_data if x not in self.readonly]
-        # 保留下instance的原始值,用于记录日志 
-        self.before_changed_data = {k:v for k,v in simdc.items() if k in self.changed_data} # sim_dict(self.instance, include= self.changed_data)
+        # 保留下instance的原始值,用于记录日志;
+        # 因为simdc被clean函数处理过，可能不能json化，所以使用 orgin_simdc。后面 orgin_simdc 用于保存日志
+        self.before_changed_data = {k:v for k,v in orgin_simdc.items() if k in self.changed_data} # sim_dict(self.instance, include= self.changed_data)
+       
         #self.org_db_dict = mark_dict(self.instance.__dict__,keys= self.fields.keys())
         
     

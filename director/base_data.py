@@ -28,6 +28,7 @@ inspect_dict ={
     'page_dc':page_dc,
     'director':director,
     'director_views':director_views,
+    'field_map':field_map,
 }
 
 from functools import wraps
