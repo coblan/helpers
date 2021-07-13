@@ -121,8 +121,8 @@
                     add_new(kws){
                         self.addNew(kws)
                     },
-                    search(){
-                        self.search_page(1)
+                    search({loading}={loading:true}){
+                       return self.search_page(1,{loading:loading})
                     },
                     check_selected(head){
                         return self.check_selected(head)
@@ -218,11 +218,13 @@
         },
         methods:{
 
-            search_page(page){
+            search_page(page,{loading}={loading:true}){
                 this.searchArgs._page = page
-                cfg.show_load()
+                if(loading){
+                    cfg.show_load()
+                }
                 this.searchArgs._advise_heads= this.$refs.dtable.advise_heads
-                ex.director_call('d.get_rows',{director_name:this.directorName,search_args:this.searchArgs}).then(resp=>{
+               return ex.director_call('d.get_rows',{director_name:this.directorName,search_args:this.searchArgs}).then(resp=>{
                     cfg.hide_load()
 //                    this.tableRows.splice(0,this.tableRows.length,...resp.rows)
                     ex.array.replace(this.tableRows,resp.rows)
