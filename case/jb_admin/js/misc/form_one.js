@@ -87,8 +87,10 @@ export  var fields_all_in_one={
     computed:{
         normed_ops(){
             return ex.filter(this.ops,(op)=>{
-                if(op.show){
-                    return ex.eval(op.show,{row:this.row,vc:this})
+                // 兼容老调用
+                op.show_express = op.show_express || op.show
+                if(op.show_express){
+                    return ex.eval(op.show_express,{row:this.row,vc:this})
                 }else{
                     return true
                 }
