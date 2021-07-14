@@ -11,6 +11,7 @@ var op_a = {
         return {
             myvalue:this.head.init_value || '',
             parStore : parStore,
+            timeout_index:0,
         }
     },
     computed:{
@@ -18,35 +19,35 @@ var op_a = {
     },
     watch:{
         myvalue(v){
-            //if(this.interval_index){
-            //    clearTimeout(this.interval_index)
-            //}
-            //if(v){
-            //    this.auto_refresh=()=>{
-            //        this.interval_index = setTimeout(()=>{
-            //            Promise.resolve().then(()=>{
-            //                return  ex.eval(this.head.action,{ps:this.parStore})
-            //            }).then(()=>{
-            //                this.auto_refresh()
-            //            })
-            //        },v)
-            //    }
-            //    this.auto_refresh()
-            //}
-
-            if(this.interval_index){
-                clearInterval(this.interval_index)
-            }
-
             if(v){
-                this.interval_index = setInterval(()=>{
-                    ex.eval(this.head.action_express,{ps:this.parStore})
-                },v)
+                this.start_refresh()
+            }else{
+                if(this.timeout_index){
+                    clearTimeout(this.timeout_index)
+                }
             }
+            //if(this.interval_index){
+            //    clearInterval(this.interval_index)
+            //}
+            //
+            //if(v){
+            //    this.interval_index = setInterval(()=>{
+            //        ex.eval(this.head.action_express,{ps:this.parStore})
+            //    },v)
+            //}
         },
     },
     methods:{
+         start_refresh(){
+            if(this.myvalue){
+               this.timeout_index =  setTimeout(()=>{
+                     ex.eval(this.head.action_express,{ps:this.parStore}).then(()=>{
+                         this.start_refresh()
+                     })
 
+                },this.myvalue)
+            }
+        }
     }
 }
 Vue.component('com-op-table-refresh',op_a)
