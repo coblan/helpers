@@ -7,7 +7,13 @@ def SET(scope,path=None,extra_cfg={}):
         LOG_PATH= os.path.join( os.path.dirname(BASE_DIR),'log')
     else:
         LOG_PATH=path
-
+    if os.environ.get('TEST'):
+        def is_console(ls):
+            return ls+['console']
+    else:
+        def is_console(ls):
+            return ls   
+    
     LOGGING = {
       'version': 1, # 标示配置模板版本，int 类型，目前只接收 `1`这个值。
       'disable_existing_loggers': False, 
@@ -77,7 +83,7 @@ def SET(scope,path=None,extra_cfg={}):
               },          
   
           'general_log': {
-              'handlers': [ 'general_log', ] ,# 'console','elk_info' ],  #'djangoout_warning',
+              'handlers': is_console( [ 'general_log', ]) ,# 'console','elk_info' ],  #'djangoout_warning',
               'level': 'DEBUG',
               'propagate': False,            
               },
