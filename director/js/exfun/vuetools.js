@@ -26,6 +26,13 @@ export var  vuetool = {
             Vue.delete(obj,name)
         })
     },
+    vueExpose(obj,instance){
+        setTimeout(()=>{
+            Object.keys(obj).forEach(x=>{
+                Vue.set(instance.data._ref,x,obj[x])
+            })
+        },1000)
+    },
     vueBroadCall:function(self,fun,kws){
         var rt =[]
         cusBroadCall(self,fun,kws,rt)

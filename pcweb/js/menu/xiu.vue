@@ -53,7 +53,7 @@
     }
 </script>
 <style scoped lang="stylus">
-    import "./styl/xiu.styl"
+@import "./styl/xiu.styl"
 </style>
 <style scoped lang="scss">
 .dark{
