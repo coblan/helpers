@@ -19,19 +19,30 @@
     </director_table>
 </template>
 <script>
-    import  director_table from  './director_table.vue'
+    import  director_table,{DTableLogic} from  './director_table.vue'
     const { ref, reactive,computed ,onMounted,getCurrentInstance } = VueCompositionAPI
 
-    class BackendTable{
-        extendSetup(){
-            return {}
+    class DTable2Logic extends DTableLogic{
+        getSetup(props){
+            const vc = getCurrentInstance()
+            onMounted(()=>{
+                if(vc.proxy.tableRows.length==0){
+                    vc.proxy.search()
+                }
+            })
+            return {
+
+            }
         }
+    }
+
+    class BackendTable{
         getSetup(props){
             this. dtable = ref(null)
             this.connect_dtable_event()
             return {
                 dtable:this.dtable,
-                extendLogic:this.extendSetup(),
+//                extendLogic:DTable2Logic,
             }
         }
         connect_dtable_event(){
@@ -48,9 +59,14 @@
         components:{
             director_table,
         },
-        props:['ctx','extendLogic'],
+        props:['ctx'],
+        data(){
+            return {
+                extendLogic:DTable2Logic
+            }
+        },
         setup(props){
-
+            debugger
             return new BackendTable().getSetup(props)
         }
     }
