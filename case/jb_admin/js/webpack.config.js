@@ -24,6 +24,7 @@ module.exports =
         alias: {
             jb_admin: path.resolve(__dirname,"../../case/jb_admin/js"),
             webcase:'D:/coblan/webcase',
+            weblib:'D:/coblan/weblib'
         },
         modules:["D:/coblan/webcode/node_modules"],
     },

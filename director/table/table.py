@@ -924,7 +924,7 @@ class ModelTable(object):
                  'css':'.com-btn-refresh-btn{float:right}',
                  'type':'success',
                  'plain':True,
-                 'visible':self.filters ==RowFilter,
+                 'visible':self.filters ==RowFilter and self.search in [RowSearch],
                  'action':'scope.ps.search()'}
         
         fieldCls = director.get(director_name+'.edit')     

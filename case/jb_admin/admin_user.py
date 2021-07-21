@@ -64,6 +64,7 @@ class UserPage(TablePage):
         class filters(RowFilter):
             names=['first_name','groups__name','is_superuser','is_staff','is_active']
             icontains=['first_name','groups__name']
+            range_fields = ['last_login']
             
             def getExtraHead(self):
                 return [
