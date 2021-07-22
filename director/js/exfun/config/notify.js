@@ -28,8 +28,10 @@ export var notify={
         var notification = new Notification(title, options)
         if(options.data && options.data.url){
             notification.onclick = function(){
-                window.open(options.data.url, '_blank');      // 打开网址
                 notification.close();                              // 并且关闭通知
+                location = options.data.url
+                //window.open(options.data.url, '_blank');      // 打开网址
+                
             }
         }
     },
