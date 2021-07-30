@@ -644,7 +644,7 @@ class ModelFields(forms.ModelForm):
         self.instance.save()
             
         if op or extra_log:
-            after_changed_data = sim_dict(self.instance, include= self.changed_data)
+            after_changed_data = sim_dict(self.instance, include= self.changed_data,include_pk=False)
             dc = {
                 'model': model_to_name(self.instance),
                 'pk': self.instance.pk,
