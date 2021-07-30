@@ -29,11 +29,12 @@ class DBOperationHandler(logging.Handler):
             db_op_dict = json.loads(msg)
            
             content = db_op_dict.pop('content', None)
+            pk = db_op_dict.get('pk','')
             if not content:
                 content = parser_form_log(db_op_dict)
             type_key = db_op_dict.pop('model', '')
             op= db_op_dict.pop('kind','')
-            pk = db_op_dict.pop('pk','')
+            
             BackendOperation.objects.create(createuser = user_label,
                                             inst_pk=pk,
                                             op=op,
@@ -54,7 +55,7 @@ def parser_form_log(dc):
     after = dc.pop('_after', {})
     after.update( dc.pop('after', {}) )
     model = dc.get('model', '')
-    pk = dc.get('pk', '')
+    pk = dc.pop('pk', '')
     if after:
         before = dc.pop('_before', {})
         before.update( dc.pop('before', {}) )
