@@ -20,7 +20,7 @@ class GeneralLog(models.Model):
 
 
 class BackendOperation(models.Model):
-    createtime = models.DateTimeField(verbose_name='创建时间',)
+    createtime = models.DateTimeField(verbose_name='创建时间',auto_now_add=True)
     model = models.CharField('相关表', max_length=100, blank=True,)  # Field name made lowercase.
     inst_pk = models.CharField('主键',max_length=30,blank=True)
     op= models.CharField('操作',max_length=50,blank=True)
