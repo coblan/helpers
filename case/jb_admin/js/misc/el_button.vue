@@ -45,11 +45,16 @@
 
                     var click_express = this.my_ctx.click_express ||this.my_ctx.action
                     // 在table组件中，会先检查选中的row。
-                    if(this.my_ctx.row_match){
-                        var p = this.parStore.check_selected(this.my_ctx)
+                    if(this.parStore && this.parStore.check_selected){
+                      var p = this.parStore.check_selected(this.my_ctx)
                     }else{
-                       var p = Promise.resolve()
+                      var p = Promise.resolve()
                     }
+                    // if(this.my_ctx.row_match){
+                    //     var p = this.parStore.check_selected(this.my_ctx)
+                    // }else{
+                    //    var p = Promise.resolve()
+                    // }
                     p.then(()=>{
                         if(this.my_ctx.confirm_msg){
                             return cfg.confirm(this.my_ctx.confirm_msg)

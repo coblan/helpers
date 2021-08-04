@@ -34,13 +34,30 @@ export default {
         check_selected(head){
             //@head 是button的参数
             // 检查 rows的选中情况是否满足 head所标示
+            var self =this;
+
             return new Promise((resolve,reject)=>{
+
                 var row_match_fun = head.row_match || 'many_row'
+
                 if(row_match[row_match_fun](this, head)) {
                     resolve()
+
                 }else{
-                    reject()
+                     reject()
                 }
+
+                // if (head.match_express) {
+                //     for (var i = 0; i < self.selected.length; i++) {
+                //         var row = self.selected[i]
+                //         if (!ex.eval(head.match_express, {row: row})) {
+                //             // cfg.showError(head.match_msg)
+                //             reject()
+                //         }
+                //     }
+                // }
+
+
             })
         },
         async delete_selected(){
