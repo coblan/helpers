@@ -45,7 +45,7 @@
 
                     var click_express = this.my_ctx.click_express ||this.my_ctx.action
                     // 在table组件中，会先检查选中的row。
-                    if(this.parStore && this.parStore.check_selected){
+                    if(this.parStore && this.parStore.check_selected && (this.my_ctx.row_match || this.my_ctx.match_express ) ){
                       var p = this.parStore.check_selected(this.my_ctx)
                     }else{
                       var p = Promise.resolve()
