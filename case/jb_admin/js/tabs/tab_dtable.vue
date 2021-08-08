@@ -14,6 +14,7 @@
                 :parents="head.parents"
                 :search-args="head.search_args"
                 ref="dtable"
+                par_row="par_row"
                 :extend-logic="extend_logic"
         ></director_table>
     </div>
@@ -23,28 +24,27 @@
     import  director_table,{DTableLogic} from  '../pannels/director_table.vue'
     const { ref, reactive,computed ,onMounted,getCurrentInstance } = VueCompositionAPI
 
-    class TabDTableLogic extends DTableLogic{
-        getSetup(props){
-            return {
-                par_row:props.par_row
-            }
-        }
-    }
+
 
     export default {
         props:['tab_head','par_row'],
         components:{
             director_table,
         },
-        setup(porps){
-//            var dtable = ref(null)
-//            onMounted(()=>{
-//                debugger
-//                console.log(dtable.value)
-//            })
+        setup(props){
+          var out_props =props
+
+          class TabDTableLogic extends DTableLogic{
+            getSetup(props){
+              return {
+                par_row:out_props.par_row
+              }
+            }
+          }
 
             return {
 //                dtable:dtable,
+
                 extend_logic:TabDTableLogic,
 //                extend_logic:{
 //                    par_row:porps.par_row
