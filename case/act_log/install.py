@@ -92,7 +92,7 @@ def SET(scope,path=None,extra_cfg={}):
               'level': 'DEBUG',
               'propagate': False,              
               },
-          'operation': {
+          'operation_log': {
               'handlers': ['backend_operation'] , # ,'console','elk_debug'],
               'level': 'DEBUG',
               'propagate': False,              
