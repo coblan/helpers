@@ -1,4 +1,6 @@
 export function save_row(row){
+    // 直接保存 director modelfields  row 的数据，
+    // 可能可以提取到ex接口里面
     var p = new Promise((resolve,reject)=>{
       return  ex.director_call('d.save_row',{row:row}).then( (resp) =>{
             var rt = resp //resp.save_row

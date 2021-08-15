@@ -13,6 +13,7 @@
                         :directorName="directorName"
                         :rows="tableRows"
                         :selected="selected"
+                        :selectable="selectable"
                         :footer="footer"
                         @search="search_page(1)"
                         @sort-changed="sortChange"
@@ -191,6 +192,9 @@
             directorName:{},
             footer:{
                 default:()=>{}
+            },
+            selectable:{
+                default:()=>{return  true}
             },
             parents:{
                 default:()=>[]

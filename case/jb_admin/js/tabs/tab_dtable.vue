@@ -1,5 +1,5 @@
 <template>
-    <div class="com-tab-table flex-v" style="position: absolute;top:0;left:0;bottom: 0;right:0;overflow: auto;padding-bottom: 1em;">
+    <div class="com-tab-dtable flex-v" style="position: absolute;top:0;left:0;bottom: 0;right:0;overflow: auto;padding-bottom: 1em;">
         <director_table
                 :filter-heads='head.row_filters'
                 :table-rows="rows"
