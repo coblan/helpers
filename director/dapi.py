@@ -37,6 +37,22 @@ def save_row(row):
           return {'_outdate':str(e)}
 
 
+@director_view('d.save_row_for_front')
+def save_row_for_front(row):
+     request = get_request_cache()['request']
+     user = request.user
+     try:
+          kw = request.GET.dict()
+          field_obj = permit_save_model(user, row,**kw)
+          dc = field_obj.get_row()
+          return dc
+     except ValidationError as e:
+          return {'errors':dict(e)}
+     except PermissionDenied as e:
+          raise UserWarning(str(e))
+     except OutDateException as e:
+          return {'_outdate':str(e)}
+
 @director_view('get_row')
 @director_view('d.get_row')
 def get_row(director_name,pk=None,**kws):

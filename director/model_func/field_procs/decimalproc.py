@@ -19,7 +19,7 @@ class DecimalProc(BaseFieldProc):
     
     def clean_field(self,dc,name):
         if dc.get(name) or dc.get(name) ==0: 
-            return Decimal(dc.get(name))
+            return Decimal(str( dc.get(name)) )
         else:
             return dc.get(name)
     
