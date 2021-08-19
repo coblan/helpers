@@ -125,9 +125,8 @@ def sim_dict(instance,filt_attr=None,include=None,exclude=None,include_id=True,i
     #if 'id' in [x.name for x in instance._meta.get_fields()] and \
        #instance.id:
         #out['id']=instance.id
-    if include_id:
-        if instance.id:
-            out['id'] = instance.id
+    if include_id and hasattr(instance,'id'):
+        out['id'] = instance.id
     if include_pk:
         out['pk']=instance.pk
     return out
