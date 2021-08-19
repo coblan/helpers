@@ -43,6 +43,7 @@ class ModelFields(forms.ModelForm):
     
     """
     readonly=[]
+    const_fields=[]
     field_sort=[]
     extra_mixins=[]
     hide_fields = []
@@ -51,6 +52,7 @@ class ModelFields(forms.ModelForm):
                                  #在后台发现改变时，需要警告前端，作废此次保存。因为这些字段值可能是前端做判断的依据。
     show_pk=False
     nolimit=False
+    simple_dict = False
     @classmethod
     def parse_request(cls,request):
         """
@@ -163,6 +165,10 @@ class ModelFields(forms.ModelForm):
         #n2 TODO:可能会在以后移除这里的_clean_dict,因为应该保持数据库数据的 数据库->前端->后端 的一致性，就算显示需求，也应该利用_label等特殊字段。
         simdc = self._clean_dict(simdc)
         #simdc = self.clean_dict(simdc) 
+        
+        if not self.is_create:
+            self.readonly = list(self.readonly)
+            self.readonly += self.const_fields
         
         if meta_change_fields or self.readonly:
             # 修正只读字段 
@@ -574,20 +580,24 @@ class ModelFields(forms.ModelForm):
         # self.fields 是经过 权限 处理了的。可读写的字段
         if self.instance.pk: # not self.instance._state.adding #
             self.instance.refresh_from_db()
-        row = to_dict(self.instance,include=self.fields.keys())
-        row.update( self.dict_row(self.instance) )
-        
-        ls=[]
-        ls.extend(self.permit.readable_fields())
-        ls.extend(self.permit.changeable_fields())
-        
-        for field in self.instance._meta.get_fields():
-            if isinstance(field,(models.AutoField,models.BigAutoField)):
-                if field.name in ls and ( not self._meta.exclude or field.name not in self._meta.exclude) and\
-                   field.name not in row:
-                    row[field.name]=getattr(self.instance,field.name)
-        row['_director_name']=self.get_director_name()
-        row['meta_org_dict'] = self.get_org_dict(row)
+        if self.simple_dict:
+            row = sim_dict(self.instance,include=self.fields.keys(),include_pk=False)
+            row.update( self.dict_row(self.instance) )
+        else:
+            row = to_dict(self.instance,include=self.fields.keys())
+            row.update( self.dict_row(self.instance) )
+            
+            ls=[]
+            ls.extend(self.permit.readable_fields())
+            ls.extend(self.permit.changeable_fields())
+            
+            for field in self.instance._meta.get_fields():
+                if isinstance(field,(models.AutoField,models.BigAutoField)):
+                    if field.name in ls and ( not self._meta.exclude or field.name not in self._meta.exclude) and\
+                       field.name not in row:
+                        row[field.name]=getattr(self.instance,field.name)
+            row['_director_name']=self.get_director_name()
+            row['meta_org_dict'] = self.get_org_dict(row)
         return row
 
     def dict_row(self,inst):

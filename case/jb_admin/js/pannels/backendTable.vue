@@ -12,6 +12,7 @@
             :footer="ctx.footer"
             :parents="ctx.parents"
             :search-args="ctx.search_args"
+            :selectable="ctx.selectable"
             ref="dtable"
     >
       <!--            :extend-logic="extendLogic"-->
