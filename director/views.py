@@ -142,17 +142,21 @@ def export_excel(request):
 def director_view(request,director_name):
     """将director函数以api的方式直接暴露出去"""
     
-    directorEnt= director_views.get(director_name)
-    if not directorEnt:
-        directorEnt = director.get(director_name)
     # 2021/8/18增加新的逻辑,可以对edit/customForm 这种直接映射
     kws = argument.get_argument(request,outtype='dict')
+    if director_name.startswith('edit/'):
+        directorEnt = director_views.get('d.save_row_for_front')
+        kws['_director_name'] = director_name #[5:]  
+        kws={'row':kws}
+    elif director_name.startswith('delete/'):
+        directorEnt = director_views.get('d.delete_row')
+        kws['_director_name'] = director_name
+        kws={'row':kws}      
+    else:
+        directorEnt= director_views.get(director_name)
     if not directorEnt:
-        if director_name.startswith('edit/'):
-            directorEnt= director_views.get('d.save_row_for_front')
-            kws['_director_name'] = director_name[5:]  
-            kws={'row':kws}
-                
+        directorEnt = director.get(director_name)
+          
     try:
         #kws = argument.get_argument(request,outtype='dict')
         if request.GET.get('transaction') == '0':

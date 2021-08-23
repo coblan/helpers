@@ -125,3 +125,10 @@ def del_rows(rows):
           fields_obj.del_form()
      rows_only_pk=[{'pk':x['pk']} for x in rows]
      return rows_only_pk
+
+@director_view('d.delete_row')
+def del_rows(row):
+     fields_cls = director.get(row.get('_director_name'))
+     fields_obj = fields_cls(row)
+     fields_obj.del_form()
+    
