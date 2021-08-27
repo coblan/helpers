@@ -120,7 +120,9 @@ class ModelFields(forms.ModelForm):
                 try:
                     form_kw['instance']= self._meta.model.objects.get(pk=pk)
                 except self._meta.model.DoesNotExist:
-                    raise Http404('Id=%s that you request is not exist'%pk)
+                    raise UserWarning('Id=%s that you request is not exist'%pk)
+                    # 感觉 instance不存在时，报错404可能不太合适，所以还是用普通报错 
+                    #raise Http404('Id=%s that you request is not exist'%pk)
             else:
                 # 前端初始化字段值，在 add_new opertions里面添加 pre_set:'rt={}'
                 field_names = []
