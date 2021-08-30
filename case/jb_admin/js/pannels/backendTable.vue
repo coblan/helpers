@@ -76,7 +76,7 @@
               this.$refs.dtable.search()
           }
           this.$refs.dtable.childStore.$on('finish',(data)=>{
-              this.emit('finish',data)
+              this.$emit('finish',data)
           })
         }
     }
