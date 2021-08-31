@@ -20,8 +20,9 @@
     </director_table>
 </template>
 <script>
-    import  director_table,{DTableLogic} from  './director_table.vue'
-    const { ref, reactive,computed ,onMounted,getCurrentInstance } = VueCompositionAPI
+    import  director_table from  './director_table.vue'
+    // import  director_table,{DTableLogic} from  './director_table.vue'
+    // const { ref, reactive,computed ,onMounted,getCurrentInstance } = VueCompositionAPI
 
     // class DTable2Logic extends DTableLogic{
     //     getSetup(props){
