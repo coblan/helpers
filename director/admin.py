@@ -46,6 +46,7 @@ def get_first_name(self):
 User.add_to_class("__str__", get_first_name)
 User._meta.get_field('first_name').verbose_name = _('昵称')
 User._meta.get_field('username').verbose_name = _('账号')
+User._meta.get_field('is_staff').verbose_name = _('后台账号')
 
 inspect_dict['sim_signal']=sim_signal.map_dict
 
