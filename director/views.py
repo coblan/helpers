@@ -216,6 +216,8 @@ def director_view(request,director_name):
 
     return rt
     
+def helloworld(request):
+    return  HttpResponse('hello world')
 
     
 
