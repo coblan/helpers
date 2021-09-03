@@ -7,6 +7,17 @@ def findone(collection,dc):
         if find:
             return doc
 
+def filter_all(collection,dc):
+    out = []
+    for doc in collection:
+        find=True
+        for k,v in dc.items():
+            if doc.get(k)!=v:
+                find=False
+        if find:
+            out.append(doc)
+    return out   
+
 def find_index(collection,dc):
     count =0
     for doc in collection:
