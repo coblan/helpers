@@ -215,7 +215,57 @@ def director_view(request,director_name):
         rt = HttpResponse(str(e),status=403)
 
     return rt
+
+
+
+@csrf_exempt
+def fast_director_view(request,director_name):
+    """director_view的快速版本
     
+    为了加大并发量，一般只读版本
+    """
+    kws = argument.get_argument(request,outtype='dict')
+    directorEnt= director_views.get(director_name)
+    if not directorEnt:
+        directorEnt = director.get(director_name)
+    try:
+        # 快速版本里面应该只有fuction,尽量不要使用 modelfields,之类
+        if inspect.isfunction(directorEnt):
+            rt = directorEnt(**kws)
+            
+        else:
+            # directorEnt is class
+            if hasattr(directorEnt,'gen_from_search_args'):
+                # 表示是 modeltable子类
+                obj = directorEnt.gen_from_search_args(kws)
+                real_func = obj.get_data_context
+            else:
+                obj = directorEnt(**kws)
+                real_func = obj.get_context
+                
+            rt = real_func()
+
+        if isinstance(rt,HttpResponse):
+            # 直接返回
+            pass
+        else:
+            dc ={'success':True,'data':rt}
+            #rt = JsonResponse(dc,safe=False,ensure_ascii=False)
+            rt = HttpResponse(json.dumps(dc,ensure_ascii=False,cls=DirectorEncoder),content_type="application/json") 
+    except UnAuth401Exception as e:
+        return HttpResponse(str(e),status=401)
+    except QuestionException as e:
+        dc= {'success':True,'_question':str(e)}
+        rt = HttpResponse(json.dumps(dc,ensure_ascii=False,cls=DirectorEncoder),content_type="application/json") 
+    except UserWarning as e:
+        dc = {'success':False,'msg':str(e)}
+        rt = HttpResponse(json.dumps(dc,ensure_ascii=False,cls=DirectorEncoder),content_type="application/json") 
+        #rt = JsonResponse({'success':False,'msg':str(e)})
+    except PermissionDenied as e:
+        rt = HttpResponse(str(e),status=403)
+
+    return rt
+
 def helloworld(request):
     return  HttpResponse('hello world')
 
