@@ -1,6 +1,7 @@
 <template>
-    <div class="tab-full active-tab-hightlight-top" style="position: absolute;bottom: 0;top: 0;left: 0;right: 0;" >
-        <el-tabs  v-if="tabs.length >1" type="border-card"
+    <div class="tab-full " style="position: absolute;bottom: 0;top: 0;left: 0;right: 0;" >
+    aaa
+        <el-tabs class="active-tab-hightlight-top"  v-if="tabs.length >1" type="border-card"
                   @tab-click="handleClick"
                   style="width: 100%;height: 100%;"
                   :value="crt_tab_name" >
