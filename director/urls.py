@@ -32,4 +32,5 @@ urlpatterns = [
     url(r'^ckeditor_image', views.ckeditor, name= 'ckeditor_upload_image'), 
     url(r'^excel/?$', views.export_excel), 
     url(r'^qr/?$',qr.general_qr),
+    url(r'^helloworld',views.helloworld)
 ]

@@ -1,7 +1,7 @@
 # encoding:utf-8
 from __future__ import unicode_literals
 
-from .base_data import model_dc,page_dc,permit_list
+from .base_data import model_dc,page_dc,permit_list,director_view
 from .fields.fieldspage import FieldsPage
 from .fields.fields import ModelFields
 
@@ -46,6 +46,7 @@ def get_first_name(self):
 User.add_to_class("__str__", get_first_name)
 User._meta.get_field('first_name').verbose_name = _('昵称')
 User._meta.get_field('username').verbose_name = _('账号')
+User._meta.get_field('is_staff').verbose_name = _('后台账号')
 
 inspect_dict['sim_signal']=sim_signal.map_dict
 
@@ -291,9 +292,14 @@ class UserFormPage(FieldsPage):
     template='authuser/user_form.html'
     fieldsCls=UserFields
 
+# model_dc应该是没有使用了。
 model_dc[Group]={'fields':GroupFormPage.GroupForm}
 model_dc[User]={'fields':UserFields}
 model_dc[PermitModel]={'fields':PermitFormPage.PermitForm}
+
+@director_view("helloworld")
+def helloworld():
+    return {"resp":'helloword'}
 
 director.update({
     'permit.programer': PermitPage.PermitTable,
