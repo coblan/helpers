@@ -34,6 +34,7 @@ import  blocktext from  './blocktext.vue'
 import  head_shower from  './head_shower.vue'
 import  lineText from './lineText.vue'
 import  number from './number.vue'
+import singleCheckbox from "./singleCheckbox.vue";
 
 Vue.component('com-field-blocktext',blocktext)
 Vue.component('com-field-radio',radio)
@@ -48,3 +49,4 @@ Vue.component('com-field-pop-table-multi-select',pop_table_multi_select)
 Vue.component('com-field-head-shower',head_shower)
 Vue.component('com-field-linetext',lineText)
 Vue.component('com-field-number',number)
+Vue.component('com-field-single-checkbox',singleCheckbox)
