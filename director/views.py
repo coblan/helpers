@@ -142,6 +142,9 @@ def export_excel(request):
 def director_view(request,director_name):
     """将director函数以api的方式直接暴露出去"""
     
+    if request.method == "GET":
+        return fast_director_view(request, director_name)
+    
     # 2021/8/18增加新的逻辑,可以对edit/customForm 这种直接映射
     kws = argument.get_argument(request,outtype='dict')
     if director_name.startswith('edit/'):
