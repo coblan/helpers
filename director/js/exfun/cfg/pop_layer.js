@@ -2,6 +2,15 @@
 export  function pop_layer (com_ctx,component_name,callback,layerConfig){
     // row,head ->//model_name,relat_field
 
+    function  update_size(layero){
+        debugger
+        var total_height= $('#fields-pop-'+pop_id).parents('.layui-layer').height()
+        if(this.title){
+            $('#fields-pop-'+pop_id).parents('.layui-layer-content').height(total_height-42)
+        }else{
+            $('#fields-pop-'+pop_id).parents('.layui-layer-content').height(total_height)
+        }
+    }
 
     var pop_id =new Date().getTime()
     var psize = get_proper_size()
@@ -12,14 +21,23 @@ export  function pop_layer (com_ctx,component_name,callback,layerConfig){
         zIndex:1000,
         resize:true,
         resizing: function(layero){
-            var total_height= $('#fields-pop-'+pop_id).parents('.layui-layer').height()
-            if(this.title){
-                $('#fields-pop-'+pop_id).parents('.layui-layer-content').height(total_height-42)
-            }else{
-                $('#fields-pop-'+pop_id).parents('.layui-layer-content').height(total_height)
-            }
+            update_size.call(this,layero)
+            // debugger
+            // var total_height= $('#fields-pop-'+pop_id).parents('.layui-layer').height()
+            // if(this.title){
+            //     $('#fields-pop-'+pop_id).parents('.layui-layer-content').height(total_height-42)
+            // }else{
+            //     $('#fields-pop-'+pop_id).parents('.layui-layer-content').height(total_height)
+            // }
 
         },
+        restore(layero, index){
+            update_size.call(this,layero)
+        },
+        full(layero, index){
+            update_size.call(this,layero)
+        },
+
         //shadeClose: true, //点击遮罩关闭  style="height: 100%;width: 100%"
         content:`<div id="fields-pop-${pop_id}" class="pop-layer" style="height: 100%;width: 100%">
                     <component :is="component_name" :ctx="com_ctx" @finish="on_finish($event)"></component>
