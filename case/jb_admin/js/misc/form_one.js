@@ -70,20 +70,6 @@ export  var fields_all_in_one={
     </div>
     </div>`,
 
-    //created:function(){
-    //    // find head from parent table
-    //    var table_par = this.$parent
-    //    while (true){
-    //        if (table_par.heads){
-    //            break
-    //        }
-    //        table_par = table_par.$parent
-    //        if(!table_par){
-    //            break
-    //        }
-    //    }
-    //    this.table_par = table_par
-    //},
     computed:{
         normed_ops(){
             return ex.filter(this.ops,(op)=>{

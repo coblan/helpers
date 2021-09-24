@@ -94,6 +94,10 @@ export  default  {
           Vue.set(self.row,self.head.name,foreign_row[self.head.select_field])
         }
 
+        Vue.nextTick(()=>{
+          $(this.$el).find(`input`).trigger("validate")
+        })
+
       }).catch(()=>{
         console.log('break table panel')
       })
