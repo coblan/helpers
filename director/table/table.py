@@ -759,7 +759,7 @@ class ModelTable(object):
                         scope.head.fields_ctx.title=scope.row._label;
                         scope.head.fields_ctx.par_row=scope.row;
                         scope.head.fields_ctx.row = ex.copy(scope.row); // [1] 如果不是编辑par_row ，可以修改这行
-                        cfg.pop_vue_com("com-form-one",scope.head.fields_ctx)'''
+                        cfg.pop_vue_com("com-form-one",scope.head.fields_ctx,{maxmin: true})'''
                     
         return heads
     
