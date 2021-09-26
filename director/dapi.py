@@ -8,6 +8,9 @@ from django.core.exceptions import ValidationError
 from .fields.fields import ModelFields,OutDateException
 from django.core.exceptions import PermissionDenied
 from .model_func.dictfy import delete_related_query
+from .base_data import director_transaction 
+from django.db import transaction
+from . views import tranactionDbs
 
 def director_save_row(row):
      #rt_dc = save_row(row,user,request)
@@ -20,14 +23,25 @@ def director_save_row(row):
      else:
           return {}
 
+def _total_save(user, row,**kw):
+     field_obj = permit_save_model(user, row,**kw)
+     dc = field_obj.get_row()
+     return dc
+
 @director_view('d.save_row')
 def save_row(row):
      request = get_request_cache()['request']
      user = request.user
      try:
           kw = request.GET.dict()
-          field_obj = permit_save_model(user, row,**kw)
-          dc = field_obj.get_row()
+          d_name =  row.get('_director_name')
+          if director_transaction.get(d_name):
+               real_save = tranactionDbs(_total_save,director_transaction.get(d_name))
+               dc = real_save(user, row,**kw)
+          else:
+               dc = _total_save(user, row,**kw)
+          #field_obj = permit_save_model(user, row,**kw)
+          #dc = field_obj.get_row()
           return {'success':True,'status':'success','row':dc}
      except ValidationError as e:
           return {'errors':dict(e)}
