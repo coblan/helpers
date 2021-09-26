@@ -79,6 +79,10 @@
         watch:{
             my_value:function(v){
                 this.$emit('input',v)
+                Vue.nextTick(()=>{
+                  $(this.$el).find(`input`).trigger("validate")
+                })
+
             }
         },
 
