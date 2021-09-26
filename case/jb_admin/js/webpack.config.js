@@ -2,8 +2,8 @@ var path = require( 'path' );
 
 var webpack = require('D:/coblan/webcode/node_modules/webpack')
 
-//const VueLoaderPlugin = require('D:/coblan/webcode/node_modules/vue-loader/lib/plugin')
-const VueLoaderPlugin = require('vue-loader/lib/plugin');
+const VueLoaderPlugin = require('D:/coblan/webcode/node_modules/vue-loader/lib/plugin')
+// const VueLoaderPlugin = require('vue-loader/lib/plugin');
 
 var webpack = require('webpack')
 
