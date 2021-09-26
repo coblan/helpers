@@ -4,15 +4,6 @@
         <el-radio-group v-else v-model="row[head.name]">
             <el-radio v-for="opt in normed_options" :label="opt.value" v-text="opt.label"></el-radio>
         </el-radio-group>
-
-        <!--<select v-else v-model='row[head.name]'  :id="'id_'+head.name" :name="head.name"  :class="['form-control input-sm',{ novalue: ! is_select}] ">-->
-            <!--&lt;!&ndash;<option v-if="head.required"  :value="undefined" disabled selected style='display:none;' class="placeholder" v-text="head.placeholder"></option>&ndash;&gt;-->
-            <!--&lt;!&ndash;<option v-else  :value="undefined" selected style="color: #b8b8b8" class="placeholder" v-text="head.placeholder"></option>&ndash;&gt;-->
-            <!--<option v-if="head.required"  :value="novalue" disabled selected style='display:none;color: #b8b8b8' class="placeholder" v-text="head.placeholder"></option>-->
-            <!--<option v-else   :value="novalue" selected style="color: #b8b8b8" class="placeholder" v-text="head.placeholder"></option>-->
-
-            <!--<option v-for='opt in normed_options' :value='opt.value' v-text='opt.label'></option>-->
-        <!--</select>-->
     </div>
 </template>
 <script>

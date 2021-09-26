@@ -40,11 +40,15 @@ from . import model_adapte
 
 # 定制User表的显示方式
 def get_first_name(self):
-    return self.first_name or self.username
+    if self.first_name:
+        return '%s(%s)'%(self.username,self.first_name)
+    else:
+        return self.username
+    #return self.first_name or self.username
     #return self.first_name + '(%s)'%self.username
 
 User.add_to_class("__str__", get_first_name)
-User._meta.get_field('first_name').verbose_name = _('昵称')
+User._meta.get_field('first_name').verbose_name = _('称呼')
 User._meta.get_field('username').verbose_name = _('账号')
 User._meta.get_field('is_staff').verbose_name = _('后台账号')
 

@@ -13,7 +13,7 @@ export default {
             let resp = await ex.director_call('d.get_row',dc)
             cfg.hide_load()
              fields_ctx.row= resp
-             let row = await cfg.pop_vue_com('com-form-one',fields_ctx)
+             let row = await cfg.pop_vue_com('com-form-one',fields_ctx,{maxmin: true})
              if(row){
                  self.update_or_insert(row)
                  if(kws.after_save_express){

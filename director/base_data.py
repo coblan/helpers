@@ -1,5 +1,5 @@
 import inspect
-
+from django.conf import settings
 # used for model render
 page_dc={
     #'xxx_model': {'model':'xxx','table_temp':xxx,'field_temp':xxx}
@@ -81,3 +81,9 @@ def director_element(name):
             #return fun(*args, **kargs)
         #return _fun2
     return _fun
+
+director_transaction= {}
+def append_transaction(director_name,db_name):
+    director_transaction[director_name] = director_transaction.get(director_name)  or list(getattr(settings,'REQUEST_TRANSACTION_DB',['default']))
+    if db_name not in director_transaction[director_name]:
+        director_transaction[director_name].append(db_name)
