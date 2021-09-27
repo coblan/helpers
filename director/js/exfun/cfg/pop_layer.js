@@ -13,7 +13,18 @@ export  function pop_layer (com_ctx,component_name,callback,layerConfig){
     }
 
     var pop_id =new Date().getTime()
-    var psize = get_proper_size()
+    if(com_ctx.width && com_ctx.height){
+        var psize =[com_ctx.width,com_ctx.height]
+    } else {
+        var psize = get_proper_size()
+        if(com_ctx.width){
+             psize=[com_ctx.width,psize[1]]
+        }
+        if(com_ctx.height){
+            psize=[psize[0],com_ctx.height]
+        }
+    }
+
     var layer_config = {
         type: 1,
         area: psize,// ['800px', '500px'],
@@ -39,8 +50,11 @@ export  function pop_layer (com_ctx,component_name,callback,layerConfig){
         },
 
         //shadeClose: true, //点击遮罩关闭  style="height: 100%;width: 100%"
+        // content:`<div id="fields-pop-${pop_id}" class="pop-layer" style="height: 100%;width: 100%">
+        //             <component :is="component_name" :ctx="com_ctx" @finish="on_finish($event)"></component>
+        //         </div>`,
         content:`<div id="fields-pop-${pop_id}" class="pop-layer" style="height: 100%;width: 100%">
-                    <component :is="component_name" :ctx="com_ctx" @finish="on_finish($event)"></component>
+                   
                 </div>`,
         end: function () {
             if(callback){
@@ -59,6 +73,18 @@ export  function pop_layer (com_ctx,component_name,callback,layerConfig){
         data:{
             com_ctx:com_ctx,
             component_name:component_name,
+        },
+        render(createElement){
+            return createElement(this.component_name,{
+                attrs:{
+                    ctx:this.com_ctx
+                },
+                    on:{
+                        finish:this.on_finish
+                    }
+            }
+
+                )
         },
         methods:{
             on_finish:function(e){

@@ -3,7 +3,7 @@
 
     <input type="text" v-model="row[head.name]" style="display: none;" :id="'id_'+head.name" :name="head.name">
 
-    <div class="my-input">
+    <div class="my-input" :style="mystyle">
 
       <el-tag :closable=" can_clear" v-if="row[head.name]"
               size="small"
@@ -26,6 +26,11 @@
 export  default  {
   props:['row','head'],
   computed:{
+    mystyle(){
+        if (this.head.width){
+          return {width:this.head.width}
+        }
+    },
     label:function(){
       return this.row['_'+this.head.name+'_label']
     },

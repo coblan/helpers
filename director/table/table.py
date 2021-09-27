@@ -26,7 +26,7 @@ from django.db import connections
 from django.db.utils import ProgrammingError
 from helpers.director.model_func.func import str_lazy_label
 from helpers.func.collection.ex import findone,find_index
-
+from helpers.case.jb_admin.uidict import pop_edit_current_row
 class PageNum(object):
     perPage=20
     def __init__(self,pageNumber=1,perpage=None,kw={}):
@@ -377,6 +377,7 @@ class ModelTable(object):
     nolimit = False
     simple_dict = False
     export_related = True
+    button_edit = False
     def __init__(self,page=1,row_sort=[],row_filter={},row_search= '',crt_user=None,perpage=None,**kw):
         """
         kw['search_args']只是一个记录，在获取到rows时，一并返回前端页面，便于显示。
@@ -572,6 +573,20 @@ class ModelTable(object):
         return ls
     
     def getExtraHead(self):
+              
+        if self.button_edit:
+            model_form = director.get(self.get_edit_director_name())
+            if model_form:
+                form_obj = model_form(crt_user=self.crt_user)
+                fields_ctx = form_obj.get_head_context()              
+                return [ 
+                    {'name':'op','label':'操作',
+                     'editor':'com-table-button-click',
+                     'button_label':'编辑',
+                     'fields_ctx':fields_ctx,
+                     'click_express':pop_edit_current_row(),                      }
+                  ]
+            
         return []
     
     @request_cache

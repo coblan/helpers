@@ -32,12 +32,24 @@ def op_excel(max_length=2000,default_length=1000,length=None):
 
 
 def pop_edit_current_row():
-    "在前端table中，弹出窗口编辑row"
-    return ''' scope.head.fields_ctx.genVc=scope.vc;
-                scope.head.fields_ctx.title=scope.row._label;
-                scope.head.fields_ctx.par_row=scope.row;
-                scope.head.fields_ctx.row = ex.copy(scope.row); // [1] 如果不是编辑par_row ，可以修改这行
-                cfg.pop_vue_com("com-form-one" ,scope.head.fields_ctx)'''
+    "在前端table中,com-table-click，弹出窗口编辑row"
+    
+    return '''var fields_ctx= scope.head.fields_ctx;
+        fields_ctx.genVc=scope.vc;
+                fields_ctx.title=scope.row._label;
+                fields_ctx.par_row=scope.row;
+                fields_ctx.row = ex.copy(scope.row); // [1] 如果不是编辑par_row ，可以修改这行
+                cfg.pop_vue_com("com-form-one" ,fields_ctx,{maxmin:true})'''
+
+def table_ops_pop_edit_current_row():
+    """在ops中使用，直接吊起编辑数据
+    """
+    return '''var fields_ctx= scope.vc.head.fields_ctx;
+      fields_ctx.genVc=scope.vc;
+              fields_ctx.title=scope.ps.vc.rowData._label;
+              fields_ctx.par_row=scope.ps.vc.rowData;
+              fields_ctx.row = ex.copy(scope.ps.vc.rowData); // [1] 如果不是编辑par_row ，可以修改这行
+              cfg.pop_vue_com("com-form-one" ,fields_ctx,{maxmin:true})'''
 
 def nice_express(express,msg):
     express = base64.b64encode(express.encode('utf-8'))

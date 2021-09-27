@@ -1,19 +1,19 @@
 
-<template lang="pug">
-div.com-field-blocktext(:class="head.class")
-    pre.mypre(v-if='head.readonly' v-text='row[head.name]')
-    textarea.form-control.input-sm(v-else :style="head.style" :maxlength="head.maxlength" :name="head.name" :id="'id_'+head.name" v-model="row[head.name]" :placeholder="head.placeholder" :readonly='head.readonly')
+<!--<template lang="pug">-->
+<!--div.com-field-blocktext(:class="head.class")-->
+<!--    pre.mypre(v-if='head.readonly' v-text='row[head.name]')-->
+<!--    textarea.form-control.input-sm(v-else :style="head.style" :maxlength="head.maxlength" :name="head.name" :id="'id_'+head.name" v-model="row[head.name]" :placeholder="head.placeholder" :readonly='head.readonly')-->
 
-</template>
-<!--<template>-->
-    <!--<div class="com-field-blocktext" :class="head.class">-->
-        <!--<pre class="mypre" v-if='head.readonly' v-text='row[head.name]'></pre>-->
-            <!--<textarea :style="head.style" v-else :maxlength="head.maxlength" class="form-control input-sm"-->
-                      <!--:name="head.name"-->
-                      <!--:id="'id_'+head.name" v-model="row[head.name]" :placeholder="head.placeholder"-->
-                      <!--:readonly='head.readonly'></textarea>-->
-    <!--</div>-->
 <!--</template>-->
+<template>
+    <div class="com-field-blocktext" :class="head.class" :style="mystyle">
+        <pre class="mypre" v-if='head.readonly' v-text='row[head.name]'></pre>
+            <textarea :style="head.style" v-else :maxlength="head.maxlength" class="form-control input-sm"
+                      :name="head.name"
+                      :id="'id_'+head.name" v-model="row[head.name]" :placeholder="head.placeholder"
+                      :readonly='head.readonly'></textarea>
+    </div>
+</template>
 <script>
 export default {
     props:['row','head'],
@@ -24,7 +24,18 @@ export default {
         if(this.head.css){
             ex.append_css(this.head.css)
         }
-    }
+    },
+  computed:{
+      mystyle(){
+        if(this.head.width){
+          return {
+            width:this.head.width
+          }
+        }else {
+          return  {}
+        }
+      }
+  }
 }
 </script>
 <style scoped lang="scss">
