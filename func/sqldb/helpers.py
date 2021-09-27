@@ -1,6 +1,8 @@
 # coding: utf8
 """
 Main module with the bulk_update function.
+文档:
+https://github.com/aykut/django-bulk-update/blob/master/django_bulk_update/helper.py
 """
 import itertools
 
