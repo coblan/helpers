@@ -37,10 +37,13 @@ from . import dapi
 from helpers.func.sim_signal import sim_signal
 from .base_data import inspect_dict
 from . import model_adapte
+from django.conf import settings 
 
 # 定制User表的显示方式
 def get_first_name(self):
-    if self.first_name:
+    if settings.USER_LABEL == 'nickname':
+        return self.first_name
+    elif self.first_name:
         return '%s(%s)'%(self.username,self.first_name)
     else:
         return self.username
