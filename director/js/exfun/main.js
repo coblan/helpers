@@ -28,7 +28,8 @@ var ex={
         }
         return dst
     },
-    dayjs:dayjs
+    dayjs:dayjs,
+    count:0,
 }
 
 //import {md5} from  './md5.min'

@@ -53,20 +53,31 @@ export var  vuetool = {
                 if(filter){
                     if(typeof filter =='function' && filter(parent)){
                         return parent.childStore
-                    }else{
-                        if(ex.objContain(parent,filter) ){
+                    }else if(ex.objContain(parent.childStore,filter) ){
                             return parent.childStore
-                        }
+                  }else{
+                        parent=  this._extendGenVcTree(parent) // parent.$parent
                     }
+
                 }else{
                     return parent.childStore
                 }
             }else {
-                parent = parent.$parent
+                parent = this._extendGenVcTree(parent) // parent.$parent
             }
         }
     },
+    _extendGenVcTree(parent){
+        // !parent.$parent  &&
+        if(parent.ctx && parent.ctx.genVc){
+            return parent.ctx.genVc
+        }else{
+            return  parent.$parent
+        }
+    },
     vueEventRout:function(self,event_slots){
+        /*后台传入代码控制。现在被各种express替代了。
+        * */
         if(!event_slots){
             if(self.head && self.head.event_slots){
                 event_slots = self.head.event_slots
