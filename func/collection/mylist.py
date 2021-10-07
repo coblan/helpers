@@ -27,9 +27,12 @@ def left_join(left,right,func):
 def complement(srcList,rows,extrac_fun,default=0):
     """以srcList为参照，返回补全的数组
     
+    用在chart图表补全数据
+    Args:
     srcList = ['2021-07-20','2021-07-21']
     rows =[{'date':'2021-07-20','count':12}]
-    
+    返回:
+    [{date:'2021-07-20','count':12},{date:'2021-07-21','count':0}]
     """
     outlist = [default] * len( srcList )
     for index,item in enumerate( srcList):
