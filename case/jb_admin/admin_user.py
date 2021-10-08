@@ -448,7 +448,8 @@ def user_write():
 
 permits = [('User.write', user_write(), model_to_name(User) , 'model'), 
            ('User.read', model_read_permit(User), model_to_name(User) , 'model'), 
-           ('Group', model_full_permit(Group), model_to_name(Group) , 'model'), 
+           ('Group', model_read_permit(Group), model_to_name(Group) , 'model'), 
+           ('Group.edit', model_full_permit(Group), model_to_name(Group) , 'model'), 
            ]
 
 add_permits(permits)
