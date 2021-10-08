@@ -254,10 +254,13 @@ class GroupPage(TablePage):
             return dc
 
 class GroupUserList(UserPage.tableCls):
+    def dict_head(self, head):
+        if head['name'] == 'username':
+            return head
+        else:
+            return super().dict_head(head)
     def get_operation(self):
         return [
-            #{'name':'create_user','label':'创建用户','editor':'com-btn'},
-            #{'name':'add_user','label':'添加用户','editor':'com-btn'},
         ]
     
     @classmethod
