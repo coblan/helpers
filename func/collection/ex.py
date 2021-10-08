@@ -44,7 +44,8 @@ def locate(path):
 def assign_object(dst,src,item_match=None,child=['items','childrens']):
     """把src的值赋予dst
     
-    @item_match : callable对象,返回 src中 与 dst.item 相匹配的项
+    Args:
+    item_match : callable对象,返回 src中 与 dst.item 相匹配的项
     """
     if isinstance(dst,list):
         for item in dst:

@@ -41,7 +41,8 @@ from django.conf import settings
 
 # 定制User表的显示方式
 def get_first_name(self):
-    if settings.USER_LABEL == 'nickname':
+    userlabel = getattr(settings,'USER_LABEL','')
+    if userlabel == 'nickname':
         return self.first_name
     elif self.first_name:
         return '%s(%s)'%(self.username,self.first_name)
