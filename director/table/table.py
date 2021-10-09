@@ -70,7 +70,7 @@ class PageNum(object):
                 'perpage':self.perPage}
 
 class TrivalPageNum(object):
-    def __init__(self,pageNumber=1,kw={}):
+    def __init__(self,pageNumber=1,perpage=None,kw={}):
         pass    
     def get_query(self,query):
         return query
@@ -1283,7 +1283,7 @@ class PlainTable(ModelTable):
         }
     
     def getRowFilters(self): 
-        return {}
+        return []
     
     def getRowPages(self): 
         per_page = math.ceil(self.rows_count /100) *100 
