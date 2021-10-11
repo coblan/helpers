@@ -31,6 +31,7 @@ def complement(srcList,rows,extrac_fun,default=0):
     Args:
     srcList = ['2021-07-20','2021-07-21']
     rows =[{'date':'2021-07-20','count':12}]
+    extrac_fun = lamda row,target: row if row['date']==target else None
     返回:
     [{date:'2021-07-20','count':12},{date:'2021-07-21','count':0}]
     """
