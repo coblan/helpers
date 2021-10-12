@@ -27,7 +27,7 @@
             is_disabled(){
                 var disabled_express = this.my_ctx .disabled_express || this.my_ctx .disabled
                 if(disabled_express){
-                    return  ex.eval(disabled_express,{ps:this.parStore})
+                    return  ex.eval(disabled_express,{ps:this.parStore,vc:this})
                 }else{
                     return false
                 }
