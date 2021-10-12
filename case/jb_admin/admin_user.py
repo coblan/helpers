@@ -1,7 +1,8 @@
 
 from django.contrib import admin
 from django.contrib.auth.models import Group,User
-from helpers.director.shortcut import TablePage,ModelTable,page_dc,model_dc,ModelFields, director,RowFilter,director_view,director,director_element,get_request_cache
+from helpers.director.shortcut import TablePage,ModelTable,page_dc,model_dc,ModelFields, director,RowFilter,director_view,director,\
+     director_element,get_request_cache,SelectSearch
 from helpers.director.models import PermitModel 
 import re
 from . import  js_cfg
@@ -59,18 +60,29 @@ class UserPage(TablePage):
             else:
                 return query
         
-        class search(RowSearch):
-            names=['username']
+        class search(SelectSearch):
+            names=['username','first_name','groups__name',]
+            def get_option(self, name):
+                #if name =='first_name':
+                    #return {
+                                #'value':name,
+                                #'label':'用户手机'
+                            #}
+                if name =='groups__name':
+                    return {'value':name,'label':'权限组'}
+                else:
+                    return super().get_option(name)
+                
         class filters(RowFilter):
-            names=['first_name','groups__name','is_superuser','is_staff','is_active']
-            icontains=['first_name','groups__name']
+            names=['is_superuser','is_staff','is_active']
+            #icontains=['first_name']
             range_fields = ['last_login']
             
-            def getExtraHead(self):
-                return [
-                    {'name':'groups__name','label':'权限分组','show':'!scope.ps.search_args.groups_id'}
-                ]
-                
+            #def getExtraHead(self):
+                #return [
+                    #{'name':'groups__name','label':'权限分组','show':'!scope.ps.search_args.groups_id'}
+                #]
+        
             
 class UserFields(ModelFields):
     "具有权限性的创建和修改用户资料"
@@ -254,10 +266,13 @@ class GroupPage(TablePage):
             return dc
 
 class GroupUserList(UserPage.tableCls):
+    def dict_head(self, head):
+        if head['name'] == 'username':
+            return head
+        else:
+            return super().dict_head(head)
     def get_operation(self):
         return [
-            #{'name':'create_user','label':'创建用户','editor':'com-btn'},
-            #{'name':'add_user','label':'添加用户','editor':'com-btn'},
         ]
     
     @classmethod
@@ -448,7 +463,8 @@ def user_write():
 
 permits = [('User.write', user_write(), model_to_name(User) , 'model'), 
            ('User.read', model_read_permit(User), model_to_name(User) , 'model'), 
-           ('Group', model_full_permit(Group), model_to_name(Group) , 'model'), 
+           ('Group', model_read_permit(Group), model_to_name(Group) , 'model'), 
+           ('Group.edit', model_full_permit(Group), model_to_name(Group) , 'model'), 
            ]
 
 add_permits(permits)
