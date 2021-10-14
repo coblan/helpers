@@ -5,7 +5,7 @@ import inspect
 
 class TablePage(object):
     template=''
-    tableCls=''
+    tableCls=None
     extra_js=[]
     def __init__(self,request, engin):
         if request.GET.get('_accept')=='json' or 'json' in request.META.get('HTTP_ACCEPT'):
@@ -14,11 +14,11 @@ class TablePage(object):
             self.accept = ''
             
         self.engin = engin
-        if not self.tableCls:
-            for k,v in self.__class__.__dict__.items():
-                if inspect.isclass(v) and issubclass(v,ModelTable):
-                    self.tableCls = v
-                    break
+        #if not self.tableCls:
+            #for k,v in self.__class__.__dict__.items():
+                #if inspect.isclass(v) and issubclass(v,ModelTable):
+                    #self.tableCls = v
+                    #break
         
         self.request=request
         self.table = self.tableCls.parse_request(request)
