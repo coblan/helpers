@@ -119,7 +119,7 @@ class ModelFields(forms.ModelForm):
                 form_kw['instance']=self._meta.model.objects.last()
             elif pk != None:  # 很多时候，pk=0 是已经创建了
                 try:
-                    form_kw['instance']= self._meta.model.objects.get(pk=pk)
+                    form_kw['instance']= self._meta.model.objects.select_for_update().get(pk=pk)
                 except self._meta.model.DoesNotExist:
                     raise UserWarning('Id=%s that you request is not exist'%pk)
                     # 感觉 instance不存在时，报错404可能不太合适，所以还是用普通报错 
@@ -180,6 +180,8 @@ class ModelFields(forms.ModelForm):
                     if k in self.readonly_change_warning and adapt_type(dc[k]) != adapt_type( simdc.get(k)):
                         readonly_waring.append(k)
                     dc[k] = simdc.get(k)
+                    if 'meta_org_dict' in dc:
+                        dc['meta_org_dict'].pop(k)
                     #if hasattr(inst, "%s_id" % k):  # 如果是ForeignKey，必须要pk值才能通过 form验证
                         #fieldcls = inst.__class__._meta.get_field(k)
                         #if isinstance(fieldcls, models.ForeignKey):
