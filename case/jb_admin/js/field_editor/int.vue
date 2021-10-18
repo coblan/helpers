@@ -29,7 +29,12 @@
         }
         getSetup(props){
             if(this.fv_rule){
-                Vue.set(props.head,'fv_rule',this.fv_rule) //  props.head.fv_rule = this.fv_rule
+                if(props.head.fv_rule){
+                  var fv_rule= props.head.fv_rule + this.fv_rule
+                }else{
+                  var fv_rule=  this.fv_rule
+                }
+                Vue.set(props.head,'fv_rule',fv_rule) //  props.head.fv_rule = this.fv_rule
             }
             var dc = super.getSetup(props)
             Object.assign(dc,{
