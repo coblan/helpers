@@ -1,5 +1,17 @@
 from .models import KVModel
 import json
+from django.db import transaction
+
+@transaction.atomic
+def lock_get_inst(key,default=''):
+    inst,created = KVModel.objects.select_for_update().get_or_create(key=key)
+    if created:
+        inst.value = default
+        inst.save()
+        return inst
+    else:
+        return inst
+    
 
 def get_json(key,default=None,gte=None):
     value = get_value(key,gte=gte)
