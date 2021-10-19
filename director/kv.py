@@ -3,7 +3,7 @@ import json
 from django.db import transaction
 
 @transaction.atomic
-def lock_get_inst(key,default=''):
+def lock_kv_inst(key,default=''):
     inst,created = KVModel.objects.select_for_update().get_or_create(key=key)
     if created:
         inst.value = default
