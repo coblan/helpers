@@ -41,12 +41,16 @@ export var com_file_uploader = {
     mounted:function(){
         var self=this
         if(this.cfg.sortable){
-            ex.load_js("/static/lib/sortable.min.js",function(){
-                new Sortable($(self.$el).find('.sortable')[0],{
-                    onSort: function (/**Event*/evt) {
-                        self.ajust_order()
-                    },
-                });
+            ex.load_js(js_config.js_lib.sortablejs,function(){
+                let ele = $(self.$el).find('.sortable')[0]
+                if(ele){
+                     new Sortable($(self.$el).find('.sortable')[0],{
+                        onSort: function (/**Event*/evt) {
+                            self.ajust_order()
+                        },
+                    });
+                }
+               
             })
         }
 

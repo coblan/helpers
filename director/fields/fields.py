@@ -43,13 +43,14 @@ class ModelFields(forms.ModelForm):
     
     """
     readonly=[]
-    const_fields=[]
+    const_fields=[]  # 只有创建的时候才允许修改的字段
     field_sort=[]
     extra_mixins=[]
     hide_fields = []
     overlap_fields=[]  # 这些字段不会被同步检查
     readonly_change_warning = [] # 普通保存时，后台会恢复只读字段的值，但是有时有些只读字段，
                                  #在后台发现改变时，需要警告前端，作废此次保存。因为这些字段值可能是前端做判断的依据。
+    forbid_change = False # 禁止修改
     show_pk=False
     nolimit=False
     simple_dict = False
@@ -118,7 +119,7 @@ class ModelFields(forms.ModelForm):
                 form_kw['instance']=self._meta.model.objects.last()
             elif pk != None:  # 很多时候，pk=0 是已经创建了
                 try:
-                    form_kw['instance']= self._meta.model.objects.get(pk=pk)
+                    form_kw['instance']= self._meta.model.objects.select_for_update().get(pk=pk)
                 except self._meta.model.DoesNotExist:
                     raise UserWarning('Id=%s that you request is not exist'%pk)
                     # 感觉 instance不存在时，报错404可能不太合适，所以还是用普通报错 
@@ -179,6 +180,8 @@ class ModelFields(forms.ModelForm):
                     if k in self.readonly_change_warning and adapt_type(dc[k]) != adapt_type( simdc.get(k)):
                         readonly_waring.append(k)
                     dc[k] = simdc.get(k)
+                    if 'meta_org_dict' in dc:
+                        dc['meta_org_dict'].pop(k)
                     #if hasattr(inst, "%s_id" % k):  # 如果是ForeignKey，必须要pk值才能通过 form验证
                         #fieldcls = inst.__class__._meta.get_field(k)
                         #if isinstance(fieldcls, models.ForeignKey):
@@ -368,7 +371,7 @@ class ModelFields(forms.ModelForm):
     
     def get_operations(self):
         ls=[]
-        if self.permit.changeable_fields():
+        if self.permit.changeable_fields() and not self.forbid_change:
             ls += [
                 {
                 'name':'save',
@@ -499,11 +502,16 @@ class ModelFields(forms.ModelForm):
         heads = [self.dict_head(head) for head in heads]
         
         self.heads = heads
-        for name in self.get_readonly_fields():
+        # 设置前端组件的只读属性
+        if self.forbid_change:
             for head in heads:
-                if head['name']==name:
-                    head['readonly']=True 
-                    break
+                head['readonly']=True 
+        else:
+            for name in self.get_readonly_fields():
+                for head in heads:
+                    if head['name']==name:
+                        head['readonly']=True 
+                        break
                 
         for head in heads:
             if head.get('editor') == 'sim_select' and not head.get('options'):
@@ -620,7 +628,9 @@ class ModelFields(forms.ModelForm):
 
             if not self.can_access():
                 raise PermissionDenied('you have no Permission access %s'%self.instance._meta.model_name  )
- 
+        if self.forbid_change:
+            raise PermissionDenied("%s is readonly"%self.instance._meta.model_name)
+        
         for data in self.changed_data:
             if data in self.get_readonly_fields():
                 raise PermissionDenied(" {data} is readonly".format(data=data))

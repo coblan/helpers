@@ -11,6 +11,7 @@ class SelectSearch(object):
     model=''
     field_sort=[]
     db_map={} # 用户 raw sql 查询时，映射字段到 数据库字段
+    label_map = {} # name 到 label 的映射
     def __init__(self,q,user = None,allowed_names = [], kw = {}):
         self.crt_user=user
         self.valid_name=  self.names + self.exact_names  #[x for x in self.names if x in allowed_names]
@@ -44,7 +45,10 @@ class SelectSearch(object):
             return dc
         
     def get_option(self, name): 
-        return {'value': name, 'label': _(self.model._meta.get_field(name).verbose_name) }
+        if self.label_map.get(name):
+            return {'value':name,'label':self.label_map.get(name)}
+        else:
+            return {'value': name, 'label': _(self.model._meta.get_field(name).verbose_name) }
     
     def clean_search(self): 
         "可以返回字符串。或者返回字典,直接代入query查询"

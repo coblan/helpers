@@ -32,7 +32,8 @@ import  flow from  './flow.vue'
 import  pop_table_multi_select from  './pop_table_multi_select.vue'
 import  blocktext from  './blocktext.vue'
 import  head_shower from  './head_shower.vue'
-import  lineText from './lineText.vue'
+// import  lineText from './lineText.vue'
+import  baseLine from './baseLine.vue'
 import  number from './number.vue'
 import singleCheckbox from "./singleCheckbox.vue";
 import pop_table_select from './pop_table_select.vue'
@@ -48,7 +49,7 @@ Vue.component('com-field-search-select',search_select)
 Vue.component('com-field-flow',flow)
 Vue.component('com-field-pop-table-multi-select',pop_table_multi_select)
 Vue.component('com-field-head-shower',head_shower)
-Vue.component('com-field-linetext',lineText)
+Vue.component('com-field-linetext',baseLine)
 Vue.component('com-field-number',number)
 Vue.component('com-field-single-checkbox',singleCheckbox)
 Vue.component('com-field-pop-table-select',pop_table_select)
