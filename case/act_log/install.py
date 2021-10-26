@@ -47,7 +47,6 @@ def SET(scope,path=None,extra_cfg={}):
               'formatter':'standard',
               'filename': os.path.join(LOG_PATH,'errors.log'),    
               'encoding': 'utf8',
-              'include_html': True,
               },
           'general_log':{
               'level': 'DEBUG',
