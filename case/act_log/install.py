@@ -75,6 +75,7 @@ def SET(scope,path=None,extra_cfg={}):
               'handlers': ['mail_admins', 'error_warning'], # 'elk_warning',
               'level': 'WARNING',
               'propagate': False,
+              'include_html': True
           },
           'django': {
               'handlers': [] , # 'console', 'djangoout_warning', 'mail_admins', 'elk_warning'],
