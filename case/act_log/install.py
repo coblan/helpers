@@ -47,7 +47,6 @@ def SET(scope,path=None,extra_cfg={}):
               'formatter':'standard',
               'filename': os.path.join(LOG_PATH,'errors.log'),    
               'encoding': 'utf8',
-              
               },
           'general_log':{
               'level': 'DEBUG',
@@ -75,6 +74,7 @@ def SET(scope,path=None,extra_cfg={}):
               'handlers': ['mail_admins', 'error_warning'], # 'elk_warning',
               'level': 'WARNING',
               'propagate': False,
+              
           },
           'django': {
               'handlers': [] , # 'console', 'djangoout_warning', 'mail_admins', 'elk_warning'],

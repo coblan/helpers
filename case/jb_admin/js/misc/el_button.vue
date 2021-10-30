@@ -27,7 +27,7 @@
             is_disabled(){
                 var disabled_express = this.my_ctx .disabled_express || this.my_ctx .disabled
                 if(disabled_express){
-                    return  ex.eval(disabled_express,{ps:this.parStore})
+                    return  ex.eval(disabled_express,{ps:this.parStore,vc:this})
                 }else{
                     return false
                 }
@@ -58,6 +58,9 @@
                     p.then(()=>{
                         if(this.my_ctx.confirm_msg){
                             return cfg.confirm(this.my_ctx.confirm_msg)
+                        }else if(this.my_ctx.confirm_msg_express){
+                          var confirm_msg = ex.eval(this.my_ctx.confirm_msg_express,{head:this.my_ctx,ps:this.parStore,vc:this})
+                          return cfg.confirm(confirm_msg)
                         }
                     }).then(()=>{
                         ex.eval(click_express,{head:this.my_ctx,ps:this.parStore,vc:this})

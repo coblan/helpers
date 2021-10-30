@@ -1,7 +1,7 @@
 import random
 from django.utils import timezone
-from helpers.director.kv import get_value,set_value,update_value,lock_created
-
+from helpers.director.kv import get_value,set_value,update_value,lock_created,lock_kv_inst
+from django.db import transaction
 from uuid import uuid4,uuid1
 uuidChars = ("a", "b", "c", "d", "e", "f",
        "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s",
@@ -34,11 +34,13 @@ def get_random_number(length= 6):
     rt = random.choice(a) + ''.join([random.choice(a1) for i in range(length-1)])
     return rt
   
-
+@transaction.atomic
 def get_date_sequence(key='_data_sequence',fill=6,how_many=1):
   now = timezone.now()
   date_str = now.strftime('%Y%m%d')   
-  v = get_value(key,None)
+  inst  = lock_kv_inst(key,default='')
+  v = inst.value
+  #v = get_value(key,None)
 
   if v and v.startswith(date_str):
     start = int(v[8:])+1
