@@ -119,7 +119,7 @@
                         self.switchToTab(kws)
                     },
                     add_new(kws){
-                        self.addNew(kws)
+                        return self.addNew(kws)
                     },
                     search({loading}={loading:true}){
                        return self.search_page(1,{loading:loading})

@@ -20,6 +20,8 @@ export default {
                      ex.eval(kws.after_save_express,{vc:self,ps:self.childStore,search_args:self.searchArgs,row:row})
                  }
              }
+            debugger
+            return row
         },
         update_or_insert(new_row){
             var table_row = ex.findone(this.tableRows,{pk:new_row.pk})
