@@ -85,7 +85,7 @@ export  var fields_all_in_one={
         grouped_heads_bucket:function(){
             var out_bucket = []
             ex.each(this.fields_group,(group)=>{
-                if(group.show && ! ex.eval(group.show,{row:this.row,head:this.head})){
+                if(group.show_express && ! ex.eval(group.show_express,{row:this.row,head:this.head})){
                     return
                 }
                 var heads = ex.filter(this.normed_heads,function(head){
