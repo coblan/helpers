@@ -232,9 +232,10 @@ var mix_fields_data ={
                         cfg.outdate_confirm(
                             rt._outdate,
                             function() {
-                                ex.director_call(self.row._director_name, {pk: self.row.pk}).then(resp=> {
-                                    ex.vueAssign(self.row, resp.row)
-                                })
+                                ex.update_row(self.row)
+                                // ex.director_call(self.row._director_name, {pk: self.row.pk}).then(resp=> {
+                                //     ex.vueAssign(self.row, resp.row)
+                                // })
                             },function(){
                                     self.row.meta_overlap_fields='__all__'
                                     self.submit()
