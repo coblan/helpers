@@ -51,6 +51,7 @@ export  var pop_fields={
                 }],
                 extra_mixin:[],
                 genVc:self,
+                par_row:this.rowData
             }
 
                var win= pop_edit_local(self.rowData,fields_ctx,(resp)=> {

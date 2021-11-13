@@ -1,4 +1,4 @@
-var mix_fields_data ={
+export  var mix_fields_data ={
     data:function(){
         return {
             op_funs:{
@@ -91,7 +91,7 @@ var mix_fields_data ={
                     return false
                 }else if(head.show || head.show_express){
                     var show_express = head.show_express || head.show
-                    return ex.eval(show_express,{row:self.row,head:head})
+                    return ex.eval(show_express,{row:self.row,head:head,par_vc:self})
                 }else{
                     return true
                 }

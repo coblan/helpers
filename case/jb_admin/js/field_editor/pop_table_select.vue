@@ -1,24 +1,29 @@
 <template>
   <div class="com-field-pop-table-select">
 
-    <input type="text" v-model="row[head.name]" style="display: none;" :id="'id_'+head.name" :name="head.name">
+    <template v-if="head.readonly">
+      <span> {{row[head.name]}}</span>
+    </template>
+    <template v-else>
+      <input type="text" v-model="row[head.name]" style="display: none;" :id="'id_'+head.name" :name="head.name">
 
-    <div class="my-input" :style="mystyle">
+      <el-input class="type-input" size="small" :style="mytype_style" v-if="head.type_input" :placeholder="head.placeholder" v-model="row[head.name]">
+        <el-button @click="open_win" slot="append" icon="el-icon-search"></el-button>
+      </el-input>
+      <div v-else class="my-input" :style="mystyle">
 
-      <el-tag :closable=" can_clear" v-if="row[head.name]"
-              size="small"
-              @close="clear()">
-        <span  v-text="label"></span>
-      </el-tag>
-      <div v-else>
+        <el-tag :closable=" can_clear" v-if="row[head.name]"
+                size="small"
+                @close="clear()">
+          <span  v-text="label"></span>
+        </el-tag>
+        <div v-else>
 
+        </div>
+
+        <span v-if="!head.readonly" class="clickable" @click="open_win"><i class="fa fa-search"></i></span>
       </div>
-
-      <span v-if="!head.readonly" class="clickable" @click="open_win"><i class="fa fa-search"></i></span>
-
-    </div>
-
-
+    </template>
     <!--<span v-if="show_search" class="clickable" @click="open_win"><i class="fa fa-search"></i></span>-->
   </div>
 </template>
@@ -30,6 +35,11 @@ export  default  {
         if (this.head.width){
           return {width:this.head.width}
         }
+    },
+    mytype_style(){
+      if (this.head.width){
+        return {'--width':this.head.width}
+      }
     },
     label:function(){
       return this.row['_'+this.head.name+'_label']
@@ -123,5 +133,13 @@ export  default  {
   .clickable{
     padding: 5px;
   }
+}
+.type-input{
+  /deep/{
+    .el-input__inner{
+      width: var(--width);
+    }
+  }
+
 }
 </style>

@@ -36,7 +36,7 @@ require('./scss/form_one.scss')
   </div>
 </template>
 <script>
-
+import {mix_fields_data} from "../mix/mix_fields_data";
 
 export default {
     props:['ctx'],
@@ -53,10 +53,11 @@ export default {
         var data_row = ex.copy(this.ctx.row  || def_row )
         var self=this
         var childStore = new Vue({
-        data:{
-            vc:self
-            }
-        })
+              data:{
+                  vc:self,
+                  name:'form-one'
+                  }
+              })
         var parStore = ex.vueParStore(this)
         return {
           head:this.ctx,
