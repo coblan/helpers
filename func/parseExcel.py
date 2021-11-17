@@ -55,7 +55,7 @@ class ExcelFields(ModelFields):
                    ctx.row.par_row_pk = scope.ps.vc.par_row.pk
                 }
                 return cfg.pop_vue_com('com-form-one',ctx)
-            }).then(()=>{
+            }).then((resp)=>{
                scope.ps.search()
             })
         '''%{'director_name':self_director_name}
@@ -127,6 +127,8 @@ class ExcelFields(ModelFields):
             model.objects.bulk_create(out_list)
         except Exception as e:
             raise UserWarning(str(e))
+    
+
 
 @director_view('func.get_excel_head')
 def get_excel_head(url):
