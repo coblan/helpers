@@ -13,6 +13,8 @@ from urllib.parse import urljoin
 import hashlib
 import re
 from django.views.decorators.csrf import csrf_exempt
+from helpers.director.base_data import director
+import time
 
 class BasicReciever(object):
     
@@ -78,6 +80,7 @@ class BasicReciever(object):
         file_url=urljoin(settings.MEDIA_URL, 'general_upload/{file_name}'.format(file_name=file_name))
         return  file_url
 
+
 class GeneralUpload(BasicReciever):
     """
     @path: media的相对路径
@@ -125,9 +128,49 @@ class GeneralUpload(BasicReciever):
             return mt.group(1)
         else:
             return fl_name    
-    
-    
 
+def get_md5(text):
+    m = hashlib.md5()   
+    m.update(text.encode('utf-8'))  
+    mid_name = m.hexdigest()
+    return mid_name
+    
+class BigFileRecieve(GeneralUpload):
+    def asView(self,request):
+        self.request = request
+        file_dict = request.FILES
+        file_url_list=[]
+
+        for name, fl in file_dict.items():
+            keepname = request.GET.get('keepname','tm-name')
+            if keepname=='overwrite':
+                file_name = fl.name
+            elif keepname=='overwrite-md5':
+                sufix = self.getSufix(fl)
+                file_name = get_md5(fl.name)+'.'+ sufix 
+            elif keepname=='tm-name':
+                file_name = '%s_%s'%(int( time.time()%1000000),fl.name)
+            elif keepname =='tm-md5':
+                sufix = self.getSufix(fl)
+                file_name = '%s_%s.%s'%(int( time.time()%1000000),get_md5( fl.name),sufix )
+            par_dir = self.getParDir()
+            file_path = os.path.join(par_dir,file_name)            
+            absolut_par_path = os.path.join( settings.MEDIA_ROOT, par_dir)
+            try:
+                os.makedirs(absolut_par_path)
+            except os.error as e:
+                print(e)   
+            absolut_file_path =os.path.join(absolut_par_path,file_name)
+            with open(absolut_file_path,'wb') as general_file:
+                for chunk in fl.chunks():
+                    general_file.write(chunk)                
+            file_url = self.getFileUrl(file_path)
+            file_url_list.append(file_url)
+        return HttpResponse(json.dumps(file_url_list),content_type="application/json")
+
+director.update({
+    'big-file-saver':BigFileRecieve
+})
 #class RecieverWithTimeSplit(BasicReciever):
     #def getParDir(self):
         #today = datetime.today().date()
