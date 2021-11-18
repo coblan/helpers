@@ -42,7 +42,6 @@ class ExcelFields(ModelFields):
         var ctx = named_ctx["%(director_name)s"]
         ex.uploadfile({accept:".xlsx, .xls, .csv"})
             .then((resp)=>{
-               debugger;
                if(scope.ps.vc.par_row){
                   return ex.director("%(director_name)s").call("parse_excel_head",{url:resp[0],par_row:scope.ps.vc.par_row.pk})
                }else{
