@@ -11,6 +11,9 @@ from .model_func.dictfy import delete_related_query
 from .base_data import director_transaction 
 from django.db import transaction
 from . views import tranactionDbs
+from django.utils import timezone
+import os
+from django.conf import settings
 
 def director_save_row(row):
      #rt_dc = save_row(row,user,request)
@@ -145,4 +148,15 @@ def del_rows(row):
      fields_cls = director.get(row.get('_director_name'))
      fields_obj = fields_cls(row)
      fields_obj.del_form()
-    
+
+@director_view('d.gen_excel')
+def get_excel(director_name,search_args): 
+     table_cls = director.get(director_name)
+     table_obj = table_cls.gen_from_search_args(search_args)
+     wb = table_obj.get_excel()
+     fl_name = director_name.replace('.', '_')
+     now = timezone.now().strftime('%Y_%m_%d_%H_%M_%S')
+     fl_name =  '%s_%s.xlsx' % (fl_name, now)
+
+     wb.save(filename = os.path.join(settings.MEDIA_ROOT, 'gen_files', fl_name))
+     return {'file_url': '/media/gen_files/%s' % fl_name,}

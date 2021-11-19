@@ -34,7 +34,8 @@ class ExcelFields(ModelFields):
     def get_front_action(self,):
         """
         发送到前端执行的代码。
-        `ctx.row.par_row_pk = scope.ps.vc.par_row.pk` 用于从前端环境提取变量信息，可以overwrite该行代码
+        `ctx.row.par_row_pk = scope.ps.vc.par_row.pk` 用于从前端环境提取变量信息，可以overwrite该行代码,
+        如果由主界面table点击row跳转到tab.table再进行导出，可能会用到这个字段
         """
         self_director_name = self.get_director_name()
 
