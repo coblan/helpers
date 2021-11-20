@@ -54,7 +54,7 @@ class ExcelFields(ModelFields):
                 if(scope.ps.vc.par_row){
                    ctx.row.par_row_pk = scope.ps.vc.par_row.pk
                 }
-                return cfg.pop_vue_com('com-form-one',ctx)
+                return cfg.pop_vue_com('com-form-one',ctx,{title:'字段对照(左边为系统预设名，右边为当前excel首行字段名)'})
             }).then((resp)=>{
                scope.ps.search()
             })
