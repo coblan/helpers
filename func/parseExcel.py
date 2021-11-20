@@ -34,7 +34,8 @@ class ExcelFields(ModelFields):
     def get_front_action(self,):
         """
         发送到前端执行的代码。
-        `ctx.row.par_row_pk = scope.ps.vc.par_row.pk` 用于从前端环境提取变量信息，可以overwrite该行代码
+        `ctx.row.par_row_pk = scope.ps.vc.par_row.pk` 用于从前端环境提取变量信息，可以overwrite该行代码,
+        如果由主界面table点击row跳转到tab.table再进行导出，可能会用到这个字段
         """
         self_director_name = self.get_director_name()
 
@@ -42,7 +43,6 @@ class ExcelFields(ModelFields):
         var ctx = named_ctx["%(director_name)s"]
         ex.uploadfile({accept:".xlsx, .xls, .csv"})
             .then((resp)=>{
-               debugger;
                if(scope.ps.vc.par_row){
                   return ex.director("%(director_name)s").call("parse_excel_head",{url:resp[0],par_row:scope.ps.vc.par_row.pk})
                }else{
@@ -54,7 +54,7 @@ class ExcelFields(ModelFields):
                 if(scope.ps.vc.par_row){
                    ctx.row.par_row_pk = scope.ps.vc.par_row.pk
                 }
-                return cfg.pop_vue_com('com-form-one',ctx)
+                return cfg.pop_vue_com('com-form-one',ctx,{title:'字段对照(左边为系统预设名，右边为当前excel首行字段名)'})
             }).then((resp)=>{
                scope.ps.search()
             })

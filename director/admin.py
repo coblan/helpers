@@ -38,6 +38,7 @@ from helpers.func.sim_signal import sim_signal
 from .base_data import inspect_dict
 from . import model_adapte
 from django.conf import settings 
+from .network import download_excel
 
 # 定制User表的显示方式
 def get_first_name(self):
