@@ -18,7 +18,8 @@ from helpers.func.d_import import import_element
 
 class LoginFormPage(FieldsPage):
     template = 'authuser/login.html'
-    
+    need_login = False # 如果不设置这里，engine会不断的跳转到登录界面,无法执行后面的内容 
+    need_staff = False # 不设置这里， engin跳不过去
     def get_heads(self): 
         return [
             {'name':'username','editor':'linetext','autofocus':True,'placeholder':_('用户名')},
@@ -42,6 +43,7 @@ class LoginFormPage(FieldsPage):
         
         ctx.update(dc)
         return ctx
+    
 
 @director_view('username/login')
 def login(username , password):
