@@ -16,6 +16,20 @@ from django.utils.translation import gettext as _
 from django.conf import settings
 from helpers.func.d_import import import_element
 
+#class LoginFormPage(FieldsPage):
+    #template = 'director/web.html'
+    #need_login = False # 如果不设置这里，engine会不断的跳转到登录界面,无法执行后面的内容 
+    #need_staff = False # 不设置这里， engin跳不过去
+    
+    #def getExtraJs(self,ctx):
+        #return ['authuser']
+    #def get_context(self):
+        #return {
+            #'editor':'login-form-jb',
+            #'editor_ctx':{}
+        #}
+    
+   
 class LoginFormPage(FieldsPage):
     template = 'authuser/login.html'
     need_login = False # 如果不设置这里，engine会不断的跳转到登录界面,无法执行后面的内容 
