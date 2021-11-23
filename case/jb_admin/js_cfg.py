@@ -65,7 +65,9 @@ def get_lib(request):
         #'nice_validator': 'https://cdn.bootcss.com/nice-validator/1.1.3/jquery.validator.min.js?local=zh-CN',
         #'nice_validator_css': 'https://cdn.bootcss.com/nice-validator/1.1.3/jquery.validator.min.css',
 
-        #'adminlte': 'https://cdn.bootcss.com/admin-lte/2.4.3/js/adminlte.min.js',
+        'adminlte': '/static/lib/adminlte2.4.10/dist/js/adminlte.min.js',
+        'adminlte_css': '/static/lib/adminlte2.4.10/dist/css/AdminLTE.min.css',
+        'adminlte_them_css':'/static/lib/adminlte2.4.10/dist/css/skins/_all-skins.min.css',        
         #'adminlte_css': 'https://cdn.bootcss.com/admin-lte/2.4.3/css/AdminLTE.min.css',
         #'adminlte_blue_css': 'https://cdn.bootcss.com/admin-lte/2.4.3/css/skins/skin-blue.min.css',
         
@@ -80,6 +82,9 @@ def get_lib(request):
         'jb_admin': static_url( 'js/jb_admin.pack.js?t=%s&t2=123'%js_stamp_dc.get('jb_admin_pack_js') ),
         #'swiper': 'https://cdn.bootcss.com/Swiper/4.3.0/js/swiper.min.js',
         #'swiper_css': 'https://cdn.bootcss.com/Swiper/4.3.0/css/swiper.min.css',  
+        'select2':'/static/lib/select2-4.0.10/dist/js/select2.min.js',
+        'select2_css':'/static/lib/select2-4.0.10/dist/css/select2.min.css',
+        
         'swiper': '/static/lib/swiper/js/swiper.min.js',
         'swiper_css': '/static/lib/swiper/css/swiper.min.css',  
         'echarts':'/static/lib/echarts.min.js',
@@ -93,6 +98,7 @@ def get_lib(request):
         'selectizejs_css':'https://cdn.jsdelivr.net/npm/selectize@0.12.6/dist/css/selectize.default.css',
         'cropper_css':'/static/lib/cropper2.3.4.min.css',
         'cropper':'/static/lib/cropper2.3.4.min.js',
+        'composition_api':'/static/lib/vue_lib/composition-api@1.0.0-rc.11',
         'vuedraggable':'https://cdn.jsdelivr.net/npm/vuedraggable@2.24.1/dist/vuedraggable.umd.min.js',# 'https://cdnjs.cloudflare.com/ajax/libs/Vue.Draggable/2.20.0/vuedraggable.umd.min.js'
     }
     if request.META['ACCESS_FROM_INTERNET']:
@@ -142,6 +148,7 @@ def get_lib(request):
             'velocity':'https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.min.js',
             'animate_css':'https://cdn.jsdelivr.net/npm/animate.css@3.7.2/animate.min.css',
             'wow':'https://cdn.jsdelivr.net/npm/wow.js@1.2.2/dist/wow.min.js',
+            'composition_api':'https://cdn.jsdelivr.net/npm/@vue/composition-api@1.0.0-rc.11',
         })
         
         if not settings.DEBUG:
