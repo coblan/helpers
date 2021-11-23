@@ -1,4 +1,4 @@
-from helpers.director.shortcut import FieldsPage, ModelFields, director,director_view
+from helpers.director.shortcut import FieldsPage, ModelFields, director,director_view,page_dc
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext as _
 from .validate_code import faseGetDataUrl
@@ -313,7 +313,12 @@ class LogOutPage(object):
     #'do_login': LoginFormPage.do_login,
 #})
 
+# [TODO] 后面会放弃使用 auth_page_dc
 auth_page_dc .update({
     'login': LoginFormPage,
     'logout': LogOutPage,
+})
+page_dc.update({
+    'login': LoginFormPage,
+    'logout': LogOutPage,    
 })

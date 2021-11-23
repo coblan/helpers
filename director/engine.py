@@ -63,8 +63,10 @@ class BaseEngine(object):
     mini_brand = 'AdSys'
     title = 'Admin'
     prefer='pc'
-    login_url=getattr( settings,'LOGIN_URL','/accounts/login')
-    logout_url = '/accounts/logout'
+    login_url=getattr( settings,'LOGIN_URL','/pc/login')
+    logout_url = '/pc/logout?next=/'
+    #login_url=getattr( settings,'LOGIN_URL','/accounts/login')
+    #logout_url = '/accounts/logout'
     need_login = True
     menu_search = True
     ui_theme='skin-blue'
