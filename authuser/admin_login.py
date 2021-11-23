@@ -17,32 +17,48 @@ from django.conf import settings
 from helpers.func.d_import import import_element
 
 class LoginFormPage(FieldsPage):
-    template = 'authuser/login.html'
+    template = 'director/web.html'
     need_login = False # 如果不设置这里，engine会不断的跳转到登录界面,无法执行后面的内容 
     need_staff = False # 不设置这里， engin跳不过去
-    def get_heads(self): 
-        return [
-            {'name':'username','editor':'linetext','autofocus':True,'placeholder':_('用户名')},
-            {'name':'password','editor':'password','placeholder':_('用户密码'),},
-        ]
     
-    def get_context(self): 
-        ctx = super().get_context()
-        next_url= self.request.GET.get('next','/')
-        dc={
-            'page_cfg': {     
-                'next':next_url,
-                'title': _('用户登录'),
-                'subtitle': _('欢迎登录后台管理系统'),
-                #'regist_url': '%s/regist' % self.engin.engin_url,
-                'copyright': 'Copyright @%s  All Right Reserve'%timezone.now().year,
-                'heads': self.get_heads(),
-                'login_item': _('用户名'),
-                },
-        } 
+    def getExtraJs(self,ctx):
+        return ['authuser']
+    def get_context(self):
+        return {
+            'editor':getattr(self.engin,'login_com', 'login-form-jb'),
+            'editor_ctx':{
+                
+            }
+        }
+    
+   
+#class LoginFormPage(FieldsPage):
+    #template = 'authuser/login.html'
+    #need_login = False # 如果不设置这里，engine会不断的跳转到登录界面,无法执行后面的内容 
+    #need_staff = False # 不设置这里， engin跳不过去
+    #def get_heads(self): 
+        #return [
+            #{'name':'username','editor':'linetext','autofocus':True,'placeholder':_('用户名')},
+            #{'name':'password','editor':'password','placeholder':_('用户密码'),},
+        #]
+    
+    #def get_context(self): 
+        #ctx = super().get_context()
+        #next_url= self.request.GET.get('next','/')
+        #dc={
+            #'page_cfg': {     
+                #'next':next_url,
+                #'title': _('用户登录'),
+                #'subtitle': _('欢迎登录后台管理系统'),
+                ##'regist_url': '%s/regist' % self.engin.engin_url,
+                #'copyright': 'Copyright @%s  All Right Reserve'%timezone.now().year,
+                #'heads': self.get_heads(),
+                #'login_item': _('用户名'),
+                #},
+        #} 
         
-        ctx.update(dc)
-        return ctx
+        #ctx.update(dc)
+        #return ctx
     
 
 @director_view('username/login')

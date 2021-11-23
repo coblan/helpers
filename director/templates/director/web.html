@@ -1,0 +1,60 @@
+{% extends "pcweb/base.html" %}
+
+{% load static %}
+{% load jsonify %}
+
+
+{% block page_body %}
+<link href="{{ js_config.js_lib.element_css }}" rel="stylesheet">
+<script src="{{ js_config.js_lib.element }}"></script>
+<script src="{{ js_config.js_lib.layer }}"></script>
+
+<script>
+    editor= {{ editor | jsonify }}
+    editor_ctx ={{ editor_ctx | jsonify }}
+
+    $(function(){
+        live_root_store =  new Vue({
+            data(){
+                return {
+                    option:{},
+                }
+            }
+        })
+
+        live_root=new Vue({
+            el:'#main-panel',
+            data: function(){
+                var self =this
+                var childStore =live_root_store
+                childStore.vc = this
+                window.root_store= childStore
+                return {
+                    childStore:childStore,
+                    editor:editor,
+                    editor_ctx:editor_ctx,
+                }
+            },
+        })
+    })
+
+
+</script>
+<style>
+    /*body{*/
+    /*    font-size: 1.3rem;*/
+    /*}*/
+    #main-panel{
+        position: relative;
+        width: 100%;
+    }
+</style>
+<div id="main-panel">
+    <component :is="editor" :ctx="editor_ctx"></component>
+</div>
+
+{% block page_content %}
+
+{% endblock %}
+
+{% endblock %}

@@ -9,6 +9,7 @@ require('./scss/layer.scss')
 require('./scss/my_bootstrap.scss')
 
 require('./styl/adminlte.styl')
+require('weblib/pc/style/element_ex.scss')
 
 import * as config from  './config.js'
 //table mix
