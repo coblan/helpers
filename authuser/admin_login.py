@@ -25,7 +25,7 @@ class LoginFormPage(FieldsPage):
         return ['authuser']
     def get_context(self):
         return {
-            'editor':'login-form-jb',
+            'editor':getattr(self.engin,'login_com', 'login-form-jb'),
             'editor_ctx':{
                 
             }
