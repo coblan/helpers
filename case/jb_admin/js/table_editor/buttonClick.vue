@@ -1,5 +1,5 @@
 <template>
-  <div class="button-click"  style="display: inline-block">
+  <div class="button-click light-sea-green"  style="display: inline-block">
     <el-button type="goon" @click="on_click()" size="mini">{{head.button_label}}</el-button>
   </div>
 </template>
@@ -33,24 +33,25 @@ export  default  {
 }
 </script>
 <style scoped lang="scss">
-.el-button--goon.is-active,
-.el-button--goon:active {
-  background: #20B2AA;
-  border-color: #20B2AA;
-  color: #fff;
-}
-
-.el-button--goon:focus,
-.el-button--goon:hover {
-  background: #48D1CC;
-  border-color: #48D1CC;
-  color: #fff;
-}
-
-.el-button--goon {
-  color: #FFF;
-  background-color: #20B2AA;
-  border-color: #20B2AA;
-}
+// 转移到  weblib/pc/style/element_ex.scss   class=light-sea-green
+//.el-button--goon.is-active,
+//.el-button--goon:active {
+//  background: #20B2AA;
+//  border-color: #20B2AA;
+//  color: #fff;
+//}
+//
+//.el-button--goon:focus,
+//.el-button--goon:hover {
+//  background: #48D1CC;
+//  border-color: #48D1CC;
+//  color: #fff;
+//}
+//
+//.el-button--goon {
+//  color: #FFF;
+//  background-color: #20B2AA;
+//  border-color: #20B2AA;
+//}
 
 </style>

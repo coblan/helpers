@@ -113,12 +113,12 @@
                     ex.director_call('do_login',{row:this.row},function (resp) {
                         cfg.hide_load()
                         if(resp.success){
-                            if(parent.root_page){
+                             if(page_cfg.next){
+                                location=decodeURIComponent(page_cfg.next) ;
+                            }else if(parent.root_page){
                                 // 手机版里面，iframe内容直接跳转到首页
                                 parent.location= parent.root_page
-                            }else if(page_cfg.next){
-                                location=decodeURIComponent(page_cfg.next) ;
-                            }else{
+                            } else{
                                 location = '/'
                             }
                         }else if(resp.validate_img){

@@ -1,7 +1,7 @@
 var order_list =  {
     props:['row','head'],
     template:`<div class="com-field-table-list">
-    <div>
+    <div v-if="!head.readonly">
         <button @click="add_new()" class="btn btn-default btn-xs" v-if="head.can_create!=undefined?head.can_create:true">
             <i style="color: green" class="fa fa-plus-circle"></i>
         </button>
@@ -125,17 +125,21 @@ var order_list =  {
         add_new:function(){
             var self = this
             self.crt_row = {}
-
+            if(self.head.preset_express){
+                var preset = ex.eval(self.head.preset_express,{head:self.head,par_row:this.row})
+            }else{
+                var preset = {}
+            }
             var fields_ctx={
                 heads:self.head.fields_heads,
                 ops_loc:'bottom',
-                //extra_mixin:[],
                 save_express:'scope.vc.$emit("finish",scope.vc.row);rt=Promise.resolve(scope.vc.row)',
                 ops:[{
                     'name':'save','editor':'com-field-op-btn','label':'确定', 'icon': 'fa-save',
                 }],
                 genVc:self,
-                par_row:this.row,
+                par_row:self.row,
+                preset:preset,
             }
             cfg.pop_vue_com('com-form-one',fields_ctx).then((row)=>{
                 if(row){
@@ -143,7 +147,9 @@ var order_list =  {
                 }else{
                    console.log('break form one')
                 }
-               
+                if(self.head.after_save_express){
+                    ex.eval(self.head.after_save_express,{row:row,vc:self})
+                }
             })
         },
         delete_rows:function(){

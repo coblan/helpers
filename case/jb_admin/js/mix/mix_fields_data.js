@@ -1,4 +1,4 @@
-var mix_fields_data ={
+export  var mix_fields_data ={
     data:function(){
         return {
             op_funs:{
@@ -91,7 +91,7 @@ var mix_fields_data ={
                     return false
                 }else if(head.show || head.show_express){
                     var show_express = head.show_express || head.show
-                    return ex.eval(show_express,{row:self.row,head:head})
+                    return ex.eval(show_express,{row:self.row,head:head,par_vc:self})
                 }else{
                     return true
                 }
@@ -232,9 +232,10 @@ var mix_fields_data ={
                         cfg.outdate_confirm(
                             rt._outdate,
                             function() {
-                                ex.director_call(self.row._director_name, {pk: self.row.pk}).then(resp=> {
-                                    ex.vueAssign(self.row, resp.row)
-                                })
+                                ex.update_row(self.row)
+                                // ex.director_call(self.row._director_name, {pk: self.row.pk}).then(resp=> {
+                                //     ex.vueAssign(self.row, resp.row)
+                                // })
                             },function(){
                                     self.row.meta_overlap_fields='__all__'
                                     self.submit()
