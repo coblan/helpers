@@ -47,8 +47,12 @@ export var obj_control={
     },
     update_rows(rows){
         var out_row=ex.map(rows,row=>{return {pk:row.pk,_director_name:row._director_name}})
-        return ex.director_call('d.get_row_form_db',{rows:out_row}).then((resp)=>{
-            this.update_rows(resp)
+        return ex.director_call('d.get_row_form_db',{rows:out_row}).then((resp_rows)=>{
+            
+            ex.each(rows,function(row){
+                var table_row = ex.findone(resp_rows,{pk:row.pk})
+                ex.vueAssign(row,table_row)
+            })
         })
     }
 }
