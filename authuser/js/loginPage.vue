@@ -3,7 +3,7 @@
     <imageDiv class="bg" src="/static/authuser/image/login_bg.jpg"></imageDiv>
     <div class="login-form">
       <div class="big-head">
-        用户登录1
+        用户登录
       </div>
       <div class="sub-title">
         <span class="sub-content">欢迎登录后台管理系统</span>
