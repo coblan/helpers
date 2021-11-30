@@ -1,7 +1,7 @@
 
 var my_link = {
     props:['rowData','field','index'],
-    template:`<a class="com-table-link clickable" :href="rowData[field]" v-text="rowData[field]"></a>`,
+    template:`<a class="com-table-link clickable" :href="rowData[field]" v-text="rowData[field]" target="_blank"></a>`,
     created:function(){
         // find head from parent table
         var table_par = this.$parent
