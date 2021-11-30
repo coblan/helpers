@@ -63,7 +63,7 @@ class BaseEngine(object):
     mini_brand = 'AdSys'
     title = 'Admin'
     prefer='pc'
-    login_url=getattr( settings,'LOGIN_URL','/pc/login')
+    login_url= '/pc/login' # getattr( settings,'LOGIN_URL','/pc/login')
     logout_url = '/pc/logout?next=/'
     #login_url=getattr( settings,'LOGIN_URL','/accounts/login')
     #logout_url = '/accounts/logout'
@@ -73,7 +73,7 @@ class BaseEngine(object):
     home = '/' # 当前engine的主页，没有目的的时候，可以往这里跳
     
     root_page='/'   # 被home 替代了
-    access_from_internet = getattr(settings,'ACCESS_FROM_INTERNET',False)
+    access_from_internet = True # getattr(settings,'ACCESS_FROM_INTERNET',False)
     need_staff = False
     
     @classmethod
