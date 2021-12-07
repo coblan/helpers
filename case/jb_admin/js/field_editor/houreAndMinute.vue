@@ -1,13 +1,24 @@
 <template>
-  <div>
-    <input type="text" @keypress="isNumber($event)">小时
-    <input type="text">分钟
+  <div class="hour-and-minute">
+    <input type="text"  v-model="row[head.name]"
+           :id="'id_'+head.name" :name="head.name" style="display: none;">
+
+    <elInt class="hour-input" size="small" type="text" @keypress="isNumber($event)" v-model="my_hour"></elInt><span style="white-space: nowrap">小时</span>
+    <el-select style="width:100px"  size="small" v-model="minute" >
+      <el-option
+          v-for="item in options"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value">
+      </el-option>
+    </el-select>
+    <span style="white-space: nowrap">分钟</span>
   </div>
 
 </template>
 
 <script>
-import  elint from 'weblib/pc/fields/'
+import  elInt from 'weblib/pc/fields/elInt.vue'
 // import lineText from './lineText.vue'
 // import {LineTextLogic} from './lineText.vue'
 
@@ -35,12 +46,41 @@ import  elint from 'weblib/pc/fields/'
 // }
 
 export default {
+  components:{
+    elInt,
+  },
   props:['row','head'],
   data(){
 //            Vue.set(this.row,this.head.name,this.row[this.head.name] || '')
+    var options= []
+    for(var i =1;i<60;i++){
+      options.push({value:i,label:i})
+    }
     return {
+      my_hour:'',
+      minute:'',
+      options:options
 //              mydata:this.row[this.head.name]
     }
+  },
+  computed:{
+    mydata(){
+      return  this.row[this.head.name]
+    }
+  },
+  watch:{
+    my_hour(nv){
+      this.readOutData()
+    },
+    minute(){
+      this.readOutData()
+    },
+    mydata(nv){
+      this.writeInData()
+    }
+  },
+  mounted(){
+    this.writeInData()
   },
   // setup(props){
   //   if(props.extendLogic){
@@ -51,6 +91,22 @@ export default {
   //
   // },
   methods:{
+    readOutData(){
+      this.row[this.head.name] = 0
+      if(this.my_hour){
+        this.row[this.head.name] = this.my_hour * 60
+      }
+      if(this.minute){
+        this.row[this.head.name] += this.minute
+      }
+    },
+    writeInData(){
+      var vv = this.row[this.head.name]
+      if(vv){
+          this.my_hour = parseInt(vv/60)
+          this.minute = parseInt(vv%60)
+      }
+    },
     isNumber(evt){
       evt = (evt) ? evt : window.event;
       var charCode = (evt.which) ? evt.which : evt.keyCode;
@@ -68,9 +124,19 @@ export default {
         return evt.preventDefault();
       }
     }
-//            on_blur(){
-//                this.row[this.head.name] =
-//            },
   }
 }
 </script>
+<style scoped lang="scss">
+.hour-and-minute{
+  display: flex;
+  align-items: center;
+
+  .hour-input{
+    width: 100px;;
+  }
+  /deep/ input{
+    width: 90%;
+  }
+}
+</style>

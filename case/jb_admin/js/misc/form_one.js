@@ -14,11 +14,13 @@ export  var fields_all_in_one={
         }
         var data_row = ex.copy(this.ctx.row  || def_row )
         var self=this
-        var childStore = new Vue({
-            data:{
-                vc:self
-            }
-        })
+        // var childStore = new Vue({
+        //     data:{
+        //         vc:self,
+        //         name:'form-one'
+        //     }
+        // })
+        var childStore = {vc:this,name:'form-one',}
         var parStore = ex.vueParStore(this)
         return {
             head:this.ctx,

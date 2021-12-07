@@ -222,7 +222,6 @@ export  var mix_fields_data ={
                     delete self.row.meta_change_fields
 
                     var rt = resp //resp.save_row
-                    debugger
                     if(rt.errors){
                         //cfg.hide_load()
                         self.setErrors(rt.errors)

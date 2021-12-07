@@ -79,6 +79,16 @@
         watch:{
             my_value:function(v){
                 this.$emit('input',v)
+              if(this.head.update_label){
+                var item = ex.findone(this.options,{value:v})
+                if(item){
+                  this.row[`_${this.head.name}_label`] = item.label
+                }else{
+                  this.row[`_${this.head.name}_label`] =''
+                }
+
+              }
+
                 Vue.nextTick(()=>{
                   $(this.$el).find(`input`).trigger("validate")
                 })
