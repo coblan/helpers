@@ -37,8 +37,8 @@ import  baseLine from './baseLine.vue'
 import  number from './number.vue'
 import singleCheckbox from "./singleCheckbox.vue";
 import pop_table_select from './pop_table_select.vue'
+import  inputOrUpload from './inputOrUpload.vue'
 import houreAndMinute from "./houreAndMinute.vue";
-
 Vue.component('com-field-blocktext',blocktext)
 Vue.component('com-field-radio',radio)
 Vue.component('com-field-int',int_field)

@@ -30,7 +30,7 @@ export var com_file_uploader = {
     </div>
 
     <div class="wrap">
-           <a v-for="pic in pictures" :href="pic"><span  v-text="pic"></span></a>
+           <a v-for="pic in pictures" :href="pic" target="_blank"><span  v-text="pic"></span></a>
     </div>
 
      <!--<component v-if="cfg.com_btn && ! readonly" :is="cfg.com_btn" @click.native="browse()"></component>-->

@@ -7,52 +7,49 @@
 </template>
 
 <script>
-import lineText from './lineText.vue'
-import {LineTextLogic} from './lineText.vue'
+import  elint from 'weblib/pc/fields/'
+// import lineText from './lineText.vue'
+// import {LineTextLogic} from './lineText.vue'
 
-export class IntInputLogic extends LineTextLogic{
-  constructor(){
-    super()
-    this.fv_rule=';integer'
-  }
-  getSetup(props){
-    if(this.fv_rule){
-      if(props.head.fv_rule){
-        var fv_rule= props.head.fv_rule + this.fv_rule
-      }else{
-        var fv_rule=  this.fv_rule
-      }
-      Vue.set(props.head,'fv_rule',fv_rule) //  props.head.fv_rule = this.fv_rule
-    }
-    var dc = super.getSetup(props)
-    Object.assign(dc,{
-      isNumber:this.isNumber
-    })
-    return dc
-  }
-
-}
+// export class IntInputLogic extends LineTextLogic{
+//   constructor(){
+//     super()
+//     this.fv_rule=';integer'
+//   }
+//   getSetup(props){
+//     if(this.fv_rule){
+//       if(props.head.fv_rule){
+//         var fv_rule= props.head.fv_rule + this.fv_rule
+//       }else{
+//         var fv_rule=  this.fv_rule
+//       }
+//       Vue.set(props.head,'fv_rule',fv_rule) //  props.head.fv_rule = this.fv_rule
+//     }
+//     var dc = super.getSetup(props)
+//     Object.assign(dc,{
+//       isNumber:this.isNumber
+//     })
+//     return dc
+//   }
+//
+// }
 
 export default {
-  props:['row','head','extendLogic'],
-  components:{
-    lineText,
-  },
+  props:['row','head'],
   data(){
 //            Vue.set(this.row,this.head.name,this.row[this.head.name] || '')
     return {
 //              mydata:this.row[this.head.name]
     }
   },
-  setup(props){
-    if(props.extendLogic){
-      return new  props.extendLogic().getSetup(props)
-    }else{
-      return  new IntInputLogic().getSetup(props)
-    }
-
-
-  },
+  // setup(props){
+  //   if(props.extendLogic){
+  //     return new  props.extendLogic().getSetup(props)
+  //   }else{
+  //     return  new IntInputLogic().getSetup(props)
+  //   }
+  //
+  // },
   methods:{
     isNumber(evt){
       evt = (evt) ? evt : window.event;

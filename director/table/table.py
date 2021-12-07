@@ -378,6 +378,7 @@ class ModelTable(object):
     simple_dict = False
     export_related = True
     button_edit = False
+    allow_delete = False
     def __init__(self,page=1,row_sort=[],row_filter={},row_search= '',crt_user=None,perpage=None,**kw):
         """
         kw['search_args']只是一个记录，在获取到rows时，一并返回前端页面，便于显示。
@@ -996,7 +997,7 @@ class ModelTable(object):
                  'icon':'el-icon-delete',
                  'row_match':'many_row',
                  'disabled':'!scope.ps.has_select', 
-                 'visible': self.permit.can_del(),},
+                 'visible': self.permit.can_del() and self.allow_delete ,},
                 refresh_action,
                 ]     
         
