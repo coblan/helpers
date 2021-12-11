@@ -38,6 +38,7 @@
                 cfg: inn_config,
                 parStore:ex.vueParStore(this),
                 options:this.head.options || [],
+
             }
         },
         mounted: function () {
@@ -48,14 +49,14 @@
             var self=this
             // 兼容老的调用,新的请在 on_mounted 里面调用
             // remote_options 只用在初始化的时候，请求远端服务器获取options。如果需要动态切换options，请设置 director_name 。
-            // TODO 清楚这段代码
+            // TODO 清除这段代码
             if(this.head.remote_options){
                 ex.director_call(this.head.remote_options,{crt_value:this.row[this.head.name]},function(resp){
                     self.head.options=resp
                     self.options = resp
                 })
             }
-            // TODO 清楚这段代码
+            // TODO 清除这段代码
             if(this.head.on_mounted){
                 ex.eval(this.head.on_mounted,{vc:this})
             }
@@ -64,7 +65,7 @@
                 ex.eval(this.head.mounted_express,{vc:this})
             }
             // 这种方式，一般是与filter共用options的时候
-            // TODO 清楚这段代码。用 mounted_express 代替
+            // TODO 清除这段代码。用 mounted_express 代替
             if(this.head.ctx_name){
                 self.head.options = named_ctx[this.head.ctx_name]
             }
@@ -78,7 +79,7 @@
 
         watch:{
             my_value:function(v){
-                this.$emit('input',v)
+              // this.$emit('input',v)
               if(this.head.update_label){
                 var item = ex.findone(this.options,{value:v})
                 if(item){
@@ -186,6 +187,7 @@
         },
         methods:{
             update_options:function(post_data){
+              // 废弃， 使用 mounted_express 替代
                 var self=this
                 if(this.head.director_name){
                     cfg.show_load()

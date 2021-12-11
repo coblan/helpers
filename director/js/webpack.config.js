@@ -19,6 +19,13 @@ module.exports =
         path:path.resolve(__dirname, '../static/js'),
         filename: '[name].pack.js'
     },
+    externals: {
+        'vue': 'Vue',
+        'vue-router': 'VueRouter',
+        'axios': 'axios',
+        'element-ui': 'Element',
+        'qs': 'Qs'
+    },
 
     watch: true,
     resolve:{
