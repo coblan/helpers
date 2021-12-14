@@ -36,6 +36,10 @@ require('./scss/form_one.scss')
   </div>
 </template>
 <script>
+/*
+*
+* 改造form_one.js 还未完成。
+* */
 import {mix_fields_data} from "../mix/mix_fields_data";
 
 export default {

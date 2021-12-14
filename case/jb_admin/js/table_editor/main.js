@@ -13,11 +13,12 @@ import * as rich_span from  './rich_span.js'
 import * as multi_row from  './multi_row.js'
 import * as color from  './color.js'
 import * as icon_cell from  './icon_cell.js'
-
+import hourAndMinute  from "./hourAndMinute.vue";
 import  com_tag from './tag_map.vue'
 import buttonClick  from "./buttonClick.vue";
 Vue.component('com-table-tag-map',com_tag)
 Vue.component('com-table-button-click',buttonClick)
+Vue.component('com-table-hour-and-minute',hourAndMinute)
 
 import * as table_input_main from './table_input/main'
 
