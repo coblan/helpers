@@ -160,9 +160,9 @@
         if(extra_table_logic){
             table_logic.mixins.push(window[extra_table_logic])
         }
-//        setTimeout(()=>{
-            table=new Vue(table_logic)
-//        },1000)
+
+        // table=new Vue(table_logic)
+        live_root = new Vue(table_logic)
 
 
     })
