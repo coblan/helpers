@@ -1,5 +1,8 @@
 require('./scss/cfg.scss')
-
+// require('weblib/style')
+// require('weblib/pc/style')
+import * as web_style from 'weblib/style'
+import * as pc_style from 'weblib/pc/style'
 import {pop_layer} from './cfg/pop_layer.js'
 
 $(document).ready(function () { }).keydown(
