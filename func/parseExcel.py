@@ -142,7 +142,12 @@ def get_excel_head(url):
         return parse_xls_head(path)
 
 def parse_xls_head(path):
-    data = xlrd.open_workbook(path)
+    # 2021/12/19，由于解析 .xls 报错，所以增加 encoding_override='gbk'。
+    # [TODO] 后面看看效果，如果解析其他excel报错，这里可能需要用try进行一定判断
+    if path.endswith('.xls'):
+        data = xlrd.open_workbook(path,encoding_override='gbk')
+    else:
+        data = xlrd.open_workbook(path)
     return data.sheets()[0].row_values(0)
 
 def parse_csv_head(path):

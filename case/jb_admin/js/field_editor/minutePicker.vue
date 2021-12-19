@@ -1,5 +1,5 @@
 <template>
-  <div :class="['com-field-minute','field-'+head.name,head.class]" >
+  <div  :class="['com-field-minute','field-'+head.name,head.class]" >
     <input v-if="!head.readonly" type="text" style="display: none"
            :id="'id_'+head.name"
            :name="head.name"
@@ -8,7 +8,9 @@
     <el-time-picker
         v-model="row[head.name]"
         value-format="HH:mm"
+        format="HH:mm"
         size="small"
+        editable
         :placeholder="head.placeholder || '请输入时间'">
     </el-time-picker>
   </div>
@@ -23,11 +25,13 @@ export  default  {
   },
   watch:{
     innvalue(v){
-      if(v.length > 10){
-        this.row[this.head.name] = v.slice(11)
-      }else{
-        this.row[this.head.name] = v
-      }
+      this.row[this.head.name] = v
+      // debugger
+      // if(v.length > 10){
+      //   this.row[this.head.name] = v.slice(11)
+      // }else{
+      //   this.row[this.head.name] = v
+      // }
     }
   },
   mounted(){
@@ -38,4 +42,15 @@ export  default  {
 }
 </script>
 
-Vue.component('com-field-time',time_field)
+<style scoped lang="scss">
+.com-field-minute{
+}
+
+</style>
+<!--<style lang="scss">-->
+<!--.field-minute{-->
+<!--  .el-time-spinner__wrapper:last-child{-->
+<!--    display: none;-->
+<!--  }-->
+<!--}-->
+<!--</style>-->
