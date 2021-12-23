@@ -17,10 +17,12 @@ import hourAndMinute  from "./hourAndMinute.vue";
 import  com_tag from './tag_map.vue'
 import buttonClick  from "./buttonClick.vue";
 import tableSpan from './tableSpan.vue'
+import ratioNumber from "./ratioNumber.vue";
 Vue.component('com-table-tag-map',com_tag)
 Vue.component('com-table-button-click',buttonClick)
 Vue.component('com-table-hour-and-minute',hourAndMinute)
 Vue.component('com-table-span',tableSpan)
+Vue.component('com-table-ratio-number',ratioNumber)
 import * as table_input_main from './table_input/main'
 
 /*
