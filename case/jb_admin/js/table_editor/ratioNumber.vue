@@ -35,7 +35,8 @@ export default {
   methods:{
     on_click:function(){
       if(this.head.click_express){
-        ex.eval(this.head.click_express,{row:this.rowData,head:this.head,ps:this.parStore})
+        debugger
+        ex.eval(this.head.click_express,{row:this.rowData,head:this.head,ps:this.parStore,vc:this})
       }
     }
   }
