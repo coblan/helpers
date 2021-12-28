@@ -131,7 +131,8 @@ export default {
     },
     save(){
     if(this.head.save_express){
-    return ex.eval(this.head.save_express,{vc:this})
+      var super_save = ()=>{mix_fields_data.methods.save.call(this)}
+    return ex.eval(this.head.save_express,{vc:this,super_save:super_save})
     }else{
     return  mix_fields_data.methods.save.call(this)
     }

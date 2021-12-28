@@ -1,5 +1,5 @@
 <template>
-  <span class="radio-number" v-text="show_text" @click="on_click()"></span>
+  <span class="ratio-number" v-text="show_text"></span>
 </template>
 <script>
 export default {
@@ -33,12 +33,12 @@ export default {
     this.parStore = ex.vueParStore(this)
   },
   methods:{
-    on_click:function(){
-      if(this.head.click_express){
-        debugger
-        ex.eval(this.head.click_express,{row:this.rowData,head:this.head,ps:this.parStore,vc:this})
-      }
-    }
+    // on_click:function(){
+    //   if(this.head.click_express){
+    //     debugger
+    //     ex.eval(this.head.click_express,{row:this.rowData,head:this.head,ps:this.parStore,vc:this})
+    //   }
+    // }
   }
 }
 </script>
