@@ -1,5 +1,6 @@
 <template>
-  <span class="table-span" v-text="show_text" @click="on_click()"></span>
+  <span class="table-span" v-text="show_text" ></span>
+<!--  @click="on_click()"-->
 </template>
 <script>
 export default {
@@ -34,11 +35,11 @@ export default {
     this.parStore = ex.vueParStore(this)
   },
   methods:{
-    on_click:function(){
-      if(this.head.click_express){
-        ex.eval(this.head.click_express,{row:this.rowData,head:this.head,ps:this.parStore})
-      }
-    }
+    // on_click:function(){
+    //   if(this.head.click_express){
+    //     ex.eval(this.head.click_express,{row:this.rowData,head:this.head,ps:this.parStore})
+    //   }
+    // }
   }
 }
 </script>
