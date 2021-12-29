@@ -3,20 +3,25 @@ export  function pop_layer (com_ctx,component_name,callback,layerConfig){
     // row,head ->//model_name,relat_field
 
     function  update_size(layero){
-        debugger
-        var total_height= $('#fields-pop-'+pop_id).parents('.layui-layer').height()
+        var total_height = layero.height()
         if(this.title){
-            $('#fields-pop-'+pop_id).parents('.layui-layer-content').height(total_height-42)
+            $(layero).children('.layui-layer-content').height(total_height-42)
         }else{
-            $('#fields-pop-'+pop_id).parents('.layui-layer-content').height(total_height)
+            $(layero).children('.layui-layer-content').height(total_height)
         }
+        // var total_height= $('#fields-pop-'+pop_id).parents('.layui-layer').height()
+        // if(this.title){
+        //     $('#fields-pop-'+pop_id).parents('.layui-layer-content').height(total_height-42)
+        // }else{
+        //     $('#fields-pop-'+pop_id).parents('.layui-layer-content').height(total_height)
+        // }
     }
 
     var pop_id =new Date().getTime()
     if(com_ctx.width && com_ctx.height){
         var psize =[com_ctx.width,com_ctx.height]
     } else {
-        var psize = get_proper_size()
+        var psize =  get_proper_size()
         if(com_ctx.width){
              psize=[com_ctx.width,psize[1]]
         }
@@ -32,6 +37,7 @@ export  function pop_layer (com_ctx,component_name,callback,layerConfig){
         zIndex:1000,
         resize:true,
         resizing: function(layero){
+            // console.log(layero)
             update_size.call(this,layero)
             // debugger
             // var total_height= $('#fields-pop-'+pop_id).parents('.layui-layer').height()
