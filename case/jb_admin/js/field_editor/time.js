@@ -11,6 +11,7 @@ var time_field={
                     v-model="row[head.name]"
                     value-format="HH:mm:ss"
                     size="small"
+                    editable
                     :placeholder="head.placeholder || '请输入时间'">
                    </el-time-picker>
               </div>`,

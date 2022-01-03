@@ -5,7 +5,9 @@ import {urlparse} from './urlparse.js'
 import * as path from './patch.js'
 import {cookie} from './cookie.js'
 import {obj_control} from  './obj'
-import {vuetool} from  './vuetools'
+
+import {vuetool} from 'weblib/ex/vuetools.js'
+// import {vuetool} from  './vuetools'
 import {code} from  './code'
 import {sortOrder} from  './order'
 import {layout} from  './layout'
@@ -17,7 +19,7 @@ import  * as defPromise from  './defPromise'
 import  {os} from  './os'
 import {localCatch} from  './catch'
 import {utile} from  './utile'
-
+import {get_validator} from 'weblib/ex/validator'
 import {collection} from  'weblib/ex/collection.js'
 var dayjs = require('dayjs')
 
@@ -50,6 +52,8 @@ ex.assign(ex,utile)
 ex.os = os
 ex.sortOrder=sortOrder
 ex.DefPromise = defPromise.default
+ex.vld = get_validator()
+
 //ex.md5=md5
 window.ex = ex
 

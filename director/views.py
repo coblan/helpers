@@ -145,7 +145,7 @@ def director_view(request,director_name):
     if request.method == "GET":
         return fast_director_view(request, director_name)
     
-    # 2021/8/18增加新的逻辑,可以对edit/customForm 这种直接映射
+    # 2021/8/18增加新的逻辑,可以对edit/customForm 这种直接映射为 /dapi/edit/mytable.edit
     kws = argument.get_argument(request,outtype='dict')
     if director_name.startswith('edit/'):
         directorEnt = director_views.get('d.save_row_for_front')

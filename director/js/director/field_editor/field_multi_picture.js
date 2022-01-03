@@ -11,11 +11,14 @@ Vue.component('com-field-multi-picture',{
                     <span class="center-vh" style="font-size: 300%;">+</span>
                 </div>
             </div>
-            <div class="img-wrap" v-for="(imgsrc,index) in row[head.name]" @click="big_win(imgsrc)">
-                <img class="center-vh" :src="imgsrc" alt="图片不能加载">
-                <div v-if="!head.readonly" class="close" @click='remove_image(index)'><i class="fa fa-times-circle" aria-hidden="true" style="color:red;position:relative;left:30px;"></i></div>
+            <div class="img-wrap" v-for="(imgsrc,index) in row[head.name]" >
+                <img class="center-vh" :src="imgsrc" alt="图片不能加载" @click="big_win(imgsrc)">
+                <div v-if="!head.readonly" class="close" @click='remove_image(index)'>
+                    <i class="fa fa-times-circle" aria-hidden="true" style="color:red;position:relative;left:30px;"></i>
+                </div>
             </div>
         </div>
+        
          <file-input v-if="!head.readonly" style="display: none"  v-model='img_files'
             accept='image/*'  multiple></file-input>
        	</div>`,
@@ -38,7 +41,9 @@ Vue.component('com-field-multi-picture',{
                 return
             }
             var up_url = this.head.up_url || '/d/upload?path=general_upload/images'
+            cfg.show_load('uploading...')
             fl.uploads(v,up_url,function(url_list){
+                cfg.hide_load()
                 if(!self.row[self.head.name]){
                     self.row[self.head.name] = url_list
                 }else{

@@ -28,7 +28,7 @@ class PlainFileProc(BaseFieldProc):
         head['config']={
             #'multiple':False,
             'accept':self.field.accept,
-            #'upload_url':'/d/upload?path=public/activity', 
+            'upload_url':'/d/upload?director=big-file-saver&split=date', 
            #'media\public\activity'
             #'upload_url':reverse('app_pkg_upload')
         }         

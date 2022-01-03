@@ -63,12 +63,14 @@ var order_list =  {
             var rows = []
         }
 
+        var self = this
         return {
             rows:rows,
             row_sort:{},
             heads:this.head.table_heads,
             selected:[],
             parStore:ex.vueParStore(this),
+            childStore:{name:'com-field-table-list',vc:self}
         }
 
     },
@@ -125,22 +127,33 @@ var order_list =  {
         add_new:function(){
             var self = this
             self.crt_row = {}
+            debugger
             if(self.head.preset_express){
                 var preset = ex.eval(self.head.preset_express,{head:self.head,par_row:this.row})
             }else{
                 var preset = {}
             }
-            var fields_ctx={
-                heads:self.head.fields_heads,
-                ops_loc:'bottom',
-                save_express:'scope.vc.$emit("finish",scope.vc.row);rt=Promise.resolve(scope.vc.row)',
-                ops:[{
-                    'name':'save','editor':'com-field-op-btn','label':'确定', 'icon': 'fa-save',
-                }],
-                genVc:self,
-                par_row:self.row,
-                preset:preset,
+            if(this.head.fields_ctx){
+                var fields_ctx = this.head.fields_ctx
+                Object.assign(fields_ctx,{
+                    genVc:self,
+                    par_row:self.row,
+                    preset:preset,
+                })
+            }else{ // 这里是兼顾老的
+                var fields_ctx={
+                  heads:self.head.fields_heads,
+                  ops_loc:'bottom',
+                  save_express:'scope.vc.$emit("finish",scope.vc.row);rt=Promise.resolve(scope.vc.row)',
+                  ops:[{
+                      'name':'save','editor':'com-field-op-btn','label':'确定', 'icon': 'fa-save',
+                  }],
+                  genVc:self,
+                  par_row:self.row,
+                  preset:preset,
+              }
             }
+          
             cfg.pop_vue_com('com-form-one',fields_ctx).then((row)=>{
                 if(row){
                   self.rows.push(row)

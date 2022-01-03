@@ -36,6 +36,10 @@ require('./scss/form_one.scss')
   </div>
 </template>
 <script>
+/*
+*
+* 改造form_one.js 还未完成。
+* */
 import {mix_fields_data} from "../mix/mix_fields_data";
 
 export default {
@@ -127,7 +131,8 @@ export default {
     },
     save(){
     if(this.head.save_express){
-    return ex.eval(this.head.save_express,{vc:this})
+      var super_save = ()=>{mix_fields_data.methods.save.call(this)}
+    return ex.eval(this.head.save_express,{vc:this,super_save:super_save})
     }else{
     return  mix_fields_data.methods.save.call(this)
     }

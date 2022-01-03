@@ -10,7 +10,7 @@ const VueLoaderPlugin = require('vue-loader/lib/plugin');
 module.exports =
 {
     //context:__dirname,
-    mode: 'production', //'development', //
+    mode:'production', //'development', //
     entry: {
         director:'./director/director.js',
         exfun:'./exfun/main.js'
@@ -18,6 +18,13 @@ module.exports =
     output: {
         path:path.resolve(__dirname, '../static/js'),
         filename: '[name].pack.js'
+    },
+    externals: {
+        'vue': 'Vue',
+        'vue-router': 'VueRouter',
+        'axios': 'axios',
+        'element-ui': 'Element',
+        'qs': 'Qs'
     },
 
     watch: true,

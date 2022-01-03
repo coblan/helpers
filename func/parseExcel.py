@@ -57,6 +57,10 @@ class ExcelFields(ModelFields):
                 return cfg.pop_vue_com('com-form-one',ctx,{title:'字段对照(左边为系统预设名，右边为当前excel首行字段名)'})
             }).then((resp)=>{
                scope.ps.search()
+               
+               if(resp.messages){
+                  cfg.pop_vue_com('com-message-rows',resp,{title:'导入结果'})
+               }
             })
         '''%{'director_name':self_director_name}
     
@@ -142,7 +146,12 @@ def get_excel_head(url):
         return parse_xls_head(path)
 
 def parse_xls_head(path):
-    data = xlrd.open_workbook(path)
+    # 2021/12/19，由于解析 .xls 报错，所以增加 encoding_override='gbk'。
+    # [TODO] 后面看看效果，如果解析其他excel报错，这里可能需要用try进行一定判断
+    if path.endswith('.xls'):
+        data = xlrd.open_workbook(path,encoding_override='gbk')
+    else:
+        data = xlrd.open_workbook(path)
     return data.sheets()[0].row_values(0)
 
 def parse_csv_head(path):
@@ -221,7 +230,7 @@ def parse_xlsx(path):
     return rows[1:]
 
 def parse_xls(path):
-    data = xlrd.open_workbook(path)
+    data = xlrd.open_workbook(path,encoding_override='gbk')
     table = data.sheets()[0]
     ls =[]
     for i in range(0,table.nrows):

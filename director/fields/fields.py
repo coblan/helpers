@@ -48,6 +48,7 @@ class ModelFields(forms.ModelForm):
     extra_mixins=[]
     hide_fields = []
     overlap_fields=[]  # 这些字段不会被同步检查
+    outdate_check_fields= None 
     readonly_change_warning = [] # 普通保存时，后台会恢复只读字段的值，但是有时有些只读字段，
                                  #在后台发现改变时，需要警告前端，作废此次保存。因为这些字段值可能是前端做判断的依据。
     forbid_change = False # 禁止修改
@@ -246,14 +247,16 @@ class ModelFields(forms.ModelForm):
         if self.overlap_fields:
             overlaped_fields += self.overlap_fields
             
-        if self.instance.pk and self.changed_data  and self.kw.get('meta_org_dict') : #and self.kw.get('meta_hash_fields'):
-            #fields_name =  self.kw.get('meta_hash_fields').split(',') 
-            #crt_mark_dc = make_mark_dict(self.instance.__dict__,fields_name)
+        if self.instance.pk and self.changed_data  and self.kw.get('meta_org_dict') : 
+      
             crt_mark_dc= self.get_org_dict()
-
-            if self.kw.get('meta_key_fields'):
-                meta_key_fields = self.kw.get('meta_key_fields').split(',')
-                dif_dc = dif_mark_dict(crt_mark_dc,self.kw.get('meta_org_dict'),include= meta_key_fields)
+            
+            # 这个太复杂了，转由后端控制。
+            #if self.kw.get('meta_key_fields'):
+                #meta_key_fields = self.kw.get('meta_key_fields').split(',')
+                #dif_dc = dif_mark_dict(crt_mark_dc,self.kw.get('meta_org_dict'),include= meta_key_fields)
+            if self.outdate_check_fields != None:
+                dif_dc = dif_mark_dict(crt_mark_dc,self.kw.get('meta_org_dict'),include= self.outdate_check_fields)
             else:
                 dif_dc = dif_mark_dict(crt_mark_dc, self.kw.get('meta_org_dict'),exclude= overlaped_fields)
             
