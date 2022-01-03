@@ -275,6 +275,9 @@ export  var mix_fields_data ={
                             }else{
                                 cfg.toast('操作成功！',{time: 1000})
                             }
+                            if (this.head.extra_after_save_express){
+                                ex.eval(this.head.extra_after_save_express,{ps:self.parStore,vc:self,row:rt.row})
+                            }
                         }
 
                         self.setErrors({})
