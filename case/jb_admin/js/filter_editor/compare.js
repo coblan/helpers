@@ -2,7 +2,7 @@
 var filter_compare={
     props:['head','search_args'],
     data:function(){
-        this.search_args['_'+this.head.name+'_compare'] =  this.search_args['_'+this.head.name+'_compare'] || 0
+        this.search_args['_'+this.head.name+'_compare'] =  this.search_args['_'+this.head.name+'_compare'] || '0'
         return {
         }
     },
