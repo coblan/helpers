@@ -41,7 +41,9 @@ Vue.component('com-field-multi-picture',{
                 return
             }
             var up_url = this.head.up_url || '/d/upload?path=general_upload/images'
+            cfg.show_load('uploading...')
             fl.uploads(v,up_url,function(url_list){
+                cfg.hide_load()
                 if(!self.row[self.head.name]){
                     self.row[self.head.name] = url_list
                 }else{

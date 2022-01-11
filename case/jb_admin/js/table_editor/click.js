@@ -2,7 +2,7 @@
 var my_click = {
     // head: {fun:'xxx'}
     props:['rowData','field','index'],
-    template:`<div class="com-table-click clickable" @click="on_click()" style="display: inline-block">
+    template:`<div class="com-table-click clickable" :class="head.class" @click="on_click()" style="display: inline-block">
         <component v-if="head.inn_editor"
             :is="head.inn_editor"
             :row-data="rowData" :field="field" :index="index"></component>

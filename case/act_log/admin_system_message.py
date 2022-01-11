@@ -11,6 +11,13 @@ class SystemMessagePage(TablePage):
         model = SystemMessage
         exclude =[]
         
+        def dict_head(self, head):
+            width = {
+                'title':250,
+                'content':350,
+            }
+            head['width'] = width.get(head['name'])
+            return head
         def get_operations(self):
             ops = [] # super().get_operations()
             ops += [
