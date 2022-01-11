@@ -1,18 +1,24 @@
 <template>
   <div class="hour-and-minute">
-    <input type="text"  v-model="row[head.name]"
-           :id="'id_'+head.name" :name="head.name" style="display: none;">
+    <template v-if="head.readonly">
+      <span>{{show_text}}</span>
+    </template>
+    <template v-else>
+      <input type="text"  v-model="row[head.name]"
+             :id="'id_'+head.name" :name="head.name" style="display: none;">
 
-    <elInt class="hour-input" size="small" type="text" @keypress="isNumber($event)" v-model="my_hour"></elInt><span style="white-space: nowrap">小时</span>
-    <el-select style="width:100px"  size="small" v-model="minute" >
-      <el-option
-          v-for="item in options"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value">
-      </el-option>
-    </el-select>
-    <span style="white-space: nowrap">分钟</span>
+      <elInt class="hour-input" size="small" type="text" @keypress="isNumber($event)" v-model="my_hour"></elInt><span style="white-space: nowrap">小时</span>
+      <el-select style="width:100px"  size="small" v-model="minute" >
+        <el-option
+            v-for="item in options"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+        </el-option>
+      </el-select>
+      <span style="white-space: nowrap">分钟</span>
+    </template>
+
   </div>
 
 </template>
@@ -64,6 +70,15 @@ export default {
     }
   },
   computed:{
+    show_text(){
+        if(this.mydata){
+          var minut = this.mydata%60
+          minut = minut.toString(). padStart(2, '0')
+          return `${parseInt( this.mydata/60)}:${minut}`
+        }else{
+          return  0
+        }
+    },
     mydata(){
       return  this.row[this.head.name]
     }
