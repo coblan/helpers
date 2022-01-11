@@ -216,7 +216,9 @@ def director_view(request,director_name):
         #rt = JsonResponse({'success':False,'msg':str(e)})
     except PermissionDenied as e:
         rt = HttpResponse(str(e),status=403)
-
+    if hasattr(request,'on_finally'):
+        for callback in request.on_finally:
+            callback()
     return rt
 
 
