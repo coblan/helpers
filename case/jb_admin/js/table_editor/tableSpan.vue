@@ -46,6 +46,23 @@ export default {
 <style scoped lang="scss">
 .table-span{
   display:inline-block;
-  max-height: 50px;
+  //max-height: 500px;
+  position: relative;
+  overflow:hidden;
+
+  overflow:hidden;
+  text-overflow:ellipsis;
+  display:-webkit-box;
+  -webkit-line-clamp:5;
+  -webkit-box-orient:vertical;
+  //&:after{
+  //  content:'...';
+  //  font-weight:bold;
+  //  position:absolute;
+  //  bottom:0;
+  //  right:0;
+  //  padding:0 20px 1px 25px;
+  //  background: white;
+  //}
 }
 </style>

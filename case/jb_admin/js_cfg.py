@@ -21,9 +21,9 @@ js_tr_list.append(get_tr)
 
 def get_lib(request): 
     if settings.DEBUG:
-        vue= static_url('lib/vue2.5/vue.js')
+        vue= static_url('lib/vue2.6/vue.js')
     else:
-        vue = static_url ( 'lib/vue2.5/vue.min.js' )
+        vue = static_url ( 'lib/vue2.6/vue.min.js' )
         
     dc = {
         'jquery': static_url( 'lib/jquery3.2.1.min.js'),
@@ -45,16 +45,16 @@ def get_lib(request):
         #'adminlte': 'https://cdn.staticfile.org/admin-lte/2.4.3/js/adminlte.min.js',
         #'adminlte_css': 'https://cdn.staticfile.org/admin-lte/2.4.3/css/AdminLTE.min.css',
         #'adminlte_blue_css': 'https://cdn.staticfile.org/admin-lte/2.4.3/css/skins/skin-blue.min.css',  
-        'adminlte': '/static/lib/adminlte/dist/js/adminlte.min.js',
-        'adminlte_css': '/static/lib/adminlte/dist/css/AdminLTE.min.css',
-        'adminlte_blue_css': '/static/lib/adminlte/dist/css/skins/skin-blue.min.css',            
+        #'adminlte': '/static/lib/adminlte/dist/js/adminlte.min.js',
+        #'adminlte_css': '/static/lib/adminlte/dist/css/AdminLTE.min.css',
+        #'adminlte_blue_css': '/static/lib/adminlte/dist/css/skins/skin-blue.min.css',            
         
         'nprogress': '/static/lib/nprogress/nprogress.min.js',
         'nprogress_css': '/static/lib/nprogress/nprogress.min.css',        
         
         
-        'element': '/static/lib/element/index.js', 
-        'element_css':'/static/lib/element/index.css', 
+        'element': '/static/lib/element/index.js?v=2.15.7', 
+        'element_css':'/static/lib/element/index.css?v=2.15.7', 
         #'element': 'https://cdn.staticfile.org/element-ui/2.4.0/index.js', 
         #'element_css':'https://cdn.staticfile.org/element-ui/2.4.0/theme-chalk/index.css', 
         
