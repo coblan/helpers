@@ -581,7 +581,7 @@ class ModelTable(object):
                 form_obj = model_form(crt_user=self.crt_user)
                 fields_ctx = form_obj.get_head_context()              
                 return [ 
-                    {'name':'op','label':'操作',
+                    {'name':'_op','label':'操作',
                      'editor':'com-table-button-click',
                      'button_label':'编辑',
                      'fields_ctx':fields_ctx,
