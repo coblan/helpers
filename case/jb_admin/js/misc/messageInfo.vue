@@ -16,6 +16,10 @@
 export default {
   props:{
     ctx:{}
+  },
+  unmounted(){
+    debugger
+    this.$emit('finish')
   }
 }
 </script>
