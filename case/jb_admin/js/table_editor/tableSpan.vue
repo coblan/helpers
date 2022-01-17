@@ -1,5 +1,5 @@
 <template>
-  <span class="table-span" v-text="show_text" ></span>
+  <span class="table-span">{{show_text}} </span>
 <!--  @click="on_click()"-->
 </template>
 <script>
