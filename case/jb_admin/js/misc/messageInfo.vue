@@ -1,13 +1,13 @@
 <template>
   <div class="com-message-rows">
     <div class="inn-wrap">
-      <template  v-for='(row,index) in ctx.messages'>
-        <span style="display: inline-block;padding: 0 10px">{{index+1}}:</span>
+      <div  v-for='(row,index) in ctx.messages' style="display: contents" :key="index">
+        <span style="display: inline-block;padding: 0 10px;background-color: #e8e8e8;text-align: right;">{{index+1}}:</span>
         <template v-if="row.type">
           <span :class="row.type">{{row.message}}</span>
         </template>
         <span v-else>{{row}}</span>
-      </template>
+      </div>
     </div>
   </div>
 
