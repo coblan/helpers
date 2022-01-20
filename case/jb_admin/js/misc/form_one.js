@@ -41,7 +41,7 @@ export  var fields_all_in_one={
     mixins:[mix_fields_data,mix_nice_validator],
     template:`<div class="com-form-one flex-v" :class="head.class">
    <div class="oprations" v-if="ops_loc=='up'">
-        <component v-for="op in ops" :is="op.editor" :ref="'op_'+op.name" :ctx="op" :head="op" @operation="on_operation(op)"></component>
+        <component v-for="op in normed_ops" :is="op.editor" :ref="'op_'+op.name" :ctx="op" :head="op" @operation="on_operation(op)"></component>
     </div>
     <div style="overflow: auto;" :class="{'box box-success':ops_loc=='up'}" class="flex-grow fields-area">
             <!--有分组的情况-->
@@ -134,7 +134,7 @@ export  var fields_all_in_one={
 
 }
 
-Vue.component('com-form-one',fields_all_in_one)
+// Vue.component('com-form-one',fields_all_in_one)
 
 var get_data={
     get_row:function(self,callback,kws){

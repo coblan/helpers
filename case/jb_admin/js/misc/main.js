@@ -1,4 +1,5 @@
-import * as form_one from  './form_one'
+// import * as form_one from  './form_one'
+import form_one from './formOne.vue'
 import login_head from  './login_head.vue'
 import login_footer from  './login_footer.vue'
 import el_button from  './el_button.vue'
@@ -16,4 +17,6 @@ Vue.component('com-line-info',line_info)
 
 Vue.component('com-widget-el-tab',el_tab)
 Vue.component('com-message-rows',messageInfo)
+Vue.component('com-form-one',form_one)
+
 window.live_el_tab = el_tab
