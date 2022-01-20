@@ -1,13 +1,19 @@
 <template>
   <div class="com-message-rows">
     <div class="inn-wrap">
-      <div  v-for='(row,index) in ctx.messages' style="display: contents" :key="index">
-        <span style="display: inline-block;padding: 0 10px;background-color: #e8e8e8;text-align: right;">{{index+1}}:</span>
-        <template v-if="row.type">
-          <span :class="row.type">{{row.message}}</span>
-        </template>
-        <span v-else>{{row}}</span>
-      </div>
+      <table>
+        <tr  v-for='(row,index) in ctx.messages' :key="index">
+          <td class="my-number">
+            <span>{{index+1}}:</span>
+          </td>
+          <td>
+            <template v-if="row.type">
+              <span :class="row.type">{{row.message}}</span>
+            </template>
+            <span v-else>{{row}}</span>
+          </td>
+        </tr>
+      </table>
     </div>
   </div>
 
@@ -53,6 +59,11 @@ export default {
 .inn-wrap{
   display: grid;
   grid-template-columns: auto 1fr;
+}
+.my-number{
+  padding: 0 10px;
+  background-color: #e8e8e8;
+  text-align: right;
 }
 .error{
   color: red;
