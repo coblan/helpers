@@ -66,6 +66,7 @@ def director_view(name):
         @wraps(fun)
         def _fun2(*args, **kargs): 
             return fun(*args, **kargs)
+        _fun2.director_name = name
         return _fun2
     return _fun
 
@@ -87,3 +88,9 @@ def append_transaction(director_name,db_name):
     director_transaction[director_name] = director_transaction.get(director_name)  or list(getattr(settings,'REQUEST_TRANSACTION_DB',['default']))
     if db_name not in director_transaction[director_name]:
         director_transaction[director_name].append(db_name)
+
+director_exclude_transaction= []
+def exclude_transaction(fun):
+    director_exclude_transaction.append(fun.director_name)
+    return fun    
+   
