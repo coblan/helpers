@@ -13,7 +13,11 @@ def jsonify(obj):
         return ''
     else:
         outstr=json.dumps(obj,cls=DirectorEncoder,ensure_ascii=False)
-        return mark_safe( outstr )
+        #'<' + '/script>'
+        outstr = outstr.replace('</script>','<" + "/script>')
+        outstr =  mark_safe( outstr )
+        
+        return outstr
 
     #if isinstance(object, ValuesListQuerySet):
         #return mark_safe(json.dumps(list(object)))

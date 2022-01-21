@@ -581,7 +581,7 @@ class ModelTable(object):
                 form_obj = model_form(crt_user=self.crt_user)
                 fields_ctx = form_obj.get_head_context()              
                 return [ 
-                    {'name':'op','label':'操作',
+                    {'name':'_op','label':'操作',
                      'editor':'com-table-button-click',
                      'button_label':'编辑',
                      'fields_ctx':fields_ctx,
@@ -1229,7 +1229,7 @@ class PlainTable(ModelTable):
         """
         有些时候，最先不需要返回rows，而只返回filters，head等，等待用户选择后，才返回rows
         """
-        ops = self.get_operation()
+        ops = self.get_operations()
         ops = evalue_container(ops)
         return {
             'heads':self.get_heads(),
@@ -1275,7 +1275,7 @@ class PlainTable(ModelTable):
             #'selectable': self.selectable,
             #'event_slots':self.get_event_slots()
         #}    
-    def get_operation(self):
+    def get_operations(self):
         return []
     
     def getRowSort(self): 

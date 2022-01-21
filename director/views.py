@@ -14,7 +14,7 @@ from .network.ajax_router import ajax_router
 from .recv_file import GeneralUpload
 from django.views.decorators.csrf import csrf_exempt
 from .network.ckeditor import Ckeditor
-from .base_data import director,director_views
+from .base_data import director,director_views,director_exclude_transaction
 from django.db import transaction
 from helpers.director.network import argument
 from django.conf import settings
@@ -163,6 +163,8 @@ def director_view(request,director_name):
     try:
         #kws = argument.get_argument(request,outtype='dict')
         if request.GET.get('transaction') == '0':
+            need_transaction = False
+        elif director_name in  director_exclude_transaction:
             need_transaction = False
         else:
             need_transaction = True
