@@ -1,6 +1,6 @@
 
 var user_info={
-    props:['head'],
+    props:['ctx'],
     template:` <li class="dropdown user user-menu">
                         <!-- Menu Toggle Button -->
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -9,7 +9,7 @@ var user_info={
                             <i class="fa fa-user-circle-o"></i>
 
                             <!-- hidden-xs hides the username on small devices so only the image appears. -->
-                            <span class="hidden-xs" v-text="head.first_name || head.username">
+                            <span class="hidden-xs" v-text="ctx.first_name || ctx.username">
                             </span>
                         </a>
                         <ul class="dropdown-menu">
@@ -17,7 +17,7 @@ var user_info={
                             <li class="user-header" style="font-size: 3em;">
                                 <!--<img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">-->
                                 <i class="fa fa-user-circle-o fa-lg"></i>
-                                <p v-text="head.first_name || head.username">
+                                <p v-text="ctx.first_name || ctx.username">
                                 </p>
                             </li>
                             <!-- Menu Body -->
@@ -41,7 +41,7 @@ var user_info={
                                     <a href="/accounts/pswd" class="btn btn-default btn-flat" v-text="tr.change_password"></a>
                                 </div>
                                 <div class="pull-right">
-                                    <a :href="head.logout_url" class="btn btn-default btn-flat" v-text="tr.logout"></a>
+                                    <a :href="ctx.logout_url" class="btn btn-default btn-flat" v-text="tr.logout"></a>
                                 </div>
                             </li>
                         </ul>
