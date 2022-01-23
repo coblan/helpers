@@ -18,7 +18,8 @@
 </template>
 <script>
 import imageDiv from 'weblib/uis/imageDiv.vue'
-import loginForm  from "webcase/pcweb/loginForm.vue";
+// import loginForm  from "webcase/pcweb/loginForm.vue";
+import loginForm from "./loginForm.vue";
 export  default  {
   components:{
     imageDiv,
