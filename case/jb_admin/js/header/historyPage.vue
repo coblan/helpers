@@ -11,7 +11,12 @@
 <!--           @close="handleClose(tag)">-->
 <!--         {{page.label}}-->
 <!--       </el-tag>-->
-       <i class="fa fa-history toggle-button" :class="{active:show_history}" @click="show_history = !show_history" aria-hidden="true"></i>
+       <span title="最近访问历史">
+         <i class="fa fa-history toggle-button"
+
+            :class="{active:show_history}" @click="show_history = !show_history" aria-hidden="true"></i>
+       </span>
+
        <div class="wrap" v-for="page in pagelist" v-if="show_history">
          <div class="page-label clickable" :class="{active:page.name==current_name}"  @click="goto(page)">{{page.label}}</div>
          
@@ -24,15 +29,23 @@
 </template>
 <script>
 export default {
+  props:['ctx'],
   data(){
+    var show_history = ex.defaultGet(this.ctx.show_history,true)
+    var show_history = ex.localGet('_history-page.show',show_history)
     return {
-        show_history:true,
+        show_history:show_history,
         pagelist:[],
         current_name:page_name,
     }
   },
   mounted(){
     this.updatePageList()
+  },
+  watch:{
+    show_history(nv){
+      ex.localSet('_history-page.show',nv)
+    }
   },
   methods:{
     handleClose(){
@@ -47,9 +60,10 @@ export default {
       }
       var one = ex.findone(pp,{name:page_name})
       if(one){
-        // var index = pp.indexOf(one)
-        // pp.splice(index,1)
-        // pp.splice(0,0,one)
+        // 不断的把老的历史 放到最前面
+        var index = pp.indexOf(one)
+        pp.splice(index,1)
+        pp.splice(0,0,one)
       }else{
         if(page_name){
           pp.splice(0,0, {href:location.href,label:page_label,name:page_name})
@@ -79,10 +93,12 @@ export default {
 }
 .page-label{
     display: inline-block;
-    color: #b4abab;
+    color: #a0a0a0;
 }
 .toggle-button{
-  color:grey;
+  color:#a0a0a0;
+  cursor: pointer;
+  margin-right: 3px;
   &.active{
     color: white;
   }
