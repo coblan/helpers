@@ -84,26 +84,44 @@ export default {
 <style scoped lang="scss">
 .history-page{
   display:  inline-block;
-
   padding: 15px 0;
+  //background-color: #252f34;
+  //background-color: white;
 }
 .wrap{
   display: inline-block;
   margin-right: 10px;
+
 }
 .page-label{
     display: inline-block;
-    color: #a0a0a0;
+    //color: #8aa4af;
+    color: #dcdcdc;
+    font-size: 80%;
+    position: relative;
+    &.active,&:hover{
+      color: white;
+      &:after{
+        content: '';
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: -5px;
+        height: 1px;
+        background-color: white;
+      }
+    }
+  &.active{
+    font-size: 90%
+  }
 }
 .toggle-button{
-  color:#a0a0a0;
+  color:#8aa4af;
   cursor: pointer;
   margin-right: 3px;
   &.active{
     color: white;
   }
 }
-.active{
-  color: white;
-}
+
 </style>
