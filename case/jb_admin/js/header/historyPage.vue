@@ -61,16 +61,18 @@ export default {
       var one = ex.findone(pp,{name:page_name})
       if(one){
         // 不断的把老的历史 放到最前面
-        var index = pp.indexOf(one)
-        pp.splice(index,1)
-        pp.splice(0,0,one)
+        // var index = pp.indexOf(one)
+        // pp.splice(index,1)
+        // pp.splice(0,0,one)
       }else{
         if(page_name){
-          pp.splice(0,0, {href:location.href,label:page_label,name:page_name})
+          pp.push({href:location.href,label:page_label,name:page_name})
+          // pp.splice(0,0, {href:location.href,label:page_label,name:page_name})
         }
       }
       if(pp.length>5){
-        pp.pop()
+        // pp.pop()
+        pp.splice(0,1)
       }
       this.pagelist  = pp
       localStorage.setItem('_history-page',JSON.stringify(this.pagelist))
