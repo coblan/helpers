@@ -9,13 +9,15 @@
                >
 <!--                trigger="hover"-->
                <div>
-                 <div class="setting-row">
+                 <h4>页面访问历史</h4>
+                 <div class="setting-row" style="margin-top: 20px">
                    <span>启用</span>
                    <span>
                       <el-checkbox v-model="show_history"></el-checkbox>
                    </span>
                  </div>
-                <div class="setting-row" style="margin-top: 14px;margin-bottom: 10px; font-weight: bold;">
+                 <hr>
+                <div class="setting-row" style="margin-top: 10px;margin-bottom: 10px; font-weight: bold;">
                   <span>页面</span>
                   <span>锁定</span>
                 </div>
