@@ -1,25 +1,46 @@
 <template>
 
      <div class="history-page">
-<!--       <el-tag-->
-<!--           v-for="page in pagelist"-->
-<!--           :key="page.name"-->
-<!--           closable-->
-<!--           effect="plain"-->
-<!--           size="small"-->
-<!--           :disable-transitions="false"-->
-<!--           @close="handleClose(tag)">-->
-<!--         {{page.label}}-->
-<!--       </el-tag>-->
        <span title="最近访问历史">
-         <i class="fa fa-history toggle-button"
+               <el-popover
+                   placement="top"
+                   width="200"
+                   trigger="click"
+               >
+<!--                trigger="hover"-->
+               <div>
+                 <div class="setting-row">
+                   <span>启用</span>
+                   <span>
+                      <el-checkbox v-model="show_history"></el-checkbox>
+                   </span>
+                 </div>
+                <div class="setting-row" style="margin-top: 14px;margin-bottom: 10px; font-weight: bold;">
+                  <span>页面</span>
+                  <span>锁定</span>
+                </div>
+                 <div class="setting-row" v-for="page in pagelist">
+                   <span>{{page.label}}</span>
+                   <span>
+                      <el-checkbox v-model="page.lock"></el-checkbox>
+                   </span>
+                 </div>
+               </div>
+                <span slot="reference">
+                    <i class="fa fa-history toggle-button"
+                       :class="{active:show_history}"  aria-hidden="true"></i>
+                </span>
 
-            :class="{active:show_history}" @click="show_history = !show_history" aria-hidden="true"></i>
+              </el-popover>
+
+
+<!--         @click="show_history = !show_history"-->
+
        </span>
 
        <div class="wrap" v-for="page in pagelist" v-if="show_history">
 <!--         <div class="page-label" :class="{active:page.name==current_name}">-->
-           <a class="page-label" :class="{active:page.name==current_name}" :href="page.href">{{page.label}}</a>
+           <a class="page-label" :class="{active:page.name==current_name,lock:page.lock}" :href="page.href">{{page.label}}</a>
 <!--           </div>-->
          
 <!--         <i class="fa fa-lock" aria-hidden="true"></i>-->
@@ -47,6 +68,12 @@ export default {
   watch:{
     show_history(nv){
       ex.localSet('_history-page.show',nv)
+    },
+    pagelist:{
+      deep:true,
+      handler(nv){
+          ex.localSet('_history-page',nv)
+      }
     }
   },
   methods:{
@@ -54,6 +81,7 @@ export default {
 
     },
     updatePageList(){
+
       var pp_str = localStorage.getItem('_history-page')
       if(pp_str){
         var pp = JSON.parse(pp_str)
@@ -67,17 +95,34 @@ export default {
         // pp.splice(index,1)
         // pp.splice(0,0,one)
       }else{
-        if(page_name){
+        if(page_name && page_label){
           pp.push({href:location.href,label:page_label,name:page_name})
           // pp.splice(0,0, {href:location.href,label:page_label,name:page_name})
         }
       }
-      if(pp.length>5){
+      var locked = ex.filter(pp,{lock:true})
+
+      if(pp.length - locked.length>4){
         // pp.pop()
-        pp.splice(0,1)
+        var overflow_count = (pp.length - locked.length) -4
+        var p_length = pp.length
+        var popindex = []
+        for(var i= 0 ; i < pp.length;i++){
+          if(overflow_count <=0){
+            break
+          }
+          if(!pp[i].lock){
+            popindex.push(i)
+            overflow_count = overflow_count -1
+          }
+        }
+        popindex = popindex.reverse()
+        for(var i =0;i < popindex.length;i++){
+          pp.splice(popindex[i],1)
+        }
       }
       this.pagelist  = pp
-      localStorage.setItem('_history-page',JSON.stringify(this.pagelist))
+      // localStorage.setItem('_history-page',JSON.stringify(this.pagelist))
     },
     goto(page){
       location=page.href
@@ -103,6 +148,18 @@ export default {
     color: #dcdcdc;
     font-size: 80%;
     position: relative;
+    &.lock:after{
+        content: '';
+      display: block;
+      background-color: white;
+      width: 4px;
+      height: 4px;
+      border-radius: 2px;
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: -4px;
+    }
     &.active,&:hover{
       color: white;
       &:after{
@@ -128,5 +185,8 @@ export default {
     color: white;
   }
 }
-
+.setting-row{
+  display: flex;
+  justify-content: space-between;
+}
 </style>
