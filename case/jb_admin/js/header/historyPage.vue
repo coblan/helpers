@@ -18,7 +18,9 @@
        </span>
 
        <div class="wrap" v-for="page in pagelist" v-if="show_history">
-         <div class="page-label clickable" :class="{active:page.name==current_name}"  @click="goto(page)">{{page.label}}</div>
+<!--         <div class="page-label" :class="{active:page.name==current_name}">-->
+           <a class="page-label" :class="{active:page.name==current_name}" :href="page.href">{{page.label}}</a>
+<!--           </div>-->
          
 <!--         <i class="fa fa-lock" aria-hidden="true"></i>-->
        </div>
@@ -106,8 +108,9 @@ export default {
       &:after{
         content: '';
         position: absolute;
-        left: 0;
-        right: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 5px;
         bottom: -5px;
         height: 1px;
         background-color: white;
