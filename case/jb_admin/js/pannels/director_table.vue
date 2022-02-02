@@ -198,8 +198,12 @@
             },
             parents:{
                 default:()=>[]
+            },
+            option:{
+              url_args:{
+                false
+              }
             }
-
         },
         data (){
         var vc = this
@@ -222,6 +226,12 @@
         methods:{
 
             search_page(page,{loading}={loading:true}){
+              if(this.option.url_args){
+                var args = ex.copy(this.searchArgs)
+                delete args._page
+                history.replaceState({},'',ex.appendSearch(args))
+              }
+
                 this.searchArgs._page = page
                 if(loading){
                     cfg.show_load()
