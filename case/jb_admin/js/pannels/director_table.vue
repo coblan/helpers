@@ -199,9 +199,9 @@
             parents:{
                 default:()=>[]
             },
-            urlArgs:{
-              default:false
-            }
+            // urlArgs:{
+            //   default:false
+            // }
         },
         data (){
         var vc = this
@@ -224,11 +224,12 @@
         methods:{
 
             search_page(page,{loading}={loading:true}){
-              if(this.urlArgs){
-                var args = ex.copy(this.searchArgs)
-                delete args._page
-                history.replaceState({},'',ex.appendSearch(args))
-              }
+              // if(this.urlArgs){
+              //   var args = ex.copy(this.searchArgs)
+              //   delete args._page
+              //   delete args._advise_heads
+              //   history.replaceState({},'',ex.appendSearch(args))
+              // }
 
                 this.searchArgs._page = page
                 if(loading){
