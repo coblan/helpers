@@ -199,10 +199,8 @@
             parents:{
                 default:()=>[]
             },
-            option:{
-              url_args:{
-                false
-              }
+            urlArgs:{
+              default:false
             }
         },
         data (){
@@ -226,7 +224,7 @@
         methods:{
 
             search_page(page,{loading}={loading:true}){
-              if(this.option.url_args){
+              if(this.urlArgs){
                 var args = ex.copy(this.searchArgs)
                 delete args._page
                 history.replaceState({},'',ex.appendSearch(args))
