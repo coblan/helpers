@@ -434,7 +434,7 @@ desired effect
                 <!-- Optionally, you can add icons to the links -->
                 <!--<li style="height: 20px;"></li>-->
                 <li v-for="action in filted_menu" :class="{active:is_active(action),treeview:action.submenu}">
-                    <a :href="action.url">
+                    <a class="clickable" :href="action.url" @click="onClickAction(action)">
                         <i v-html="action.icon"></i>
                         <!--<i class="fa fa-link"></i>-->
                         <span v-text="action.label"></span>
@@ -447,7 +447,7 @@ desired effect
                         <!--<li><a href="#">Link in level 2</a></li>-->
                         <!--leve2_url(subact)-->
                         <li v-for="subact in action.submenu" :class="{'active':is_active(subact),treeview:subact.submenu}">
-                            <a  :href="subact.url">
+                            <a class="clickable"  :href="subact.url" @click="onClickAction(subact)">
                                 <i class="fa fa-circle-o"></i>
                                 <span v-text="subact.label"></span>
                                 <span v-if="subact.submenu" class="pull-right-container">
@@ -458,7 +458,7 @@ desired effect
                             <!--三级菜单-->
                             <ul v-if="subact.submenu" class="treeview-menu">
                                 <li v-for="sub_subact in subact.submenu" :class="{'active':is_active(sub_subact)}">
-                                    <a :href="sub_subact.url">
+                                    <a class="clickable" :href="sub_subact.url" @click="onClickAction(sub_subact)">
                                         <i class="fa fa-square-o"></i>
                                         <span v-text="sub_subact.label"></span>
                                     </a>
@@ -697,6 +697,15 @@ desired effect
                     }
 
                 },
+                onClickAction(action){
+                    if(action.click_express){
+                        ex.eval(action.click_express,{head:action})
+                        var rt_value = true
+                    }else{
+                        var rt_value =  false
+                    }
+                    return rt_value
+                }
             }
         })
     new Vue({

@@ -32,21 +32,6 @@ var live_table={
                 }
             },
             methods:{
-                //switch_to_tab:function(kws){
-                //    this.parStore.switch_to_tab(kws)
-                //},
-                //getRows:function(){
-                //    if(vc.tab_head.pre_set){
-                //        var pre_set = ex.eval(vc.tab_head.pre_set,{par_row:vc.par_row})
-                //        ex.assign(this.search_args,pre_set)
-                //    }else if(vc.tab_head.tab_field){ // 下面是老的调用，
-                //        this.search_args[vc.tab_head.tab_field] = vc.par_row[vc.tab_head.par_field]
-                //    }else if(vc.tab_head.par_field){
-                //        this.search_args[vc.tab_head.par_field] = vc.par_row[vc.tab_head.par_field]
-                //    }
-                //    table_store.methods.getRows.call(this)
-                //
-                //},
             }
         }
         return {
@@ -89,6 +74,6 @@ var live_table={
 }
 
 
-
+Vue.component('com-live-table',live_table)
 
 window.live_table = live_table

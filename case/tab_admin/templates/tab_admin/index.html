@@ -1,0 +1,132 @@
+{% extends "tab_admin/base.html" %}
+{% load static %}
+{% load jsonify %}
+
+{% block head-script %}
+
+<script src="{{ js_config.js_lib.tab_admin }}"></script>
+<script src="{{ js_config.js_lib.sortablejs }}"></script>
+{% endblock %}
+
+{% block page_content %}
+<div id='there' >
+    <div style="background-color: white">
+        <el-tabs class="tabs-sort" v-model="editableTabsValue" type="border-card" closable @tab-remove="removeTab">
+            <el-tab-pane
+                    v-for="(item, index) in editableTabs"
+                    :key="item.name"
+                    :label="item.label"
+                    :name="item.name"
+            >
+                <div class="real-content">
+                    <component :is="item.editor" :ctx="item"></component>
+                </div>
+
+            </el-tab-pane>
+        </el-tabs>
+    </div>
+
+</div>
+
+<script type="text/javascript">
+
+    editor= {{ editor | jsonify }}
+    editor_ctx = {{ editor_ctx | jsonify }}
+
+
+
+    live_root = new Vue({
+        el: '#there',
+        data: function () {
+            return {
+                editableTabsValue: '2',
+                editableTabs: [
+                //     {
+                //     label: 'Tab 1',
+                //     name: '1',
+                //     content: 'Tab 1 content'
+                // }, {
+                //     label: 'Tab 2',
+                //     name: '2',
+                //     content: 'Tab 2 content'
+                // }
+                ],
+                tabIndex: 2
+            }
+        },
+        mounted(){
+            let el = this.$el.querySelector('.tabs-sort .el-tabs__nav')
+            Sortable.create(el,{
+                onEnd:(evt)=>{
+                    const tempIndex = this.editableTabs.splice(evt.oldIndex,1)[0]
+                    this.editableTabs.splice(evt.newIndex,0,tempIndex)
+                }
+            })
+
+            setTimeout(()=>{
+                var one = ex.findone(this.editableTabs,{name:this.editableTabsValue})
+                if(one){
+                    this.$emit('tab-change',one)
+                }
+            },100)
+
+
+        },
+        watch:{
+            editableTabsValue(nv){
+                var one = ex.findone(this.editableTabs,{name:nv})
+                this.$emit('tab-change',one)
+            },
+        },
+        methods:{
+            addTab(ctx) {
+                var one = ex.findone(this.editableTabs,{name:ctx.name})
+                if(!one){
+                    this.editableTabs.push(ctx);
+                }
+                this.editableTabsValue = ctx.name // newTabName;
+            },
+            removeTab(targetName) {
+                let tabs = this.editableTabs;
+                let activeName = this.editableTabsValue;
+                if (activeName === targetName) {
+                    tabs.forEach((tab, index) => {
+                        if (tab.name === targetName) {
+                            let nextTab = tabs[index + 1] || tabs[index - 1];
+                            if (nextTab) {
+                                activeName = nextTab.name;
+                            }
+                        }
+                    });
+                }
+
+                this.editableTabsValue = activeName;
+                this.editableTabs = tabs.filter(tab => tab.name !== targetName);
+            }
+        },
+    })
+
+
+
+
+</script>
+
+<style>
+    a[disabled] {
+        color: gray;
+        pointer-events: none;
+    }
+    .container-fluid{
+        padding: 0;
+        padding-left: 0;
+        padding-right: 0;
+    }
+    .real-content{
+        height: calc(100vh - 80px - 48px);
+        position: relative;
+    }
+</style>
+
+
+
+{% endblock %}

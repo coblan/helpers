@@ -261,6 +261,10 @@ export  var mix_fields_data ={
 
                     }else{
                         ex.vueAssign(self.row,rt.row)
+                        if(self.ctx && self.ctx.row){
+                            // 由外部传入的row，也应该被更新。
+                            ex.vueAssign(self.ctx.row,rt.row)
+                        }
                         if(this.head && this.head.after_save_express){
                             ex.eval(this.head.after_save_express,{ps:self.parStore,vc:self,row:rt.row})
                         }else  if(this.head && this.head.after_save && typeof this.head.after_save =='string'){
