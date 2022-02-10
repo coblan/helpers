@@ -235,6 +235,7 @@
                 if(loading){
                     cfg.show_load()
                 }
+                this.selected = []
                 this.searchArgs._advise_heads= this.$refs.dtable.advise_heads
                return ex.director_call('d.get_rows',{director_name:this.directorName,search_args:this.searchArgs}).then(resp=>{
                     cfg.hide_load()
