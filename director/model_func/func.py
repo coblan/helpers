@@ -4,5 +4,7 @@ def is_lazy_label(obj):
 def str_lazy_label(obj):
     if is_lazy_label(obj):
         return str(obj)
+    elif isinstance(obj,list):
+        return ';\n'.join(obj)
     else:
         return obj
