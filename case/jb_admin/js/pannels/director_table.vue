@@ -231,6 +231,7 @@
               //   history.replaceState({},'',ex.appendSearch(args))
               // }
 
+              ex.array.replace(this.tableRows,[])
                 this.searchArgs._page = page
                 if(loading){
                     cfg.show_load()
