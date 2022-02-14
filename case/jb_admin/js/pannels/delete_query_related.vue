@@ -36,11 +36,13 @@
         },
         methods:{
             on_cancel(){
-                this.$emit('finish')
+                this.$emit('finish',false)
             },
             on_click(){
+              if(this.ctx.genStore){
                 this.ctx.genStore.delete_selected()
-                this.$emit('finish')
+              }
+                this.$emit('finish',true)
             }
         }
     }
