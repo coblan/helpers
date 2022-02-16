@@ -2,6 +2,7 @@ from helpers.director.shortcut import ModelFields,director
 from django.contrib.auth.models import User
 
 class PhoneRegist(ModelFields):
+    nolimit = True
     class Meta:
         model = User
         fields=['username','password']
