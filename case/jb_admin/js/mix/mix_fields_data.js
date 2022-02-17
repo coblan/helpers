@@ -188,7 +188,9 @@ export  var mix_fields_data ={
             this.setErrors({})
             ex.vueBroadCall(self,'commit')
             return new Promise(function(resolve,reject){
-                Vue.nextTick(function(){
+                Vue.nextTick(async function(){
+                    await Promise.all(self.check_funs)
+
                     if(!self.isValid()){
                         //reject()
                     }else{
