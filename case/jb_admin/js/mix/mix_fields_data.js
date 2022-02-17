@@ -184,10 +184,13 @@ export  var mix_fields_data ={
             })
         },
         submit:function(){
+            debugger
             var self =this;
             this.setErrors({})
             ex.vueBroadCall(self,'commit')
+            debugger
             return new Promise(function(resolve,reject){
+                debugger
                 Vue.nextTick(async function(){
                     await Promise.all(self.check_funs)
 
