@@ -3,7 +3,7 @@
         <span v-if='head.readonly' v-text='get_label'></span>
         <div v-else>
             <input type="text" style="display: none" :id="'id_'+head.name" :name="head.name" v-model="row[head.name]"><!-- :clearable="!head.required"-->
-            <el-select  v-model="row[head.name]"
+            <el-select :class="{isempty:!is_select}"  v-model="row[head.name]"
                         :multiple="head.multiple"
                         :filterable="head.multiple ||  head.filterable "
                         :placeholder="head.placeholder"
@@ -99,7 +99,6 @@
         },
 
         computed:{
-
             novalue(){
                 if(this.row[this.head.name] ==0){
                     var novalue = undefined
@@ -115,7 +114,12 @@
             },
             is_select:function(){
                 var v = this.row[this.head.name]
-                return v !== this.novalue
+                if(this.head.multiple){
+                  return  v.length !=0
+                }else{
+                  return v !== this.novalue
+                }
+
             },
             place_value:function(){
                 var v = this.row[this.head.name]
@@ -219,11 +223,14 @@
         color: black;
     }
 
-    /deep/{
-      .el-select > .el-input > input {
-        min-height:34px!important;
+
+
+     /deep/{
+        .el-select.isempty > .el-input > input {
+          min-height:34px!important;
+        }
       }
-    }
+
  }
 
 </style>
