@@ -4,18 +4,19 @@
         <div v-else>
             <input type="text" style="display: none" :id="'id_'+head.name" :name="head.name" v-model="row[head.name]"><!-- :clearable="!head.required"-->
             <el-select  v-model="row[head.name]"
+                        :multiple="head.multiple"
                         :filterable="head.multiple ||  head.filterable "
                         :placeholder="head.placeholder"
                         size="small"
-                        :multiple="head.multiple"
-                        :clearable="!head.multiple && !head.required">
+                        :clearable="!head.multiple && !head.required"
+            >
                 <el-option
                         v-for="item in normed_options"
                         :key="item.value"
                         :label="item.label"
                         :value="item.value">
                 </el-option>
-                </el-select>
+            </el-select>
         </div>
     </div>
 </template>
@@ -218,7 +219,12 @@
         color: black;
     }
 
+    /deep/{
+      .el-select > .el-input > input {
+        min-height:34px!important;
+      }
     }
+ }
 
 </style>
 <style lang="scss">
@@ -226,9 +232,7 @@
         display: none;
     }
 
-     .com-field-select{
 
-     }
 .com-filter-multi-select{
     .el-select-dropdown.is-multiple li.selected{
         display: block;
