@@ -3,7 +3,8 @@
         <span v-if='head.readonly' v-text='get_label'></span>
         <div v-else>
             <input type="text" style="display: none" :id="'id_'+head.name" :name="head.name" v-model="row[head.name]"><!-- :clearable="!head.required"-->
-            <el-select :class="{isempty:!is_select}"  v-model="row[head.name]"
+<!--          :class="{isempty:!is_select}"  -->
+          <el-select  :class="{start:!loaded || !is_select }"  v-model="row[head.name]"
                         :multiple="head.multiple"
                         :filterable="head.multiple ||  head.filterable "
                         :placeholder="head.placeholder"
@@ -39,7 +40,7 @@
                 cfg: inn_config,
                 parStore:ex.vueParStore(this),
                 options:this.head.options || [],
-
+                loaded:false
             }
         },
         mounted: function () {
@@ -76,6 +77,9 @@
                 ex.append_css(this.head.css)
             }
 
+            this.$nextTick(()=>{
+              this.loaded=true
+            })
         },
 
         watch:{
@@ -223,13 +227,13 @@
         color: black;
     }
 
+  //.isempty
 
-
-     /deep/{
-        .el-select.isempty > .el-input > input {
-          min-height:34px!important;
-        }
+   /deep/{
+      .el-select.start > .el-input > input {
+        min-height:34px!important;
       }
+    }
 
  }
 
