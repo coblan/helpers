@@ -10,7 +10,7 @@ const VueLoaderPlugin = require('vue-loader/lib/plugin');
 module.exports =
 {
     //context:__dirname,
-    mode: 'production', //'development', //
+    mode:'production', //'development', //
     entry: {
         director:'./director/director.js',
         exfun:'./exfun/main.js'

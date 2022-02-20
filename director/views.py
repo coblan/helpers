@@ -14,7 +14,7 @@ from .network.ajax_router import ajax_router
 from .recv_file import GeneralUpload
 from django.views.decorators.csrf import csrf_exempt
 from .network.ckeditor import Ckeditor
-from .base_data import director,director_views
+from .base_data import director,director_views,director_exclude_transaction
 from django.db import transaction
 from helpers.director.network import argument
 from django.conf import settings
@@ -145,15 +145,15 @@ def director_view(request,director_name):
     if request.method == "GET":
         return fast_director_view(request, director_name)
     
-    # 2021/8/18增加新的逻辑,可以对edit/customForm 这种直接映射为 /dapi/edit/mytable.edit
+    # 2021/8/18增加新的逻辑,可以对/dapi/edit/customForm转换为请求d.save_row_for_front,参数是edit/customForm指向的director表单
     kws = argument.get_argument(request,outtype='dict')
     if director_name.startswith('edit/'):
         directorEnt = director_views.get('d.save_row_for_front')
-        kws['_director_name'] = director_name #[5:]  
+        kws['_director_name'] = director_name#[5:]  
         kws={'row':kws}
     elif director_name.startswith('delete/'):
         directorEnt = director_views.get('d.delete_row')
-        kws['_director_name'] = director_name
+        kws['_director_name'] = director_name#[6:]
         kws={'row':kws}      
     else:
         directorEnt= director_views.get(director_name)
@@ -163,6 +163,8 @@ def director_view(request,director_name):
     try:
         #kws = argument.get_argument(request,outtype='dict')
         if request.GET.get('transaction') == '0':
+            need_transaction = False
+        elif director_name in  director_exclude_transaction:
             need_transaction = False
         else:
             need_transaction = True
@@ -216,7 +218,9 @@ def director_view(request,director_name):
         #rt = JsonResponse({'success':False,'msg':str(e)})
     except PermissionDenied as e:
         rt = HttpResponse(str(e),status=403)
-
+    if hasattr(request,'on_finally'):
+        for callback in request.on_finally:
+            callback()
     return rt
 
 

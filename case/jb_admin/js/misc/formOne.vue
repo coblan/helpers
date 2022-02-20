@@ -1,10 +1,7 @@
-//require('./scss/tab_fields.scss')
-require('./scss/form_one.scss')
-
 <template>
   <div class="com-form-one flex-v" :class="head.class">
     <div class="oprations" v-if="ops_loc=='up'">
-      <component v-for="op in ops" :is="op.editor" :ref="'op_'+op.name" :ctx="op" :head="op" @operation="on_operation(op)"></component>
+      <component v-for="op in normed_ops" :is="op.editor" :ref="'op_'+op.name" :ctx="op" :head="op" @operation="on_operation(op)"></component>
     </div>
     <div style="overflow: auto;" :class="{'box box-success':ops_loc=='up'}" class="flex-grow fields-area">
       <!--有分组的情况-->
@@ -76,7 +73,8 @@ export default {
           org_row:data_row,
           childStore:childStore,
           parStore:parStore,
-          ops_loc: this.ctx.ops_loc ||  'up'
+          ops_loc: this.ctx.ops_loc ||  'up',
+          check_funs:[],
         }
     },
     mixins:[mix_fields_data,mix_nice_validator],
@@ -86,55 +84,55 @@ export default {
         // 兼容老调用
         op.show_express = op.show_express || op.show
         if(op.show_express){
-        return ex.eval(op.show_express,{row:this.row,vc:this})
+            return ex.eval(op.show_express,{row:this.row,vc:this})
         }else{
-        return true
+            return true
         }
       })
     },
     grouped_heads_bucket:function(){
-    var out_bucket = []
-    ex.each(this.fields_group,(group)=>{
-    if(group.show && ! ex.eval(group.show,{row:this.row,head:this.head})){
-    return
-    }
-    var heads = ex.filter(this.normed_heads,function(head){
-    return ex.isin(head.name,group.heads)
-    })
-    out_bucket.push({name:group.name,label:group.label,heads:heads})
-    })
-    return out_bucket
-
-    }
+      var out_bucket = []
+      ex.each(this.fields_group,(group)=>{
+        if(group.show && ! ex.eval(group.show,{row:this.row,head:this.head})){
+        return
+      }
+      var heads = ex.filter(this.normed_heads,function(head){
+        return ex.isin(head.name,group.heads)
+      })
+      out_bucket.push({name:group.name,label:group.label,heads:heads})
+      })
+      return out_bucket
+      }
     },
 
     methods:{
     group_filter_heads:function(group){
-    return ex.filter(this.normed_heads,function(head){
-    return ex.isin(head.name,group.heads)
-    })
+      return ex.filter(this.normed_heads,function(head){
+        return ex.isin(head.name,group.heads)
+      })
     },
-    data_getter:function(){
-    var self=this
-    if(self.tab_head.get_data){
-    var fun = get_data [self.tab_head.get_data.fun]
-    var kws = self.tab_head.get_data.kws
-    fun(self,function(row){
-    self.org_row = row
-    self.row = ex.copy(row)
-    self.childStore.$emit('row.update_or_insert',row)
-    },kws)
-    }
-    if(self.tab_head.get_row){
-    ex.eval(self.tab_head.get_row,{vc:self})
-    }
-    },
+    // data_getter:function(){
+    //   var self=this
+    //   if(self.tab_head.get_data){
+    //     var fun = get_data [self.tab_head.get_data.fun]
+    //     var kws = self.tab_head.get_data.kws
+    //     fun(self,function(row){
+    //       self.org_row = row
+    //       self.row = ex.copy(row)
+    //       self.childStore.$emit('row.update_or_insert',row)
+    //     },kws)
+    //   }
+    //   if(self.tab_head.get_row){
+    //     ex.eval(self.tab_head.get_row,{vc:self})
+    //   }
+    // },
     save(){
-    if(this.head.save_express){
-    return ex.eval(this.head.save_express,{vc:this})
-    }else{
-    return  mix_fields_data.methods.save.call(this)
-    }
+      if(this.head.save_express){
+        var super_save = ()=>{mix_fields_data.methods.save.call(this)}
+        return ex.eval(this.head.save_express,{vc:this,super_save:super_save})
+      }else{
+        return  mix_fields_data.methods.save.call(this)
+      }
     }
     }
     // data_getter  回调函数，获取数据,
@@ -142,50 +140,80 @@ export default {
 
 }
 
-Vue.component('com-form-one',fields_all_in_one)
-
-var get_data={
-get_row:function(self,callback,kws){
-//kws={model_name ,relat_field}
-var director_name = kws.director_name
-var relat_field = kws.relat_field
-var dt = {fun:'get_row',director_name:director_name}
-dt[relat_field] = self.par_row[relat_field]
-//var post_data=[dt]
-cfg.show_load()
-ex.director_call('d.get_row?dname='+director_name,dt).then((resp)=>{
-cfg.hide_load()
-callback(resp)
-})
-
-//$.post('/d/ajax',JSON.stringify(post_data),function(resp){
-//    cfg.hide_load()
-//    callback(resp.get_row)
-//})
-},
-table_row:function(self,callback,kws){
-callback(self.par_row)
-}
-}
-
-var after_save={
-update_or_insert:function(self,new_row,kws){
-var old_row= self.old_row
-var parStore = ex.vueParStore(self)
-parStore.update_or_insert(new_row,old_row)
-// 要update_or_insert ，证明一定是 更新了 par_row
-//ex.vueAssign(self.par_row,new_row)
-//self.$emit('tab-event',{name:'update_or_insert',new_row:self.par_row,old_row:old_row})
-},
-do_nothing:function(self,new_row,kws){
-},
-
-update_par_row_from_db:function(self,new_row,kws){
+// var get_data={
+// get_row:function(self,callback,kws){
+// //kws={model_name ,relat_field}
+// var director_name = kws.director_name
+// var relat_field = kws.relat_field
+// var dt = {fun:'get_row',director_name:director_name}
+// dt[relat_field] = self.par_row[relat_field]
+// //var post_data=[dt]
+// cfg.show_load()
+// ex.director_call('d.get_row?dname='+director_name,dt).then((resp)=>{
+// cfg.hide_load()
+// callback(resp)
+// })
 //
-var post_data=[{fun:'get_row',director_name:self.par_row._director_name,pk:self.par_row.pk}]
-ex.post('/d/ajax',JSON.stringify(post_data),function(resp){
-ex.vueAssign(self.par_row,resp.get_row)
-})
-}
-}
+// },
+// table_row:function(self,callback,kws){
+// callback(self.par_row)
+// }
+// }
+
+// var after_save={
+// update_or_insert:function(self,new_row,kws){
+// var old_row= self.old_row
+// var parStore = ex.vueParStore(self)
+// parStore.update_or_insert(new_row,old_row)
+// // 要update_or_insert ，证明一定是 更新了 par_row
+// //ex.vueAssign(self.par_row,new_row)
+// //self.$emit('tab-event',{name:'update_or_insert',new_row:self.par_row,old_row:old_row})
+// },
+// // do_nothing:function(self,new_row,kws){
+// // },
+//
+// update_par_row_from_db:function(self,new_row,kws){
+// //
+// var post_data=[{fun:'get_row',director_name:self.par_row._director_name,pk:self.par_row.pk}]
+// ex.post('/d/ajax',JSON.stringify(post_data),function(resp){
+// ex.vueAssign(self.par_row,resp.get_row)
+// })
+// }
+// }
 </script>
+
+<style scoped lang="scss">
+.com-form-one{
+  height: 100%;
+
+  .oprations{
+    padding: 5px 10px;
+  }
+  .oprations.bottom{
+    text-align: right;
+    border-top:1px solid #d7d7d7;
+  }
+
+  .table-fields{
+    border:1px solid #efefef;
+    background-color: #f8f8f8;
+    //border-radius: 4px;
+    margin:5px 15px;
+    padding: 5px 30px;
+  }
+  .fields-group-title{
+    margin: 10px 0;
+  }
+
+  .field-input-td{
+    .msg-box.n-right{
+      position: absolute;
+      bottom: 0;
+      left: 0;
+    }
+  }
+
+}
+
+
+</style>

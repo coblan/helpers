@@ -184,11 +184,16 @@ export  var mix_fields_data ={
             })
         },
         submit:function(){
+            debugger
             var self =this;
             this.setErrors({})
             ex.vueBroadCall(self,'commit')
+            debugger
             return new Promise(function(resolve,reject){
-                Vue.nextTick(function(){
+                debugger
+                Vue.nextTick(async function(){
+                    await Promise.all(self.check_funs)
+
                     if(!self.isValid()){
                         //reject()
                     }else{
@@ -274,6 +279,9 @@ export  var mix_fields_data ={
                                 cfg.showMsg(resp.msg || rt.msg)
                             }else{
                                 cfg.toast('操作成功！',{time: 1000})
+                            }
+                            if (this.head.extra_after_save_express){
+                                ex.eval(this.head.extra_after_save_express,{ps:self.parStore,vc:self,row:rt.row})
                             }
                         }
 

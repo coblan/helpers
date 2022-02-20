@@ -1,4 +1,6 @@
 
+
+
 Vue.component('com-head-bell-msg',{
     props:['head'],
     template:` <li  class="com-head-bell-msg dropdown notifications-menu" @click="on_click()">

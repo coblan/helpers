@@ -22,7 +22,7 @@ import {utile} from  './utile'
 import {get_validator} from 'weblib/ex/validator'
 import {collection} from  'weblib/ex/collection.js'
 var dayjs = require('dayjs')
-
+import  local from 'weblib/ex/local.js'
 var ex={
     assign:function (dst,src) {
         for(var key in src){
@@ -49,6 +49,8 @@ ex.assign(ex,rabbit)
 ex.assign(ex,sys)
 ex.assign(ex,localCatch)
 ex.assign(ex,utile)
+ex.assign(ex,local)
+
 ex.os = os
 ex.sortOrder=sortOrder
 ex.DefPromise = defPromise.default

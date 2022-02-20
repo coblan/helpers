@@ -1,7 +1,7 @@
 
 var label_shower = {
     props:['rowData','field','index'],
-    template:`<span v-text="show_text" @click="on_click()"></span>`,
+    template:`<span class="table-span ellipsis" v-text="show_text" @click="on_click()"></span>`,
     computed:{
         show_text:function(){
             var value = this.rowData[this.field]

@@ -198,8 +198,10 @@
             },
             parents:{
                 default:()=>[]
-            }
-
+            },
+            // urlArgs:{
+            //   default:false
+            // }
         },
         data (){
         var vc = this
@@ -222,10 +224,19 @@
         methods:{
 
             search_page(page,{loading}={loading:true}){
+              // if(this.urlArgs){
+              //   var args = ex.copy(this.searchArgs)
+              //   delete args._page
+              //   delete args._advise_heads
+              //   history.replaceState({},'',ex.appendSearch(args))
+              // }
+
+              ex.array.replace(this.tableRows,[])
                 this.searchArgs._page = page
                 if(loading){
                     cfg.show_load()
                 }
+                this.selected = []
                 this.searchArgs._advise_heads= this.$refs.dtable.advise_heads
                return ex.director_call('d.get_rows',{director_name:this.directorName,search_args:this.searchArgs}).then(resp=>{
                     cfg.hide_load()

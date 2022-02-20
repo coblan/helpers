@@ -1,39 +1,46 @@
 <template>
-    <int-input class="com-field-number" :head="head" :row="row" :extend-logic="extend_logic"></int-input>
+  <div class="com-field-number" :class="head.class" :style="head.style">
+    <div v-if='head.readonly'>
+      <span class="readonly-info"  v-text='row[head.name]'></span>
+      <span v-text="head.suffix"></span>
+    </div>
+    <div  v-else  class="form-inline test1">
+        <el-input v-model="row[head.name]" size="small" :placeholder="head.placeholder"
+                  :id="'id_'+head.name" :name="head.name"
+                  @keypress.native="isNumber($event)"
+                  :maxlength="head.maxlength">
+          <template v-slot:prepend >
+            <span  v-if="head.prefix" v-html="head.prefix"></span>
+          </template>
+          <template v-slot:append>
+            <span  v-if="head.suffix" v-html="head.suffix"></span>
+          </template>
+        </el-input>
+    </div>
+  </div>
 </template>
 <script>
-    import intInput ,{IntInputLogic} from './int.vue'
 
-  export  class NumberLogic extends IntInputLogic{
-          constructor(){
-              super()
-              this.fv_rule=null
-          }
-          isNumber(evt){
-                evt = (evt) ? evt : window.event;
-                var charCode = (evt.which) ? evt.which : evt.keyCode;
-                if ((charCode >= 48 && charCode <= 57) || charCode== 46 || charCode== 45) {
-                    if(charCode==46 && this.row[this.head.name].indexOf('.')!=-1){
-                        return evt.preventDefault();
-                    }else{
-                        return true
-                    }
-                }else{
-                    return evt.preventDefault();
-                }
-            }
-    }
     export default {
-        props:['row','head'],
-        components:{
-            intInput
-        },
-        setup(props){
-//            return new NumberLogic().setup(props)
-            return {
-                extend_logic:NumberLogic
+       props:{
+         row:{},
+         head:{},
+       },
+      methods:{
+        isNumber(evt){
+          evt = (evt) ? evt : window.event;
+          var charCode = (evt.which) ? evt.which : evt.keyCode;
+          if ((charCode >= 48 && charCode <= 57) || charCode== 46 || charCode== 45) {
+            if(charCode==46 && this.row[this.head.name].indexOf('.')!=-1){
+              return evt.preventDefault();
+            }else{
+              return true
             }
+          }else{
+            return evt.preventDefault();
+          }
         }
+      }
     }
 </script>
 

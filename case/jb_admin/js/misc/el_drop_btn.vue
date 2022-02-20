@@ -10,7 +10,7 @@
         <!--</el-button>-->
 
         <!--split-button :type="my_ctx.type"-->
-        <el-dropdown >
+        <el-dropdown trigger="click">
             <el-button  size="mini" :disabled="is_disabled">
                <span class="el-dropdown-link">
                  <span v-text="my_ctx.label"></span>
@@ -44,41 +44,12 @@
                 }
             }
         },
-//        watch:{
-//            is_disabled(nv){
-//                if(nv){
-//                    this.set_btn_group_disable()
-//                }else{
-//                    this.clear_btn_group_disable()
-//                }
-//            }
-//        },
         mounted(){
-            if(this.ctx.css){
-                ex.append_css(this.ctx.css)
+            if(this.my_ctx.css){
+                ex.append_css(this.my_ctx.css)
             }
-//            if(this.is_disabled){
-//                this.set_btn_group_disable()
-//            }
         },
         methods:{
-//            set_btn_group_disable(){
-//                $(this.$el).find('.el-button').addClass('is-disabled')
-//                $(this.$el).find('.el-button').prop('disabled',true)
-//            },
-//            clear_btn_group_disable(){
-//                $(this.$el).find('.el-button').removeClass('is-disabled')
-//                $(this.$el).find('.el-button').prop('disabled',false)
-//            },
-//            set_drop_disable(value ){
-//                if(value){
-//                    $(this.$el).find('.el-dropdown__caret-button').addClass('is-disabled')
-//                    $(this.$el).find('.el-dropdown__caret-button').prop('disabled',true)
-//                }else{
-//                    $(this.$el).find('.el-dropdown__caret-button').removeClass('is-disabled')
-//                    $(this.$el).find('.el-dropdown__caret-button').prop('disabled',false)
-//                }
-//            },
             action_disable(action){
                 if(action.disabled_express){
                     return ex.eval(action.disabled_express,{ps:this.parStore})
