@@ -1,6 +1,7 @@
 export  var mix_fields_data ={
     data:function(){
         return {
+            before_submit:[],
             op_funs:{
             }
         }
@@ -184,15 +185,12 @@ export  var mix_fields_data ={
             })
         },
         submit:function(){
-            debugger
             var self =this;
             this.setErrors({})
             ex.vueBroadCall(self,'commit')
-            debugger
             return new Promise(function(resolve,reject){
-                debugger
                 Vue.nextTick(async function(){
-                    await Promise.all(self.check_funs)
+                    await Promise.all( ex.map(self.before_submit,fun=>{return fun()}  )  )
 
                     if(!self.isValid()){
                         //reject()
