@@ -74,7 +74,7 @@ export default {
           childStore:childStore,
           parStore:parStore,
           ops_loc: this.ctx.ops_loc ||  'up',
-          check_funs:[],
+
         }
     },
     mixins:[mix_fields_data,mix_nice_validator],
