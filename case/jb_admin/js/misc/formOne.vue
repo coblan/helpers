@@ -73,7 +73,8 @@ export default {
           org_row:data_row,
           childStore:childStore,
           parStore:parStore,
-          ops_loc: this.ctx.ops_loc ||  'up'
+          ops_loc: this.ctx.ops_loc ||  'up',
+
         }
     },
     mixins:[mix_fields_data,mix_nice_validator],

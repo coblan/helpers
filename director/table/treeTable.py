@@ -28,35 +28,71 @@ class TreeTable(ModelTable):
                        'css':'.myphone button{ padding: 2px;}',
                        'class':'myphone',
                        'fields_ctx':model_form().get_head_context(),
-                       'click_express':"scope.head.fields_ctx.preset={parent:scope.ps.vc.rowData.pk}; cfg.pop_vue_com('com-form-one',scope.head.fields_ctx).then(()=>{ scope.ps.vc.rowData.hasChildren=true;scope.ps.vc.parStore.vc.$refs.dtable.updateNode( scope.ps.vc.rowData) })"},
+                       #'click_express':"scope.head.fields_ctx.preset={parent:scope.ps.vc.rowData.pk}; cfg.pop_vue_com('com-form-one',scope.head.fields_ctx).then(()=>{ scope.ps.vc.rowData.hasChildren=true;scope.ps.vc.parStore.vc.$refs.dtable.updateNode( scope.ps.vc.rowData) })"
+                        'click_express':'''cfg.show_load(); ex.director_call('d.get_row',{director_name:scope.head.fields_ctx.director_name,parent:scope.ps.vc.rowData.pk}).then((row)=>{
+                            cfg.hide_load()
+                            row.parent = scope.ps.vc.rowData.pk
+                            scope.head.fields_ctx.row=row
+                            return cfg.pop_vue_com('com-form-one',scope.head.fields_ctx)
+                        }) .then(()=>{ 
+                            Vue.set(scope.ps.vc.rowData,'hasChildren',true);
+                            scope.ps.vc.parStore.vc.$refs.dtable.updateNode( scope.ps.vc.rowData) 
+                        })''' 
+                        
+                       },
                       {'editor':'com-btn',
                        'label':'删除',
                        'width':100,
                        'type':'warning',
                        'class':'myphone',
-                       'click_express':'''
-                       cfg.show_load();
-                       ex.director_call("d.delete_query_related",{rows:[scope.ps.vc.rowData]}).then((resp)=>{
-                     cfg.hide_load();
-                     if(resp.length>0){
-                         cfg.pop_vue_com("com-pan-delete-query-message",{msg_list:resp,genStore:scope.ps,title:"删除关联确认"})
-                     }else{
-                        cfg.confirm("确认删除?").then(()=>{
-                            cfg.show_load()
-                            return ex.director_call('d.delete_rows',{rows:[scope.ps.vc.rowData]})
-                          }).then(()=>{
-                            cfg.hide_load()
-                            if(scope.ps.vc.rowData.parent){
-                                scope.ps.vc.parStore.vc.$refs.dtable.updateNode( {pk:scope.ps.vc.rowData.parent})
-                            }else{
-                                scope.ps.vc.parStore.vc.search()
-                            }
-                            
-                          })
-                        
-                     }
+                       'click_express':''' 
+                       var func = async ()=>{
+                                 cfg.show_load();
+                                 var resp = await ex.director_call("d.delete_query_related",{rows:[scope.ps.vc.rowData]})
+                                 cfg.hide_load();
+                                 if(resp.length>0){
+                                    var resp2 = await cfg.pop_vue_com("com-pan-delete-query-message",{msg_list:resp,title:"删除关联确认"})
+                                    if(!resp2){
+                                        return
+                                    }
+                                 }else{
+                                    await cfg.confirm("确认删除?")
+                                 }
+                                cfg.show_load()
+                                await ex.director_call('d.delete_rows',{rows:[scope.ps.vc.rowData]})
+                                cfg.hide_load()
+                                if(scope.ps.vc.rowData.parent){
+                                    scope.ps.vc.parStore.vc.$refs.dtable.updateNode( {pk:scope.ps.vc.rowData.parent})
+                                }else{
+                                    scope.ps.vc.parStore.vc.search()
+                                }
+                       }
+                       func()
+                      ''',
+                       
+                       #cfg.show_load();
+                       #ex.director_call("d.delete_query_related",{rows:[scope.ps.vc.rowData]}).then((resp)=>{
+                            #cfg.hide_load();
+                            #if(resp.length>0){
+                                
+                                #return cfg.pop_vue_com("com-pan-delete-query-message",{msg_list:resp,title:"删除关联确认"})
+                            #}else{
+                               #return cfg.confirm("确认删除?")
+                            #}
                     
-                 });''',
+                        #}).then(()=>{
+                                #cfg.show_load()
+                                #return ex.director_call('d.delete_rows',{rows:[scope.ps.vc.rowData]})
+                        #}).then(()=>{
+                                #cfg.hide_load()
+                                #if(scope.ps.vc.rowData.parent){
+                                    #scope.ps.vc.parStore.vc.$refs.dtable.updateNode( {pk:scope.ps.vc.rowData.parent})
+                                #}else{
+                                    #scope.ps.vc.parStore.vc.search()
+                                #}
+                                         #});
+                       
+                       
                        },
                       {'editor':'com-btn-drop',
                        'label':'更多',

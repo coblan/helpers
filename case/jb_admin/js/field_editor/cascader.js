@@ -47,16 +47,15 @@ var cascader_field =  {
             ],
         }
     },
-    template:`<div class="com-field-cascader">
-      <el-cascader
-            :show-all-levels="false"
+    template:`
+<!--:show-all-levels="false"-->
+      <el-cascader class="com-field-cascader"
             v-model="row[head.name]"
             :options="head.options"
             :props="{checkStrictly: true,emitPath:false }"
             size="small"
             clearable>
-        </el-cascader>
-    </div>`,
+        </el-cascader>`,
     //default-expand-all
     computed:{
         label:function(){
