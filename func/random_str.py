@@ -22,6 +22,16 @@ def short_uuid(u=4):
     result += uuidChars[x % 0x3E]
   return result
 
+def unique_random(get_fun,check_fun,maxcount=5,count=0):
+  if count > maxcount:
+    raise UserWarning('search unique str extend %s'%maxcount)
+  count +=1
+  value = get_fun()
+  if not check_fun(value):
+    return unique_random(get_fun, check_fun,maxcount, count)
+  else:
+    return value
+
 def get_str(length=15):
     a='abcdefghijklmnopqrstuvwxyz'
     a+=a.upper()
