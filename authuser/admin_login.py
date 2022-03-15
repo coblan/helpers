@@ -15,6 +15,7 @@ from helpers.authuser.validate_code import code_and_url
 from django.utils.translation import gettext as _
 from django.conf import settings
 from helpers.func.d_import import import_element
+from helpers.director.decorator import need_login
 
 class LoginFormPage(FieldsPage):
     template = 'director/web.html'
@@ -308,10 +309,13 @@ class LogOutPage(object):
         auth.logout(self.request)
         return redirect(next) 
 
-
-#director.update({
-    #'do_login': LoginFormPage.do_login,
-#})
+@need_login
+@director_view('user/info')
+def userinfo():
+    user = get_request_cache()['request'].user
+    return {
+        'name':str(user),
+    }
 
 # [TODO] 后面会放弃使用 auth_page_dc
 auth_page_dc .update({
