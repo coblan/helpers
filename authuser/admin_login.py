@@ -233,7 +233,8 @@ class Login(object):
         #return {'success':True,'token':request.session.session_key}
     #else:
         #return {'errors':form.errors}
-        
+
+@director_view('user/logout')
 @director_view('do_logout')
 def do_logout(**kw):
     request = get_request_cache()['request']
@@ -309,8 +310,9 @@ class LogOutPage(object):
         auth.logout(self.request)
         return redirect(next) 
 
-@need_login
+
 @director_view('user/info')
+@need_login
 def userinfo():
     user = get_request_cache()['request'].user
     return {
