@@ -40,9 +40,18 @@ class ForeignProc(BaseFieldProc):
         return head
     
     def filter_get_head(self, name, model):
+        this_field= model._meta.get_field(name)
+        
+        # 2022-3-22 防止大型数据返回到前端进行筛选。一般来说
+        if hasattr(model,'hugeFields') and name in model.hugeFields():
+            return {
+                'name':name,
+                'label':_(this_field.verbose_name),
+                'editor': 'com-filter-text',           
+            }
         catch = get_request_cache()
         option_name = model_to_name(model)+'.%s.options'%name
-        this_field= model._meta.get_field(name)
+        
         if not catch.get(option_name):
             def mychoice_func():
                 ls=this_field.get_choices()
