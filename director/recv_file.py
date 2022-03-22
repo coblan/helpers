@@ -15,6 +15,7 @@ import re
 from django.views.decorators.csrf import csrf_exempt
 from helpers.director.base_data import director
 import time
+from helpers.func.image_proc import ceil_image_size
 
 class BasicReciever(object):
     
@@ -50,9 +51,13 @@ class BasicReciever(object):
 
         with open(absolut_file_path,'wb') as general_file:
             general_file.write(file_data)
-            return self.getFileUrl(file_path)
+        if self.request.GET.get('maxspan'):
+            span = int( self.request.GET.get('maxspan') )
+            # 压缩图片的 width 和height
+            ceil_image_size(absolut_file_path,absolut_file_path,maxspan= span )
+        return self.getFileUrl(file_path)
         
-
+    
     def getFileName(self,file_data,fl):
         sufix = self.getSufix(fl)
         m = hashlib.md5()   
@@ -87,6 +92,16 @@ class GeneralUpload(BasicReciever):
     @split: month ;date
     @keepname: 1
     """
+    
+    #def readFile(self, fl):
+        #image_data =  super().readFile(fl)
+        #from PIL import Image
+        #img = Image.open(io.BytesIO(image_data))    
+        #print('hell')
+        #return img.tobytes()
+        
+        
+    
     def getParDir(self):
         path = self.request.GET.get('path','general_upload')
         split = self.request.GET.get('split','')
