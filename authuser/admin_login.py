@@ -311,13 +311,13 @@ class LogOutPage(object):
         return redirect(next) 
 
 
-@director_view('user/info')
-@need_login
-def userinfo():
-    user = get_request_cache()['request'].user
-    return {
-        'name':str(user),
-    }
+#@director_view('user/info')
+#@need_login
+#def userinfo():
+    #user = get_request_cache()['request'].user
+    #return {
+        #'name':str(user),
+    #}
 
 # [TODO] 后面会放弃使用 auth_page_dc
 auth_page_dc .update({
