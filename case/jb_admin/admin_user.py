@@ -96,7 +96,9 @@ class UserFields(ModelFields):
         if head['name']=='groups':
             head['label']='权限分组'
             #head['editor']='field_multi_chosen'
-            head['editor'] = 'com-field-multi-chosen'
+            #head['editor'] = 'com-field-multi-chosen'
+            head['editor'] = 'com-field-select'
+            head['multiple'] = True
         if head['name'] == 'username':
             head['label']='账号'
             head['help_text'] = '作为登录账号,只能填写字母,数字或者下划线(_),长度为2~50'
