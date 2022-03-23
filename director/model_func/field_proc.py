@@ -44,17 +44,10 @@ class BaseFieldProc(object):
         return head 
     
     def dict_field_head(self,head): 
-        # 2022-3-22 增加hugeFields函数判断字段是否输出全部数据以供选择
-        if hasattr(self.instance,'hugeFields') and \
-           head['name'] in self.instance.hugeFields():
-            options =[]
-            head['editor'] = 'com-field-label-shower'
-        else:
-            options = self.get_options()  
-            
-            if options:
-                head['options']=options
-                head['editor'] = 'com-field-select'
+        options = self.get_options()  
+        if options:
+            head['options']=options
+            head['editor'] = 'com-field-select'
         return head
     
     def get_options(self):
