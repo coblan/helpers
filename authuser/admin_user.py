@@ -9,7 +9,9 @@ class UserForm(ModelFields):
     nolimit = True
     class Meta:
         model = User
-        exclude =['password','date_joined']
+        fields =['first_name','last_name','email']
+        #exclude =['password','date_joined']
+
 
 @director_view('user/info')
 @need_login
@@ -20,16 +22,19 @@ def user_info(**row):
         return {
             'username':user.username,
             'nickname':user.first_name,
-            'head':user.last_name,
             'email':user.email,
         }
-    else:
-        row['pk']=user.pk
-        fields_obj = UserForm(dc = row,crt_user=user,)
+    elif request.method=='POST':
+        dc = {
+            'pk':user.pk,
+            'first_name':row.get('nickname',''),
+            'email':row.get('email',''),
+        }
+        fields_obj = UserForm(dc = dc,crt_user=user,)
         if fields_obj.is_valid():
             fields_obj.save_form()
         else:
-            return  fields_obj.get_errors() 
+            return {'error': fields_obj.get_errors() }
 
 
 
