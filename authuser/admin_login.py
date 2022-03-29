@@ -63,8 +63,8 @@ class LoginFormPage(FieldsPage):
     
 
 @director_view('username/login')
-def login(username , password):
-    row={"username":username,'password':password}
+def login(username , password,validate_code='',validate_img=''):
+    row={"username":username,'password':password,"validate_code":validate_code}
     rt= run(row)
     if 'errors' in rt:
         dc ={}
@@ -72,7 +72,6 @@ def login(username , password):
             dc[k] = ';'.join(v)
         rt['errors'] = dc
     return rt
-
 
 @director_view('do_login')
 def run(row):
