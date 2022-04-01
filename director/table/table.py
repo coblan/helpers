@@ -1018,7 +1018,8 @@ class ModelTable(object):
         #self.search_args['_perpage'] = 5000
         #ctx = self.get_context()
         self.is_export_excel = True
-        
+       
+
         heads = self.getExcelHead() #ctx['heads']
         rows =  self.getExcelRows() #ctx['rows']
         out_rows = []
@@ -1052,13 +1053,16 @@ class ModelTable(object):
             out_rows.append(excel_row)
         
         wb = Workbook()
-        ws = wb.active
+        ws = wb.active       
         for row in out_rows:
             #ws.append(row)
             # 有可能是models.py lazy翻译的
             ws.append([str_lazy_label(x)  for x in row ])        
-        
+        self.after_excel(wb,ws,out_rows)
         return wb
+    def after_excel(self,wb,ws,out_rows):
+        "用户设置ws的单元格格式等"
+        pass
 
 class RawTable(ModelTable):
     '''

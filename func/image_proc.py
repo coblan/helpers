@@ -9,3 +9,12 @@ class ImageProc(object):
         im = Image.open("lenna.jpg")
         # 指定逆时针旋转的角度
         im_rotate = im.rotate(45) 
+
+
+def ceil_image_size(inputpath,outpath,maxspan=1200):
+    "压缩图片"
+    img = Image.open(inputpath)
+    ratio = max(img.size) / maxspan
+    if ratio >1:
+        resized_image = img.resize(  (int(x / ratio) for x in img.size) )
+        resized_image.save(outpath)

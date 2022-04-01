@@ -190,16 +190,23 @@ def get_lib(request):
                 'md5': 'https://cdn.jsdelivr.net/npm/blueimp-md5@2.10.0/js/md5.min.js',
                 'swiper': 'https://cdn.jsdelivr.net/npm/swiper@4.5.0/dist/js/swiper.min.js',
                 'swiper_css': 'https://cdn.jsdelivr.net/npm/swiper@4.5.0/dist/css/swiper.min.css',  
-                'echarts':'https://cdn.jsdelivr.net/npm/echarts@4.9.0/dist/echarts.min.js',#'https://cdn.jsdelivr.net/npm/echarts@4.2.1/dist/echarts.min.js',
+                'echarts':'https://lib.baomitu.com/echarts/5.2.2/echarts.min.js',#'https://cdn.jsdelivr.net/npm/echarts@4.2.1/dist/echarts.min.js',
                 'chosen':'https://cdn.jsdelivr.net/npm/chosen-js@1.8.7/chosen.jquery.min.js',
                 'chosen_css':'https://cdn.jsdelivr.net/npm/chosen-js@1.8.7/chosen.min.css',
+
                 
-                # ckeditor lineHeight Html5Video插件找不到
+                # 外面找到ckeditor 要报错， ckeditor lineHeight Html5Video插件找不到 还是用jsdelivr吧
                 #'ckeditor':'https://cdn.jsdelivr.net/npm/ckeditor@4.11.4/ckeditor.js',
                 #'ckeditor':'https://cdn.jsdelivr.net/npm/ckeditor@4.11.4/ckeditor.min.js',
+
                 #'ckeditor':'https://cdn.ckeditor.com/4.18.0/standard/ckeditor.js',
                 #'ckeditor': 'https://lib.baomitu.com/ckeditor/4.10.1/ckeditor.js',#'https://cdn.ckeditor.com/4.10.1/full/ckeditor.js',
                 #'ckeditor':'https://cdn.jsdelivr.net/npm/ckeditor-full@4.7.3/ckeditor.js',
+
+                #'ckeditor': 'https://lib.baomitu.com/ckeditor/4.10.1/ckeditor.js',#
+                #"ckeditor":'https://cdn.ckeditor.com/4.10.1/full/ckeditor.js',
+
+
                 
                 'select2':'https://cdn.jsdelivr.net/npm/select2@4.0.10/dist/js/select2.min.js',
                 'select2_css':'https://cdn.jsdelivr.net/npm/select2@4.0.10/dist/css/select2.min.css',

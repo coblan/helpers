@@ -22,6 +22,16 @@ def short_uuid(u=4):
     result += uuidChars[x % 0x3E]
   return result
 
+def unique_random(get_fun,check_fun,maxcount=5,count=0):
+  if count > maxcount:
+    raise UserWarning('search unique str extend %s'%maxcount)
+  count +=1
+  value = get_fun()
+  if not check_fun(value):
+    return unique_random(get_fun, check_fun,maxcount, count)
+  else:
+    return value
+
 def get_str(length=15):
     a='abcdefghijklmnopqrstuvwxyz'
     a+=a.upper()
@@ -36,6 +46,11 @@ def get_random_number(length= 6):
   
 @transaction.atomic
 def get_date_sequence(key='_data_sequence',fill=6,how_many=1):
+  """以日期为依据，生成随机序列
+  
+  @key:在kv数据库里面的key，可以用默认的
+  
+  """
   now = timezone.now()
   date_str = now.strftime('%Y%m%d')   
   inst  = lock_kv_inst(key,default='')

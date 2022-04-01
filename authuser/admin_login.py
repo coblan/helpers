@@ -15,6 +15,7 @@ from helpers.authuser.validate_code import code_and_url
 from django.utils.translation import gettext as _
 from django.conf import settings
 from helpers.func.d_import import import_element
+from helpers.director.decorator import need_login
 
 class LoginFormPage(FieldsPage):
     template = 'director/web.html'
@@ -62,8 +63,8 @@ class LoginFormPage(FieldsPage):
     
 
 @director_view('username/login')
-def login(username , password):
-    row={"username":username,'password':password}
+def login(username , password,validate_code='',validate_img=''):
+    row={"username":username,'password':password,"validate_code":validate_code}
     rt= run(row)
     if 'errors' in rt:
         dc ={}
@@ -71,7 +72,6 @@ def login(username , password):
             dc[k] = ';'.join(v)
         rt['errors'] = dc
     return rt
-
 
 @director_view('do_login')
 def run(row):
@@ -232,7 +232,8 @@ class Login(object):
         #return {'success':True,'token':request.session.session_key}
     #else:
         #return {'errors':form.errors}
-        
+
+@director_view('user/logout')
 @director_view('do_logout')
 def do_logout(**kw):
     request = get_request_cache()['request']
@@ -309,9 +310,13 @@ class LogOutPage(object):
         return redirect(next) 
 
 
-#director.update({
-    #'do_login': LoginFormPage.do_login,
-#})
+#@director_view('user/info')
+#@need_login
+#def userinfo():
+    #user = get_request_cache()['request'].user
+    #return {
+        #'name':str(user),
+    #}
 
 # [TODO] 后面会放弃使用 auth_page_dc
 auth_page_dc .update({

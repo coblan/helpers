@@ -44,7 +44,7 @@ class BaseFieldProc(object):
         return head 
     
     def dict_field_head(self,head): 
-        options = self.get_options()   
+        options = self.get_options()  
         if options:
             head['options']=options
             head['editor'] = 'com-field-select'
