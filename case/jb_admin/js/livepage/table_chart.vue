@@ -165,7 +165,7 @@
 
 
 //Vue.component('com-live-table-type',live_table_type)
-<style lang="scss">
+<style lang="scss" scoped>
     .mychart{
         padding: 10px;
         background-color: white;
