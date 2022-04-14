@@ -11,7 +11,13 @@ require('./scss/my_bootstrap.scss')
 require('./styl/adminlte.styl')
 require('weblib/pc/style/element_ex.scss')
 import  'weblib/pc/style'
+
 import * as config from  './config.js'
+
+import VueCompositionAPI from '@vue/composition-api'
+
+Vue.use(VueCompositionAPI)
+
 //table mix
 import * as mix_table_data from  './mix/mix_table_data.js'
 import * as mix_v_table_adapter from './mix/mix_v_table_adapter.js'
