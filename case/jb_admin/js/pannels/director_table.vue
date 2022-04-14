@@ -24,7 +24,8 @@
     </div>
 </template>
 <script>
-    const { ref, reactive,computed ,onMounted,getCurrentInstance } = VueCompositionAPI
+import { ref, reactive,computed ,onMounted,getCurrentInstance } from '@vue/composition-api'
+    // const { ref, reactive,computed ,onMounted,getCurrentInstance } = VueCompositionAPI
 
     import dtable from 'webcase/director/table/dtable.vue'
     import dOperation from 'webcase/director/table/doperation.vue'

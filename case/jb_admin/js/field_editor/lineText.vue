@@ -22,7 +22,8 @@
     </div>
 </template>
 <script>
-    const { ref, reactive,computed ,onMounted,getCurrentInstance } = VueCompositionAPI
+import { ref, reactive,computed ,onMounted,getCurrentInstance } from '@vue/composition-api'
+    // const { ref, reactive,computed ,onMounted,getCurrentInstance } = VueCompositionAPI
     export  class LineTextLogic{
         constructor(){
 
