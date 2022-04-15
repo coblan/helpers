@@ -42,7 +42,7 @@ import { ref, reactive,computed ,onMounted,getCurrentInstance } from '@vue/compo
                 var mounted_express = props.head.mounted_express || props.head.on_mounted
                 if(mounted_express){
                     var vc = getCurrentInstance()
-                    ex.eval(mounted_express,{vc:vc})
+                    ex.eval(mounted_express,{vc:vc.proxy})
                 }
             })
         }
