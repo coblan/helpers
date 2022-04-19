@@ -25,7 +25,7 @@ var order_list =  {
                                 width="55">
                         </el-table-column>
 
-                        <template  v-for="col in heads">
+                        <template  v-for="col in normed_heads">
 
                             <el-table-column v-if="col.editor"
                                              :show-overflow-tooltip="is_show_tooltip(col) "
@@ -85,9 +85,18 @@ var order_list =  {
         //this.$on('commit',this.on_commit)
     },
     computed:{
-       out_row_this_field:function(){
-           return this.row[this.head.name]
-       }
+        out_row_this_field:function(){
+            return this.row[this.head.name]
+        },
+        normed_heads(){
+            return ex.filter(this.heads,head=>{
+                if(head.show_express){
+                    return ex.eval(head.show_express,{row:this.row,vc:this})
+                }else{
+                    return  true
+                }
+            })
+        }
     },
     watch:{
         out_row_this_field:function(){
@@ -142,23 +151,23 @@ var order_list =  {
                 })
             }else{ // 这里是兼顾老的
                 var fields_ctx={
-                  heads:self.head.fields_heads,
-                  ops_loc:'bottom',
-                  save_express:'scope.vc.$emit("finish",scope.vc.row);rt=Promise.resolve(scope.vc.row)',
-                  ops:[{
-                      'name':'save','editor':'com-field-op-btn','label':'确定', 'icon': 'fa-save',
-                  }],
-                  genVc:self,
-                  par_row:self.row,
-                  preset:preset,
-              }
+                    heads:self.head.fields_heads,
+                    ops_loc:'bottom',
+                    save_express:'scope.vc.$emit("finish",scope.vc.row);rt=Promise.resolve(scope.vc.row)',
+                    ops:[{
+                        'name':'save','editor':'com-field-op-btn','label':'确定', 'icon': 'fa-save',
+                    }],
+                    genVc:self,
+                    par_row:self.row,
+                    preset:preset,
+                }
             }
-          
+
             cfg.pop_vue_com('com-form-one',fields_ctx).then((row)=>{
                 if(row){
-                  self.rows.push(row)
+                    self.rows.push(row)
                 }else{
-                   console.log('break form one')
+                    console.log('break form one')
                 }
                 if(self.head.after_save_express){
                     ex.eval(self.head.after_save_express,{row:row,vc:self})
@@ -178,7 +187,7 @@ var order_list =  {
         },
         norm_head:function(head,row){
             if(row._editing){
-                
+
             }
         }
     }
