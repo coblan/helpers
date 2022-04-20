@@ -1,0 +1,62 @@
+{% extends "mobile/base2.html" %}
+
+{% load static %}
+{% load jsonify %}
+
+
+{% block head-content %}
+
+{% block head-content2 %}
+<title>{{ page_label}}|{{ title }}</title>
+{% endblock %}
+<script src="{{ js_config.js_lib.vuejs }}"></script>
+<script src="{{ js_config.js_lib.mobile2 }}"></script>
+
+{% endblock %}
+
+
+{% block page_body %}
+
+<script>
+    if(js_config.is_debug){
+        Vue.config.devtools = true
+    }else{
+        Vue.config.devtools = false
+    }
+
+    editor= {{ editor | jsonify }}
+    bind = {{ bind | jsonify }}
+
+
+    document.addEventListener("DOMContentLoaded", function(event) {
+        new Vue({
+            el:'#main-panel',
+            data(){
+                return {
+                    editor:editor,
+                    bind:bind
+                }
+            }
+        })
+  });
+
+
+</script>
+
+<div id="main-panel">
+        <component ref="root_editor"
+                   :is="editor"
+                   v-bind="bind" ></component>
+</div>
+
+
+<script>
+
+
+
+</script>
+{% block page_content %}
+
+{% endblock %}
+
+{% endblock %}
