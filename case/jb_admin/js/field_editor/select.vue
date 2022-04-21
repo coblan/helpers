@@ -85,7 +85,10 @@
                 this.loaded=true
               },100)
             })
+          }else {
+            this.loaded=true
           }
+
 
           // this.$nextTick(()=>{
           //   this.loaded=true
