@@ -4,7 +4,7 @@
         <div v-else>
             <input type="text" style="display: none" :id="'id_'+head.name" :name="head.name" v-model="row[head.name]"><!-- :clearable="!head.required"-->
 <!--          :class="{isempty:!is_select}"  -->
-          <el-select  :class="{start:!loaded || !is_select }"  v-model="row[head.name]"
+          <el-select v-show="loaded"  :class="{start:!loaded || !is_select }"  v-model="row[head.name]"
                         :multiple="head.multiple"
                         :filterable="head.multiple ||  head.filterable "
                         :placeholder="head.placeholder"
@@ -77,9 +77,23 @@
                 ex.append_css(this.head.css)
             }
 
+            // 为了纠正多选情况下，启动时 布局 错乱问题。
+          if (this.head.multiple){
+
             this.$nextTick(()=>{
-              this.loaded=true
+              setTimeout(()=>{
+                this.loaded=true
+              },100)
             })
+          }else {
+            this.loaded=true
+          }
+
+
+          // this.$nextTick(()=>{
+          //   this.loaded=true
+          // })
+
         },
 
         watch:{
@@ -123,7 +137,6 @@
                 }else{
                   return v !== this.novalue
                 }
-
             },
             place_value:function(){
                 var v = this.row[this.head.name]

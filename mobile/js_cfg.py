@@ -19,14 +19,15 @@ js_tr_list.append(get_tr)
 def get_lib(request): 
     dc = {
         'mobile': static_url( 'js/mobile.pack.js?t=%s&v=16'%js_stamp_dc.get('mobile_pack_js') ), 
+        'mobile2': static_url( 'js/mobile2.pack.js?t=%s&v=16'%js_stamp_dc.get('mobile2_pack_js') ), 
         'mint_ui':'https://cdn.jsdelivr.net/npm/mint-ui@2.2.13/lib/index.js',
         'mint_ui_css':'https://cdn.jsdelivr.net/npm/mint-ui@2.2.13/lib/style.min.css',
         #'vant':'https://cdn.jsdelivr.net/npm/vant@1.6/lib/vant.min.js',
         #'vant_css':'https://cdn.jsdelivr.net/npm/vant@1.6/lib/index.css',
         #'vant':'https://cdn.jsdelivr.net/npm/vant@2.6/lib/vant.min.js',
         #'vant_css':'https://cdn.jsdelivr.net/npm/vant@2.6/lib/index.css',
-        'vant':'https://cdn.jsdelivr.net/npm/vant@2.12.6/lib/vant.min.js',
-        'vant_css':'https://cdn.jsdelivr.net/npm/vant@2.12.6/lib/index.css',
+        'vant':'https://lib.baomitu.com/vant/2.12.46/vant.min.js',# 'https://cdn.jsdelivr.net/npm/vant@2.12.6/lib/vant.min.js',
+        'vant_css': 'https://lib.baomitu.com/vant/2.12.46/index.min.css', # 'https://cdn.jsdelivr.net/npm/vant@2.12.6/lib/index.css',
         'cube_ui':'https://cdn.jsdelivr.net/npm/cube-ui@1.12.14/lib/index.min.js',
         'cube_ui_css':'https://cdn.jsdelivr.net/npm/cube-ui@1.12.14/lib/cube.min.css',
         'velocity':'https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.min.js'

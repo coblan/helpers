@@ -24,7 +24,8 @@ class Ckeditor(object):
                 catch.write(chunk) 
                 m.update(chunk)
             catch.flush()
-            file_name=m.hexdigest()+'_'+f.name
+            #file_name=m.hexdigest()+'_'+f.name
+            file_name=m.hexdigest()+'.'+f.name.split('.')[-1]
             file_path=os.path.join(file_dir,file_name)
             self.file_name= file_name
             self.file_path= file_path

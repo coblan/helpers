@@ -188,6 +188,8 @@ class BaseEngine(object):
         if getattr(page,'get_cache_control',None):
             kw= page.get_cache_control()
             patch_cache_control(resp,**kw)
+        if getattr(page,'processRespons',None):
+            page.processRespons(resp)
         return resp
        
     def custome_ctx(self,ctx):

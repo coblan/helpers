@@ -13,7 +13,7 @@
 
 
     {% block head-content %}
-        <title></title>
+    <title></title>
     {% endblock %}
     <style>
         .bar{
@@ -25,8 +25,7 @@
     {% endblock %}
 </head>
 
-
-{% include 'director/reverse.html' %}
+{% include 'mobile/reverse2.html' %}
 <script>
     if(js_config.is_debug){
         Vue.config.devtools = true
@@ -45,10 +44,10 @@
 </body>
 
 {% for lib in extra_js %}
-    <script src='{{ lib | ctxvalue:js_config.js_lib }}'></script>
+<script src='{{ lib | ctxvalue:js_config.js_lib }}'></script>
 {% endfor %}
 {% for lib in extra_css %}
-    <link  href='{{ lib | ctxvalue:js_config.js_lib }}' rel="stylesheet">
+<link  href='{{ lib | ctxvalue:js_config.js_lib }}' rel="stylesheet">
 {% endfor %}
 
 <script>
