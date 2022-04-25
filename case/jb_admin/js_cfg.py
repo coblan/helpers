@@ -82,6 +82,7 @@ def get_lib(request):
         
         #'jb_admin_pack_js': '/static/js/jb_admin.pack.js?t=%s&t2=123'%js_stamp_dc.get('jb_admin_pack_js'),
         'jb_admin': static_url( 'js/jb_admin.pack.js?t=%s&t2=123'%js_stamp_dc.get('jb_admin_pack_js') ),
+        'fields':static_url( 'js/fields.pack.js?t=%s'%js_stamp_dc.get('fields_pack_js') ),  
         #'swiper': 'https://cdn.bootcss.com/Swiper/4.3.0/js/swiper.min.js',
         #'swiper_css': 'https://cdn.bootcss.com/Swiper/4.3.0/css/swiper.min.css',  
         'select2':'/static/lib/select2-4.0.10/dist/js/select2.min.js',
@@ -100,6 +101,7 @@ def get_lib(request):
         'selectizejs_css':'https://cdn.jsdelivr.net/npm/selectize@0.12.6/dist/css/selectize.default.css',
         'cropper_css':'/static/lib/cropper2.3.4.min.css',
         'cropper':'/static/lib/cropper2.3.4.min.js',
+        # 这里需要更新
         'composition_api':'/static/lib/vue_lib/composition-api@1.0.0-rc.11',
         'vuedraggable':'https://cdn.jsdelivr.net/npm/vuedraggable@2.24.1/dist/vuedraggable.umd.min.js',# 'https://cdnjs.cloudflare.com/ajax/libs/Vue.Draggable/2.20.0/vuedraggable.umd.min.js'
     }
@@ -152,7 +154,7 @@ def get_lib(request):
             'velocity':'https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.min.js',
             'animate_css':'https://cdn.jsdelivr.net/npm/animate.css@3.7.2/animate.min.css',
             'wow':'https://cdn.jsdelivr.net/npm/wow.js@1.2.2/dist/wow.min.js',
-            'composition_api':'https://cdn.jsdelivr.net/npm/@vue/composition-api@1.0.0-rc.11',
+            'composition_api':'https://cdn.jsdelivr.net/npm/@vue/composition-api@1.5.0',
         })
         
         if not settings.DEBUG:
@@ -216,7 +218,8 @@ def get_lib(request):
                 'velocity':'https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.min.js',
                 'animate_css':'https://cdn.jsdelivr.net/npm/animate.css@3.7.2/animate.min.css',
                 'wow':'https://cdn.jsdelivr.net/npm/wow.js@1.2.2/dist/wow.min.js',
-                'composition_api':'https://cdn.jsdelivr.net/npm/@vue/composition-api@1.0.0-rc.11',
+                #'composition_api':'https://cdn.jsdelivr.net/npm/@vue/composition-api@1.5.0',
+                'composition_api':'https://cdn007.oss-cn-shenzhen.aliyuncs.com/composition-api1.5.0.js'
             })
             if not settings.DEBUG:
                 dc.update({
