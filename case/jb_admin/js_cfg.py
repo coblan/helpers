@@ -82,7 +82,7 @@ def get_lib(request):
         
         #'jb_admin_pack_js': '/static/js/jb_admin.pack.js?t=%s&t2=123'%js_stamp_dc.get('jb_admin_pack_js'),
         'jb_admin': static_url( 'js/jb_admin.pack.js?t=%s&t2=123'%js_stamp_dc.get('jb_admin_pack_js') ),
-        'fields':static_url( 'js/fields.pack.js?t=%s'%js_stamp_dc.get('fields_pack_js') ),  
+        #'fields':static_url( 'js/fields.pack.js?t=%s'%js_stamp_dc.get('fields_pack_js') ),  
         #'swiper': 'https://cdn.bootcss.com/Swiper/4.3.0/js/swiper.min.js',
         #'swiper_css': 'https://cdn.bootcss.com/Swiper/4.3.0/css/swiper.min.css',  
         'select2':'/static/lib/select2-4.0.10/dist/js/select2.min.js',

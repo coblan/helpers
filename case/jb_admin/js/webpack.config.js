@@ -5,7 +5,7 @@ var webpack = require('D:/coblan/webcode/node_modules/webpack')
 const VueLoaderPlugin = require('D:/coblan/webcode/node_modules/vue-loader/lib/plugin')
 // const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
-
+var {CleanWebpackPlugin} = require('clean-webpack-plugin');
 var webpack = require('webpack')
 
 module.exports =
@@ -14,11 +14,21 @@ module.exports =
     mode:'production', //'development', //
     entry: {
         jb_admin:'./main.js',
-        fields:'./fields_main.js'
+        // fields:'./fields_main.js'
     },
     output: {
-        path:path.resolve(__dirname, '../static/js'),
-        filename: '[name].pack.js'
+        // path:path.resolve(__dirname, '../static/js'),
+        // filename: '[name].pack.js'
+        path:path.resolve(__dirname, '../static'),
+        filename: 'js/[name].pack.js',
+        chunkFilename: 'js/jb_admin.[id].[chunkhash].js',
+        publicPath:'/static/'
+
+        // path:path.resolve(__dirname, '../static/'),
+        // filename: 'js/[name].pack.js',
+        // chunkFilename: 'js/jb_admin/[id].[chunkhash].js',
+        // publicPath:'/static/'
+
     },
     externals: {
         'vue': 'Vue',
@@ -105,6 +115,7 @@ module.exports =
     },
     plugins: [
         new VueLoaderPlugin(),
+        new CleanWebpackPlugin(),
         // new BundleAnalyzerPlugin(),
         //new UglifyJSPlugin()
         //new webpack.DefinePlugin({

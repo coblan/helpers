@@ -94,7 +94,10 @@ import * as stack_widget from './misc/stack_widget'
 
 
 import * as table_editor_main from  './table_editor/main.js'
-import * as table_group_main from  './table_group/main.js'
+
+
+
+
 import * as node_store_main from  './node_store/main.js'
 import * as tabs_main from  './tabs/main'
 
@@ -113,3 +116,8 @@ import * as layout_main from './layout'
 
 import excelProcessResult from "./misc/excelProcessResult.vue";
 Vue.component('com-excel-process-result',excelProcessResult)
+
+// import(/* webpackChunkName: 'table_group' */'./table_group/main.js')
+import(/* webpackChunkName: 'fields_main' */'./fields_main.js')
+
+import * as table_group_main from  './table_group/main.js'
