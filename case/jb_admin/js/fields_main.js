@@ -21,3 +21,17 @@ import * as plain_field_panel from  './fields_panels/plain_field_panel.js'
 
 import * as nice_validator_rule from  './nice_validator_rule.js'
 import * as fields_panels_main from  './fields_panels/main.js'
+
+Vue.component('com-d-table', async (resolve, reject)=> {
+    var com = await import('./fields_import.js')
+    resolve(com.director_table)
+})
+Vue.component('com-backend-table', async (resolve, reject)=> {
+    var com = await import('./fields_import.js')
+    resolve(com.backendTable)
+})
+Vue.component('com-d-table-setting', async (resolve, reject)=> {
+    var com = await import('./fields_import.js')
+    resolve(com.d_table_setting)
+})
+

@@ -13,7 +13,7 @@ var webpack = require('webpack')
 module.exports =
 {
     //context:__dirname,
-    mode:'production', //'development', //
+    mode:'development', //'production', //
     entry: {
         jb_admin:'./main.js',
         // fields:'./fields_main.js'
