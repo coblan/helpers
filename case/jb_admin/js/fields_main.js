@@ -22,6 +22,7 @@ import * as plain_field_panel from  './fields_panels/plain_field_panel.js'
 import * as nice_validator_rule from  './nice_validator_rule.js'
 import * as fields_panels_main from  './fields_panels/main.js'
 
+
 Vue.component('com-d-table', async (resolve, reject)=> {
     var com = await import('./fields_import.js')
     resolve(com.director_table)
@@ -34,4 +35,28 @@ Vue.component('com-d-table-setting', async (resolve, reject)=> {
     var com = await import('./fields_import.js')
     resolve(com.d_table_setting)
 })
+Vue.component('com-excel-process-result', async (resolve, reject)=> {
+    var com = await import('./fields_import.js')
+    resolve(com.excelProcessResult)
+})
+
+Vue.component('com-live-tab', async (resolve, reject)=> {
+    var com = await import('./fields_import.js')
+    resolve(com.livepage_tab)
+})
+
+Vue.component('com-table-chart',async(resolve,reject) =>{
+    var com = await import('./fields_import.js')
+    await ex.load_js(js_config.js_lib.echarts)
+    resolve(com.live_table_chart)
+
+    // ex.load_js(js_config.js_lib.echarts).then(function(){
+    //     resolve(com.live_table_chart)
+    // })
+})
+Vue.component('com-tab-dtable', async (resolve, reject)=> {
+    var com = await import('./fields_import.js')
+    resolve(com.tab_dtable)
+})
+
 

@@ -1,16 +1,4 @@
-require('./scss/fields.scss')
-require('./table_editor/scss/table_editor_base.scss')
-require('./scss/tab.scss')
-require('./scss/table.scss')
-require('./scss/table_page.scss')
-require('./scss/element_ex.scss')
-require('./scss/share.scss')
-require('./scss/layer.scss')
-require('./scss/my_bootstrap.scss')
 
-require('./styl/adminlte.styl')
-require('weblib/pc/style/element_ex.scss')
-import  'weblib/pc/style'
 
 import * as config from  './config.js'
 
@@ -114,13 +102,13 @@ import  * as table_local_input from './table_editor/local_input/main'
 import * as layout_main from './layout'
 //import * as pop_win_main from './pop_win/main'
 
-import excelProcessResult from "./misc/excelProcessResult.vue";
-Vue.component('com-excel-process-result',excelProcessResult)
+
 
 // import(/* webpackChunkName: 'table_group' */'./table_group/main.js')
 // import(/* webpackChunkName: 'fields_main' */'./fields_main.js')
 
 import * as fields_main from  './fields_main.js'
 
-//这里面的东西好像都过时了，现在用的com-d-table
+//这里面的东西好像都过时了，现在用的com-d-table  发现有用的： com-table-filters
 // import * as table_group_main from  './table_group/main.js'
+import * as filter from  './table_group/filter.js'

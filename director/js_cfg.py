@@ -24,7 +24,8 @@ def get_lib(request):
     if request.META.get('ACCESS_FROM_INTERNET'):
         dc.update({
             'moment':'https://cdn.jsdelivr.net/npm/moment@2.24.0/moment.min.js',
-            'moment_zh_cn':'https://cdn.jsdelivr.net/npm/moment@2.24.0/locale/zh-cn.js'
+            'moment_zh_cn':'https://cdn.jsdelivr.net/npm/moment@2.24.0/locale/zh-cn.js',
+            'stompjs':'https://cdn.bootcdn.net/ajax/libs/stomp.js/2.3.3/stomp.min.js'
         })
 
     return dc
