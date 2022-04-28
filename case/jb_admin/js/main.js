@@ -119,5 +119,8 @@ Vue.component('com-excel-process-result',excelProcessResult)
 
 // import(/* webpackChunkName: 'table_group' */'./table_group/main.js')
 // import(/* webpackChunkName: 'fields_main' */'./fields_main.js')
+
 import * as fields_main from  './fields_main.js'
-import * as table_group_main from  './table_group/main.js'
+
+// 这里面的东西好像都过时了，现在用的com-d-table
+// import * as table_group_main from  './table_group/main.js'

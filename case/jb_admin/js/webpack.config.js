@@ -6,6 +6,8 @@ const VueLoaderPlugin = require('D:/coblan/webcode/node_modules/vue-loader/lib/p
 // const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 var {CleanWebpackPlugin} = require('clean-webpack-plugin');
+// var MiniCssExtractPlugin = require('mini-css-extract-plugin')
+
 var webpack = require('webpack')
 
 module.exports =
@@ -109,14 +111,26 @@ module.exports =
                 }, {
                     loader: 'less-loader' // compiles Less to CSS
                 }]
-            }
+            },
+            // {
+            //     test: /\.css$/,
+            //     use: [
+            //         process.env.NODE_ENV !== 'production'
+            //             ? 'vue-style-loader'
+            //             : MiniCssExtractPlugin.loader,
+            //         'css-loader'
+            //     ]
+            // }
         ]
 
     },
     plugins: [
         new VueLoaderPlugin(),
         new CleanWebpackPlugin(),
-        // new BundleAnalyzerPlugin(),
+        // new MiniCssExtractPlugin({
+        //     filename: 'style.css'
+        // })
+        new BundleAnalyzerPlugin(),
         //new UglifyJSPlugin()
         //new webpack.DefinePlugin({
             //'process.env.NODE_ENV': JSON.stringify('production'),
