@@ -118,6 +118,6 @@ import excelProcessResult from "./misc/excelProcessResult.vue";
 Vue.component('com-excel-process-result',excelProcessResult)
 
 // import(/* webpackChunkName: 'table_group' */'./table_group/main.js')
-import(/* webpackChunkName: 'fields_main' */'./fields_main.js')
-
+// import(/* webpackChunkName: 'fields_main' */'./fields_main.js')
+import * as fields_main from  './fields_main.js'
 import * as table_group_main from  './table_group/main.js'
