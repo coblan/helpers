@@ -18,7 +18,8 @@ def get_lib(request):
         'exfun': static_url( 'js/exfun.pack.js?t=%s&v=6'%js_stamp_dc.get('exfun_pack_js') ),
         'director': static_url( 'js/director.pack.js?t=%s&v=2'%js_stamp_dc.get('director_pack_js') ),
         'moment': '/static/lib/moment2.17.1.min.js',
-        'stompjs':'https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js'
+        #'stompjs':'https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js'
+        'stompjs':'https://cdn.bootcdn.net/ajax/libs/stomp.js/2.3.3/stomp.min.js'
         
     }
     if request.META.get('ACCESS_FROM_INTERNET'):
