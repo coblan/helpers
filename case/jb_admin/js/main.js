@@ -111,4 +111,6 @@ import * as fields_main from  './fields_main.js'
 
 //这里面的东西好像都过时了，现在用的com-d-table  发现有用的： com-table-filters
 // import * as table_group_main from  './table_group/main.js'
-import * as filter from  './table_group/filter.js'
+// import * as filter from  './table_group/filter.js'
+
+import  * as table_group from './table_group.js'

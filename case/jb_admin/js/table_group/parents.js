@@ -1,4 +1,4 @@
-var table_parents={
+export  var table_parents={
     data:function(){
         var self=this
         return {
@@ -22,4 +22,3 @@ var table_parents={
         }
     }
 }
-Vue.component('com-table-parents',table_parents)
