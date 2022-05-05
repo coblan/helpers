@@ -1,6 +1,6 @@
 require('./styl/fields_table_block.styl')
 
-Vue.component('com-fields-table-block',{
+export default  {
     props:['heads','row','option'],
     template:`<div class="com-fields-table-block field-panel msg-bottom">
            <table >
@@ -57,4 +57,4 @@ Vue.component('com-fields-table-block',{
             layer.close(this.msg_index)
         }
     }
-})
+}

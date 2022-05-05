@@ -134,7 +134,7 @@ module.exports =
         // new MiniCssExtractPlugin({
         //     filename: 'style.css'
         // })
-        // new BundleAnalyzerPlugin(),
+        new BundleAnalyzerPlugin(),
         //new UglifyJSPlugin()
         //new webpack.DefinePlugin({
             //'process.env.NODE_ENV': JSON.stringify('production'),

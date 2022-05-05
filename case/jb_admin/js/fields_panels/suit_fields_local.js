@@ -1,6 +1,6 @@
 import {suit_fields} from  './suit_fields'
 
-var suit_fields_local={
+export default {
     mixins:[suit_fields],
     methods:{
         submit:function(){
@@ -11,6 +11,5 @@ var suit_fields_local={
     }
 }
 
-window.suit_fields_local=suit_fields_local
+// window.suit_fields_local=suit_fields_local
 
-Vue.component('com-suit-fields-local',suit_fields_local)

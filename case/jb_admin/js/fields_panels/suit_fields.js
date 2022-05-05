@@ -25,4 +25,3 @@ export var  suit_fields= {
 
 }
 
-Vue.component('com-suit-fields',suit_fields)

@@ -24,6 +24,9 @@
 <script>
     export default {
         props: ['row', 'head'],
+      /*
+      * filterable=true, 取代了 search_select
+      * */
         data: function () {
             var inn_config = {
 //orgin_order:true,
@@ -244,7 +247,8 @@
 
    /deep/{
       .el-select.start > .el-input > input {
-        min-height:34px!important;
+        // 遇到multiple的时候开启
+        //min-height:34px!important;
       }
     }
 

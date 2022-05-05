@@ -1,4 +1,4 @@
-var order_list =  {
+export default {
     props:['row','head'],
     template:`<div class="com-field-table-list">
     <div v-if="!head.readonly">
@@ -194,4 +194,3 @@ var order_list =  {
 
 }
 
-Vue.component('com-field-table-list',order_list)

@@ -1,4 +1,4 @@
-function init_table_ctx(ctx){
+export  function init_table_ctx(ctx){
     ctx.search_args= ctx.search_args || {}
 
     ctx.row_sort =ctx.row_sort || {sortable:[]}
@@ -29,7 +29,7 @@ function init_table_bus(bus){
 }
 
 
-var ele_table={
+export var ele_table={
     props:['bus'],
     created:function(){
         this.bus.table=this
@@ -139,7 +139,7 @@ var ele_table={
                     </el-table>
 `
 }
-var ele_operations={
+export var ele_operations={
     props:['bus'],
     //                      :disabled="get_attr(op.disabled)"
     //v-show="! get_attr(op.hide)"
@@ -165,7 +165,7 @@ var ele_operations={
     }
 }
 
-var ele_filter={
+export var ele_filter={
     props:['bus'],
     computed:{
     },
@@ -178,7 +178,7 @@ var ele_filter={
     }
 }
 
-var ele_page={
+export var ele_page={
     props:['bus'],
     data:function(){
         return {
@@ -207,15 +207,15 @@ var ele_page={
                 </el-pagination>`
 }
 
-Vue.component('com-table-bus',ele_table)
-Vue.component('com-table-bus-ops',ele_operations)
-Vue.component('com-table-bus-filter',ele_filter)
-Vue.component('com-table-bus-page',ele_page)
+// Vue.component('com-table-bus',ele_table)
+// Vue.component('com-table-bus-ops',ele_operations)
+// Vue.component('com-table-bus-filter',ele_filter)
+// Vue.component('com-table-bus-page',ele_page)
 
-window.init_table_ctx=init_table_ctx
-window.init_table_bus=init_table_bus
-
-window.bus_ele_table_logic=ele_table
-
-window.ele_table_logic=ele_table
-window.ele_table_page_logic=ele_page
+// window.init_table_ctx=init_table_ctx
+// window.init_table_bus=init_table_bus
+//
+// window.bus_ele_table_logic=ele_table
+//
+// window.ele_table_logic=ele_table
+// window.ele_table_page_logic=ele_page

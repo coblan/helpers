@@ -1,6 +1,6 @@
 import {com_sim_fields} from  './sim_fields'
 
-var com_sim_fields_local={
+export  default  {
     mixins:[com_sim_fields],
     methods:{
         submit:function(){
@@ -11,6 +11,6 @@ var com_sim_fields_local={
     }
 }
 
-window.com_sim_fields_local=com_sim_fields_local
-
-Vue.component('com-sim-fields-local',com_sim_fields_local)
+// window.com_sim_fields_local=com_sim_fields_local
+//
+// Vue.component('com-sim-fields-local',com_sim_fields_local)
