@@ -23,7 +23,8 @@ module.exports =
         // filename: '[name].pack.js'
         path:path.resolve(__dirname, '../static/js'),
         filename: '[name].pack.js',
-        chunkFilename: 'jb_admin/[id].[chunkhash].js',
+        // chunkFilename: 'jb_admin/[id].[chunkhash].js',
+        chunkFilename: 'jb_admin/[id].js?h=[chunkhash]',
         publicPath:'/static/js/'
 
         // path:path.resolve(__dirname, '../static/'),
