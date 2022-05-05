@@ -226,8 +226,13 @@ class BaseEngine(object):
         ls = []
         for act in menu:
             if 'submenu' in act:
+                for act2 in list( act['submenu']):
+                    if 'submenu' in act2:
+                        if not act2['submenu']:
+                            act['submenu'].remove(act2)                
                 if not act['submenu']:
                     continue
+               
             ls.append(act)
         return ls
     
