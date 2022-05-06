@@ -414,6 +414,7 @@ class ModelTable(object):
         
         self.footer = {}
         self.is_export_excel = False
+        self.count_query=None
         
     
     def custom_permit(self):
@@ -813,16 +814,16 @@ class ModelTable(object):
     def before_query(self):
         pass
     
-    #def getCountQuery(self,query):
-        #return query
+    def getCountQuery(self,query):
+        return None
     
     def get_rows(self):
         """
         return: [{"name": "heyul0", "age": "32", "user": null, "pk": 1, "_class": "user_admin.BasicInfo", "id": 1}]
         """
         query=self.get_query()
-        countQuery = getattr(self,'countquery',None)
-        query = self.pagenum.get_query(query,countQuery = countQuery)  
+      
+        query = self.pagenum.get_query(query,countQuery = self.count_query)  
         out=[]
         #director_name = self.get_director_name()
         permit_fields =  self.permited_fields()
@@ -904,11 +905,12 @@ class ModelTable(object):
         # 优化速度
         if self.exclude:
             query = query.defer(*self.exclude)
-        if getattr(self,'getCountQuery',None):
-            countquery = self.getCountQuery(query)
-            self.row_filter.get_query(countquery)
-            self.row_search.get_query(countquery)
-            self.countquery=countquery    
+        
+        count_query = self.getCountQuery(query)
+        if count_query != None:
+            self.row_filter.get_query(count_query)
+            self.row_search.get_query(count_query)
+            self.count_query=count_query    
             
         query = self.inn_filter(query)
         query=self.row_filter.get_query(query)
