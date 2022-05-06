@@ -35,23 +35,26 @@ class PageNum(object):
             self.perPage= int(perpage)
         
     
-    def get_query(self,query):
+    def get_query(self,query,countQuery=None):
         #count = query.count()
         #totalpage = int( math.ceil( float( count )/self.perPage) )
         #self.totalpage = max(totalpage,1)
         
         # 需要研究下，为什么有时 len(query) != query.count()  ，例如 jb.maindb.ticket_admin.TicketparlayTable
-
-        #self.count = len(query) # query.count() #len(query) #
-        #crt_page= max(1,int( self.pageNumber))
-        #start = (crt_page -1)*self.perPage
-        #end = min(crt_page*self.perPage, self.count)
-        #return query[start:end]
+        if countQuery==None:
+            self.count = query.count()
+        else:
+            self.count = countQuery.count()
+        crt_page= max(1,int( self.pageNumber))
+        start = (crt_page -1)*self.perPage
+        end = min(crt_page*self.perPage, self.count)
+        return query[start:end]
         
-        self.pagenator = Paginator(query,self.perPage)
-        self.pageNumber = min(self.pagenator.num_pages,abs(int( self.pageNumber)))
-        self.count = self.pagenator.count
-        return self.pagenator.page(self.pageNumber)
+        # 这里在某些子查询里面会触发group sql，会报错。所以改成简单方式
+        #self.pagenator = Paginator(query,self.perPage)
+        #self.pageNumber = min(self.pagenator.num_pages,abs(int( self.pageNumber)))
+        #self.count = self.pagenator.count
+        #return self.pagenator.page(self.pageNumber)
     
     def get_slice_index(self):
         crt_page= max(1,int( self.pageNumber))
@@ -810,12 +813,16 @@ class ModelTable(object):
     def before_query(self):
         pass
     
+    #def getCountQuery(self,query):
+        #return query
+    
     def get_rows(self):
         """
         return: [{"name": "heyul0", "age": "32", "user": null, "pk": 1, "_class": "user_admin.BasicInfo", "id": 1}]
         """
         query=self.get_query()
-        query = self.pagenum.get_query(query)  
+        countQuery = getattr(self,'countquery',None)
+        query = self.pagenum.get_query(query,countQuery = countQuery)  
         out=[]
         #director_name = self.get_director_name()
         permit_fields =  self.permited_fields()
@@ -897,11 +904,16 @@ class ModelTable(object):
         # 优化速度
         if self.exclude:
             query = query.defer(*self.exclude)
-        
+        if getattr(self,'getCountQuery',None):
+            countquery = self.getCountQuery(query)
+            self.row_filter.get_query(countquery)
+            self.row_search.get_query(countquery)
+            self.countquery=countquery    
+            
         query = self.inn_filter(query)
         query=self.row_filter.get_query(query)
-    
         query=self.row_search.get_query(query)
+        
         query = self.statistics(query)
         query = self.row_sort.get_query(query)
         
