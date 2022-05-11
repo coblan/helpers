@@ -61,15 +61,6 @@
     <link href="{{ js_config.js_lib.nprogress_css }}" rel="stylesheet">
     <!--<link href="https://cdn.bootcss.com/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">-->
 
-
-    {% for lib in extra_js %}
-    <script src='{{ lib | ctxvalue:js_config.js_lib }}'></script>
-    {% endfor %}
-
-    {% for lib in extra_css %}
-    <link href='{{ lib | ctxvalue:js_config.js_lib }}' rel="stylesheet">
-    {% endfor %}
-
     <script>
         (function(){
             document.onreadystatechange = function(){
@@ -151,6 +142,14 @@ desired effect
 -->
 
 {% include 'director/reverse.html' %}
+
+{% for lib in extra_js %}
+<script src='{{ lib | ctxvalue:js_config.js_lib }}'></script>
+{% endfor %}
+
+{% for lib in extra_css %}
+<link href='{{ lib | ctxvalue:js_config.js_lib }}' rel="stylesheet">
+{% endfor %}
 
 <script>
     if(js_config.is_debug){
