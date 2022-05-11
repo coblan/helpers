@@ -1,5 +1,5 @@
 
-
+import './scss'
 import * as config from  './config.js'
 
 //table mix
