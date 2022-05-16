@@ -157,10 +157,10 @@ def get_lib(request):
             'composition_api':'https://cdn.jsdelivr.net/npm/@vue/composition-api@1.5.0',
         })
         
-        if not settings.DEBUG:
-            dc.update({
-                'vue':'https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.min.js'
-            })
+        #if not settings.DEBUG:
+            #dc.update({
+                #'vue':'https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.min.js'
+            #})
         
         if jsdeliver_crack:
             dc.update( {
@@ -226,7 +226,8 @@ def get_lib(request):
             })
             if not settings.DEBUG:
                 dc.update({
-                    'vue':'https://lib.baomitu.com/vue/2.6.10/vue.min.js'
+                    #'vue':'https://lib.baomitu.com/vue/2.6.10/vue.min.js',
+                    'vuejs':'https://lib.baomitu.com/vue/2.6.10/vue.min.js'
                 })            
         
         # 由于早期没有ui_theme属性，方式用到了jb_admin作为管理界面的，默认加上skin-blue作为其主题
