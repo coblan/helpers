@@ -190,8 +190,8 @@ def get_lib(request):
        
        
                 'md5': 'https://lib.baomitu.com/blueimp-md5/2.19.0/js/md5.min.js',
-                'swiper': 'https://cdn.jsdelivr.net/npm/swiper@4.5.0/dist/js/swiper.min.js',
-                'swiper_css': 'https://cdn.jsdelivr.net/npm/swiper@4.5.0/dist/css/swiper.min.css',  
+                'swiper': 'https://lib.baomitu.com/Swiper/4.5.1/js/swiper.min.js',
+                'swiper_css': 'https://lib.baomitu.com/Swiper/4.5.1/css/swiper.min.css',  
                 'echarts':'https://lib.baomitu.com/echarts/5.2.2/echarts.min.js',#'https://cdn.jsdelivr.net/npm/echarts@4.2.1/dist/echarts.min.js',
                 'chosen':'https://cdn.jsdelivr.net/npm/chosen-js@1.8.7/chosen.jquery.min.js',
                 'chosen_css':'https://cdn.jsdelivr.net/npm/chosen-js@1.8.7/chosen.min.css',
