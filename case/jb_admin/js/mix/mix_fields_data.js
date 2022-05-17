@@ -194,7 +194,7 @@ export  var mix_fields_data ={
             return new Promise(function(resolve,reject){
                 Vue.nextTick(async function(){
                     // await Promise.all( ex.map(self.before_submit,fun=>{return fun()}  )  )
-                    await this.beforeSubmit()
+                    await self.beforeSubmit()
 
                     if(!self.isValid()){
                         //reject()
