@@ -38,8 +38,9 @@ class MultiPictureProc(BaseFieldProc):
     
     def dict_field_head(self,head):
         head['editor']='com-field-multi-picture'
-        #head['up_url']='/d/upload?path=general_upload/images'
-        head['up_url']='/d/upload?path=general_upload/%s'%timezone.now().strftime('%Y%m')
+        #head['up_url']='/d/upload?path=general_upload&maxspan=1000'
+        #head['up_url']='/d/upload?path=general_upload/%s'%timezone.now().strftime('%Y%m')
+        head['up_url']='/d/upload?path=general_upload'
         return head
 
 field_map[MultiPictureField]=MultiPictureProc

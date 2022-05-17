@@ -1,4 +1,4 @@
-var ele_operations={
+export  var ele_operations={
 
     //                      :disabled="get_attr(op.disabled)"
     //v-show="! get_attr(op.hide)"   // overflow: hidden  是因为有 refresh 按钮 是float:right 的；
@@ -56,6 +56,6 @@ var ele_operations={
 }
 
 var count = 0
-Vue.component('com-table-operations',ele_operations)
+
 console.log('import operation')
 import  pagination from  './pagination.vue'

@@ -1,4 +1,4 @@
-var ele_filter={
+export  var ele_filter={
     data:function(){
         this.parStore=ex.vueParStore(this)
         return {
@@ -30,4 +30,3 @@ var ele_filter={
     }
 }
 
-Vue.component('com-table-filters',ele_filter)

@@ -4,6 +4,9 @@ var webpack = require('D:/coblan/webcode/node_modules/webpack')
 
 const VueLoaderPlugin = require('D:/coblan/webcode/node_modules/vue-loader/lib/plugin')
 // const VueLoaderPlugin = require('vue-loader/lib/plugin');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
+var {CleanWebpackPlugin} = require('clean-webpack-plugin');
+// var MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
 var webpack = require('webpack')
 
@@ -13,12 +16,33 @@ module.exports =
     mode:'development', //'production', //
     entry: {
         jb_admin:'./main.js',
+        // fields:'./fields_main.js'
     },
     output: {
+        // path:path.resolve(__dirname, '../static/js'),
+        // filename: '[name].pack.js'
         path:path.resolve(__dirname, '../static/js'),
-        filename: '[name].pack.js'
-    },
+        filename: '[name].pack.js',
+        // chunkFilename: 'jb_admin/[id].[chunkhash].js',
+        chunkFilename: 'jb_admin/[id].js?h=[chunkhash]',
+        publicPath:'/static/js/'
 
+        // path:path.resolve(__dirname, '../static/'),
+        // filename: 'js/[name].pack.js',
+        // chunkFilename: 'js/jb_admin/[id].[chunkhash].js',
+        // publicPath:'/static/'
+
+    },
+    optimization: {
+        namedChunks: true
+    },
+    externals: {
+        'vue': 'Vue',
+        'vue-router': 'VueRouter',
+        '@vue/composition-api':'VueCompositionAPI',
+        'axios': 'axios',
+        'element-ui': 'Element',
+    },
     watch: true,
     resolve:{
         alias: {
@@ -91,13 +115,26 @@ module.exports =
                 }, {
                     loader: 'less-loader' // compiles Less to CSS
                 }]
-            }
+            },
+            // {
+            //     test: /\.css$/,
+            //     use: [
+            //         process.env.NODE_ENV !== 'production'
+            //             ? 'vue-style-loader'
+            //             : MiniCssExtractPlugin.loader,
+            //         'css-loader'
+            //     ]
+            // }
         ]
 
     },
     plugins: [
         new VueLoaderPlugin(),
-
+        new CleanWebpackPlugin(),
+        // new MiniCssExtractPlugin({
+        //     filename: 'style.css'
+        // })
+        new BundleAnalyzerPlugin(),
         //new UglifyJSPlugin()
         //new webpack.DefinePlugin({
             //'process.env.NODE_ENV': JSON.stringify('production'),

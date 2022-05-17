@@ -40,9 +40,10 @@ class ForeignProc(BaseFieldProc):
         return head
     
     def filter_get_head(self, name, model):
+        this_field= model._meta.get_field(name)
         catch = get_request_cache()
         option_name = model_to_name(model)+'.%s.options'%name
-        this_field= model._meta.get_field(name)
+        
         if not catch.get(option_name):
             def mychoice_func():
                 ls=this_field.get_choices()

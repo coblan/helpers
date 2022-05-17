@@ -20,6 +20,8 @@ def get_tr():
 js_tr_list.append(get_tr)
 
 def get_lib(request): 
+    jsdeliver_crack = True
+    
     if settings.DEBUG:
         vue= static_url('lib/vue2.6/vue.js')
     else:
@@ -80,6 +82,7 @@ def get_lib(request):
         
         #'jb_admin_pack_js': '/static/js/jb_admin.pack.js?t=%s&t2=123'%js_stamp_dc.get('jb_admin_pack_js'),
         'jb_admin': static_url( 'js/jb_admin.pack.js?t=%s&t2=123'%js_stamp_dc.get('jb_admin_pack_js') ),
+        #'fields':static_url( 'js/fields.pack.js?t=%s'%js_stamp_dc.get('fields_pack_js') ),  
         #'swiper': 'https://cdn.bootcss.com/Swiper/4.3.0/js/swiper.min.js',
         #'swiper_css': 'https://cdn.bootcss.com/Swiper/4.3.0/css/swiper.min.css',  
         'select2':'/static/lib/select2-4.0.10/dist/js/select2.min.js',
@@ -98,6 +101,7 @@ def get_lib(request):
         'selectizejs_css':'https://cdn.jsdelivr.net/npm/selectize@0.12.6/dist/css/selectize.default.css',
         'cropper_css':'/static/lib/cropper2.3.4.min.css',
         'cropper':'/static/lib/cropper2.3.4.min.js',
+        # 这里需要更新
         'composition_api':'/static/lib/vue_lib/composition-api@1.0.0-rc.11',
         'vuedraggable':'https://cdn.jsdelivr.net/npm/vuedraggable@2.24.1/dist/vuedraggable.umd.min.js',# 'https://cdnjs.cloudflare.com/ajax/libs/Vue.Draggable/2.20.0/vuedraggable.umd.min.js'
     }
@@ -150,13 +154,81 @@ def get_lib(request):
             'velocity':'https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.min.js',
             'animate_css':'https://cdn.jsdelivr.net/npm/animate.css@3.7.2/animate.min.css',
             'wow':'https://cdn.jsdelivr.net/npm/wow.js@1.2.2/dist/wow.min.js',
-            'composition_api':'https://cdn.jsdelivr.net/npm/@vue/composition-api@1.0.0-rc.11',
+            'composition_api':'https://cdn.jsdelivr.net/npm/@vue/composition-api@1.5.0',
         })
         
-        if not settings.DEBUG:
-            dc.update({
-                'vue':'https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.min.js'
+        #if not settings.DEBUG:
+            #dc.update({
+                #'vue':'https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.min.js'
+            #})
+        
+        if jsdeliver_crack:
+            dc.update( {
+                'vuejs': 'https://lf26-cdn-tos.bytecdntp.com/cdn/expire-1-M/vue/2.6.10/vue.js',
+
+                'jquery': 'https://lf9-cdn-tos.bytecdntp.com/cdn/expire-1-M/jquery/3.4.1/jquery.min.js',
+                #'vuex': 'https://cdn.jsdelivr.net/npm/vuex@3.0.1/dist/vuex.min.js', 
+        
+                'font_awesome': 'https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/font-awesome/4.7.0/css/font-awesome.min.css',
+                'bootstrap_css': 'https://lib.baomitu.com/twitter-bootstrap/3.3.7/css/bootstrap.min.css',
+                'bootstrap': 'https://lib.baomitu.com/twitter-bootstrap/3.3.7/js/bootstrap.min.js',
+                
+                'layer': 'https://lf6-cdn-tos.bytecdntp.com/cdn/expire-1-M/layer/3.1.1/layer.min.js',
+                'layer_css':'https://lf9-cdn-tos.bytecdntp.com/cdn/expire-1-M/layer/3.1.1/mobile/need/layer.min.css', 
+                'nice_validator': 'https://lf9-cdn-tos.bytecdntp.com/cdn/expire-1-M/nice-validator/1.1.4/jquery.validator.min.js?local=zh-CN',
+                'nice_validator_css': 'https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/nice-validator/1.1.4/jquery.validator.min.css',
+                'adminlte': 'https://lf26-cdn-tos.bytecdntp.com/cdn/expire-1-y/admin-lte/2.4.10/js/adminlte.min.js',
+                'adminlte_css': 'https://lf9-cdn-tos.bytecdntp.com/cdn/expire-1-y/admin-lte/2.4.10/css/AdminLTE.min.css',
+                'adminlte_them_css':'https://lf26-cdn-tos.bytecdntp.com/cdn/expire-1-y/admin-lte/2.4.10/css/skins/_all-skins.min.css',
+                
+                'nprogress': 'https://lf6-cdn-tos.bytecdntp.com/cdn/expire-1-y/nprogress/0.2.0/nprogress.min.js',
+                'nprogress_css': 'https://lf26-cdn-tos.bytecdntp.com/cdn/expire-1-y/nprogress/0.2.0/nprogress.min.css',   
+                
+    
+                'element': 'https://lib.baomitu.com/element-ui/2.15.7/index.min.js', 
+                'element_css':'https://lib.baomitu.com/element-ui/2.15.7/theme-chalk/index.min.css',              
+       
+       
+                'md5': 'https://lib.baomitu.com/blueimp-md5/2.19.0/js/md5.min.js',
+                'swiper': 'https://lib.baomitu.com/Swiper/4.5.1/js/swiper.min.js',
+                'swiper_css': 'https://lib.baomitu.com/Swiper/4.5.1/css/swiper.min.css',  
+                'echarts':'https://lib.baomitu.com/echarts/5.2.2/echarts.min.js',#'https://cdn.jsdelivr.net/npm/echarts@4.2.1/dist/echarts.min.js',
+                'chosen':'https://cdn.jsdelivr.net/npm/chosen-js@1.8.7/chosen.jquery.min.js',
+                'chosen_css':'https://cdn.jsdelivr.net/npm/chosen-js@1.8.7/chosen.min.css',
+
+                
+                # 外面找到ckeditor 要报错， ckeditor lineHeight Html5Video插件找不到 还是用jsdelivr吧
+                #'ckeditor':'https://cdn.jsdelivr.net/npm/ckeditor@4.11.4/ckeditor.js',
+                #'ckeditor':'https://cdn.jsdelivr.net/npm/ckeditor@4.11.4/ckeditor.min.js',
+
+                #'ckeditor':'https://cdn.ckeditor.com/4.18.0/standard/ckeditor.js',
+                #'ckeditor': 'https://lib.baomitu.com/ckeditor/4.10.1/ckeditor.js',#'https://cdn.ckeditor.com/4.10.1/full/ckeditor.js',
+                #'ckeditor':'https://cdn.jsdelivr.net/npm/ckeditor-full@4.7.3/ckeditor.js',
+
+                #'ckeditor': 'https://lib.baomitu.com/ckeditor/4.10.1/ckeditor.js',#
+                #"ckeditor":'https://cdn.ckeditor.com/4.10.1/full/ckeditor.js',
+
+
+                
+                'select2':'https://cdn.jsdelivr.net/npm/select2@4.0.10/dist/js/select2.min.js',
+                'select2_css':'https://cdn.jsdelivr.net/npm/select2@4.0.10/dist/css/select2.min.css',
+                
+                'cropper_css':'https://cdn.jsdelivr.net/npm/cropper@4.1.0/dist/cropper.min.css',
+                'cropper':'https://cdn.jsdelivr.net/npm/cropper@4.1.0/dist/cropper.min.js',
+                'velocity':'https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.min.js',
+                'animate_css':'https://cdn.jsdelivr.net/npm/animate.css@3.7.2/animate.min.css',
+                'wow':'https://cdn.jsdelivr.net/npm/wow.js@1.2.2/dist/wow.min.js',
+                #'composition_api':'https://cdn.jsdelivr.net/npm/@vue/composition-api@1.5.0',
+                'composition_api':'/static/cdn/jb_admin/composition-api@1.6.0',
+                #'https://cdn007.oss-cn-shenzhen.aliyuncs.com/composition-api1.5.0.js',
+                #'https://cdn.jsdelivr.net/npm/@vue/composition-api@1.6.0',
+                #'https://cdn007.oss-cn-shenzhen.aliyuncs.com/composition-api1.5.0.js'
             })
+            if not settings.DEBUG:
+                dc.update({
+                    #'vue':'https://lib.baomitu.com/vue/2.6.10/vue.min.js',
+                    'vuejs':'https://lib.baomitu.com/vue/2.6.10/vue.min.js'
+                })            
         
         # 由于早期没有ui_theme属性，方式用到了jb_admin作为管理界面的，默认加上skin-blue作为其主题
         #request.META['ENGIN'].ui_theme = request.META['ENGIN'].ui_theme or 'skin-blue'

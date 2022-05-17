@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+{% load static %}
+{% load jsonify %}
+{% load ctxvalue %}
+{% load rpdot %}
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    {{ customize_meta | safe }}
+    {{ extra_head | safe }}
+    <script src="{{ js_config.js_lib.vuejs }}"></script>
+    {% block head-content %}
+    <title>{{ page_label }}</title>
+    {% endblock %}
+
+
+</head>
+
+<script>
+    js_config={{js_config | jsonify }}
+     // document.title = page_label
+    if(js_config.is_debug){
+        Vue.config.devtools = true
+    }
+</script>
+
+<script>
+    editor= {{ editor | jsonify }}
+    editor_ctx ={{ editor_ctx | jsonify }}
+
+
+    live_root_store =  new Vue({
+        data(){
+            return {
+                option:{},
+            }
+        }
+    })
+    document.onreadystatechange = function () {
+        if (document.readyState == "complete") {
+
+            new Vue({
+                el:'#main-panel',
+                data: function(){
+                    var self =this
+                    return {
+                        editor:editor,
+                        editor_ctx:editor_ctx,
+                    }
+                },
+            })
+
+        }
+    }
+</script>
+
+<body >
+    <div id="main-panel">
+        <component :is="editor" :ctx="editor_ctx"></component>
+    </div>
+</body>
+
+{% for lib in extra_js %}
+<script src='{{ lib | ctxvalue:js_config.js_lib }}'></script>
+{% endfor %}
+{% for lib in extra_css %}
+<link  href='{{ lib | ctxvalue:js_config.js_lib }}' rel="stylesheet">
+{% endfor %}
+
+<script>
+    init_express={{ init_express | jsonify }}
+    if(init_express){
+        ex.eval(init_express)
+    }
+</script>
+</html>

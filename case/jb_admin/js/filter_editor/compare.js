@@ -1,5 +1,5 @@
 
-var filter_compare={
+export default  {
     props:['head','search_args'],
     data:function(){
         this.search_args['_'+this.head.name+'_compare'] =  this.search_args['_'+this.head.name+'_compare'] || '0'
@@ -19,5 +19,3 @@ var filter_compare={
 
 
 }
-
-Vue.component('com-filter-compare',filter_compare)

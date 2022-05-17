@@ -47,6 +47,7 @@ export var rabbit={
         return p
     },
     stompInit(ctx){
+        debugger
         ex.load_js(js_config.js_lib.stompjs, ()=> {
             this._stomp_client = Stomp.client(ctx.url);
             var on_connect = (x)=> {

@@ -1,5 +1,5 @@
 
-var ele_table= {
+export var ele_table= {
     props: ['ctx'],
     created: function () {
     },
@@ -315,7 +315,7 @@ var ele_table= {
         }
     },
 }
-Vue.component('com-table-grid',ele_table)
+
 
 var arg_filter={
     field:function(row,head){

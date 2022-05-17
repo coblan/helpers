@@ -35,18 +35,20 @@ msg-bottom  nice validator的位置在下面，默认在右侧
     width: 23rem;
   }
 
-
   flex-grow:0;
   align-self:center;
   padding:5px 20px;
-  input {
-    /*max-width:25em;*/
-  }
+
   /*.ckeditor{*/
   /*padding: 20px;*/
   /*}*/
   .multi-chosen{
     width: 30em;
+  }
+
+  // .field_input.input是23rem，element.date组件写死了input外层div只有220px宽度，比input的小很多。造成nicevalidator的错误消息显示在input内部。
+  .el-date-editor.el-input, .el-date-editor.el-input__inner{
+    width: auto !important;
   }
 }
 

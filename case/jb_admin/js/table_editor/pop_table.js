@@ -32,12 +32,13 @@ export  var pop_table={
         }
     },
     methods:{
-        open_layer:function(){
-            var table_ctx=init_table_ctx(this.head.table_ctx)
+        async open_layer(){
+            var com = await import(/* webpackChunkName: 'maybe_old' */'../table_panels/ele_table.js')
+            var table_ctx=com.init_table_ctx(this.head.table_ctx)
             pop_table_layer(this.rowData,table_ctx,function(){
             })
         }
 
     }
 }
-Vue.component('com-table-pop-table',pop_table)
+// Vue.component('com-table-pop-table',pop_table)

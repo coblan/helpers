@@ -11,7 +11,8 @@ editor_ctx = {{ editor_ctx | jsonify }}
 
 $(function() {
 
-  live_root = new Vue({
+
+    var myapp = {
         el: '#there',
         data: function () {
             var search_args = ex.parseSearch()
@@ -33,12 +34,12 @@ $(function() {
                 var com = this.stack.pop()
                 Vue.delete(this.$options.components,com)
             },
-             open_live(com,ctx,label){
-                 if (com.basename){
-                     var com_name = 'dyn-'+com.basename +'-'+ Date.now()
-                 }else{
-                     var com_name = 'dyn-'+ Date.now()
-                 }
+            open_live(com,ctx,label){
+                if (com.basename){
+                    var com_name = 'dyn-'+com.basename +'-'+ Date.now()
+                }else{
+                    var com_name = 'dyn-'+ Date.now()
+                }
                 var big_com = {
                     mixins:[com],
                     name:com_name,
@@ -57,8 +58,8 @@ $(function() {
             },
             alive_list(){
                 return this.stack.map((item)=>{
-                            return item.editor
-                        })
+                    return item.editor
+                })
             },
             pathable_tab_names(){
                 var names =[]
@@ -78,7 +79,21 @@ $(function() {
                 return names
             }
         }
-    })
+    }
+
+    live_root =  new Vue(myapp)
+  // live_root =  new Vue({
+  //       el: '#there',
+  //       data:{
+  //           component_name:myapp,
+  //       },
+  //       render(createElement){
+  //           return createElement(this.component_name,{
+  //                   attrs:{},
+  //               }
+  //           )
+  //       },
+  //   })
     
     // 兼容老的调用
     root_live= live_root

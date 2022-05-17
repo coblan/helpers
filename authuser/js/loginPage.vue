@@ -51,7 +51,7 @@ export  default  {
     background-color: white;
     position: relative;
     padding: 60px 30px 25px 30px;
-    width: 300px;
+    width: 380px;
     top:-66px;
 
     .big-head{

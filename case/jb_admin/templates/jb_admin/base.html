@@ -15,9 +15,10 @@
     <script src="{{ js_config.js_lib.md5 }}"></script>
     <link rel="stylesheet" href="{{ js_config.js_lib.font_awesome }}">
     <script src="{{ js_config.js_lib.vuejs }}"></script>
-    <script src="{{ js_config.js_lib.composition_api }}"></script>
+<!--    <script src="{{ js_config.js_lib.composition_api }}"></script>-->
 
     <!--<script src="{{ js_config.js_lib.vuex }}"></script>-->
+
     <link rel="stylesheet" href="{{ js_config.js_lib.bootstrap_css }}">
     <script src="{{ js_config.js_lib.bootstrap }}"></script>
 
@@ -28,15 +29,16 @@
     <script src="{{ js_config.js_lib.adminlte }}"></script>
     <link rel="stylesheet" href="{{ js_config.js_lib.adminlte_css }}">
     <link rel="stylesheet" href="{{ js_config.js_lib.adminlte_them_css }}">
-    <script src="{{ js_config.js_lib.moment }}"></script>
+<!--    <script src="{{ js_config.js_lib.moment }}"></script>-->
 
-    <script src="{{ js_config.js_lib.exfun }}"></script>
-    <script src="{{ js_config.js_lib.director }}"></script>
-    <script src="{{ js_config.js_lib.jb_admin }}"></script>
 
     <script src="{{ js_config.js_lib.element }}"></script>
     <link href="{{ js_config.js_lib.element_css }}" rel="stylesheet">
+    <script src="{{ js_config.js_lib.exfun }}"></script>
+    <script src="{{ js_config.js_lib.director }}"></script>
 
+    <script src="{{ js_config.js_lib.composition_api }}"></script>
+    <script src="{{ js_config.js_lib.jb_admin }}"></script>
     <!--<link rel="stylesheet" href="https://cdn.bootcss.com/admin-lte/2.4.3/css/AdminLTE.min.css">-->
     <!-- AdminLTE Skins. We have chosen the skin-blue for this starter
           page. However, you can choose any other skin. Make sure you
@@ -58,15 +60,6 @@
     <script src="{{ js_config.js_lib.nprogress }}"></script>
     <link href="{{ js_config.js_lib.nprogress_css }}" rel="stylesheet">
     <!--<link href="https://cdn.bootcss.com/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">-->
-
-
-    {% for lib in extra_js %}
-    <script src='{{ lib | ctxvalue:js_config.js_lib }}'></script>
-    {% endfor %}
-
-    {% for lib in extra_css %}
-    <link href='{{ lib | ctxvalue:js_config.js_lib }}' rel="stylesheet">
-    {% endfor %}
 
     <script>
         (function(){
@@ -149,6 +142,14 @@ desired effect
 -->
 
 {% include 'director/reverse.html' %}
+
+{% for lib in extra_js %}
+<script src='{{ lib | ctxvalue:js_config.js_lib }}'></script>
+{% endfor %}
+
+{% for lib in extra_css %}
+<link href='{{ lib | ctxvalue:js_config.js_lib }}' rel="stylesheet">
+{% endfor %}
 
 <script>
     if(js_config.is_debug){

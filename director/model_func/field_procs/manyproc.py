@@ -20,7 +20,9 @@ class ManyProc(BaseFieldProc):
     def dict_field_head(self,head):  
         options = self.get_options()   
         #head['editor'] = 'com-field-multi-chosen'
-        head['editor'] = 'com-field-multi-select2'
+        #head['editor'] = 'com-field-multi-select2'
+        head['editor'] = 'com-field-select'
+        head['multiple'] = True
         head['options'] = options
         return head 
     

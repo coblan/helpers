@@ -3,25 +3,30 @@
         <span v-if='head.readonly' v-text='get_label'></span>
         <div v-else>
             <input type="text" style="display: none" :id="'id_'+head.name" :name="head.name" v-model="row[head.name]"><!-- :clearable="!head.required"-->
-            <el-select  v-model="row[head.name]"
+<!--          :class="{isempty:!is_select}"  -->
+          <el-select v-show="loaded"  :class="{start:!loaded || !is_select }"  v-model="row[head.name]"
+                        :multiple="head.multiple"
                         :filterable="head.multiple ||  head.filterable "
                         :placeholder="head.placeholder"
                         size="small"
-                        :multiple="head.multiple"
-                        :clearable="!head.multiple && !head.required">
+                        :clearable="!head.multiple && !head.required"
+            >
                 <el-option
                         v-for="item in normed_options"
                         :key="item.value"
                         :label="item.label"
                         :value="item.value">
                 </el-option>
-                </el-select>
+            </el-select>
         </div>
     </div>
 </template>
 <script>
     export default {
         props: ['row', 'head'],
+      /*
+      * filterable=true, 取代了 search_select
+      * */
         data: function () {
             var inn_config = {
 //orgin_order:true,
@@ -38,7 +43,7 @@
                 cfg: inn_config,
                 parStore:ex.vueParStore(this),
                 options:this.head.options || [],
-
+                loaded:false
             }
         },
         mounted: function () {
@@ -75,6 +80,23 @@
                 ex.append_css(this.head.css)
             }
 
+            // 为了纠正多选情况下，启动时 布局 错乱问题。
+          if (this.head.multiple){
+
+            this.$nextTick(()=>{
+              setTimeout(()=>{
+                this.loaded=true
+              },100)
+            })
+          }else {
+            this.loaded=true
+          }
+
+
+          // this.$nextTick(()=>{
+          //   this.loaded=true
+          // })
+
         },
 
         watch:{
@@ -98,7 +120,6 @@
         },
 
         computed:{
-
             novalue(){
                 if(this.row[this.head.name] ==0){
                     var novalue = undefined
@@ -114,7 +135,11 @@
             },
             is_select:function(){
                 var v = this.row[this.head.name]
-                return v !== this.novalue
+                if(this.head.multiple){
+                  return  v.length !=0
+                }else{
+                  return v !== this.novalue
+                }
             },
             place_value:function(){
                 var v = this.row[this.head.name]
@@ -218,7 +243,16 @@
         color: black;
     }
 
+  //.isempty
+
+   /deep/{
+      .el-select.start > .el-input > input {
+        // 遇到multiple的时候开启
+        //min-height:34px!important;
+      }
     }
+
+ }
 
 </style>
 <style lang="scss">
@@ -226,9 +260,7 @@
         display: none;
     }
 
-     .com-field-select{
 
-     }
 .com-filter-multi-select{
     .el-select-dropdown.is-multiple li.selected{
         display: block;

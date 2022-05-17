@@ -1,5 +1,5 @@
 
-var table_panel={
+export default {
     props:['ctx'],
 
     data:function(){
@@ -98,8 +98,8 @@ var table_panel={
     </div>`
 }
 
-window.com_table_panel=table_panel
+// window.com_table_panel=table_panel
 //Vue.component('com-table-editor',table_panel)
 
 //window.com_table_panel=table_panel
-Vue.component('com-table-panel',table_panel)
+

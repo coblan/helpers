@@ -11,6 +11,7 @@ module.exports =
     mode: 'development', //'production', //
     entry: {
         mobile:'./main.js',
+        mobile2:'./mobile2.js'
     },
     output: {
         path:path.resolve(__dirname, '../static/js'),

@@ -20,46 +20,77 @@
 
 <script>
     import lineText from './lineText.vue'
-    import {LineTextLogic} from './lineText.vue'
+    // import {LineTextLogic} from './lineText.vue'
 
-    export class IntInputLogic extends LineTextLogic{
-        constructor(){
-            super()
-           this.fv_rule=';integer'
+    function append_rule(props,new_rule){
+        if(props.head.fv_rule){
+          var fv_rule= props.head.fv_rule +';'+ new_rule
+        }else{
+          var fv_rule=  new_rule
         }
-        getSetup(props){
-            if(this.fv_rule){
-                if(props.head.fv_rule){
-                  var fv_rule= props.head.fv_rule + this.fv_rule
-                }else{
-                  var fv_rule=  this.fv_rule
-                }
-                Vue.set(props.head,'fv_rule',fv_rule) //  props.head.fv_rule = this.fv_rule
-            }
-            var dc = super.getSetup(props)
-            Object.assign(dc,{
-                isNumber:this.isNumber
-            })
-            return dc
-        }
-        isNumber(evt){
-            evt = (evt) ? evt : window.event;
-            var charCode = (evt.which) ? evt.which : evt.keyCode;
-            if(charCode== 46){
-                return evt.preventDefault();
-            }
-
-            if ((charCode >= 48 && charCode <= 57) || charCode== 46 || charCode== 45) {
-                if(charCode==46 && this.row[this.head.name].indexOf('.')!=-1){
-                    return evt.preventDefault();
-                }else{
-                    return true
-                }
-            }else{
-                return evt.preventDefault();
-            }
-        }
+        Vue.set(props.head,'fv_rule',fv_rule)
     }
+    function check_number(){
+      var isNumber = (evt)=>{
+        evt = (evt) ? evt : window.event;
+        var charCode = (evt.which) ? evt.which : evt.keyCode;
+        if(charCode== 46){
+          return evt.preventDefault();
+        }
+
+        if ((charCode >= 48 && charCode <= 57) || charCode== 46 || charCode== 45) {
+          if(charCode==46 && this.row[this.head.name].indexOf('.')!=-1){
+            return evt.preventDefault();
+          }else{
+            return true
+          }
+        }else{
+          return evt.preventDefault();
+        }
+      }
+      return {
+        isNumber
+      }
+    }
+
+    // export class IntInputLogic extends LineTextLogic{
+    //     constructor(){
+    //         super()
+    //        this.fv_rule=';integer'
+    //     }
+    //     getSetup(props){
+    //         if(this.fv_rule){
+    //             if(props.head.fv_rule){
+    //               var fv_rule= props.head.fv_rule + this.fv_rule
+    //             }else{
+    //               var fv_rule=  this.fv_rule
+    //             }
+    //             Vue.set(props.head,'fv_rule',fv_rule) //  props.head.fv_rule = this.fv_rule
+    //         }
+    //         var dc = super.getSetup(props)
+    //         Object.assign(dc,{
+    //             isNumber:this.isNumber
+    //         })
+    //         return dc
+    //     }
+    //     isNumber(evt){
+    //         evt = (evt) ? evt : window.event;
+    //         var charCode = (evt.which) ? evt.which : evt.keyCode;
+    //         if(charCode== 46){
+    //             return evt.preventDefault();
+    //         }
+    //
+    //         if ((charCode >= 48 && charCode <= 57) || charCode== 46 || charCode== 45) {
+    //             if(charCode==46 && this.row[this.head.name].indexOf('.')!=-1){
+    //                 return evt.preventDefault();
+    //             }else{
+    //                 return true
+    //             }
+    //         }else{
+    //             return evt.preventDefault();
+    //         }
+    //     }
+    // }
 
     export default {
         props:['row','head','extendLogic'],
@@ -73,11 +104,17 @@
           }
         },
         setup(props){
-            if(props.extendLogic){
-                return new  props.extendLogic().getSetup(props)
-            }else{
-                return  new IntInputLogic().getSetup(props)
-            }
+          append_rule(props, 'integer')
+          var {isNumber} = check_number()
+          return  {
+            isNumber
+          }
+
+            // if(props.extendLogic){
+            //     return new  props.extendLogic().getSetup(props)
+            // }else{
+            //     return  new IntInputLogic().getSetup(props)
+            // }
 
 
         },

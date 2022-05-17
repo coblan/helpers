@@ -35,23 +35,26 @@ class PageNum(object):
             self.perPage= int(perpage)
         
     
-    def get_query(self,query):
+    def get_query(self,query,countQuery=None):
         #count = query.count()
         #totalpage = int( math.ceil( float( count )/self.perPage) )
         #self.totalpage = max(totalpage,1)
         
         # 需要研究下，为什么有时 len(query) != query.count()  ，例如 jb.maindb.ticket_admin.TicketparlayTable
-
-        #self.count = len(query) # query.count() #len(query) #
-        #crt_page= max(1,int( self.pageNumber))
-        #start = (crt_page -1)*self.perPage
-        #end = min(crt_page*self.perPage, self.count)
-        #return query[start:end]
+        if countQuery==None:
+            self.count = query.count()
+        else:
+            self.count = countQuery.count()
+        crt_page= max(1,int( self.pageNumber))
+        start = (crt_page -1)*self.perPage
+        end = min(crt_page*self.perPage, self.count)
+        return query[start:end]
         
-        self.pagenator = Paginator(query,self.perPage)
-        self.pageNumber = min(self.pagenator.num_pages,abs(int( self.pageNumber)))
-        self.count = self.pagenator.count
-        return self.pagenator.page(self.pageNumber)
+        # 这里在某些子查询里面会触发group sql，会报错。所以改成简单方式
+        #self.pagenator = Paginator(query,self.perPage)
+        #self.pageNumber = min(self.pagenator.num_pages,abs(int( self.pageNumber)))
+        #self.count = self.pagenator.count
+        #return self.pagenator.page(self.pageNumber)
     
     def get_slice_index(self):
         crt_page= max(1,int( self.pageNumber))
@@ -411,6 +414,7 @@ class ModelTable(object):
         
         self.footer = {}
         self.is_export_excel = False
+        self.count_query=None
         
     
     def custom_permit(self):
@@ -810,12 +814,16 @@ class ModelTable(object):
     def before_query(self):
         pass
     
+    def getCountQuery(self,query):
+        return None
+    
     def get_rows(self):
         """
         return: [{"name": "heyul0", "age": "32", "user": null, "pk": 1, "_class": "user_admin.BasicInfo", "id": 1}]
         """
         query=self.get_query()
-        query = self.pagenum.get_query(query)  
+      
+        query = self.pagenum.get_query(query,countQuery = self.count_query)  
         out=[]
         #director_name = self.get_director_name()
         permit_fields =  self.permited_fields()
@@ -898,10 +906,16 @@ class ModelTable(object):
         if self.exclude:
             query = query.defer(*self.exclude)
         
+        count_query = self.getCountQuery(query)
+        if count_query != None:
+            self.row_filter.get_query(count_query)
+            self.row_search.get_query(count_query)
+            self.count_query=count_query    
+            
         query = self.inn_filter(query)
         query=self.row_filter.get_query(query)
-    
         query=self.row_search.get_query(query)
+        
         query = self.statistics(query)
         query = self.row_sort.get_query(query)
         
@@ -1018,7 +1032,8 @@ class ModelTable(object):
         #self.search_args['_perpage'] = 5000
         #ctx = self.get_context()
         self.is_export_excel = True
-        
+       
+
         heads = self.getExcelHead() #ctx['heads']
         rows =  self.getExcelRows() #ctx['rows']
         out_rows = []
@@ -1052,13 +1067,16 @@ class ModelTable(object):
             out_rows.append(excel_row)
         
         wb = Workbook()
-        ws = wb.active
+        ws = wb.active       
         for row in out_rows:
             #ws.append(row)
             # 有可能是models.py lazy翻译的
             ws.append([str_lazy_label(x)  for x in row ])        
-        
+        self.after_excel(wb,ws,out_rows)
         return wb
+    def after_excel(self,wb,ws,out_rows):
+        "用户设置ws的单元格格式等"
+        pass
 
 class RawTable(ModelTable):
     '''

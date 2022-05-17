@@ -1,6 +1,7 @@
 require('./scss/table_grid.scss')
 require('./styl/table_rows.styl')
-var ele_table= {
+
+export  var table_row = {
     props: ['ctx'],
     created: function () {
         //this.bus.table = this
@@ -321,7 +322,7 @@ var ele_table= {
         }
     },
 }
-Vue.component('com-table-rows',ele_table)
+
 
 var arg_filter={
     field:function(row,head){

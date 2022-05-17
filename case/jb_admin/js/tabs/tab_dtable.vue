@@ -22,7 +22,8 @@
 
 <script>
     import  director_table,{DTableLogic} from  '../pannels/director_table.vue'
-    const { ref, reactive,computed ,onMounted,getCurrentInstance } = VueCompositionAPI
+    import { ref, reactive,computed ,onMounted,getCurrentInstance } from '@vue/composition-api'
+    // const { ref, reactive,computed ,onMounted,getCurrentInstance } = VueCompositionAPI
 
 
 

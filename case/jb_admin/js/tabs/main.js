@@ -5,5 +5,3 @@ import * as tab_lazy_wrap from  './tab_lazy_wrap'
 import * as tab_table_type from  './tab_table_type'
 import * as tab_chart from  './tab_chart'
 
-import tab_dtable from './tab_dtable.vue'
-Vue.component('com-tab-dtable',tab_dtable)

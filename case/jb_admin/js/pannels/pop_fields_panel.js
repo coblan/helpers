@@ -1,6 +1,6 @@
 import {com_fields_panel} from './fields_panel'
 
-var com_pop_fields_panel = {
+export default {
     props:['ctx'],
     data:function(){
         return {
@@ -14,4 +14,3 @@ var com_pop_fields_panel = {
      </div>`,
 }
 
-Vue.component('com-panel-pop-fields',com_pop_fields_panel)
