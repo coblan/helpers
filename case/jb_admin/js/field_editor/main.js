@@ -70,7 +70,8 @@ Vue.component('com-field-single-checkbox',singleCheckbox)
 Vue.component('com-field-html-guide',guideHtml)
 // Vue.component('com-field-minute',minutePicker)
 // Vue.component('com-field-ratio-number',ratioNumber)
-
+import jsonEdit from "./jsonEdit.vue";
+Vue.component('com-field-json-edit',jsonEdit)
 
 Vue.component('com-field-hour-and-minute', async (resolve, reject) =>{
     var com = await import(/* webpackChunkName: 'fields_import' */'./houreAndMinute.vue')

@@ -155,6 +155,8 @@ def get_lib(request):
             'animate_css':'https://cdn.jsdelivr.net/npm/animate.css@3.7.2/animate.min.css',
             'wow':'https://cdn.jsdelivr.net/npm/wow.js@1.2.2/dist/wow.min.js',
             'composition_api':'https://cdn.jsdelivr.net/npm/@vue/composition-api@1.5.0',
+            'jsoneditor':'https://lib.baomitu.com/jsoneditor/9.7.4/jsoneditor.min.js',
+            'jsoneditor_css':'https://lib.baomitu.com/jsoneditor/9.7.4/jsoneditor.min.css',
         })
         
         #if not settings.DEBUG:
