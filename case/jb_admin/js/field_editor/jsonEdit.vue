@@ -7,12 +7,23 @@
 export default {
   props:['row','head'],
   mounted(){
+    var self = this
     ex.load_css(cfg.js_lib.jsoneditor_css)
     ex.load_js(cfg.js_lib.jsoneditor).then(()=>{
-      const options = {
-        mode: 'tree',
-        modes: ['code', 'form', 'text', 'tree', 'view', 'preview']
+      if(self.head.readonly){
+        var options = {
+          mode: 'view',
+          // modes: ['code', 'form', 'text', 'tree', 'view', 'preview']
+          modes: [ 'view', 'preview']
+        }
+      }else{
+        var options = {
+          mode: 'code',
+          // modes: ['code', 'form', 'text', 'tree', 'view', 'preview']
+          modes: ['code', 'form', 'tree', 'view', 'preview']
+        }
       }
+
       var value = this.row[this.head.name]
 
       this. editor = new JSONEditor(this.$el.querySelector('.editor'), options)
