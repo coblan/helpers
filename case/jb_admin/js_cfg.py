@@ -166,7 +166,7 @@ def get_lib(request):
         
         if jsdeliver_crack:
             dc.update( {
-                'vuejs': 'https://lf26-cdn-tos.bytecdntp.com/cdn/expire-1-M/vue/2.6.10/vue.js',
+                'vuejs': 'https://lib.baomitu.com/vue/2.6.14/vue.js',
 
                 'jquery': 'https://lf9-cdn-tos.bytecdntp.com/cdn/expire-1-M/jquery/3.4.1/jquery.min.js',
                 #'vuex': 'https://cdn.jsdelivr.net/npm/vuex@3.0.1/dist/vuex.min.js', 
