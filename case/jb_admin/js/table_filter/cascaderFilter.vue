@@ -4,6 +4,7 @@
         :show-all-levels="false"
         v-model="search_args[head.name]"
         :options="head.options"
+        :placeholder="head.label"
         :props="{checkStrictly: true ,emitPath:false}"
         @change="onChange"
         size="small"
