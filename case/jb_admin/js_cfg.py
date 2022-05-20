@@ -230,7 +230,7 @@ def get_lib(request):
                 dc.update({
                     #'vue':'https://lib.baomitu.com/vue/2.6.10/vue.min.js',
                     'vuejs':'https://lib.baomitu.com/vue/2.6.14/vue.min.js',
-                    'vuejs_dev':'https://lib.baomitu.com/vue/2.6.14/vue.js', # 展示还没用，试试 vue.DEBUG=True
+                    #'vuejs_dev':'https://lib.baomitu.com/vue/2.6.14/vue.js', # 展示还没用，试试 vue.DEBUG=True
                 })            
         
         # 由于早期没有ui_theme属性，方式用到了jb_admin作为管理界面的，默认加上skin-blue作为其主题
