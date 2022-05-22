@@ -6,7 +6,7 @@ import * as month from  './month'
 
 
 import * as cascader from  './cascader'
-import * as field_date from  './date'
+// import * as field_date from  './date'
 import * as pop_tree_select from  './pop_tree_select'
 import * as compute from  './compute'
 
@@ -72,6 +72,9 @@ Vue.component('com-field-html-guide',guideHtml)
 // Vue.component('com-field-ratio-number',ratioNumber)
 import jsonEdit from "./jsonEdit.vue";
 Vue.component('com-field-json-edit',jsonEdit)
+
+import lay_date from "./date.vue";
+Vue.component('com-field-date',lay_date)
 
 Vue.component('com-field-hour-and-minute', async (resolve, reject) =>{
     var com = await import(/* webpackChunkName: 'fields_import' */'./houreAndMinute.vue')
