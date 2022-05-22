@@ -63,11 +63,13 @@ export default {
 </script>
 
 <style scoped lang="scss">
+
 // .field_input.input是23rem，element.date组件写死了input外层div只有220px宽度，比input的小很多。造成nicevalidator的错误消息显示在input内部。
+// 本来在 field_input 的css里面有控制这个宽度，但是date组件在外部单独使用时，就没css控制了。所以在这里单独进行控制，适应性更广。
 .com-field-date{
   /deep/{
     .el-date-editor.el-input, .el-date-editor.el-input__inner{
-      width: auto !important;
+      width: auto ;
     }
   }
 }
