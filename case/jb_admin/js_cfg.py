@@ -222,9 +222,8 @@ def get_lib(request):
                 'wow':'https://cdn.jsdelivr.net/npm/wow.js@1.2.2/dist/wow.min.js',
                 #'composition_api':'https://cdn.jsdelivr.net/npm/@vue/composition-api@1.5.0',
                 'composition_api':'/static/cdn/jb_admin/composition-api@1.6.0',
-                #'https://cdn007.oss-cn-shenzhen.aliyuncs.com/composition-api1.5.0.js',
-                #'https://cdn.jsdelivr.net/npm/@vue/composition-api@1.6.0',
-                #'https://cdn007.oss-cn-shenzhen.aliyuncs.com/composition-api1.5.0.js'
+                ##'composition_api':'https://cdn.jsdelivr.net/npm/@vue/composition-api@1.6.1'
+   
             })
             if not settings.DEBUG:
                 dc.update({
