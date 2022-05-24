@@ -141,3 +141,20 @@ class TreeTable(ModelTable):
         return {
             'hasChildren':inst.hasChildren,               
         }    
+    
+
+def get_tree_option(model,label_field):
+    ls = []
+    for inst in model.objects.all():
+        ls.append({'value':inst.pk,'label':getattr(inst,label_field),'parent':inst.parent_id})
+    
+    for row in list(ls):
+        row['children'] =[]
+        if row['parent']:
+            ls.remove(row)
+        for item in ls:
+            if item['parent'] == row['value']:
+                row['children'] .append(item)
+        if not row['children']:
+            del row['children']
+    return ls
