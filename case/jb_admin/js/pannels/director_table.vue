@@ -4,7 +4,7 @@
         :search-label="seach_label"></dfilter>
         <d-operation :heads="operationHeads"></d-operation>
         <dparent :parents="parents" @click-parent="getChilds($event)"></dparent>
-        <div class="box box-success flex-grow" style="margin-bottom: 0">
+        <div class="table-area flex-grow" style="margin-bottom: 0">
             <!--flex-v flex-grow-->
             <!--<div class="table-wraper flex-grow" >-->
                 <dtable ref="dtable" class="my-d-table"
@@ -261,5 +261,16 @@ import { ref, reactive,computed ,onMounted,getCurrentInstance } from '@vue/compo
     /*position: absolute;*/
     /*height: 100%;*/
     /*width: 100%;*/
+}
+.table-area{
+  position: relative;
+  border-radius: 5px;
+  overflow: hidden;
+  background: #ffffff;
+  border-top: 1px solid #eee;
+  margin-bottom: 20px;
+  width: 100%;
+  //-moz-box-shadow:0px -3px 5px #f4f4f4;; -webkit-box-shadow:0px -3px 5px #f4f4f4;; box-shadow:0px -3px 5px #f4f4f4;
+  //box-shadow: 0 1px 1px rgb(0 0 0 / 10%);
 }
 </style>
