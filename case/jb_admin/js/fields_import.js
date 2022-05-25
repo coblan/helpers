@@ -20,7 +20,7 @@ import d_table_setting from 'webcase/director/table/dsetting.vue'
 import excelProcessResult from "./misc/excelProcessResult.vue";
 import livepage_tab from  './livepage/tab.vue'
 import  live_table_chart from  './livepage/table_chart.vue'
-import tab_dtable from './tabs/tab_dtable.vue'
+// import tab_dtable from './tabs/tab_dtable.vue'
 import  formOne from './misc/formOne.vue'
 export {
     director_table,
@@ -30,7 +30,7 @@ export {
 
     livepage_tab,
     live_table_chart,
-    tab_dtable,
+    // tab_dtable,
     formOne
 }
 // Vue.component('com-d-table',director_table_1)

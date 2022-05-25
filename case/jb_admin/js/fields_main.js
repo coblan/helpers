@@ -54,10 +54,7 @@ Vue.component('com-table-chart',async(resolve,reject) =>{
     //     resolve(com.live_table_chart)
     // })
 })
-Vue.component('com-tab-dtable', async (resolve, reject)=> {
-    var com = await import(/* webpackChunkName: 'fields_import' */'./fields_import.js')
-    resolve(com.tab_dtable)
-})
+
 
 Vue.component('com-form-one', async (resolve, reject) =>{
     var com = await import(/* webpackChunkName: 'fields_import' */'./fields_import.js')
