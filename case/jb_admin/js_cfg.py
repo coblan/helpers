@@ -168,28 +168,27 @@ def get_lib(request):
             dc.update( {
                 'vuejs': 'https://lib.baomitu.com/vue/2.6.14/vue.js',
 
-                'jquery': 'https://lf9-cdn-tos.bytecdntp.com/cdn/expire-1-M/jquery/3.4.1/jquery.min.js',
+                'jquery':'https://lib.baomitu.com/jquery/3.4.1/jquery.min.js',#  'https://lf9-cdn-tos.bytecdntp.com/cdn/expire-1-M/jquery/3.4.1/jquery.min.js',
                 #'vuex': 'https://cdn.jsdelivr.net/npm/vuex@3.0.1/dist/vuex.min.js', 
         
-                'font_awesome': 'https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/font-awesome/4.7.0/css/font-awesome.min.css',
+                'font_awesome':'https://lib.baomitu.com/font-awesome/4.7.0/css/font-awesome.min.css', #'https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/font-awesome/4.7.0/css/font-awesome.min.css',
                 'bootstrap_css': 'https://lib.baomitu.com/twitter-bootstrap/3.3.7/css/bootstrap.min.css',
                 'bootstrap': 'https://lib.baomitu.com/twitter-bootstrap/3.3.7/js/bootstrap.min.js',
                 
-                'layer': 'https://lf6-cdn-tos.bytecdntp.com/cdn/expire-1-M/layer/3.1.1/layer.min.js',
-                'layer_css':'https://lf9-cdn-tos.bytecdntp.com/cdn/expire-1-M/layer/3.1.1/mobile/need/layer.min.css', 
-                'nice_validator': 'https://lf9-cdn-tos.bytecdntp.com/cdn/expire-1-M/nice-validator/1.1.4/jquery.validator.min.js?local=zh-CN',
-                'nice_validator_css': 'https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/nice-validator/1.1.4/jquery.validator.min.css',
-                'adminlte': 'https://lf26-cdn-tos.bytecdntp.com/cdn/expire-1-y/admin-lte/2.4.10/js/adminlte.min.js',
-                'adminlte_css': 'https://lf9-cdn-tos.bytecdntp.com/cdn/expire-1-y/admin-lte/2.4.10/css/AdminLTE.min.css',
-                'adminlte_them_css':'https://lf26-cdn-tos.bytecdntp.com/cdn/expire-1-y/admin-lte/2.4.10/css/skins/_all-skins.min.css',
+                'layer':'https://lib.baomitu.com/layer/3.1.1/layer.min.js',#  'https://lf6-cdn-tos.bytecdntp.com/cdn/expire-1-M/layer/3.1.1/layer.min.js',
+                'layer_css': 'https://lib.baomitu.com/layer/3.1.1/mobile/need/layer.min.css',# 'https://lf9-cdn-tos.bytecdntp.com/cdn/expire-1-M/layer/3.1.1/mobile/need/layer.min.css', 
+                'nice_validator':'https://lib.baomitu.com/nice-validator/1.1.4/jquery.validator.min.js?local=zh-CN',# 'https://lf9-cdn-tos.bytecdntp.com/cdn/expire-1-M/nice-validator/1.1.4/jquery.validator.min.js?local=zh-CN',
+                'nice_validator_css':'https://lib.baomitu.com/nice-validator/1.1.4/jquery.validator.min.css',# 'https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/nice-validator/1.1.4/jquery.validator.min.css',
+                'adminlte': 'https://lib.baomitu.com/admin-lte/2.4.18/js/adminlte.min.js',# 'https://lf26-cdn-tos.bytecdntp.com/cdn/expire-1-y/admin-lte/2.4.10/js/adminlte.min.js',
+                'adminlte_css':'https://lib.baomitu.com/admin-lte/2.4.18/css/AdminLTE.min.css',# 'https://lf9-cdn-tos.bytecdntp.com/cdn/expire-1-y/admin-lte/2.4.10/css/AdminLTE.min.css',
+                'adminlte_them_css': 'https://lib.baomitu.com/admin-lte/2.4.18/css/skins/_all-skins.min.css',# 'https://lf26-cdn-tos.bytecdntp.com/cdn/expire-1-y/admin-lte/2.4.10/css/skins/_all-skins.min.css',
                 
-                'nprogress': 'https://lf6-cdn-tos.bytecdntp.com/cdn/expire-1-y/nprogress/0.2.0/nprogress.min.js',
-                'nprogress_css': 'https://lf26-cdn-tos.bytecdntp.com/cdn/expire-1-y/nprogress/0.2.0/nprogress.min.css',   
+                'nprogress': 'https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js',#  'https://lf6-cdn-tos.bytecdntp.com/cdn/expire-1-y/nprogress/0.2.0/nprogress.min.js',
+                'nprogress_css':'https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css', # 'https://lf26-cdn-tos.bytecdntp.com/cdn/expire-1-y/nprogress/0.2.0/nprogress.min.css',   
                 
     
                 'element': 'https://lib.baomitu.com/element-ui/2.15.7/index.min.js', 
                 'element_css':'https://lib.baomitu.com/element-ui/2.15.7/theme-chalk/index.min.css',              
-       
        
                 'md5': 'https://lib.baomitu.com/blueimp-md5/2.19.0/js/md5.min.js',
                 'swiper': 'https://lib.baomitu.com/Swiper/4.5.1/js/swiper.min.js',
@@ -222,9 +221,8 @@ def get_lib(request):
                 'wow':'https://cdn.jsdelivr.net/npm/wow.js@1.2.2/dist/wow.min.js',
                 #'composition_api':'https://cdn.jsdelivr.net/npm/@vue/composition-api@1.5.0',
                 'composition_api':'/static/cdn/jb_admin/composition-api@1.6.0',
-                #'https://cdn007.oss-cn-shenzhen.aliyuncs.com/composition-api1.5.0.js',
-                #'https://cdn.jsdelivr.net/npm/@vue/composition-api@1.6.0',
-                #'https://cdn007.oss-cn-shenzhen.aliyuncs.com/composition-api1.5.0.js'
+                ##'composition_api':'https://cdn.jsdelivr.net/npm/@vue/composition-api@1.6.1'
+   
             })
             if not settings.DEBUG:
                 dc.update({

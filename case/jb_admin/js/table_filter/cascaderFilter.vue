@@ -5,7 +5,7 @@
         v-model="search_args[head.name]"
         :options="head.options"
         :placeholder="head.label"
-        :props="{checkStrictly: true ,emitPath:false}"
+        :props="myprops"
         @change="onChange"
         size="small"
         clearable>
@@ -15,6 +15,15 @@
 <script>
 export  default  {
   props:['head','search_args'],
+  computed:{
+    myprops(){
+      if(this.head.onlyLeaf){
+        return  {emitPath:false}
+      }else{
+        return {checkStrictly: true,emitPath:false }
+      }
+    }
+  },
   methods:{
     onChange(){
       if(!this.search_args[this.head.name]){
