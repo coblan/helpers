@@ -109,6 +109,9 @@ class BaseEngine(object):
         self.engin_url =  reverse(self.url_name,args=('aa',))[:-3]
         
         page_cls = self.get_page_cls(name)
+        # 如果需要从定向director页面
+        if hasattr(page_cls,'directorPage'):
+            page_cls = page_cls.directorPage(request,name) or page_cls
         #if not page_cls:
             #raise Http404()
         

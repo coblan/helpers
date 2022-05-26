@@ -136,13 +136,13 @@ export default {
 .history-page{
   display:  inline-block;
   padding: 15px 0;
+  white-space: nowrap;
   //background-color: #252f34;
   //background-color: white;
 }
 .wrap{
   display: inline-block;
   margin-right: 10px;
-
 }
 .page-label{
     display: inline-block;
