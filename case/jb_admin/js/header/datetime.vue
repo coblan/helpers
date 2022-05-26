@@ -56,5 +56,6 @@ export default {
 <style scoped lang="scss">
 .datetime-pannel{
   float: left;
+  white-space: nowrap;
 }
 </style>
