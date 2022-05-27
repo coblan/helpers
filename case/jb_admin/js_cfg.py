@@ -222,6 +222,7 @@ def get_lib(request):
                 #'composition_api':'https://cdn.jsdelivr.net/npm/@vue/composition-api@1.5.0',
                 'composition_api':'/static/cdn/jb_admin/composition-api@1.6.0',
                 ##'composition_api':'https://cdn.jsdelivr.net/npm/@vue/composition-api@1.6.1'
+                'axios':'https://lib.baomitu.com/axios/0.26.1/axios.min.js',
    
             })
             if not settings.DEBUG:
