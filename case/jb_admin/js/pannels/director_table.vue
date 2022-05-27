@@ -1,10 +1,10 @@
 <template>
-    <div class="com-d-table flex-v">
+    <div class="com-d-table flex-v" :class="{autoHeight:autoHeight,streach:!autoHeight}">
         <dfilter :heads="filterHeads" @search="search_page(1)" :search-args="searchArgs"
         :search-label="seach_label"></dfilter>
         <d-operation :heads="operationHeads"></d-operation>
         <dparent :parents="parents" @click-parent="getChilds($event)"></dparent>
-        <div class="table-area flex-grow" style="margin-bottom: 0">
+        <div class="table-area"  style="margin-bottom: 0">
             <!--flex-v flex-grow-->
             <!--<div class="table-wraper flex-grow" >-->
                 <dtable ref="dtable" class="my-d-table"
@@ -17,10 +17,12 @@
                         :footer="footer"
                         @search="search_page(1)"
                         @sort-changed="sortChange"
+                        :tableClass="tableClass"
+                        :autoHeight="autoHeight"
                         :row-sort="rowSort" ></dtable>
             <!--</div>   :search-args="searchArgs"-->
         </div>
-        <dpagination :row-pages="rowPages" @goto-page="search_page($event)" :search-args="searchArgs"></dpagination>
+        <dpagination v-if="hasPagination" :row-pages="rowPages" @goto-page="search_page($event)" :search-args="searchArgs"></dpagination>
     </div>
 </template>
 <script>
@@ -192,13 +194,20 @@ import { ref, reactive,computed ,onMounted,getCurrentInstance } from '@vue/compo
             },
             directorName:{},
             footer:{
-                default:()=>{}
+                default:()=>{return {}}
             },
             selectable:{
                 default:()=>{return  true}
             },
             parents:{
                 default:()=>[]
+            },
+            hasPagination:{
+                default:true
+            },
+            tableClass:{},
+            autoHeight:{
+                default:false
             },
             // urlArgs:{
             //   default:false
@@ -223,6 +232,10 @@ import { ref, reactive,computed ,onMounted,getCurrentInstance } from '@vue/compo
             }
         },
         methods:{
+          clearRows(){
+            debugger
+            this.$refs.dtable.rows.splice(0,this.$refs.dtable.rows.length)
+          },
 
             search_page(page,{loading}={loading:true}){
               // if(this.urlArgs){
@@ -245,32 +258,41 @@ import { ref, reactive,computed ,onMounted,getCurrentInstance } from '@vue/compo
                     ex.array.replace(this.tableRows,resp.rows)
                     ex.vueAssign( this.rowPages,resp.row_pages)
                     ex.vueAssign(this.searchArgs,resp.search_args)
+                    debugger
                     ex.vueAssign(this.footer,resp.footer)
                     ex.array.replace(this.parents,resp.parents)
 //                    this.footer = resp.footer
+                    this.$emit('afterSearchPage',page)
                 })
             }
         }
     }
 </script>
 <style scoped lang="scss">
-.com-d-table{
+
+.streach{
+  &.com-d-table{
     height: 100%;
+  }
+  .table-area{
+      position: relative;
+      border-radius: 5px;
+      overflow: hidden;
+      background: #ffffff;
+      border-top: 1px solid #eee;
+      margin-bottom: 20px;
+      width: 100%;
+      flex-grow: 10;
+      .my-d-table{
+        position: absolute;
+        top:0;
+        left:0;
+        bottom: 0;
+        right:0;
+      }
+    //-moz-box-shadow:0px -3px 5px #f4f4f4;; -webkit-box-shadow:0px -3px 5px #f4f4f4;; box-shadow:0px -3px 5px #f4f4f4;
+    //box-shadow: 0 1px 1px rgb(0 0 0 / 10%);
+  }
 }
-.my-d-table{
-    /*position: absolute;*/
-    /*height: 100%;*/
-    /*width: 100%;*/
-}
-.table-area{
-  position: relative;
-  border-radius: 5px;
-  overflow: hidden;
-  background: #ffffff;
-  border-top: 1px solid #eee;
-  margin-bottom: 20px;
-  width: 100%;
-  //-moz-box-shadow:0px -3px 5px #f4f4f4;; -webkit-box-shadow:0px -3px 5px #f4f4f4;; box-shadow:0px -3px 5px #f4f4f4;
-  //box-shadow: 0 1px 1px rgb(0 0 0 / 10%);
-}
+
 </style>

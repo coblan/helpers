@@ -13,6 +13,9 @@
             :parents="ctx.parents"
             :search-args="ctx.search_args"
             :selectable="ctx.selectable"
+            :hasPagination="ctx.hasPagination"
+            :tableClass="ctx.tableClass"
+            :autoHeight="ctx.autoHeight"
             ref="dtable"
     >
       <!--            :extend-logic="extendLogic"-->
@@ -73,9 +76,12 @@
         //     return new BackendTable().getSetup(props)
         // },
         mounted(){
-          if(!this.ctx.rows || this.ctx.rows.length==0){
+          if(this.ctx.autoLoad!=false){
+            if(!this.ctx.rows || this.ctx.rows.length==0){
               this.$refs.dtable.search()
+            }
           }
+
           this.$refs.dtable.childStore.$on('finish',(data)=>{
               this.$emit('finish',data)
           })
