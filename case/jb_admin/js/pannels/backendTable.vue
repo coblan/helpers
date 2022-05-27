@@ -16,6 +16,7 @@
             :hasPagination="ctx.hasPagination"
             :tableClass="ctx.tableClass"
             :autoHeight="ctx.autoHeight"
+            :fitWidth="ctx.fitWidth"
             ref="dtable"
     >
       <!--            :extend-logic="extendLogic"-->

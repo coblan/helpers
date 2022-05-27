@@ -19,6 +19,7 @@
                         @sort-changed="sortChange"
                         :tableClass="tableClass"
                         :autoHeight="autoHeight"
+                        :fitWidth="fitWidth"
                         :row-sort="rowSort" ></dtable>
             <!--</div>   :search-args="searchArgs"-->
         </div>
@@ -209,6 +210,9 @@ import { ref, reactive,computed ,onMounted,getCurrentInstance } from '@vue/compo
             autoHeight:{
                 default:false
             },
+            fitWidth:{
+            },
+
             // urlArgs:{
             //   default:false
             // }
