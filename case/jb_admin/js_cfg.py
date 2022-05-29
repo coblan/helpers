@@ -187,8 +187,11 @@ def get_lib(request):
                 'nprogress_css':'https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css', # 'https://lf26-cdn-tos.bytecdntp.com/cdn/expire-1-y/nprogress/0.2.0/nprogress.min.css',   
                 
     
-                'element': 'https://lib.baomitu.com/element-ui/2.15.7/index.min.js', 
-                'element_css':'https://lib.baomitu.com/element-ui/2.15.7/theme-chalk/index.min.css',              
+                #'element': 'https://lib.baomitu.com/element-ui/2.15.8/index.min.js', 
+                #'element_css':'https://lib.baomitu.com/element-ui/2.15.8/theme-chalk/index.min.css',    
+                # 360总element可能显示icon有问题，替换成字节的
+                'element':'https://cdn.bytedance.com/cdn/expire-1-M/element-ui/2.15.7/index.min.js',
+                'element_css':'https://cdn.bytedance.com/cdn/expire-1-M/element-ui/2.15.7/theme-chalk/index.min.css',
        
                 'md5': 'https://lib.baomitu.com/blueimp-md5/2.19.0/js/md5.min.js',
                 'swiper': 'https://lib.baomitu.com/Swiper/4.5.1/js/swiper.min.js',

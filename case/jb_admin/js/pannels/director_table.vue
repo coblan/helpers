@@ -1,14 +1,17 @@
 <template>
     <div class="com-d-table flex-v" :class="{autoHeight:autoHeight,streach:!autoHeight}">
 
-      <dOpeAndFilter :heads="filterHeads" @search="search_page(1)" :search-args="searchArgs"
+      <dOpeAndFilter v-if="mergeOperationFilter" :heads="filterHeads" @search="search_page(1)" :search-args="searchArgs"
                :search-label="seach_label"
                :op-heads="operationHeads"
       >
       </dOpeAndFilter>
-<!--        <dfilter :heads="filterHeads" @search="search_page(1)" :search-args="searchArgs"-->
-<!--        :search-label="seach_label"></dfilter>-->
-<!--        <d-operation :heads="operationHeads"></d-operation>-->
+      <template v-else>
+        <dfilter :heads="filterHeads" @search="search_page(1)" :search-args="searchArgs"
+                 :search-label="seach_label"></dfilter>
+        <d-operation :heads="operationHeads"></d-operation>
+      </template>
+
 
         <dparent :parents="parents" @click-parent="getChilds($event)"></dparent>
         <div class="table-area"  style="margin-bottom: 0">
@@ -219,8 +222,11 @@ import { ref, reactive,computed ,onMounted,getCurrentInstance } from '@vue/compo
                 default:false
             },
             fitWidth:{
+              // 每列自适应宽度
             },
-
+            mergeOperationFilter:{
+                default:true,
+            }
             // urlArgs:{
             //   default:false
             // }
