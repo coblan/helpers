@@ -1,8 +1,15 @@
 <template>
     <div class="com-d-table flex-v" :class="{autoHeight:autoHeight,streach:!autoHeight}">
-        <dfilter :heads="filterHeads" @search="search_page(1)" :search-args="searchArgs"
-        :search-label="seach_label"></dfilter>
-        <d-operation :heads="operationHeads"></d-operation>
+
+      <dOpeAndFilter :heads="filterHeads" @search="search_page(1)" :search-args="searchArgs"
+               :search-label="seach_label"
+               :op-heads="operationHeads"
+      >
+      </dOpeAndFilter>
+<!--        <dfilter :heads="filterHeads" @search="search_page(1)" :search-args="searchArgs"-->
+<!--        :search-label="seach_label"></dfilter>-->
+<!--        <d-operation :heads="operationHeads"></d-operation>-->
+
         <dparent :parents="parents" @click-parent="getChilds($event)"></dparent>
         <div class="table-area"  style="margin-bottom: 0">
             <!--flex-v flex-grow-->
@@ -36,7 +43,7 @@ import { ref, reactive,computed ,onMounted,getCurrentInstance } from '@vue/compo
     import dpagination from 'webcase/director/table/dpagination.vue'
     import table_mix from './director_table/table_mix'
     import dparent from 'webcase/director/table/dparent.vue'
-
+    import dOpeAndFilter from 'webcase/director/table/dOpeAndFilter.vue'
     /*
     *
     * table_settings原理
@@ -157,6 +164,7 @@ import { ref, reactive,computed ,onMounted,getCurrentInstance } from '@vue/compo
             dpagination,
             dOperation,
             dparent,
+            dOpeAndFilter
         },
         mixins:[table_mix],
         setup(props){

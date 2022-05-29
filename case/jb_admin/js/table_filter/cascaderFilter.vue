@@ -7,7 +7,7 @@
         :placeholder="head.label"
         :props="myprops"
         @change="onChange"
-        size="small"
+        size="mini"
         clearable>
     </el-cascader>
   </div>

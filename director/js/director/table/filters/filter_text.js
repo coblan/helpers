@@ -7,7 +7,7 @@ var filter_input = {
         <el-input class="input-with-select"
                   :placeholder="myplaceholder"
                   @keyup.native.13="parStore.search()"
-                  size="small"
+                  size="mini"
                   maxlength="200"
                   v-model="search_args[head.name]">
         </el-input>
