@@ -225,7 +225,8 @@ import { ref, reactive,computed ,onMounted,getCurrentInstance } from '@vue/compo
               // 每列自适应宽度
             },
             opMergeCount:{
-                default:4,
+              // operation少于该数量，operation就会融合在一起
+                default:-1,
             }
             // urlArgs:{
             //   default:false
