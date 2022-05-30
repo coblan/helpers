@@ -1,7 +1,7 @@
 <template>
     <div class="com-d-table flex-v" :class="{autoHeight:autoHeight,streach:!autoHeight}">
 
-      <dOpeAndFilter v-if="mergeOperationFilter" :heads="filterHeads" @search="search_page(1)" :search-args="searchArgs"
+      <dOpeAndFilter v-if="operationHeads.length <= opMergeCount" :heads="filterHeads" @search="search_page(1)" :search-args="searchArgs"
                :search-label="seach_label"
                :op-heads="operationHeads"
       >
@@ -224,8 +224,8 @@ import { ref, reactive,computed ,onMounted,getCurrentInstance } from '@vue/compo
             fitWidth:{
               // 每列自适应宽度
             },
-            mergeOperationFilter:{
-                default:true,
+            opMergeCount:{
+                default:4,
             }
             // urlArgs:{
             //   default:false
