@@ -17,6 +17,7 @@
             :tableClass="ctx.tableClass"
             :autoHeight="ctx.autoHeight"
             :fitWidth="ctx.fitWidth"
+            :opMergeCount="ctx.opMergeCount"
             ref="dtable"
     >
       <!--            :extend-logic="extendLogic"-->
