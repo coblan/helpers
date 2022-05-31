@@ -6,11 +6,10 @@
     <h2Drag save-name="_page_editor" :fixRight="true" style="width: 100%">
       <template v-slot:left>
         <editorViewer :bus="bus"></editorViewer>
-         <div style="flex-grow: 0">我是左边</div>
+
       </template>
       <template v-slot:right>
         <editorTree :bus="bus"></editorTree>
-        <div>我是右边的</div>
       </template>
     </h2Drag>
 
