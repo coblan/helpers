@@ -29,6 +29,15 @@ class PagePage(TablePage):
             ctx = super().get_head_context()
             return ctx
         
+        def get_operations(self):
+            ops = super().get_operations()
+            ops.append({
+                'editor':'com-btn',
+                'label':'固化',
+                
+            })
+            return ops
+        
         def dict_head(self, head):
             width = {
                 'name':300
