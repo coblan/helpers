@@ -28,6 +28,12 @@ export default {
     }
   }
 }
+
+cfg.ui_editor['uie-backendTable'] = {
+  fields:[
+    {name:'director_name',label:'director name',editor:'com-field-linetext'},
+  ]
+}
 </script>
 <style scoped lang="scss">
 .uie-backend-table{

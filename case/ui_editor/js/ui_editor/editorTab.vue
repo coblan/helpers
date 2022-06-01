@@ -3,13 +3,13 @@
 
 
 
-    <h2Drag save-name="_page_editor" :fixRight="true" style="width: 100%">
+    <h2Drag save-name="_page_editor" :fixRight="true" style="width: 100%;background-color: transparent">
       <template v-slot:left>
-        <editorViewer :bus="bus"></editorViewer>
-
+<!--        <editorViewer :bus="bus"></editorViewer>-->
+        <uie-mount-view :heads="heads"></uie-mount-view>
       </template>
       <template v-slot:right>
-        <editorTree :bus="bus"></editorTree>
+        <editorTree :heads="heads" @save="onSave"></editorTree>
       </template>
     </h2Drag>
 
@@ -35,10 +35,24 @@ export default {
         coms:[]
       }
     }
-
+  },
+  computed:{
+    heads(){
+      return JSON.parse(this.par_row.content)
+    }
   },
   mounted(){
     this.bus.coms = JSON.parse(this.par_row.content)
+  },
+  methods:{
+    async onSave(){
+      this.par_row.content = JSON.stringify(this.heads)
+      cfg.show_load()
+      var resp = await ex.director_call('d.save_row',{row:this.par_row})
+      cfg.hide_load()
+      cfg.toast('保存成功')
+
+    }
   }
 }
 </script>
