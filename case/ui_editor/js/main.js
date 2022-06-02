@@ -10,6 +10,7 @@ cfg.ui_editor.test = editorTab
 
 import mountView from './coms/mountView.vue'
 import backendTable from './coms/backendTable.vue'
-
+import generalWrap from "./coms/generalWrap.vue";
 Vue.component('uie-mount-view',mountView)
 Vue.component('uie-backendTable',backendTable)
+Vue.component('uie-general-wrap',generalWrap)

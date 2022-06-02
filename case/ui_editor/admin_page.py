@@ -93,6 +93,9 @@ class PageForm(ModelFields):
         if head['name'] == 'content':
             head['editor'] = 'com-field-json-edit'
         return head
+    
+    def save_form(self):
+        super().save_form()
 
 director.update({
     'webpage':PagePage.tableCls,

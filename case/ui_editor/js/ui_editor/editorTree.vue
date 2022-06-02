@@ -1,12 +1,15 @@
 <template>
   <div class="editor-tree">
     <div>
-      <button @click="add">增加</button>
+      <button @click="onTopAdd">增加</button>
       <button @click="save">保存</button>
     </div>
     <div>
       <el-tree :data="heads"
                :props="defaultProps"
+               default-expand-all
+               node-key="id"
+               :expand-on-click-node="false"
                @node-click="handleNodeClick">
 
          <span class="custom-tree-node" slot-scope="{ node, data }">
@@ -26,6 +29,7 @@
                       </el-button>
 
                       <el-button
+                          v-if="data.children"
                           type="text"
                           size="mini"
                           @click="() => append(data)">
@@ -37,15 +41,27 @@
                           @click="() => remove(node, data)">
                         Delete
                       </el-button>
+                     <el-button
+                         type="text"
+                         size="mini"
+                         @click="() => up(node, data)">
+                        up
+                      </el-button>
+                    <el-button
+                        type="text"
+                        size="mini"
+                        @click="() => down(node, data)">
+                        down
+                      </el-button>
                 </div>
             </div>
 
         </span>
       </el-tree>
 
-      <div v-for="head in heads">
-        {{head.editor}}
-      </div>
+<!--      <div v-for="head in heads">-->
+<!--        {{head.editor}}-->
+<!--      </div>-->
     </div>
   </div>
 </template>
@@ -69,6 +85,16 @@ export default {
     this.getComponents()
   },
   methods:{
+    async append(data) {
+      debugger
+      this.add(data.children)
+      // const newChild = { id: Date.now(), label: 'testtest', children: [] };
+      // if (!data.children) {
+      //   this.$set(data, 'children', []);
+      // }
+      // data.children.push(newChild);
+    },
+
     async popEdit(data){
       var fields = [
         {name:'label',label:'名称',editor:'com-field-linetext'},
@@ -106,7 +132,10 @@ export default {
       }
 
     },
-    async add(){
+    onTopAdd(){
+      this.add()
+    },
+    async add(children){
 
       var fields_ctx = {
         heads:[
@@ -115,15 +144,51 @@ export default {
         ],
         row:{},
         ops:[
-          {name:'save',label:'确定',editor:'com-btn',click_express:'scope.ps.vc.beforeSubmit().then(()=>{  if(scope.ps.vc.isValid()){var vc= scope.ps.vc;vc.$emit("finish",vc.row)}  })  '},
+          {name:'save',label:'确定',editor:'com-btn',
+            click_express:'scope.ps.vc.beforeSubmit().then(()=>{  if(scope.ps.vc.isValid()){var vc= scope.ps.vc;vc.$emit("finish",vc.row)}  })  '},
         ],
       }
       var resp = await cfg.pop_vue_com('com-form-one',fields_ctx)
+
       debugger
-      this.heads.push(
-          {editor:resp.editor,label:resp.label,bind:{} }
-      )
-    }
+      if(!children){
+        children = this.heads
+      }
+      if(cfg.ui_editor[resp.editor].has_children){
+        children.push(
+            {editor:resp.editor,label:resp.label,id:Date.now(),bind:{},children: [] }
+        )
+      }else{
+        children.push(
+            {editor:resp.editor,label:resp.label,id:Date.now(),bind:{} }
+        )
+      }
+      this.$emit('update:heads',this.heads)
+    },
+    remove(node, data) {
+      const parent = node.parent;
+      const children = parent.data.children || parent.data;
+      const index = children.findIndex(d => d.id === data.id);
+      children.splice(index, 1);
+    },
+    up(node, data) {
+      const parent = node.parent;
+      const children = parent.data.children || parent.data;
+      const index = children.findIndex(d => d.id === data.id);
+      children.splice(index, 1);
+      this.$nextTick(()=>{
+        children.splice( Math.max(0,index-1) ,0,data)
+      })
+    },
+    down(node, data) {
+      const parent = node.parent;
+      const children = parent.data.children || parent.data;
+      const index = children.findIndex(d => d.id === data.id);
+      children.splice(index, 1);
+      this.$nextTick(()=>{
+        children.splice( Math.min(children.length,index+1) ,0,data)
+      })
+    },
   }
 }
 </script>
@@ -133,16 +198,20 @@ export default {
   background-color: white;
   height: 100%;
 }
+.custom-tree-node{
+  flex-grow: 10;
+}
 .item-pannel{
   position: relative;
   display: flex;
   align-items: center;
   padding: 5px;
   border-top:1px solid lightgray;
+
   .my-buttons{
-    //position: absolute;
-    //top:0;
-    //right: 0;
+    position: absolute;
+    top:0;
+    right: 0;
     display: none;
   }
   &:hover{

@@ -6,10 +6,10 @@
     <h2Drag save-name="_page_editor" :fixRight="true" style="width: 100%;background-color: transparent">
       <template v-slot:left>
 <!--        <editorViewer :bus="bus"></editorViewer>-->
-        <uie-mount-view :heads="heads"></uie-mount-view>
+        <uie-mount-view :heads.sync="heads"></uie-mount-view>
       </template>
       <template v-slot:right>
-        <editorTree :heads="heads" @save="onSave"></editorTree>
+        <editorTree :heads.sync="heads" @save="onSave"></editorTree>
       </template>
     </h2Drag>
 
@@ -32,15 +32,16 @@ export default {
   data(){
     return {
       bus:{
-        coms:[]
-      }
+        coms:[],
+      },
+      heads:JSON.parse(this.par_row.content)
     }
   },
-  computed:{
-    heads(){
-      return JSON.parse(this.par_row.content)
-    }
-  },
+  // computed:{
+  //   heads(){
+  //     return JSON.parse(this.par_row.content)
+  //   }
+  // },
   mounted(){
     this.bus.coms = JSON.parse(this.par_row.content)
   },
@@ -50,6 +51,7 @@ export default {
       cfg.show_load()
       var resp = await ex.director_call('d.save_row',{row:this.par_row})
       cfg.hide_load()
+      ex.vueAssign(this.par_row,resp.row)
       cfg.toast('保存成功')
 
     }
