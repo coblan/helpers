@@ -67,6 +67,7 @@
 </template>
 <script>
 import ex from 'weblib/ex'
+import comSelect from './comSelect.vue'
 export default {
   props:{
     bus:{},
@@ -86,7 +87,6 @@ export default {
   },
   methods:{
     async append(data) {
-      debugger
       this.add(data.children)
       // const newChild = { id: Date.now(), label: 'testtest', children: [] };
       // if (!data.children) {
@@ -139,7 +139,9 @@ export default {
 
       var fields_ctx = {
         heads:[
-          {name:'editor',label:'组件',editor:'com-field-select',options:this.coms_options,required:true},
+
+          // {name:'editor',label:'组件',editor:'com-field-select',options:this.coms_options,required:true},
+          {name:'editor',label:'组件',editor:comSelect,options:this.coms_options,required:true},
           {name:'label',label:'名称',editor:'com-field-linetext',required:true},
         ],
         row:{},
