@@ -53,6 +53,13 @@
                         @click="() => down(node, data)">
                         down
                       </el-button>
+
+                     <el-button
+                         type="text"
+                         size="mini"
+                         @click="() => help_text(node, data)">
+                        help
+                      </el-button>
                 </div>
             </div>
 
@@ -68,6 +75,7 @@
 <script>
 import ex from 'weblib/ex'
 import comSelect from './comSelect.vue'
+import helpText from './helpText.vue'
 export default {
   props:{
     bus:{},
@@ -191,6 +199,9 @@ export default {
         children.splice( Math.min(children.length,index+1) ,0,data)
       })
     },
+    help_text(node,data){
+      cfg.pop_vue_com(helpText,{editor:data.editor})
+    }
   }
 }
 </script>
