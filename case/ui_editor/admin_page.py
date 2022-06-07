@@ -98,6 +98,11 @@ class PageForm(ModelFields):
     def save_form(self):
         super().save_form()
 
+@director_view('uie/page')
+def uie_page(name):
+    inst = Page.objects.get(name=name)
+    return json.loads(inst.content)
+
 director.update({
     'webpage':PagePage.tableCls,
     'webpage.edit':PageForm

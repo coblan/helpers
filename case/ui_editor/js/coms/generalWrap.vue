@@ -29,7 +29,11 @@ cfg.ui_editor['uie-general-wrap'] = {
     ]},
     {name:'css',label:'css样式',editor:'com-field-blocktext'},
 
-  ]
+  ],
+  desp:'容器',
+  help_text:`
+  <div>容器，可以flex,grid等布局</div>
+  `
 }
 </script>
 
