@@ -62,6 +62,8 @@ from functools import wraps
 def director_view(name): 
     def _fun(fun): 
         #director[name] = fun
+        if name in director_views:
+            raise UserWarning('name=%s的director_view已经存在')
         director_views[name] = fun
         @wraps(fun)
         def _fun2(*args, **kargs): 

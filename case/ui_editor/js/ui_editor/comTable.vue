@@ -2,7 +2,12 @@
   <div class="flex">
 
     <div>
-      <input type="text" v-model="keyword" placeholder="关键字">
+      <div class="flex">
+        <com-field-linetext :head="{name:'free_word',}" :row="word_row"></com-field-linetext>
+<!--        <input type="text" v-model="keyword" placeholder="关键字">-->
+        <com-field-select :head="{name:'first_word',options:firstkey_options}" :row="word_row"></com-field-select>
+      </div>
+
       <com-backend-table  style="width: 450px"  ref="mytable" :ctx="tableCtx"></com-backend-table>
     </div>
 
@@ -21,6 +26,11 @@ export default {
         rows.push({com:k,desp:com.desp,help_text:com.help_text})
       }
       return {
+        firstkey_options:[
+          {value:'Echarts',label:'Echarts'}
+        ],
+        word_row:{},
+
         current_row:{},
         rows:rows,
         tableCtx:{
@@ -54,7 +64,7 @@ export default {
           selectable:false,
           option:{},
         },
-        keyword:''
+        // keyword:''
       }
     },
   mounted(){
@@ -64,6 +74,18 @@ export default {
       },1000)
 
   },
+  computed:{
+      keyword(){
+        var regword = ''
+        if(this.word_row.free_word){
+          regword += this.word_row.free_word
+        }
+        if(this.word_row.first_word){
+          regword += this.word_row.first_word
+        }
+        return regword
+      }
+  },
   watch:{
       keyword(){
           this.updateRows()
@@ -72,9 +94,30 @@ export default {
   methods:{
     updateRows(){
       if(this.keyword){
+        var r1=null
+        var r2 = null
+        if(this.word_row.free_word){
+          var word_ls = ex.filter(this.word_row.free_word.split(' '),item=>{ return item !=''} )
+          if(word_ls.length >0) {
+            var regword = word_ls.join('|')
+            r1 = RegExp(regword,"i");
+          }
+        }
+        if(this.word_row.first_word){
+          r2 = RegExp(this.word_row.first_word,"i");
+        }
+
         var rows = ex.filter(this.rows,item=>{
           if(item.desp){
-            return item.desp.indexOf(this.keyword) !=-1
+            var rt = true
+            if(r1){
+              rt = rt && r1.test(item.desp)
+            }
+            if(r2){
+              rt = rt && r2.test(item.desp)
+            }
+            return rt
+            // return item.desp.indexOf(this.keyword) !=-1
           }
         })
         this.tableCtx.rows = rows

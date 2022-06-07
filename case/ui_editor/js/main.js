@@ -14,3 +14,5 @@ import generalWrap from "./coms/generalWrap.vue";
 Vue.component('uie-mount-view',mountView)
 Vue.component('uie-backendTable',backendTable)
 Vue.component('uie-general-wrap',generalWrap)
+
+import './coms'

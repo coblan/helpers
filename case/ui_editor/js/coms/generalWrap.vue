@@ -12,13 +12,21 @@ export default {
   },
   mounted(){
     ex.append_css(this.css)
+  },
+  computed:{
+    // validCss(){
+    //   return this.myclass.split(',')
+    // }
   }
 }
 
 cfg.ui_editor['uie-general-wrap'] = {
   has_children:true,
   fields:[
-    {name:'myclass',label:'类名',editor: 'com-field-linetext'},
+    {name:'myclass',label:'类名',editor: 'com-field-split-text',splitter:' ',
+    options:[
+      {value:'flex',label:'flex'},
+    ]},
     {name:'css',label:'css样式',editor:'com-field-blocktext'},
 
   ]

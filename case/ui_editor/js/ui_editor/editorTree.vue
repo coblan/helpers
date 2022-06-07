@@ -160,7 +160,6 @@ export default {
       }
       var resp = await cfg.pop_vue_com('com-form-one',fields_ctx)
 
-      debugger
       if(!children){
         children = this.heads
       }

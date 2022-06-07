@@ -70,6 +70,7 @@ def save_ui_editor_data():
     for inst in Page.objects.all():
         rows.append({
             'name':inst.name,
+            'desp':inst.desp,
             'content':inst.content
         })
     with open( os.path.join( settings.STATICFILES_DIRS[0],'page.json'),'w',encoding='utf-8' ) as f:
@@ -81,7 +82,7 @@ def import_ui_editor_data():
     with open( os.path.join( settings.STATICFILES_DIRS[0],'page.json'),'r',encoding='utf-8' ) as f:
         rows = json.load(f)   
     for row in rows:
-        Page.objects.update_or_create(name=row.get('name'),defaults={'content':row.get('content')})
+        Page.objects.update_or_create(name=row.get('name'),defaults={ 'desp':row.get('desp','') ,'content':row.get('content')})
               
 
 class PageForm(ModelFields):

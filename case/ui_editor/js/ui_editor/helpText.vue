@@ -12,7 +12,6 @@ export default {
   },
   computed:{
     html_text(){
-      debugger
       var com = cfg.ui_editor[this.editor]
       return com.help_text
     }
