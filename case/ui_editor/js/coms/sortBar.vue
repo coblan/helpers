@@ -1,19 +1,51 @@
 <template>
-  <sortBar  style="width: 500px;height: 300px;margin: 10px;background-color: white"
-            title="加油金额排名" :ydata="['装备验收员','装备技师',]" :xdata="[{name:'',data:[1011,1800,]}]"></sortBar>
+  <sortBar :class="myclass" ref="chart"
+            :title="title" :ydata="ydata" :xdata="xdata"></sortBar>
 </template>
 
 <script>
 import sortBar from "webcase/chart/sortBar.vue";
+import  ex from 'weblib/ex'
 export default {
   components:{
     sortBar
+  },
+  props:{
+    title: {},
+    ydata:{},
+    xdata:{},
+    myclass:{},
+    // ctxName:{},
+    // director:{},
+  },
+
+  // data(){
+  //   return {
+  //     row:{
+  //       title:'',
+  //       ydata:[],
+  //       xdata:[],
+  //     }
+  //
+  //   }
+  // },
+
+  async mounted(){
+    // if(this.ctxName && named_ctx[this.ctxName]){
+    //   var ctx = named_ctx[this.ctxName]
+    //   ex.vueAssign(this.row,ctx)
+    // }else if(this.director){
+    //   var resp = await ex.director_call(this.director,)
+    //   ex.vueAssign(this.row,resp)
+    // }
+    this.$refs.chart.draw()
   }
 }
 
 cfg.ui_editor['uie-sortBar'] = {
   fields:[
-    {name:'director',label:'director',editor: 'com-field-linetext'},
+    // {name:'bind_express',label:'绑定脚本',editor: 'com-field-blocktext'},
+    // {name:'ctxName',label:'ctxName',editor: 'com-field-linetext'},
     {name:'myclass',label:'类名',editor: 'com-field-split-text',splitter:' ',
       options:[
         {value:'flex',label:'flex'},

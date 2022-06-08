@@ -106,11 +106,12 @@ export default {
     async popEdit(data){
       var fields = [
         {name:'label',label:'名称',editor:'com-field-linetext'},
+        {name:'bind_express',label:'启动脚本',editor:'com-field-blocktext'},
       ]
       fields = fields.concat(cfg.ui_editor[data.editor].fields)
       var fields_ctx = {
         heads:fields,
-        row:{label:data.label, ... data.bind},
+        row:{label:data.label,bind_express:data.bind_express, ... data.bind},
         ops:[
           {'editor':'com-btn','label':'确定',
             'click_express':'scope.ps.vc.beforeSubmit().then(()=>{  if(scope.ps.vc.isValid()){ scope.ps.vc.$emit("finish",scope.ps.vc.row)}  })'},
@@ -120,8 +121,10 @@ export default {
       }
       var resp = await cfg.pop_vue_com('com-form-one',fields_ctx)
       Vue.set(data,'label',resp.label)
+      Vue.set(data,'bind_express',resp.bind_express)
       // data.label = resp.label
       delete resp.label
+      delete resp.bind_express
       data.bind=resp
 
     },

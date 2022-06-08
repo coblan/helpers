@@ -2,8 +2,8 @@
   <div class="uie-mount-view">
 
     <template v-for="head in normed_heads">
-      <component v-if="head.children" :is="head.editor" :key="head.id"  v-bind="head.bind" :children="head.children"></component>
-      <component v-else :is="head.editor" :key="head.id"  v-bind="head.bind"></component>
+      <component v-if="head.children && head.loaded" :is="head.editor" :key="head.id"  v-bind="head.bind" :children="head.children"></component>
+      <component v-else-if="head.loaded" :is="head.editor" :key="head.id"  v-bind="head.bind"></component>
     </template>
 
   </div>
@@ -61,6 +61,8 @@ export default {
           var resp = await ex.eval(head.bind_express,{ex:ex,head:head})
           ex.vueAssign(head.bind,resp)
           head.loaded = true
+
+
         }else{
           head.loaded = true
         }
