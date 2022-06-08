@@ -43,6 +43,7 @@ export default {
 }
 
 cfg.ui_editor['uie-sortBar'] = {
+  has_bind_express: true,
   fields:[
     // {name:'bind_express',label:'绑定脚本',editor: 'com-field-blocktext'},
     // {name:'ctxName',label:'ctxName',editor: 'com-field-linetext'},

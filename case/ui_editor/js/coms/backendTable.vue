@@ -31,8 +31,10 @@ export default {
 
 cfg.ui_editor['uie-backendTable'] = {
   fields:[
-    {name:'director_name',label:'director name',editor:'com-field-linetext'},
-  ]
+    {name:'director_name',label:'director name',editor:'com-field-linetext',help_text: '直接填写后台table的director_name即可'},
+  ],
+  desp:'后台table',
+  help_text:`<div>直接填写后台table的director_name即可</div>`
 }
 </script>
 <style scoped lang="scss">

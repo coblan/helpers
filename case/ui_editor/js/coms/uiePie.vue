@@ -9,28 +9,22 @@ export default {
     pie
   },
   props:{
-    director:{},
+    kvlist:{},
+    title:{},
     myclass:{},
   },
-  data(){
-    return {
-      kvlist:[],
-      title:''
-    }
-  },
   async mounted(){
-    var resp = await ex.director_get(this.director)
-    this.kvlist=resp.kvlist
-    this.title=resp.title
-    this.$nextTick(()=>{
-      this.$refs.chart.draw()
-    })
+    if(this.kvlist){
+      this.$nextTick(()=>{
+        this.$refs.chart.draw()
+      })
+    }
   },
 }
 
 cfg.ui_editor['uie-pie'] = {
+  has_bind_express:true,
   fields:[
-    {name:'director',label:'director',editor: 'com-field-linetext'},
     {name:'myclass',label:'类名',editor: 'com-field-split-text',splitter:' ',
       options:[
         {value:'flex',label:'flex'},

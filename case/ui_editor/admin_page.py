@@ -1,8 +1,9 @@
-from helpers.director.shortcut import TablePage,ModelTable,ModelFields,page_dc,director,get_request_cache,director_view
+from helpers.director.shortcut import TablePage,ModelTable,ModelFields,page_dc,director,get_request_cache,director_view,RowSort
 from . models import Page
 import json
 from django.conf import settings
 import os
+from helpers.director.kv import get_json,set_json
 
 class PagePage(TablePage):
     def get_label(self):
@@ -33,26 +34,26 @@ class PagePage(TablePage):
             ctx = super().get_head_context()
             return ctx
         
-        def get_operations(self):
-            ops = super().get_operations()
-            ops+= [{
-                'editor':'com-btn',
-                'label':'固化',
-                'click_express':'''cfg.confirm("确定保存并覆盖以前的数据?").then(()=>{
-                    cfg.show_load();
-                    return ex.director_call("save_ui_editor_data")
-                }).then(()=>{cfg.hide_load();cfg.toast("操作成功")})'''
+        #def get_operations(self):
+            #ops = super().get_operations()
+            #ops+= [{
+                #'editor':'com-btn',
+                #'label':'固化',
+                #'click_express':'''cfg.confirm("确定保存并覆盖以前的数据?").then(()=>{
+                    #cfg.show_load();
+                    #return ex.director_call("save_ui_editor_data")
+                #}).then(()=>{cfg.hide_load();cfg.toast("操作成功")})'''
                 
-            },{
-                'editor':'com-btn',
-                'label':'导入',
-                'click_express':''' cfg.confirm("确定要导入页面?").then(()=>{
-                    cfg.show_load();
-                    return ex.director_call("import_ui_editor_data")
-                }).then(()=>{cfg.hide_load();cfg.toast("操作成功")}) 
-                '''
-            }]
-            return ops
+            #},{
+                #'editor':'com-btn',
+                #'label':'导入',
+                #'click_express':''' cfg.confirm("确定要导入页面?").then(()=>{
+                    #cfg.show_load();
+                    #return ex.director_call("import_ui_editor_data")
+                #}).then(()=>{cfg.hide_load();cfg.toast("操作成功")}) 
+                #'''
+            #}]
+            #return ops
         
         def dict_head(self, head):
             width = {
@@ -63,6 +64,13 @@ class PagePage(TablePage):
                 head['editor'] = 'com-table-click'
                 head['click_express']="scope.ps.switch_to_tab({ctx_name:'order-page-tabs',tab_name:'uitest',par_row:scope.row})"
             return head
+        
+        class sort(RowSort):
+            names=['sort']
+            general_sort ='sort'
+        
+
+
 
 @director_view('save_ui_editor_data')
 def save_ui_editor_data():
@@ -71,6 +79,7 @@ def save_ui_editor_data():
         rows.append({
             'name':inst.name,
             'desp':inst.desp,
+            'sort':inst.sort,
             'content':inst.content
         })
     with open( os.path.join( settings.STATICFILES_DIRS[0],'page.json'),'w',encoding='utf-8' ) as f:
@@ -82,7 +91,9 @@ def import_ui_editor_data():
     with open( os.path.join( settings.STATICFILES_DIRS[0],'page.json'),'r',encoding='utf-8' ) as f:
         rows = json.load(f)   
     for row in rows:
-        Page.objects.update_or_create(name=row.get('name'),defaults={ 'desp':row.get('desp','') ,'content':row.get('content')})
+        Page.objects.update_or_create(name=row.get('name'),defaults={ 'desp':row.get('desp','') ,
+                                                                      'sort':row.get('sort',0),
+                                                                      'content':row.get('content')})
               
 
 class PageForm(ModelFields):
@@ -95,13 +106,24 @@ class PageForm(ModelFields):
             head['editor'] = 'com-field-json-edit'
         return head
     
-    def save_form(self):
-        super().save_form()
+    def after_save(self):
+        save_ui_editor_data()
 
 @director_view('uie/page')
 def uie_page(name):
     inst = Page.objects.get(name=name)
     return json.loads(inst.content)
+
+def check_and_import():
+    page_file = os.path.join( settings.STATICFILES_DIRS[0],'page.json')
+    tm =  os.path.getmtime(page_file)
+    if tm > get_json('_page_json_modify_time',0):
+        import_ui_editor_data()
+        set_json('_page_json_modify_time',tm)
+
+check_and_import()
+
+
 
 director.update({
     'webpage':PagePage.tableCls,

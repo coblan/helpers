@@ -17,6 +17,7 @@ $(document).ready(function () { }).keydown(
 
 var cfg={
     ui_editor: {},
+    bus:new Vue(),
     layer_index_stack:[],
     env:{
         width:$(window).width(),

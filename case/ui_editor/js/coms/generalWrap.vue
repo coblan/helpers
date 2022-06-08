@@ -1,6 +1,6 @@
 <template>
   <div :class="myclass">
-    <component v-for="item in children" :is="item.editor" v-bind="item.bind"></component>
+    <component v-for="item in children" :is="item.editor" :key="item.id" v-bind="item.bind"></component>
   </div>
 </template>
 <script>

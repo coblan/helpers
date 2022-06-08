@@ -106,8 +106,15 @@ export default {
     async popEdit(data){
       var fields = [
         {name:'label',label:'名称',editor:'com-field-linetext'},
-        {name:'bind_express',label:'启动脚本',editor:'com-field-blocktext'},
+
       ]
+
+      if(cfg.ui_editor[data.editor].has_bind_express){
+        fields.push(
+            {name:'bind_express',label:'启动脚本',editor:'com-field-blocktext'},
+        )
+      }
+
       fields = fields.concat(cfg.ui_editor[data.editor].fields)
       var fields_ctx = {
         heads:fields,
