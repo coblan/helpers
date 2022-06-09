@@ -124,8 +124,8 @@ def uie_page(name):
     inst = Page.objects.get(name=name)
     return json.loads(inst.content)
 
-if 'collectstatic' in sys.argv:
-    check_and_import()
+#if 'collectstatic' in sys.argv:
+check_and_import()
 
 
 director.update({
