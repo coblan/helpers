@@ -676,7 +676,11 @@ desired effect
                     var self=this
                     if (action.url == location.pathname){
                         return true
-                    }else if(action.submenu){
+                    }else if(action.url ==location.pathname+location.search){
+                        // 路由形页面
+                        return  true
+                    }
+                    else if(action.submenu){
                         var find_submenu_active= false
                         for(var i=0;i<action.submenu.length;i++){
                             var subact = action.submenu[i]

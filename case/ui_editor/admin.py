@@ -5,3 +5,4 @@ from . import admin_page
 
 from . import js_cfg
 from . import basedata
+from . import backendPage
