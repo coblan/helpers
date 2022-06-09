@@ -3,9 +3,9 @@ import editorTab from "./ui_editor/editorTab.vue";
 Vue.component('com-tab-ui-editor',editorTab)
 
 import test from './ui_editor/test.vue'
-Vue.component('com-ui-test',test)
+Vue.component('uie-test',test)
 
-cfg.ui_editor.test = editorTab
+
 
 
 import mountView from './coms/mountView.vue'

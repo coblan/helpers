@@ -1,4 +1,4 @@
-from helpers.director.shortcut import TablePage,ModelTable,ModelFields,page_dc,director,get_request_cache,director_view,RowSort
+from helpers.director.shortcut import TablePage,ModelTable,ModelFields,page_dc,director,get_request_cache,director_view,RowSort,RowFilter
 from . models import Page
 import json
 from django.conf import settings
@@ -8,11 +8,12 @@ import sys
 
 def check_and_import():
     page_json_path = os.path.join(settings. BASE_DIR, 'static','page.json').replace('\\', '/')
-    tm =  os.path.getmtime(page_json_path)
-    if tm > get_json('_page_json_modify_time',0):
-        print('update uie from page.json')
-        import_ui_editor_data()
-        set_json('_page_json_modify_time',tm)
+    if os.path.exists(page_json_path):
+        tm =  os.path.getmtime(page_json_path)
+        if tm > get_json('_page_json_modify_time',0):
+            print('update uie from page.json')
+            import_ui_editor_data()
+            set_json('_page_json_modify_time',tm)
 
 
 class PagePage(TablePage):
@@ -79,6 +80,9 @@ class PagePage(TablePage):
             names=['sort']
             general_sort ='sort'
         
+        class filters(RowFilter):
+            names =['kind']
+        
 
 
 
@@ -125,7 +129,9 @@ def uie_page(name):
     return json.loads(inst.content)
 
 #if 'collectstatic' in sys.argv:
-check_and_import()
+if 'makemigrations' not in sys.argv and\
+   'migrate' not in sys.argv:
+    check_and_import()
 
 
 director.update({

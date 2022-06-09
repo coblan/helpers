@@ -10,11 +10,12 @@ export default {
   },
   methods:{
   },
-  label:'测试组件',
-  fields(){
-    return [
-      {name:'text',label:'ss',editor:'com-field-linetext'}
-    ]
-  }
+
+}
+cfg.ui_editor['uie-test'] = {
+    fields:[
+      {name:'text',label:'label',editor:'com-field-linetext'}
+    ],
+    desp:'测试组件'
 }
 </script>

@@ -1,6 +1,6 @@
 <template>
   <div :class="myclass">
-    <component v-for="item in children" :is="item.editor" :key="item.id" v-bind="item.bind"></component>
+    <component v-for="item in children" :is="item.editor" :key="item.id" v-bind="item.bind" :children="item.children"></component>
   </div>
 </template>
 <script>
@@ -8,7 +8,7 @@ export default {
   props:{
     myclass:{},
     css:{},
-    children:[]
+    children:{}
   },
   mounted(){
     ex.append_css(this.css)
