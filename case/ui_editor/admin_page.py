@@ -10,7 +10,7 @@ def check_and_import():
     page_json_path = os.path.join(settings. BASE_DIR, 'static','page.json').replace('\\', '/')
     tm =  os.path.getmtime(page_json_path)
     if tm > get_json('_page_json_modify_time',0):
-        print('更新uie组件到page.json')
+        print('update uie from page.json')
         import_ui_editor_data()
         set_json('_page_json_modify_time',tm)
 
