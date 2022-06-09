@@ -4,12 +4,13 @@ import json
 from django.conf import settings
 import os
 from helpers.director.kv import get_json,set_json
-
+import sys
 
 def check_and_import():
-    page_file = os.path.join( settings.STATICFILES_DIRS[0],'page.json')
-    tm =  os.path.getmtime(page_file)
+    page_json_path = os.path.join(settings. BASE_DIR, 'static','page.json').replace('\\', '/')
+    tm =  os.path.getmtime(page_json_path)
     if tm > get_json('_page_json_modify_time',0):
+        print('更新uie组件到page.json')
         import_ui_editor_data()
         set_json('_page_json_modify_time',tm)
 
@@ -96,8 +97,8 @@ def save_ui_editor_data():
 
 @director_view('import_ui_editor_data')
 def import_ui_editor_data():
-    
-    with open( os.path.join( settings.STATICFILES_DIRS[0],'page.json'),'r',encoding='utf-8' ) as f:
+    page_json_path = os.path.join(settings. BASE_DIR, 'static','page.json').replace('\\', '/')
+    with open( page_json_path,'r',encoding='utf-8' ) as f:
         rows = json.load(f)   
     for row in rows:
         Page.objects.update_or_create(name=row.get('name'),defaults={ 'desp':row.get('desp','') ,
@@ -123,7 +124,7 @@ def uie_page(name):
     inst = Page.objects.get(name=name)
     return json.loads(inst.content)
 
-if settings.STATICFILES_DIRS:
+if 'collectstatic' in sys.argv:
     check_and_import()
 
 
