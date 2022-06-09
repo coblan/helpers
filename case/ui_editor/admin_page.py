@@ -5,6 +5,15 @@ from django.conf import settings
 import os
 from helpers.director.kv import get_json,set_json
 
+
+def check_and_import():
+    page_file = os.path.join( settings.STATICFILES_DIRS[0],'page.json')
+    tm =  os.path.getmtime(page_file)
+    if tm > get_json('_page_json_modify_time',0):
+        import_ui_editor_data()
+        set_json('_page_json_modify_time',tm)
+
+
 class PagePage(TablePage):
     def get_label(self):
         return '页面管理'
@@ -20,7 +29,7 @@ class PagePage(TablePage):
         button_edit = True
         allow_delete= True
         
-        def get_head_context(self):
+        def get_head_context(self):  
             get_request_cache()['named_ctx'].update({
                           'order-page-tabs':[
                               {'name':'uitest',
@@ -114,15 +123,8 @@ def uie_page(name):
     inst = Page.objects.get(name=name)
     return json.loads(inst.content)
 
-def check_and_import():
-    page_file = os.path.join( settings.STATICFILES_DIRS[0],'page.json')
-    tm =  os.path.getmtime(page_file)
-    if tm > get_json('_page_json_modify_time',0):
-        import_ui_editor_data()
-        set_json('_page_json_modify_time',tm)
-
-check_and_import()
-
+if settings.STATICFILES_DIRS:
+    check_and_import()
 
 
 director.update({
