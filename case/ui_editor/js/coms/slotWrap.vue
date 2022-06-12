@@ -1,7 +1,7 @@
 <template>
   <div>
     我是 slot
-    <component v-for="ii in children" :is="ii.editor" :key="ii.id" v-bind="ii.bind" :children="ii.children"></component>
+    <component v-for="ii in children" :is="ii.editor" :key="ii.id" v-bind="ii.bind" :id="ii.id" :children="ii.children"></component>
   </div>
 </template>
 <script>
