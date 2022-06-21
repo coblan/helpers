@@ -190,8 +190,11 @@ def get_lib(request):
                 #'element': 'https://lib.baomitu.com/element-ui/2.15.8/index.min.js', 
                 #'element_css':'https://lib.baomitu.com/element-ui/2.15.8/theme-chalk/index.min.css',    
                 # 360总element可能显示icon有问题，替换成字节的
-                'element':'https://cdn.bytedance.com/cdn/expire-1-M/element-ui/2.15.7/index.min.js',
-                'element_css':'https://cdn.bytedance.com/cdn/expire-1-M/element-ui/2.15.7/theme-chalk/index.min.css',
+                #'element':'https://cdn.bytedance.com/cdn/expire-1-M/element-ui/2.15.7/index.min.js',
+                #'element_css':'https://cdn.bytedance.com/cdn/expire-1-M/element-ui/2.15.7/theme-chalk/index.min.css',
+                'element':'https://s1.pstatp.com/cdn/element-ui/2.15.7/index.min.js',
+                'element_css':'https://s1.pstatp.com/cdn/element-ui/2.15.7/theme-chalk/index.min.css',                
+                
        
                 'md5': 'https://lib.baomitu.com/blueimp-md5/2.19.0/js/md5.min.js',
                 'swiper': 'https://lib.baomitu.com/Swiper/4.5.1/js/swiper.min.js',
@@ -226,6 +229,8 @@ def get_lib(request):
                 'composition_api':'/static/cdn/jb_admin/composition-api@1.6.0',
                 ##'composition_api':'https://cdn.jsdelivr.net/npm/@vue/composition-api@1.6.1'
                 'axios':'https://lib.baomitu.com/axios/0.26.1/axios.min.js',
+                'ace':'https://lib.baomitu.com/ace/1.5.3/ace.min.js',
+                'ace_javascript':'https://lib.baomitu.com/ace/1.5.3/mode-javascript.min.js',
    
             })
             if not settings.DEBUG:

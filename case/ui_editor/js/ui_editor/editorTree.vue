@@ -12,7 +12,7 @@
                :expand-on-click-node="false"
                @node-click="handleNodeClick">
 
-         <span class="custom-tree-node" slot-scope="{ node, data }">
+         <span class="custom-tree-node" slot-scope="{ node, data }" @mouseover="onOver(data)" @mouseleave="outOver(data)">
              <div class="item-pannel">
                <div>
                   <span>{{ data.label }}</span>
@@ -94,6 +94,12 @@ export default {
     this.getComponents()
   },
   methods:{
+    onOver(data){
+      document.getElementById(data.id).classList.add('uie-current-com')
+    },
+    outOver(data){
+      document.getElementById(data.id).classList.remove('uie-current-com')
+    },
     async append(data) {
       this.add(data.children)
       // const newChild = { id: Date.now(), label: 'testtest', children: [] };
@@ -111,7 +117,8 @@ export default {
 
       if(cfg.ui_editor[data.editor].has_bind_express){
         fields.push(
-            {name:'bind_express',label:'启动脚本',editor:'com-field-blocktext'},
+            // {name:'bind_express',label:'启动脚本',editor:'com-field-blocktext'},
+            {name:'bind_express',label:'启动脚本',editor:'com-field-js-editor'},
         )
       }
 
@@ -241,5 +248,11 @@ export default {
       display: block;
     }
   }
+}
+</style>
+
+<style lang="scss">
+.uie-current-com{
+  border: 1px solid red;
 }
 </style>

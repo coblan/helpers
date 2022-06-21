@@ -8,6 +8,7 @@ def get_lib(request):
 
     dc ={
         'ui_editor': static_url('js/ui_editor.pack.js?t=%s'%js_stamp_dc.get('ui_editor_pack_js') ),
+        'uie_init': static_url('js/uie_init.pack.js?t=%s'%js_stamp_dc.get('uie_init_pack_js') ),
     }
     return dc
 

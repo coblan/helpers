@@ -16,6 +16,7 @@ module.exports =
     mode:'development', //'production', //
     entry: {
         ui_editor:'./main.js',
+        uie_init:'./uie_init.js'
         // fields:'./fields_main.js'
     },
     output: {
