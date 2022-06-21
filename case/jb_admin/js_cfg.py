@@ -229,6 +229,8 @@ def get_lib(request):
                 'composition_api':'/static/cdn/jb_admin/composition-api@1.6.0',
                 ##'composition_api':'https://cdn.jsdelivr.net/npm/@vue/composition-api@1.6.1'
                 'axios':'https://lib.baomitu.com/axios/0.26.1/axios.min.js',
+                'ace':'https://lib.baomitu.com/ace/1.5.3/ace.min.js',
+                'ace_javascript':'https://lib.baomitu.com/ace/1.5.3/mode-javascript.min.js',
    
             })
             if not settings.DEBUG:

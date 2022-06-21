@@ -2,8 +2,8 @@
   <div class="uie-mount-view">
 
     <template v-for="head in normed_heads">
-      <component v-if="head.children" :is="head.editor" :key="head.id"  v-bind="head.bind" :children="head.children"></component>
-      <component v-else :is="head.editor" :key="head.id"  v-bind="head.bind"></component>
+      <component v-if="head.children" :is="head.editor" :key="head.id"  v-bind="head.bind" :children="head.children" :id="head.id"></component>
+      <component v-else :is="head.editor" :key="head.id"  v-bind="head.bind" :id="head.id"></component>
     </template>
 
   </div>
@@ -59,7 +59,10 @@ export default {
         if(head.bind_express){
           head.loaded = false
           var resp = await ex.eval(head.bind_express,{ex:ex,head:head})
-          ex.vueAssign(head.bind,resp)
+          if(resp){
+            ex.vueAssign(head.bind,resp)
+          }
+
           head.loaded = true
         }else{
           head.loaded = true
@@ -70,5 +73,17 @@ export default {
       })
     }
   }
+}
+
+cfg.ui_editor['uie-mount-view'] = {
+  has_bind_express:true,
+  fields:[
+    {name:'pageName',label:'页面名',editor:'com-field-linetext'},
+  ],
+  desp:'mountview',
+  help_text:`
+<div>数据结构</div>
+
+  `
 }
 </script>
