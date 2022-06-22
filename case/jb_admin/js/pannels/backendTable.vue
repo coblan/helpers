@@ -20,7 +20,11 @@
             :opMergeCount="ctx.opMergeCount"
             ref="dtable"
     >
-      <!--            :extend-logic="extendLogic"-->
+
+      <template v-slot:default="slotprops">
+        <slot v-bind:rows="slotprops.rows"></slot>
+      </template>
+
 
     </director_table>
 </template>

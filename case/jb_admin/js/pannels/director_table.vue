@@ -14,6 +14,7 @@
 
 
         <dparent :parents="parents" @click-parent="getChilds($event)"></dparent>
+      <slot v-bind:rows="tableRows">
         <div class="table-area"  style="margin-bottom: 0">
             <!--flex-v flex-grow-->
             <!--<div class="table-wraper flex-grow" >-->
@@ -33,6 +34,7 @@
                         :row-sort="rowSort" ></dtable>
             <!--</div>   :search-args="searchArgs"-->
         </div>
+      </slot>
         <dpagination v-if="hasPagination" :row-pages="rowPages" @goto-page="search_page($event)" :search-args="searchArgs"></dpagination>
     </div>
 </template>
@@ -110,7 +112,12 @@ import { ref, reactive,computed ,onMounted,getCurrentInstance } from '@vue/compo
                         return vc.adviseHeadsCookiePath
                     },
                     advise_order(){
+                      if(vc.$refs.dtable){
                         return vc.$refs.dtable.advise_order
+                      }else{
+                        return  []
+                      }
+
                     },
                     director_name(){
                         return vc.directorName
@@ -270,7 +277,9 @@ import { ref, reactive,computed ,onMounted,getCurrentInstance } from '@vue/compo
                     cfg.show_load()
                 }
                 this.selected = []
-                this.searchArgs._advise_heads= this.$refs.dtable.advise_heads
+                if(this.$refs.dtable){
+                  this.searchArgs._advise_heads= this.$refs.dtable.advise_heads
+                }
                return ex.director_call('d.get_rows',{director_name:this.directorName,search_args:this.searchArgs}).then(resp=>{
                     cfg.hide_load()
 //                    this.tableRows.splice(0,this.tableRows.length,...resp.rows)
