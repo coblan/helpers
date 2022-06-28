@@ -21,6 +21,7 @@
 </head>
 
 <script>
+    named_ctx={{ named_ctx | jsonify | default:'{}' }}
     js_config={{js_config | jsonify }}
      // document.title = page_label
     if(js_config.is_debug){
