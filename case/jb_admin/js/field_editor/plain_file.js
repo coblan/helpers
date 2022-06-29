@@ -6,13 +6,34 @@ require('./scss/file_uploader.scss')
  * }
  * */
 
+function  check_file_size(fl,maxsize){
+    if(fl.size > maxsize){
+        if(maxsize > 1024*1024){
+            var num_msg = (maxsize /(1024*1024) ).toFixed(2) + 'M'
+        }else  if(maxsize > 1024){
+            var num_msg = (maxsize /(1024) ).toFixed(2) + 'k'
+        }else{
+            var num_msg = maxsize
+        }
+        return  num_msg
+    }
+}
+
 export var field_file_uploader={
     props:['row','head'],
-    template:`<div><com-file-uploader-tmp :name="head.name" v-model="row[head.name]" :config="head.config" :readonly="head.readonly"></com-file-uploader-tmp></div>`
+    template:`<div><com-file-uploader-tmp :name="head.name" v-model="row[head.name]" :maxsize="head.maxsize" :config="head.config" :readonly="head.readonly"></com-file-uploader-tmp></div>`
 }
 
 export var com_file_uploader = {
-    props:['value','readonly','config','name'],
+    props: {
+        value:{},
+        readonly:{},
+        config:{},
+        name:{},
+        maxsize:{
+            default:1024*1024*100 //
+        }
+    } ,
     data:function(){
 
         return {
@@ -110,6 +131,17 @@ export var com_file_uploader = {
             if(file_list.length==0){
                 return
             }
+            if(this.maxsize){
+
+                for(var i=0;i<file_list.length;i++){
+                    var item_file = file_list[i]
+                    var human_read_size = check_file_size(item_file,this.maxsize)
+                    if(human_read_size){
+                        return cfg.showMsg(`文件尺寸不能超过${human_read_size}`)
+                    }
+                }
+            }
+
             var upload_url=this.cfg.upload_url
 
             //cfg.show_load()
@@ -195,14 +227,6 @@ export var com_file_uploader = {
     }
 }
 
-//var plus_btn={
-//    props:['accept'],
-//    template:`<div class="file-uploader-btn-plus">
-//        <div class="inn-btn"><span>+</span></div>
-//        <div style="text-align: center">添加文件</div>
-//    </div>`,
-//}
-//Vue.component('file-uploader-btn-plus',plus_btn)
 
 Vue.component('com-file-uploader-tmp',com_file_uploader)
 Vue.component('com-field-plain-file',field_file_uploader)
