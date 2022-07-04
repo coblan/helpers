@@ -203,20 +203,7 @@ def get_lib(request):
                 'chosen':'https://cdn.jsdelivr.net/npm/chosen-js@1.8.7/chosen.jquery.min.js',
                 'chosen_css':'https://cdn.jsdelivr.net/npm/chosen-js@1.8.7/chosen.min.css',
 
-                
-                # 外面找到 ckeditor 要报错， ckeditor lineHeight Html5Video插件找不到 还是用jsdelivr吧
-                #'ckeditor':'https://cdn.jsdelivr.net/npm/ckeditor@4.11.4/ckeditor.js',
-                #'ckeditor':'https://cdn.jsdelivr.net/npm/ckeditor@4.11.4/ckeditor.min.js',
-
-                #'ckeditor':'https://cdn.ckeditor.com/4.18.0/standard/ckeditor.js',
-                #'ckeditor': 'https://lib.baomitu.com/ckeditor/4.10.1/ckeditor.js',#'https://cdn.ckeditor.com/4.10.1/full/ckeditor.js',
-                #'ckeditor':'https://cdn.jsdelivr.net/npm/ckeditor-full@4.7.3/ckeditor.js',
-
-                #'ckeditor': 'https://lib.baomitu.com/ckeditor/4.10.1/ckeditor.js',#
-                #"ckeditor":'https://cdn.ckeditor.com/4.10.1/full/ckeditor.js',
-                "ckeditor":"https://s1.pstatp.com/cdn/expire-1-M/ckeditor/4.10.1/ckeditor.js",
-
-                
+                'ckeditor': 'https://lib.baomitu.com/ckeditor/4.10.1/ckeditor.js',#
                 'select2':'https://cdn.jsdelivr.net/npm/select2@4.0.10/dist/js/select2.min.js',
                 'select2_css':'https://cdn.jsdelivr.net/npm/select2@4.0.10/dist/css/select2.min.css',
                 
