@@ -521,7 +521,19 @@ class ModelTable(object):
         if search_head:
             ls.append( search_head)
         if row_filters:
-            ls.extend(row_filters)
+            #ls.extend(row_filters)
+            # 把有默认值的filter排在前面
+            f1 = []
+            f2 = []
+            for row in row_filters:
+                if row.get('name') in self.search_args or '_start_'+row.get('name') in self.search_args or\
+                   '_end_'+row.get('name') in self.search_args:
+                    f1 .append(row)
+                else:
+                    f2.append(row)
+            ls.extend(f1)
+            ls.extend(f2)            
+            
         return ls
     
     def getParents(self): 

@@ -73,8 +73,15 @@ Vue.component('com-field-html-guide',guideHtml)
 import jsonEdit from "./jsonEdit.vue";
 Vue.component('com-field-json-edit',jsonEdit)
 
-import lay_date from "./date.vue";
-Vue.component('com-field-date',lay_date)
+import el_date from "./date.vue";
+Vue.component('com-field-date',el_date)
+
+import jsEditor from "./jsEditor.vue";
+Vue.component('com-field-js-editor', async (resolve, reject) =>{
+    await ex.load_js(cfg.js_lib.ace)
+    await ex.load_js(cfg.js_lib.ace_javascript)
+    resolve(jsEditor)
+})
 
 Vue.component('com-field-hour-and-minute', async (resolve, reject) =>{
     var com = await import(/* webpackChunkName: 'fields_import' */'./houreAndMinute.vue')

@@ -1,6 +1,6 @@
 <template>
   <div>
-    我是 slot
+    我是 slot inn
     <component v-for="ii in children" :is="ii.editor" :key="ii.id" v-bind="ii.bind" :children="ii.children"></component>
   </div>
 </template>
