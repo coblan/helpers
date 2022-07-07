@@ -71,7 +71,7 @@
             if(this.type=='tab-full'){
               return 'border-card'
             }else if(this.type=='tab-v'){
-              return  '' // 'card'
+              return 'card'// 'border-card' //
             }
           },
             normed_tab:function(){
@@ -145,7 +145,42 @@
 .tab-v{
   background-color: white;
   .active-tab-hightlight-top{
-    padding: 20px;
+    //padding: 20px;
   }
+}
+
+.tab-full{
+  .el-tabs{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    .el-tabs__content{
+      flex-grow:10;
+      position: relative;
+      overflow: auto;
+    }
+  }
+
+  .active-tab-hightlight-top{
+    &>.el-tabs__header{
+      .el-tabs__item {
+        &.is-top.is-active{
+          color: #3e8ebd;
+        }
+        &.is-top.is-active:after{
+          content: '';
+          display: block;
+          position: absolute;
+          top:0;
+          left: 0;
+          right:0;
+          width: 100%;
+          height: 3px;
+          background-color: #3e8ebd;
+        }
+      }
+    }
+  }
+
 }
 </style>
