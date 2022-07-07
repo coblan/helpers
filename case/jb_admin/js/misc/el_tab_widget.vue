@@ -4,9 +4,9 @@
                  v-bind="top_ctx"
                  :par_row="ctx.par_row"></component>
 
+
         <el-tabs class="active-tab-hightlight-top"  v-if="ctx.tabs.length >1 || type!='tab-full'" :type="my_el_type"
                   @tab-click="handleClick"
-                  style="width: 100%;height: 100%;"
                   :value="ctx.crt_tab_name" >
 
             <!--<el-tab-pane v-for="tab in normed_tab( tabgroup.tabs )"            @mouseenter="set_hover(tab,true)" @mouseleave="set_hover(tab,false)"-->
@@ -141,10 +141,19 @@
 .tab-full{
   position: absolute;
   bottom: 0;top: 0;left: 0;right: 0;
+  .active-tab-hightlight-top{
+    width: 100%;
+    height: 100%;
+  }
 }
 .tab-v{
   background-color: white;
   .active-tab-hightlight-top{
+
+    margin:0 20px;
+    //border-left: 1px solid #e1e1e1;
+    box-sizing: border-box;
+    position: relative;
     //padding: 20px;
   }
 }
