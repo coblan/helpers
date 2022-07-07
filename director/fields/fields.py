@@ -58,13 +58,14 @@ class ModelFields(forms.ModelForm):
     @classmethod
     def parse_request(cls,request):
         """
-        传入参数的形式：
+        传入参数的形式：  
+        被fieldsPage使用，最好不要再使用该函数，有点混乱了
         """
         dc=request.GET.dict()
         pk=dc.pop('pk',None)
-        return cls(pk=pk,crt_user=request.user,**dc) 
+        return cls(pk=pk,crt_user=request.user,select_for_update=False,**dc) 
     
-    def __init__(self,dc={},pk=None,crt_user=None,*args,**kw):
+    def __init__(self,dc={},pk=None,crt_user=None,select_for_update=True,*args,**kw):
         """
         调用情况：
         1. ajax save 时
@@ -120,7 +121,10 @@ class ModelFields(forms.ModelForm):
                 form_kw['instance']=self._meta.model.objects.last()
             elif pk != None:  # 很多时候，pk=0 是已经创建了
                 try:
-                    form_kw['instance']= self._meta.model.objects.select_for_update().get(pk=pk)
+                    if select_for_update:
+                        form_kw['instance']= self._meta.model.objects.select_for_update().get(pk=pk)
+                    else:
+                        form_kw['instance']= self._meta.model.objects.get(pk=pk)
                 except self._meta.model.DoesNotExist:
                     raise UserWarning('Id=%s that you request is not exist'%pk)
                     # 感觉 instance不存在时，报错404可能不太合适，所以还是用普通报错 
