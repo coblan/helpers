@@ -1,6 +1,10 @@
 <template>
-    <div class="tab-full " style="position: absolute;bottom: 0;top: 0;left: 0;right: 0;" >
-        <el-tabs class="active-tab-hightlight-top"  v-if="ctx.tabs.length >1" type="border-card"
+    <div class="tab-widget" :class="type" >
+      <component v-if="top_editor" :is="top_editor"
+                 v-bind="top_ctx"
+                 :par_row="ctx.par_row"></component>
+
+        <el-tabs class="active-tab-hightlight-top"  v-if="ctx.tabs.length >1 || type!='tab-full'" :type="my_el_type"
                   @tab-click="handleClick"
                   style="width: 100%;height: 100%;"
                   :value="ctx.crt_tab_name" >
@@ -32,7 +36,14 @@
 </template>
 <script>
     export default {
-        props:['ctx'],
+        props:{
+          ctx:{},
+          type:{
+            default:'tab-full'
+          },
+          top_editor:{},
+          top_ctx:{},
+        },
         data(){
             //ex.each(this.ctx.tabs,tab=>{
             //    if(tab.lazy_init){
@@ -51,14 +62,18 @@
             //     this.show_tab(v)
             // }
         },
-        created(){
-
-        },
         mounted:function(){
             this.is_mounted  = true
             this.show_tab(this.ctx.crt_tab_name)
         },
         computed:{
+          my_el_type(){
+            if(this.type=='tab-full'){
+              return 'border-card'
+            }else if(this.type=='tab-v'){
+              return  '' // 'card'
+            }
+          },
             normed_tab:function(){
                 var tabs = this.ctx.tabs
                 var par_row = this.ctx.par_row
@@ -78,32 +93,7 @@
                 Vue.set(tab,'_hover',value)
             },
             show_tab(name){
-                //var tab_head = ex.findone(this.normed_tab,{name:name})
-                //if(tab_head.lazy_init){
-                //     ex.eval(tab_head.lazy_init,{head:tab_head}).then(()=>{
-                //         delete tab_head.lazy_init
-                //         Vue.set(tab_head,'_loaded',true)
-                //         this.ctx.crt_tab_name=name
-                //     })
-                //
-                //}else{
-                //    Vue.set(tab_head,'_loaded',true)
-                //
-                //}
                 this.ctx.crt_tab_name=name
-
-//                Vue.nextTick(()=>{
-//                    this.$refs['_tab_'+this.ctx.crt_tab_name][0].$emit('tab-show',name)
-//                })
-
-                //var self =this
-                //if(this.is_mounted){
-                //    Vue.nextTick(function(){
-                //        if(self.$refs['_tab_'+name][0].on_show){
-                //            self.$refs['_tab_'+name][0].on_show()
-                //        }
-                //    })
-                //}
             },
             handleClick(tab, event) {
                 if(this.crt_tab_name != tab.name){
@@ -147,5 +137,15 @@
     .icon_image_active{
         display: inline;
     }
+}
+.tab-full{
+  position: absolute;
+  bottom: 0;top: 0;left: 0;right: 0;
+}
+.tab-v{
+  background-color: white;
+  .active-tab-hightlight-top{
+    padding: 20px;
+  }
 }
 </style>
