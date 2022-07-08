@@ -21,10 +21,11 @@
                         </span>
                 <span slot="label" v-else  v-text="tab.label" ></span>
                 <!--<span v-if="!tab._loaded"></span>-->
-                <component :is="tab.editor || tab.com " :tab_head="tab"
+              <transition name="fade">
+                <component v-show="ctx.crt_tab_name==tab.name" :is="tab.editor || tab.com " :tab_head="tab"
                            :par_row="ctx.par_row"
                            :ref="'_tab_'+tab.name" @tab-event="up_event($event)"></component>
-
+              </transition>
 
             </el-tab-pane>
         </el-tabs>
@@ -154,6 +155,7 @@
     //border-left: 1px solid #e1e1e1;
     box-sizing: border-box;
     position: relative;
+    min-height: 86vh; // 给一个min-height，保证切换tab时不会抖动太厉害。（由于每个tab页高度不一致，切换到height小的页面，滚动条会缩回去，造成抖动。）
     //padding: 20px;
   }
 }
@@ -192,4 +194,12 @@
   }
 
 }
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
+}
+
 </style>
