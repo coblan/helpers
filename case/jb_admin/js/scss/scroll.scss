@@ -1,0 +1,35 @@
+/*
+去掉滚动条 抖动，这种抖动在出现和消失间切换时。
+参考文章: https://www.zhangxinxu.com/wordpress/2015/01/css-page-scrollbar-toggle-center-no-jumping/
+*/
+
+//  这个好像也能行，不知道什么原理;可能是100vw起作用了。
+html {
+  overflow-y: scroll;
+}
+
+:root {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+//:root body {
+//  position: absolute;
+//}
+
+body {
+  width: 100vw;
+  overflow: hidden;
+}
+
+
+//@media screen and (min-width: 1150px) {
+//  //.wrap-outer {
+//  //  margin-left: calc(100vw - 100%);
+//  //}
+//  body{
+//    //padding-right:  calc(100vw - 100%);
+//    margin-right:  calc( 100% - 100vw);
+//  }
+//
+//}
