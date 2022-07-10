@@ -50,6 +50,9 @@ def flatten(l, types=(list, float)):
 
 def grouper(iterable, size):
     # http://stackoverflow.com/a/8991553
+    """把iterable按照size分组
+     list( grouper([2,3,4,5,6,7],2) )  == [(2, 3), (4, 5), (6, 7)]
+    """
     it = iter(iterable)
     while True:
         chunk = tuple(itertools.islice(it, size))
@@ -117,6 +120,10 @@ def get_fields(update_fields, exclude_fields, meta, obj=None):
 
 def bulk_update(objs, meta=None, update_fields=None, exclude_fields=None,
                 using='default', batch_size=None, pk_field='pk'):
+    """批量更新。
+    在django1.11中没有批量更新函数。这里补上
+    
+    """
     assert batch_size is None or batch_size > 0
 
     # force to retrieve objs from the DB at the beginning,

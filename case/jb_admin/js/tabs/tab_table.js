@@ -1,6 +1,6 @@
 
 
-var tab_table={
+export default  {
     props:['tab_head','par_row'],
     data:function(){
         var vc = this
@@ -134,4 +134,3 @@ var tab_table={
     </div>`
 }
 
-Vue.component('com-tab-table',tab_table)

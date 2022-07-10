@@ -81,9 +81,3 @@ var label_shower =  {
 }
 
 Vue.component('com-field-ele-tree',label_shower)
-//Vue.component('com-field-ele-tree-name-layer',function(resolve,reject){
-    //ex.load_css('https://unpkg.com/element-ui/lib/theme-chalk/index.css')
-    //ex.load_js('https://unpkg.com/element-ui/lib/index.js',function(){
-        //resolve(label_shower)
-    //})
-//})

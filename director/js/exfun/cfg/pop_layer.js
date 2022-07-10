@@ -83,7 +83,8 @@ export  function pop_layer (com_ctx,component_name,callback,layerConfig){
         render(createElement){
             return createElement(this.component_name,{
                 attrs:{
-                    ctx:this.com_ctx
+                    ctx:this.com_ctx,
+                    ...this.com_ctx
                 },
                     on:{
                         finish:this.on_finish

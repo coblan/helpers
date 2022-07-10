@@ -22,10 +22,6 @@
 
 <script>
     import  director_table,{DTableLogic} from  '../pannels/director_table.vue'
-    import { ref, reactive,computed ,onMounted,getCurrentInstance } from '@vue/composition-api'
-    // const { ref, reactive,computed ,onMounted,getCurrentInstance } = VueCompositionAPI
-
-
 
     export default {
         props:['tab_head','par_row'],
@@ -44,12 +40,7 @@
           }
 
             return {
-//                dtable:dtable,
-
                 extend_logic:TabDTableLogic,
-//                extend_logic:{
-//                    par_row:porps.par_row
-//                }
             }
         },
         data(){

@@ -52,7 +52,7 @@
     <!--<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>-->
     <![endif]-->
 
-    <title>Admin</title>
+<!--    <title>Admin</title>-->
     <!-- Google Font -->
     <!--<link rel="stylesheet"-->
           <!--href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">-->
@@ -60,15 +60,6 @@
     <script src="{{ js_config.js_lib.nprogress }}"></script>
     <link href="{{ js_config.js_lib.nprogress_css }}" rel="stylesheet">
     <!--<link href="https://cdn.bootcss.com/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">-->
-
-
-    {% for lib in extra_js %}
-    <script src='{{ lib | ctxvalue:js_config.js_lib }}'></script>
-    {% endfor %}
-
-    {% for lib in extra_css %}
-    <link href='{{ lib | ctxvalue:js_config.js_lib }}' rel="stylesheet">
-    {% endfor %}
 
     <script>
         (function(){
@@ -95,9 +86,9 @@
             },300)
 
             if($('body').hasClass('sidebar-collapse')){
-                sessionStorage.setItem("sidebar-collapse",true);
+                sessionStorage.setItem(`${engine_name}.sidebar-collapse`,true);
             }else{
-                sessionStorage.removeItem("sidebar-collapse");
+                sessionStorage.removeItem(`${engine_name}.sidebar-collapse`);
             }
         }
 
@@ -151,6 +142,14 @@ desired effect
 -->
 
 {% include 'director/reverse.html' %}
+
+{% for lib in extra_js %}
+<script src='{{ lib | ctxvalue:js_config.js_lib }}'></script>
+{% endfor %}
+
+{% for lib in extra_css %}
+<link href='{{ lib | ctxvalue:js_config.js_lib }}' rel="stylesheet">
+{% endfor %}
 
 <script>
     if(js_config.is_debug){
@@ -222,7 +221,7 @@ desired effect
 </style>
 <body class="hold-transition {{ ui_theme }} sidebar-mini">
 <script>
-    if(sessionStorage.getItem('sidebar-collapse')){
+    if(sessionStorage.getItem(`${engine_name}.sidebar-collapse`)){
         $('body').addClass('sidebar-collapse')
     }
 </script>
@@ -677,7 +676,11 @@ desired effect
                     var self=this
                     if (action.url == location.pathname){
                         return true
-                    }else if(action.submenu){
+                    }else if(action.url ==location.pathname+location.search){
+                        // 路由形页面
+                        return  true
+                    }
+                    else if(action.submenu){
                         var find_submenu_active= false
                         for(var i=0;i<action.submenu.length;i++){
                             var subact = action.submenu[i]

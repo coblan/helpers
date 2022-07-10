@@ -1,4 +1,4 @@
-var color={
+export default {
     props:['row','head'],
     template:`<div :class="['com-field-color',head.class]">
    	<input type="text"  v-model="row[head.name]"
@@ -33,4 +33,3 @@ var color={
         }
     }
 }
-Vue.component('com-field-color',color)

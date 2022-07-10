@@ -1,4 +1,4 @@
-var order_list =  {
+export default {
     props:['row','head'],
     template:`<div class="com-field-table-list">
     <div v-if="!head.readonly">
@@ -117,7 +117,7 @@ var order_list =  {
                     Vue.set(this.row,this.head.name,JSON.stringify(v))
                     //this.row[this.head.name] = JSON.stringify(v)
                 }else{
-                    Vue.set(this.row,this.head.name,'')
+                    Vue.set(this.row,this.head.name,"[]")
                     //this.row[this.head.name] = ''
                 }
 
@@ -194,4 +194,3 @@ var order_list =  {
 
 }
 
-Vue.component('com-field-table-list',order_list)

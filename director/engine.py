@@ -109,6 +109,9 @@ class BaseEngine(object):
         self.engin_url =  reverse(self.url_name,args=('aa',))[:-3]
         
         page_cls = self.get_page_cls(name)
+        # 如果需要从定向director页面
+        if hasattr(page_cls,'directorPage'):
+            page_cls = page_cls.directorPage(request,name) or page_cls
         #if not page_cls:
             #raise Http404()
         
@@ -158,7 +161,7 @@ class BaseEngine(object):
             if ctx.get('named_ctx'):
                 named_ctx.update(ctx.get('named_ctx'))
             ctx['named_ctx'] = evalue_container( named_ctx)
-            
+            ctx['engine_name'] = self.url_name
             ctx['brand'] = self.brand
             ctx['title'] = self.title
             ctx['menu_search']=self.menu_search
@@ -226,8 +229,13 @@ class BaseEngine(object):
         ls = []
         for act in menu:
             if 'submenu' in act:
+                for act2 in list( act['submenu']):
+                    if 'submenu' in act2:
+                        if not act2['submenu']:
+                            act['submenu'].remove(act2)                
                 if not act['submenu']:
                     continue
+               
             ls.append(act)
         return ls
     

@@ -22,7 +22,7 @@
     event_slots = {{ event_slots | jsonify | default:'[]' }}
 
     childStore_event_slot={{ childStore_event_slot | jsonify |default:'{}' }}
-
+    fitWidth = {{ fitWidth | jsonify  }} || false
     //    eventBus = new Vue({})
 
 
@@ -52,6 +52,7 @@
                 advise_heads_cookie_path:advise_heads_cookie_path,
                 option:option,
                 table_layout:table_layout,
+
             }
         },
         mixins:[table_store,table_page_store],
@@ -69,6 +70,7 @@
             parents:parents,
             page_label:page_label,
             tr:cfg.tr,
+            fitWidth:fitWidth,
 
         },
         //mixins:[mix_table_data,mix_ele_table_adapter],
@@ -219,6 +221,7 @@
                      :parents="childStore.parents"
                      :search-args="childStore.search_args"
                      :selectable="selectable"
+                     :fit-width="fitWidth"
                     ></com-d-table>
 
         <!--<div v-if="childStore.row_filters.length > 0"-->

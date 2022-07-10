@@ -1,6 +1,6 @@
 require('./scss/tab_fields.scss')
 
-var tab_fields={
+export  default  {
     props:['tab_head','par_row'],
     data:function(){
         var data_row =  this.tab_head.row || {}
@@ -135,7 +135,7 @@ var tab_fields={
 
 }
 
-Vue.component('com-tab-fields',tab_fields)
+
 
 var get_data={
     get_row:function(self,callback,kws){

@@ -7,6 +7,9 @@
 <script>
     import el_select from './select.vue'
     export default {
+      /*
+      * 这个组件应该是无用了，可以使用com-field-select   head.filterable=true 替代
+      * */
         props:['row','head'],
         components:{
             el_select

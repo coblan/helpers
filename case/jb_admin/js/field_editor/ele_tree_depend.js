@@ -1,6 +1,6 @@
 require('./scss/ele_tree_name_layer.scss')
 
-var label_shower =  {
+export default  {
     props:['row','head'],
 
     methods:{
@@ -187,7 +187,8 @@ var label_shower =  {
     }
 }
 
-Vue.component('com-field-ele-tree-depend',label_shower)
+// Vue.component('com-field-ele-tree-depend',label_shower)
+
 //Vue.component('com-field-ele-tree-name-layer',function(resolve,reject){
 //ex.load_css('https://unpkg.com/element-ui/lib/theme-chalk/index.css')
 //ex.load_js('https://unpkg.com/element-ui/lib/index.js',function(){

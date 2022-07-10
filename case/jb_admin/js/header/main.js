@@ -7,3 +7,6 @@ Vue.component('com-head-bell-msg',bellMessage)
 
 import historyPage from './historyPage.vue'
 Vue.component('com-historypage',historyPage)
+
+import datetime from './datetime.vue'
+Vue.component('com-head-datetime',datetime)

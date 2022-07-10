@@ -23,7 +23,11 @@ import {get_validator} from 'weblib/ex/validator'
 import {collection} from  'weblib/ex/collection.js'
 var dayjs = require('dayjs')
 import  local from 'weblib/ex/local.js'
+import {FreePromise} from 'weblib/ex/promise'
+
 var ex={
+    source:'director',
+    FreePromise:FreePromise,
     assign:function (dst,src) {
         for(var key in src){
             dst[key]=src[key]

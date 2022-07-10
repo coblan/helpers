@@ -1,10 +1,21 @@
 <template>
-    <div class="com-d-table flex-v">
+    <div class="com-d-table flex-v" :class="{autoHeight:autoHeight,streach:!autoHeight}">
+
+      <dOpeAndFilter v-if="operationHeads.length <= opMergeCount" :heads="filterHeads" @search="search_page(1)" :search-args="searchArgs"
+               :search-label="seach_label"
+               :op-heads="operationHeads"
+      >
+      </dOpeAndFilter>
+      <template v-else>
         <dfilter :heads="filterHeads" @search="search_page(1)" :search-args="searchArgs"
-        :search-label="seach_label"></dfilter>
+                 :search-label="seach_label"></dfilter>
         <d-operation :heads="operationHeads"></d-operation>
+      </template>
+
+
         <dparent :parents="parents" @click-parent="getChilds($event)"></dparent>
-        <div class="box box-success flex-grow" style="margin-bottom: 0">
+      <slot v-bind:rows="tableRows">
+        <div class="table-area"  style="margin-bottom: 0">
             <!--flex-v flex-grow-->
             <!--<div class="table-wraper flex-grow" >-->
                 <dtable ref="dtable" class="my-d-table"
@@ -17,10 +28,14 @@
                         :footer="footer"
                         @search="search_page(1)"
                         @sort-changed="sortChange"
+                        :tableClass="tableClass"
+                        :autoHeight="autoHeight"
+                        :fitWidth="fitWidth"
                         :row-sort="rowSort" ></dtable>
             <!--</div>   :search-args="searchArgs"-->
         </div>
-        <dpagination :row-pages="rowPages" @goto-page="search_page($event)" :search-args="searchArgs"></dpagination>
+      </slot>
+        <dpagination v-if="hasPagination" :row-pages="rowPages" @goto-page="search_page($event)" :search-args="searchArgs"></dpagination>
     </div>
 </template>
 <script>
@@ -33,7 +48,7 @@ import { ref, reactive,computed ,onMounted,getCurrentInstance } from '@vue/compo
     import dpagination from 'webcase/director/table/dpagination.vue'
     import table_mix from './director_table/table_mix'
     import dparent from 'webcase/director/table/dparent.vue'
-
+    import dOpeAndFilter from 'webcase/director/table/dOpeAndFilter.vue'
     /*
     *
     * table_settings原理
@@ -97,7 +112,12 @@ import { ref, reactive,computed ,onMounted,getCurrentInstance } from '@vue/compo
                         return vc.adviseHeadsCookiePath
                     },
                     advise_order(){
+                      if(vc.$refs.dtable){
                         return vc.$refs.dtable.advise_order
+                      }else{
+                        return  []
+                      }
+
                     },
                     director_name(){
                         return vc.directorName
@@ -154,6 +174,7 @@ import { ref, reactive,computed ,onMounted,getCurrentInstance } from '@vue/compo
             dpagination,
             dOperation,
             dparent,
+            dOpeAndFilter
         },
         mixins:[table_mix],
         setup(props){
@@ -192,7 +213,7 @@ import { ref, reactive,computed ,onMounted,getCurrentInstance } from '@vue/compo
             },
             directorName:{},
             footer:{
-                default:()=>{}
+                default:()=>{return {}}
             },
             selectable:{
                 default:()=>{return  true}
@@ -200,6 +221,20 @@ import { ref, reactive,computed ,onMounted,getCurrentInstance } from '@vue/compo
             parents:{
                 default:()=>[]
             },
+            hasPagination:{
+                default:true
+            },
+            tableClass:{},
+            autoHeight:{
+                default:false
+            },
+            fitWidth:{
+              // 每列自适应宽度
+            },
+            opMergeCount:{
+              // operation少于该数量，operation就会融合在一起
+                default:-1,
+            }
             // urlArgs:{
             //   default:false
             // }
@@ -223,6 +258,9 @@ import { ref, reactive,computed ,onMounted,getCurrentInstance } from '@vue/compo
             }
         },
         methods:{
+          clearRows(){
+            this.$refs.dtable.rows.splice(0,this.$refs.dtable.rows.length)
+          },
 
             search_page(page,{loading}={loading:true}){
               // if(this.urlArgs){
@@ -231,14 +269,15 @@ import { ref, reactive,computed ,onMounted,getCurrentInstance } from '@vue/compo
               //   delete args._advise_heads
               //   history.replaceState({},'',ex.appendSearch(args))
               // }
-
               ex.array.replace(this.tableRows,[])
                 this.searchArgs._page = page
                 if(loading){
                     cfg.show_load()
                 }
                 this.selected = []
-                this.searchArgs._advise_heads= this.$refs.dtable.advise_heads
+                if(this.$refs.dtable){
+                  this.searchArgs._advise_heads= this.$refs.dtable.advise_heads
+                }
                return ex.director_call('d.get_rows',{director_name:this.directorName,search_args:this.searchArgs}).then(resp=>{
                     cfg.hide_load()
 //                    this.tableRows.splice(0,this.tableRows.length,...resp.rows)
@@ -248,18 +287,37 @@ import { ref, reactive,computed ,onMounted,getCurrentInstance } from '@vue/compo
                     ex.vueAssign(this.footer,resp.footer)
                     ex.array.replace(this.parents,resp.parents)
 //                    this.footer = resp.footer
+                    this.$emit('afterSearchPage',page)
                 })
             }
         }
     }
 </script>
 <style scoped lang="scss">
-.com-d-table{
+
+.streach{
+  &.com-d-table{
     height: 100%;
+  }
+  .table-area{
+      position: relative;
+      border-radius: 5px;
+      overflow: hidden;
+      background: #ffffff;
+      border-top: 1px solid #eee;
+      margin-bottom: 20px;
+      width: 100%;
+      flex-grow: 10;
+      .my-d-table{
+        position: absolute;
+        top:0;
+        left:0;
+        bottom: 0;
+        right:0;
+      }
+    //-moz-box-shadow:0px -3px 5px #f4f4f4;; -webkit-box-shadow:0px -3px 5px #f4f4f4;; box-shadow:0px -3px 5px #f4f4f4;
+    //box-shadow: 0 1px 1px rgb(0 0 0 / 10%);
+  }
 }
-.my-d-table{
-    /*position: absolute;*/
-    /*height: 100%;*/
-    /*width: 100%;*/
-}
+
 </style>

@@ -1,5 +1,5 @@
 
-
+import './scss'
 import * as config from  './config.js'
 
 //table mix
@@ -66,7 +66,7 @@ import * as pop_layer from  './misc/pop_layer'
 import * as misc_main from  './misc/main.js'
 
 
-import * as ele_table from  './table_panels/ele_table.js'
+// import * as ele_table from  './table_panels/ele_table.js'
 
 
 
@@ -99,7 +99,7 @@ import * as table_filter_main from './table_filter/main'
 import * as page_com_main from './page_com/main'
 import  * as table_local_input from './table_editor/local_input/main'
 
-import * as layout_main from './layout'
+// import * as layout_main from './layout'
 //import * as pop_win_main from './pop_win/main'
 
 
@@ -111,4 +111,8 @@ import * as fields_main from  './fields_main.js'
 
 //这里面的东西好像都过时了，现在用的com-d-table  发现有用的： com-table-filters
 // import * as table_group_main from  './table_group/main.js'
-import * as filter from  './table_group/filter.js'
+// import * as filter from  './table_group/filter.js'
+
+import  * as table_group from './table_group.js'
+import * as table_filter from './filter_main.js'
+import * as maybe_old from './maybe_old.js'

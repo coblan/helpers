@@ -1,4 +1,4 @@
-var ele_transfer={
+export default {
     props:['row','head'],
     template:`<div class="com-field-ele-transfer" :class="head.class">
      <el-transfer v-model="row[head.name]" :data="head.options"
@@ -28,4 +28,4 @@ var ele_transfer={
         }
     }
 }
-Vue.component('com-field-ele-transfer',ele_transfer)
+// Vue.component('com-field-ele-transfer',ele_transfer)

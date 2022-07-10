@@ -6,11 +6,12 @@
     page_name='{{page_name}}'
     page_label={{ page_label | jsonify | default:'unlabel page'}}
     engine_url='{{engine_url}}'
-
-    can_add={{ can_add | jsonify | default:'false' }}
-    can_log={{ can_log | jsonify | default:'false' }}
-    can_del={{ can_del | jsonify | default:'false' }}
-    can_edit={{ can_edit | jsonify | default:'false' }}
+    engine_name = "{{engine_name}}"
+    //
+    // can_add={{ can_add | jsonify | default:'false' }}
+    // can_log={{ can_log | jsonify | default:'false' }}
+    // can_del={{ can_del | jsonify | default:'false' }}
+    // can_edit={{ can_edit | jsonify | default:'false' }}
 
     heads={{ heads | jsonify | default:'[]' }}
 

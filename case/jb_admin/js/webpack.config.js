@@ -21,16 +21,20 @@ module.exports =
     output: {
         // path:path.resolve(__dirname, '../static/js'),
         // filename: '[name].pack.js'
-        path:path.resolve(__dirname, '../static'),
-        filename: 'js/[name].pack.js',
-        chunkFilename: 'js/jb_admin/[id].[chunkhash].js',
-        publicPath:'/static/'
+        path:path.resolve(__dirname, '../static/js'),
+        filename: '[name].pack.js',
+        // chunkFilename: 'jb_admin/[id].[chunkhash].js',
+        chunkFilename: 'jb_admin/[id].js?h=[chunkhash]',
+        publicPath:'/static/js/'
 
         // path:path.resolve(__dirname, '../static/'),
         // filename: 'js/[name].pack.js',
         // chunkFilename: 'js/jb_admin/[id].[chunkhash].js',
         // publicPath:'/static/'
 
+    },
+    optimization: {
+        namedChunks: true
     },
     externals: {
         'vue': 'Vue',
@@ -86,6 +90,8 @@ module.exports =
                     loader: "css-loader" // translates CSS into CommonJS
                 }, {
                     loader: "sass-loader" // compiles Sass to CSS
+                },{
+                    loader: path.resolve('./deepChangeLoader.js'),
                 }]
             },
             {
@@ -127,10 +133,11 @@ module.exports =
     plugins: [
         new VueLoaderPlugin(),
         new CleanWebpackPlugin(),
+        // new BundleAnalyzerPlugin(),
+
         // new MiniCssExtractPlugin({
         //     filename: 'style.css'
         // })
-        new BundleAnalyzerPlugin(),
         //new UglifyJSPlugin()
         //new webpack.DefinePlugin({
             //'process.env.NODE_ENV': JSON.stringify('production'),

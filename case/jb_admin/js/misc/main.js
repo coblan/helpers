@@ -18,9 +18,6 @@ Vue.component('com-line-info',line_info)
 Vue.component('com-widget-el-tab',el_tab)
 Vue.component('com-message-rows',messageInfo)
 // Vue.component('com-form-one',form_one)
-Vue.component('com-form-one', async (resolve, reject) =>{
-    var com = await import('./formOne.vue')
-    resolve(com.default)
-})
+
 
 window.live_el_tab = el_tab
