@@ -26,6 +26,7 @@ import  local from 'weblib/ex/local.js'
 import {FreePromise} from 'weblib/ex/promise'
 
 var ex={
+    source:'director',
     FreePromise:FreePromise,
     assign:function (dst,src) {
         for(var key in src){

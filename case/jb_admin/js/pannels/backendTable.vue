@@ -91,6 +91,11 @@
           this.$refs.dtable.childStore.$on('finish',(data)=>{
               this.$emit('finish',data)
           })
-        }
+        },
+      methods:{
+          search(){
+            this.$refs.dtable.search()
+          }
+      }
     }
 </script>

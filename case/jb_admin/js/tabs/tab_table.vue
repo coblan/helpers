@@ -8,7 +8,8 @@ export default {
   props:['tab_head','par_row'],
   data(){
     var childStore = {
-      vc:this
+      vc:this,
+      name:'com-tab-table'
     }
     return {
         childStore:childStore,
