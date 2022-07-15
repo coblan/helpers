@@ -25,9 +25,9 @@ Vue.component('com-tab-fields', async (resolve, reject)=> {
     resolve(com)
 })
 
-import frontPage from "./frontPage.vue";
-import confirmTab from './confirmTab.vue'
-Vue.component('com-front-page',frontPage)
-Vue.component('com-tab-confirm',confirmTab)
+// import frontPage from "./frontPage.vue";
+// import confirmTab from './confirmTab.vue'
+// Vue.component('com-tab-front-page',frontPage)
+// Vue.component('com-tab-confirm',confirmTab)
 
 

@@ -258,17 +258,7 @@ var cfg={
                 top_editor: kws.top_editor,
                 top_ctx: kws.top_ctx,
             })
-            // 传统 页面
-            //self.tab_stack.push( {
-            //    widget:'com-widget-el-tab' ,
-            //    tabs:tabs,
-            //    crt_tab_name:kws.tab_name,
-            //    par_row:kws.par_row,
-            //
-            //})
         }
-        // 这里暂时打开，以后移除
-        // self.crt_row=kws.par_row
     }
 }
 
