@@ -15,9 +15,12 @@ export default {
     ex.assign(ctx,{
       par_row:this.par_row,
       init_express:this.tab_head.init_express,
-      mounted_express:this.tab_head.mounted_express,
     })
+    if(this.tab_head.mounted_express){
+      ctx.mounted_express = this.tab_head.mounted_express
+    }
     return {
+      childStore:{vc:this,name:'com-tab-form'},
       ctx:ctx,
       show_front:false,
     }
