@@ -30,42 +30,6 @@
 </template>
 <script>
     import  director_table from  './director_table.vue'
-    // import  director_table,{DTableLogic} from  './director_table.vue'
-    // const { ref, reactive,computed ,onMounted,getCurrentInstance } = VueCompositionAPI
-
-    // class DTable2Logic extends DTableLogic{
-    //     getSetup(props){
-    //         // const vc = getCurrentInstance()
-    //         // onMounted(()=>{
-    //         //     if(vc.proxy.tableRows.length==0){
-    //         //         vc.proxy.search()
-    //         //     }
-    //         // })
-    //         return {
-    //
-    //         }
-    //     }
-    // }
-
-//     class BackendTable{
-//         getSetup(props){
-//             this. dtable = ref(null)
-//             this.connect_dtable_event()
-//             return {
-//                 dtable:this.dtable,
-// //                extendLogic:DTable2Logic,
-//             }
-//         }
-//         connect_dtable_event(){
-//             const vc = getCurrentInstance()
-//             onMounted(()=>{
-//                 this.dtable.value.childStore.$on('finish',(data)=>{
-//                     vc.emit('finish',data)
-//                 })
-//             })
-//         }
-//
-//     }
     export default {
         components:{
             director_table,
@@ -91,6 +55,11 @@
           this.$refs.dtable.childStore.$on('finish',(data)=>{
               this.$emit('finish',data)
           })
-        }
+        },
+      methods:{
+          search(){
+            this.$refs.dtable.search()
+          }
+      }
     }
 </script>

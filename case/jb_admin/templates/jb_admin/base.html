@@ -86,9 +86,9 @@
             },300)
 
             if($('body').hasClass('sidebar-collapse')){
-                sessionStorage.setItem("sidebar-collapse",true);
+                sessionStorage.setItem(`${engine_name}.sidebar-collapse`,true);
             }else{
-                sessionStorage.removeItem("sidebar-collapse");
+                sessionStorage.removeItem(`${engine_name}.sidebar-collapse`);
             }
         }
 
@@ -221,7 +221,7 @@ desired effect
 </style>
 <body class="hold-transition {{ ui_theme }} sidebar-mini">
 <script>
-    if(sessionStorage.getItem('sidebar-collapse')){
+    if(sessionStorage.getItem(`${engine_name}.sidebar-collapse`)){
         $('body').addClass('sidebar-collapse')
     }
 </script>

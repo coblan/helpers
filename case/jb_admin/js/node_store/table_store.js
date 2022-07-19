@@ -1,3 +1,5 @@
+import el_tab from '../misc/el_tab_widget.vue'
+
 var table_store={
     data:function(){
          return {
@@ -666,7 +668,13 @@ var table_store={
 
             if(window.root_live){
                 // keeplive 页面
-                root_live.open_live(live_el_tab,{tabs:tabs,title:kws.par_row._label,crt_tab_name:kws.tab_name,par_row:kws.par_row,last_ps:self})
+                // el_tab 就是原来的 live_el_tab
+                root_live.open_live(el_tab,{tabs:tabs,
+                    title:kws.par_row._label,
+                    crt_tab_name:kws.tab_name,
+                    par_row:kws.par_row,
+                    type:kws.type,
+                    last_ps:self})
             }else{
                 // 传统 页面
                 self.tab_stack.push( {

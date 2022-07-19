@@ -1,7 +1,7 @@
 
 require('./scss/fields.scss')
 require('./table_editor/scss/table_editor_base.scss')
-require('./scss/tab.scss')
+// require('./scss/tab.scss')
 require('./scss/table.scss')
 require('./scss/table_page.scss')
 require('./scss/element_ex.scss')

@@ -73,9 +73,6 @@
 {% endfor %}
 
 <script>
-    init_express={{ init_express | jsonify }}
-    if(init_express){
-        ex.eval(init_express)
-    }
+    {{ init_express | safe }}
 </script>
 </html>

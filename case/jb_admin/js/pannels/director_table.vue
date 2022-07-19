@@ -259,7 +259,6 @@ import { ref, reactive,computed ,onMounted,getCurrentInstance } from '@vue/compo
         },
         methods:{
           clearRows(){
-            debugger
             this.$refs.dtable.rows.splice(0,this.$refs.dtable.rows.length)
           },
 
@@ -270,7 +269,6 @@ import { ref, reactive,computed ,onMounted,getCurrentInstance } from '@vue/compo
               //   delete args._advise_heads
               //   history.replaceState({},'',ex.appendSearch(args))
               // }
-
               ex.array.replace(this.tableRows,[])
                 this.searchArgs._page = page
                 if(loading){
@@ -286,7 +284,6 @@ import { ref, reactive,computed ,onMounted,getCurrentInstance } from '@vue/compo
                     ex.array.replace(this.tableRows,resp.rows)
                     ex.vueAssign( this.rowPages,resp.row_pages)
                     ex.vueAssign(this.searchArgs,resp.search_args)
-                    debugger
                     ex.vueAssign(this.footer,resp.footer)
                     ex.array.replace(this.parents,resp.parents)
 //                    this.footer = resp.footer
