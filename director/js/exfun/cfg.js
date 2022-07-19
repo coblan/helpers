@@ -23,6 +23,13 @@ var cfg={
         width:$(window).width(),
         height:$(window).height(),
     },
+    scrollTo({selector,url,top=0}){
+        // if(url){location.path = url}
+
+        var real_top = document.querySelector(selector).offsetTop +top
+        // document.documentElement.scrollTop=top
+        document.documentElement.scrollTo({ top: real_top, behavior: 'smooth' })
+    },
     prompt(mycfg){
         //{
         //    formType: 2,
