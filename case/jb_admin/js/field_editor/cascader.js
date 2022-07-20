@@ -49,13 +49,18 @@ var cascader_field =  {
     },
     template:`
 <!--:show-all-levels="false"-->
-      <el-cascader class="com-field-cascader"
+<div class="com-field-cascader">
+<el-cascader class="com-field-cascader"
+            :name="head.name"
             v-model="row[head.name]"
             :options="head.options"
             :props="myprops"
             size="small"
             clearable>
-        </el-cascader>`,
+        </el-cascader>
+<input style="display: none" type="text" :name="head.name" :id="'id_'+head.name" v-model="row[head.name]">
+</div>
+      `,
     //default-expand-all
     computed:{
         label:function(){

@@ -2,9 +2,10 @@
     <div class="com-field-select" :class="head.class">
         <span v-if='head.readonly' v-text='get_label'></span>
         <div v-else>
-            <input type="text" style="display: none" :id="'id_'+head.name" :name="head.name" v-model="row[head.name]"><!-- :clearable="!head.required"-->
-<!--          :class="{isempty:!is_select}"  -->
+<!--            <input type="text" style="display: none" :id="'id_'+head.name" :name="head.name" v-model="row[head.name]">&lt;!&ndash; :clearable="!head.required"&ndash;&gt;-->
+
           <el-select v-show="loaded"  :class="{start:!loaded || !is_select }"  v-model="row[head.name]"
+                     :name="head.name"
                         :multiple="head.multiple"
                         :filterable="head.multiple ||  head.filterable "
                         :placeholder="head.placeholder"
@@ -36,7 +37,7 @@
                 ex.assign(inn_config, this.head.config)
             }
 
-            this.head.placeholder = this.head.placeholder || cfg.tr('请选择')
+            this.head.placeholder = this.head.placeholder || cfg.tr('请选择1')
 
             return {
                 model: this.row[this.head.name],

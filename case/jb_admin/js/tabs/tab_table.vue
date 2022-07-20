@@ -17,6 +17,8 @@ export default {
     }
   },
   mounted(){
+    // 去掉rows是为了防止第二次打开tab-table时，携带了上次的rows数据
+    this.tab_head.table_ctx.rows=[]
     this.init_search_args()
   },
   methods:{
