@@ -1,11 +1,12 @@
 <template>
   <div class="com-form-one flex-v" :class="head.class">
-    <div class="oprations" v-if="ops_loc=='up'">
+    <div class="oprations up" v-if="ops_loc=='up'">
       <component v-for="op in normed_ops" :is="op.editor" :ref="'op_'+op.name" :ctx="op" :head="op" @operation="on_operation(op)"></component>
     </div>
-    <div style="overflow: auto;" :class="{'box box-success':ops_loc=='up'}" class="flex-grow fields-area">
+    <div style="overflow: auto;"   class="flex-grow fields-area">
+<!--      :class="{'box box-default':ops_loc=='up'}"-->
       <!--有分组的情况-->
-      <div v-if="fields_group" >
+      <div v-if="fields_group" class="fields-group">
         <div v-for="group in grouped_heads_bucket" :class="'group_'+group.name" v-if="group.heads.length > 0">
 
           <div class="fields-group-title"  v-html="group.label"></div>
@@ -73,7 +74,7 @@ export default {
           org_row:data_row,
           childStore:childStore,
           parStore:parStore,
-          ops_loc: this.ctx.ops_loc ||  'up',
+          ops_loc: this.ctx.ops_loc || 'up',
 
         }
     },
@@ -183,6 +184,24 @@ export default {
 </script>
 
 <style scoped lang="scss">
+// 为了分组显示好看
+
+//.fields-group{
+//  padding: 0 20px;
+//}
+.fields-group-title{
+  padding-left: 10px;
+  font-size: 110%;
+  font-weight: bold;
+}
+.oprations.up{
+  background-color: white;
+  //border-bottom: 1px solid #dadada;
+}
+//.fields-area{
+//  background-color: white;
+//}
+//
 .com-form-one{
   height: 100%;
 
