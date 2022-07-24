@@ -210,7 +210,9 @@ def get_lib(request):
                 'cropper_css':'https://cdn.jsdelivr.net/npm/cropper@4.1.0/dist/cropper.min.css',
                 'cropper':'https://cdn.jsdelivr.net/npm/cropper@4.1.0/dist/cropper.min.js',
                 'velocity':'https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.min.js',
+                # 版本有兼容问题
                 'animate_css':'https://lib.baomitu.com/animate.css/4.1.1/animate.min.css',
+                #'animate_css':'https://lib.baomitu.com/animate.css/3.7.2/animate.min.css',
                 'wow':'https://cdn.jsdelivr.net/npm/wow.js@1.2.2/dist/wow.min.js',
                 #'composition_api':'https://cdn.jsdelivr.net/npm/@vue/composition-api@1.5.0',
                 'composition_api':'/static/cdn/jb_admin/composition-api@1.6.0',
