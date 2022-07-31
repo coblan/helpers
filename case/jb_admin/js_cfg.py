@@ -220,6 +220,7 @@ def get_lib(request):
                 'axios':'https://lib.baomitu.com/axios/0.26.1/axios.min.js',
                 'ace':'https://lib.baomitu.com/ace/1.5.3/ace.min.js',
                 'ace_javascript':'https://lib.baomitu.com/ace/1.5.3/mode-javascript.min.js',
+                "qrcode":"https://lib.baomitu.com/qrcodejs/1.0.0/qrcode.min.js",
    
             })
             if not settings.DEBUG:
