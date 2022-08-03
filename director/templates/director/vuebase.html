@@ -21,6 +21,7 @@
 </head>
 
 <script>
+    named_ctx={{ named_ctx | jsonify | default:'{}' }}
     js_config={{js_config | jsonify }}
      // document.title = page_label
     if(js_config.is_debug){
@@ -60,7 +61,7 @@
 
 <body >
     <div id="main-panel">
-        <component :is="editor" :ctx="editor_ctx"></component>
+        <component :is="editor" :ctx="editor_ctx" v-bind="editor_ctx"></component>
     </div>
 </body>
 
@@ -72,9 +73,6 @@
 {% endfor %}
 
 <script>
-    init_express={{ init_express | jsonify }}
-    if(init_express){
-        ex.eval(init_express)
-    }
+    {{ init_express | safe }}
 </script>
 </html>

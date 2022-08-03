@@ -59,11 +59,12 @@ from functools import wraps
 
 
 
-def director_view(name): 
+def director_view(name,allow_overlap=False): 
     def _fun(fun): 
         #director[name] = fun
-        if name in director_views:
-            raise UserWarning('name=%s的director_view已经存在')
+        if not allow_overlap:
+            if name in director_views:
+                raise UserWarning('name=%s的director_view已经存在'%name)
         director_views[name] = fun
         @wraps(fun)
         def _fun2(*args, **kargs): 

@@ -13,6 +13,7 @@ export default {
 
 }
 cfg.ui_editor['uie-test'] = {
+    has_bind_express:true,
     fields:[
       {name:'text',label:'label',editor:'com-field-linetext'}
     ],

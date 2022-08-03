@@ -144,7 +144,8 @@ var ckeditor = {
 			//self.input.value=self.value
 
 		//CKEDITOR.plugins.addExternal('html5video', 'https://cdn.jsdelivr.net/gh/coblan/static@0.0/ckeditor/plugins/html5video/dialogs', 'html5video.js');
-
+		CKEDITOR.plugins.addExternal('html5video', '/static/cdn/ckeditor/plugins/html5video/','plugin.js');
+		CKEDITOR.plugins.addExternal('lineheight', '/static/cdn/ckeditor/plugins/lineheight/','plugin.js');
 			var editor = CKEDITOR.replace(self.input,config)
 			if(self.value){
 				editor.setData(self.value)

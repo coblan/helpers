@@ -1,9 +1,11 @@
-from .table import ModelTable,director
+from .table import ModelTable,director,RowSort
 from django.db.models import Count,F,OuterRef, Subquery,Exists
 
 class TreeTable(ModelTable):
     first_field=''
     selectable = False
+    class sort(RowSort):
+        general_sort ='pk'
     def inn_filter(self, query):
         if self.kw.get('par'):
             query  =query.filter(parent_id = self.kw.get('par'))
@@ -12,6 +14,18 @@ class TreeTable(ModelTable):
         subquery = self.model.objects.filter(parent=OuterRef('pk'))
         query = query.annotate(hasChildren=Exists(subquery))
         return query
+    
+    def get_operations(self):
+        ops = super().get_operations()
+        for op in ops:
+            if op['name']=='add_new':
+                op['click_express']='''scope.head.fields_ctx.genVc=scope.vc;
+                scope.ps.add_new(scope.head).then(()=>{
+                    scope.ps.search()
+                })
+                 
+                '''
+        return ops
     
     def getExtraHead(self):
         model_form = director.get(self.get_edit_director_name())

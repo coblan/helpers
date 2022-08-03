@@ -8,4 +8,6 @@ import * as table_grid from  './table_grid'
 // Vue.component('com-live-tab',tab)
 
 import myhtml from './html.vue'
+import mytable from './table.vue'
 Vue.component('com-live-html',myhtml)
+Vue.component('com-live-table',mytable)

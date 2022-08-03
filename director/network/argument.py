@@ -118,6 +118,27 @@ def model_instance(model,field='pk'):
             raise UserWarning('%(name)s=%(value)s can not be find'%{'name':name,'value':value})
     return _model_validator
 
+def model_instance_list(model,field='pk'):
+    "判断value是否是model instance(默认使用pk值查询)"
+    def _model_validator(value,name):
+        try:
+            if value:
+                dc ={'%s__in'%field:value}
+                inst_dc = {}
+                for inst in model.objects.filter(**dc):
+                    inst_dc[ str( getattr(inst,field) )] = inst
+                out_ls = []
+                for ii in value:
+                    if str(ii ) in inst_dc:
+                        out_ls.append( inst_dc[str(ii )] )
+                    else:
+                        raise UserWarning('%s=%s can not be find'%(field,ii))
+                return out_ls
+                    
+        except model.DoesNotExist as e:
+            raise UserWarning('%(name)s=%(value)s can not be find'%{'name':name,'value':value})
+    return _model_validator
+
 """
 ls={
     'zk':[not_null,model_instance(model)],
