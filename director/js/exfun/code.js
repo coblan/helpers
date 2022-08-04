@@ -12,7 +12,10 @@ export var code ={
     //    }
     //    return h;
     //}
-
+    async md5(str){
+        await this.load_js(cfg.js_lib.md5)
+        return window.md5(str)
+    },
     hashDict:function(dc){
         var ls =[]
         for(var k in dc){
