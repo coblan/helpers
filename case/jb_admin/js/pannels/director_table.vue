@@ -1,7 +1,7 @@
 <template>
     <div class="com-d-table flex-v" :class="{autoHeight:autoHeight,streach:!autoHeight}">
 
-      <dOpeAndFilter v-if="operationHeads.length <= opMergeCount" :heads="filterHeads" @search="search_page(1)" :search-args="searchArgs"
+      <dOpeAndFilter v-if="operationHeads.length <= opMergeCount && filterHeads.length>0" :heads="filterHeads" @search="search_page(1)" :search-args="searchArgs"
                :search-label="seach_label"
                :op-heads="operationHeads"
       >

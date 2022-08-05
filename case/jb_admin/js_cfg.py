@@ -209,17 +209,23 @@ def get_lib(request):
                 
                 'cropper_css':'https://cdn.jsdelivr.net/npm/cropper@4.1.0/dist/cropper.min.css',
                 'cropper':'https://cdn.jsdelivr.net/npm/cropper@4.1.0/dist/cropper.min.js',
-                'velocity':'https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.min.js',
+                #'velocity':'https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.min.js',
+                'velocity':'https://lib.baomitu.com/velocity/1.5.2/velocity.min.js',
                 # 版本有兼容问题
                 'animate_css':'https://lib.baomitu.com/animate.css/4.1.1/animate.min.css',
                 #'animate_css':'https://lib.baomitu.com/animate.css/3.7.2/animate.min.css',
-                'wow':'https://cdn.jsdelivr.net/npm/wow.js@1.2.2/dist/wow.min.js',
+                #'wow':'https://cdn.jsdelivr.net/npm/wow.js@1.2.2/dist/wow.min.js',
+                'wow':'https://lib.baomitu.com/wow/1.1.2/wow.min.js',
                 #'composition_api':'https://cdn.jsdelivr.net/npm/@vue/composition-api@1.5.0',
                 'composition_api':'/static/cdn/jb_admin/composition-api@1.6.0',
                 ##'composition_api':'https://cdn.jsdelivr.net/npm/@vue/composition-api@1.6.1'
                 'axios':'https://lib.baomitu.com/axios/0.26.1/axios.min.js',
                 'ace':'https://lib.baomitu.com/ace/1.5.3/ace.min.js',
                 'ace_javascript':'https://lib.baomitu.com/ace/1.5.3/mode-javascript.min.js',
+                "qrcode":"https://lib.baomitu.com/qrcodejs/1.0.0/qrcode.min.js",
+                
+                'selectizejs': 'https://lib.baomitu.com/selectize.js/0.13.6/js/standalone/selectize.min.js', 
+                'selectizejs_css':'https://lib.baomitu.com/selectize.js/0.13.6/css/selectize.default.min.css',                
    
             })
             if not settings.DEBUG:
