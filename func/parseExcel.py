@@ -54,7 +54,7 @@ class ExcelFields(ModelFields):
                 if(scope.ps.vc.par_row){
                    ctx.row.par_row_pk = scope.ps.vc.par_row.pk
                 }
-                return cfg.pop_vue_com('com-form-one',ctx,{title:'字段对照(左边为系统预设名，右边为当前excel首行字段名)'})
+                return cfg.pop_vue_com('com-form-one',ctx,{title:'请选择正确的对应字段(系统预设名<--->excel首行字段名)'})
             }).then((resp)=>{
                scope.ps.search()
                
@@ -68,7 +68,7 @@ class ExcelFields(ModelFields):
         excelHeads = get_excel_head(url)
         heads =[]
         for index,name in enumerate(excelHeads):
-            heads.append({'value':index,'label':name.strip(),})
+            heads.append({'value':index,'label':'excel:%s'%name.strip(),})
         
         row ={
             '_director_name':self.get_director_name(),
@@ -94,8 +94,10 @@ class ExcelFields(ModelFields):
         return None    
     
     def dict_head(self, head):
+        "这里会修改modelfields原来的field editor"
         head['editor']='com-field-select'
         head['group']='1'
+        head['fv_rule']=''
         head['option_show'] = '''
         (function(){
             var heads = scope.ps.vc.heads
