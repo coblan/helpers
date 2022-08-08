@@ -18,9 +18,12 @@ export default {
   },
   computed:{
      proxy(){
+       var self = this
        return new Proxy(this.$refs.backend_table,{
          get: function(obj, prop) {
-           if(prop in obj){
+           if(prop in self){
+             return  self[prop]
+           }else if(prop in obj){
              return  obj[prop]
            }else if(obj.proxy){
              return  obj.proxy[prop]
