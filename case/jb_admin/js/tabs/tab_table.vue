@@ -1,6 +1,6 @@
 <template>
   <com-backend-table class="com-tab-table" v-if="loaded"
-                     ref="community" :ctx="tab_head.table_ctx"></com-backend-table>
+                     ref="backend_table" :ctx="tab_head.table_ctx"></com-backend-table>
 </template>
 <script>
 
@@ -13,8 +13,21 @@ export default {
     }
     return {
         childStore:childStore,
-        loaded:false
+        loaded:false,
     }
+  },
+  computed:{
+     proxy(){
+       return new Proxy(this.$refs.backend_table,{
+         get: function(obj, prop) {
+           if(prop in obj){
+             return  obj[prop]
+           }else if(obj.proxy){
+             return  obj.proxy[prop]
+           }
+         }
+       })
+     }
   },
   mounted(){
     // 去掉rows是为了防止第二次打开tab-table时，携带了上次的rows数据

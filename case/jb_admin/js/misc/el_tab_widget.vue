@@ -53,9 +53,11 @@ export default {
     //})
     var childStore = new Vue()
     childStore.vc = this
+    childStore.name='com-widget-el-tab'
     return {
-//                childStore:childStore,
-      is_mounted:false
+      childStore:childStore,
+      is_mounted:false,
+
     }
   },
   watch:{
