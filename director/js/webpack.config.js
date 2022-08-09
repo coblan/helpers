@@ -47,6 +47,19 @@ module.exports =
                 test: /\.vue$/,
                 loader: 'vue-loader'
             },
+            // {
+            //     test: /\.m?js$/,
+            //     exclude: /(node_modules|bower_components)/,
+            //     use: {
+            //         loader: 'babel-loader',
+            //         options: {
+            //             presets:[
+            //                 require.resolve('@babel/preset-env')
+            //             ]
+            //
+            //         }
+            //     },
+            // },
             {
                 test: /\.m?js$/,
                 exclude: /(node_modules|bower_components)/,
@@ -55,6 +68,9 @@ module.exports =
                     options: {
                         presets:[
                             require.resolve('@babel/preset-env')
+                        ],
+                        plugins: [
+                            require.resolve("@babel/plugin-transform-runtime")
                         ]
 
                     }
