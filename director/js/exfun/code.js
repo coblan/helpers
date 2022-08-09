@@ -16,6 +16,10 @@ export var code ={
         await this.load_js(cfg.js_lib.md5)
         return window.md5(str)
     },
+    async fileMd5(file){
+        await this.load_js('https://lib.baomitu.com/md5-wasm/1.2.0/md5-wasm.min.js')
+        return await window.md5WASM(file)
+    },
     hashDict:function(dc){
         var ls =[]
         for(var k in dc){

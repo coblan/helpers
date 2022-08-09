@@ -255,6 +255,20 @@ import { ref, reactive,computed ,onMounted,getCurrentInstance } from '@vue/compo
         computed:{
             seach_label(){
                 return cfg.tr.search
+            },
+            proxy(){
+              var self = this
+              return new Proxy(this.$refs.dtable,{
+                get: function(obj, prop) {
+                  if(prop in self){
+                    return  self[prop]
+                  }else if(prop in obj){
+                    return  obj[prop]
+                  }else if(obj.proxy){
+                    return  obj.proxy[prop]
+                  }
+                }
+              })
             }
         },
         methods:{

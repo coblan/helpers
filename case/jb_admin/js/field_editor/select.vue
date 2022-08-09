@@ -2,10 +2,10 @@
     <div class="com-field-select" :class="head.class">
         <span v-if='head.readonly' v-text='get_label'></span>
         <div v-else>
-<!--            <input type="text" style="display: none" :id="'id_'+head.name" :name="head.name" v-model="row[head.name]">&lt;!&ndash; :clearable="!head.required"&ndash;&gt;-->
+            <input type="text" style="display: none" :id="'id_'+head.name" :name="head.name" v-model="row[head.name]"><!-- :clearable="!head.required"-->
 
           <el-select v-show="loaded"  :class="{start:!loaded || !is_select }"  v-model="row[head.name]"
-                     :name="head.name"
+
                         :multiple="head.multiple"
                         :filterable="head.multiple ||  head.filterable "
                         :placeholder="head.placeholder"

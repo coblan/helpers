@@ -45,6 +45,22 @@
         //     debugger
         //     return new BackendTable().getSetup(props)
         // },
+      computed:{
+        proxy(){
+          var self = this
+          return new Proxy(this.$refs.dtable,{
+            get: function(obj, prop) {
+              if(prop in self){
+                return  self[prop]
+              }else if(prop in obj){
+                return  obj[prop]
+              }else if(obj.proxy){
+                return  obj.proxy[prop]
+              }
+            }
+          })
+        }
+      },
         mounted(){
           if(this.ctx.autoLoad!=false){
             if(!this.ctx.rows || this.ctx.rows.length==0){

@@ -234,7 +234,7 @@ var cfg={
         },...funclist);
         cfg.layer_index_stack.push(index);
     },
-    switch_to_tab(kws,last_ps){
+    switch_to_tab(kws,){
         // 从 table_page_store 移过来的。因为 live_table 可能有这个需求
         var self=this
         var tabs=named_ctx[kws.ctx_name]
@@ -246,7 +246,7 @@ var cfg={
         if(!kws.tab_name || !canfind ){
             kws.tab_name = tabs[0].name
         }
-
+        debugger
         if(window.root_live){
             // keeplive 页面
             root_live.open_live(live_el_tab,{tabs:tabs,
@@ -254,8 +254,10 @@ var cfg={
                 type:kws.type,
                 top_editor: kws.top_editor,
                 top_ctx: kws.top_ctx,
-                last_ps:last_ps})
+                last_ps:kws.last_ps,
+                genVc:kws.genVc})
         }else{
+            // 这个应该是用在 table_new.html中的
             root_store.$emit('switch-to-tab',{
                 widget:'com-widget-el-tab' ,
                 tabs:tabs,
@@ -264,6 +266,7 @@ var cfg={
                 type:kws.type,
                 top_editor: kws.top_editor,
                 top_ctx: kws.top_ctx,
+                genVc:kws.genVc
             })
         }
     }

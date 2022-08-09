@@ -25,6 +25,7 @@ var dayjs = require('dayjs')
 import  local from 'weblib/ex/local.js'
 import {FreePromise} from 'weblib/ex/promise'
 
+
 var ex={
     source:'director',
     FreePromise:FreePromise,
@@ -60,8 +61,18 @@ ex.sortOrder=sortOrder
 ex.DefPromise = defPromise.default
 ex.vld = get_validator()
 
-//ex.md5=md5
-window.ex = ex
+// window.ex = ex
+import ex_weblib from 'weblib/ex'
+
+window.ex = new Proxy(ex,{
+    get: function(obj, prop) {
+        if(prop in obj){
+            return  obj[prop]
+        }else {
+            return  ex_weblib[prop]
+        }
+    }
+})
 
 
 import * as uis from  './uis/main.js'
