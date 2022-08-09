@@ -57,7 +57,10 @@ class IntProc(BaseFieldProc):
 
 class BigProc(IntProc):
     def to_dict(self, inst, name):
-        return { name :str(getattr(inst,name)) } 
+        if getattr(inst,name):
+            return { name :str(getattr(inst,name)) } 
+        else:
+            return {name:None}
     
     def filter_clean_search(self, q_str): 
         if re.search('^\d+$', q_str):

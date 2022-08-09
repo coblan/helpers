@@ -107,34 +107,19 @@ export default {
     },
 
     methods:{
-    group_filter_heads:function(group){
-      return ex.filter(this.normed_heads,function(head){
-        return ex.isin(head.name,group.heads)
-      })
-    },
-    // data_getter:function(){
-    //   var self=this
-    //   if(self.tab_head.get_data){
-    //     var fun = get_data [self.tab_head.get_data.fun]
-    //     var kws = self.tab_head.get_data.kws
-    //     fun(self,function(row){
-    //       self.org_row = row
-    //       self.row = ex.copy(row)
-    //       self.childStore.$emit('row.update_or_insert',row)
-    //     },kws)
-    //   }
-    //   if(self.tab_head.get_row){
-    //     ex.eval(self.tab_head.get_row,{vc:self})
-    //   }
-    // },
-    save(){
-      if(this.head.save_express){
-        var super_save = ()=>{mix_fields_data.methods.save.call(this)}
-        return ex.eval(this.head.save_express,{vc:this,super_save:super_save})
-      }else{
-        return  mix_fields_data.methods.save.call(this)
+      group_filter_heads:function(group){
+        return ex.filter(this.normed_heads,function(head){
+          return ex.isin(head.name,group.heads)
+        })
+      },
+      save(){
+        if(this.head.save_express){
+          var super_save = ()=>{mix_fields_data.methods.real_save.call(this)}
+          return ex.eval(this.head.save_express,{vc:this,super_save:super_save})
+        }else{
+          return  mix_fields_data.methods.save.call(this)
+        }
       }
-    }
     }
     // data_getter  回调函数，获取数据,
 
