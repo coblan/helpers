@@ -382,6 +382,7 @@ class ModelTable(object):
     export_related = True
     button_edit = False
     allow_delete = False
+    fitWidth = False
     def __init__(self,page=1,row_sort=[],row_filter={},row_search= '',crt_user=None,perpage=None,**kw):
         """
         kw['search_args']只是一个记录，在获取到rows时，一并返回前端页面，便于显示。
@@ -498,7 +499,8 @@ class ModelTable(object):
             'director_name': self.get_director_name(),#model_to_name(self.model),
             'ops' : ops, 
             'selectable': self.selectable,
-            'event_slots':self.get_event_slots()
+            'event_slots':self.get_event_slots(),
+            'fitWidth':self.fitWidth
         }  
     
     def get_context(self):
