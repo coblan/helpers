@@ -187,7 +187,7 @@ export  var mix_fields_data ={
         async beforeSubmit(){
            return  await Promise.all( ex.map(this.before_submit,fun=>{return fun()}  )  )
         },
-         submit:function(){
+        submit(){
             var self =this;
             this.setErrors({})
             ex.vueBroadCall(self,'commit')
@@ -195,6 +195,9 @@ export  var mix_fields_data ={
                 Vue.nextTick(async function(){
                     // await Promise.all( ex.map(self.before_submit,fun=>{return fun()}  )  )
                     await self.beforeSubmit()
+                    if(self.head.before_submit_express){
+                        await ex.eval(self.head.before_submit_express,{vc:self})
+                    }
 
                     if(!self.isValid()){
                         //reject()
