@@ -250,7 +250,9 @@ var cfg={
         if(window.root_live){
             // keeplive 页面
             root_live.open_live(live_el_tab,{tabs:tabs,
-                title:kws.par_row._label,crt_tab_name:kws.tab_name,par_row:kws.par_row,
+                title:kws.par_row._label,
+                crt_tab_name:kws.tab_name,
+                par_row:kws.par_row,
                 type:kws.type,
                 top_editor: kws.top_editor,
                 top_ctx: kws.top_ctx,
