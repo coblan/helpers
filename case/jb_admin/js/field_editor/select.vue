@@ -37,7 +37,7 @@
                 ex.assign(inn_config, this.head.config)
             }
 
-            this.head.placeholder = this.head.placeholder || cfg.tr('请选择1')
+            this.head.placeholder = this.head.placeholder || cfg.tr('请选择')
 
             return {
                 model: this.row[this.head.name],
