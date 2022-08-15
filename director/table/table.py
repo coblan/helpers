@@ -487,6 +487,12 @@ class ModelTable(object):
         ops = self.get_operation()
         ops = evalue_container(ops)
         
+        # 这样写，为了不影响这种写法: {fitWidth:True,**Mytab().get_head_context() }
+        dc = {}
+        if self.fitWidth:
+            dc.update({
+                'fitWidth':True
+            })
         return {
             'heads':self.get_heads(),
             'rows': [], #self.get_rows(),
@@ -500,7 +506,7 @@ class ModelTable(object):
             'ops' : ops, 
             'selectable': self.selectable,
             'event_slots':self.get_event_slots(),
-            'fitWidth':self.fitWidth
+            **dc
         }  
     
     def get_context(self):
