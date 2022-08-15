@@ -45,7 +45,7 @@ $(function() {
                     name:com_name,
                 }
                 Vue.set( this.$options.components,com_name,big_com)
-                this.stack.push({editor:com_name,ctx:ctx,label:label || com.label || ctx.title  })
+                this.stack.push({editor:com_name,ctx:ctx,label:label || com.label || ctx.par_row._label ||  ctx.title  })
             },
             open_com(com_name,ctx,label){
                 this.stack.push({editor:com_name,ctx:ctx,label:label||ctx.label || ctx.title })
@@ -65,14 +65,11 @@ $(function() {
                 var names =[]
                 ex.each(this.stack.slice(1),function(editor){
                     if(editor){
-                        names.push(editor.label )
-//                        var last_crt_tab = ex.findone(stack.tabs,{name:stack.crt_tab_name})
-////                        names.push(last_crt_tab.label)
-//                        if(stack.par_row._label){
-//                            names.push(last_crt_tab.label+"("+stack.par_row._label+")")
-//                        }else{
-//                            names.push(last_crt_tab.label)
-//                        }
+                        if(editor.ctx.par_row && editor.ctx.par_row._label){
+                            names.push( editor.ctx.par_row._label )
+                        }else{
+                            names.push(editor.label || editor.ctx.par_row._label )
+                        }
                     }
 //                    last_stack = stack
                 })
