@@ -277,12 +277,9 @@ import { ref, reactive,computed ,onMounted,getCurrentInstance } from '@vue/compo
           },
 
             search_page(page,{loading}={loading:true}){
-              // if(this.urlArgs){
-              //   var args = ex.copy(this.searchArgs)
-              //   delete args._page
-              //   delete args._advise_heads
-              //   history.replaceState({},'',ex.appendSearch(args))
-              // }
+            if(page==1){
+              this.$emit('search')
+            }
               ex.array.replace(this.tableRows,[])
                 this.searchArgs._page = page
                 if(loading){
