@@ -487,6 +487,12 @@ class ModelTable(object):
         ops = self.get_operation()
         ops = evalue_container(ops)
         
+        # 这样写，为了不影响这种写法: {fitWidth:True,**Mytab().get_head_context() }
+        dc = {}
+        if self.fitWidth:
+            dc.update({
+                'fitWidth':True
+            })
         return {
             'heads':self.get_heads(),
             'rows': [], #self.get_rows(),
@@ -500,7 +506,7 @@ class ModelTable(object):
             'ops' : ops, 
             'selectable': self.selectable,
             'event_slots':self.get_event_slots(),
-            'fitWidth':self.fitWidth
+            **dc
         }  
     
     def get_context(self):
@@ -1008,15 +1014,33 @@ class ModelTable(object):
                 {'name':'delete_selected',
                  'editor':'com-btn',
                  'label':_('删除'),
-                 'click_express':'''cfg.show_load();ex.director_call("d.delete_query_related",{rows:scope.ps.selected}).then((resp)=>{
+                 'click_express':'''(async ()=>{
+                     cfg.show_load();
+                     var resp = await ex.director_get("d.delete_query_related",{rows:scope.ps.selected})
                      cfg.hide_load();
+                     var confirm_delete = true;
                      if(resp.length>0){
-                         cfg.pop_vue_com("com-pan-delete-query-message",{msg_list:resp,genStore:scope.ps,title:"删除关联确认"})
-                     }else{
+                         confirm_delete = await cfg.pop_vue_com("com-pan-delete-query-message",{msg_list:resp,title:"删除关联确认"})
+                     }
+                     if(confirm_delete){
                         scope.ps.delete_selected()
                      }
+                     
+                 } )()
+                 ''' ,
+                 
+                 #'''
+                   #cfg.show_load();ex.director_call("d.delete_query_related",{rows:scope.ps.selected}).then((resp)=>{
+                     #cfg.hide_load();
+                     #if(resp.length>0){
+                         #cfg.pop_vue_com("com-pan-delete-query-message",{msg_list:resp,genStore:scope.ps,title:"删除关联确认"})
+                     #}else{
+                        #scope.ps.delete_selected()
+                     #}
                     
-                 });  ''' ,
+                 #});
+                 #'''
+                 
                  # if(scope.ps.check_selected(scope.head)){scope.ps.delete_selected()}
                  #'style': 'color:red',
                  #'icon': 'fa-times',

@@ -19,6 +19,7 @@
             :fitWidth="ctx.fitWidth"
             :opMergeCount="ctx.opMergeCount"
             ref="dtable"
+            @search="$emit('search')"
     >
 
       <template v-slot:default="slotprops">
