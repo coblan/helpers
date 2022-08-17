@@ -59,13 +59,13 @@ def model_read_permit(model,write=[]):
     }
     return json.dumps( permit )    
 
-def model_full_permit(model,exclude=[],write_exclude=[]): 
+def model_full_permit(model,exclude=[],write_exclude=[],create=True,delete=True): 
     fields = model._meta.get_fields()
     fields=[x for x in fields if x.name not in exclude]  
     permit = {
         'read': [f.name for f in fields],
         'write': [f.name for f in fields if f.name not in write_exclude],
-        '_can_create': True,
-        '_can_delete': True,
+        '_can_create': create,
+        '_can_delete': delete,
     }
     return json.dumps( permit )
