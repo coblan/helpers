@@ -187,27 +187,25 @@ export  var mix_fields_data ={
         async beforeSubmit(){
            return  await Promise.all( ex.map(this.before_submit,fun=>{return fun()}  )  )
         },
-        submit(){
+        async submit(){
+            debugger
             var self =this;
             this.setErrors({})
             ex.vueBroadCall(self,'commit')
-            return new Promise( function(resolve,reject){
-                Vue.nextTick(async function(){
-                    // await Promise.all( ex.map(self.before_submit,fun=>{return fun()}  )  )
-                    await self.beforeSubmit()
-                    if(self.head.before_submit_express){
-                        await ex.eval(self.head.before_submit_express,{vc:self})
-                    }
-
-                    if(!self.isValid()){
-                        //reject()
-                    }else{
-                        var res = await  self.save()
-                        resolve(res)
-                    }
-                })
-            })
-
+            await self.beforeSubmit()
+            if(self.head.before_submit_express){
+                await ex.eval(self.head.before_submit_express,{vc:self})
+            }
+            // 可能有些元素获取value是异步的，所以等下一个循环在运行，nicevalidator需要读取dom的值，[这个是可能，没有测试过]
+            await ex.vueNextTick()
+            var pro = new ex.FreePromise()
+            if(!self.isValid()){
+                //reject()
+            }else{
+                var res = await  self.save()
+                pro.resolve(res)
+            }
+            return  pro.promise
         },
         real_save:function () {
             /*三种方式设置after_save
