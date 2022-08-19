@@ -4,15 +4,25 @@ from django.db.models import Count,F,OuterRef, Subquery,Exists
 class TreeTable(ModelTable):
     first_field=''
     selectable = False
+    parent_null= None
+    
+    #class pagenator():
+        #pass
+    
     class sort(RowSort):
         general_sort ='pk'
     def inn_filter(self, query):
         if self.kw.get('par'):
             query  =query.filter(parent_id = self.kw.get('par'))
         else:
-            query = query.filter(parent__isnull = True)
+            if self.parent_null != None:
+                query = query.filter(parent_id = self.parent_null)
+            else:
+                query = query.filter(parent__isnull = True)
+        self.count_query = query
         subquery = self.model.objects.filter(parent=OuterRef('pk'))
         query = query.annotate(hasChildren=Exists(subquery))
+        
         return query
     
     def get_operations(self):
@@ -127,12 +137,12 @@ class TreeTable(ModelTable):
                             'click_express':'''
                             var row=scope.ps.vc.rowData;
                             var old_parent_pk = row.parent
-                            row.parent=null;
+                            row.parent=%s;
                             ex.director_call('d.save_row',{row:row}).then(()=>{
                                scope.ps.vc.parStore.vc.$refs.dtable.updateNode( {pk:old_parent_pk})
                                scope.ps.vc.parStore.vc.search()
                            })
-                            '''}
+                            '''%( 'null' if self.parent_null==None else self.parent_null)  }
                            ]
                            }
                      ]}
@@ -147,8 +157,10 @@ class TreeTable(ModelTable):
         }
         head['width'] = width.get(head['name'])
         if head['name']==self.first_field:
-            head['class']='chuizhi'
-            head['css']='''.chuizhi:first-child{margin-left:23px}'''
+            head['inn_editor']= head['editor']
+            head['editor'] = 'com-table-tree-first'
+            #head['class']='chuizhi'
+            #head['css']='''.chuizhi:first-child{margin-left:23px}'''
         return head    
     
     def dict_row(self, inst):

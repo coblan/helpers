@@ -380,9 +380,11 @@ class ModelTable(object):
     nolimit = False
     simple_dict = False
     export_related = True
+    exclude_export_related =[]  # 有些外键有问题，例如用0作为null，所以这是不用用select_related导出，否则会出现空数据。
     button_edit = False
     allow_delete = False
     fitWidth = False
+    
     def __init__(self,page=1,row_sort=[],row_filter={},row_search= '',crt_user=None,perpage=None,**kw):
         """
         kw['search_args']只是一个记录，在获取到rows时，一并返回前端页面，便于显示。
@@ -835,7 +837,8 @@ class ModelTable(object):
         pass
     
     def getCountQuery(self,query):
-        return None
+        return getattr(self,'count_query',None)
+        #return None
     
     def get_rows(self):
         """
@@ -926,13 +929,15 @@ class ModelTable(object):
         if self.exclude:
             query = query.defer(*self.exclude)
         
+        query = self.inn_filter(query)
+        #[count-] 有时单独计算count，效率很高。
         count_query = self.getCountQuery(query)
         if count_query != None:
             self.row_filter.get_query(count_query)
             self.row_search.get_query(count_query)
-            self.count_query=count_query    
-            
-        query = self.inn_filter(query)
+            self.count_query=count_query 
+        # [-count]
+
         query=self.row_filter.get_query(query)
         query=self.row_search.get_query(query)
         
@@ -942,7 +947,7 @@ class ModelTable(object):
         #[todo] 这里需要弄清楚原理
         #[todo_已经完成] 优化，是否select_related,select_related的field限定在输出的head中
         if not query._fields and self.export_related:  # 如果这个属性部位空，证明已经调用了.values() or .values_list()
-            head_nams = [x['name'] for x in self.get_light_heads()]
+            head_nams = [x['name'] for x in self.get_light_heads() if x['name'] not in self.exclude_export_related]
             for f in self.model._meta.get_fields():
                 if f.name in head_nams and isinstance(f, (models.ForeignKey,models.OneToOneField)):
                     query = query.select_related(f.name)        

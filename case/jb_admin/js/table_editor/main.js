@@ -27,6 +27,10 @@ Vue.component('com-table-span',tableSpan)
 Vue.component('com-table-ratio-number',ratioNumber)
 Vue.component('com-table-onlytext',onlytext)
 Vue.component('com-table-qrcode',qrcode)
+
+import  treeFirst from './treeFirst.vue'
+Vue.component('com-table-tree-first',treeFirst)
+
 import * as table_input_main from './table_input/main'
 
 /*
