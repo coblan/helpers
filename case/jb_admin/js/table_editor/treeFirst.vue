@@ -1,7 +1,7 @@
 <template>
   <div class="table-tree-first" :class="head.class" style="display: inline-block">
-    <component v-if="head.inn_editor"
-               :is="head.inn_editor"
+    <component v-if="head.inn_tree_deep_editor"
+               :is="head.inn_tree_deep_editor"
                :row-data="rowData" :field="field" :index="index"></component>
     <span v-else="" v-text="rowData[field]" ></span>
   </div>

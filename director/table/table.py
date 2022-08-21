@@ -340,11 +340,36 @@ class RowSort(object):
                 query = query.order_by(*ls)
         else:
             if not query.ordered and not query._fields and self.general_sort: # 如果这个为空，才能弄一个默认排序，否则造成聚合函数无效
-                query = query.order_by(self.general_sort)
+                norm_name,direction = adapt_field_name(self.general_sort)
+                if norm_name in self.chinese_words:
+                    query = query_chinese_words(norm_name,direction,query)
+                else:
+                    query = query.order_by(self.general_sort)
 
         return query
 
-  
+def query_chinese_words(norm_name,direction,query):
+    engine= settings.DATABASES.get(query.db)['ENGINE'] 
+
+    if engine == 'django.contrib.gis.db.backends.postgis':
+        # postgresql 注意，postgre的默认中文排序，好像是按照拼音来的（如果这样的话，下面这句程序就没用了。），待以后确认
+        query= query.extra(select={'converted_%s'%norm_name: "convert_to(%s,'GBK')"%norm_name},order_by=['%sconverted_%s'%(direction,norm_name)])
+    else:
+        # mysql 按照拼音排序
+        query= query.extra(select={'converted_%s'%norm_name: 'CONVERT(%s USING gbk)'%norm_name},order_by=['%sconverted_%s'%(direction,norm_name)])  
+    return query
+
+
+def adapt_field_name(name):
+    if name.startswith('-'):
+        norm_name=name.lstrip('-')
+        direction='-'
+    else:
+        norm_name=name
+        direction='' 
+    return norm_name,direction
+
+
 class ModelTable(object):
     """
     
