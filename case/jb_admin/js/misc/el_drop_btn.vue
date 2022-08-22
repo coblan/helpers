@@ -1,15 +1,5 @@
 <template>
     <span class="com-drop-btn" :class="my_ctx.class">
-        <!--<el-button size="mini" :type="my_ctx.type" @click="on_click()"-->
-                   <!--:title="ctx.title"-->
-                   <!--:disabled="is_disabled" :plain="my_ctx.plain">-->
-            <!--<slot name="content">-->
-                <!--<i v-if="my_ctx.icon" :class="my_ctx.icon"></i>-->
-                <!--<span v-text="my_ctx.label"></span>-->
-            <!--</slot>-->
-        <!--</el-button>-->
-
-        <!--split-button :type="my_ctx.type"-->
         <el-dropdown trigger="click">
             <el-button  size="mini" :disabled="is_disabled">
                <span class="el-dropdown-link">
@@ -18,8 +8,10 @@
               </span>
             </el-button>
             <el-dropdown-menu slot="dropdown" >
-                <el-dropdown-item v-for="action in my_ctx.menu" :disabled="action_disable(action)">
-                    <span :title="action.title" @click="on_click_action(action)" v-text="action.label"></span>
+                <el-dropdown-item v-for="action in my_ctx.menu"
+                                  @click.native="on_click_action(action)"
+                                  :disabled="action_disable(action)">
+                    <div :title="action.title"  v-text="action.label" ></div>
                 </el-dropdown-item>
             </el-dropdown-menu>
         </el-dropdown>

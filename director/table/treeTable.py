@@ -41,11 +41,13 @@ class TreeTable(ModelTable):
         model_form = director.get(self.get_edit_director_name())
         if model_form:
             return [
-                {'name':'op','label':'操作','editor':'com-table-ops-cell',
+                {'name':'op',
+                 'label':'操作',
+                 'editor':'com-table-ops-cell',
                  'ops':[
                       {'editor':'com-btn', 
-                       'label':'创建',
-                       'width':100,
+                       'label':'创建下级',
+                       
                        #'icon':'el-icon-phone',
                        #'fa_icon':'fa fa-phone-square',
                        'type':'primary',
@@ -123,16 +125,20 @@ class TreeTable(ModelTable):
                        'class':'myphone',
                        'menu':[
                            {'label':'剪切','click_express':'var row=scope.ps.vc.rowData;window.cut_data=row;cfg.toast("剪切成功")'},
-                           {'label':'粘贴','click_express':'''
-                           var row = window.cut_data;
-                           var old_parent_pk = row.parent
-                           var new_parent=scope.ps.vc.rowData;
-                           row.parent=new_parent.pk; 
-                           ex.director_call('d.save_row',{row:row}).then(()=>{
-                               scope.ps.vc.parStore.vc.$refs.dtable.updateNode( {pk:old_parent_pk})
-                               new_parent.hasChildren=true
-                               scope.ps.vc.parStore.vc.$refs.dtable.updateNode( {pk:new_parent.pk})
-                           })''' },
+                           {'label':'粘贴','click_express':'''( async ()=>{
+                                var row = window.cut_data;
+                                var old_parent_pk = row.parent
+                                var new_parent=scope.ps.vc.rowData;
+                                if(row.pk == new_parent.pk){
+                                    cfg.toast("不能选择自己作为自己的上级")
+                                    return
+                                }
+                                row.parent=new_parent.pk; 
+                                var resp = await ex.director_call('d.save_row',{row:row})
+                                 scope.ps.vc.parStore.vc.$refs.dtable.updateNode( {pk:old_parent_pk})
+                                 new_parent.hasChildren=true
+                                 scope.ps.vc.parStore.vc.$refs.dtable.updateNode( {pk:new_parent.pk})
+                           })()''' },
                            {'label':'移到顶层',
                             'click_express':'''
                             var row=scope.ps.vc.rowData;
@@ -152,12 +158,14 @@ class TreeTable(ModelTable):
     
     def dict_head(self, head):
         width = {
-            self.first_field:200,
-            'op':150,
+            self.first_field:300,
+            'op':180,
+            
         }
         head['width'] = width.get(head['name'])
         if head['name']==self.first_field:
-            head['inn_editor']= head['editor']
+            if not head.get('inn_tree_deep_editor'):
+                head['inn_tree_deep_editor']= head['editor']
             head['editor'] = 'com-table-tree-first'
             #head['class']='chuizhi'
             #head['css']='''.chuizhi:first-child{margin-left:23px}'''
