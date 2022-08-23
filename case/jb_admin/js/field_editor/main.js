@@ -48,6 +48,9 @@ import guideHtml from "./guideHtml.vue";
 
 Vue.component('com-field-blocktext',blocktext)
 Vue.component('com-field-radio',radio)
+import checkbox  from "./checkbox.vue";
+Vue.component('com-field-checkbox',checkbox)
+
 Vue.component('com-field-int',int_field)
 Vue.component('com-field-int-bool',int_bool)
 Vue.component('com-field-password',password)
