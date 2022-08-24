@@ -137,7 +137,7 @@ class RowFilter(object):
     names=[]   # 该list中的字段，会经过 map cls 正常流程，进行映射。  除了 extrahead中的字段
     range_fields=[]   
     model=''
-    fields_sort = [] # 现在不用这个了，直接用names作为顺序
+    fields_sort = [] # 排序直接用names作为顺序，如果有些自定义字段不能出现在names中，就需要用到fields_sort来进行排序了。
     icontains=[]   #  该list中的字段，会处理为 com-filter-text类型
     def __init__(self,dc,user,allowed_names,kw={}):
         # 为了让前端不显示
@@ -244,10 +244,11 @@ class RowFilter(object):
         
         out_list = [self.dict_head(head) for head in out_list]
         out_list = [x for x in out_list if x['name'] in send_to_front_names]
-        out_list = sorted(out_list, key= lambda x:  self.names.index(x['name']) if x['name'] in self.names else 10000 )
-        #if self.fields_sort:
-            #out_list = [x for x in out_list if x['name'] in self.fields_sort]
-            #out_list = sorted(out_list, key= lambda x: self.fields_sort.index(x['name']))
+        if not self.fields_sort:
+            out_list = sorted(out_list, key= lambda x:  self.names.index(x['name']) if x['name'] in self.names else 10000 )
+        elif self.fields_sort:
+            out_list = [x for x in out_list if x['name'] in self.fields_sort]
+            out_list = sorted(out_list, key= lambda x: self.fields_sort.index(x['name']))
         
         out_list = evalue_container(out_list)
         
