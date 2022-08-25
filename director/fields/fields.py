@@ -55,6 +55,7 @@ class ModelFields(forms.ModelForm):
     show_pk=False
     nolimit=False
     simple_dict = False
+    allow_delete= False
     @classmethod
     def parse_request(cls,request):
         """
