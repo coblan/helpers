@@ -29,7 +29,7 @@ from helpers.func.collection.ex import findone,find_index
 from helpers.case.jb_admin.uidict import pop_edit_current_row
 class PageNum(object):
     perPage=20
-    def __init__(self,pageNumber=1,perpage=None,kw={}):
+    def __init__(self,pageNumber=1,perpage=None,**kws):
         self.pageNumber = int(pageNumber)
         if perpage:
             self.perPage= int(perpage)
@@ -45,9 +45,10 @@ class PageNum(object):
             self.count = query.count()
         else:
             self.count = countQuery.count()
-        crt_page= max(1,int( self.pageNumber))
-        start = (crt_page -1)*self.perPage
-        end = min(crt_page*self.perPage, self.count)
+        #crt_page= max(1,int( self.pageNumber))
+        #start = (crt_page -1)*self.perPage
+        #end = min(crt_page*self.perPage, self.count)
+        start,end = self.get_slice_index()
         return query[start:end]
         
         # 这里在某些子查询里面会触发group sql，会报错。所以改成简单方式
@@ -59,7 +60,7 @@ class PageNum(object):
     def get_slice_index(self):
         crt_page= max(1,int( self.pageNumber))
         start = (crt_page -1)*self.perPage
-        end = crt_page*self.perPage
+        end = min(crt_page*self.perPage, self.count)
         return start,end
     
     def get_context(self):
@@ -439,7 +440,8 @@ class ModelTable(object):
         if not self.row_search.model:
             self.row_search.model=self.model
         myperpage =  self.kw.get('_perpage',perpage)
-        self.pagenum = self.pagenator(pageNumber=self.page,perpage=myperpage)
+        self.pagenum = self.pagenator(pageNumber=self.page,perpage=myperpage,table=self)
+        # 这个ps暂时不动，但是不能用了。
         self.pagenum.ps = self
         
         self.footer = {}

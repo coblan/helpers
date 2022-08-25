@@ -1,4 +1,4 @@
-from .table import ModelTable,director,RowSort
+from .table import ModelTable,director,RowSort,PageNum
 from django.db.models import Count,F,OuterRef, Subquery,Exists
 
 class TreeTable(ModelTable):
@@ -6,8 +6,16 @@ class TreeTable(ModelTable):
     selectable = False
     parent_null= None
     
-    #class pagenator():
-        #pass
+    class pagenator(PageNum):
+        def __init__(self, pageNumber=1, perpage=None, **kws):
+            super().__init__(pageNumber, perpage, **kws)
+            self.table = kws.get('table')
+            
+        def get_slice_index(self):
+            if self.table.kw.get('search_args').get('par'):
+                return 0,1000
+            else:
+                return super().get_slice_index()
     
     class sort(RowSort):
         general_sort ='pk'
