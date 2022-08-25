@@ -1083,7 +1083,7 @@ class ModelTable(object):
                  'icon':'el-icon-delete',
                  'row_match':'many_row',
                  'disabled':'!scope.ps.has_select', 
-                 'visible': self.permit.can_del() and self.allow_delete ,},
+                 'visible': self.allow_delete  and self.permit.can_del() },
                 refresh_action,
                 ]     
         
