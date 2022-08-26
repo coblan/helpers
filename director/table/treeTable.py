@@ -190,13 +190,29 @@ def get_tree_option(model,label_field):
     for inst in model.objects.all():
         ls.append({'value':inst.pk,'label':getattr(inst,label_field),'parent':inst.parent_id})
     
-    for row in list(ls):
-        row['children'] =[]
+    children_dc = {}
+    for row in ls:
         if row['parent']:
-            ls.remove(row)
-        for item in ls:
-            if item['parent'] == row['value']:
-                row['children'] .append(item)
-        if not row['children']:
-            del row['children']
-    return ls
+            if row['parent'] not in children_dc:
+                children_dc[row['parent']] =[]
+            children_dc[row['parent']] .append(row)
+    for row in ls:
+        if row['value'] in children_dc:
+            row['children'] = children_dc[row['value']]
+    
+    outls =[]
+    for row in ls:
+        if not row['parent']:
+            outls.append(row)
+            
+    
+    #for row in list(ls):
+        #row['children'] =[]
+        #if row['parent']:
+            #ls.remove(row)
+        #for item in ls:
+            #if item['parent'] == row['value']:
+                #row['children'] .append(item)
+        #if not row['children']:
+            #del row['children']
+    return outls
