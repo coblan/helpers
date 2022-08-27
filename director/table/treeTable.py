@@ -19,11 +19,18 @@ class TreeTable(ModelTable):
     
     class sort(RowSort):
         general_sort ='pk'
+    
+    def getRoot(self,query):
+        return None
+    
     def inn_filter(self, query):
         if self.kw.get('par'):
             query  =query.filter(parent_id = self.kw.get('par'))
         else:
-            if self.parent_null != None:
+            root_query = self.getRoot(query)
+            if root_query:
+                query = root_query
+            elif self.parent_null != None:
                 query = query.filter(parent_id = self.parent_null)
             else:
                 query = query.filter(parent__isnull = True)
@@ -47,7 +54,7 @@ class TreeTable(ModelTable):
     
     def getExtraHead(self):
         model_form = director.get(self.get_edit_director_name())
-        if model_form:
+        if model_form and self.permit.can_edit():
             return [
                 {'name':'op',
                  'label':'操作',
@@ -103,30 +110,6 @@ class TreeTable(ModelTable):
                        }
                        func()
                       ''',
-                       
-                       #cfg.show_load();
-                       #ex.director_call("d.delete_query_related",{rows:[scope.ps.vc.rowData]}).then((resp)=>{
-                            #cfg.hide_load();
-                            #if(resp.length>0){
-                                
-                                #return cfg.pop_vue_com("com-pan-delete-query-message",{msg_list:resp,title:"删除关联确认"})
-                            #}else{
-                               #return cfg.confirm("确认删除?")
-                            #}
-                    
-                        #}).then(()=>{
-                                #cfg.show_load()
-                                #return ex.director_call('d.delete_rows',{rows:[scope.ps.vc.rowData]})
-                        #}).then(()=>{
-                                #cfg.hide_load()
-                                #if(scope.ps.vc.rowData.parent){
-                                    #scope.ps.vc.parStore.vc.$refs.dtable.updateNode( {pk:scope.ps.vc.rowData.parent})
-                                #}else{
-                                    #scope.ps.vc.parStore.vc.search()
-                                #}
-                                         #});
-                       
-                       
                        },
                       {'editor':'com-btn-drop',
                        'label':'更多',
@@ -134,6 +117,10 @@ class TreeTable(ModelTable):
                        'menu':[
                            {'label':'剪切','click_express':'var row=scope.ps.vc.rowData;window.cut_data=row;cfg.toast("剪切成功")'},
                            {'label':'粘贴','click_express':'''( async ()=>{
+                               if(!window.cut_data){
+                                    cfg.toast("先执行剪切操作,才能粘贴")
+                                    return
+                               }
                                 var row = window.cut_data;
                                 var old_parent_pk = row.parent
                                 var new_parent=scope.ps.vc.rowData;
@@ -146,6 +133,7 @@ class TreeTable(ModelTable):
                                  scope.ps.vc.parStore.vc.$refs.dtable.updateNode( {pk:old_parent_pk})
                                  new_parent.hasChildren=true
                                  scope.ps.vc.parStore.vc.$refs.dtable.updateNode( {pk:new_parent.pk})
+                                 window.cut_data =null
                            })()''' },
                            {'label':'移到顶层',
                             'click_express':'''
@@ -185,10 +173,15 @@ class TreeTable(ModelTable):
         }    
     
 
-def get_tree_option(model,label_field):
+def get_tree_option(model,label_field,par=None):
     ls = []
-    for inst in model.objects.all():
-        ls.append({'value':inst.pk,'label':getattr(inst,label_field),'parent':inst.parent_id})
+    if par:
+        ls.append({'value':par.pk,'label':getattr(par,label_field),'parent':None}) 
+        for inst in model.objects.filter(parent=par):
+            ls.append({'value':inst.pk,'label':getattr(inst,label_field),'parent':inst.parent_id})        
+    else:
+        for inst in model.objects.all():
+            ls.append({'value':inst.pk,'label':getattr(inst,label_field),'parent':inst.parent_id})
     
     children_dc = {}
     for row in ls:

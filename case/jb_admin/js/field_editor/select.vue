@@ -19,6 +19,7 @@
                         :value="item.value">
                 </el-option>
             </el-select>
+          <i v-if="head.add_express" @click="onAddNew" title="新建" class="el-icon-circle-plus" style="color: #0aa938;cursor: pointer"></i>
         </div>
     </div>
 </template>
@@ -212,6 +213,9 @@
             },
         },
         methods:{
+          onAddNew(){
+              ex.eval(this.head.add_express,{vc:this,row:this.row,head:this.head})
+          },
             update_options:function(post_data){
               // 废弃， 使用 mounted_express 替代
                 var self=this
