@@ -450,23 +450,3 @@ page_dc.update({
     'jb_group':GroupPage
 })
 
-def user_write(): 
-    model = User
-    fields = model._meta.get_fields()
-    permit = {
-        'read': [f.name for f in fields],
-        'write': [f.name for f in fields if f.name != 'is_superuser'],
-        '_can_create': True,
-        '_can_delete': True,
-    } 
-    return json.dumps(permit)
-
-
-
-permits = [('User.write', user_write(), model_to_name(User) , 'model'), 
-           ('User.read', model_read_permit(User), model_to_name(User) , 'model'), 
-           ('Group', model_read_permit(Group), model_to_name(Group) , 'model'), 
-           ('Group.edit', model_full_permit(Group), model_to_name(Group) , 'model'), 
-           ]
-
-add_permits(permits)
