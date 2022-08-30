@@ -187,7 +187,9 @@ class GroupPage(TablePage):
         
         def getExtraHead(self):
             return [
+                {'name':'group_desp','label':'描述'},
                 {'name':'user_count','label':'用户数'},
+                
             ]
         
         def get_operation(self):
@@ -215,31 +217,11 @@ class GroupPage(TablePage):
                  }) ''' },
             ]
             return ops
-        
-        #def dict_head(self, head):
-            
-            #if head['name']=='name':
-                #groupform = GroupForm(crt_user=self.crt_user)
-                #head['editor']='com-table-pop-fields'
-                #head['get_row']={
-                    #"fun":'use_table_row'
-                #}
-                #head['fields_ctx']=groupform.get_head_context()
-                #head['after_save']={
-                    ##'fun':'do_nothing'
-                    #'fun':'update_or_insert'
-                #}  
-                #head['width'] = 200
-                ##head['ops']=groupform.get_operations()
 
-            ##if head['name']=='permissions':
-                ##head['editor'] = 'com-field-ele-tree-name-layer'
-                
-            #return head
-            
         def dict_head(self, head):
             width = {
-                'name':300
+                'name':300,
+                'group_desp':400,
             }
             if head['name'] in width:
                 head['width'] = width.get(head['name'])
@@ -263,7 +245,8 @@ class GroupPage(TablePage):
             else:
                 dc['permit']=[]
             dc.update({
-                'user_count':inst.user_count
+                'user_count':inst.user_count,
+                'group_desp':inst.permitmodel.desp,
             })
             return dc
 
@@ -351,6 +334,9 @@ class GroupForm(ModelFields):
                 {'par_event':'permit_options_changed','express':'scope.vc.refresh(scope.event)'},
             ]
         })
+        heads+= [
+            {'name':'group_desp','label':'权限组描述','editor':'com-field-blocktext'},
+        ]
         return heads    
     
     def get_row(self):
@@ -359,13 +345,19 @@ class GroupForm(ModelFields):
             row['permit']=[x for x in self.instance.permitmodel.names.split(';')]
         else:
             row['permit']=[]
+        if hasattr(self.instance,'permitmodel'):
+            row.update({
+                'group_desp': self.instance.permitmodel.desp
+            })
         return row   
     
     def clean_save(self):
         self.instance.save()
         
         if not hasattr(self.instance, 'permitmodel'):
-            PermitModel.objects.create(group = self.instance)
+            self.instance.permitmodel = PermitModel.objects.create(group = self.instance)
+        self.instance.permitmodel.desp = self.kw.get('group_desp','')
+        self.instance.permitmodel.save()
         if self.kw.get('permit',None) != None:
             before = {
                 'permit':self.instance.permitmodel.names
