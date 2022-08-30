@@ -16,8 +16,6 @@
         <dparent :parents="parents" @click-parent="getChilds($event)"></dparent>
       <slot v-bind:rows="tableRows">
         <div class="table-area"  style="margin-bottom: 0">
-            <!--flex-v flex-grow-->
-            <!--<div class="table-wraper flex-grow" >-->
                 <dtable ref="dtable" class="my-d-table"
                         :heads="tableHeads"
                         :adviseHeads="adviseHeads"
@@ -32,7 +30,6 @@
                         :autoHeight="autoHeight"
                         :fitWidth="fitWidth"
                         :row-sort="rowSort" ></dtable>
-            <!--</div>   :search-args="searchArgs"-->
         </div>
       </slot>
         <dpagination v-if="hasPagination" :row-pages="rowPages" @goto-page="search_page($event)" :search-args="searchArgs"></dpagination>
@@ -310,6 +307,7 @@ import { ref, reactive,computed ,onMounted,getCurrentInstance } from '@vue/compo
   &.com-d-table{
     height: 100%;
   }
+
   .table-area{
       position: relative;
       border-radius: 5px;
@@ -319,6 +317,7 @@ import { ref, reactive,computed ,onMounted,getCurrentInstance } from '@vue/compo
       margin-bottom: 20px;
       width: 100%;
       flex-grow: 10;
+
       .my-d-table{
         position: absolute;
         top:0;
@@ -326,8 +325,6 @@ import { ref, reactive,computed ,onMounted,getCurrentInstance } from '@vue/compo
         bottom: 0;
         right:0;
       }
-    //-moz-box-shadow:0px -3px 5px #f4f4f4;; -webkit-box-shadow:0px -3px 5px #f4f4f4;; box-shadow:0px -3px 5px #f4f4f4;
-    //box-shadow: 0 1px 1px rgb(0 0 0 / 10%);
   }
 }
 
