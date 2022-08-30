@@ -273,7 +273,7 @@ class GroupExport(object):
             query = Group.objects.all()
         outls = []
         for inst in query.annotate(permit=F('permitmodel__names')):
-            outls.append({'id':inst.pk,'name':inst.name,'permit':inst.permit})
+            outls.append({'id':inst.pk,'name':inst.name,'permit':inst.permit,'desp':inst.permitmodel.desp})
             #PermitModel
         return outls
     
@@ -284,6 +284,7 @@ class GroupExport(object):
             inst.save()
             p_inst , is_created = PermitModel.objects.get_or_create(group= inst)
             p_inst.names = group.get('permit','')
+            p_inst.desp = group.get('desp','')
             p_inst.save()
             
         
