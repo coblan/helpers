@@ -20,14 +20,14 @@ class TreeTable(ModelTable):
     class sort(RowSort):
         general_sort ='pk'
     
-    def getRoot(self,query):
+    def getRootQuery(self,query):
         return None
     
     def inn_filter(self, query):
         if self.kw.get('par'):
             query  =query.filter(parent_id = self.kw.get('par'))
         else:
-            root_query = self.getRoot(query)
+            root_query = self.getRootQuery(query)
             if root_query:
                 query = root_query
             elif self.parent_null != None:
