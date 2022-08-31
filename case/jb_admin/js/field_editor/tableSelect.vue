@@ -1,8 +1,8 @@
 <template>
-  <div>
+  <div class="table-select">
 <!--    <el-button size="mini">选择</el-button>-->
     <div style="display: inline-block;padding: 0 5px" v-for="row in selected_rows" :title="row.desp">
-      <el-tag>{{row._label}}</el-tag>
+      <el-tag size="small">{{row._label}}</el-tag>
     </div>
 
     <i class="el-icon-edit clickable" @click="openTable"></i>
@@ -40,3 +40,16 @@ export default {
 
 }
 </script>
+<style scoped lang="scss">
+.table-select{
+  background-color: white;
+  width: 23rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  min-height: 32px;
+  border: 1px solid #eeeded;
+  border-radius: 3px;
+  row-gap: 10px;
+}
+</style>
