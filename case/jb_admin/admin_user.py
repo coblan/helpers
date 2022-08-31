@@ -110,7 +110,7 @@ class UserFields(ModelFields):
             #head['multiple'] = True
             head['editor'] = 'com-field-table-select'
             head['table_heads'] =[{'name':'name','label':'权限组','width':'150px'},
-                                  {'name':'group_desp','label':'描述','pre':True}]
+                                  {'name':'desp','label':'描述','pre':True}]
             head['table_rows'] = GroupPage.tableCls().get_rows()
             head['order'] = 100
             
@@ -202,7 +202,7 @@ class GroupPage(TablePage):
         
         def getExtraHead(self):
             return [
-                {'name':'group_desp','label':'描述','editor':'com-table-pre'},
+                {'name':'desp','label':'描述','editor':'com-table-pre'},
                 {'name':'user_count','label':'用户数'},
                 
             ]
@@ -236,7 +236,7 @@ class GroupPage(TablePage):
         def dict_head(self, head):
             width = {
                 'name':300,
-                'group_desp':400,
+                'desp':400,
             }
             if head['name'] in width:
                 head['width'] = width.get(head['name'])
@@ -261,7 +261,7 @@ class GroupPage(TablePage):
                 dc['permit']=[]
             dc.update({
                 'user_count':inst.user_count,
-                'group_desp':inst.permitmodel.desp,
+                'desp':inst.permitmodel.desp,
             })
             return dc
 
@@ -351,7 +351,7 @@ class GroupForm(ModelFields):
             ]
         })
         heads+= [
-            {'name':'group_desp','label':'权限组描述','editor':'com-field-blocktext'},
+            {'name':'desp','label':'权限组描述','editor':'com-field-blocktext'},
         ]
         return heads    
     
@@ -363,7 +363,7 @@ class GroupForm(ModelFields):
             row['permit']=[]
         if hasattr(self.instance,'permitmodel'):
             row.update({
-                'group_desp': self.instance.permitmodel.desp
+                'desp': self.instance.permitmodel.desp
             })
         return row   
     
@@ -372,7 +372,7 @@ class GroupForm(ModelFields):
         
         if not hasattr(self.instance, 'permitmodel'):
             self.instance.permitmodel = PermitModel.objects.create(group = self.instance)
-        self.instance.permitmodel.desp = self.kw.get('group_desp','')
+        self.instance.permitmodel.desp = self.kw.get('desp','')
         self.instance.permitmodel.save()
         if self.kw.get('permit',None) != None:
             before = {

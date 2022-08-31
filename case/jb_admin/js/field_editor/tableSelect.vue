@@ -1,8 +1,13 @@
 <template>
   <div>
 <!--    <el-button size="mini">选择</el-button>-->
+    <div style="display: inline-block;padding: 0 5px" v-for="row in selected_rows" :title="row.desp">
+      <el-tag>{{row._label}}</el-tag>
+    </div>
+
     <i class="el-icon-edit clickable" @click="openTable"></i>
-    <simTable v-if="selected_rows.length>0" :heads="head.table_heads" :rows="selected_rows" :showHead="true"></simTable>
+
+<!--    <simTable v-if="selected_rows.length>0" :heads="head.table_heads" :rows="selected_rows" :showHead="true"></simTable>-->
   </div>
 </template>
 <script>
