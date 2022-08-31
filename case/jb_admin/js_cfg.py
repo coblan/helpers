@@ -175,8 +175,13 @@ def get_lib(request):
                 'bootstrap_css': 'https://lib.baomitu.com/twitter-bootstrap/3.3.7/css/bootstrap.min.css',
                 'bootstrap': 'https://lib.baomitu.com/twitter-bootstrap/3.3.7/js/bootstrap.min.js',
                 
-                'layer':'https://lib.baomitu.com/layer/3.1.1/layer.min.js',#  'https://lf6-cdn-tos.bytecdntp.com/cdn/expire-1-M/layer/3.1.1/layer.min.js',
-                'layer_css': 'https://lib.baomitu.com/layer/3.1.1/mobile/need/layer.min.css',# 'https://lf9-cdn-tos.bytecdntp.com/cdn/expire-1-M/layer/3.1.1/mobile/need/layer.min.css', 
+                #'layer':'https://lib.baomitu.com/layer/3.1.1/layer.min.js',#  'https://lf6-cdn-tos.bytecdntp.com/cdn/expire-1-M/layer/3.1.1/layer.min.js',
+                #'layer_css': 'https://lib.baomitu.com/layer/3.1.1/mobile/need/layer.min.css',# 'https://lf9-cdn-tos.bytecdntp.com/cdn/expire-1-M/layer/3.1.1/mobile/need/layer.min.css', 
+                
+                'layer':'https://s1.pstatp.com/cdn/layer/3.5.1/layer.min.js',
+                'layer_css': 'https://s1.pstatp.com/cdn/layer/3.5.1/theme/default/layer.min.css',
+                
+                
                 'nice_validator':'https://lib.baomitu.com/nice-validator/1.1.4/jquery.validator.min.js?local=zh-CN',# 'https://lf9-cdn-tos.bytecdntp.com/cdn/expire-1-M/nice-validator/1.1.4/jquery.validator.min.js?local=zh-CN',
                 'nice_validator_css':'https://lib.baomitu.com/nice-validator/1.1.4/jquery.validator.min.css',# 'https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/nice-validator/1.1.4/jquery.validator.min.css',
                 'adminlte': 'https://lib.baomitu.com/admin-lte/2.4.18/js/adminlte.min.js',# 'https://lf26-cdn-tos.bytecdntp.com/cdn/expire-1-y/admin-lte/2.4.10/js/adminlte.min.js',
