@@ -83,7 +83,18 @@ class UserPage(TablePage):
                     #{'name':'groups__name','label':'权限分组','show':'!scope.ps.search_args.groups_id'}
                 #]
         
-            
+@director_element('group.select')
+class GroupSelect(ModelTable):
+    model = Group
+    exclude=[]
+    def get_operations(self):
+        return [
+            {'name':'sss','label':'确定',
+             'editor':'com-btn',
+             'type':'success',
+             'click_express':'var ps=ex.vueParStore(scope.ps.vc,{name:"com-backend-table"}); ps.vc.$emit("finish",scope.ps.vc.selected)'},
+        ]
+  
 class UserFields(ModelFields):
     "具有权限性的创建和修改用户资料"
     hide_fields = ['date_joined']
@@ -95,10 +106,14 @@ class UserFields(ModelFields):
     def dict_head(self, head):
         if head['name']=='groups':
             head['label']='权限分组'
-            #head['editor']='field_multi_chosen'
-            #head['editor'] = 'com-field-multi-chosen'
-            head['editor'] = 'com-field-select'
-            head['multiple'] = True
+            #head['editor'] = 'com-field-select'
+            #head['multiple'] = True
+            head['editor'] = 'com-field-table-select'
+            head['table_heads'] =[{'name':'name','label':'权限组','width':'150px'},
+                                  {'name':'group_desp','label':'描述','pre':True}]
+            head['table_rows'] = GroupPage.tableCls().get_rows()
+            head['order'] = 100
+            
         if head['name'] == 'username':
             head['label']='账号'
             head['help_text'] = '作为登录账号,只能填写字母,数字或者下划线(_),长度为2~50'
@@ -187,7 +202,7 @@ class GroupPage(TablePage):
         
         def getExtraHead(self):
             return [
-                {'name':'group_desp','label':'描述'},
+                {'name':'group_desp','label':'描述','editor':'com-table-pre'},
                 {'name':'user_count','label':'用户数'},
                 
             ]

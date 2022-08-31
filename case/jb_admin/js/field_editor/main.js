@@ -85,6 +85,11 @@ Vue.component('com-field-js-editor', async (resolve, reject) =>{
     await ex.load_js(cfg.js_lib.ace_javascript)
     resolve(jsEditor)
 })
+// import tableSelect from './tableSelect.vue'
+Vue.component('com-field-table-select', async (resolve, reject) =>{
+    var com = await import(/* webpackChunkName: 'fields_import' */'./tableSelect.vue')
+    resolve(com.default)
+})
 
 Vue.component('com-field-hour-and-minute', async (resolve, reject) =>{
     var com = await import(/* webpackChunkName: 'fields_import' */'./houreAndMinute.vue')

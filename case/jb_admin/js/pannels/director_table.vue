@@ -244,11 +244,6 @@ import { ref, reactive,computed ,onMounted,getCurrentInstance } from '@vue/compo
                 childStore: logic.setParStore(vc) //childStore,
             }
         },
-        mounted(){
-//            this.$nextTick(()=>{
-//                this.childStore.selected = this.$refs.dtable.selected
-//            })
-        },
         computed:{
             seach_label(){
                 return cfg.tr.search
