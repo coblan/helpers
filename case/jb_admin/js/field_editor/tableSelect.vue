@@ -24,13 +24,26 @@ export default {
     }
   },
   mounted(){
-    var list = this.row[this.head.name] || []
-    this.selected_rows = ex.map(list,item_id=>{
-      var one= ex.findone(this.head.table_rows,{id:item_id})
-      return one
-    })
+    this.updateSelect()
+  },
+  computed:{
+      out_value(){
+        return this.row[this.head.name]
+      }
+  },
+  watch:{
+    out_value(){
+      this.updateSelect()
+    }
   },
   methods:{
+    updateSelect(){
+      var list = this.row[this.head.name] || []
+      this.selected_rows = ex.map(list,item_id=>{
+        var one= ex.findone(this.head.table_rows,{id:item_id})
+        return one
+      })
+    },
      async openTable(){
       var rows = await cfg.pop_vue_com(popTable,{heads:this.head.table_heads,rows:this.head.table_rows,selected:this.selected_rows})
        this.selected_rows = rows

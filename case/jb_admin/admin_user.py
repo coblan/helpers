@@ -10,9 +10,10 @@ from django.utils.translation import ugettext as _
 from helpers.director.shortcut import model_to_name, model_full_permit, add_permits, model_read_permit,RowSearch
 from django.db.models import Count,F
 import json
+from helpers.director.access.permit import user_permit_names,group_permit
 # Register your models here.
 class UserPage(TablePage):
-    template='jb_admin/table.html'
+    template='jb_admin/table_new.html'
     def get_label(self): 
         return _('User')
     
@@ -94,7 +95,31 @@ class GroupSelect(ModelTable):
              'type':'success',
              'click_express':'var ps=ex.vueParStore(scope.ps.vc,{name:"com-backend-table"}); ps.vc.$emit("finish",scope.ps.vc.selected)'},
         ]
-  
+
+
+def user_group_options(user):
+    out = []
+    if user.is_superuser:
+        for group in Group.objects.select_related('permitmodel').all():
+            out.append({
+              'id':group.id,
+              'name':group.name,
+              'desp':group.permitmodel.desp,
+              '_label':group.name
+            })
+    else:
+        names = list( user_permit_names(user) )
+        for group in Group.objects.select_related('permitmodel').all():
+            group_names = set(  group_permit(group) )
+            if  not group_names.difference(names):
+                out.append({
+                    'id':group.id,
+                    'name':group.name,
+                    'desp':group.permitmodel.desp,
+                    '_label':group.name
+                })
+    return out
+
 class UserFields(ModelFields):
     "具有权限性的创建和修改用户资料"
     hide_fields = ['date_joined']
@@ -111,7 +136,9 @@ class UserFields(ModelFields):
             head['editor'] = 'com-field-table-select'
             head['table_heads'] =[{'name':'name','label':'权限组','width':'150px'},
                                   {'name':'desp','label':'描述','pre':True}]
-            head['table_rows'] = GroupPage.tableCls().get_rows()
+            head['table_rows'] =user_group_options(self.crt_user) #GroupPage.tableCls().get_rows()
+          
+            
             head['order'] = 100
             
         if head['name'] == 'username':
