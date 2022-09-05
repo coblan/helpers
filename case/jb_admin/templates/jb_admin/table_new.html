@@ -16,6 +16,7 @@
     option= {{ option | jsonify }}
     table_layout={{ table_layout | jsonify }}
     selectable = {{ selectable | jsonify }}
+    tableClass = "{{tableClass | default:'grey-head' }}"
     // 这个变量留着，兼容老的调用。。准备把它移除
 //    tabs={{ tabs | jsonify | default:'[]' }}
 //    named_tabs={{ named_tabs | jsonify | default:'{}' }}
@@ -41,6 +42,7 @@
                 footer:footer,
                 ops:ops,
                 search_args:search_args,
+                tableClass:tableClass,
                 //---------table_page---------
                 tab_stack:[],
 //                tabs:tabs,
@@ -221,6 +223,7 @@
                      :parents="childStore.parents"
                      :search-args="childStore.search_args"
                      :selectable="selectable"
+                     :table-class="childStore.tableClass"
                      :fit-width="fitWidth"
                     ></com-d-table>
 
