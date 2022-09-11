@@ -150,10 +150,12 @@ class RowFilter(object):
         
         #self._names=[x for x in self.names if x in allowed_names]        
         self.filter_args={}
+        
+        # [compare]过滤组件后端逻辑
         for k in self.total_names:
             compare_name = '_%s_compare'%k
             v = dc.pop(k,'')
-            if compare_name in kw:
+            if v and compare_name in kw:
                 cv = str( kw.get(compare_name) )
                 if cv == '0':
                     self.filter_args[k] =v
