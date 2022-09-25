@@ -29,7 +29,7 @@ from helpers.func.collection.ex import findone,find_index
 from helpers.case.jb_admin.uidict import pop_edit_current_row
 class PageNum(object):
     perPage=20
-    def __init__(self,pageNumber=1,perpage=None,kw={}):
+    def __init__(self,pageNumber=1,perpage=None,**kws):
         self.pageNumber = int(pageNumber)
         if perpage:
             self.perPage= int(perpage)
@@ -45,9 +45,10 @@ class PageNum(object):
             self.count = query.count()
         else:
             self.count = countQuery.count()
-        crt_page= max(1,int( self.pageNumber))
-        start = (crt_page -1)*self.perPage
-        end = min(crt_page*self.perPage, self.count)
+        #crt_page= max(1,int( self.pageNumber))
+        #start = (crt_page -1)*self.perPage
+        #end = min(crt_page*self.perPage, self.count)
+        start,end = self.get_slice_index()
         return query[start:end]
         
         # 这里在某些子查询里面会触发group sql，会报错。所以改成简单方式
@@ -59,7 +60,7 @@ class PageNum(object):
     def get_slice_index(self):
         crt_page= max(1,int( self.pageNumber))
         start = (crt_page -1)*self.perPage
-        end = crt_page*self.perPage
+        end = min(crt_page*self.perPage, self.count)
         return start,end
     
     def get_context(self):
@@ -137,7 +138,7 @@ class RowFilter(object):
     names=[]   # 该list中的字段，会经过 map cls 正常流程，进行映射。  除了 extrahead中的字段
     range_fields=[]   
     model=''
-    fields_sort = []
+    fields_sort = [] # 排序直接用names作为顺序，如果有些自定义字段不能出现在names中，就需要用到fields_sort来进行排序了。
     icontains=[]   #  该list中的字段，会处理为 com-filter-text类型
     def __init__(self,dc,user,allowed_names,kw={}):
         # 为了让前端不显示
@@ -149,10 +150,12 @@ class RowFilter(object):
         
         #self._names=[x for x in self.names if x in allowed_names]        
         self.filter_args={}
+        
+        # [compare]过滤组件后端逻辑
         for k in self.total_names:
             compare_name = '_%s_compare'%k
             v = dc.pop(k,'')
-            if compare_name in kw:
+            if v and compare_name in kw:
                 cv = str( kw.get(compare_name) )
                 if cv == '0':
                     self.filter_args[k] =v
@@ -244,7 +247,9 @@ class RowFilter(object):
         
         out_list = [self.dict_head(head) for head in out_list]
         out_list = [x for x in out_list if x['name'] in send_to_front_names]
-        if self.fields_sort:
+        if not self.fields_sort:
+            out_list = sorted(out_list, key= lambda x:  self.names.index(x['name']) if x['name'] in self.names else 10000 )
+        elif self.fields_sort:
             out_list = [x for x in out_list if x['name'] in self.fields_sort]
             out_list = sorted(out_list, key= lambda x: self.fields_sort.index(x['name']))
         
@@ -340,11 +345,36 @@ class RowSort(object):
                 query = query.order_by(*ls)
         else:
             if not query.ordered and not query._fields and self.general_sort: # 如果这个为空，才能弄一个默认排序，否则造成聚合函数无效
-                query = query.order_by(self.general_sort)
+                norm_name,direction = adapt_field_name(self.general_sort)
+                if norm_name in self.chinese_words:
+                    query = query_chinese_words(norm_name,direction,query)
+                else:
+                    query = query.order_by(self.general_sort)
 
         return query
 
-  
+def query_chinese_words(norm_name,direction,query):
+    engine= settings.DATABASES.get(query.db)['ENGINE'] 
+
+    if engine == 'django.contrib.gis.db.backends.postgis':
+        # postgresql 注意，postgre的默认中文排序，好像是按照拼音来的（如果这样的话，下面这句程序就没用了。），待以后确认
+        query= query.extra(select={'converted_%s'%norm_name: "convert_to(%s,'GBK')"%norm_name},order_by=['%sconverted_%s'%(direction,norm_name)])
+    else:
+        # mysql 按照拼音排序
+        query= query.extra(select={'converted_%s'%norm_name: 'CONVERT(%s USING gbk)'%norm_name},order_by=['%sconverted_%s'%(direction,norm_name)])  
+    return query
+
+
+def adapt_field_name(name):
+    if name.startswith('-'):
+        norm_name=name.lstrip('-')
+        direction='-'
+    else:
+        norm_name=name
+        direction='' 
+    return norm_name,direction
+
+
 class ModelTable(object):
     """
     
@@ -380,8 +410,11 @@ class ModelTable(object):
     nolimit = False
     simple_dict = False
     export_related = True
+    exclude_export_related =[]  # 有些外键有问题，例如用0作为null，所以这是不用用select_related导出，否则会出现空数据。
     button_edit = False
     allow_delete = False
+    fitWidth = False
+    
     def __init__(self,page=1,row_sort=[],row_filter={},row_search= '',crt_user=None,perpage=None,**kw):
         """
         kw['search_args']只是一个记录，在获取到rows时，一并返回前端页面，便于显示。
@@ -409,7 +442,8 @@ class ModelTable(object):
         if not self.row_search.model:
             self.row_search.model=self.model
         myperpage =  self.kw.get('_perpage',perpage)
-        self.pagenum = self.pagenator(pageNumber=self.page,perpage=myperpage)
+        self.pagenum = self.pagenator(pageNumber=self.page,perpage=myperpage,table=self)
+        # 这个ps暂时不动，但是不能用了。
         self.pagenum.ps = self
         
         self.footer = {}
@@ -486,6 +520,12 @@ class ModelTable(object):
         ops = self.get_operation()
         ops = evalue_container(ops)
         
+        # 这样写，为了不影响这种写法: {fitWidth:True,**Mytab().get_head_context() }
+        dc = {}
+        if self.fitWidth:
+            dc.update({
+                'fitWidth':True
+            })
         return {
             'heads':self.get_heads(),
             'rows': [], #self.get_rows(),
@@ -498,7 +538,8 @@ class ModelTable(object):
             'director_name': self.get_director_name(),#model_to_name(self.model),
             'ops' : ops, 
             'selectable': self.selectable,
-            'event_slots':self.get_event_slots()
+            'event_slots':self.get_event_slots(),
+            **dc
         }  
     
     def get_context(self):
@@ -827,7 +868,8 @@ class ModelTable(object):
         pass
     
     def getCountQuery(self,query):
-        return None
+        return getattr(self,'count_query',None)
+        #return None
     
     def get_rows(self):
         """
@@ -907,7 +949,7 @@ class ModelTable(object):
     def get_query(self):
         if self.nolimit:
             pass
-        elif not self.crt_user.is_authenticated:
+        elif not self.crt_user.is_authenticated():
             raise  UnAuth401Exception('no permission to browse %s ,Please login first' % self.model._meta.model_name)
         elif not self.crt_user.is_superuser and not self.permit.readable_fields():
             raise PermissionDenied('user %s ,no permission to browse %s'% ( self.crt_user.username, self.model._meta.model_name))
@@ -918,13 +960,15 @@ class ModelTable(object):
         if self.exclude:
             query = query.defer(*self.exclude)
         
+        query = self.inn_filter(query)
+        #[count-] 有时单独计算count，效率很高。
         count_query = self.getCountQuery(query)
         if count_query != None:
             self.row_filter.get_query(count_query)
             self.row_search.get_query(count_query)
-            self.count_query=count_query    
-            
-        query = self.inn_filter(query)
+            self.count_query=count_query 
+        # [-count]
+
         query=self.row_filter.get_query(query)
         query=self.row_search.get_query(query)
         
@@ -934,7 +978,7 @@ class ModelTable(object):
         #[todo] 这里需要弄清楚原理
         #[todo_已经完成] 优化，是否select_related,select_related的field限定在输出的head中
         if not query._fields and self.export_related:  # 如果这个属性部位空，证明已经调用了.values() or .values_list()
-            head_nams = [x['name'] for x in self.get_light_heads()]
+            head_nams = [x['name'] for x in self.get_light_heads() if x['name'] not in self.exclude_export_related]
             for f in self.model._meta.get_fields():
                 if f.name in head_nams and isinstance(f, (models.ForeignKey,models.OneToOneField)):
                     query = query.select_related(f.name)        
@@ -1006,15 +1050,33 @@ class ModelTable(object):
                 {'name':'delete_selected',
                  'editor':'com-btn',
                  'label':_('删除'),
-                 'click_express':'''cfg.show_load();ex.director_call("d.delete_query_related",{rows:scope.ps.selected}).then((resp)=>{
+                 'click_express':'''(async ()=>{
+                     cfg.show_load();
+                     var resp = await ex.director_get("d.delete_query_related",{rows:scope.ps.selected})
                      cfg.hide_load();
+                     var confirm_delete = true;
                      if(resp.length>0){
-                         cfg.pop_vue_com("com-pan-delete-query-message",{msg_list:resp,genStore:scope.ps,title:"删除关联确认"})
-                     }else{
+                         confirm_delete = await cfg.pop_vue_com("com-pan-delete-query-message",{msg_list:resp,title:"删除关联确认"})
+                     }
+                     if(confirm_delete){
                         scope.ps.delete_selected()
                      }
+                     
+                 } )()
+                 ''' ,
+                 
+                 #'''
+                   #cfg.show_load();ex.director_call("d.delete_query_related",{rows:scope.ps.selected}).then((resp)=>{
+                     #cfg.hide_load();
+                     #if(resp.length>0){
+                         #cfg.pop_vue_com("com-pan-delete-query-message",{msg_list:resp,genStore:scope.ps,title:"删除关联确认"})
+                     #}else{
+                        #scope.ps.delete_selected()
+                     #}
                     
-                 });  ''' ,
+                 #});
+                 #'''
+                 
                  # if(scope.ps.check_selected(scope.head)){scope.ps.delete_selected()}
                  #'style': 'color:red',
                  #'icon': 'fa-times',
@@ -1023,7 +1085,7 @@ class ModelTable(object):
                  'icon':'el-icon-delete',
                  'row_match':'many_row',
                  'disabled':'!scope.ps.has_select', 
-                 'visible': self.permit.can_del() and self.allow_delete ,},
+                 'visible': self.allow_delete  and self.permit.can_del() },
                 refresh_action,
                 ]     
         

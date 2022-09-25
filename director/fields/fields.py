@@ -55,6 +55,7 @@ class ModelFields(forms.ModelForm):
     show_pk=False
     nolimit=False
     simple_dict = False
+    allow_delete= False
     @classmethod
     def parse_request(cls,request):
         """
@@ -387,7 +388,7 @@ class ModelFields(forms.ModelForm):
                 'type':'primary',
                 'icon':'el-icon-receiving',
                 'label':'保存', 
-                'action':'scope.ps.vc.submit()'
+                'click_express':'scope.ps.vc.submit()'
                 #'icon': 'fa-save',
                 #'class':'btn btn-info btn-sm',
             },
@@ -396,6 +397,42 @@ class ModelFields(forms.ModelForm):
                 #'name':'save_and_return','editor':'com-field-op-btn','label':'保存后返回','icon':'fa-share-square','show':'scope.vc.back',
                 #'class':'btn btn-sm','action':'scope.vc.submit().then((row)=>{ scope.vc.back()})'
                 #}
+            ]
+        if self.allow_delete and self.permit.can_del():
+            ls += [
+                {
+                'name':'delete',
+                'editor':'com-btn',
+                'type':'danger',
+                'icon':'el-icon-delete',
+                'label':'删除', 
+                'click_express':'''(async ()=>{
+                      cfg.show_load();
+                      var resp = await ex.director_call("d.delete_query_related",{rows:[scope.ps.vc.row]})
+                      cfg.hide_load();
+                      if(resp.length>0){
+                            cfg.pop_vue_com("com-pan-delete-query-message",{msg_list:resp,genStore:scope.ps,title:"删除关联确认"})
+                       }else{
+                            await cfg.confirm(`确认删除[${scope.ps.vc.row._label}]?`)
+                            cfg.show_load()
+                            await ex.director_call("d.delete_row",{row:scope.ps.vc.row})
+                            cfg.hide_load()
+                            cfg.toast("删除成功")
+                       }
+                       // tab形式的
+                       var ps = ex.vueParStore(scope.ps.vc,{name:'com-widget-el-tab'})
+                       if(ps){
+                            var tab_table = ps.vc.ctx.genVc
+                            tab_table.search()
+                            cfg.switch_back()
+                       }
+                      
+                })()
+                ''',
+                'show_express':'scope.row.pk'
+                #'icon': 'fa-save',
+                #'class':'btn btn-info btn-sm',
+                      },
             ]
         return ls
     

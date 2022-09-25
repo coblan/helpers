@@ -1,3 +1,4 @@
+
 require('./scss/cfg.scss')
 // require('weblib/style')
 // require('weblib/pc/style')
@@ -234,7 +235,7 @@ var cfg={
         },...funclist);
         cfg.layer_index_stack.push(index);
     },
-    switch_to_tab(kws,last_ps){
+    switch_to_tab(kws){
         // 从 table_page_store 移过来的。因为 live_table 可能有这个需求
         var self=this
         var tabs=named_ctx[kws.ctx_name]
@@ -246,16 +247,19 @@ var cfg={
         if(!kws.tab_name || !canfind ){
             kws.tab_name = tabs[0].name
         }
-
         if(window.root_live){
             // keeplive 页面
             root_live.open_live(live_el_tab,{tabs:tabs,
-                title:kws.par_row._label,crt_tab_name:kws.tab_name,par_row:kws.par_row,
+                title:kws.par_row._label,
+                crt_tab_name:kws.tab_name,
+                par_row:kws.par_row,
                 type:kws.type,
                 top_editor: kws.top_editor,
                 top_ctx: kws.top_ctx,
-                last_ps:last_ps})
+                last_ps:kws.last_ps,
+                genVc:kws.genVc})
         }else{
+            // 这个应该是用在 table_new.html中的
             root_store.$emit('switch-to-tab',{
                 widget:'com-widget-el-tab' ,
                 tabs:tabs,
@@ -264,7 +268,17 @@ var cfg={
                 type:kws.type,
                 top_editor: kws.top_editor,
                 top_ctx: kws.top_ctx,
+                genVc:kws.genVc
             })
+        }
+    },
+    switch_back(){
+        // 这里很混乱，root_live只存在于live.html中，而live_root存在于live.html和table_new.html中
+        if(window.root_live){
+            var com = window.live_root.stack.pop()
+            Vue.delete(window.live_root.$options.components,com)
+        }else{
+            window.live_root.childStore.tab_stack.pop()
         }
     }
 }

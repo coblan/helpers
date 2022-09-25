@@ -19,6 +19,7 @@
             :fitWidth="ctx.fitWidth"
             :opMergeCount="ctx.opMergeCount"
             ref="dtable"
+            @search="$emit('search')"
     >
 
       <template v-slot:default="slotprops">
@@ -36,15 +37,34 @@
         },
         props:['ctx'],
         data(){
+          var childStore = {
+            vc:this,
+            name:'com-backend-table'
+          }
             return {
-
-                // extendLogic:DTable2Logic
+              childStore:childStore
             }
         },
         // setup(props){
         //     debugger
         //     return new BackendTable().getSetup(props)
         // },
+      computed:{
+        proxy(){
+          var self = this
+          return new Proxy(this.$refs.dtable,{
+            get: function(obj, prop) {
+              if(prop in self){
+                return  self[prop]
+              }else if(prop in obj){
+                return  obj[prop]
+              }else if(obj.proxy){
+                return  obj.proxy[prop]
+              }
+            }
+          })
+        }
+      },
         mounted(){
           if(this.ctx.autoLoad!=false){
             if(!this.ctx.rows || this.ctx.rows.length==0){

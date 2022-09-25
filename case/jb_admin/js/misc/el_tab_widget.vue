@@ -53,9 +53,11 @@ export default {
     //})
     var childStore = new Vue()
     childStore.vc = this
+    childStore.name='com-widget-el-tab'
     return {
-//                childStore:childStore,
-      is_mounted:false
+      childStore:childStore,
+      is_mounted:false,
+
     }
   },
   watch:{
@@ -79,8 +81,8 @@ export default {
       var tabs = this.ctx.tabs
       var par_row = this.ctx.par_row
       var out_tabs = ex.filter(tabs,function(tab){
-        if(tab.show){
-          return ex.eval(tab.show,{par_row:par_row})
+        if(tab.show_express){
+          return ex.eval(tab.show_express,{par_row:par_row})
           //return ex.boolExpress(par_row,tab.show)
         }else{
           return true

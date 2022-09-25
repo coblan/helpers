@@ -175,8 +175,13 @@ def get_lib(request):
                 'bootstrap_css': 'https://lib.baomitu.com/twitter-bootstrap/3.3.7/css/bootstrap.min.css',
                 'bootstrap': 'https://lib.baomitu.com/twitter-bootstrap/3.3.7/js/bootstrap.min.js',
                 
-                'layer':'https://lib.baomitu.com/layer/3.1.1/layer.min.js',#  'https://lf6-cdn-tos.bytecdntp.com/cdn/expire-1-M/layer/3.1.1/layer.min.js',
-                'layer_css': 'https://lib.baomitu.com/layer/3.1.1/mobile/need/layer.min.css',# 'https://lf9-cdn-tos.bytecdntp.com/cdn/expire-1-M/layer/3.1.1/mobile/need/layer.min.css', 
+                #'layer':'https://lib.baomitu.com/layer/3.1.1/layer.min.js',#  'https://lf6-cdn-tos.bytecdntp.com/cdn/expire-1-M/layer/3.1.1/layer.min.js',
+                #'layer_css': 'https://lib.baomitu.com/layer/3.1.1/mobile/need/layer.min.css',# 'https://lf9-cdn-tos.bytecdntp.com/cdn/expire-1-M/layer/3.1.1/mobile/need/layer.min.css', 
+                
+                'layer':'https://s1.pstatp.com/cdn/layer/3.5.1/layer.min.js',
+                'layer_css': 'https://s1.pstatp.com/cdn/layer/3.5.1/theme/default/layer.min.css',
+                
+                
                 'nice_validator':'https://lib.baomitu.com/nice-validator/1.1.4/jquery.validator.min.js?local=zh-CN',# 'https://lf9-cdn-tos.bytecdntp.com/cdn/expire-1-M/nice-validator/1.1.4/jquery.validator.min.js?local=zh-CN',
                 'nice_validator_css':'https://lib.baomitu.com/nice-validator/1.1.4/jquery.validator.min.css',# 'https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/nice-validator/1.1.4/jquery.validator.min.css',
                 'adminlte': 'https://lib.baomitu.com/admin-lte/2.4.18/js/adminlte.min.js',# 'https://lf26-cdn-tos.bytecdntp.com/cdn/expire-1-y/admin-lte/2.4.10/js/adminlte.min.js',
@@ -190,11 +195,10 @@ def get_lib(request):
                 #'element': 'https://lib.baomitu.com/element-ui/2.15.8/index.min.js', 
                 #'element_css':'https://lib.baomitu.com/element-ui/2.15.8/theme-chalk/index.min.css',    
                 # 360总element可能显示icon有问题，替换成字节的
-                #'element':'https://cdn.bytedance.com/cdn/expire-1-M/element-ui/2.15.7/index.min.js',
-                #'element_css':'https://cdn.bytedance.com/cdn/expire-1-M/element-ui/2.15.7/theme-chalk/index.min.css',
-                'element':'https://s1.pstatp.com/cdn/element-ui/2.15.7/index.min.js',
-                'element_css':'https://s1.pstatp.com/cdn/element-ui/2.15.7/theme-chalk/index.min.css',                
-                
+                'element':'https://cdn.bytedance.com/cdn/expire-1-M/element-ui/2.15.7/index.min.js',
+                'element_css':'https://cdn.bytedance.com/cdn/expire-1-M/element-ui/2.15.7/theme-chalk/index.min.css',         
+                #'element':'https://lib.baomitu.com/element-ui/2.15.9/index.min.js',
+                #'element_css':'https://lib.baomitu.com/element-ui/2.15.9/theme-chalk/index.min.css',
        
                 'md5': 'https://lib.baomitu.com/blueimp-md5/2.19.0/js/md5.min.js',
                 'swiper': 'https://lib.baomitu.com/Swiper/4.5.1/js/swiper.min.js',
@@ -223,6 +227,9 @@ def get_lib(request):
                 'ace':'https://lib.baomitu.com/ace/1.5.3/ace.min.js',
                 'ace_javascript':'https://lib.baomitu.com/ace/1.5.3/mode-javascript.min.js',
                 "qrcode":"https://lib.baomitu.com/qrcodejs/1.0.0/qrcode.min.js",
+                
+                'selectizejs': 'https://lib.baomitu.com/selectize.js/0.13.6/js/standalone/selectize.min.js', 
+                'selectizejs_css':'https://lib.baomitu.com/selectize.js/0.13.6/css/selectize.default.min.css',                
    
             })
             if not settings.DEBUG:

@@ -187,31 +187,27 @@ export  var mix_fields_data ={
         async beforeSubmit(){
            return  await Promise.all( ex.map(this.before_submit,fun=>{return fun()}  )  )
         },
-        submit:function(){
+        async submit(){
+            debugger
             var self =this;
             this.setErrors({})
             ex.vueBroadCall(self,'commit')
-            return new Promise(function(resolve,reject){
-                Vue.nextTick(async function(){
-                    // await Promise.all( ex.map(self.before_submit,fun=>{return fun()}  )  )
-                    await self.beforeSubmit()
-
-                    if(!self.isValid()){
-                        //reject()
-                    }else{
-                        self.save().then((res)=>{
-                            resolve(res)
-                        }).then(()=>{
-                            // 如果所有流程都没处理load框，再隐藏load框
-                            //cfg.hide_load(2000)
-                            //cfg.toast('保存成功!')
-                        })
-                    }
-                })
-            })
-
+            await self.beforeSubmit()
+            if(self.head.before_submit_express){
+                await ex.eval(self.head.before_submit_express,{vc:self})
+            }
+            // 可能有些元素获取value是异步的，所以等下一个循环在运行，nicevalidator需要读取dom的值，[这个是可能，没有测试过]
+            await ex.vueNextTick()
+            var pro = new ex.FreePromise()
+            if(!self.isValid()){
+                //reject()
+            }else{
+                var res = await  self.save()
+                pro.resolve(res)
+            }
+            return  pro.promise
         },
-        save:function () {
+        real_save:function () {
             /*三种方式设置after_save
             * 1. ps.submit().then((new_row)=>{ps.update_or_insert(new_row)})
             * 2. head.after_save = "scope.ps.update_or_insert(scope.row)"
@@ -247,25 +243,6 @@ export  var mix_fields_data ={
                                     self.submit()
                                 }
                         )
-                        //layer.confirm(rt._outdate, {
-                        //    icon:3,
-                        //    title:'提示',
-                        //    btn: ['刷新数据', '仍然保存', '取消'] //可以无限个按钮
-                        //    ,btn3: function(index, layero){
-                        //       layer.close(index)
-                        //    }
-                        //}, function(index, layero){
-                        //    layer.close(index)
-                        //    ex.director_call(self.row._director_name,{pk:self.row.pk}).then(resp=>{
-                        //        ex.vueAssign(self.row,resp.row)
-                        //    })
-                        //}, function(index){
-                        //    layer.close(index)
-                        //    self.row.meta_overlap_fields='__all__'
-                        //    self.submit()
-                        //});
-
-
                     }else{
                         ex.vueAssign(self.row,rt.row)
                         if(this.head && this.head.after_save_express){
@@ -288,12 +265,16 @@ export  var mix_fields_data ={
                         }
 
                         self.setErrors({})
-                        self.$emit('finish',rt.row)
-                        resolve(rt.row)
+                         resolve(self.row)
                     }
                 })
             })
             return p
+        },
+        async save(){
+            var row = await this.real_save()
+            this.$emit('finish',row)
+            return row
         },
 
         after_save:function(new_row){

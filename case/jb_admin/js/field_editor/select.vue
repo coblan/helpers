@@ -2,10 +2,10 @@
     <div class="com-field-select" :class="head.class">
         <span v-if='head.readonly' v-text='get_label'></span>
         <div v-else>
-<!--            <input type="text" style="display: none" :id="'id_'+head.name" :name="head.name" v-model="row[head.name]">&lt;!&ndash; :clearable="!head.required"&ndash;&gt;-->
+            <input type="text" style="display: none" :id="'id_'+head.name" :name="head.name" v-model="row[head.name]"><!-- :clearable="!head.required"-->
 
           <el-select v-show="loaded"  :class="{start:!loaded || !is_select }"  v-model="row[head.name]"
-                     :name="head.name"
+
                         :multiple="head.multiple"
                         :filterable="head.multiple ||  head.filterable "
                         :placeholder="head.placeholder"
@@ -19,6 +19,7 @@
                         :value="item.value">
                 </el-option>
             </el-select>
+          <i v-if="head.add_express" @click="onAddNew" title="新建" class="el-icon-circle-plus" style="color: #0aa938;cursor: pointer"></i>
         </div>
     </div>
 </template>
@@ -37,7 +38,7 @@
                 ex.assign(inn_config, this.head.config)
             }
 
-            this.head.placeholder = this.head.placeholder || cfg.tr('请选择1')
+            this.head.placeholder = this.head.placeholder || cfg.tr('请选择')
 
             return {
                 model: this.row[this.head.name],
@@ -212,6 +213,9 @@
             },
         },
         methods:{
+          onAddNew(){
+              ex.eval(this.head.add_express,{vc:this,row:this.row,head:this.head})
+          },
             update_options:function(post_data){
               // 废弃， 使用 mounted_express 替代
                 var self=this

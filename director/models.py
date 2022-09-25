@@ -22,6 +22,7 @@ class LogModel(models.Model):
 class PermitModel(models.Model):
     group = models.OneToOneField(Group)
     names = models.TextField(default= '')
+    desp = models.TextField('描述',blank=True)
 
 #class PermitModel(models.Model):
     #name = models.CharField('权限名称',max_length=300)

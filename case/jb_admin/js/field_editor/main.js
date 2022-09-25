@@ -48,6 +48,9 @@ import guideHtml from "./guideHtml.vue";
 
 Vue.component('com-field-blocktext',blocktext)
 Vue.component('com-field-radio',radio)
+import checkbox  from "./checkbox.vue";
+Vue.component('com-field-checkbox',checkbox)
+
 Vue.component('com-field-int',int_field)
 Vue.component('com-field-int-bool',int_bool)
 Vue.component('com-field-password',password)
@@ -81,6 +84,11 @@ Vue.component('com-field-js-editor', async (resolve, reject) =>{
     await ex.load_js(cfg.js_lib.ace)
     await ex.load_js(cfg.js_lib.ace_javascript)
     resolve(jsEditor)
+})
+// import tableSelect from './tableSelect.vue'
+Vue.component('com-field-table-select', async (resolve, reject) =>{
+    var com = await import(/* webpackChunkName: 'fields_import' */'./tableSelect.vue')
+    resolve(com.default)
 })
 
 Vue.component('com-field-hour-and-minute', async (resolve, reject) =>{
@@ -118,5 +126,10 @@ Vue.component('com-field-pop-table-multi-select', async (resolve, reject) =>{
 
 Vue.component('com-field-input-or-upload', async (resolve, reject) =>{
     var com = await import(/* webpackChunkName: 'fields_import' */'./inputOrUpload.vue')
+    resolve(com.default)
+})
+
+Vue.component('com-field-qrcode', async (resolve, reject) =>{
+    var com = await import(/* webpackChunkName: 'fields_import' */'./qrcode.vue')
     resolve(com.default)
 })

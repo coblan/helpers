@@ -10,9 +10,10 @@ from django.utils.translation import ugettext as _
 from helpers.director.shortcut import model_to_name, model_full_permit, add_permits, model_read_permit,RowSearch
 from django.db.models import Count,F
 import json
+from helpers.director.access.permit import user_permit_names,group_permit
 # Register your models here.
 class UserPage(TablePage):
-    template='jb_admin/table.html'
+    template='jb_admin/table_new.html'
     def get_label(self): 
         return _('User')
     
@@ -83,7 +84,42 @@ class UserPage(TablePage):
                     #{'name':'groups__name','label':'权限分组','show':'!scope.ps.search_args.groups_id'}
                 #]
         
-            
+@director_element('group.select')
+class GroupSelect(ModelTable):
+    model = Group
+    exclude=[]
+    def get_operations(self):
+        return [
+            {'name':'sss','label':'确定',
+             'editor':'com-btn',
+             'type':'success',
+             'click_express':'var ps=ex.vueParStore(scope.ps.vc,{name:"com-backend-table"}); ps.vc.$emit("finish",scope.ps.vc.selected)'},
+        ]
+
+
+def user_group_options(user):
+    out = []
+    if user.is_superuser:
+        for group in Group.objects.select_related('permitmodel').all():
+            out.append({
+              'id':group.id,
+              'name':group.name,
+              'desp':group.permitmodel.desp,
+              '_label':group.name
+            })
+    else:
+        names = list( user_permit_names(user) )
+        for group in Group.objects.select_related('permitmodel').all():
+            group_names = set(  group_permit(group) )
+            if  not group_names.difference(names):
+                out.append({
+                    'id':group.id,
+                    'name':group.name,
+                    'desp':group.permitmodel.desp,
+                    '_label':group.name
+                })
+    return out
+
 class UserFields(ModelFields):
     "具有权限性的创建和修改用户资料"
     hide_fields = ['date_joined']
@@ -95,10 +131,16 @@ class UserFields(ModelFields):
     def dict_head(self, head):
         if head['name']=='groups':
             head['label']='权限分组'
-            #head['editor']='field_multi_chosen'
-            #head['editor'] = 'com-field-multi-chosen'
-            head['editor'] = 'com-field-select'
-            head['multiple'] = True
+            #head['editor'] = 'com-field-select'
+            #head['multiple'] = True
+            head['editor'] = 'com-field-table-select'
+            head['table_heads'] =[{'name':'name','label':'权限组','width':'150px'},
+                                  {'name':'desp','label':'描述','pre':True}]
+            head['table_rows'] =user_group_options(self.crt_user) #GroupPage.tableCls().get_rows()
+          
+            
+            head['order'] = 100
+            
         if head['name'] == 'username':
             head['label']='账号'
             head['help_text'] = '作为登录账号,只能填写字母,数字或者下划线(_),长度为2~50'
@@ -187,7 +229,9 @@ class GroupPage(TablePage):
         
         def getExtraHead(self):
             return [
+                {'name':'desp','label':'描述','editor':'com-table-pre'},
                 {'name':'user_count','label':'用户数'},
+                
             ]
         
         def get_operation(self):
@@ -215,31 +259,11 @@ class GroupPage(TablePage):
                  }) ''' },
             ]
             return ops
-        
-        #def dict_head(self, head):
-            
-            #if head['name']=='name':
-                #groupform = GroupForm(crt_user=self.crt_user)
-                #head['editor']='com-table-pop-fields'
-                #head['get_row']={
-                    #"fun":'use_table_row'
-                #}
-                #head['fields_ctx']=groupform.get_head_context()
-                #head['after_save']={
-                    ##'fun':'do_nothing'
-                    #'fun':'update_or_insert'
-                #}  
-                #head['width'] = 200
-                ##head['ops']=groupform.get_operations()
 
-            ##if head['name']=='permissions':
-                ##head['editor'] = 'com-field-ele-tree-name-layer'
-                
-            #return head
-            
         def dict_head(self, head):
             width = {
-                'name':300
+                'name':300,
+                'desp':400,
             }
             if head['name'] in width:
                 head['width'] = width.get(head['name'])
@@ -263,7 +287,8 @@ class GroupPage(TablePage):
             else:
                 dc['permit']=[]
             dc.update({
-                'user_count':inst.user_count
+                'user_count':inst.user_count,
+                'desp':inst.permitmodel.desp,
             })
             return dc
 
@@ -290,7 +315,7 @@ class GroupExport(object):
             query = Group.objects.all()
         outls = []
         for inst in query.annotate(permit=F('permitmodel__names')):
-            outls.append({'id':inst.pk,'name':inst.name,'permit':inst.permit})
+            outls.append({'id':inst.pk,'name':inst.name,'permit':inst.permit,'desp':inst.permitmodel.desp})
             #PermitModel
         return outls
     
@@ -301,6 +326,7 @@ class GroupExport(object):
             inst.save()
             p_inst , is_created = PermitModel.objects.get_or_create(group= inst)
             p_inst.names = group.get('permit','')
+            p_inst.desp = group.get('desp','')
             p_inst.save()
             
         
@@ -351,6 +377,9 @@ class GroupForm(ModelFields):
                 {'par_event':'permit_options_changed','express':'scope.vc.refresh(scope.event)'},
             ]
         })
+        heads+= [
+            {'name':'desp','label':'权限组描述','editor':'com-field-blocktext'},
+        ]
         return heads    
     
     def get_row(self):
@@ -359,13 +388,19 @@ class GroupForm(ModelFields):
             row['permit']=[x for x in self.instance.permitmodel.names.split(';')]
         else:
             row['permit']=[]
+        if hasattr(self.instance,'permitmodel'):
+            row.update({
+                'desp': self.instance.permitmodel.desp
+            })
         return row   
     
     def clean_save(self):
         self.instance.save()
         
         if not hasattr(self.instance, 'permitmodel'):
-            PermitModel.objects.create(group = self.instance)
+            self.instance.permitmodel = PermitModel.objects.create(group = self.instance)
+        self.instance.permitmodel.desp = self.kw.get('desp','')
+        self.instance.permitmodel.save()
         if self.kw.get('permit',None) != None:
             before = {
                 'permit':self.instance.permitmodel.names
@@ -450,23 +485,3 @@ page_dc.update({
     'jb_group':GroupPage
 })
 
-def user_write(): 
-    model = User
-    fields = model._meta.get_fields()
-    permit = {
-        'read': [f.name for f in fields],
-        'write': [f.name for f in fields if f.name != 'is_superuser'],
-        '_can_create': True,
-        '_can_delete': True,
-    } 
-    return json.dumps(permit)
-
-
-
-permits = [('User.write', user_write(), model_to_name(User) , 'model'), 
-           ('User.read', model_read_permit(User), model_to_name(User) , 'model'), 
-           ('Group', model_read_permit(Group), model_to_name(Group) , 'model'), 
-           ('Group.edit', model_full_permit(Group), model_to_name(Group) , 'model'), 
-           ]
-
-add_permits(permits)
