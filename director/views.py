@@ -23,6 +23,8 @@ from helpers.director.exceptions.unauth401 import UnAuth401Exception
 from .data_format.json_format import DirectorEncoder
 from .exceptions.question import QuestionException
 from helpers.func.d_import import import_element
+from helpers.func import ex
+from .base_data import director_setting
 
 import logging
 req_log = logging.getLogger('general_log')
@@ -233,6 +235,9 @@ def fast_director_view(request,director_name):
     """
     kws = argument.get_argument(request,outtype='dict')
     directorEnt= director_views.get(director_name)
+    allowed_methods =  ex.read_dict_path(director_setting, f'{director_name}.methods')
+    if allowed_methods and 'GET' not in allowed_methods:
+        return HttpResponse('request Method not allowed',status=405)
     if not directorEnt:
         directorEnt = director.get(director_name)
     try:

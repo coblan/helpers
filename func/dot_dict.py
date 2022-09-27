@@ -22,3 +22,16 @@ def read_dict_path(dict_obj,path,default=None):
         return default
     else:
         return tmp
+
+def set_dict_path(dc,path,value):
+    ls = path.split('.')
+    last = dc
+    for index,key in enumerate(ls):
+        if key not in last :
+            last[key] ={}
+        if index < len(ls)-1:
+            last = last[key]
+        else:
+            last[key] = value
+
+    
