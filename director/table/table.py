@@ -150,10 +150,12 @@ class RowFilter(object):
         
         #self._names=[x for x in self.names if x in allowed_names]        
         self.filter_args={}
+        
+        # [compare]过滤组件后端逻辑
         for k in self.total_names:
             compare_name = '_%s_compare'%k
             v = dc.pop(k,'')
-            if compare_name in kw:
+            if v and compare_name in kw:
                 cv = str( kw.get(compare_name) )
                 if cv == '0':
                     self.filter_args[k] =v
@@ -947,7 +949,7 @@ class ModelTable(object):
     def get_query(self):
         if self.nolimit:
             pass
-        elif not self.crt_user.is_authenticated:
+        elif not self.crt_user.is_authenticated():
             raise  UnAuth401Exception('no permission to browse %s ,Please login first' % self.model._meta.model_name)
         elif not self.crt_user.is_superuser and not self.permit.readable_fields():
             raise PermissionDenied('user %s ,no permission to browse %s'% ( self.crt_user.username, self.model._meta.model_name))
