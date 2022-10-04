@@ -50,14 +50,18 @@ var cascader_field =  {
     template:`
 <!--:show-all-levels="false"-->
 <div class="com-field-cascader">
- <input type="text" style="display: none" :id="'id_'+head.name" :name="head.name" v-model="row[head.name]">
-<el-cascader class="com-field-cascader"
+<span v-if="head.readonly">{{label}}</span>
+<template v-else>
+    <input type="text" style="display: none" :id="'id_'+head.name" :name="head.name" v-model="row[head.name]">
+    <el-cascader class="com-field-cascader"
             v-model="row[head.name]"
             :options="head.options"
             :props="myprops"
             size="small"
             clearable>
         </el-cascader>
+</template>
+
 </div>
       `,
     //default-expand-all
