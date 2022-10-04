@@ -1,7 +1,10 @@
 <template>
     <div class="com-field-radio">
 <!--        <span v-if='head.readonly' v-text='get_label(head.options,row[head.name])'></span>-->
-        <el-checkbox-group v-model="inn_value">
+      <input type="text" style="display: none"
+             :id="'id_'+head.name" :name="head.name" v-model="row[head.name]">
+
+      <el-checkbox-group v-model="inn_value" >
             <el-checkbox v-for="opt in normed_options" :label="opt.value">{{opt.label}}</el-checkbox>
         </el-checkbox-group>
     </div>
