@@ -10,7 +10,7 @@ class TokenUser(MiddlewareMixin):
     def process_request(self, request):
         token = request.META.get('HTTP_AUTHORIZATION')
         if not token:
-            token=request.GET.get('_token')
+            token = request.GET.get('_token')
         if token:
             request.COOKIES['sessionid'] = token
     
