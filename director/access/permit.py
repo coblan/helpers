@@ -48,6 +48,10 @@ def can_write(model,user):
     validator = ModelPermit(model, user)
     return len( validator.changeable_fields() ) >0
 
+def can_create(model,user):
+    validator = ModelPermit(model, user)
+    return validator.can_add()
+
 def has_permit(user, perm_name):
     """
     special.sp1

@@ -33,6 +33,9 @@ def get_argument(request,outtype='obj'):
                     #dc[k]=v[0]
     else:
         dc =  request.GET.dict()
+    if '_token' in dc: # _token参数被 helpers.director.middleware.tokenuser使用了。
+        dc.pop('_token')
+        
     if outtype=='dict':
         return dc
     else:

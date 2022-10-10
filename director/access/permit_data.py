@@ -33,8 +33,10 @@ def get_model_permit(names, model):
         for per in cur.execute("""SELECT content FROM permit WHERE name IN (%s) AND type='set' """ % ','.join(["'%s'" % name for name in names]) ):
             names .extend(per[0].split(';'))
             
-        for per in cur.execute("""SELECT content FROM permit WHERE name IN (%s) AND info='%s' AND type='model' """ % ( ','.join(["'%s'" % name for name in names]), model_to_name(model)) ):
-            yield json.loads( per[0] )
+        for per in cur.execute("""SELECT content,name FROM permit WHERE name IN (%s) AND info='%s' AND type='model' """ % ( ','.join(["'%s'" % name for name in names]), model_to_name(model)) ):
+            content_dc = json.loads( per[0] )
+            content_dc['name']=per[1]
+            yield content_dc
     finally:
         lock.release()
 
