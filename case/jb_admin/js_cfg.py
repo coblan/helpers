@@ -168,7 +168,8 @@ def get_lib(request):
             dc.update( {
                 'vuejs': 'https://lib.baomitu.com/vue/2.6.14/vue.js',
 
-                'jquery':'https://lib.baomitu.com/jquery/3.4.1/jquery.min.js',#  'https://lf9-cdn-tos.bytecdntp.com/cdn/expire-1-M/jquery/3.4.1/jquery.min.js',
+                #'jquery':'https://lib.baomitu.com/jquery/3.4.1/jquery.min.js',#  'https://lf9-cdn-tos.bytecdntp.com/cdn/expire-1-M/jquery/3.4.1/jquery.min.js',
+                'jquery':'https://s1.pstatp.com/cdn/jquery/3.4.1/jquery.min.js',
                 #'vuex': 'https://cdn.jsdelivr.net/npm/vuex@3.0.1/dist/vuex.min.js', 
         
                 'font_awesome':'https://lib.baomitu.com/font-awesome/4.7.0/css/font-awesome.min.css', #'https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/font-awesome/4.7.0/css/font-awesome.min.css',
