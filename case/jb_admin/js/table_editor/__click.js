@@ -6,7 +6,7 @@ var my_click = {
         <component v-if="head.inn_editor"
             :is="head.inn_editor"
             :row-data="rowData" :field="field" :index="index"></component>
-        <span v-else="" v-text="rowData[field]" ></span>
+        <span class="table-span"  v-else v-text="rowData[field]" ></span>
     </div>`,
     created:function(){
         // find head from parent table
@@ -36,3 +36,5 @@ var my_click = {
 }
 
 Vue.component('com-table-click',my_click)
+
+
