@@ -133,3 +133,8 @@ Vue.component('com-field-qrcode', async (resolve, reject) =>{
     var com = await import(/* webpackChunkName: 'fields_import' */'./qrcode.vue')
     resolve(com.default)
 })
+
+Vue.component('com-field-phone', async (resolve, reject) =>{
+    var com = await import(/* webpackChunkName: 'fields_import' */'./phone.vue')
+    resolve(com.default)
+})

@@ -11,6 +11,8 @@ from helpers.director.shortcut import model_to_name, model_full_permit, add_perm
 from django.db.models import Count,F
 import json
 from helpers.director.access.permit import user_permit_names,group_permit
+from helpers.func.dot_dict import read_dict_path
+from django.conf import settings
 # Register your models here.
 class UserPage(TablePage):
     template='jb_admin/table_new.html'
@@ -22,7 +24,7 @@ class UserPage(TablePage):
         exclude=['password', 'last_name', 'user_permissions']
         pop_edit_fields = ['username']
         fields_sort = ['id','username','first_name','groups','is_superuser','is_staff','is_active','last_login']
-        
+        allow_delete = read_dict_path(settings,'JB_ADMIN.delete_user',False)
         def get_head_context(self):
             ctx = super().get_head_context()
             get_request_cache()['named_ctx'].update({
@@ -137,8 +139,6 @@ class UserFields(ModelFields):
             head['table_heads'] =[{'name':'name','label':'权限组','width':'150px'},
                                   {'name':'desp','label':'描述','pre':True}]
             head['table_rows'] =user_group_options(self.crt_user) #GroupPage.tableCls().get_rows()
-          
-            
             head['order'] = 100
             
         if head['name'] == 'username':
@@ -148,6 +148,12 @@ class UserFields(ModelFields):
             #express = ''
             #msg = ''
             #head['fv_rule']='length(2~50);express(%s , %s)'%( express.decode('utf-8'),msg.decode('utf-8'))
+        if head['name'] =='is_superuser':
+            if not self.crt_user.is_superuser:
+                head['readonly'] = True
+        #if head['name'] =='is_staff': # 这个可以不要，因为is_staff不是true的话，根本就看不到界面。
+            #if not self.crt_user.is_superuser and not self.crt_user.is_staff:
+                #head['readonly'] = True
         return head
 
     def getExtraHeads(self):
@@ -172,7 +178,28 @@ class UserFields(ModelFields):
             pswd =  self.kw.get('user_password')
             target_user = self.instance
             target_user.set_password(pswd)
-            #target_user.save()            
+            #target_user.save()      
+        # 检查设置人的权限
+        if not self.crt_user.is_superuser:
+            if 'is_superuser' in self.changed_data:
+                raise UserWarning('您不是超级管理员，不能修改超级管理员属性')
+            if not self.crt_user.is_staff:
+                raise UserWarning('您不是管理员，不能设置用户信息')
+            if 'groups' in self.changed_data:
+                """
+                当前只判断了【当前用户】给【目标用户】添加group时，不能超过【当前用户】自身的权限。
+                TODO:可能需要判断【当前用户】删除【目标用户】group时，不能让【当前用户】删除更高权限的分组。
+                考虑到普通用户为【目标用户】分配组时，可能是在特殊的界面，例如本部门下。所以不太可能能直接操作所有用户的分组，就不能乱删除。
+                所以占时不做这个TODO需求。
+                """
+                #self.kw.get('groups')
+                allow_group = user_group_options(self.crt_user)
+                allow_group_names = [x['id'] for x in allow_group]
+                for group in self.kw.get('groups'):
+                    if group not in allow_group_names:
+                        raise UserWarning('你不能赋予用户权限组%s'%group)
+        
+
 
 class NoLimitUserForm(UserFields):
     """ 在某些场合可能会创建新的用户或者修改下级用户，但是又不需要创建人员权限过大，所以不能赋予其user.edit权限,

@@ -266,7 +266,12 @@ class RowFilter(object):
             if k in self.icontains:
                 out['%s__icontains'%k]=v
             else:
-                out[k]=v
+                if v=='true':
+                    out[k] = True
+                elif v=='false':
+                    out[k] = False
+                else:
+                    out[k]=v
         return out
     
     def get_query(self,query):

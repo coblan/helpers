@@ -4,7 +4,7 @@ import * as style_block from  './style_block.js'
 import * as ops_cell from  './ops_cell.js'
 // import * as table_span from  './span.js'
 import * as array_shower from  './array_shower.js'
-import * as click from  './click.js'
+// import * as click from  './click.js'
 import * as my_json from  './json.js'
 import * as multi_image from  './multi_image.js'
 import * as map_html from  './map_html.js'
@@ -27,7 +27,8 @@ Vue.component('com-table-span',tableSpan)
 Vue.component('com-table-ratio-number',ratioNumber)
 Vue.component('com-table-onlytext',onlytext)
 Vue.component('com-table-qrcode',qrcode)
-
+import click from './click.vue'
+Vue.component('com-table-click',click)
 import  treeFirst from './treeFirst.vue'
 Vue.component('com-table-tree-first',treeFirst)
 import tablePre  from "./tablePre.vue";

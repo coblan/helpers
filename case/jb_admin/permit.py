@@ -25,3 +25,21 @@ permits=[
     ]
 add_permits(permits)
 
+
+def get_user_permit_menu():
+    permit_menu = [
+        {'label':'账号管理','children':[
+                 #{'label':'查看','value':'user-read'},
+                 #{'label':'编辑','value':'user-edit','depend':['user-read']},
+                 {'label':'查看','value':'User.read',},
+                 {'label':'编辑','value':'User.write','depend':['User.read']},
+                 {'label':'账号管理界面','value':'User.admin_page','depend':['User.read']},
+                 ]},
+             {'label':'权限组','children':[
+                 {'label':'查看','value':'Group','depend':['User.read']},
+                 {'label':'编辑','value':'Group.edit','depend':['Group',]},
+             ]}
+    ]
+    
+    return permit_menu
+
