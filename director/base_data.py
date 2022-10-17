@@ -68,7 +68,7 @@ def director_view(name,allow_overlap=False,allow_methods=None):
             if name in director_views:
                 raise UserWarning('name=%s的director_view已经存在'%name)
         if allow_methods:
-            ex.set_dict_path(director_setting,f'{name}.methods',allow_methods)
+            ex.set_dict_path(director_setting,'%s.methods'%name,allow_methods)
         
         director_views[name] = fun
         @wraps(fun)

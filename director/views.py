@@ -235,7 +235,7 @@ def fast_director_view(request,director_name):
     """
     kws = argument.get_argument(request,outtype='dict')
     directorEnt= director_views.get(director_name)
-    allowed_methods =  ex.read_dict_path(director_setting, f'{director_name}.methods')
+    allowed_methods =  ex.read_dict_path(director_setting, '%s.methods'%director_name)
     if allowed_methods and 'GET' not in allowed_methods:
         return HttpResponse('request Method not allowed',status=405)
     if not directorEnt:
