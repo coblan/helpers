@@ -20,8 +20,10 @@ def get_lib(request):
     dc = {
         'mobile': static_url( 'js/mobile.pack.js?t=%s&v=16'%js_stamp_dc.get('mobile_pack_js') ), 
         'mobile2': static_url( 'js/mobile2.pack.js?t=%s&v=16'%js_stamp_dc.get('mobile2_pack_js') ), 
-        'mint_ui':'https://cdn.jsdelivr.net/npm/mint-ui@2.2.13/lib/index.js',
-        'mint_ui_css':'https://cdn.jsdelivr.net/npm/mint-ui@2.2.13/lib/style.min.css',
+        'mint_ui': 'https://s1.pstatp.com/cdn/expire-1-M/mint-ui/2.2.13/index.js', 
+           # 'https://cdn.jsdelivr.net/npm/mint-ui@2.2.13/lib/index.js',
+        'mint_ui_css': 'https://s1.pstatp.com/cdn/expire-1-M/mint-ui/2.2.13/style.min.css',
+        # 'https://cdn.jsdelivr.net/npm/mint-ui@2.2.13/lib/style.min.css',
         #'vant':'https://cdn.jsdelivr.net/npm/vant@1.6/lib/vant.min.js',
         #'vant_css':'https://cdn.jsdelivr.net/npm/vant@1.6/lib/index.css',
         #'vant':'https://cdn.jsdelivr.net/npm/vant@2.6/lib/vant.min.js',
