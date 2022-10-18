@@ -20,7 +20,7 @@ class MobileLogin(FieldsPage):
     need_login=False
     
     def get_template(self):
-        return 'mobile/live.html'
+        return 'mobile/live_show.html'
     
     def get_label(self):
         return _('用户登录')
