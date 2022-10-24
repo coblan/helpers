@@ -11,6 +11,8 @@ from helpers.director.shortcut import model_to_name, model_full_permit, add_perm
 from django.db.models import Count,F
 import json
 from helpers.director.access.permit import user_permit_names,group_permit
+from helpers.func.dot_dict import read_dict_path
+from django.conf import settings
 # Register your models here.
 class UserPage(TablePage):
     template='jb_admin/table_new.html'
@@ -22,7 +24,7 @@ class UserPage(TablePage):
         exclude=['password', 'last_name', 'user_permissions']
         pop_edit_fields = ['username']
         fields_sort = ['id','username','first_name','groups','is_superuser','is_staff','is_active','last_login']
-        
+        allow_delete = read_dict_path(settings,'JB_ADMIN.delete_user',False)
         def get_head_context(self):
             ctx = super().get_head_context()
             get_request_cache()['named_ctx'].update({
