@@ -25,6 +25,7 @@ from .exceptions.question import QuestionException
 from helpers.func.d_import import import_element
 from helpers.func import ex
 from .base_data import director_setting
+from .funs.transaction_db import director_transaction_db
 
 import logging
 req_log = logging.getLogger('general_log')
@@ -175,7 +176,7 @@ def director_view(request,director_name):
             # 2020/7/6 再次开启 事务
             # 2021/3/7 加入默认事务配置，sportscenter有多个库连接，但是sports库才是主库。原来采用default库，造成重大问题
             if need_transaction:         
-                db_names=  getattr(settings,'REQUEST_TRANSACTION_DB',['default'])
+                db_names= director_transaction_db(director_name,kws = kws) #  getattr(settings,'REQUEST_TRANSACTION_DB',['default'])
                 wraped_directorEnt = tranactionDbs(directorEnt,db_names)
                 #wraped_directorEnt = tranactionDefault(directorEnt)
                 rt = wraped_directorEnt(**kws)
