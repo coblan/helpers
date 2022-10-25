@@ -91,6 +91,9 @@ def director_element(name):
         #return _fun2
     return _fun
 
+"""
+下面三个item都过时了，现在使用db_router对事物进行控制
+"""
 director_transaction= {}
 def append_transaction(director_name,db_name):
     director_transaction[director_name] = director_transaction.get(director_name)  or list(getattr(settings,'REQUEST_TRANSACTION_DB',['default']))

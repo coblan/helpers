@@ -43,11 +43,12 @@ def all_name(director_name,kws):
     return out
 
 def director_transaction_db(director_name,kws):
+    """根据director_name返回需要事物的数据库"""
     if router:
         out = []
         paths = all_name(director_name, kws)
         for path in paths:
-            out.extend(router.transaction_db(path) )
+            out.extend(router.db_for_transaction(path) )
         return list(set(out))
     else:
         return ['default']

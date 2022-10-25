@@ -14,6 +14,7 @@ from . views import tranactionDbs
 from django.utils import timezone
 import os
 from django.conf import settings
+from helpers.director.base_data import exclude_transaction
 
 def director_save_row(row):
      #rt_dc = save_row(row,user,request)
@@ -70,18 +71,22 @@ def save_row_for_front(row):
      except OutDateException as e:
           return {'_outdate':str(e)}
 
-@director_view('get_row')
+
+@exclude_transaction
 @director_view('d.get_row')
+@director_view('get_row')
 def get_row(director_name,pk=None,**kws):
      fields_cls = director.get(director_name)
      fields_obj = fields_cls(pk=pk, **kws)
      return fields_obj.get_row()
 
+@exclude_transaction
 @director_view('d.get_row_form_db')
 def get_row_form_db(rows):
      out_rows = [get_row(row.get('_director_name'),row.get('pk')) for row in rows]
      return out_rows
 
+@exclude_transaction
 @director_view('d.get_rows')
 def get_rows(director_name,search_args={},user=None):
      table_cls = director.get(director_name)
@@ -108,16 +113,19 @@ def save_rows(rows):
      except PermissionDenied as e :
           raise UserWarning(str(e))
 
+@exclude_transaction
 @director_view('d.get_head_context')
 def get_head_context(director_name):
      dcls = director.get(director_name)
      return dcls().get_head_context()
 
+@exclude_transaction
 @director_view('d.get_context')
 def get_context(director_name):
      dcls = director.get(director_name)
      return dcls().get_context()
 
+@exclude_transaction
 @director_view('d.director_element_call')
 def director_element_call(director_name,attr_name,kws):
      dcls = director.get(director_name)
