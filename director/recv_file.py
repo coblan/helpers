@@ -39,6 +39,9 @@ class BasicReciever(object):
     def procFile(self,file_data,fl):
         par_dir = self.getParDir()
         file_name = self.getFileName(file_data,fl)
+        file_name = file_name.lower()
+        if not any([x in file_name for x in ['.jpeg','jpg','png'] ]):
+            file_name += '.jpg'
         file_path = os.path.join(par_dir,file_name)
         
         absolut_par_path = os.path.join( settings.MEDIA_ROOT, par_dir)
