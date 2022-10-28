@@ -137,7 +137,7 @@ def search_delete_related(rows):
      out_ls =[]
      for row in rows:
           fields_cls = director.get(row['_director_name'])
-          fields_obj = fields_cls(dc = row)
+          fields_obj = fields_cls(dc = row,select_for_update=False)
           inst = fields_obj.instance
           ls = delete_related_query(inst)
           if ls:

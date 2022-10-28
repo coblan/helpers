@@ -145,7 +145,7 @@ def export_excel(request):
 def director_view(request,director_name):
     """将director函数以api的方式直接暴露出去"""
     
-    if request.method == "GET":
+    if request.method == "GET" or request.META.get('HTTP_REALTYPE')=='json_get':
         return fast_director_view(request, director_name)
     
     # 2021/8/18增加新的逻辑,可以对/dapi/edit/customForm转换为请求d.save_row_for_front,参数是edit/customForm指向的director表单
