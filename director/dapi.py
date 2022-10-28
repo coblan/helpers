@@ -77,7 +77,7 @@ def save_row_for_front(row):
 @director_view('get_row')
 def get_row(director_name,pk=None,**kws):
      fields_cls = director.get(director_name)
-     fields_obj = fields_cls(pk=pk, **kws)
+     fields_obj = fields_cls(pk=pk,select_for_update=False, **kws)
      return fields_obj.get_row()
 
 @exclude_transaction
@@ -117,13 +117,13 @@ def save_rows(rows):
 @director_view('d.get_head_context')
 def get_head_context(director_name):
      dcls = director.get(director_name)
-     return dcls().get_head_context()
+     return dcls(select_for_update=False).get_head_context()
 
 @exclude_transaction
 @director_view('d.get_context')
 def get_context(director_name):
      dcls = director.get(director_name)
-     return dcls().get_context()
+     return dcls(select_for_update=False).get_context()
 
 @exclude_transaction
 @director_view('d.director_element_call')
@@ -151,7 +151,7 @@ def search_delete_related(rows):
 def del_rows(rows):
      for row in rows:
           fields_cls = director.get(row.get('_director_name'))
-          fields_obj = fields_cls(row)
+          fields_obj = fields_cls(row,select_for_update=True)
           fields_obj.del_form()
      rows_only_pk=[{'pk':x['pk']} for x in rows]
      return rows_only_pk
@@ -159,7 +159,7 @@ def del_rows(rows):
 @director_view('d.delete_row')
 def del_rows(row):
      fields_cls = director.get(row.get('_director_name'))
-     fields_obj = fields_cls(row)
+     fields_obj = fields_cls(row,select_for_update=True)
      fields_obj.del_form()
 
 @director_view('d.gen_excel')
