@@ -104,8 +104,9 @@ class ModelFields(forms.ModelForm):
             pass
         elif dc.get('pk') != None and dc.get('pk') != '':
             pk=dc.get('pk')
-        elif dc.get('id') !=None and dc.get('id') != '':
-            pk = dc.get('id')
+        # 如果不注释这里会造成问题: 当前端手动输入id来创建记录，后端判断“是否新建”会错判为“不是新建”，产生找不到记录错误
+        #elif dc.get('id') !=None and dc.get('id') != '': 
+            #pk = dc.get('id')
         else:
             if self.kw.get('instance'):
                 pk = self.kw['instance'].pk
