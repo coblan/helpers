@@ -419,6 +419,7 @@ class ModelTable(object):
     button_edit = False
     allow_delete = False
     fitWidth = False
+    allow_set_layout = False
     
     def __init__(self,page=1,row_sort=[],row_filter={},row_search= '',crt_user=None,perpage=None,**kw):
         """
@@ -525,14 +526,20 @@ class ModelTable(object):
         ops = self.get_operation()
         ops = evalue_container(ops)
         
+        heads = self.get_heads()
         # 这样写，为了不影响这种写法: {fitWidth:True,**Mytab().get_head_context() }
         dc = {}
         if self.fitWidth:
             dc.update({
                 'fitWidth':True
             })
+        if self.allow_set_layout:
+            heads_names = [head['name'] for head in heads]
+            dc.update({
+                'advise_heads':heads_names,
+            })
         return {
-            'heads':self.get_heads(),
+            'heads':heads,
             'rows': [], #self.get_rows(),
             'row_pages':{}, # self.pagenum.get_context(),
             'row_sort':self.row_sort.get_context(),
@@ -544,7 +551,7 @@ class ModelTable(object):
             'ops' : ops, 
             'selectable': self.selectable,
             'event_slots':self.get_event_slots(),
-            **dc
+            **dc,
         }  
     
     def get_context(self):
@@ -1028,6 +1035,13 @@ class ModelTable(object):
             'ops_loc':'bottom'
         })
         return [
+            {'editor':'com-btn','name':'table_setting',
+                             'label':'设置列',
+                             'icon':'el-icon-s-tools',
+                             'click_express':'''cfg.pop_vue_com("com-d-table-setting",{table_ps:scope.ps,title:"设置列的排序和显示"})
+                                            .then(()=>scope.ps.reloadAdviseInfo())''',
+                             'visible':self.allow_set_layout},              
+            
             {
                 'name':'add_new',
                  #'editor':'com-op-btn',
