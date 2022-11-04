@@ -24,9 +24,10 @@ var line_text={
             //    var items = []
             //}
             //var options = self.head.options .concat(items)
+
             var bb = $(this.$el).find('.my-input-field').selectize({
                 delimiter: this.head.splitter ||  ',',
-                persist: false,
+                // persist: false,
                 create: true,
                 //items:items,
                 //create: function(input) {
@@ -40,6 +41,7 @@ var line_text={
                 //        label: input,
                 //    }
                 //},
+                maxItems:this.head.maxItems,
                 hideSelected:true,
                 valueField: 'value',
                 labelField:'label',
