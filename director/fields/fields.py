@@ -163,7 +163,7 @@ class ModelFields(forms.ModelForm):
                     #if isinstance(fieldcls, models.ForeignKey):
                         #dc[k] = getattr(inst, "%s_id" % k)
                         #continue
-                    #dc[k] = getattr(form_kw['instance'] , k)  
+                    #dc[k] = getattr(form_kw['instance'] , k)  kw
         
 
         # todict -> ui -> todict(compare) -> adapte_dict
@@ -779,7 +779,7 @@ class Fields(ModelFields):
     """
     普通的form表单，与model层剥离开的
     """
-    def __init__(self, dc={}, pk=None, crt_user=None, nolimit=False, *args, **kw): 
+    def __init__(self, dc={}, pk=None, crt_user=None, nolimit=False, *args,select_for_update=True, **kw): 
         dc=self.clean_dict(dc) 
         self.kw=dc.copy()
         self.kw.update(kw)

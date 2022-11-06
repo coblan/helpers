@@ -1,5 +1,5 @@
 <template>
-  <div :class="['com-field-split-text',head.class]" :style="head.style">
+  <div :class="['com-field-split-text',head.class]" :style="head.style" @click="onClick">
     <span class="readonly-info" v-if='head.readonly' v-text='row[head.name]'></span>
     <input v-else type="text" :class="['my-input-field',head.input_class]" v-model="row[head.name]"
            :id="'id_'+head.name" :name="head.name"
@@ -9,7 +9,12 @@
 <script>
 export default {
   props:['row','head'],
-  template:``,
+  data(){
+    return {
+      last_value:'',
+      clicking:false,
+    }
+  },
   mounted(){
     if(this.head.css){
       ex.append_css(this.head.css)
@@ -29,7 +34,7 @@ export default {
 
       var bb = $(this.$el).find('.my-input-field').selectize({
         delimiter: this.head.splitter ||  ',',
-// persist: false,
+        persist: false,
         create: true,
         createOnBlur:true,
 //items:items,
@@ -54,7 +59,17 @@ export default {
           self.row[self.head.name] = value
         },
         onBlur:function(){
+          self.last_value = self.row[self.head.name]
           $(self.$el).find('.my-input-field').trigger('validate')
+        },
+        onFocus(){
+          // if(self.head.maxItems==1){
+          //   var value = this.getValue()
+          //   this.clear()
+          //   setTimeout(()=>{
+          //     this.setTextboxValue(value)
+          //   },100)
+          // }
         }
       });
       Vue.nextTick(()=>{
@@ -68,11 +83,36 @@ export default {
 
 //bb[0].selectize.setValue(items, true)
       })
+      this.selectize = bb
 
     },100)
 
 
 
+  },
+  methods:{
+    async onClick(){
+      if(this.head.maxItems==1){
+        if(! this.clicking){
+          var selectize = this.selectize[0].selectize
+          this.clicking =true
+           var value =   selectize.getValue() //this.row[this.head.name] //
+          if(!value){
+            value = this.last_value  // 因为点击文件时，可能会把文字删除掉。
+          }
+          selectize.clear()
+          setTimeout(()=>{
+            console.log('value=',value)
+            console.log('last_value=',this.last_value)
+            selectize.setTextboxValue(value)
+          },10)
+          setTimeout(()=>{
+            console.log('clear last_value')
+            this.clicking = false
+          },100)
+        }
+      }
+    }
   }
 }
 </script>
