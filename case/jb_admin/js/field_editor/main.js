@@ -17,7 +17,7 @@ import * as list_ctn from  './list_ctn'
 // import * as color from  './color'
 //import * as number from  './number'
 import * as richtext from  './richtext'
-import * as split_text from  './split_text'
+// import * as split_text from  './split_text'
 
 
 import int_field from './int.vue'
@@ -137,4 +137,11 @@ Vue.component('com-field-qrcode', async (resolve, reject) =>{
 Vue.component('com-field-phone', async (resolve, reject) =>{
     var com = await import(/* webpackChunkName: 'fields_import' */'./phone.vue')
     resolve(com.default)
+})
+import splitText from "./splitText.vue";
+Vue.component('com-field-split-text',function(resovle,reject){
+    ex.load_css(js_config.js_lib.selectizejs_css)
+    ex.load_js(js_config.js_lib.selectizejs).then(()=>{
+        resovle(splitText)
+    })
 })
