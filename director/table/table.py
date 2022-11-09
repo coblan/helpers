@@ -419,7 +419,7 @@ class ModelTable(object):
     button_edit = False
     allow_delete = False
     fitWidth = False
-    allow_set_layout = False
+    allow_set_layout = False   # 是否自动打开 设置列。
     
     def __init__(self,page=1,row_sort=[],row_filter={},row_search= '',crt_user=None,perpage=None,**kw):
         """
