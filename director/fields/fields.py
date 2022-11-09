@@ -56,11 +56,13 @@ class ModelFields(forms.ModelForm):
     nolimit=False
     simple_dict = False
     allow_delete= False
+    select_for_update = True  # 某些高频访问文件，不允许锁定，就可以设置为False
     @classmethod
     def parse_request(cls,request):
         """
         传入参数的形式：  
         被fieldsPage使用，最好不要再使用该函数，有点混乱了
+        这个函数可能是被 d.get_row 使用的
         """
         dc=request.GET.dict()
         pk=dc.pop('pk',None)
@@ -123,7 +125,7 @@ class ModelFields(forms.ModelForm):
                 form_kw['instance']=self._meta.model.objects.last()
             elif pk != None:  # 很多时候，pk=0 是已经创建了
                 try:
-                    if select_for_update:
+                    if select_for_update and self.__class__.select_for_update:
                         form_kw['instance']= self._meta.model.objects.select_for_update().get(pk=pk)
                     else:
                         form_kw['instance']= self._meta.model.objects.get(pk=pk)
