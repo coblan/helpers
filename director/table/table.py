@@ -416,11 +416,11 @@ class ModelTable(object):
     simple_dict = False
     export_related = True
     exclude_export_related =[]  # 有些外键有问题，例如用0作为null，所以这是不用用select_related导出，否则会出现空数据。
-    button_edit = False
-    allow_delete = False
+    button_edit = False    # 自动添加一列，有一个编辑按钮
+    allow_delete = False   # 删除按钮是否显示出来
     fitWidth = False
-    allow_set_layout = False
-    
+    allow_set_layout = False   # 是否自动打开 设置列。
+    allow_create = True # 创建按钮是否显示
     def __init__(self,page=1,row_sort=[],row_filter={},row_search= '',crt_user=None,perpage=None,**kw):
         """
         kw['search_args']只是一个记录，在获取到rows时，一并返回前端页面，便于显示。
@@ -1054,7 +1054,7 @@ class ModelTable(object):
                  'label':_('创建'),
                  'pre_set':'', # 预先设置的字段,一般用于com-tab-table下的创建
                  'fields_ctx':fields_ctx,
-                 'visible': self.permit.can_add(),
+                 'visible': self.permit.can_add() and self.allow_create,
                  },
                 #{'name':'save_changed_rows','editor':'com-op-btn','label':'保存', 
                  #'class':'btn btn-info btn-sm',
