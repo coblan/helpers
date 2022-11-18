@@ -40,8 +40,12 @@ class BasicReciever(object):
         par_dir = self.getParDir()
         file_name = self.getFileName(file_data,fl)
         file_name = file_name.lower()
-        if not any([x in file_name for x in ['.jpeg','jpg','png'] ]):
-            file_name += '.jpg'
+       
+        #if not any([x in file_name for x in ['.jpeg','jpg','png'] ]):
+        # 文件没有后缀的情况下
+        if '.' not in file_name: 
+            if 'image' in fl.content_type: 
+                file_name +=  '.' +fl.content_type.split('/')[-1]
         file_path = os.path.join(par_dir,file_name)
         
         absolut_par_path = os.path.join( settings.MEDIA_ROOT, par_dir)
