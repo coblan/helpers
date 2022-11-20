@@ -32,6 +32,7 @@ def complement(srcList,rows,extrac_fun,default=0):
     srcList = ['2021-07-20','2021-07-21']
     rows =[{'date':'2021-07-20','count':12}]
     extrac_fun = lamda row,target: row if row['date']==target else None
+    defaut:没有找到的key返回的值
     返回:
     [{date:'2021-07-20','count':12},{date:'2021-07-21','count':0}]
     """
@@ -48,4 +49,16 @@ def _find_dc_item(rows,target, extrac_fun):
         if rt:
             return rt
     return None
-    
+
+def split_iter(iteration,count):
+    current_count = 0
+    ls = []
+    for inst in iteration:
+        ls.append(inst)
+        current_count += 1
+        if current_count >=count:
+            current_count = 0
+            yield ls
+            ls =[]
+    if ls:
+        yield ls

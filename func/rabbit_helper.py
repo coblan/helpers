@@ -3,8 +3,8 @@ from requests.auth import HTTPBasicAuth
 
 def get_queue(domain,user,pswd,vhost='',name_reg='',page_size=100):
     """
-    获取rabbitmq的queue列表，
-    @domain:管理的域名入http://www.123.com,主要不要斜线结尾
+    通过rabbit的web管理系统获取rabbitmq的queue列表，
+    @domain:web管理系统的域名如:http://www.123.com,注意不要斜线结尾
     @user:用户
     @pswd:密码
     @name_reg:名称正则表达式，如: mqtt-subscription-*   表示mqtt-subscription-开始的
