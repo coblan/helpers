@@ -240,7 +240,7 @@ var cfg={
         var self=this
         var tabs=named_ctx[kws.ctx_name]
         if(!tabs){
-            throw `named_ctx. ${kws.ctx_name} 不存在，检查是否传入`
+            throw `named_ctx.${kws.ctx_name} 不存在，检查是否传入`
         }
 
         var canfind = ex.findone(tabs,{name:kws.tab_name})
