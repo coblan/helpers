@@ -60,4 +60,41 @@ def assign_object(dst,src,item_match=None,child=['items','childrens']):
                 assign_object(dst[key],src[key],item_match,child)
             else:
                 dst[key] = src[key]
-                
+
+
+def default_assign( dst,src,key):
+    v = dst[key]
+    if v.endswith('.jpg') or v.endswith('.png'):
+        dst[key] = src[key]
+
+def assign_collection(dst,src,item_match=None,assign_fun=default_assign,):
+    """把src的值赋予dst
+    
+    Args:
+    item_match : callable对象,在list中相匹配的项，如果不传，则按照index来匹配
+    
+    """
+    if isinstance(dst,list):
+        index = -1 
+        for item in dst:
+            index +=1
+            if item_match:
+                src_item = item_match(item,src)
+            else:
+                if len(src)>index:
+                    src_item = src[index]
+                else:
+                    continue
+            if src_item:
+                assign_collection(item,src_item,item_match,assign_fun)
+    elif isinstance(dst,dict):
+        for key in dst:
+            next_dst = dst[key]
+            next_src = src.get(key)
+            if isinstance(next_dst,dict) and isinstance(next_src,dict):
+                assign_collection(next_dst,next_src,item_match,assign_fun)
+            elif isinstance(next_dst,list) and isinstance(next_src,list):
+                assign_collection(next_dst,next_src,item_match,assign_fun)
+            else:
+                assign_fun(dst,src,key)
+                #dst[key] = src[key]
