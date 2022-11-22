@@ -295,10 +295,10 @@ def delete_related_query(inst):
                 continue
             elif hasattr(obj,'all'):  # Foreign Key field
                 for sub_obj in obj.all():
-                    ls.append({'str':"{cls_name}:{content}".format(cls_name = sub_obj.__class__.__name__,content=str(sub_obj)),
+                    ls.append({'str':"{content}  ({cls_name})".format(cls_name = sub_obj.__class__.__name__,content=str(sub_obj)),
                                'related':delete_related_query(sub_obj)})
             else:   # OneToOne related
-                ls.append({'str':"{cls_name}:{content}".format(cls_name = obj.__class__.__name__,content=str(obj)),
+                ls.append({'str':"{content}  ({cls_name})".format(cls_name = obj.__class__.__name__,content=str(obj)),
                            'related':delete_related_query(obj)})   
                 
     for rel in all_related_many_to_many_objects:  #inst._meta.get_all_related_many_to_many_objects():  # ManyToMany Related

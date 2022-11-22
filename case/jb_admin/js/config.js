@@ -7,8 +7,8 @@ ex.assign(cfg,{
             title:'数据过期',
             btn: ['刷新数据', '强制保存', ] //可以无限个按钮
 
-        }, function(index, layero){
-            refresh()
+        }, async function(index, layero){
+              await  refresh()
             layer.close(index)
         }, function(index){
             force_save()

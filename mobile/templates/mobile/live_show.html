@@ -446,7 +446,7 @@
         <component :ref="ctx.editor" v-for="(ctx,index) in total_stack" :key="ctx.editor"
                    class="child-view"
                    v-show="index==crt_index"
-                   :is="ctx.editor" :ctx="ctx.ctx" ></component>
+                   :is="ctx.editor" :ctx="ctx.ctx" v-bind="ctx.ctx"></component>
     </transition-group>
         <!--<template v-for="(ctx,index) in stack">-->
             <!--<transition :name="tranName">-->

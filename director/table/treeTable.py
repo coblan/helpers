@@ -1,27 +1,68 @@
-from .table import ModelTable,director
+from .table import ModelTable,director,RowSort,PageNum
 from django.db.models import Count,F,OuterRef, Subquery,Exists
 
 class TreeTable(ModelTable):
     first_field=''
     selectable = False
+    parent_null= None
+    
+    class pagenator(PageNum):
+        def __init__(self, pageNumber=1, perpage=None, **kws):
+            super().__init__(pageNumber, perpage, **kws)
+            self.table = kws.get('table')
+            
+        def get_slice_index(self):
+            if self.table.kw.get('search_args').get('par'):
+                return 0,1000
+            else:
+                return super().get_slice_index()
+    
+    class sort(RowSort):
+        general_sort ='pk'
+    
+    def getRootQuery(self,query):
+        return None
+    
     def inn_filter(self, query):
         if self.kw.get('par'):
             query  =query.filter(parent_id = self.kw.get('par'))
         else:
-            query = query.filter(parent__isnull = True)
+            root_query = self.getRootQuery(query)
+            if root_query:
+                query = root_query
+            elif self.parent_null != None:
+                query = query.filter(parent_id = self.parent_null)
+            else:
+                query = query.filter(parent__isnull = True)
+        self.count_query = query
         subquery = self.model.objects.filter(parent=OuterRef('pk'))
         query = query.annotate(hasChildren=Exists(subquery))
+        
         return query
+    
+    def get_operations(self):
+        ops = super().get_operations()
+        for op in ops:
+            if op['name']=='add_new':
+                op['click_express']='''scope.head.fields_ctx.genVc=scope.vc;
+                scope.ps.add_new(scope.head).then(()=>{
+                    scope.ps.search()
+                })
+                 
+                '''
+        return ops
     
     def getExtraHead(self):
         model_form = director.get(self.get_edit_director_name())
-        if model_form:
+        if model_form and self.permit.can_edit():
             return [
-                {'name':'op','label':'操作','editor':'com-table-ops-cell',
+                {'name':'op',
+                 'label':'操作',
+                 'editor':'com-table-ops-cell',
                  'ops':[
                       {'editor':'com-btn', 
-                       'label':'创建',
-                       'width':100,
+                       'label':'创建下级',
+                       
                        #'icon':'el-icon-phone',
                        #'fa_icon':'fa fa-phone-square',
                        'type':'primary',
@@ -69,56 +110,41 @@ class TreeTable(ModelTable):
                        }
                        func()
                       ''',
-                       
-                       #cfg.show_load();
-                       #ex.director_call("d.delete_query_related",{rows:[scope.ps.vc.rowData]}).then((resp)=>{
-                            #cfg.hide_load();
-                            #if(resp.length>0){
-                                
-                                #return cfg.pop_vue_com("com-pan-delete-query-message",{msg_list:resp,title:"删除关联确认"})
-                            #}else{
-                               #return cfg.confirm("确认删除?")
-                            #}
-                    
-                        #}).then(()=>{
-                                #cfg.show_load()
-                                #return ex.director_call('d.delete_rows',{rows:[scope.ps.vc.rowData]})
-                        #}).then(()=>{
-                                #cfg.hide_load()
-                                #if(scope.ps.vc.rowData.parent){
-                                    #scope.ps.vc.parStore.vc.$refs.dtable.updateNode( {pk:scope.ps.vc.rowData.parent})
-                                #}else{
-                                    #scope.ps.vc.parStore.vc.search()
-                                #}
-                                         #});
-                       
-                       
                        },
                       {'editor':'com-btn-drop',
                        'label':'更多',
                        'class':'myphone',
                        'menu':[
                            {'label':'剪切','click_express':'var row=scope.ps.vc.rowData;window.cut_data=row;cfg.toast("剪切成功")'},
-                           {'label':'粘贴','click_express':'''
-                           var row = window.cut_data;
-                           var old_parent_pk = row.parent
-                           var new_parent=scope.ps.vc.rowData;
-                           row.parent=new_parent.pk; 
-                           ex.director_call('d.save_row',{row:row}).then(()=>{
-                               scope.ps.vc.parStore.vc.$refs.dtable.updateNode( {pk:old_parent_pk})
-                               new_parent.hasChildren=true
-                               scope.ps.vc.parStore.vc.$refs.dtable.updateNode( {pk:new_parent.pk})
-                           })''' },
+                           {'label':'粘贴','click_express':'''( async ()=>{
+                               if(!window.cut_data){
+                                    cfg.toast("先执行剪切操作,才能粘贴")
+                                    return
+                               }
+                                var row = window.cut_data;
+                                var old_parent_pk = row.parent
+                                var new_parent=scope.ps.vc.rowData;
+                                if(row.pk == new_parent.pk){
+                                    cfg.toast("不能选择自己作为自己的上级")
+                                    return
+                                }
+                                row.parent=new_parent.pk; 
+                                var resp = await ex.director_call('d.save_row',{row:row})
+                                 scope.ps.vc.parStore.vc.$refs.dtable.updateNode( {pk:old_parent_pk})
+                                 new_parent.hasChildren=true
+                                 scope.ps.vc.parStore.vc.$refs.dtable.updateNode( {pk:new_parent.pk})
+                                 window.cut_data =null
+                           })()''' },
                            {'label':'移到顶层',
                             'click_express':'''
                             var row=scope.ps.vc.rowData;
                             var old_parent_pk = row.parent
-                            row.parent=null;
+                            row.parent=%s;
                             ex.director_call('d.save_row',{row:row}).then(()=>{
                                scope.ps.vc.parStore.vc.$refs.dtable.updateNode( {pk:old_parent_pk})
                                scope.ps.vc.parStore.vc.search()
                            })
-                            '''}
+                            '''%( 'null' if self.parent_null==None else self.parent_null)  }
                            ]
                            }
                      ]}
@@ -128,13 +154,17 @@ class TreeTable(ModelTable):
     
     def dict_head(self, head):
         width = {
-            self.first_field:200,
-            'op':150,
+            self.first_field:300,
+            'op':180,
+            
         }
         head['width'] = width.get(head['name'])
         if head['name']==self.first_field:
-            head['class']='chuizhi'
-            head['css']='''.chuizhi:first-child{margin-left:23px}'''
+            if not head.get('inn_tree_deep_editor'):
+                head['inn_tree_deep_editor']= head['editor']
+            head['editor'] = 'com-table-tree-first'
+            #head['class']='chuizhi'
+            #head['css']='''.chuizhi:first-child{margin-left:23px}'''
         return head    
     
     def dict_row(self, inst):
@@ -143,18 +173,39 @@ class TreeTable(ModelTable):
         }    
     
 
-def get_tree_option(model,label_field):
+def get_tree_option(model,label_field,par=None):
     ls = []
-    for inst in model.objects.all():
-        ls.append({'value':inst.pk,'label':getattr(inst,label_field),'parent':inst.parent_id})
+    if par:
+        ls.append({'value':par.pk,'label':getattr(par,label_field),'parent':None}) 
+        for inst in model.objects.filter(parent=par):
+            ls.append({'value':inst.pk,'label':getattr(inst,label_field),'parent':inst.parent_id})        
+    else:
+        for inst in model.objects.all():
+            ls.append({'value':inst.pk,'label':getattr(inst,label_field),'parent':inst.parent_id})
     
-    for row in list(ls):
-        row['children'] =[]
+    children_dc = {}
+    for row in ls:
         if row['parent']:
-            ls.remove(row)
-        for item in ls:
-            if item['parent'] == row['value']:
-                row['children'] .append(item)
-        if not row['children']:
-            del row['children']
-    return ls
+            if row['parent'] not in children_dc:
+                children_dc[row['parent']] =[]
+            children_dc[row['parent']] .append(row)
+    for row in ls:
+        if row['value'] in children_dc:
+            row['children'] = children_dc[row['value']]
+    
+    outls =[]
+    for row in ls:
+        if not row['parent']:
+            outls.append(row)
+            
+    
+    #for row in list(ls):
+        #row['children'] =[]
+        #if row['parent']:
+            #ls.remove(row)
+        #for item in ls:
+            #if item['parent'] == row['value']:
+                #row['children'] .append(item)
+        #if not row['children']:
+            #del row['children']
+    return outls

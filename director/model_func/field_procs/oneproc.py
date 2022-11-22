@@ -17,6 +17,8 @@ class OneProc(BaseFieldProc):
         else:
             related_model = inst.__class__._meta.get_field(name).related_model
             return {
+                name:None,
+                '_%s_label'%name:'', 
                 '_%s_model'%name:model_to_name(related_model)
             }
     

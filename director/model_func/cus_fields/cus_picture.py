@@ -29,7 +29,7 @@ class PictureProc(BaseFieldProc):
     def dict_field_head(self,head):
         head['editor']='com-field-picture'
         #head['up_url']='/d/upload?path=general_upload/images'
-        head['up_url']='/d/upload?path=general_upload/%s'%timezone.now().strftime('%Y%m')
+        head['up_url']='/d/upload?path=general_upload/images'
         #head['config']={
             #'up_url':'/d/upload?path=public/images'
         #}

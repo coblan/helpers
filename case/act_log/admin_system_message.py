@@ -1,5 +1,6 @@
 from helpers.director.shortcut import TablePage,ModelTable,ModelFields,page_dc,director,director_view,RowFilter
 from .models import SystemMessage
+from helpers.case.jb_admin.uidict import op_excel
 
 class SystemMessagePage(TablePage):
     def get_label(self):
@@ -32,7 +33,9 @@ class SystemMessagePage(TablePage):
                 {'name':'all_read',
                  'label':'全部已读',
                  'editor':'com-btn',
-                 'click_express':'cfg.show_load();ex.director_call("act_log.system_message.all_read",{}).then(()=>{cfg.hide_load(2000);scope.ps.search()})'}
+                 'click_express':'cfg.show_load();ex.director_call("act_log.system_message.all_read",{}).then(()=>{cfg.hide_load(2000);scope.ps.search()})'},
+                op_excel()
+                
             ]
             return ops
         

@@ -11,6 +11,7 @@ import hashlib
 from django.conf import settings
 import inspect
 import time
+from decimal import Decimal
 
 def get_argument(request,outtype='obj'):
     """
@@ -32,6 +33,9 @@ def get_argument(request,outtype='obj'):
                     #dc[k]=v[0]
     else:
         dc =  request.GET.dict()
+    if '_token' in dc: # _token参数被 helpers.director.middleware.tokenuser使用了。
+        dc.pop('_token')
+        
     if outtype=='dict':
         return dc
     else:
@@ -114,6 +118,27 @@ def model_instance(model,field='pk'):
             if value:
                 dc={field:value}
                 return model.objects.get(**dc)
+        except model.DoesNotExist as e:
+            raise UserWarning('%(name)s=%(value)s can not be find'%{'name':name,'value':value})
+    return _model_validator
+
+def model_instance_list(model,field='pk'):
+    "判断value是否是model instance(默认使用pk值查询)"
+    def _model_validator(value,name):
+        try:
+            if value:
+                dc ={'%s__in'%field:value}
+                inst_dc = {}
+                for inst in model.objects.filter(**dc):
+                    inst_dc[ str( getattr(inst,field) )] = inst
+                out_ls = []
+                for ii in value:
+                    if str(ii ) in inst_dc:
+                        out_ls.append( inst_dc[str(ii )] )
+                    else:
+                        raise UserWarning('%s=%s can not be find'%(field,ii))
+                return out_ls
+                    
         except model.DoesNotExist as e:
             raise UserWarning('%(name)s=%(value)s can not be find'%{'name':name,'value':value})
     return _model_validator
@@ -223,6 +248,12 @@ def float_str(value,name):
             #return int(value)
     #except ValueError as e:
         #raise UserWarning('%(name)s=%(value)s could not be covert to int'%{'name':name,'value':value})
+
+def decimal_str(value,name):
+    try:
+        return Decimal(value)
+    except ValueError:
+        raise UserWarning('%s不能转换为数字(包含小数)'%name)
 
 def choice_in(choices):
     def _choice_in(value,name):

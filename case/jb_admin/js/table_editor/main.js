@@ -4,7 +4,7 @@ import * as style_block from  './style_block.js'
 import * as ops_cell from  './ops_cell.js'
 // import * as table_span from  './span.js'
 import * as array_shower from  './array_shower.js'
-import * as click from  './click.js'
+// import * as click from  './click.js'
 import * as my_json from  './json.js'
 import * as multi_image from  './multi_image.js'
 import * as map_html from  './map_html.js'
@@ -19,12 +19,20 @@ import buttonClick  from "./buttonClick.vue";
 import tableSpan from './tableSpan.vue'
 import ratioNumber from "./ratioNumber.vue";
 import onlytext from "./onlytext.vue";
+import qrcode from "./qrcode.vue";
 Vue.component('com-table-tag-map',com_tag)
 Vue.component('com-table-button-click',buttonClick)
 Vue.component('com-table-hour-and-minute',hourAndMinute)
 Vue.component('com-table-span',tableSpan)
 Vue.component('com-table-ratio-number',ratioNumber)
 Vue.component('com-table-onlytext',onlytext)
+Vue.component('com-table-qrcode',qrcode)
+import click from './click.vue'
+Vue.component('com-table-click',click)
+import  treeFirst from './treeFirst.vue'
+Vue.component('com-table-tree-first',treeFirst)
+import tablePre  from "./tablePre.vue";
+Vue.component('com-table-pre',tablePre)
 import * as table_input_main from './table_input/main'
 
 /*

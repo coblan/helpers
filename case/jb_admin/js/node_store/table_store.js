@@ -1,3 +1,5 @@
+import el_tab from '../misc/el_tab_widget.vue'
+
 var table_store={
     data:function(){
          return {
@@ -387,8 +389,8 @@ var table_store={
                         layer.confirm(resp._outdate, {
                             icon:3,
                             title:'提示',
-                            btn: ['刷新数据', '仍然保存', '取消'] //可以无限个按钮
-                            ,btn3: function(index, layero){
+                            btn:  ['刷新数据', '取消'], //['刷新数据', '仍然保存', '取消'] //可以无限个按钮
+                            btn3: function(index, layero){
                                 layer.close(index)
                             }
                         }, function(index, layero){
@@ -409,15 +411,13 @@ var table_store={
                                     }
                                 }
                             })
-                        }, function(index){
-                            layer.close(index)
-                            //ex.each(self.selected,row=>{
-                            //    row.meta_overlap_fields='__all__'
-                            //})
-                            new_row.meta_overlap_fields = '__all__'
-                            after_proc({new_row,field_vc,pop_fields_win_index})
-                            //self.selected_set_and_save(kws,true)
                         });
+
+                    // function(index){
+                    //         layer.close(index)
+                    //         new_row.meta_overlap_fields = '__all__'
+                    //         after_proc({new_row,field_vc,pop_fields_win_index})
+                    //     }
                         return
                     }else  if( !resp.errors){
                         cfg.toast('操作成功！',{time:1000})
@@ -468,21 +468,13 @@ var table_store={
                         layer.confirm(resp._outdate, {
                             icon: 3,
                             title: '提示',
-                            btn: ['刷新数据', '仍然保存', '取消'] //可以无限个按钮
-                            , btn3: function (index, layero) {
+                            btn: ['刷新数据', '取消'], // ['刷新数据', '仍然保存', '取消'] //可以无限个按钮
+                            btn3: function (index, layero) {
                                 layer.close(index)
                             }
                         }, function (index, layero) {
-                        debugger
                             layer.close(index)
                             self.search()
-                        }, function (index) {
-                            debugger
-                            layer.close(index)
-                            ex.each(rows, row=> {
-                                row.meta_overlap_fields = '__all__'
-                            })
-                            self.save_rows(rows)
                         });
                     } else if (resp.errors) {
                         if (option.after_error) {
@@ -666,7 +658,13 @@ var table_store={
 
             if(window.root_live){
                 // keeplive 页面
-                root_live.open_live(live_el_tab,{tabs:tabs,title:kws.par_row._label,crt_tab_name:kws.tab_name,par_row:kws.par_row,last_ps:self})
+                // el_tab 就是原来的 live_el_tab
+                root_live.open_live(el_tab,{tabs:tabs,
+                    title:kws.par_row._label,
+                    crt_tab_name:kws.tab_name,
+                    par_row:kws.par_row,
+                    type:kws.type,
+                    last_ps:self})
             }else{
                 // 传统 页面
                 self.tab_stack.push( {

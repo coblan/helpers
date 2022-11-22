@@ -1,5 +1,7 @@
 import inspect
 from django.conf import settings
+from helpers.func import ex
+
 # used for model render
 page_dc={
     #'xxx_model': {'model':'xxx','table_temp':xxx,'field_temp':xxx}
@@ -57,13 +59,17 @@ from functools import wraps
         #return _fun2
     #return _fun
 
+director_setting={}
 
-
-def director_view(name): 
+def director_view(name,allow_overlap=False,allow_methods=None): 
     def _fun(fun): 
         #director[name] = fun
-        if name in director_views:
-            raise UserWarning('name=%s的director_view已经存在'%name)
+        if not allow_overlap:
+            if name in director_views:
+                raise UserWarning('name=%s的director_view已经存在'%name)
+        if allow_methods:
+            ex.set_dict_path(director_setting,'%s.methods'%name,allow_methods)
+        
         director_views[name] = fun
         @wraps(fun)
         def _fun2(*args, **kargs): 
@@ -85,6 +91,9 @@ def director_element(name):
         #return _fun2
     return _fun
 
+"""
+下面三个item都过时了，现在使用db_router对事物进行控制
+"""
 director_transaction= {}
 def append_transaction(director_name,db_name):
     director_transaction[director_name] = director_transaction.get(director_name)  or list(getattr(settings,'REQUEST_TRANSACTION_DB',['default']))

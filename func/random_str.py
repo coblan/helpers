@@ -45,23 +45,26 @@ def get_random_number(length= 6):
     return rt
   
 @transaction.atomic
-def get_date_sequence(key='_data_sequence',fill=6,how_many=1):
+def get_date_sequence(key='_data_sequence',fill=6,how_many=1,remove_year_digit=0):
   """以日期为依据，生成随机序列
   
   @key:在kv数据库里面的key，可以用默认的
+  @remove_year_digit:有时候fill的位数太多了，可能会造成int类型溢出，所以增加可以移除 年份前面的前面两位，2022的  20基本是无用的。
   
   """
   now = timezone.now()
-  date_str = now.strftime('%Y%m%d')   
+  date_str = now.strftime('%Y%m%d')[remove_year_digit:]
+  
   inst  = lock_kv_inst(key,default='')
   v = inst.value
   #v = get_value(key,None)
 
   if v and v.startswith(date_str):
-    start = int(v[8:])+1
+    start = int(v[8-remove_year_digit:])+1
   else:
     start = 1
-  date_int = int( now.strftime('%Y%m%d') ) * 10**fill
+  time_str = now.strftime('%Y%m%d')
+  date_int = int( time_str[remove_year_digit :] ) * 10**fill
   ls = [date_int+x for x in range(start,start+how_many) ]
   set_value(key,ls[-1])
   return ls

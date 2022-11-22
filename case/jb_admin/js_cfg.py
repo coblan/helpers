@@ -168,15 +168,21 @@ def get_lib(request):
             dc.update( {
                 'vuejs': 'https://lib.baomitu.com/vue/2.6.14/vue.js',
 
-                'jquery':'https://lib.baomitu.com/jquery/3.4.1/jquery.min.js',#  'https://lf9-cdn-tos.bytecdntp.com/cdn/expire-1-M/jquery/3.4.1/jquery.min.js',
+                #'jquery':'https://lib.baomitu.com/jquery/3.4.1/jquery.min.js',#  'https://lf9-cdn-tos.bytecdntp.com/cdn/expire-1-M/jquery/3.4.1/jquery.min.js',
+                'jquery':'https://s1.pstatp.com/cdn/jquery/3.4.1/jquery.min.js',
                 #'vuex': 'https://cdn.jsdelivr.net/npm/vuex@3.0.1/dist/vuex.min.js', 
         
                 'font_awesome':'https://lib.baomitu.com/font-awesome/4.7.0/css/font-awesome.min.css', #'https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/font-awesome/4.7.0/css/font-awesome.min.css',
                 'bootstrap_css': 'https://lib.baomitu.com/twitter-bootstrap/3.3.7/css/bootstrap.min.css',
                 'bootstrap': 'https://lib.baomitu.com/twitter-bootstrap/3.3.7/js/bootstrap.min.js',
                 
-                'layer':'https://lib.baomitu.com/layer/3.1.1/layer.min.js',#  'https://lf6-cdn-tos.bytecdntp.com/cdn/expire-1-M/layer/3.1.1/layer.min.js',
-                'layer_css': 'https://lib.baomitu.com/layer/3.1.1/mobile/need/layer.min.css',# 'https://lf9-cdn-tos.bytecdntp.com/cdn/expire-1-M/layer/3.1.1/mobile/need/layer.min.css', 
+                #'layer':'https://lib.baomitu.com/layer/3.1.1/layer.min.js',#  'https://lf6-cdn-tos.bytecdntp.com/cdn/expire-1-M/layer/3.1.1/layer.min.js',
+                #'layer_css': 'https://lib.baomitu.com/layer/3.1.1/mobile/need/layer.min.css',# 'https://lf9-cdn-tos.bytecdntp.com/cdn/expire-1-M/layer/3.1.1/mobile/need/layer.min.css', 
+                
+                'layer':'https://s1.pstatp.com/cdn/layer/3.5.1/layer.min.js',
+                'layer_css': 'https://s1.pstatp.com/cdn/layer/3.5.1/theme/default/layer.min.css',
+                
+                
                 'nice_validator':'https://lib.baomitu.com/nice-validator/1.1.4/jquery.validator.min.js?local=zh-CN',# 'https://lf9-cdn-tos.bytecdntp.com/cdn/expire-1-M/nice-validator/1.1.4/jquery.validator.min.js?local=zh-CN',
                 'nice_validator_css':'https://lib.baomitu.com/nice-validator/1.1.4/jquery.validator.min.css',# 'https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/nice-validator/1.1.4/jquery.validator.min.css',
                 'adminlte': 'https://lib.baomitu.com/admin-lte/2.4.18/js/adminlte.min.js',# 'https://lf26-cdn-tos.bytecdntp.com/cdn/expire-1-y/admin-lte/2.4.10/js/adminlte.min.js',
@@ -190,11 +196,10 @@ def get_lib(request):
                 #'element': 'https://lib.baomitu.com/element-ui/2.15.8/index.min.js', 
                 #'element_css':'https://lib.baomitu.com/element-ui/2.15.8/theme-chalk/index.min.css',    
                 # 360总element可能显示icon有问题，替换成字节的
-                #'element':'https://cdn.bytedance.com/cdn/expire-1-M/element-ui/2.15.7/index.min.js',
-                #'element_css':'https://cdn.bytedance.com/cdn/expire-1-M/element-ui/2.15.7/theme-chalk/index.min.css',
-                'element':'https://s1.pstatp.com/cdn/element-ui/2.15.7/index.min.js',
-                'element_css':'https://s1.pstatp.com/cdn/element-ui/2.15.7/theme-chalk/index.min.css',                
-                
+                'element':'https://cdn.bytedance.com/cdn/expire-1-M/element-ui/2.15.7/index.min.js',
+                'element_css':'https://cdn.bytedance.com/cdn/expire-1-M/element-ui/2.15.7/theme-chalk/index.min.css',         
+                #'element':'https://lib.baomitu.com/element-ui/2.15.9/index.min.js',
+                #'element_css':'https://lib.baomitu.com/element-ui/2.15.9/theme-chalk/index.min.css',
        
                 'md5': 'https://lib.baomitu.com/blueimp-md5/2.19.0/js/md5.min.js',
                 'swiper': 'https://lib.baomitu.com/Swiper/4.5.1/js/swiper.min.js',
@@ -203,34 +208,29 @@ def get_lib(request):
                 'chosen':'https://cdn.jsdelivr.net/npm/chosen-js@1.8.7/chosen.jquery.min.js',
                 'chosen_css':'https://cdn.jsdelivr.net/npm/chosen-js@1.8.7/chosen.min.css',
 
-                
-                # 外面找到ckeditor 要报错， ckeditor lineHeight Html5Video插件找不到 还是用jsdelivr吧
-                #'ckeditor':'https://cdn.jsdelivr.net/npm/ckeditor@4.11.4/ckeditor.js',
-                #'ckeditor':'https://cdn.jsdelivr.net/npm/ckeditor@4.11.4/ckeditor.min.js',
-
-                #'ckeditor':'https://cdn.ckeditor.com/4.18.0/standard/ckeditor.js',
-                #'ckeditor': 'https://lib.baomitu.com/ckeditor/4.10.1/ckeditor.js',#'https://cdn.ckeditor.com/4.10.1/full/ckeditor.js',
-                #'ckeditor':'https://cdn.jsdelivr.net/npm/ckeditor-full@4.7.3/ckeditor.js',
-
-                #'ckeditor': 'https://lib.baomitu.com/ckeditor/4.10.1/ckeditor.js',#
-                #"ckeditor":'https://cdn.ckeditor.com/4.10.1/full/ckeditor.js',
-
-
-                
+                'ckeditor': 'https://lib.baomitu.com/ckeditor/4.10.1/ckeditor.js',#
                 'select2':'https://cdn.jsdelivr.net/npm/select2@4.0.10/dist/js/select2.min.js',
                 'select2_css':'https://cdn.jsdelivr.net/npm/select2@4.0.10/dist/css/select2.min.css',
                 
                 'cropper_css':'https://cdn.jsdelivr.net/npm/cropper@4.1.0/dist/cropper.min.css',
                 'cropper':'https://cdn.jsdelivr.net/npm/cropper@4.1.0/dist/cropper.min.js',
-                'velocity':'https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.min.js',
+                #'velocity':'https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.min.js',
+                'velocity':'https://lib.baomitu.com/velocity/1.5.2/velocity.min.js',
+                # 版本有兼容问题
                 'animate_css':'https://lib.baomitu.com/animate.css/4.1.1/animate.min.css',
-                'wow':'https://cdn.jsdelivr.net/npm/wow.js@1.2.2/dist/wow.min.js',
+                #'animate_css':'https://lib.baomitu.com/animate.css/3.7.2/animate.min.css',
+                #'wow':'https://cdn.jsdelivr.net/npm/wow.js@1.2.2/dist/wow.min.js',
+                'wow':'https://lib.baomitu.com/wow/1.1.2/wow.min.js',
                 #'composition_api':'https://cdn.jsdelivr.net/npm/@vue/composition-api@1.5.0',
                 'composition_api':'/static/cdn/jb_admin/composition-api@1.6.0',
                 ##'composition_api':'https://cdn.jsdelivr.net/npm/@vue/composition-api@1.6.1'
                 'axios':'https://lib.baomitu.com/axios/0.26.1/axios.min.js',
                 'ace':'https://lib.baomitu.com/ace/1.5.3/ace.min.js',
                 'ace_javascript':'https://lib.baomitu.com/ace/1.5.3/mode-javascript.min.js',
+                "qrcode":"https://lib.baomitu.com/qrcodejs/1.0.0/qrcode.min.js",
+                
+                'selectizejs': 'https://lib.baomitu.com/selectize.js/0.13.6/js/standalone/selectize.min.js', 
+                'selectizejs_css':'https://lib.baomitu.com/selectize.js/0.13.6/css/selectize.default.min.css',                
    
             })
             if not settings.DEBUG:

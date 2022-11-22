@@ -8,6 +8,11 @@ export default {
   computed:{
     show_text:function(){
       var value = this.rowData[this.field]
+      if(this.head.hide_express){
+        if(ex.eval(this.head.hide_express,{value:value})){
+          return  ''
+        }
+      }
       if( value == undefined){
         return ''
       }else if(typeof value == 'object'){

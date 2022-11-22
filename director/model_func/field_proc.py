@@ -98,6 +98,9 @@ class BaseFieldProc(object):
         return dc
     
     def filter_clean_filter_arg(self, name,search_args):
+        if name not in search_args:
+            return search_args
+        
         value = search_args.get(name,'')
         if value == '':
             search_args.pop(name)      # 如果是空字符串，就表示不过滤

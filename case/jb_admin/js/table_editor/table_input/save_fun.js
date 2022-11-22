@@ -11,7 +11,9 @@ export function save_row(row){
                 cfg.outdate_confirm(
                     rt._outdate,
                     function() {
-                        ex.director_call(row._director_name, {pk: row.pk}).then(resp=> {
+                        cfg.show_load()
+                       return  ex.director_get(row._director_name, {pk: row.pk}).then(resp=> {
+                           cfg.hide_load()
                             ex.vueAssign(row, resp.row)
                         })
                     },function(){

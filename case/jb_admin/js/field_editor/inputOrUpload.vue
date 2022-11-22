@@ -9,8 +9,14 @@
          :class="{active:crt_view=='input'}"
          @click="crt_view='input'"></i>
     </div>
-    <com-field-plain-file :row="row" :head="head" v-if="crt_view=='upload'"></com-field-plain-file>
-    <lineText :row="row" :head="head" v-if="crt_view=='input'"></lineText>
+
+    <slot name="upload" v-if="crt_view=='upload'">
+      <com-field-plain-file :row="row" :head="head" ></com-field-plain-file>
+    </slot>
+    <slot name="input">
+      <lineText :row="row" :head="head" v-if="crt_view=='input'"></lineText>
+    </slot>
+
   </div>
 </template>
 <script>

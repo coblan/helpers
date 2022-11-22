@@ -4,10 +4,54 @@
 
 {% block page_content %}
 
+<style>
+    .live-hide{
+        display: none;
+    }
+
+    /*@media (min-width: 768px){*/
+        .wrapper>.on-live-hide.content-wrapper{
+            margin-left: 0 !important;
+        }
+    /*}*/
+.full-content{
+    padding: 0;
+    padding-left: 0;
+    padding-right: 0;
+}
+#main-page{
+    position: relative;
+    min-height: calc( 100vh - 110px )
+}
+.full-content #main-page{
+    min-height: calc( 100vh - 50px )
+}
+.on-live-hide .full-content #main-page{
+    min-height: 100vh;
+}
+</style>
 <script type="text/javascript">
 
 editor= {{ editor | jsonify }}
 editor_ctx = {{ editor_ctx | jsonify }}
+
+var live_layout = {
+     fullWin(){
+        document.body.querySelector('#head-bar').className += ' live-hide'
+        document.body.querySelector('#main-sidebar').className += ' live-hide'
+        document.body.querySelector('.content-wrapper').className += ' on-live-hide'
+    },
+     exitFullWin(){
+        document.body.querySelector('#head-bar').className = document.body.querySelector('#head-bar').className.replace('live-hide','')
+        document.body.querySelector('#main-sidebar').className = document.body.querySelector('#main-sidebar').className.replace('live-hide','')
+        document.body.querySelector('.content-wrapper').className =document.body.querySelector('.content-wrapper').className.replace('on-live-hide','')
+    },
+    fullContent(){
+        document.body.querySelector('section.content').className+= ' full-content'
+    },
+}
+
+
 
 $(function() {
 
@@ -45,7 +89,7 @@ $(function() {
                     name:com_name,
                 }
                 Vue.set( this.$options.components,com_name,big_com)
-                this.stack.push({editor:com_name,ctx:ctx,label:label || com.label || ctx.title  })
+                this.stack.push({editor:com_name,ctx:ctx,label:label || com.label || ctx.par_row._label ||  ctx.title  })
             },
             open_com(com_name,ctx,label){
                 this.stack.push({editor:com_name,ctx:ctx,label:label||ctx.label || ctx.title })
@@ -65,14 +109,11 @@ $(function() {
                 var names =[]
                 ex.each(this.stack.slice(1),function(editor){
                     if(editor){
-                        names.push(editor.label )
-//                        var last_crt_tab = ex.findone(stack.tabs,{name:stack.crt_tab_name})
-////                        names.push(last_crt_tab.label)
-//                        if(stack.par_row._label){
-//                            names.push(last_crt_tab.label+"("+stack.par_row._label+")")
-//                        }else{
-//                            names.push(last_crt_tab.label)
-//                        }
+                        if(editor.ctx.par_row && editor.ctx.par_row._label){
+                            names.push( editor.ctx.par_row._label )
+                        }else{
+                            names.push(editor.label || editor.ctx.par_row._label )
+                        }
                     }
 //                    last_stack = stack
                 })
@@ -82,19 +123,6 @@ $(function() {
     }
 
     live_root =  new Vue(myapp)
-  // live_root =  new Vue({
-  //       el: '#there',
-  //       data:{
-  //           component_name:myapp,
-  //       },
-  //       render(createElement){
-  //           return createElement(this.component_name,{
-  //                   attrs:{},
-  //               }
-  //           )
-  //       },
-  //   })
-    
     // 兼容老的调用
     root_live= live_root
 })
@@ -130,7 +158,7 @@ $(function() {
     {% endblock %}
 
     {% block tab-content %}
-    <div id="main-page" class="rows-block flex-v flex-grow"  style="position: relative;min-height: calc( 100vh - 110px )">
+    <div id="main-page" class="rows-block flex-v flex-grow" >
         <!--<transition name="slide">-->
             <keep-alive :include="alive_list">
                 <component :is="current_com.editor" :ctx="current_com.ctx" v-bind="current_com.ctx"></component>

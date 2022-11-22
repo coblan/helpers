@@ -138,8 +138,8 @@ export default {
                         layer.confirm(resp._outdate, {
                             icon:3,
                             title:'提示',
-                            btn: ['刷新数据', '仍然保存', '取消'] //可以无限个按钮
-                            ,btn3: function(index, layero){
+                            btn:  ['刷新数据', '取消'] , //  ['刷新数据', '仍然保存', '取消'] //可以无限个按钮
+                            btn3: function(index, layero){
                                 layer.close(index)
                             }
                         }, function(index, layero){
@@ -160,14 +160,6 @@ export default {
                                     }
                                 }
                             })
-                        }, function(index){
-                            layer.close(index)
-                            //ex.each(self.selected,row=>{
-                            //    row.meta_overlap_fields='__all__'
-                            //})
-                            new_row.meta_overlap_fields = '__all__'
-                            after_proc({new_row,field_vc,pop_fields_win_index})
-                            //self.selected_set_and_save(kws,true)
                         });
                         return
                     }else  if( !resp.errors){
@@ -234,14 +226,21 @@ export default {
 
             if(window.root_live){
                 // keeplive 页面
-                root_live.open_live(live_el_tab,{tabs:tabs,title:kws.par_row._label,crt_tab_name:kws.tab_name,par_row:kws.par_row,last_ps:self})
+                root_live.open_live(live_el_tab,{tabs:tabs,
+                    title:kws.par_row._label,crt_tab_name:kws.tab_name,par_row:kws.par_row,
+                    type:kws.type,
+                    top_editor: kws.top_editor,
+                    top_ctx: kws.top_ctx,
+                    last_ps:self})
             }else{
                 root_store.$emit('switch-to-tab',{
                     widget:'com-widget-el-tab' ,
                     tabs:tabs,
                     crt_tab_name:kws.tab_name,
                     par_row:kws.par_row,
-
+                    type:kws.type,
+                    top_editor: kws.top_editor,
+                    top_ctx: kws.top_ctx,
                 })
                 // 传统 页面
                 //self.tab_stack.push( {

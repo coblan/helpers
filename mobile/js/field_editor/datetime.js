@@ -20,9 +20,11 @@ Vue.component('com-field-datetime',{
         }
     },
     template:`<van-cell class="com-field-date com-field-datetime" :title="head.label">
-     <span :class="{empty_value:!row[head.name]}" v-text="row[head.name] || '请输入'+head.label"
+  <span v-if="head.readonly" :class="{empty_value:!row[head.name]}" v-text="row[head.name]"
+        style="width: 5rem;display: inline-block;min-height: .4rem;text-align: left"  ></span>
+     <span v-else  :class="{empty_value:!row[head.name]}" v-text="row[head.name] || '请输入'+head.label"
         style="width: 5rem;display: inline-block;min-height: .4rem;text-align: left"  @click.stop="open()"></span>
-        <!--<van-icon v-if="row[head.name]" slot="right-icon" name="cross" @click.stop="clear()" class="custom-icon" />-->
+        
    <van-popup v-model="show" position="bottom" overlay>
     <van-datetime-picker
       v-model="inn_value"

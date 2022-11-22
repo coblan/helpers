@@ -7,6 +7,7 @@
         :placeholder="head.label"
         :props="myprops"
         @change="onChange"
+        :popper-class="head.pop_class"
         size="small"
         clearable>
     </el-cascader>

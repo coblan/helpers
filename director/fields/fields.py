@@ -55,11 +55,14 @@ class ModelFields(forms.ModelForm):
     show_pk=False
     nolimit=False
     simple_dict = False
+    allow_delete= False
+    select_for_update = True  # 某些高频访问文件，不允许锁定，就可以设置为False
     @classmethod
     def parse_request(cls,request):
         """
         传入参数的形式：  
         被fieldsPage使用，最好不要再使用该函数，有点混乱了
+        这个函数可能是被 d.get_row 使用的
         """
         dc=request.GET.dict()
         pk=dc.pop('pk',None)
@@ -103,8 +106,9 @@ class ModelFields(forms.ModelForm):
             pass
         elif dc.get('pk') != None and dc.get('pk') != '':
             pk=dc.get('pk')
-        elif dc.get('id') !=None and dc.get('id') != '':
-            pk = dc.get('id')
+        # 如果不注释这里会造成问题: 当前端手动输入id来创建记录，后端判断“是否新建”会错判为“不是新建”，产生找不到记录错误
+        #elif dc.get('id') !=None and dc.get('id') != '': 
+            #pk = dc.get('id')
         else:
             if self.kw.get('instance'):
                 pk = self.kw['instance'].pk
@@ -121,7 +125,7 @@ class ModelFields(forms.ModelForm):
                 form_kw['instance']=self._meta.model.objects.last()
             elif pk != None:  # 很多时候，pk=0 是已经创建了
                 try:
-                    if select_for_update:
+                    if select_for_update and self.__class__.select_for_update:
                         form_kw['instance']= self._meta.model.objects.select_for_update().get(pk=pk)
                     else:
                         form_kw['instance']= self._meta.model.objects.get(pk=pk)
@@ -161,7 +165,7 @@ class ModelFields(forms.ModelForm):
                     #if isinstance(fieldcls, models.ForeignKey):
                         #dc[k] = getattr(inst, "%s_id" % k)
                         #continue
-                    #dc[k] = getattr(form_kw['instance'] , k)  
+                    #dc[k] = getattr(form_kw['instance'] , k)  kw
         
 
         # todict -> ui -> todict(compare) -> adapte_dict
@@ -387,7 +391,7 @@ class ModelFields(forms.ModelForm):
                 'type':'primary',
                 'icon':'el-icon-receiving',
                 'label':'保存', 
-                'action':'scope.ps.vc.submit()'
+                'click_express':'scope.ps.vc.submit()'
                 #'icon': 'fa-save',
                 #'class':'btn btn-info btn-sm',
             },
@@ -396,6 +400,42 @@ class ModelFields(forms.ModelForm):
                 #'name':'save_and_return','editor':'com-field-op-btn','label':'保存后返回','icon':'fa-share-square','show':'scope.vc.back',
                 #'class':'btn btn-sm','action':'scope.vc.submit().then((row)=>{ scope.vc.back()})'
                 #}
+            ]
+        if self.allow_delete and self.permit.can_del():
+            ls += [
+                {
+                'name':'delete',
+                'editor':'com-btn',
+                'type':'danger',
+                'icon':'el-icon-delete',
+                'label':'删除', 
+                'click_express':'''(async ()=>{
+                      cfg.show_load();
+                      var resp = await ex.director_call("d.delete_query_related",{rows:[scope.ps.vc.row]})
+                      cfg.hide_load();
+                      if(resp.length>0){
+                            cfg.pop_vue_com("com-pan-delete-query-message",{msg_list:resp,genStore:scope.ps,title:"删除关联确认"})
+                       }else{
+                            await cfg.confirm(`确认删除[${scope.ps.vc.row._label}]?`)
+                            cfg.show_load()
+                            await ex.director_call("d.delete_row",{row:scope.ps.vc.row})
+                            cfg.hide_load()
+                            cfg.toast("删除成功")
+                       }
+                       // tab形式的
+                       var ps = ex.vueParStore(scope.ps.vc,{name:'com-widget-el-tab'})
+                       if(ps){
+                            var tab_table = ps.vc.ctx.genVc
+                            tab_table.search()
+                            cfg.switch_back()
+                       }
+                      
+                })()
+                ''',
+                'show_express':'scope.row.pk'
+                #'icon': 'fa-save',
+                #'class':'btn btn-info btn-sm',
+                      },
             ]
         return ls
     
@@ -741,7 +781,7 @@ class Fields(ModelFields):
     """
     普通的form表单，与model层剥离开的
     """
-    def __init__(self, dc={}, pk=None, crt_user=None, nolimit=False, *args, **kw): 
+    def __init__(self, dc={}, pk=None, crt_user=None, nolimit=False, *args,select_for_update=True, **kw): 
         dc=self.clean_dict(dc) 
         self.kw=dc.copy()
         self.kw.update(kw)
