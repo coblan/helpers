@@ -1,6 +1,6 @@
 <template>
-    <span class="com-btn" :class="my_ctx.class">
-        <el-button :size="my_ctx.size || 'mini' " :type="my_ctx.type" @click="on_click()"
+<!--    <span class="com-btn" :class="my_ctx.class">-->
+        <el-button class="com-btn"  :class="my_ctx.class"  :size="my_ctx.size || 'mini' " :type="my_ctx.type" @click="on_click()"
                    :title="my_ctx.title"
                    :icon="my_ctx.icon"
                    :disabled="is_disabled"
@@ -11,7 +11,7 @@
                 <span v-text="my_ctx.label"></span>
             </slot>
         </el-button>
-    </span>
+<!--    </span>-->
 </template>
 <script>
     export default {

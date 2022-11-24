@@ -421,6 +421,8 @@ class ModelTable(object):
     fitWidth = False
     allow_set_layout = False   # 是否自动打开 设置列。
     allow_create = True # 创建按钮是否显示
+    allow_refresh = True
+    
     def __init__(self,page=1,row_sort=[],row_filter={},row_search= '',crt_user=None,perpage=None,**kw):
         """
         kw['search_args']只是一个记录，在获取到rows时，一并返回前端页面，便于显示。
@@ -1015,32 +1017,41 @@ class ModelTable(object):
         
         refresh_action = {'name':'refresh',
                  'editor':'com-btn',
-                 'label':_('刷新'),
-                 'class':'com-btn-refresh-btn',
+                 'label':'',
+                 'title':'refresh',
+                 #'class':'com-btn-refresh-btn',
                  'icon':'el-icon-refresh',
-                 'css':'.com-btn-refresh-btn{float:right}',
-                 'type':'success',
+                 #'css':'.com-btn-refresh-btn{float:right}',
+                 "utility":True,
+                 #'type':'success',
                  'plain':True,
-                 'visible':self.filters ==RowFilter and self.search in [RowSearch],
+                 'visible':  self.allow_refresh, # self.filters ==RowFilter and self.search in [RowSearch],
                  'action':'scope.ps.search()'}
         
         fieldCls = director.get(director_name+'.edit')     
-        if not fieldCls:
-            return [
-                refresh_action
-            ]
+        #if not fieldCls:
+            #return [
+                #refresh_action
+            #]
+            
         fieldobj=fieldCls(crt_user=self.crt_user)
         fields_ctx = fieldobj.get_head_context()
         fields_ctx.update({
             'ops_loc':'bottom'
         })
         return [
-            {'editor':'com-btn','name':'table_setting',
-                             'label':'设置列',
-                             'icon':'el-icon-s-tools',
-                             'click_express':'''cfg.pop_vue_com("com-d-table-setting",{table_ps:scope.ps,title:"设置列的排序和显示"})
-                                            .then(()=>scope.ps.reloadAdviseInfo())''',
-                             'visible':self.allow_set_layout},              
+            {'editor':'com-btn',
+             'name':'table_setting',
+            'label':'',  # 
+            'title':'设置列显示和排序',
+            'utility':True,
+            'plain':True,
+            'icon':'el-icon-s-tools',
+            'click_express':'''cfg.pop_vue_com("com-d-table-setting",{table_ps:scope.ps,title:"设置列的排序和显示(拖动可以调整顺序,勾选控制是否显示)"})
+                           .then(()=>scope.ps.reloadAdviseInfo())''',
+            'visible':self.allow_set_layout},    
+            
+            refresh_action,
             
             {
                 'name':'add_new',
@@ -1105,7 +1116,7 @@ class ModelTable(object):
                  'row_match':'many_row',
                  'disabled':'!scope.ps.has_select', 
                  'visible': self.allow_delete  and self.permit.can_del() },
-                refresh_action,
+               
                 ]     
         
     
