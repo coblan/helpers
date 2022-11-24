@@ -1027,20 +1027,7 @@ class ModelTable(object):
                  'plain':True,
                  'visible':  self.allow_refresh, # self.filters ==RowFilter and self.search in [RowSearch],
                  'action':'scope.ps.search()'}
-        
-        fieldCls = director.get(director_name+'.edit')     
-        #if not fieldCls:
-            #return [
-                #refresh_action
-            #]
-            
-        fieldobj=fieldCls(crt_user=self.crt_user)
-        fields_ctx = fieldobj.get_head_context()
-        fields_ctx.update({
-            'ops_loc':'bottom'
-        })
-        return [
-            {'editor':'com-btn-el-button',
+        table_setting = {'editor':'com-btn-el-button',
              'name':'table_setting',
             'label':'',  # 
             'title':'设置列显示和排序',
@@ -1049,8 +1036,21 @@ class ModelTable(object):
             'icon':'el-icon-s-tools',
             'click_express':'''cfg.pop_vue_com("com-d-table-setting",{table_ps:scope.ps,title:"设置列的排序和显示(拖动可以调整顺序,勾选控制是否显示)"})
                            .then(()=>scope.ps.reloadAdviseInfo())''',
-            'visible':self.allow_set_layout},    
+            'visible':self.allow_set_layout}
+        fieldCls = director.get(director_name+'.edit')     
+        if not fieldCls:
+            return [
+                table_setting,
+                refresh_action
+            ]
             
+        fieldobj=fieldCls(crt_user=self.crt_user)
+        fields_ctx = fieldobj.get_head_context()
+        fields_ctx.update({
+            'ops_loc':'bottom'
+        })
+        return [
+            table_setting,    
             refresh_action,
             
             {
