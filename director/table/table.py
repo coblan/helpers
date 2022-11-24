@@ -1016,7 +1016,7 @@ class ModelTable(object):
         #model_form = model_dc[self.model].get('fields')
         
         refresh_action = {'name':'refresh',
-                 'editor':'com-btn',
+                 'editor':'com-btn-el-button',
                  'label':'',
                  'title':'refresh',
                  #'class':'com-btn-refresh-btn',
@@ -1040,7 +1040,7 @@ class ModelTable(object):
             'ops_loc':'bottom'
         })
         return [
-            {'editor':'com-btn',
+            {'editor':'com-btn-el-button',
              'name':'table_setting',
             'label':'',  # 
             'title':'设置列显示和排序',
