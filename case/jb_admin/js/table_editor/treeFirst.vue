@@ -33,4 +33,12 @@ export default {
 .table-tree-first{
   vertical-align: bottom;
 }
+
+</style>
+<style lang="scss">
+.table-area{
+  .el-table__expand-icon{
+    vertical-align: top;
+  }
+}
 </style>
