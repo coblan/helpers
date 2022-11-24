@@ -240,7 +240,7 @@ class UserPicker(ModelTable):
         icontains = ['username','first_name']
 
 class GroupPage(TablePage):
-    template='jb_admin/table.html'
+    template='jb_admin/table_new.html'
     
     def get_label(self): 
         return '权限分组'
