@@ -1014,6 +1014,7 @@ class ModelTable(object):
     def get_operations(self):
         director_name = self.get_director_name()
         #model_form = model_dc[self.model].get('fields')
+        #has_not_filter_or_search = ( self.filters ==RowFilter and self.search in [RowSearch] )
         
         refresh_action = {'name':'refresh',
                  'editor':'com-btn-el-button',
@@ -1025,6 +1026,7 @@ class ModelTable(object):
                  "utility":True,
                  #'type':'success',
                  'plain':True,
+                  'show_express':' rt = !(scope.ps.vc.operationHeads.length == 1 && scope.ps.vc.filterHeads.length >1) ',
                  'visible':  self.allow_refresh, # self.filters ==RowFilter and self.search in [RowSearch],
                  'action':'scope.ps.search()'}
         table_setting = {'editor':'com-btn-el-button',
