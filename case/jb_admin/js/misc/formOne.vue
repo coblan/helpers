@@ -3,7 +3,7 @@
     <div class="oprations up" v-if="ops_loc=='up'">
       <component v-for="op in normed_ops" :is="op.editor" :ref="'op_'+op.name" :ctx="op" :head="op" @operation="on_operation(op)"></component>
     </div>
-    <div style="overflow: auto;" :class="{'box box-success':ops_loc=='up','has-group':fields_group}" class="flex-grow fields-area">
+    <div style="overflow: auto;" :class="{ 'box box-default box-mycustom':ops_loc=='up','has-group':fields_group}" class="flex-grow fields-area">
       <!--有分组的情况-->
       <div v-if="fields_group" class="fields-group">
         <div v-for="group in grouped_heads_bucket" :class="'group_'+group.name" v-if="group.heads.length > 0">
@@ -223,5 +223,9 @@ export default {
     padding: 10px;
   }
 
+}
+
+.box-mycustom{
+  border-top-color: #f4f4f4;
 }
 </style>
