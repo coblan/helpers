@@ -1026,7 +1026,7 @@ class ModelTable(object):
                  "utility":True,
                  #'type':'success',
                  'plain':True,
-                  'show_express':' rt = !(scope.ps.vc.operationHeads.length == 1 && scope.ps.vc.filterHeads.length >1) ',
+                  'show_express':'rt = !(scope.ps.vc.operationHeads.length == 1 && scope.ps.vc.filterHeads.length >=1) ',
                  'visible':  self.allow_refresh, # self.filters ==RowFilter and self.search in [RowSearch],
                  'action':'scope.ps.search()'}
         table_setting = {'editor':'com-btn-el-button',
