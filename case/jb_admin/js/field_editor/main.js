@@ -5,7 +5,7 @@ import * as phone_code from  './phone_code'
 import * as month from  './month'
 
 
-import * as cascader from  './cascader'
+// import * as cascader from  './cascader'
 // import * as field_date from  './date'
 import * as pop_tree_select from  './pop_tree_select'
 import * as compute from  './compute'
@@ -75,7 +75,8 @@ Vue.component('com-field-html-guide',guideHtml)
 // Vue.component('com-field-ratio-number',ratioNumber)
 import jsonEdit from "./jsonEdit.vue";
 Vue.component('com-field-json-edit',jsonEdit)
-
+import cascader from "./cascader.vue";
+Vue.component('com-field-cascader',cascader)
 import el_date from "./date.vue";
 Vue.component('com-field-date',el_date)
 
