@@ -146,3 +146,10 @@ Vue.component('com-field-split-text',function(resovle,reject){
         resovle(splitText)
     })
 })
+import signature from "./signature.vue";
+Vue.component('com-field-signature',function(resovle,reject){
+    ex.load_js('https://s1.pstatp.com/cdn/signature_pad/1.5.3/signature_pad.min.js').then(()=>{
+        resovle(signature)
+    })
+
+})
