@@ -1,5 +1,5 @@
 from helpers.director.shortcut import director_view
-import urllib
+import urllib.request
 from helpers.func import ex
 from django.conf import settings
 import os
