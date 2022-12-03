@@ -20,7 +20,7 @@ export default {
         title:'签字'
       }
         var resp = await cfg.pop_vue_com(popSignature,{title:'签字',},option)
-      this.row[this.head.name] = resp
+      Vue.set(this.row,this.head.name,resp)
     }
   }
 }
