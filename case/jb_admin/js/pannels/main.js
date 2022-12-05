@@ -22,6 +22,8 @@ Vue.component('com-pop-progress',pop_progress)
 Vue.component('com-pan-static1',static1)
 Vue.component('com-pan-delete-query-message',delete_query_related)
 
+
+
 // import  director_table_1 from  './director_table.vue'
 // Vue.component('com-d-table',director_table_1)
 

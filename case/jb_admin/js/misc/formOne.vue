@@ -6,16 +6,20 @@
     <div style="overflow: auto;" :class="{ 'box box-default box-mycustom':ops_loc=='up','has-group':fields_group}" class="flex-grow fields-area">
       <!--有分组的情况-->
       <div v-if="fields_group" class="fields-group">
-        <div v-for="group in grouped_heads_bucket" :class="'group_'+group.name" v-if="group.heads.length > 0">
+        <template v-for="group in grouped_heads_bucket">
+          <div  :class="'group_'+group.name" v-if="group.heads && group.heads.length > 0">
 
-          <div class="fields-group-title"  v-html="group.label"></div>
-          <com-fields-table-block v-if="table_grid "
-                                  :heads="group.heads" :row="row" :option="{table_grid:table_grid}">
-          </com-fields-table-block>
-          <div v-else class='field-panel suit' >
-            <field  v-for='head in group.heads' :key="head.name" :head="head" :row='row'></field>
+            <div class="fields-group-title"  v-html="group.label"></div>
+            <com-fields-table-block v-if="table_grid "
+                                    :heads="group.heads" :row="row" :option="{table_grid:table_grid}">
+            </com-fields-table-block>
+            <div v-else class='field-panel suit' >
+              <field  v-for='head in group.heads' :key="head.name" :head="head" :row='row'></field>
+            </div>
           </div>
-        </div>
+          <component v-if="group.editor" :is="group.editor" :row="row" :ctx="group.editor_ctx"></component>
+        </template>
+
       </div>
       <!--只有table分组-->
       <div v-else-if="table_grid " >
@@ -94,12 +98,12 @@ export default {
       var out_bucket = []
       ex.each(this.fields_group,(group)=>{
         if(group.show && ! ex.eval(group.show,{row:this.row,head:this.head})){
-        return
-      }
-      var heads = ex.filter(this.normed_heads,function(head){
-        return ex.isin(head.name,group.heads)
-      })
-      out_bucket.push({name:group.name,label:group.label,heads:heads})
+          return
+        }
+        var heads = ex.filter(this.normed_heads,function(head){
+          return ex.isin(head.name,group.heads)
+        })
+        out_bucket.push({name:group.name,label:group.label,heads:heads,editor:group.editor,editor_ctx:group.editor_ctx})
       })
       return out_bucket
       }
