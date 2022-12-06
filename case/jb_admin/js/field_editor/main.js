@@ -79,7 +79,8 @@ import cascader from "./cascader.vue";
 Vue.component('com-field-cascader',cascader)
 import el_date from "./date.vue";
 Vue.component('com-field-date',el_date)
-
+import  html from './html.vue'
+Vue.component('com-field-html',html)
 import jsEditor from "./jsEditor.vue";
 Vue.component('com-field-js-editor', async (resolve, reject) =>{
     await ex.load_js(cfg.js_lib.ace)
