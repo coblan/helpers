@@ -7,18 +7,33 @@
       <!--有分组的情况-->
       <div v-if="fields_group" class="fields-group">
         <template v-for="group in grouped_heads_bucket">
-          <div  :class="'group_'+group.name" v-if="group.heads && group.heads.length > 0">
+            <div v-if="group.heads && group.heads.length > 0" :class="'group_'+group.name">
+             <div style="display: flex;gap: 30px;align-items: center">
+               <div class="fields-group-title"  v-html="group.label"></div>
+               <div v-if="group.collapse != undefined" @click="groupCollapseSwitch(group)" style="cursor: pointer">
+                 <i style="font-size: 120%" v-if="group.collapse" class="el-icon-caret-right"></i>
+                 <i style="font-size: 120%" v-if="!group.collapse" class="el-icon-caret-bottom"></i>
+               </div>
+             </div>
+              <div v-show="group.collapse == undefined || !group.collapse">
+                <com-fields-table-block v-if="table_grid "
+                                        :heads="group.heads" :row="row" :option="{table_grid:table_grid}">
+                </com-fields-table-block>
+                <div v-else class='field-panel suit' >
+                  <field  v-for='head in group.heads' :key="head.name" :head="head" :row='row'></field>
+                </div>
+              </div>
 
-            <div class="fields-group-title"  v-html="group.label"></div>
-            <com-fields-table-block v-if="table_grid "
-                                    :heads="group.heads" :row="row" :option="{table_grid:table_grid}">
-            </com-fields-table-block>
-            <div v-else class='field-panel suit' >
-              <field  v-for='head in group.heads' :key="head.name" :head="head" :row='row'></field>
             </div>
-          </div>
-          <component v-if="group.editor" :is="group.editor" :row="row" :ctx="group.editor_ctx"></component>
+            <component v-show="group.collapse == undefined || !group.collapse"
+                       v-if="group.editor" :is="group.editor" :row="row" :ctx="group.editor_ctx"></component>
+
+
+
+
         </template>
+
+
 
       </div>
       <!--只有table分组-->
@@ -103,13 +118,26 @@ export default {
         var heads = ex.filter(this.normed_heads,function(head){
           return ex.isin(head.name,group.heads)
         })
-        out_bucket.push({name:group.name,label:group.label,heads:heads,editor:group.editor,editor_ctx:group.editor_ctx})
+        var gg = ex.copy(group)
+        gg.heads=heads
+        out_bucket.push(gg)
+        // out_bucket.push({name:group.name,label:group.label,heads:heads,
+        //   editor:group.editor,
+        //   editor_ctx:group.editor_ctx,
+        //   collapse:group.collapse,
+        // })
       })
       return out_bucket
       }
     },
 
     methods:{
+      groupCollapseSwitch(group){
+        var one = ex.findone(this.fields_group,{name:group.name})
+        one.collapse = !group.collapse
+        // Vue.set(group,'collapse',!group.collapse)
+         // group.collapse= !group.collapse
+      },
       group_filter_heads:function(group){
         return ex.filter(this.normed_heads,function(head){
           return ex.isin(head.name,group.heads)
@@ -232,4 +260,6 @@ export default {
 .box-mycustom{
   border-top-color: #f4f4f4;
 }
+
+
 </style>
