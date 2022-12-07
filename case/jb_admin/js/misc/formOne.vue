@@ -97,6 +97,11 @@ export default {
         }
     },
     mixins:[mix_fields_data,mix_nice_validator],
+    mounted(){
+        if(this.ctx.css){
+          ex.append_css(this.css)
+        }
+    },
     computed:{
     normed_ops(){
       return ex.filter(this.ops,(op)=>{
