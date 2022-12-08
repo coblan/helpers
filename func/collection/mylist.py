@@ -62,3 +62,24 @@ def split_iter(iteration,count):
             ls =[]
     if ls:
         yield ls
+        
+
+def slice_names(names,start,end):
+    """
+    @names:['name1','name2','name3','name4']
+    @start: name2
+    @end:   name4
+    
+    返回 :[name2,name3,name4]
+    """
+    out =[]
+    inn = False
+    for name in names:
+        if name ==start:
+            inn = True
+        if inn:
+            out.append(name)
+        if name ==end:
+            inn =False
+            break
+    return out
