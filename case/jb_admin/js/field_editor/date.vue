@@ -1,5 +1,5 @@
 <template>
-  <div class="com-field-date">
+  <div class="com-field-date" :style="mysytle">
     <span class="readonly-info" v-show='head.readonly' v-text='row[head.name]'></span>
 
     <input v-if="!head.readonly" type="text" style="display: none"
@@ -58,6 +58,14 @@ export default {
         }]
       },
     }
+  },
+  computed:{
+    mysytle(){
+      return {
+        '--width':this.head.width || 'auto',
+        '--input_width':this.head.width || '23rem',
+      }
+    },
   }
 }
 </script>
@@ -69,7 +77,10 @@ export default {
 .com-field-date{
   /deep/{
     .el-date-editor.el-input, .el-date-editor.el-input__inner{
-      width: auto ;
+      width: var(--width) !important;
+    }
+    .el-date-editor input{
+      width: var(--input_width);
     }
   }
 }
