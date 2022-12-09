@@ -1,3 +1,5 @@
+import random
+
 def split_list(dstlist,every_num):
     """ 将dstlist分批次返回。
     
@@ -83,3 +85,9 @@ def slice_names(names,start,end):
             inn =False
             break
     return out
+
+def random_sample(collection,count):
+    if len(collection) <= count:
+        return collection
+    else:
+        return random.sample(collection,count)
