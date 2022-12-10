@@ -133,7 +133,11 @@ def run(row):
     if not loger.check_code():
         code,url = code_and_url()
         set_value(loger.code_key, code)
-        return {'success':False,'errors':{'validate_code':[_('验证码错误')]},'validate_img':url}
+        return {
+            #'success':False,
+                'errors':{'validate_code':[_('验证码错误')]},
+                'validate_img':url
+                }
     rt= loger.check_and_login()
     return rt
 
@@ -207,9 +211,9 @@ class Login(object):
             code,url = code_and_url()
             set_value(self.code_key,code)
             infodc.update( {'validate_img':url} )
-        infodc.update({
-            'success':False
-        })
+        #infodc.update({
+            #'success':False
+        #})
         return infodc
     
 #@director_view('do_login')
