@@ -67,7 +67,8 @@ export default {
   },
   mounted:function(){
     this.is_mounted  = true
-    this.show_tab(this.ctx.crt_tab_name)
+    // this.show_tab(this.ctx.crt_tab_name)
+
   },
   computed:{
     my_el_type(){
@@ -92,15 +93,19 @@ export default {
     }
   },
   methods:{
+    setCurrentTab(tabname){
+      this.ctx.crt_tab_name = tabname
+    },
     set_hover(tab,value){
       Vue.set(tab,'_hover',value)
     },
-    show_tab(name){
-      this.ctx.crt_tab_name=name
-    },
+    // show_tab(name){
+    //   this.ctx.crt_tab_name=name
+    // },
     handleClick(tab, event) {
       if(this.crt_tab_name != tab.name){
-        this.show_tab(tab.name)
+        // this.show_tab(tab.name)
+        this.setCurrentTab(tab.name)
         this.$emit('click-tab',name)
       }
     },

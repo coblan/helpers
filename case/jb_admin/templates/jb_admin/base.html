@@ -92,11 +92,80 @@
             }
         }
 
-//        Vue.use(Vuex);
-//        var store = new Vuex.Store({
-//        });
+
+        var live_layout = {
+            fullWin(){
+                document.body.querySelector('#head-bar').className += ' live-hide'
+                document.body.querySelector('#main-sidebar').className += ' live-hide'
+                document.body.querySelector('.content-wrapper').className += ' on-live-hide'
+            },
+            exitFullWin(){
+                document.body.querySelector('#head-bar').className = document.body.querySelector('#head-bar').className.replace('live-hide','')
+                document.body.querySelector('#main-sidebar').className = document.body.querySelector('#main-sidebar').className.replace('live-hide','')
+                document.body.querySelector('.content-wrapper').className =document.body.querySelector('.content-wrapper').className.replace('on-live-hide','')
+            },
+            fullContent(){
+                document.body.querySelector('section.content').className+= ' full-content'
+            },
+        }
+
+        function update_cnt_size(){
+//        var cnt_ht =  Math.max( $(document).height(),window.innerHeight)
+            var cnt_ht =  window.innerHeight ;//$('body').height() ;//
+            const doc = document.documentElement
+
+            if(!search_args._embed){
+                // $('#there').height(cnt_ht -80)
+                doc.style.setProperty('--content-height', cnt_ht -80+'px')
+            }else{
+                // $('#there').height(cnt_ht)
+                doc.style.setProperty('--content-height', cnt_ht +'px')
+            }
+
+        }
+
+        $(function () {
+            update_cnt_size()
+            $(window).resize(function(){
+                update_cnt_size()
+            });
+
+        })
+
+
     </script>
     <style>
+        body.embed #head-bar,body.embed #main-sidebar{
+             display: none;
+         }
+        body.embed .wrapper>.content-wrapper{
+            margin-left: 0 !important;
+        }
+        body.embed section.content{
+            padding: 0;
+            padding-left: 0;
+            padding-right: 0;
+        }
+        /*body.embed .page-label{*/
+        /*    display: none;*/
+        /*}*/
+
+        .live-hide{
+            display: none;
+        }
+
+        /*@media (min-width: 768px){*/
+        .wrapper>.on-live-hide.content-wrapper{
+            margin-left: 0 !important;
+        }
+        /*}*/
+        .full-content{
+            padding: 0;
+            padding-left: 0;
+            padding-right: 0;
+        }
+
+
         .bar{
             background: #dd453b !important;
         }
@@ -105,17 +174,9 @@
             padding-bottom: 60px;
         }
 
-        /*html {*/
-            /*min-height: 100%;*/
-            /*_height:100%;*/
-        /*}*/
-        /*body {*/
-            /*margin: 0;*/
-            /*padding: 0;*/
-            /*min-height: 100%;*/
-            /*_height:100%;*/
-        /*}*/
-
+       #there{
+           height: var( --content-height );
+       }
     </style>
     {% block head-script %}
     {% endblock %}
@@ -142,7 +203,6 @@ desired effect
 -->
 
 {% include 'director/reverse.html' %}
-
 {% for lib in extra_js %}
 <script src='{{ lib | ctxvalue:js_config.js_lib }}'></script>
 {% endfor %}
@@ -219,7 +279,7 @@ desired effect
     }
 
 </style>
-<body class="hold-transition {{ ui_theme }} sidebar-mini">
+<body class="hold-transition {{ ui_theme }} sidebar-mini {{body_class}}">
 <script>
     if(sessionStorage.getItem(`${engine_name}.sidebar-collapse`)){
         $('body').addClass('sidebar-collapse')
@@ -736,19 +796,7 @@ desired effect
 
 
 </script>
-<!--<script src="https://cdn.bootcss.com/admin-lte/2.4.3/js/adminlte.min.js"></script>-->
-
-<!--<script src="/static/lib/layui/layui.js"></script>-->
-<!--<script src="/static/lib/layui/lay/modules/layer.js"></script>-->
-<!--<script src="https://cdn.bootcss.com/layer/3.1.0/layer.js"></script>-->
 <script src="{{ js_config.js_lib.layer }}"></script>
-
-<!--<script src="https://cdn.bootcss.com/layer/3.1.0/layer.js"></script>-->
-<!--<script src="https://unpkg.com/vue-easytable/umd/js/index.js"></script>-->
-<!--<link rel="stylesheet" href="https://unpkg.com/vue-easytable/umd/css/index.css">-->
-
-<!--<script src="https://unpkg.com/element-ui/lib/index.js"></script>-->
-
 {% if js_config.tr.element_translation_js != "element_translation_js" %}
     <script src="{{ js_config.tr.element_translation_js }}"></script>
     <script>

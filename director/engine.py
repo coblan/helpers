@@ -181,6 +181,8 @@ class BaseEngine(object):
             #ctx=self.get_ctx(ctx)
             ctx['template']= template
             ctx['ui_theme'] = self.ui_theme
+            if self.request.GET.get('_embed'):
+                ctx['body_class']= 'embed'
             if hasattr(page,'get_label'):
                 ctx['page_label'] =page.get_label()
             ctx['head_bar_data']=self.get_head_bar_data(request)
