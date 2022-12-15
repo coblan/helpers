@@ -28,7 +28,7 @@ class ForeignProc(BaseFieldProc):
             }
     def get_options(self):
         if getattr(self.field.target_field.model,'bigdata',False):
-            return [{'value':1,'label':'大数据量,请自定义'}]        
+            return [{'value':0,'label':'大数据量,请自定义'}]        
         else:
             return super().get_options()
     
@@ -46,7 +46,7 @@ class ForeignProc(BaseFieldProc):
     def filter_get_head(self, name, model):
         this_field= model._meta.get_field(name)
         if getattr(self.field.target_field.model,'bigdata',False):
-            options =  [{'value':1,'label':'大数据量,请自定义'}]
+            options =  [{'value':0,'label':'大数据量,请自定义'}]
         else:  
             
             catch = get_request_cache()
