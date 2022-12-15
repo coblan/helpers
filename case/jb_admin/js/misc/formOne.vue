@@ -1,7 +1,8 @@
 <template>
   <div class="com-form-one flex-v" :class="head.class">
     <div class="oprations up" v-if="ops_loc=='up'">
-      <component v-for="op in normed_ops" :is="op.editor" :ref="'op_'+op.name" :ctx="op" :head="op" @operation="on_operation(op)"></component>
+      <component v-for="op in normed_ops" :is="op.editor"  :key="op.name"
+                 :ref="'op_'+op.name" :ctx="op" :head="op" @operation="on_operation(op)"></component>
     </div>
     <div style="overflow: auto;" :class="{ 'box box-default box-mycustom':ops_loc=='up','has-group':fields_group}" class="flex-grow fields-area">
       <!--有分组的情况-->
@@ -47,7 +48,8 @@
       </div>
     </div>
     <div class="oprations bottom" v-if="ops_loc=='bottom'">
-      <component v-for="op in normed_ops" :key="op.name" :is="op.editor" :ref="'op_'+op.name" :head="op" :ctx="op" @operation="on_operation(op)"></component>
+      <component v-for="op in normed_ops" :key="op.name" :is="op.editor"
+                 :ref="'op_'+op.name" :head="op" :ctx="op" @operation="on_operation(op)"></component>
     </div>
   </div>
 </template>
@@ -103,17 +105,19 @@ export default {
         }
     },
     computed:{
-    normed_ops(){
-      return ex.filter(this.ops,(op)=>{
-        // 兼容老调用
-        op.show_express = op.show_express || op.show
-        if(op.show_express){
-            return ex.eval(op.show_express,{row:this.row,vc:this})
-        }else{
-            return true
-        }
-      })
-    },
+        normed_ops(){
+          var last_ops =  ex.filter(this.ops,(op)=>{
+            // 兼容老调用
+            op.show_express = op.show_express || op.show
+            if(op.show_express){
+                var rt =  ex.eval(op.show_express,{row:this.row,vc:this})
+              return  rt
+            }else{
+                return true
+            }
+          })
+          return last_ops
+        },
     grouped_heads_bucket:function(){
       var out_bucket = []
       ex.each(this.fields_group,(group)=>{
