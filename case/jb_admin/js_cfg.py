@@ -8,6 +8,7 @@ def get_tr():
         'language':_('Language'),
         'back':_('back'),
         'search': _('Refresh'),
+        'menu':_('菜单'),
         'change_password':_('Change Password'),
         'logout':_('LogOut'),
         'login':_('LogIn'), 

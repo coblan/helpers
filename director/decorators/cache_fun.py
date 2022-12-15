@@ -19,6 +19,7 @@ def cache_redis(ex=None,cache_key=None):
     """
     把函数的返回结果缓存在redis中
     """
+    
     def _fun(fun):
         if redis_conn:
             def _fun2(*args,**kws): 
@@ -45,6 +46,7 @@ def cache_redis(ex=None,cache_key=None):
                     rt_obj = fun(*args, **kws)
                     rt = json.dumps(rt_obj,ensure_ascii=False)
                     redis_conn.set(cache_name,rt,ex=ex)
+                    
                     #clear_value(lock_key)
                     #else:
                         #count = 0
@@ -101,15 +103,31 @@ def cache_in_db(ex=None,cache_key=None):
         return _fun2
     return _fun
 
-if getattr(settings,'REDIS_HOST',None):
+if getattr(settings,'REDIS',None):
     from ..network.myredis import redis_conn
     cache_fun = cache_redis
 else:
     cache_fun = cache_in_db
     
 def clear_fun_cache(key):
-    if getattr(settings,'REDIS_HOST',None):
+    if getattr(settings,'REDIS',None):
         redis_conn.delete(key)
     else:
         clear_value(key)  # in kv model
+
+def get_cache_list(key,count,insert_fun,ex=None):
+    rt = redis_conn.get(key)
+    if rt:
+        rt_obj = json.loads(rt)
+    else:
+        rt_obj =[]
+    if len(rt_obj) >= count:
+        return rt_obj
+    else:
+        ls = insert_fun()
+        ls.extend(rt_obj)
+        redis_conn.set(key,json.dumps(ls),ex=ex)
+        return ls[:count]
+        
+            
 
