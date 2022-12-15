@@ -76,6 +76,9 @@ $(function() {
         methods:{
             pop_stack(){
                 var com = this.stack.pop()
+                if(cfg._tab_call_back.length>0){
+                    cfg._tab_call_back.pop()()
+                }
                 Vue.delete(this.$options.components,com)
             },
             open_live(com,ctx,label){
