@@ -26,7 +26,11 @@ class ForeignProc(BaseFieldProc):
                 name: foreign,
                 '_%s_label'%name:''                
             }
-    
+    def get_options(self):
+        if getattr(self.field.target_field.model,'bigdata',False):
+            return [{'value':1,'label':'大数据量,请自定义'}]        
+        else:
+            return super().get_options()
     
     # 外键不能转换为对象，直接用pk值就行。
     #def clean_field(self,dc,name):
@@ -41,21 +45,25 @@ class ForeignProc(BaseFieldProc):
     
     def filter_get_head(self, name, model):
         this_field= model._meta.get_field(name)
-        catch = get_request_cache()
-        option_name = model_to_name(model)+'.%s.options'%name
-        
-        if not catch.get(option_name):
-            def mychoice_func():
-                ls=this_field.get_choices()
-                ls=ls[1:]
-                options = [{'value':x[0],'label':x[1]} for x in ls] 
-                #options=sorted(options,key=lambda item: ''.join(lazy_pinyin(item.get('label'))) )
-                catch[option_name] = options
-                return options
-            options= mychoice_func  
+        if getattr(self.field.target_field.model,'bigdata',False):
+            options =  [{'value':1,'label':'大数据量,请自定义'}]
+        else:  
             
-        else:
-            options = catch.get(option_name)
+            catch = get_request_cache()
+            option_name = model_to_name(model)+'.%s.options'%name
+            
+            if not catch.get(option_name):
+                def mychoice_func():
+                    ls=this_field.get_choices()
+                    ls=ls[1:]
+                    options = [{'value':x[0],'label':x[1]} for x in ls] 
+                    #options=sorted(options,key=lambda item: ''.join(lazy_pinyin(item.get('label'))) )
+                    catch[option_name] = options
+                    return options
+                options= mychoice_func  
+                
+            else:
+                options = catch.get(option_name)
         return {
             'name':name,
             'label':_(this_field.verbose_name),

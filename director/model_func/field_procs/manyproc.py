@@ -16,7 +16,12 @@ class ManyProc(BaseFieldProc):
             name:out
             }
     
-    
+    def get_options(self):
+        if getattr(self.field.target_field.model,'bigdata',False):
+            return [{'value':0,'label':'大数据量,请自定义'}]        
+        else:
+            return super().get_options()
+        
     def dict_field_head(self,head):  
         options = self.get_options()   
         #head['editor'] = 'com-field-multi-chosen'

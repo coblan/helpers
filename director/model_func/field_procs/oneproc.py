@@ -3,8 +3,10 @@ from ..field_proc  import BaseFieldProc
 from django.db.models import OneToOneField
 from .. .base_data import field_map
 from ..dictfy import model_to_name, name_to_model
+from . foreignproc import ForeignProc
 
-class OneProc(BaseFieldProc):
+#class OneProc(BaseFieldProc):
+class OneProc(ForeignProc):
     def to_dict(self,inst,name):
         
         foreign=getattr(inst,name,None)
@@ -22,6 +24,12 @@ class OneProc(BaseFieldProc):
                 '_%s_model'%name:model_to_name(related_model)
             }
     
+    def get_options(self):
+        if getattr(self.field.target_field.model,'bigdata',False):
+            return [{'value':1,'label':'大数据量,请自定义'}]        
+        else:
+            return super().get_options()
+        
     def dict_table_head(self, head):
         head['options']=[]
         head['editor'] = 'com-table-label-shower'
