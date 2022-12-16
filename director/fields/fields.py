@@ -56,7 +56,8 @@ class ModelFields(forms.ModelForm):
     nolimit=False
     simple_dict = False
     allow_delete= False
-    select_for_update = True  # 某些高频访问文件，不允许锁定，就可以设置为False
+    select_for_update = True  # 某些高频访问文件，写入不平凡，所以不允许锁定，就可以设置为False
+    complete_field = False
     @classmethod
     def parse_request(cls,request):
         """
@@ -206,8 +207,15 @@ class ModelFields(forms.ModelForm):
         # 参数的修正挪到最上面
         #dc = self._clean_dict(dc)
         #dc=self.clean_dict(dc) 
+        if self.complete_field and form_kw.get('instance'):
+            dd = sim_dict(form_kw.get('instance'))
+            dd.update(dc)
+            dc = dd
+            
         self.kw.update(dc)        
 
+       
+            
 
         super(ModelFields,self).__init__(dc,*args,**form_kw)
         # 2021-05-07 挪到上面
