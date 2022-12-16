@@ -638,7 +638,7 @@ class ModelFields(forms.ModelForm):
         if self.instance.pk: # not self.instance._state.adding #
             self.instance.refresh_from_db()
         if self.simple_dict:
-            row = sim_dict(self.instance,include=self.fields.keys(),include_pk=False)
+            row = sim_dict(self.instance,include=self.fields.keys(),include_pk=True)
             row.update( self.dict_row(self.instance) )
         else:
             row = to_dict(self.instance,include=self.fields.keys())

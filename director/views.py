@@ -145,6 +145,14 @@ def export_excel(request):
 def director_view(request,director_name):
     """将director函数以api的方式直接暴露出去"""
     
+    # 专门针对modelfield返回详情
+    if director_name.startswith('get/'):
+        kws = argument.get_argument(request,outtype='dict')
+        directorEnt= director.get(director_name)
+        rt = directorEnt(**kws,select_for_update=False).get_data_context() 
+        dc ={'success':True,'data':rt.get('row')}
+        return  HttpResponse(json.dumps(dc,ensure_ascii=False,cls=DirectorEncoder),content_type="application/json")     
+    
     if request.method == "GET" or request.META.get('HTTP_REALTYPE')=='json_get':
         return fast_director_view(request, director_name)
     
