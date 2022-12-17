@@ -208,7 +208,7 @@ class ModelFields(forms.ModelForm):
         #dc = self._clean_dict(dc)
         #dc=self.clean_dict(dc) 
         if self.complete_field and form_kw.get('instance'):
-            dd = sim_dict(form_kw.get('instance'))
+            dd = dict(simdc)
             dd.update(dc)
             dc = dd
             
@@ -240,7 +240,9 @@ class ModelFields(forms.ModelForm):
         self.before_changed_data = {k:v for k,v in orgin_simdc.items() if k in self.changed_data} # sim_dict(self.instance, include= self.changed_data)
        
         #self.org_db_dict = mark_dict(self.instance.__dict__,keys= self.fields.keys())
-        
+    
+    def findInstance(self,dc):
+        pass
     
     def clean(self):
         """
