@@ -37,4 +37,4 @@ def to_excel(model):
             ftype ='多对多，一般是一个[1,2,3]数组, 指向表%s主键'% out_model._meta.model_name
         else:
             ftype =''
-        print(f'{field.name}\t{field.verbose_name}\t{ftype}')
+        print(f'{field.name}\t{field.verbose_name}\t{ftype}.{field.help_text}')
