@@ -8,12 +8,15 @@ from ..dictfy  import model_to_name,name_to_model
 class ManyProc(BaseFieldProc):
     def to_dict(self,inst,name):
         out =[]
+        label = []
         if inst.pk:
             for item in getattr(getattr(inst,name),'all')():
                 out.append(item.pk)
+                label.append(str(item))
                 
         return {
-            name:out
+            name:out,
+            '_%s_label'%name:label
             }
     
     def get_options(self):
