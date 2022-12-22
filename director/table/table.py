@@ -995,7 +995,9 @@ class ModelTable(object):
             head_nams = [x['name'] for x in self.get_light_heads() if x['name'] not in self.exclude_export_related]
             for f in self.model._meta.get_fields():
                 if f.name in head_nams and isinstance(f, (models.ForeignKey,models.OneToOneField)):
-                    query = query.select_related(f.name)        
+                    query = query.select_related(f.name)  
+                if f.name in head_nams and isinstance(f,models.ManyToManyField):
+                    query = query.prefetch_related(f.name)
 
         
         return query
