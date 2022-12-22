@@ -118,6 +118,9 @@
             },
             pop_tab_stack(){
                 this.childStore.tab_stack.pop()
+                if(cfg._tab_call_back.length>0){
+                    cfg._tab_call_back.pop()()
+                }
             },
 //            on_td_event:function(e){
 //                this.op_funs[e.name](e)

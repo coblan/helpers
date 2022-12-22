@@ -56,7 +56,8 @@ class ModelFields(forms.ModelForm):
     nolimit=False
     simple_dict = False
     allow_delete= False
-    select_for_update = True  # 某些高频访问文件，不允许锁定，就可以设置为False
+    select_for_update = True  # 某些高频访问文件，写入不平凡，所以不允许锁定，就可以设置为False
+    complete_field = False
     @classmethod
     def parse_request(cls,request):
         """
@@ -206,8 +207,15 @@ class ModelFields(forms.ModelForm):
         # 参数的修正挪到最上面
         #dc = self._clean_dict(dc)
         #dc=self.clean_dict(dc) 
+        if self.complete_field and form_kw.get('instance'):
+            dd = dict(simdc)
+            dd.update(dc)
+            dc = dd
+            
         self.kw.update(dc)        
 
+       
+            
 
         super(ModelFields,self).__init__(dc,*args,**form_kw)
         # 2021-05-07 挪到上面
@@ -232,7 +240,9 @@ class ModelFields(forms.ModelForm):
         self.before_changed_data = {k:v for k,v in orgin_simdc.items() if k in self.changed_data} # sim_dict(self.instance, include= self.changed_data)
        
         #self.org_db_dict = mark_dict(self.instance.__dict__,keys= self.fields.keys())
-        
+    
+    def findInstance(self,dc):
+        pass
     
     def clean(self):
         """
@@ -638,7 +648,7 @@ class ModelFields(forms.ModelForm):
         if self.instance.pk: # not self.instance._state.adding #
             self.instance.refresh_from_db()
         if self.simple_dict:
-            row = sim_dict(self.instance,include=self.fields.keys(),include_pk=False)
+            row = sim_dict(self.instance,include=self.fields.keys(),include_pk=True)
             row.update( self.dict_row(self.instance) )
         else:
             row = to_dict(self.instance,include=self.fields.keys())
