@@ -17,16 +17,21 @@
     }
   .add-btn{
     margin:10px;
-
     .inn-btn{
-      background-color: #e2e2e2;
-      border: 1px solid #e2e2e2;
+      //background-color: #e2e2e2;
+      background-color: #FBFDFF;
+      border: 1px solid #a7bad2;
+      border-radius: 6px;
       width: 40px;
       height: 40px;
-      position: relative
+      position: relative;
+      color: #8C939D;
+      transition: all .5s;
     }
       .inn-btn:hover{
-          background-color: #efefef;
+          //background-color: #efefef;
+          border: 1px solid #66B1FF;;
+           background-color: rgba(102,177,255,0.3);
           cursor: pointer;
       }
   }
