@@ -1,21 +1,41 @@
 require('./styl/fields_table_block.styl')
 
 export default  {
-    props:['heads','row','option'],
+    props:{
+        heads:{},
+        row:{},
+        option: {},
+        alignLabel:{
+            default:true,
+        },
+    },
     template:`<div class="com-fields-table-block field-panel msg-bottom">
            <table >
             <tr v-for="heads_row in table_grid_heads">
                 <template v-for="(head,index) in heads_row">
-                    <td v-if="head.show_label==undefined || head.show_label " class="field-label-td" :class="[head.class,{back_td:index!=0}]"  :colspan="head.label_colspan" :rowspan="head.label_rowspan">
-                        <div class="field-label">
-                            <span class="label-content">
+                    <td  v-if="alignLabel && ( head.show_label==undefined || head.show_label) " class="field-label-td" :class="head.class"  :colspan="head.label_colspan" :rowspan="head.label_rowspan">
+                        <div class="field-label" :class="{back_label:index!=0}">
+                            <span class="req_star" v-if='head.required'>*</span>
+                            <div class="label-content" style="display: flex;align-items: center;">
                                  <span v-text="head.label"></span>
-                            </span>
-                            <span>:</span>
-                             <span class="req_star" v-if='head.required'>*</span>
+                                  <span>:</span>
+                            </div>
+                             
                         </div>
                     </td>
                     <td class="field-input-td" :class="head.class" :colspan="head.colspan" :rowspan="head.rowspan">
+                    
+                    <div style="display: flex;align-items: center;">
+                    
+                       <div v-if=" !alignLabel && ( head.show_label==undefined || head.show_label) " 
+                           class="field-label" :class="{back_label:index!=0}">
+                                <span class="req_star" v-if='head.required'>*</span>
+                                <div class="label-content" style="display: flex;align-items: center;">
+                                     <span v-text="head.label"></span>
+                                     <span>:</span>
+                                </div>
+                                
+                       </div>
                         <div class="field-input">
                             <component v-if="head.editor" :is="head.editor"
                                  @field-event="$emit('field-event',$event)"
@@ -24,6 +44,9 @@ export default  {
                                  <i style="color: #3780af;"   class="fa fa-question-circle" ></i>
                             </span>
                         </div>
+                    
+                    </div>
+                     
                     </td>
                 </template>
             </tr>

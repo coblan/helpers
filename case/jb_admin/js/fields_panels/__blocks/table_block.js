@@ -1,11 +1,18 @@
 
 Vue.component('com-fields-table-block',{
-    props:['heads','row','option'],
+    props:{
+        heads:{},
+        row:{},
+        option: {},
+        alignLabel:{
+            default:true,
+        }
+    },
     template:`<div class="table-fields field-panel msg-bottom">
            <table >
             <tr v-for="heads_row in table_grid_heads">
                 <template v-for="head in heads_row">
-                    <td class="field-label-td" :class="head.class"  :colspan="head.label_colspan" :rowspan="head.label_rowspan">
+                    <td v-if="alignLabel" class="field-label-td" :class="head.class"  :colspan="head.label_colspan" :rowspan="head.label_rowspan">
                         <div class="field-label">
                             <span class="label-content">
                                  <span v-text="head.label"></span>
@@ -14,6 +21,12 @@ Vue.component('com-fields-table-block',{
                         </div>
                     </td>
                     <td class="field-input-td" :class="head.class" :colspan="head.colspan" :rowspan="head.rowspan">
+                        <div v-if="!alignLabel" class="field-label">
+                            <span class="label-content">
+                                 <span v-text="head.label"></span>
+                                 <span class="req_star" v-if='head.required'>*</span>
+                            </span>
+                        </div>
                         <div class="field-input">
                             <component v-if="head.editor" :is="head.editor"
                                  @field-event="$emit('field-event',$event)"
