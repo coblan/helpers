@@ -5,12 +5,13 @@ export default  {
     template:`<div class="com-fields-table-block field-panel msg-bottom">
            <table >
             <tr v-for="heads_row in table_grid_heads">
-                <template v-for="head in heads_row">
-                    <td class="field-label-td" :class="head.class"  :colspan="head.label_colspan" :rowspan="head.label_rowspan">
+                <template v-for="(head,index) in heads_row">
+                    <td v-if="head.show_label==undefined || head.show_label " class="field-label-td" :class="[head.class,{back_td:index!=0}]"  :colspan="head.label_colspan" :rowspan="head.label_rowspan">
                         <div class="field-label">
                             <span class="label-content">
                                  <span v-text="head.label"></span>
                             </span>
+                            <span>:</span>
                              <span class="req_star" v-if='head.required'>*</span>
                         </div>
                     </td>
