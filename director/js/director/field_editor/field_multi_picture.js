@@ -5,10 +5,11 @@ Vue.component('com-field-multi-picture',{
     template:`<div class="com-field-multi-picture">
     <textarea style="display: none;" :name="head.name" id="" cols="30" rows="10" v-model="row[head.name]"></textarea>
 
-        <div style="vertical-align: top" >
-            <div v-if="!head.readonly" class="add-btn" @click="open_select_images()" style="width: 100px;height: 100px;position: relative;display: inline-block;padding: 10px">
+        <div style="display: flex;align-items: center;flex-wrap: wrap" >
+            <div v-if="!head.readonly" class="add-btn" @click="open_select_images()" 
+                style="width: 60px;height: 60px;position: relative;display: inline-block;padding: 10px">
                 <div class="inn-btn"  style="">
-                    <span class="center-vh" style="font-size: 300%;">+</span>
+                    <span class="center-vh" style="font-size: 200%;">+</span>
                 </div>
             </div>
             <div class="img-wrap" v-for="(imgsrc,index) in row[head.name]" >
