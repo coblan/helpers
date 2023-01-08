@@ -22,6 +22,8 @@ entity_end_re = re.compile(r'(\w+;)')
 
 def truncatehtml(string, length, ellipsis='...'):
     """Truncate HTML string, preserving tag structure and character entities."""
+    if not string:
+        return ''
     output_length = 0
     i = 0
     pending_close_tags = {}
