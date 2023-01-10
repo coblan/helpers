@@ -57,6 +57,8 @@ export default {
 .tab-full{
   .com-tab-table{
     position: absolute;top:0;left:0;bottom: 0;right:0;overflow: auto;padding-bottom: 1em;
+    //height: calc( var(--content-height) - 80px);
+    //width: 100%;
   }
 }
 </style>

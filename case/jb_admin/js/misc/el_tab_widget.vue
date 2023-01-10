@@ -30,6 +30,7 @@
       </el-tab-pane>
     </el-tabs>
 
+<!--     只有一个tab的时候，不用显示在el-tabs里面了。-->
     <component v-else v-for="tab in ctx.tabs"  :is="tab.editor || tab.com " :tab_head="tab"
                :par_row="ctx.par_row"
                :ref="'_tab_'+tab.name" @tab-event="up_event($event)"></component>
