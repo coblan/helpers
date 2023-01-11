@@ -165,7 +165,9 @@ class BigFileRecieve(GeneralUpload):
 
         for name, fl in file_dict.items():
             keepname = request.GET.get('keepname','tm-name')
-            if keepname=='overwrite':
+            if keepname =='field_name':
+                file_name = name
+            elif keepname=='overwrite':
                 file_name = fl.name
             elif keepname=='overwrite-md5':
                 sufix = self.getSufix(fl)
