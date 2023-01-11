@@ -38,21 +38,22 @@ section.content{
 editor= {{ editor | jsonify }}
 editor_ctx = {{ editor_ctx | jsonify }}
 
-var live_layout = {
-     fullWin(){
-        document.body.querySelector('#head-bar').className += ' live-hide'
-        document.body.querySelector('#main-sidebar').className += ' live-hide'
-        document.body.querySelector('.content-wrapper').className += ' on-live-hide'
-    },
-     exitFullWin(){
-        document.body.querySelector('#head-bar').className = document.body.querySelector('#head-bar').className.replace('live-hide','')
-        document.body.querySelector('#main-sidebar').className = document.body.querySelector('#main-sidebar').className.replace('live-hide','')
-        document.body.querySelector('.content-wrapper').className =document.body.querySelector('.content-wrapper').className.replace('on-live-hide','')
-    },
-    fullContent(){
-        document.body.querySelector('section.content').className+= ' full-content'
-    },
-}
+// 下面的功能挪到了base.html，现在每个页面都有改功能了。
+// var live_layout = {
+//      fullWin(){
+//         document.body.querySelector('#head-bar').className += ' live-hide'
+//         document.body.querySelector('#main-sidebar').className += ' live-hide'
+//         document.body.querySelector('.content-wrapper').className += ' on-live-hide'
+//     },
+//      exitFullWin(){
+//         document.body.querySelector('#head-bar').className = document.body.querySelector('#head-bar').className.replace('live-hide','')
+//         document.body.querySelector('#main-sidebar').className = document.body.querySelector('#main-sidebar').className.replace('live-hide','')
+//         document.body.querySelector('.content-wrapper').className =document.body.querySelector('.content-wrapper').className.replace('on-live-hide','')
+//     },
+//     fullContent(){
+//         document.body.querySelector('section.content').className+= ' full-content'
+//     },
+// }
 
 
 
