@@ -22,13 +22,15 @@ print("hello 3")
 capturing.stop()
 """
 class Capturing():
-    def __init__(self):
+    def __init__(self,stdout=True,stderr=True):
         self._stdout = None
         self._stderr = None
         self._r = None
         self._w = None
         self._thread = None
         self._on_readline_cb = None
+        self.recieve_stdout = stdout
+        self.recieve_stderr = stderr
 
     def _handler(self):
         while not self._w.closed:
@@ -53,8 +55,10 @@ class Capturing():
         r, w = os.fdopen(r, 'r',encoding='utf-8'), os.fdopen(w, 'w', 1,encoding='utf-8')
         self._r = r
         self._w = w
-        sys.stdout = self._w
-        sys.stderr = self._w
+        if self.recieve_stdout:
+            sys.stdout = self._w
+        if self.recieve_stderr:
+            sys.stderr = self._w
         self._thread = threading.Thread(target=self._handler)
         self._thread.start()
 
