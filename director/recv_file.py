@@ -16,6 +16,8 @@ from django.views.decorators.csrf import csrf_exempt
 from helpers.director.base_data import director
 import time
 from helpers.func.image_proc import ceil_image_size
+from helpers.director.shortcut import director_view
+from helpers.func.url_path import media_url_to_path
 
 class BasicReciever(object):
     
@@ -206,8 +208,28 @@ director.update({
             #pass 
         #return par_path  
 
-
-
+@director_view('media/file/merge')
+def merge_media_file(path_list,target):
+    if not target.startswith('/media/'):
+        if target.startswith('/'):
+            target =  '/media' + target
+        else:
+            target =  '/media/' + target
+    abs_target = media_url_to_path(target)
+    #if target.startswith('/media/'):
+        #abs_target = os.path.join(settings.MEDIA_ROOT,target[7:])
+    #else:
+        #abs_target = os.path.join(settings.MEDIA_ROOT,target)
+        
+    with open(abs_target,'wb+') as f:
+        for path in path_list:
+            abs_path = media_url_to_path(path) #  os.path.join(settings.MEDIA_ROOT,path.lstrip('/media/'))
+            with open(abs_path,'rb') as f_slice:
+                dt = f_slice.read()
+                f.write(dt)
+    return [target]
+            
+    
 
 
 
