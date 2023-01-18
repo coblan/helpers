@@ -227,6 +227,8 @@ def merge_media_file(path_list,target):
             with open(abs_path,'rb') as f_slice:
                 dt = f_slice.read()
                 f.write(dt)
+            os.remove(abs_path)
+    
     return [target]
             
     
