@@ -216,13 +216,13 @@ def merge_media_file(path_list,target=None,suffix=None):
                 target =  '/media' + target
             else:
                 target =  '/media/' + target
-        abs_target = media_url_to_path(target)
+        abs_target = target #media_url_to_path(target)
     elif suffix:
         if suffix.startswith('.'):
             abs_target = path_list[0] + suffix
         else:
             abs_target = path_list[0]+'.' + suffix
- 
+    abs_target = media_url_to_path(abs_target)
     with open(abs_target,'wb+') as f:
         for path in path_list:
             abs_path = media_url_to_path(path) #  os.path.join(settings.MEDIA_ROOT,path.lstrip('/media/'))
