@@ -52,9 +52,13 @@ class lock(object):
 def acquire_lock(conn, lockname, timeout = 10,ex=30):
     identifier = str(uuid.uuid4())
     end = time.time() + timeout
+    #count = 0
     while time.time() < end:
         # 这里尝试取得锁 setnx 设置-如果不存在的时候才会set
+        #count+=1
+        #print(count)
         #conn.setnx('lock:' + lockname, identifier)
+        time.sleep(0.2)
         conn.set('lock:' + lockname,identifier,nx=True,ex=ex)
         if conn.get('lock:' + lockname)==identifier:
             general_log.debug(f'获得redis锁:{lockname}.{identifier}')
