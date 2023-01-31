@@ -49,16 +49,21 @@ class lock(object):
         return False
 
 # 加锁的过程
-def acquire_lock(conn, lockname, timeout = 30,):
+def acquire_lock(conn, lockname, timeout = 10,ex=30):
     identifier = str(uuid.uuid4())
     end = time.time() + timeout
     while time.time() < end:
         # 这里尝试取得锁 setnx 设置-如果不存在的时候才会set
-        if conn.setnx('lock:' + lockname, identifier): 
-            # 获得锁之后输出获得锁的‘进程’号
-            #print('获得锁:进程'+ str(args))
+        #conn.setnx('lock:' + lockname, identifier)
+        conn.set('lock:' + lockname,identifier,nx=True,ex=ex)
+        if conn.get('lock:' + lockname)==identifier:
             general_log.debug(f'获得redis锁:{lockname}.{identifier}')
             return identifier
+        #if conn.setnx('lock:' + lockname, identifier): 
+            ## 获得锁之后输出获得锁的‘进程’号
+            ##print('获得锁:进程'+ str(args))
+            #general_log.debug(f'获得redis锁:{lockname}.{identifier}')
+            #return identifier
     return False
 
 
