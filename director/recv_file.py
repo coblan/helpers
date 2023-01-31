@@ -209,25 +209,29 @@ director.update({
         #return par_path  
 
 @director_view('media/file/merge')
-def merge_media_file(path_list,target):
-    if not target.startswith('/media/'):
-        if target.startswith('/'):
-            target =  '/media' + target
+def merge_media_file(path_list,target=None,suffix=None):
+    if target:
+        if not target.startswith('/media/'):
+            if target.startswith('/'):
+                target =  '/media' + target
+            else:
+                target =  '/media/' + target
+        #abs_target = target #media_url_to_path(target)
+    elif suffix:
+        if suffix.startswith('.'):
+            target = path_list[0] + suffix
         else:
-            target =  '/media/' + target
+            target = path_list[0]+'.' + suffix
     abs_target = media_url_to_path(target)
-    #if target.startswith('/media/'):
-        #abs_target = os.path.join(settings.MEDIA_ROOT,target[7:])
-    #else:
-        #abs_target = os.path.join(settings.MEDIA_ROOT,target)
-        
     with open(abs_target,'wb+') as f:
         for path in path_list:
             abs_path = media_url_to_path(path) #  os.path.join(settings.MEDIA_ROOT,path.lstrip('/media/'))
             with open(abs_path,'rb') as f_slice:
                 dt = f_slice.read()
                 f.write(dt)
-    return [target]
+            os.remove(abs_path)
+    
+    return target
             
     
 
