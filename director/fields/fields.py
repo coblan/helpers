@@ -57,7 +57,9 @@ class ModelFields(forms.ModelForm):
     simple_dict = False
     allow_delete= False
     select_for_update = True  # 某些高频访问文件，写入不平凡，所以不允许锁定，就可以设置为False
-    complete_field = False
+    complete_field = False   # 自动补全没有上传的字段
+    allow_miss_field = True
+    
     @classmethod
     def parse_request(cls,request):
         """
@@ -213,9 +215,6 @@ class ModelFields(forms.ModelForm):
             dc = dd
             
         self.kw.update(dc)        
-
-       
-            
 
         super(ModelFields,self).__init__(dc,*args,**form_kw)
         # 2021-05-07 挪到上面
