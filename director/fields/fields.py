@@ -246,8 +246,8 @@ class ModelFields(forms.ModelForm):
     
     def full_clean(self):
         rt = super().full_clean()
-        if self.not_clean:
-            for k in self.not_clean:
+        if self.pass_clean_field:
+            for k in self.pass_clean_field:
                 if k in self._errors:
                     self._errors.pop(k) 
         return rt
