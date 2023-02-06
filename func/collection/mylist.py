@@ -53,6 +53,12 @@ def _find_dc_item(rows,target, extrac_fun):
     return None
 
 def split_iter(iteration,count):
+    """
+    分批来处理一个可迭代器。适合一次处理不了，需要分批来处理大的collection的情况。
+    [1,2,3,4,5]
+    返回
+    [[1,2,3],[4,5,6]]
+    """
     current_count = 0
     ls = []
     for inst in iteration:
@@ -64,7 +70,21 @@ def split_iter(iteration,count):
             ls =[]
     if ls:
         yield ls
-        
+
+def slite_query(query,batch_count):
+    current_index = 0
+
+    while True:
+        ls = []
+        for inst in query[current_index:current_index+batch_count]:
+            ls.append(inst)
+        current_index += batch_count      
+        if ls:
+            yield ls
+        else:
+            break
+       
+    
 
 def slice_names(names,start,end):
     """

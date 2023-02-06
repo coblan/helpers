@@ -831,6 +831,8 @@ class ModelTable(object):
                 fields_ctx = form_obj.get_head_context()
                 for head in heads:
                     if head['name'] in self.pop_edit_fields:
+                        if head.get('editor'):
+                            head['inn_editor'] = head['editor']
                         head['editor'] = 'com-table-click'
                         head['fields_ctx'] = fields_ctx
                         head['fields_ctx'].update({

@@ -112,25 +112,37 @@ export default {
                     after_proc(dc)
                 })
             }else{
-                after_proc({new_row:one_row})
+                after_proc({new_row:one_row,submit_full_field:kws.submit_full_field})
             }
 
-            function after_proc({new_row,field_vc,pop_fields_win_index}){
+            function after_proc({new_row,field_vc,pop_fields_win_index,submit_full_field=true}){
                 /*
                  编辑后，提交
 
                  @new_row : 编辑后的 cache_row ,
                  * */
+                if(submit_full_field){
+                    var cache_rows = ex.copy(self.selected)
+                    ex.each(cache_rows ,function(row){
+                        ex.assign(row,new_row)
+                        // 2021/4/22去掉根据弹出框fields的ctx 切换director_name.因为如果有用ctx保存的需求，可以直接弹出fields框。
+                        //if(kws.fields_ctx && kws.fields_ctx.director_name){
+                        //    row._cache_director_name = row._director_name // [1] 有可能是用的特殊的 direcotor
+                        //    row._director_name=kws.fields_ctx.director_name
+                        //}
+                    })
+                }else{
+                    var cache_rows = []
+                    ex.each(self.selected,(row)=>{
+                        var tmp_row = {
+                            pk:row.pk,
+                            _director_name:row._director_name,
+                            ...new_row
+                        }
+                        cache_rows.push(tmp_row)
+                    })
+                }
 
-                var cache_rows = ex.copy(self.selected)
-                ex.each(cache_rows ,function(row){
-                    ex.assign(row,new_row)
-                    // 2021/4/22去掉根据弹出框fields的ctx 切换director_name.因为如果有用ctx保存的需求，可以直接弹出fields框。
-                    //if(kws.fields_ctx && kws.fields_ctx.director_name){
-                    //    row._cache_director_name = row._director_name // [1] 有可能是用的特殊的 direcotor
-                    //    row._director_name=kws.fields_ctx.director_name
-                    //}
-                })
                 cfg.show_load()
                 ex.director_call('d.save_rows',{rows:cache_rows}).then((resp)=>{
                     cfg.hide_load()
