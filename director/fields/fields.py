@@ -799,6 +799,7 @@ class Fields(ModelFields):
     """
     普通的form表单，与model层剥离开的
     """
+    submit_to_backend = True
     def __init__(self, dc={}, pk=None, crt_user=None, nolimit=False, *args,select_for_update=True, **kw): 
         dc=self.clean_dict(dc) 
         self.kw=dc.copy()
@@ -862,18 +863,28 @@ class Fields(ModelFields):
     
     def get_operations(self):
         ls=[]
-        ls.append({
-            'name':'save',
-            'editor':'com-btn',
-            'label':_('保存'),
-            'type':'success',
-            'icon':'el-icon-receiving',
-            'click_express':'scope.ps.vc.submit()',
-            #'editor':'com-field-op-btn',
-            #'label':'保存', 
-            #'icon': 'fa-save',
-            #'class':'btn btn-info'
-        })
+        if self.submit_to_backend:
+            ls.append({
+                'name':'save',
+                'editor':'com-btn',
+                'label':_('保存'),
+                'type':'success',
+                'icon':'el-icon-receiving',
+                'click_express':'scope.ps.vc.submit()',
+                #'editor':'com-field-op-btn',
+                #'label':'保存', 
+                #'icon': 'fa-save',
+                #'class':'btn btn-info'
+            })
+        else:
+            ls.append({
+                'name':'save',
+                'editor':'com-btn',
+                'label':'确定',
+                'type':'success',
+                'icon':'el-icon-receiving',
+                'click_express':'scope.ps.vc.beforeSubmit().then(()=>{  if(scope.ps.vc.isValid()){ scope.ps.vc.$emit("finish",scope.ps.vc.row)}  })',
+                    })
         return ls 
     
     def dict_row(self):
