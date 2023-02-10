@@ -112,16 +112,16 @@ export default {
                     after_proc(dc)
                 })
             }else{
-                after_proc({new_row:one_row,submit_full_field:kws.submit_full_field})
+                after_proc({new_row:one_row,director_full_field:kws.director_full_field})
             }
 
-            function after_proc({new_row,field_vc,pop_fields_win_index,submit_full_field=true}){
+            function after_proc({new_row,field_vc,pop_fields_win_index,director_full_field=true}){
                 /*
                  编辑后，提交
 
                  @new_row : 编辑后的 cache_row ,
                  * */
-                if(submit_full_field){
+                if(director_full_field){
                     var cache_rows = ex.copy(self.selected)
                     ex.each(cache_rows ,function(row){
                         ex.assign(row,new_row)
@@ -137,6 +137,7 @@ export default {
                         var tmp_row = {
                             pk:row.pk,
                             _director_name:row._director_name,
+                            _director_full_field:false,
                             ...new_row
                         }
                         cache_rows.push(tmp_row)
