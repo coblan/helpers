@@ -56,9 +56,9 @@ export default {
     //})
     var childStore = new Vue()
     childStore.vc = this
-    debugger
+    childStore.name='com-widget-el-tab'
     return {
-//                childStore:childStore,
+      childStore:childStore,
       is_mounted:false,
       tabs:named_ctx[this.ctx_name],
       crt_tab_name:this.tab_name,
@@ -85,8 +85,8 @@ export default {
       var tabs = this.tabs
       var par_row = this.par_row
       var out_tabs = ex.filter(tabs,function(tab){
-        if(tab.show){
-          return ex.eval(tab.show,{par_row:par_row})
+        if(tab.show_express){
+          return ex.eval(tab.show_express,{par_row:par_row})
           //return ex.boolExpress(par_row,tab.show)
         }else{
           return true
@@ -96,6 +96,9 @@ export default {
     }
   },
   methods:{
+    setCurrentTab(tabname){
+        this.crt_tab_name = tabname
+    },
     set_hover(tab,value){
       Vue.set(tab,'_hover',value)
     },

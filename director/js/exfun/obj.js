@@ -41,13 +41,13 @@ export var obj_control={
         //}
     },
     update_row(row){
-        return ex.director_call('d.get_row',{pk:row.pk,director_name:row._director_name}).then((rt_row)=>{
+        return ex.director_get('d.get_row',{pk:row.pk,director_name:row._director_name}).then((rt_row)=>{
             ex.vueAssign(row,rt_row)
         })
     },
     update_rows(rows){
         var out_row=ex.map(rows,row=>{return {pk:row.pk,_director_name:row._director_name}})
-        return ex.director_call('d.get_row_form_db',{rows:out_row}).then((resp_rows)=>{
+        return ex.director_get('d.get_row_form_db',{rows:out_row}).then((resp_rows)=>{
             
             ex.each(rows,function(row){
                 var table_row = ex.findone(resp_rows,{pk:row.pk})

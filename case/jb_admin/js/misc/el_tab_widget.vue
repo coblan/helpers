@@ -30,6 +30,7 @@
       </el-tab-pane>
     </el-tabs>
 
+<!--     只有一个tab的时候，不用显示在el-tabs里面了。-->
     <component v-else v-for="tab in ctx.tabs"  :is="tab.editor || tab.com " :tab_head="tab"
                :par_row="ctx.par_row"
                :ref="'_tab_'+tab.name" @tab-event="up_event($event)"></component>
@@ -67,7 +68,8 @@ export default {
   },
   mounted:function(){
     this.is_mounted  = true
-    this.show_tab(this.ctx.crt_tab_name)
+    // this.show_tab(this.ctx.crt_tab_name)
+
   },
   computed:{
     my_el_type(){
@@ -92,15 +94,19 @@ export default {
     }
   },
   methods:{
+    setCurrentTab(tabname){
+      this.ctx.crt_tab_name = tabname
+    },
     set_hover(tab,value){
       Vue.set(tab,'_hover',value)
     },
-    show_tab(name){
-      this.ctx.crt_tab_name=name
-    },
+    // show_tab(name){
+    //   this.ctx.crt_tab_name=name
+    // },
     handleClick(tab, event) {
       if(this.crt_tab_name != tab.name){
-        this.show_tab(tab.name)
+        // this.show_tab(tab.name)
+        this.setCurrentTab(tab.name)
         this.$emit('click-tab',name)
       }
     },

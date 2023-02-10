@@ -29,7 +29,7 @@ from helpers.func.collection.ex import findone,find_index
 from helpers.case.jb_admin.uidict import pop_edit_current_row
 class PageNum(object):
     perPage=20
-    def __init__(self,pageNumber=1,perpage=None,kw={}):
+    def __init__(self,pageNumber=1,perpage=None,**kws):
         self.pageNumber = int(pageNumber)
         if perpage:
             self.perPage= int(perpage)
@@ -45,9 +45,10 @@ class PageNum(object):
             self.count = query.count()
         else:
             self.count = countQuery.count()
-        crt_page= max(1,int( self.pageNumber))
-        start = (crt_page -1)*self.perPage
-        end = min(crt_page*self.perPage, self.count)
+        #crt_page= max(1,int( self.pageNumber))
+        #start = (crt_page -1)*self.perPage
+        #end = min(crt_page*self.perPage, self.count)
+        start,end = self.get_slice_index()
         return query[start:end]
         
         # 这里在某些子查询里面会触发group sql，会报错。所以改成简单方式
@@ -59,7 +60,7 @@ class PageNum(object):
     def get_slice_index(self):
         crt_page= max(1,int( self.pageNumber))
         start = (crt_page -1)*self.perPage
-        end = crt_page*self.perPage
+        end = min(crt_page*self.perPage, self.count)
         return start,end
     
     def get_context(self):
@@ -137,7 +138,7 @@ class RowFilter(object):
     names=[]   # 该list中的字段，会经过 map cls 正常流程，进行映射。  除了 extrahead中的字段
     range_fields=[]   
     model=''
-    fields_sort = []
+    fields_sort = [] # 排序直接用names作为顺序，如果有些自定义字段不能出现在names中，就需要用到fields_sort来进行排序了。
     icontains=[]   #  该list中的字段，会处理为 com-filter-text类型
     def __init__(self,dc,user,allowed_names,kw={}):
         # 为了让前端不显示
@@ -149,10 +150,12 @@ class RowFilter(object):
         
         #self._names=[x for x in self.names if x in allowed_names]        
         self.filter_args={}
+        
+        # [compare]过滤组件后端逻辑
         for k in self.total_names:
             compare_name = '_%s_compare'%k
             v = dc.pop(k,'')
-            if compare_name in kw:
+            if v and compare_name in kw:
                 cv = str( kw.get(compare_name) )
                 if cv == '0':
                     self.filter_args[k] =v
@@ -244,7 +247,9 @@ class RowFilter(object):
         
         out_list = [self.dict_head(head) for head in out_list]
         out_list = [x for x in out_list if x['name'] in send_to_front_names]
-        if self.fields_sort:
+        if not self.fields_sort:
+            out_list = sorted(out_list, key= lambda x:  self.names.index(x['name']) if x['name'] in self.names else 10000 )
+        elif self.fields_sort:
             out_list = [x for x in out_list if x['name'] in self.fields_sort]
             out_list = sorted(out_list, key= lambda x: self.fields_sort.index(x['name']))
         
@@ -261,7 +266,12 @@ class RowFilter(object):
             if k in self.icontains:
                 out['%s__icontains'%k]=v
             else:
-                out[k]=v
+                if v=='true':
+                    out[k] = True
+                elif v=='false':
+                    out[k] = False
+                else:
+                    out[k]=v
         return out
     
     def get_query(self,query):
@@ -340,11 +350,36 @@ class RowSort(object):
                 query = query.order_by(*ls)
         else:
             if not query.ordered and not query._fields and self.general_sort: # 如果这个为空，才能弄一个默认排序，否则造成聚合函数无效
-                query = query.order_by(self.general_sort)
+                norm_name,direction = adapt_field_name(self.general_sort)
+                if norm_name in self.chinese_words:
+                    query = query_chinese_words(norm_name,direction,query)
+                else:
+                    query = query.order_by(self.general_sort)
 
         return query
 
-  
+def query_chinese_words(norm_name,direction,query):
+    engine= settings.DATABASES.get(query.db)['ENGINE'] 
+
+    if engine == 'django.contrib.gis.db.backends.postgis':
+        # postgresql 注意，postgre的默认中文排序，好像是按照拼音来的（如果这样的话，下面这句程序就没用了。），待以后确认
+        query= query.extra(select={'converted_%s'%norm_name: "convert_to(%s,'GBK')"%norm_name},order_by=['%sconverted_%s'%(direction,norm_name)])
+    else:
+        # mysql 按照拼音排序
+        query= query.extra(select={'converted_%s'%norm_name: 'CONVERT(%s USING gbk)'%norm_name},order_by=['%sconverted_%s'%(direction,norm_name)])  
+    return query
+
+
+def adapt_field_name(name):
+    if name.startswith('-'):
+        norm_name=name.lstrip('-')
+        direction='-'
+    else:
+        norm_name=name
+        direction='' 
+    return norm_name,direction
+
+
 class ModelTable(object):
     """
     
@@ -380,9 +415,14 @@ class ModelTable(object):
     nolimit = False
     simple_dict = False
     export_related = True
-    button_edit = False
-    allow_delete = False
+    exclude_export_related =[]  # 有些外键有问题，例如用0作为null，所以这是不用用select_related导出，否则会出现空数据。
+    button_edit = False    # 自动添加一列，有一个编辑按钮
+    allow_delete = False   # 删除按钮是否显示出来
     fitWidth = False
+    allow_set_layout = False   # 是否自动打开 设置列。
+    allow_create = True # 创建按钮是否显示
+    allow_refresh = True
+    
     def __init__(self,page=1,row_sort=[],row_filter={},row_search= '',crt_user=None,perpage=None,**kw):
         """
         kw['search_args']只是一个记录，在获取到rows时，一并返回前端页面，便于显示。
@@ -410,7 +450,8 @@ class ModelTable(object):
         if not self.row_search.model:
             self.row_search.model=self.model
         myperpage =  self.kw.get('_perpage',perpage)
-        self.pagenum = self.pagenator(pageNumber=self.page,perpage=myperpage)
+        self.pagenum = self.pagenator(pageNumber=self.page,perpage=myperpage,table=self)
+        # 这个ps暂时不动，但是不能用了。
         self.pagenum.ps = self
         
         self.footer = {}
@@ -487,14 +528,20 @@ class ModelTable(object):
         ops = self.get_operation()
         ops = evalue_container(ops)
         
+        heads = self.get_heads()
         # 这样写，为了不影响这种写法: {fitWidth:True,**Mytab().get_head_context() }
         dc = {}
         if self.fitWidth:
             dc.update({
                 'fitWidth':True
             })
+        if self.allow_set_layout:
+            heads_names = [head['name'] for head in heads]
+            dc.update({
+                'advise_heads':heads_names,
+            })
         return {
-            'heads':self.get_heads(),
+            'heads':heads,
             'rows': [], #self.get_rows(),
             'row_pages':{}, # self.pagenum.get_context(),
             'row_sort':self.row_sort.get_context(),
@@ -506,7 +553,7 @@ class ModelTable(object):
             'ops' : ops, 
             'selectable': self.selectable,
             'event_slots':self.get_event_slots(),
-            **dc
+            **dc,
         }  
     
     def get_context(self):
@@ -605,9 +652,10 @@ class ModelTable(object):
                 form_obj = model_form(crt_user=self.crt_user)
                 fields_ctx = form_obj.get_head_context()              
                 return [ 
-                    {'name':'_op','label':'操作',
+                    {'name':'_op',
+                     'label':'操作',
                      'editor':'com-table-button-click',
-                     'button_label':'编辑',
+                     'button_label':'详情',
                      'fields_ctx':fields_ctx,
                      'click_express':pop_edit_current_row(),                      }
                   ]
@@ -783,6 +831,8 @@ class ModelTable(object):
                 fields_ctx = form_obj.get_head_context()
                 for head in heads:
                     if head['name'] in self.pop_edit_fields:
+                        if head.get('editor'):
+                            head['inn_editor'] = head['editor']
                         head['editor'] = 'com-table-click'
                         head['fields_ctx'] = fields_ctx
                         head['fields_ctx'].update({
@@ -835,7 +885,8 @@ class ModelTable(object):
         pass
     
     def getCountQuery(self,query):
-        return None
+        return getattr(self,'count_query',None)
+        #return None
     
     def get_rows(self):
         """
@@ -854,7 +905,7 @@ class ModelTable(object):
             if isinstance(inst,models.Model):
                 cus_dict = self.dict_row( inst)
                 if self.only_simple_data():
-                    dc = sim_dict(inst, include=permit_fields,filt_attr=cus_dict,include_pk=False)
+                    dc = sim_dict(inst, include=permit_fields,filt_attr=cus_dict,) # include_pk=False
                 else:
                     dc= to_dict(inst, include=permit_fields,filt_attr=cus_dict)
                     dc .update({
@@ -915,7 +966,7 @@ class ModelTable(object):
     def get_query(self):
         if self.nolimit:
             pass
-        elif not self.crt_user.is_authenticated:
+        elif not self.crt_user.is_authenticated():
             raise  UnAuth401Exception('no permission to browse %s ,Please login first' % self.model._meta.model_name)
         elif not self.crt_user.is_superuser and not self.permit.readable_fields():
             raise PermissionDenied('user %s ,no permission to browse %s'% ( self.crt_user.username, self.model._meta.model_name))
@@ -926,13 +977,15 @@ class ModelTable(object):
         if self.exclude:
             query = query.defer(*self.exclude)
         
+        query = self.inn_filter(query)
+        #[count-] 有时单独计算count，效率很高。
         count_query = self.getCountQuery(query)
         if count_query != None:
             self.row_filter.get_query(count_query)
             self.row_search.get_query(count_query)
-            self.count_query=count_query    
-            
-        query = self.inn_filter(query)
+            self.count_query=count_query 
+        # [-count]
+
         query=self.row_filter.get_query(query)
         query=self.row_search.get_query(query)
         
@@ -942,10 +995,12 @@ class ModelTable(object):
         #[todo] 这里需要弄清楚原理
         #[todo_已经完成] 优化，是否select_related,select_related的field限定在输出的head中
         if not query._fields and self.export_related:  # 如果这个属性部位空，证明已经调用了.values() or .values_list()
-            head_nams = [x['name'] for x in self.get_light_heads()]
+            head_nams = [x['name'] for x in self.get_light_heads() if x['name'] not in self.exclude_export_related]
             for f in self.model._meta.get_fields():
                 if f.name in head_nams and isinstance(f, (models.ForeignKey,models.OneToOneField)):
-                    query = query.select_related(f.name)        
+                    query = query.select_related(f.name)  
+                if f.name in head_nams and isinstance(f,models.ManyToManyField):
+                    query = query.prefetch_related(f.name)
 
         
         return query
@@ -964,29 +1019,47 @@ class ModelTable(object):
     def get_operations(self):
         director_name = self.get_director_name()
         #model_form = model_dc[self.model].get('fields')
+        #has_not_filter_or_search = ( self.filters ==RowFilter and self.search in [RowSearch] )
         
         refresh_action = {'name':'refresh',
-                 'editor':'com-btn',
-                 'label':_('刷新'),
-                 'class':'com-btn-refresh-btn',
+                 'editor':'com-btn-el-button',
+                 'label':'',
+                 'title':'refresh',
+                 #'class':'com-btn-refresh-btn',
                  'icon':'el-icon-refresh',
-                 'css':'.com-btn-refresh-btn{float:right}',
-                 'type':'success',
+                 #'css':'.com-btn-refresh-btn{float:right}',
+                 "utility":True,
+                 #'type':'success',
                  'plain':True,
-                 'visible':self.filters ==RowFilter and self.search in [RowSearch],
+                  'show_express':'rt = !(scope.ps.vc.operationHeads.length == 1 && scope.ps.vc.filterHeads.length >=1) ',
+                 'visible':  self.allow_refresh, # self.filters ==RowFilter and self.search in [RowSearch],
                  'action':'scope.ps.search()'}
-        
+        table_setting = {'editor':'com-btn-el-button',
+             'name':'table_setting',
+            'label':'',  # 
+            'title':'设置列显示和排序',
+            'utility':True,
+            'plain':True,
+            'icon':'el-icon-s-tools',
+            'click_express':'''cfg.pop_vue_com("com-d-table-setting",{table_ps:scope.ps,title:"设置列的排序和显示(拖动可以调整顺序,勾选控制是否显示)"})
+                           .then(()=>scope.ps.reloadAdviseInfo())''',
+            'visible':self.allow_set_layout}
         fieldCls = director.get(director_name+'.edit')     
         if not fieldCls:
             return [
+                table_setting,
                 refresh_action
             ]
+            
         fieldobj=fieldCls(crt_user=self.crt_user)
         fields_ctx = fieldobj.get_head_context()
         fields_ctx.update({
             'ops_loc':'bottom'
         })
         return [
+            table_setting,    
+            refresh_action,
+            
             {
                 'name':'add_new',
                  #'editor':'com-op-btn',
@@ -999,7 +1072,7 @@ class ModelTable(object):
                  'label':_('创建'),
                  'pre_set':'', # 预先设置的字段,一般用于com-tab-table下的创建
                  'fields_ctx':fields_ctx,
-                 'visible': self.permit.can_add(),
+                 'visible': self.permit.can_add() and self.allow_create,
                  },
                 #{'name':'save_changed_rows','editor':'com-op-btn','label':'保存', 
                  #'class':'btn btn-info btn-sm',
@@ -1049,8 +1122,8 @@ class ModelTable(object):
                  'icon':'el-icon-delete',
                  'row_match':'many_row',
                  'disabled':'!scope.ps.has_select', 
-                 'visible': self.permit.can_del() and self.allow_delete ,},
-                refresh_action,
+                 'visible': self.allow_delete  and self.permit.can_del() },
+               
                 ]     
         
     

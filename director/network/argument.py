@@ -11,6 +11,7 @@ import hashlib
 from django.conf import settings
 import inspect
 import time
+from decimal import Decimal
 
 def get_argument(request,outtype='obj'):
     """
@@ -32,6 +33,9 @@ def get_argument(request,outtype='obj'):
                     #dc[k]=v[0]
     else:
         dc =  request.GET.dict()
+    if '_token' in dc: # _token参数被 helpers.director.middleware.tokenuser使用了。
+        dc.pop('_token')
+        
     if outtype=='dict':
         return dc
     else:
@@ -244,6 +248,12 @@ def float_str(value,name):
             #return int(value)
     #except ValueError as e:
         #raise UserWarning('%(name)s=%(value)s could not be covert to int'%{'name':name,'value':value})
+
+def decimal_str(value,name):
+    try:
+        return Decimal(value)
+    except ValueError:
+        raise UserWarning('%s不能转换为数字(包含小数)'%name)
 
 def choice_in(choices):
     def _choice_in(value,name):

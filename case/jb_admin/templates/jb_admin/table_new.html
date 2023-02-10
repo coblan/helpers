@@ -16,6 +16,7 @@
     option= {{ option | jsonify }}
     table_layout={{ table_layout | jsonify }}
     selectable = {{ selectable | jsonify }}
+    tableClass = "{{tableClass | default:'grey-head' }}"
     // 这个变量留着，兼容老的调用。。准备把它移除
 //    tabs={{ tabs | jsonify | default:'[]' }}
 //    named_tabs={{ named_tabs | jsonify | default:'{}' }}
@@ -41,6 +42,7 @@
                 footer:footer,
                 ops:ops,
                 search_args:search_args,
+                tableClass:tableClass,
                 //---------table_page---------
                 tab_stack:[],
 //                tabs:tabs,
@@ -116,6 +118,9 @@
             },
             pop_tab_stack(){
                 this.childStore.tab_stack.pop()
+                if(cfg._tab_call_back.length>0){
+                    cfg._tab_call_back.pop()()
+                }
             },
 //            on_td_event:function(e){
 //                this.op_funs[e.name](e)
@@ -147,17 +152,27 @@
 
     }
 
-    function update_cnt_size(){
-//        var cnt_ht =  Math.max( $(document).height(),window.innerHeight)
-        var cnt_ht =  window.innerHeight ;//$('body').height() ;//
-        $('#there').height(cnt_ht -80)
-    }
-    $(function () {
-        update_cnt_size()
 
-        $(window).resize(function(){
-            update_cnt_size()
-        });
+//     function update_cnt_size(){
+// //        var cnt_ht =  Math.max( $(document).height(),window.innerHeight)
+//         var cnt_ht =  window.innerHeight ;//$('body').height() ;//
+//         const doc = document.documentElement
+//
+//         if(!search_args._embed){
+//             // $('#there').height(cnt_ht -80)
+//             doc.style.setProperty('--app-height', cnt_ht -80+'px')
+//         }else{
+//             // $('#there').height(cnt_ht)
+//             doc.style.setProperty('--app-height', cnt_ht +'px')
+//         }
+//
+//     }
+    $(function () {
+        // update_cnt_size()
+        //
+        // $(window).resize(function(){
+        //     update_cnt_size()
+        // });
 
         if(extra_table_logic){
             table_logic.mixins.push(window[extra_table_logic])
@@ -188,7 +203,7 @@
 <div id='there' class="flex-v">
 
     {% block flag %}
-    <div v-if="page_label" style="border-left: 3px solid #3e8ebd;padding-left: 1em;margin-bottom: 5px;">
+    <div v-if="page_label" class="page-label" style="border-left: 3px solid #3e8ebd;padding-left: 1em;margin-bottom: 5px;">
         <b v-text="page_label"></b>
         <span style="display: inline-block;width: 2em;"></span>
         <ol class="breadcrumb" style="display: inline-block;background-color: inherit;margin-bottom: 0;padding: 0"  v-show="pathable_tab_names.length >0 ">
@@ -221,6 +236,7 @@
                      :parents="childStore.parents"
                      :search-args="childStore.search_args"
                      :selectable="selectable"
+                     :table-class="childStore.tableClass"
                      :fit-width="fitWidth"
                     ></com-d-table>
 
@@ -243,7 +259,9 @@
     .main-page{
         overflow: auto;
     }
-
+    #tab-wrap{
+        overflow: auto;
+    }
 </style>
 {% block extra %}
 {% endblock %}

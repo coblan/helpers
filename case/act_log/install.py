@@ -7,7 +7,7 @@ def SET(scope,path=None,extra_cfg={}):
         LOG_PATH= os.path.join( os.path.dirname(BASE_DIR),'log')
     else:
         LOG_PATH=path
-    if os.environ.get('TEST') : #or scope.get('DEBUG'):
+    if os.environ.get('TEST') or extra_cfg.get('console',False) or os.environ.get('console'): #or scope.get('DEBUG'):
         def is_console(ls):
             return ls+['console']
     else:

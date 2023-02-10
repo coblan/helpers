@@ -52,6 +52,7 @@ from django.shortcuts import redirect
 from .base_data import js_tr_list,js_lib_list
 from django.views.decorators.csrf import csrf_exempt
 from helpers.director.middleware.request_cache import get_request_cache
+from urllib.parse import unquote
 
 gb={}
 
@@ -120,11 +121,11 @@ class BaseEngine(object):
         else:
             need_login = self.need_login
         if need_login and not self.login_authorized(request):
-            return redirect(self.login_url+'?next='+request.get_full_path())
+            return redirect(self.login_url+'?next='+ unquote( request.get_full_path()) )
         
         # 用在403页面内
         request.engin={
-            'login_url':self.login_url+'?next='+request.get_full_path()
+            'login_url':self.login_url+'?next='+ unquote( request.get_full_path())
         }
         
         if not request.user.is_staff:
@@ -180,6 +181,8 @@ class BaseEngine(object):
             #ctx=self.get_ctx(ctx)
             ctx['template']= template
             ctx['ui_theme'] = self.ui_theme
+            if self.request.GET.get('_embed'):
+                ctx['body_class']= 'embed'
             if hasattr(page,'get_label'):
                 ctx['page_label'] =page.get_label()
             ctx['head_bar_data']=self.get_head_bar_data(request)

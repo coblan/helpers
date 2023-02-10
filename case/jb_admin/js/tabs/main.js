@@ -7,6 +7,8 @@ import * as tab_chart from  './tab_chart'
 
 import tab_form from "./tab_form.vue";
 Vue.component('com-tab-form',tab_form)
+import tab_iframe  from "./tab_iframe.vue";
+Vue.component('com-tab-iframe',tab_iframe)
 
 Vue.component('com-tab-dtable', async (resolve, reject)=> {
     var com = await import(/* webpackChunkName: 'fields_import' */'./tab_dtable.vue')

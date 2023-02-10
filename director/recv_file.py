@@ -16,6 +16,8 @@ from django.views.decorators.csrf import csrf_exempt
 from helpers.director.base_data import director
 import time
 from helpers.func.image_proc import ceil_image_size
+from helpers.director.shortcut import director_view
+from helpers.func.url_path import media_url_to_path
 
 class BasicReciever(object):
     
@@ -39,6 +41,13 @@ class BasicReciever(object):
     def procFile(self,file_data,fl):
         par_dir = self.getParDir()
         file_name = self.getFileName(file_data,fl)
+        file_name = file_name.lower()
+       
+        #if not any([x in file_name for x in ['.jpeg','jpg','png'] ]):
+        # 文件没有后缀的情况下
+        if '.' not in file_name: 
+            if 'image' in fl.content_type: 
+                file_name +=  '.' +fl.content_type.split('/')[-1]
         file_path = os.path.join(par_dir,file_name)
         
         absolut_par_path = os.path.join( settings.MEDIA_ROOT, par_dir)
@@ -158,7 +167,9 @@ class BigFileRecieve(GeneralUpload):
 
         for name, fl in file_dict.items():
             keepname = request.GET.get('keepname','tm-name')
-            if keepname=='overwrite':
+            if keepname =='field_name':
+                file_name = name
+            elif keepname=='overwrite':
                 file_name = fl.name
             elif keepname=='overwrite-md5':
                 sufix = self.getSufix(fl)
@@ -197,8 +208,32 @@ director.update({
             #pass 
         #return par_path  
 
-
-
+@director_view('media/file/merge')
+def merge_media_file(path_list,target=None,suffix=None):
+    if target:
+        if not target.startswith('/media/'):
+            if target.startswith('/'):
+                target =  '/media' + target
+            else:
+                target =  '/media/' + target
+        #abs_target = target #media_url_to_path(target)
+    elif suffix:
+        if suffix.startswith('.'):
+            target = path_list[0] + suffix
+        else:
+            target = path_list[0]+'.' + suffix
+    abs_target = media_url_to_path(target)
+    with open(abs_target,'wb+') as f:
+        for path in path_list:
+            abs_path = media_url_to_path(path) #  os.path.join(settings.MEDIA_ROOT,path.lstrip('/media/'))
+            with open(abs_path,'rb') as f_slice:
+                dt = f_slice.read()
+                f.write(dt)
+            os.remove(abs_path)
+    
+    return target
+            
+    
 
 
 

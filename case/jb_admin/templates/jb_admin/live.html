@@ -4,10 +4,58 @@
 
 {% block page_content %}
 
+<style>
+    .live-hide{
+        display: none;
+    }
+
+    /*@media (min-width: 768px){*/
+        .wrapper>.on-live-hide.content-wrapper{
+            margin-left: 0 !important;
+        }
+    /*}*/
+.full-content{
+    padding: 0;
+    padding-left: 0;
+    padding-right: 0;
+}
+#main-page{
+    position: relative;
+    min-height: calc( 100vh - 110px )
+}
+.full-content #main-page{
+    min-height: calc( 100vh - 50px )
+}
+.on-live-hide .full-content #main-page{
+    min-height: 100vh;
+}
+section.content{
+    overflow: auto;
+}
+</style>
 <script type="text/javascript">
 
 editor= {{ editor | jsonify }}
 editor_ctx = {{ editor_ctx | jsonify }}
+
+// 下面的功能挪到了base.html，现在每个页面都有改功能了。
+// var live_layout = {
+//      fullWin(){
+//         document.body.querySelector('#head-bar').className += ' live-hide'
+//         document.body.querySelector('#main-sidebar').className += ' live-hide'
+//         document.body.querySelector('.content-wrapper').className += ' on-live-hide'
+//     },
+//      exitFullWin(){
+//         document.body.querySelector('#head-bar').className = document.body.querySelector('#head-bar').className.replace('live-hide','')
+//         document.body.querySelector('#main-sidebar').className = document.body.querySelector('#main-sidebar').className.replace('live-hide','')
+//         document.body.querySelector('.content-wrapper').className =document.body.querySelector('.content-wrapper').className.replace('on-live-hide','')
+//     },
+//     fullContent(){
+//         document.body.querySelector('section.content').className+= ' full-content'
+//     },
+// }
+
+
 
 $(function() {
 
@@ -32,6 +80,9 @@ $(function() {
         methods:{
             pop_stack(){
                 var com = this.stack.pop()
+                if(cfg._tab_call_back.length>0){
+                    cfg._tab_call_back.pop()()
+                }
                 Vue.delete(this.$options.components,com)
             },
             open_live(com,ctx,label){
@@ -79,19 +130,6 @@ $(function() {
     }
 
     live_root =  new Vue(myapp)
-  // live_root =  new Vue({
-  //       el: '#there',
-  //       data:{
-  //           component_name:myapp,
-  //       },
-  //       render(createElement){
-  //           return createElement(this.component_name,{
-  //                   attrs:{},
-  //               }
-  //           )
-  //       },
-  //   })
-    
     // 兼容老的调用
     root_live= live_root
 })
@@ -127,7 +165,7 @@ $(function() {
     {% endblock %}
 
     {% block tab-content %}
-    <div id="main-page" class="rows-block flex-v flex-grow"  style="position: relative;min-height: calc( 100vh - 110px )">
+    <div id="main-page" class="rows-block flex-v flex-grow" >
         <!--<transition name="slide">-->
             <keep-alive :include="alive_list">
                 <component :is="current_com.editor" :ctx="current_com.ctx" v-bind="current_com.ctx"></component>

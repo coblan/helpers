@@ -10,10 +10,13 @@
          @click="crt_view='input'"></i>
     </div>
 
-    <slot name="input" v-if="crt_view=='upload'">
+    <slot name="upload" v-if="crt_view=='upload'">
       <com-field-plain-file :row="row" :head="head" ></com-field-plain-file>
     </slot>
-    <lineText :row="row" :head="head" v-if="crt_view=='input'"></lineText>
+    <slot name="input">
+      <lineText :row="row" :head="head" v-if="crt_view=='input'"></lineText>
+    </slot>
+
   </div>
 </template>
 <script>

@@ -1,3 +1,5 @@
+import random
+
 def split_list(dstlist,every_num):
     """ 将dstlist分批次返回。
     
@@ -32,6 +34,7 @@ def complement(srcList,rows,extrac_fun,default=0):
     srcList = ['2021-07-20','2021-07-21']
     rows =[{'date':'2021-07-20','count':12}]
     extrac_fun = lamda row,target: row if row['date']==target else None
+    defaut:没有找到的key返回的值
     返回:
     [{date:'2021-07-20','count':12},{date:'2021-07-21','count':0}]
     """
@@ -48,4 +51,63 @@ def _find_dc_item(rows,target, extrac_fun):
         if rt:
             return rt
     return None
+
+def split_iter(iteration,count):
+    """
+    分批来处理一个可迭代器。适合一次处理不了，需要分批来处理大的collection的情况。
+    [1,2,3,4,5]
+    返回
+    [[1,2,3],[4,5,6]]
+    """
+    current_count = 0
+    ls = []
+    for inst in iteration:
+        ls.append(inst)
+        current_count += 1
+        if current_count >=count:
+            current_count = 0
+            yield ls
+            ls =[]
+    if ls:
+        yield ls
+
+def slite_query(query,batch_count):
+    current_index = 0
+
+    while True:
+        ls = []
+        for inst in query[current_index:current_index+batch_count]:
+            ls.append(inst)
+        current_index += batch_count      
+        if ls:
+            yield ls
+        else:
+            break
+       
     
+
+def slice_names(names,start,end):
+    """
+    @names:['name1','name2','name3','name4']
+    @start: name2
+    @end:   name4
+    
+    返回 :[name2,name3,name4]
+    """
+    out =[]
+    inn = False
+    for name in names:
+        if name ==start:
+            inn = True
+        if inn:
+            out.append(name)
+        if name ==end:
+            inn =False
+            break
+    return out
+
+def random_sample(collection,count):
+    if len(collection) <= count:
+        return collection
+    else:
+        return random.sample(collection,count)

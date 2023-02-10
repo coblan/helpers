@@ -8,7 +8,7 @@ var com_milti_picture = {
         <div class="picture-panel" style="vertical-align: top" >
             <div v-if="!head.readonly" class="add-btn" @click="open_select_images()">
                 <div class="inn-btn"  style="">
-                    <span class="center-vh" style="font-size: 300%;">+</span>
+                    <span class="center-vh" style="font-size: 200%;">+</span>
                 </div>
             </div>
             <div class="img-wrap" v-for="(imgsrc,index) in row[head.name]" @click="big_win(imgsrc)">

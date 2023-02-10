@@ -55,11 +55,17 @@ class ModelFields(forms.ModelForm):
     show_pk=False
     nolimit=False
     simple_dict = False
+    allow_delete= False
+    select_for_update = True  # 某些高频访问文件，写入不平凡，所以不允许锁定，就可以设置为False
+    complete_field = False   # 自动补全没有上传的字段,在api或者selected_set_and_save中不必上传所有字段
+    pass_clean_field = []
+    
     @classmethod
     def parse_request(cls,request):
         """
         传入参数的形式：  
         被fieldsPage使用，最好不要再使用该函数，有点混乱了
+        这个函数可能是被 d.get_row 使用的
         """
         dc=request.GET.dict()
         pk=dc.pop('pk',None)
@@ -103,8 +109,9 @@ class ModelFields(forms.ModelForm):
             pass
         elif dc.get('pk') != None and dc.get('pk') != '':
             pk=dc.get('pk')
-        elif dc.get('id') !=None and dc.get('id') != '':
-            pk = dc.get('id')
+        # 如果不注释这里会造成问题: 当前端手动输入id来创建记录，后端判断“是否新建”会错判为“不是新建”，产生找不到记录错误
+        #elif dc.get('id') !=None and dc.get('id') != '': 
+            #pk = dc.get('id')
         else:
             if self.kw.get('instance'):
                 pk = self.kw['instance'].pk
@@ -121,7 +128,7 @@ class ModelFields(forms.ModelForm):
                 form_kw['instance']=self._meta.model.objects.last()
             elif pk != None:  # 很多时候，pk=0 是已经创建了
                 try:
-                    if select_for_update:
+                    if select_for_update and self.__class__.select_for_update:
                         form_kw['instance']= self._meta.model.objects.select_for_update().get(pk=pk)
                     else:
                         form_kw['instance']= self._meta.model.objects.get(pk=pk)
@@ -161,7 +168,7 @@ class ModelFields(forms.ModelForm):
                     #if isinstance(fieldcls, models.ForeignKey):
                         #dc[k] = getattr(inst, "%s_id" % k)
                         #continue
-                    #dc[k] = getattr(form_kw['instance'] , k)  
+                    #dc[k] = getattr(form_kw['instance'] , k)  kw
         
 
         # todict -> ui -> todict(compare) -> adapte_dict
@@ -202,8 +209,12 @@ class ModelFields(forms.ModelForm):
         # 参数的修正挪到最上面
         #dc = self._clean_dict(dc)
         #dc=self.clean_dict(dc) 
+        if self.complete_field and form_kw.get('instance'):
+            dd = dict(simdc)
+            dd.update(dc)
+            dc = dd
+            
         self.kw.update(dc)        
-
 
         super(ModelFields,self).__init__(dc,*args,**form_kw)
         # 2021-05-07 挪到上面
@@ -228,7 +239,18 @@ class ModelFields(forms.ModelForm):
         self.before_changed_data = {k:v for k,v in orgin_simdc.items() if k in self.changed_data} # sim_dict(self.instance, include= self.changed_data)
        
         #self.org_db_dict = mark_dict(self.instance.__dict__,keys= self.fields.keys())
-        
+    
+    def findInstance(self,dc):
+        pass
+    
+    
+    def full_clean(self):
+        rt = super().full_clean()
+        if self.pass_clean_field:
+            for k in self.pass_clean_field:
+                if k in self._errors:
+                    self._errors.pop(k) 
+        return rt
     
     def clean(self):
         """
@@ -239,7 +261,7 @@ class ModelFields(forms.ModelForm):
            meta_change_fields 在__init__函数中，不在meta_change_fields中的字段会被还原，只剩下变化的，所以这里不需要检测了。
            
         """
-        super().clean()
+        super().clean()         
         overlaped_fields = []
         if self.kw.get('meta_change_fields'): 
             return 
@@ -396,6 +418,42 @@ class ModelFields(forms.ModelForm):
                 #'name':'save_and_return','editor':'com-field-op-btn','label':'保存后返回','icon':'fa-share-square','show':'scope.vc.back',
                 #'class':'btn btn-sm','action':'scope.vc.submit().then((row)=>{ scope.vc.back()})'
                 #}
+            ]
+        if self.allow_delete and self.permit.can_del():
+            ls += [
+                {
+                'name':'delete',
+                'editor':'com-btn',
+                'type':'danger',
+                'icon':'el-icon-delete',
+                'label':'删除', 
+                'click_express':'''(async ()=>{
+                      cfg.show_load();
+                      var resp = await ex.director_call("d.delete_query_related",{rows:[scope.ps.vc.row]})
+                      cfg.hide_load();
+                      if(resp.length>0){
+                            cfg.pop_vue_com("com-pan-delete-query-message",{msg_list:resp,genStore:scope.ps,title:"删除关联确认"})
+                       }else{
+                            await cfg.confirm(`确认删除[${scope.ps.vc.row._label}]?`)
+                            cfg.show_load()
+                            await ex.director_call("d.delete_row",{row:scope.ps.vc.row})
+                            cfg.hide_load()
+                            cfg.toast("删除成功")
+                       }
+                       // tab形式的
+                       var ps = ex.vueParStore(scope.ps.vc,{name:'com-widget-el-tab'})
+                       if(ps){
+                            var tab_table = ps.vc.ctx.genVc
+                            tab_table.search()
+                            cfg.switch_back()
+                       }
+                      
+                })()
+                ''',
+                'show_express':'scope.row.pk'
+                #'icon': 'fa-save',
+                #'class':'btn btn-info btn-sm',
+                      },
             ]
         return ls
     
@@ -598,7 +656,7 @@ class ModelFields(forms.ModelForm):
         if self.instance.pk: # not self.instance._state.adding #
             self.instance.refresh_from_db()
         if self.simple_dict:
-            row = sim_dict(self.instance,include=self.fields.keys(),include_pk=False)
+            row = sim_dict(self.instance,include=self.fields.keys(),include_pk=True)
             row.update( self.dict_row(self.instance) )
         else:
             row = to_dict(self.instance,include=self.fields.keys())
@@ -741,7 +799,8 @@ class Fields(ModelFields):
     """
     普通的form表单，与model层剥离开的
     """
-    def __init__(self, dc={}, pk=None, crt_user=None, nolimit=False, *args, **kw): 
+    submit_to_backend = True
+    def __init__(self, dc={}, pk=None, crt_user=None, nolimit=False, *args,select_for_update=True, **kw): 
         dc=self.clean_dict(dc) 
         self.kw=dc.copy()
         self.kw.update(kw)
@@ -804,18 +863,28 @@ class Fields(ModelFields):
     
     def get_operations(self):
         ls=[]
-        ls.append({
-            'name':'save',
-            'editor':'com-btn',
-            'label':_('保存'),
-            'type':'success',
-            'icon':'el-icon-receiving',
-            'click_express':'scope.ps.vc.submit()',
-            #'editor':'com-field-op-btn',
-            #'label':'保存', 
-            #'icon': 'fa-save',
-            #'class':'btn btn-info'
-        })
+        if self.submit_to_backend:
+            ls.append({
+                'name':'save',
+                'editor':'com-btn',
+                'label':_('保存'),
+                'type':'success',
+                'icon':'el-icon-receiving',
+                'click_express':'scope.ps.vc.submit()',
+                #'editor':'com-field-op-btn',
+                #'label':'保存', 
+                #'icon': 'fa-save',
+                #'class':'btn btn-info'
+            })
+        else:
+            ls.append({
+                'name':'save',
+                'editor':'com-btn',
+                'label':'确定',
+                'type':'success',
+                'icon':'el-icon-receiving',
+                'click_express':'scope.ps.vc.beforeSubmit().then(()=>{  if(scope.ps.vc.isValid()){ scope.ps.vc.$emit("finish",scope.ps.vc.row)}  })',
+                    })
         return ls 
     
     def dict_row(self):

@@ -35,6 +35,10 @@ export default {
         var now = ex.dayjs()
         this.date = now.format('YYYY/MM/DD')
         this.week = now.format('d')
+        var week_map = {
+          0:'日'
+        }
+        this.week = ex.defaultGet(week_map[this.week],this.week)
         if(now.hour() >12){
           this.time = '下午'+ now.format('HH:mm')
         }else{

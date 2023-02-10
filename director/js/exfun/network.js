@@ -7,7 +7,8 @@ hook_ajax_csrf()
 function def_proc_error(jqxhr) {
     if(! window.iclosed){
         if(jqxhr.status==401){
-            location = ex.appendSearch(js_config.login_url || '/accounts/login' ,{next:encodeURIComponent(location.href)})
+            // location = ex.appendSearch(js_config.login_url || '/accounts/login' ,{next:encodeURIComponent(location.href)})
+            location = ex.appendSearch(js_config.login_url || '/accounts/login' ,{next:encodeURI(location.pathname)})
         } else if(jqxhr.status !=0){
             alert(jqxhr.statusText+':code is;'+jqxhr.status+jqxhr.responseText)
         }else{
@@ -464,6 +465,12 @@ export var network ={
                        kws = {}
                    }
                  return ex.director_call('d.director_element_call',{director_name:director_name,attr_name:methed,kws:kws})
+            },
+            get(methed,kws){
+                if(kws == undefined){
+                    kws = {}
+                }
+                return ex.director_get('d.director_element_call',{director_name:director_name,attr_name:methed,kws:kws})
             }
         }
     },

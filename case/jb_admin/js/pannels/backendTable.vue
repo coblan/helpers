@@ -37,9 +37,12 @@
         },
         props:['ctx'],
         data(){
+          var childStore = {
+            vc:this,
+            name:'com-backend-table'
+          }
             return {
-
-                // extendLogic:DTable2Logic
+              childStore:childStore
             }
         },
         // setup(props){

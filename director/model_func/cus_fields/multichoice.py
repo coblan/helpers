@@ -9,7 +9,7 @@ class MultiChoiceField(CharField):
     """
     def __init__(self, *args, **kwargs):
         self.my_choices = kwargs.pop('choices',[])
-        self.seperator = kwargs.pop('seperator',';')
+        self.seperator = kwargs.pop('seperator',',')
         self.full_choice = kwargs.pop('full_choice',None)
         super().__init__(*args,**kwargs)
     
@@ -23,7 +23,7 @@ class MultiChoiceTextField(TextField):
             self.my_choices = choices()
         else:
             self.my_choices = choices
-        self.seperator = kwargs.pop('seperator',';')
+        self.seperator = kwargs.pop('seperator',',')
         self.full_choice = kwargs.pop('full_choice',None)
         super().__init__(*args,**kwargs)
         

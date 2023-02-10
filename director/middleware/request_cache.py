@@ -4,8 +4,10 @@ import json
 from django.utils.deprecation import MiddlewareMixin
 from functools import wraps
 
-
-_request_cache = {}
+# 每个request请求的全局对象
+_request_cache = {
+    'named_ctx':{}
+}
 _installed_middleware = False
 
 #class NoUser(object):

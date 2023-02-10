@@ -1,27 +1,46 @@
 <template>
   <div class="com-form-one flex-v" :class="head.class">
     <div class="oprations up" v-if="ops_loc=='up'">
-      <component v-for="op in normed_ops" :is="op.editor" :ref="'op_'+op.name" :ctx="op" :head="op" @operation="on_operation(op)"></component>
+      <component v-for="op in normed_ops" :is="op.editor"  :key="op.name"
+                 :ref="'op_'+op.name" :ctx="op" :head="op" @operation="on_operation(op)"></component>
     </div>
-    <div style="overflow: auto;"   class="flex-grow fields-area">
-<!--      :class="{'box box-default':ops_loc=='up'}"-->
+    <div style="overflow: auto;" :class="{ 'box box-default box-mycustom':ops_loc=='up','has-group':fields_group}" class="flex-grow fields-area">
       <!--有分组的情况-->
       <div v-if="fields_group" class="fields-group">
-        <div v-for="group in grouped_heads_bucket" :class="'group_'+group.name" v-if="group.heads.length > 0">
+        <template v-for="group in grouped_heads_bucket">
+            <div v-if="group.heads && group.heads.length > 0" :class="'group_'+group.name">
+             <div style="display: flex;gap: 30px;align-items: center">
+               <div class="fields-group-title"  v-html="group.label"></div>
+               <div v-if="group.collapse != undefined" @click="groupCollapseSwitch(group)" style="cursor: pointer">
+                 <i style="font-size: 120%" v-if="group.collapse" class="el-icon-caret-right"></i>
+                 <i style="font-size: 120%" v-if="!group.collapse" class="el-icon-caret-bottom"></i>
+               </div>
+             </div>
+              <div v-show="group.collapse == undefined || !group.collapse">
+                <com-fields-table-block v-if="table_grid "
+                                        :heads="group.heads" :row="row" :option="{table_grid:table_grid}" :alignLabel="ctx.table_grid_align_label">
+                </com-fields-table-block>
+                <div v-else class='field-panel suit' >
+                  <field  v-for='head in group.heads' :key="head.name" :head="head" :row='row'></field>
+                </div>
+              </div>
 
-          <div class="fields-group-title"  v-html="group.label"></div>
-          <com-fields-table-block v-if="table_grid "
-                                  :heads="group.heads" :row="row" :option="{table_grid:table_grid}">
-          </com-fields-table-block>
-          <div v-else class='field-panel suit' >
-            <field  v-for='head in group.heads' :key="head.name" :head="head" :row='row'></field>
-          </div>
-        </div>
+            </div>
+            <component v-show="group.collapse == undefined || !group.collapse"
+                       v-if="group.editor" :is="group.editor" :row="row" :ctx="group.editor_ctx"></component>
+
+
+
+
+        </template>
+
+
+
       </div>
       <!--只有table分组-->
       <div v-else-if="table_grid " >
         <com-fields-table-block
-            :heads="normed_heads" :row="row" :option="{table_grid:table_grid}"></com-fields-table-block>
+            :heads="normed_heads" :row="row" :option="{table_grid:table_grid}" :alignLabel="ctx.table_grid_align_label"></com-fields-table-block>
       </div>
       <!--没有分组-->
       <div v-else class='field-panel suit' id="form" >
@@ -29,7 +48,8 @@
       </div>
     </div>
     <div class="oprations bottom" v-if="ops_loc=='bottom'">
-      <component v-for="op in normed_ops" :key="op.name" :is="op.editor" :ref="'op_'+op.name" :head="op" :ctx="op" @operation="on_operation(op)"></component>
+      <component v-for="op in normed_ops" :key="op.name" :is="op.editor"
+                 :ref="'op_'+op.name" :head="op" :ctx="op" @operation="on_operation(op)"></component>
     </div>
   </div>
 </template>
@@ -79,34 +99,54 @@ export default {
         }
     },
     mixins:[mix_fields_data,mix_nice_validator],
-    computed:{
-    normed_ops(){
-      return ex.filter(this.ops,(op)=>{
-        // 兼容老调用
-        op.show_express = op.show_express || op.show
-        if(op.show_express){
-            return ex.eval(op.show_express,{row:this.row,vc:this})
-        }else{
-            return true
+    mounted(){
+        if(this.ctx.css){
+          ex.append_css(this.css)
         }
-      })
     },
+    computed:{
+        normed_ops(){
+          var last_ops =  ex.filter(this.ops,(op)=>{
+            // 兼容老调用
+            op.show_express = op.show_express || op.show
+            if(op.show_express){
+                var rt =  ex.eval(op.show_express,{row:this.row,vc:this})
+              return  rt
+            }else{
+                return true
+            }
+          })
+          return last_ops
+        },
     grouped_heads_bucket:function(){
       var out_bucket = []
       ex.each(this.fields_group,(group)=>{
         if(group.show && ! ex.eval(group.show,{row:this.row,head:this.head})){
-        return
-      }
-      var heads = ex.filter(this.normed_heads,function(head){
-        return ex.isin(head.name,group.heads)
-      })
-      out_bucket.push({name:group.name,label:group.label,heads:heads})
+          return
+        }
+        var heads = ex.filter(this.normed_heads,function(head){
+          return ex.isin(head.name,group.heads)
+        })
+        var gg = ex.copy(group)
+        gg.heads=heads
+        out_bucket.push(gg)
+        // out_bucket.push({name:group.name,label:group.label,heads:heads,
+        //   editor:group.editor,
+        //   editor_ctx:group.editor_ctx,
+        //   collapse:group.collapse,
+        // })
       })
       return out_bucket
       }
     },
 
     methods:{
+      groupCollapseSwitch(group){
+        var one = ex.findone(this.fields_group,{name:group.name})
+        one.collapse = !group.collapse
+        // Vue.set(group,'collapse',!group.collapse)
+         // group.collapse= !group.collapse
+      },
       group_filter_heads:function(group){
         return ex.filter(this.normed_heads,function(head){
           return ex.isin(head.name,group.heads)
@@ -206,7 +246,7 @@ export default {
     padding: 5px 30px;
   }
   .fields-group-title{
-    margin: 10px 0;
+    margin: 10px;
   }
 
   .field-input-td{
@@ -217,6 +257,17 @@ export default {
     }
   }
 
+}
+
+.fields-area{
+  &.has-group{
+    padding: 10px;
+  }
+
+}
+
+.box-mycustom{
+  border-top-color: #f4f4f4;
 }
 
 

@@ -112,25 +112,38 @@ export default {
                     after_proc(dc)
                 })
             }else{
-                after_proc({new_row:one_row})
+                after_proc({new_row:one_row,director_full_field:kws.director_full_field})
             }
 
-            function after_proc({new_row,field_vc,pop_fields_win_index}){
+            function after_proc({new_row,field_vc,pop_fields_win_index,director_full_field=true}){
                 /*
                  编辑后，提交
 
                  @new_row : 编辑后的 cache_row ,
                  * */
+                if(director_full_field){
+                    var cache_rows = ex.copy(self.selected)
+                    ex.each(cache_rows ,function(row){
+                        ex.assign(row,new_row)
+                        // 2021/4/22去掉根据弹出框fields的ctx 切换director_name.因为如果有用ctx保存的需求，可以直接弹出fields框。
+                        //if(kws.fields_ctx && kws.fields_ctx.director_name){
+                        //    row._cache_director_name = row._director_name // [1] 有可能是用的特殊的 direcotor
+                        //    row._director_name=kws.fields_ctx.director_name
+                        //}
+                    })
+                }else{
+                    var cache_rows = []
+                    ex.each(self.selected,(row)=>{
+                        var tmp_row = {
+                            pk:row.pk,
+                            _director_name:row._director_name,
+                            _director_full_field:false,
+                            ...new_row
+                        }
+                        cache_rows.push(tmp_row)
+                    })
+                }
 
-                var cache_rows = ex.copy(self.selected)
-                ex.each(cache_rows ,function(row){
-                    ex.assign(row,new_row)
-                    // 2021/4/22去掉根据弹出框fields的ctx 切换director_name.因为如果有用ctx保存的需求，可以直接弹出fields框。
-                    //if(kws.fields_ctx && kws.fields_ctx.director_name){
-                    //    row._cache_director_name = row._director_name // [1] 有可能是用的特殊的 direcotor
-                    //    row._director_name=kws.fields_ctx.director_name
-                    //}
-                })
                 cfg.show_load()
                 ex.director_call('d.save_rows',{rows:cache_rows}).then((resp)=>{
                     cfg.hide_load()
@@ -138,8 +151,8 @@ export default {
                         layer.confirm(resp._outdate, {
                             icon:3,
                             title:'提示',
-                            btn: ['刷新数据', '仍然保存', '取消'] //可以无限个按钮
-                            ,btn3: function(index, layero){
+                            btn:  ['刷新数据', '取消'] , //  ['刷新数据', '仍然保存', '取消'] //可以无限个按钮
+                            btn3: function(index, layero){
                                 layer.close(index)
                             }
                         }, function(index, layero){
@@ -160,14 +173,6 @@ export default {
                                     }
                                 }
                             })
-                        }, function(index){
-                            layer.close(index)
-                            //ex.each(self.selected,row=>{
-                            //    row.meta_overlap_fields='__all__'
-                            //})
-                            new_row.meta_overlap_fields = '__all__'
-                            after_proc({new_row,field_vc,pop_fields_win_index})
-                            //self.selected_set_and_save(kws,true)
                         });
                         return
                     }else  if( !resp.errors){

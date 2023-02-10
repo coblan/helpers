@@ -32,5 +32,9 @@
         }
     }
 </script>
-<style>
+<style scoped lang="scss">
+.com-field-radio{
+  position: relative;
+  top: 2px;
+}
 </style>

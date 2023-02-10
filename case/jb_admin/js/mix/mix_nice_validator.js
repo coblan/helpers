@@ -12,7 +12,7 @@ var nice_validator={
         head_fv_rules(){
             // 这个函数只是起到了监控 fv_rule变化的作用，实际上 没有用到这个函数
             var ls=[]
-            ex.each(this.heads,head=>{
+            ex.each(this.normed_heads,head=>{
                 var tmp=':'
                 if(head.required){
                     tmp+='required'

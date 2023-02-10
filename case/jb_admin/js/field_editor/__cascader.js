@@ -50,15 +50,18 @@ var cascader_field =  {
     template:`
 <!--:show-all-levels="false"-->
 <div class="com-field-cascader">
-<el-cascader class="com-field-cascader"
-            :name="head.name"
-            v-model="row[head.name]"
-            :options="head.options"
-            :props="myprops"
-            size="small"
-            clearable>
-        </el-cascader>
-<input style="display: none" type="text" :name="head.name" :id="'id_'+head.name" v-model="row[head.name]">
+    <span v-if="head.readonly">{{label}}</span>
+    <template v-else>
+        <input type="text" style="display: none" :id="'id_'+head.name" :name="head.name" v-model="row[head.name]">
+        <el-cascader class="com-field-cascader"
+                v-model="row[head.name]"
+                :options="head.options"
+                :show-all-levels="head.showAllLevels"
+                :props="myprops"
+                size="small"
+                clearable>
+            </el-cascader>
+    </template>
 </div>
       `,
     //default-expand-all
@@ -67,12 +70,16 @@ var cascader_field =  {
             return this.row['_'+this.head.name+'_label']
         },
         myprops(){
-            if(this.head.onlyLeaf){
-                return  {emitPath:false}
-            }else{
-                return {checkStrictly: true,emitPath:false }
+            var dc = {}
+            if(this.head.multiple){
+                dc.multiple=true
             }
-
+            if(this.head.onlyLeaf){
+                dc.emitPath = false
+            }else{
+                Object.assign(dc, {checkStrictly: true,emitPath:false })
+            }
+            return dc
         }
     }
 }

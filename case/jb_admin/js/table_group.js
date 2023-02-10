@@ -4,7 +4,8 @@
 // import {ele_operations} from "./table_group/operations";
 // import {ele_filter} from "./table_group/filter";
 
-
+import elbutton from "./table_operator/elbutton.vue";
+Vue.component('com-btn-el-button',elbutton)
 
 Vue.component('com-table-pagination', async (resolve, reject)=> {
 

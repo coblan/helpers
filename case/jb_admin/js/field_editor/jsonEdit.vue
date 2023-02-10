@@ -51,3 +51,10 @@ export default {
   }
 }
 </script>
+<style scoped lang="scss">
+::v-deep{
+  .jsoneditor-menu a.jsoneditor-poweredBy{
+    display: none;
+  }
+}
+</style>

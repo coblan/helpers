@@ -116,3 +116,7 @@ import * as fields_main from  './fields_main.js'
 import  * as table_group from './table_group.js'
 import * as table_filter from './filter_main.js'
 import * as maybe_old from './maybe_old.js'
+
+
+import componentPannel from "./pannels/componentPannel.vue";
+Vue.component('com-component-pannel',componentPannel)
