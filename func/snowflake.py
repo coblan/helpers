@@ -1,6 +1,8 @@
 # coding: utf-8
 import time
-
+"""
+算法出处：https://zhuanlan.zhihu.com/p/85837641
+"""
 
 class InvalidSystemClock(Exception):
     """
