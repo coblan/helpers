@@ -2,7 +2,8 @@ from django.db import models
 from helpers.director.kv import get_value
 from django.utils import timezone
 from helpers.func.snowflake import IdWorker
-
+from helpers.director.model_func.field_procs.intproc import BigProc
+from .. .base_data import field_map
 class SnowFlakeField(models.BigIntegerField):
 
     def __init__(self,sequence=0, *args, **kwargs):
@@ -29,3 +30,5 @@ class SnowFlakeField(models.BigIntegerField):
                     #setattr(model_instance,self.name,char_id )
                     #break
         return super().pre_save(model_instance, self.attname)    
+    
+field_map[SnowFlakeField]=BigProc
