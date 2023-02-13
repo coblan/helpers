@@ -1,11 +1,15 @@
 <template>
   <div class="table-select">
     <!--    <el-button size="mini">选择</el-button>-->
-    <div style="display: inline-block;padding: 0 5px" v-for="row in selected_rows" :title="row.desp">
-      <el-tag size="small">{{row._label}}</el-tag>
-    </div>
+<!--    <div style="display: inline-block;padding: 0 5px" v-for="row in selected_rows" :title="row.desp">-->
+<!--      <el-tag size="small">{{row._label}}</el-tag>-->
+<!--    </div>-->
+    <div>{{out_value}}</div>
 
-    <i class="el-icon-edit clickable" @click="openTable"></i>
+    <span style="padding: 0 10px">
+         <i class="el-icon-edit clickable" @click="openTable"></i>
+    </span>
+
  </div>
 </template>
 <script>

@@ -799,7 +799,7 @@ class Fields(ModelFields):
     """
     普通的form表单，与model层剥离开的
     """
-    submit_to_backend = True
+    submit_to_backend = True  # 现在暂时放在Fields类中，后面考虑挪到ModelFields 中去
     def __init__(self, dc={}, pk=None, crt_user=None, nolimit=False, *args,select_for_update=True, **kw): 
         dc=self.clean_dict(dc) 
         self.kw=dc.copy()
