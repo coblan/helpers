@@ -4,11 +4,12 @@
 <!--    <div style="display: inline-block;padding: 0 5px" v-for="row in selected_rows" :title="row.desp">-->
 <!--      <el-tag size="small">{{row._label}}</el-tag>-->
 <!--    </div>-->
-    <div>{{out_value}}</div>
+    <span>{{out_value}}</span>
 
-    <span style="padding: 0 10px">
-         <i class="el-icon-edit clickable" @click="openTable"></i>
-    </span>
+<!--    <span style="padding: 0 10px">-->
+      <el-button type="primary" size="mini" icon="el-icon-edit" @click.native="openTable"></el-button>
+<!--         <i class="el-icon-edit clickable"  @click="openTable"></i>-->
+<!--    </span>-->
 
  </div>
 </template>
@@ -35,19 +36,19 @@ export default {
       return this.row[this.head.name]
     }
   },
-  watch:{
-    out_value(){
-      this.updateSelect()
-    }
-  },
+  // watch:{
+    // out_value(){
+      // this.updateSelect()
+    // }
+  // },
   methods:{
-    updateSelect(){
-      var list = this.row[this.head.name] || []
-      this.selected_rows = ex.map(list,item_id=>{
-        var one= ex.findone(this.head.table_rows,{id:item_id})
-        return one
-      })
-    },
+    // updateSelect(){
+    //   var list = this.row[this.head.name] || []
+    //   this.selected_rows = ex.map(list,item_id=>{
+    //     var one= ex.findone(this.head.table_rows,{id:item_id})
+    //     return one
+    //   })
+    // },
     async openTable(){
       if(this.head.click_express){
         ex.eval(this.head.click_express,{vc:this,head:this.head})
@@ -62,7 +63,8 @@ export default {
   background-color: white;
   width: 23rem;
   display: flex;
-  flex-wrap: wrap;
+  //flex-wrap: wrap;
+  justify-content: space-between;
   align-items: center;
   min-height: 32px;
   border: 1px solid #eeeded;
