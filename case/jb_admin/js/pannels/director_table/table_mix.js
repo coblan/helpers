@@ -137,7 +137,7 @@ export default {
                         var tmp_row = {
                             pk:row.pk,
                             _director_name:row._director_name,
-                            _director_full_field:false,
+                            meta_director_full_field:false,
                             ...new_row
                         }
                         cache_rows.push(tmp_row)
