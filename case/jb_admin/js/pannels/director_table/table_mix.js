@@ -88,6 +88,8 @@ export default {
             //var first_sel_row = self.selected[0]
             if(kws.preset_express){
                 var one_row = ex.eval(kws.preset_express,{ps:this.childStore,vc:this})
+            }else if(kws.preset){
+                var one_row = ex.copy(kws.preset)
             }else{
                 var one_row = {}
             }
