@@ -11,6 +11,17 @@ from collections import defaultdict
 from django.db import connections, models
 from django.db.models.query import QuerySet
 from django.db.models.sql import UpdateQuery
+from helpers.func.d_import import import_element
+from django.conf import settings
+
+def get_model_write(inst):
+    if getattr(settings,'DATABASE_ROUTERS',None):
+        router_path = settings.DATABASE_ROUTERS[0]
+        Router= import_element(router_path)
+        db = Router().db_for_write(inst.__class__)
+    else:
+        db = 'defualt'
+    return db
 
 
 def _get_db_type(field, connection):
@@ -131,6 +142,9 @@ def bulk_update(objs, meta=None, update_fields=None, exclude_fields=None,
     objs = list(objs)
     if not objs:
         return
+    # 从第一个对象去获取using信息
+    using = get_model_write(objs[0])
+    
     batch_size = batch_size or len(objs)
 
     if meta:
