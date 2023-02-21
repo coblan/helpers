@@ -7,7 +7,7 @@
     <span>{{out_value}}</span>
 
 <!--    <span style="padding: 0 10px">-->
-      <el-button type="primary" size="mini" icon="el-icon-edit" @click.native="openTable"></el-button>
+      <el-button v-if="!head.readonly" type="primary" size="mini" icon="el-icon-edit" @click.native="openTable"></el-button>
 <!--         <i class="el-icon-edit clickable"  @click="openTable"></i>-->
 <!--    </span>-->
 
