@@ -2,7 +2,7 @@ from django.utils import timezone
 from helpers.director.shortcut import get_request_cache
 from helpers.func.mymd5 import md5
 
-def sign_check(salt):
+def sign_check(salt,expire=60):
     """
     签名请求。
     header里面需要携带  
@@ -18,7 +18,7 @@ def sign_check(salt):
             if not timestamp:
                 raise UserWarning("没有有效的时间戳")
             stamp = timezone.datetime.fromtimestamp(float(timestamp))
-            if timezone.now() - stamp > timezone.timedelta(minutes=1):
+            if timezone.now() - stamp > timezone.timedelta(seconds=expire):
                 raise UserWarning("请求已经过期")
             ls = []
             tmp_kws = dict(kws)
