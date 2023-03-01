@@ -465,6 +465,12 @@ export var network ={
                        kws = {}
                    }
                  return ex.director_call('d.director_element_call',{director_name:director_name,attr_name:methed,kws:kws})
+            },
+            get(methed,kws){
+                if(kws == undefined){
+                    kws = {}
+                }
+                return ex.director_get('d.director_element_call',{director_name:director_name,attr_name:methed,kws:kws})
             }
         }
     },

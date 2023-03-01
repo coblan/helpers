@@ -125,12 +125,28 @@ def sim_dict(instance,filt_attr=None,include=None,exclude=None,include_id=True,i
     #if 'id' in [x.name for x in instance._meta.get_fields()] and \
        #instance.id:
         #out['id']=instance.id
-    if include_id and hasattr(instance,'id'):
-        out['id'] = instance.id
-    if include_pk:
-        out['pk']=instance.pk
+    if 'id' not in out and include_id and hasattr(instance,'id'):
+        #out['id'] = instance.id
+        out['id'] = clean_field_for_js(instance._meta.get_field('id'),instance)
+    if  'pk' not in out and  include_pk:
+        #out['pk']=instance.pk
+        out['pk']= clean_field_for_js(instance._meta.pk,instance)
     return out
     
+
+def clean_field_for_js(field,instance):
+    """
+    清理id或者pk的类型，因为有些字段前端不能正常显示，所以需要转换为字符串，例如bigint会产生溢出，后面几位数全部变成0。
+    """
+    model_path = instance._meta.app_label+'.'+instance._meta.model_name
+    mapper_cls=field_map.get('%s.%s'%(model_path,field.name))
+    if not mapper_cls:
+        mapper_cls = field_map.get(field.__class__)
+    if mapper_cls:
+        mapper = mapper_cls(instance=instance,name=field.name,model=field.model)
+        return mapper.to_dict(instance,field.name).get(field.name)
+    else:
+        return getattr(instance,field.name)
 
 def from_dict(dc,model=None,pre_proc=None):
     """

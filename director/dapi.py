@@ -125,7 +125,7 @@ def get_context(director_name):
      dcls = director.get(director_name)
      return dcls(select_for_update=False).get_context()
 
-@exclude_transaction
+#@exclude_transaction
 @director_view('d.director_element_call')
 def director_element_call(director_name,attr_name,kws):
      dcls = director.get(director_name)

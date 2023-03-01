@@ -57,7 +57,9 @@ class ModelFields(forms.ModelForm):
     simple_dict = False
     allow_delete= False
     select_for_update = True  # 某些高频访问文件，写入不平凡，所以不允许锁定，就可以设置为False
-    complete_field = False
+    complete_field = False   # 自动补全没有上传的字段,在api或者selected_set_and_save中不必上传所有字段
+    pass_clean_field = []
+    
     @classmethod
     def parse_request(cls,request):
         """
@@ -214,9 +216,6 @@ class ModelFields(forms.ModelForm):
             
         self.kw.update(dc)        
 
-       
-            
-
         super(ModelFields,self).__init__(dc,*args,**form_kw)
         # 2021-05-07 挪到上面
         #if not self.instance.pk:
@@ -244,6 +243,15 @@ class ModelFields(forms.ModelForm):
     def findInstance(self,dc):
         pass
     
+    
+    def full_clean(self):
+        rt = super().full_clean()
+        if self.pass_clean_field:
+            for k in self.pass_clean_field:
+                if k in self._errors:
+                    self._errors.pop(k) 
+        return rt
+    
     def clean(self):
         """
         数据过期检查
@@ -253,7 +261,7 @@ class ModelFields(forms.ModelForm):
            meta_change_fields 在__init__函数中，不在meta_change_fields中的字段会被还原，只剩下变化的，所以这里不需要检测了。
            
         """
-        super().clean()
+        super().clean()         
         overlaped_fields = []
         if self.kw.get('meta_change_fields'): 
             return 
@@ -791,6 +799,7 @@ class Fields(ModelFields):
     """
     普通的form表单，与model层剥离开的
     """
+    submit_to_backend = True  # 现在暂时放在Fields类中，后面考虑挪到ModelFields 中去
     def __init__(self, dc={}, pk=None, crt_user=None, nolimit=False, *args,select_for_update=True, **kw): 
         dc=self.clean_dict(dc) 
         self.kw=dc.copy()
@@ -854,18 +863,28 @@ class Fields(ModelFields):
     
     def get_operations(self):
         ls=[]
-        ls.append({
-            'name':'save',
-            'editor':'com-btn',
-            'label':_('保存'),
-            'type':'success',
-            'icon':'el-icon-receiving',
-            'click_express':'scope.ps.vc.submit()',
-            #'editor':'com-field-op-btn',
-            #'label':'保存', 
-            #'icon': 'fa-save',
-            #'class':'btn btn-info'
-        })
+        if self.submit_to_backend:
+            ls.append({
+                'name':'save',
+                'editor':'com-btn',
+                'label':_('保存'),
+                'type':'success',
+                'icon':'el-icon-receiving',
+                'click_express':'scope.ps.vc.submit()',
+                #'editor':'com-field-op-btn',
+                #'label':'保存', 
+                #'icon': 'fa-save',
+                #'class':'btn btn-info'
+            })
+        else:
+            ls.append({
+                'name':'save',
+                'editor':'com-btn',
+                'label':'确定',
+                'type':'success',
+                'icon':'el-icon-receiving',
+                'click_express':'scope.ps.vc.beforeSubmit().then(()=>{  if(scope.ps.vc.isValid()){ scope.ps.vc.$emit("finish",scope.ps.vc.row)}  })',
+                    })
         return ls 
     
     def dict_row(self):

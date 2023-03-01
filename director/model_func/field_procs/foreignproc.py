@@ -23,8 +23,8 @@ class ForeignProc(BaseFieldProc):
             }
         else:
             return {
-                name: foreign,
-                '_%s_label'%name:''                
+                name:  getattr(inst,name + '_id', None), # foreign,
+                '_%s_label'%name: getattr(inst,name + '_id', '')                
             }
     def get_options(self):
         if getattr(self.field.target_field.model,'bigdata',False):

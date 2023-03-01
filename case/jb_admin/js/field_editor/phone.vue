@@ -1,5 +1,5 @@
 <template>
-  <div class="com-field-phone" :class="head.class" :style="head.style">
+  <div class="com-field-phone" :class="head.class" :style="mystyle">
     <div v-if='head.readonly'>
       <span class="readonly-info"  v-text='row[head.name]'></span>
     </div>
@@ -34,6 +34,17 @@ export default {
       contry_code_options:[]
     }
   },
+  computed:{
+    mystyle(){
+      if(this.head.style){
+        return this.head.style
+      }else{
+        return  {
+          '--width':this.head.width || '15rem',
+        }
+      }
+    }
+  },
   mounted(){
     this.contry_code_options = ex.map(this.head.contry_code,item=>{
       return {value:item,label:item}
@@ -42,7 +53,6 @@ export default {
   },
   watch:{
     contry_code(nv){
-      debugger
       if(this.head.splitter){
         this.row[this.head.name] = `${nv}${this.head.splitter}${this.phone}`
       }
@@ -58,7 +68,6 @@ export default {
   methods:{
     updateData(){
       var value = this.row[this.head.name]
-      debugger
       if(this.head.splitter && value){
         var ls = value.split(this.head.splitter)
         this.contry_code = ls[0]
@@ -69,11 +78,18 @@ export default {
 }
 </script>
 <style scoped lang="scss">
+/deep/{
+  .el-input__inner{
+    width: var(--width);
+  }
+}
+
 .contry-code{
   /deep/ {
     .el-input__inner{
-      width: 100px;
+      width: 8rem;
     }
   }
 }
+
 </style>

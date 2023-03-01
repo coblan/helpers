@@ -56,11 +56,20 @@ class IntProc(BaseFieldProc):
 
 
 class BigProc(IntProc):
-    #def to_dict(self, inst, name):
-        #if getattr(inst,name):
-            #return { name :str(getattr(inst,name)) } 
-        #else:
-            #return {name:None}
+    def to_dict(self, inst, name):
+        if getattr(inst,name):
+            return { name :str(getattr(inst,name)) } 
+        else:
+            return {name:None}
+    
+    def clean_field(self,dc,name):
+        """ 
+        fields类里，从前端穿过来的row dict数据进行清洗， dc里面有的 字段，才会被调用
+        """
+        if dc.get(name):
+            return int(dc[name])
+        else:
+            return dc[name]    
     
     def filter_clean_search(self, q_str): 
         if re.search('^\d+$', q_str):
