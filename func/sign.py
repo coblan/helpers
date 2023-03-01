@@ -13,8 +13,8 @@ def sign_check(salt,expire=60):
     def __fun(fun):
         def _fun(*arg,**kws):
             request = get_request_cache()['request']
-            sign = request.META.get('HTTP_SIGN')
-            timestamp =  request.META.get('HTTP_TS') 
+            sign = kws.get('sign') or  request.META.get('HTTP_SIGN')
+            timestamp = kws.get('ts') or request.META.get('HTTP_TS') 
             if not timestamp:
                 raise UserWarning("没有有效的时间戳")
             stamp = timezone.datetime.fromtimestamp(float(timestamp))
