@@ -24,7 +24,9 @@ from .data_format.json_format import DirectorEncoder
 from .exceptions.question import QuestionException
 from helpers.func.d_import import import_element
 from helpers.func import ex
-from .base_data import director_setting
+from .base_data import director_setting,director_view
+from .middleware.request_cache import get_request_cache
+
 from .funs.transaction_db import director_transaction_db
 
 import logging
@@ -117,6 +119,12 @@ def general_upload(request):
         return uploader().asView(request)
     else:
         return GeneralUpload().asView(request)
+
+@director_view('general/upload')
+def _general_upload():
+    request = get_request_cache()['request']
+    return general_upload(request)
+
 
 @csrf_exempt
 def ckeditor(request): 
