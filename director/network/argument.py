@@ -18,13 +18,15 @@ def get_argument(request,outtype='obj'):
     """
     
     if request.method=='POST':
-        if request.body and request.body.strip().decode('utf-8').startswith(('{','[')):
+        # 只要带有文件的，就不要解析body了
+        if not request.FILES and request.body and request.body.strip().decode('utf-8').startswith(('{','[')):
             try:
                 dc=json.loads(request.body.decode('utf-8'))
             except Exception as e:
                 raise UserWarning(str(e) )
         else:
             dc = request.POST.dict()
+            dc.update(request.GET.dict())
         #else:
             #dc =parse.parse_qs(request.body)
             
