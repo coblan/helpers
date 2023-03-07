@@ -93,7 +93,7 @@ class SelectSearch(object):
             if self.qf in self.exact_names:
                 exp = {self.qf : q_str}
             else:
-                exp = {'%s__icontains'%self.qf: q_str,}
+                exp = {'%s__contains'%self.qf: q_str,}
         else:
             raise UserWarning('没有指定查询字段')
         return Q(**exp)
