@@ -10,6 +10,8 @@ class SelectSearch(object):
     exact_names = []
     model=''
     field_sort=[]
+    orders = {}  # 字段排序，小的排在前面
+    
     db_map={} # 用户 raw sql 查询时，映射字段到 数据库字段
     label_map = {} # name 到 label 的映射
     def __init__(self,q,user = None,allowed_names = [], kw = {}):
@@ -28,7 +30,7 @@ class SelectSearch(object):
                 if item in self.valid_name:
                     sorted_name.append(item)
         else:
-            sorted_name = self.valid_name
+            sorted_name = sorted( self.valid_name ,key=lambda name:self.orders.get(name,0))
         if sorted_name:
             ls=[]
             for name in sorted_name:
@@ -91,7 +93,7 @@ class SelectSearch(object):
             if self.qf in self.exact_names:
                 exp = {self.qf : q_str}
             else:
-                exp = {'%s__icontains'%self.qf: q_str,}
+                exp = {'%s__contains'%self.qf: q_str,}
         else:
             raise UserWarning('没有指定查询字段')
         return Q(**exp)
