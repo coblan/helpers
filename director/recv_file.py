@@ -192,6 +192,7 @@ class BigFileRecieve(GeneralUpload):
                     general_file.write(chunk)                
             file_url = self.getFileUrl(file_path)
             file_url_list.append(file_url)
+        self.file_url_list = file_url_list
         return HttpResponse(json.dumps(file_url_list),content_type="application/json")
 
 director.update({
