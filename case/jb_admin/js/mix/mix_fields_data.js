@@ -201,6 +201,7 @@ export  var mix_fields_data ={
             var pro = new ex.FreePromise()
             if(!self.isValid()){
                 //reject()
+                cfg.toast('请检查填写内容!')
             }else{
                 var res = await  self.save()
                 pro.resolve(res)
@@ -227,6 +228,7 @@ export  var mix_fields_data ={
                     var rt = resp //resp.save_row
                     if(rt.errors){
                         //cfg.hide_load()
+                        cfg.toast('请检查填写内容')
                         self.setErrors(rt.errors)
                         self.showErrors(rt.errors)
                         //reject(rt.errors)
