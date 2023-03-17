@@ -72,6 +72,9 @@ def split_iter(iteration,count):
         yield ls
 
 def split_db_query(query,count):
+    """透明化的处理query查询迭代，只要支持[start:end]这种查询集。
+    已知支持 django.query, mongoengin库
+    """
     index =0
     while True:
         print(f'分批查询 index={index}...')
