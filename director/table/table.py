@@ -1032,7 +1032,8 @@ class ModelTable(object):
                  #'type':'success',
                  'plain':True,
                   'show_express':'rt = !(scope.ps.vc.operationHeads.length == 1 && scope.ps.vc.filterHeads.length >=1) ',
-                 'visible':  self.allow_refresh, # self.filters ==RowFilter and self.search in [RowSearch],
+                  # 在没有搜索栏的时候，再显示一个刷新按钮
+                 'visible':  self.allow_refresh and self.filters ==RowFilter and self.search in [RowSearch], # , #
                  'action':'scope.ps.search()'}
         table_setting = {'editor':'com-btn-el-button',
              'name':'table_setting',
