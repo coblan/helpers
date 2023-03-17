@@ -71,6 +71,20 @@ def split_iter(iteration,count):
     if ls:
         yield ls
 
+def split_db_query(query,count):
+    index =0
+    while True:
+        print(f'分批查询 index={index}...')
+        this_count = 0
+        for inst in query[index:index+count]:
+            this_count +=1
+            yield inst
+        index += count
+        if this_count < count:
+            break
+        
+
+
 def slite_query(query,batch_count):
     current_index = 0
 
