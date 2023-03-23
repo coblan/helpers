@@ -1,16 +1,17 @@
 <template>
-    <div class="com-field-select" :class="head.class">
+    <div class="com-field-select" :class="head.class" >
         <span v-if='head.readonly' v-text='get_label'></span>
         <div v-else>
             <input type="text" style="display: none" :id="'id_'+head.name" :name="head.name" v-model="row[head.name]"><!-- :clearable="!head.required"-->
 
           <el-select v-show="loaded"  :class="{start:!loaded || !is_select }"  v-model="row[head.name]"
-
+                        :collapse-tags="head.no_wrap"
                         :multiple="head.multiple"
                         :filterable="head.multiple ||  head.filterable "
                         :placeholder="head.placeholder"
                         size="small"
                         :clearable="!head.multiple && !head.required"
+                      :popper-class="head.no_wrap?'com-field-select-on-wrap':'com-field-select-wrap'"
             >
                 <el-option
                         v-for="item in normed_options"
@@ -261,10 +262,11 @@
 
 </style>
 <style lang="scss">
-    .el-select-dropdown.is-multiple li.selected{
-        display: none;
-    }
-
+// 输入框可以换行的时候，把下拉框的选择项隐藏。
+// 如果输入框不能换行，比如是用count来计数，所以下拉框的选择项不能隐藏
+.com-field-select-wrap.el-select-dropdown.is-multiple li.selected{
+    display: none;
+  }
 
 .com-filter-multi-select{
     .el-select-dropdown.is-multiple li.selected{

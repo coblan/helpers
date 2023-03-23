@@ -76,6 +76,8 @@ class BaseEngine(object):
     root_page='/'   # 被home 替代了
     access_from_internet = True # getattr(settings,'ACCESS_FROM_INTERNET',False)
     need_staff = False
+    forbid_pages =[]
+    
     
     @classmethod
     def as_view(cls):
@@ -106,6 +108,8 @@ class BaseEngine(object):
             return True
     @csrf_exempt 
     def view(self,request,name):    
+        if name in self.forbid_pages:
+            raise PermissionDenied('页面禁止访问')
         self.request = request
         self.engin_url =  reverse(self.url_name,args=('aa',))[:-3]
         
@@ -128,7 +132,8 @@ class BaseEngine(object):
             'login_url':self.login_url+'?next='+ unquote( request.get_full_path())
         }
         
-        if not request.user.is_staff:
+        
+        if need_login and  not request.user.is_staff:
             if hasattr(page_cls, 'need_staff'):
                 if getattr(page_cls, 'need_staff'):
                     raise PermissionDenied('只有职员才能登陆后台界面!')

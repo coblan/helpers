@@ -32,6 +32,7 @@ class RichtextProc(BaseFieldProc):
     
     def dict_field_head(self,head):
         head['editor']='com-field-richtext'
+        head['set'] = 'complex'
         return head
 
 field_map[RichtextField]=RichtextProc

@@ -14,6 +14,7 @@
         data(){
             this.head.filterable = true
             this.head.placeholder = this.head.label
+            this.head.no_wrap=true
             return {
             }
         }

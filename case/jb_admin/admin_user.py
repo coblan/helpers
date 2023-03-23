@@ -410,7 +410,7 @@ class GroupForm(ModelFields):
         return heads    
     
     def get_row(self):
-        row=super(self.__class__,self).get_row()
+        row=super().get_row()
         if self.instance.pk and hasattr(self.instance, 'permitmodel'):
             row['permit']=[x for x in self.instance.permitmodel.names.split(';')]
         else:
@@ -459,6 +459,12 @@ class GroupForm(ModelFields):
                     'permit':';'.join( valid_permit_ls ) 
                 },
             }
+
+# 以api的方式，可以给前端调用
+@director_element('delete/usergroup')
+@director_element('edit/usergroup')
+class GroupFormUser(GroupForm):
+    simple_dict = True
 
 
 def get_all_permit(item):

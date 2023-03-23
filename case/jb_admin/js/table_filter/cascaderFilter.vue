@@ -9,6 +9,7 @@
         @change="onChange"
         :popper-class="head.pop_class"
         size="small"
+        :filterable="head.filterable"
         clearable>
     </el-cascader>
   </div>

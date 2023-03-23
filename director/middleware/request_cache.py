@@ -28,7 +28,8 @@ def get_request_cache():
             return request_cache
     no_request =NoRequest()
     return {
-        'request':no_request
+        'request':no_request,
+        'named_ctx':{},
     }
 
 def request_cache(fun): 
