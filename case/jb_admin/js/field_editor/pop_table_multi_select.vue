@@ -6,7 +6,11 @@
         <el-tag v-for="(label,index) in labels" :closable=" can_clear" v-if="row[head.name]" @close="clear(index)">
             <span  v-text="label"></span>
         </el-tag>
-        <span v-if="!head.readonly" class="clickable" @click="open_win"><i class="fa fa-search"></i></span>
+        <span v-if="!head.readonly" class="clickable" @click="open_win">
+<!--          <i class="fa fa-search"></i>-->
+          <i type="primary" class="el-icon-circle-plus clickable"  style="padding: 10px;"></i>
+<!--          <el-button type="success"  size="mini" icon="el-icon-plus"></el-button>-->
+        </span>
         <!--<span v-if="show_search" class="clickable" @click="open_win"><i class="fa fa-search"></i></span>-->
     </div>
 </template>
