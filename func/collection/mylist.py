@@ -69,8 +69,9 @@ def split_iter(iteration,count,name='unnamed'):
         if current_count >=count:
             current_count = 0
             yield ls
+            general_log.debug(f'分批查询{name} index={current_count}...')
             ls =[]
-        general_log.debug(f'分批查询{name} index={current_count}...')
+       
     if ls:
         yield ls
 
