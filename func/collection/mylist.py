@@ -73,6 +73,7 @@ def split_iter(iteration,count,name='unnamed'):
             ls =[]
        
     if ls:
+        general_log.debug(f'分批查询{name} count={len(ls)}...')
         yield ls
 
 def split_db_query(query,count,name='unnamed'):
