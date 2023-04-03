@@ -11,6 +11,7 @@ export default {
       vc:this,
       name:'com-tab-table'
     }
+    debugger
     return {
         childStore:childStore,
         loaded:false,
