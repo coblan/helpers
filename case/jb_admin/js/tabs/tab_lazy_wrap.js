@@ -5,30 +5,37 @@ var lazy_wrap={
     props:['tab_head','par_row'],
     data(){
             return {
-                real_head:{}
+                real_head:{},
             }
     },
     mounted(){
         if(this.tab_head.lazy_init){
             ex.eval(this.tab_head.lazy_init,{head:this.tab_head})
         }
+
         if(this.tab_head.lazy_director_name_express) {
             var director_name = ex.eval(this.tab_head.lazy_director_name_express, {par_row: this.par_row})
         }else {
-            var director_name = ethis.tab_head.lazy_director_name
+            var director_name = this.tab_head.lazy_director_name
         }
         if(this.tab_head.filter_express){
-            var dc = ex.eval(this.tab_head.filter_express,{par_row:this.par_row})
+            var filter_dc = ex.eval(this.tab_head.filter_express,{par_row:this.par_row})
         }else{
-            var dc = {}
+            var filter_dc = {}
         }
-        ex.direction_get(director_name,dc).then(resp=>{
-            debugger
+
+        ex.director_get(director_name,filter_dc).then(resp=>{
             this.real_head = resp
         })
+
+        // ex.director(director_name).call("get_head_context",filter_dc).then(resp=>{
+        //     this.real_head = {
+        //         tab_head: resp
+        //     }
+        // })
     },
     template:`<div class="com-tab-lazy-wrap">
-           <component :is="real_head.editor" :ctx="real_head.ctx"></component>
+           <component :is="real_head.editor" :tab_head="real_head.tab_head" :par_row="par_row"></component>
 </div>`
 }
 
