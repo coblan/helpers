@@ -520,6 +520,14 @@ class ModelTable(object):
     def get_option(self):
         return {}
     
+    def getAdviseHeads(self,heads):
+        """
+        返回前端默认像是的字段名称，如：
+        [name1,name2]
+        """
+        heads_names = [head['name'] for head in heads]
+        return heads_names
+    
     @request_cache
     def get_head_context(self):
         """
@@ -536,9 +544,10 @@ class ModelTable(object):
                 'fitWidth':True
             })
         if self.allow_set_layout:
-            heads_names = [head['name'] for head in heads]
+            request = get_request_cache()['request']
             dc.update({
-                'advise_heads':heads_names,
+                'advise_heads':self.getAdviseHeads(heads),
+                'advise_heads_cookie_path':request.get_full_path()
             })
         return {
             'heads':heads,
