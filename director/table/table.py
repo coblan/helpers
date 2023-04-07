@@ -1370,7 +1370,9 @@ class PlainTable(ModelTable):
         """
         ops = self.get_operations()
         ops = evalue_container(ops)
+
         return {
+            'fitWidth':self.fitWidth,
             'heads':self.get_heads(),
             'rows': [], #self.get_rows(),
             'row_pages':{}, # self.pagenum.get_context(),
