@@ -54,7 +54,9 @@ class BaseFieldProc(object):
         options=None
         try:
             if not self.form_field:
-                self.form_field = fields_for_model(self.model,fields=[self.name])[self.name]
+                self.form_field = fields_for_model(self.model,fields=[self.name]).get(self.name)
+                if not self.form_field:
+                    return []
             if hasattr(self.form_field,'choices'):
                 #head['options'] =  [{'value':x[0],'label':x[1]} for x in self.field.choices]
                 catch = get_request_cache()

@@ -6,11 +6,14 @@
         <el-tag v-for="(label,index) in labels" :closable=" can_clear" v-if="row[head.name]" @close="clear(index)">
             <span  v-text="label"></span>
         </el-tag>
-        <span v-if="!head.readonly" class="clickable" @click="open_win">
-<!--          <i class="fa fa-search"></i>-->
-          <i type="primary" class="el-icon-circle-plus clickable"  style="padding: 10px;"></i>
-<!--          <el-button type="success"  size="mini" icon="el-icon-plus"></el-button>-->
-        </span>
+
+      <el-button v-if="!head.readonly" @click="open_win" size="mini" type="success" icon="el-icon-plus"></el-button>
+
+<!--        <span v-if="!head.readonly" class="clickable" @click="open_win">-->
+<!--&lt;!&ndash;          <i class="fa fa-search"></i>&ndash;&gt;-->
+<!--          <i type="primary" class="el-icon-circle-plus clickable"  style="padding: 10px;"></i>-->
+<!--&lt;!&ndash;          <el-button type="success"  size="mini" icon="el-icon-plus"></el-button>&ndash;&gt;-->
+<!--        </span>-->
         <!--<span v-if="show_search" class="clickable" @click="open_win"><i class="fa fa-search"></i></span>-->
     </div>
 </template>
@@ -64,8 +67,8 @@
                 if(this.head.init_express){
                     ex.eval(this.head.init_express,{head:this.head,row:this.row})
                 }
-                // 用到的时候，替换成 com-backend-table
-                cfg.pop_vue_com('com-table-panel',this.head.table_ctx).then(foreign_row=>{
+                // 用到的时候，替换成 com-backend-table    //,com-table-panel
+                cfg.pop_vue_com( 'com-backend-table', this.head.table_ctx).then(foreign_row=>{
                     if(!foreign_row){
                     console.log('break table panel')
                     return
@@ -88,21 +91,16 @@
             }).catch(()=>{
                     console.log('break table panel')
             })
-//var win_close = cfg.pop_middle('com-table-panel',this.head.table_ctx,function(foreign_row){
-//    if(self.head.action){
-//        ex.eval(self.head.action,{new_row:foreign_row,row:self.row})
-//    }else if(self.head.select_field){
-//        Vue.set(self.row,self.head.name,foreign_row[self.head.select_field])
-//    }else{
-//        Vue.set(self.row,self.head.name,foreign_row[self.head.name])
-//    }
-//        Vue.set(self.row,'_'+self.head.name+'_label',foreign_row._label)
-//    win_close()
-//})
+
             },
-//isValid:function(){
-//    return this.validator.isValid()
-//}
         }
     }
 </script>
+
+<style scoped lang="scss">
+/deep/ {
+  .el-button--mini{
+    padding: 7px;
+  }
+}
+</style>
