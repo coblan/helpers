@@ -173,6 +173,7 @@ var cfg={
                 if(e != '__end_by_user'){
                     resolve(e)
                 }else{
+                    console.log('user x close win, in promise condition,get reject, if not try catch may get error')
                     reject()
                 }
             }

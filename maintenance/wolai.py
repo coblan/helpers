@@ -42,7 +42,7 @@ def com_to_type(head,model_form_inst):
     if head['editor'] in ['com-field-table-select','com-field-select']:
         field = model_form_inst.instance._meta.get_field(head['name'])
         if  isinstance( field,related.ManyToManyField) or isinstance(field,related.ForeignKey):
-            return f'关联表:{field.related_model._meta.verbose_name}'
+            return f'关联表:{field.related_model._meta.verbose_name}的pk值'
         else:
             return f'选择类型{head.get("options")}'
     if head['editor'] =='com-field-picture':
