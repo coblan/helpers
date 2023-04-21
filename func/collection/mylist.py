@@ -1,6 +1,7 @@
 import random
 import logging
 general_log = logging.getLogger('general_log')
+from django.db import close_old_connections
 
 def split_list(dstlist,every_num):
     """ 将dstlist分批次返回。
@@ -76,7 +77,7 @@ def split_iter(iteration,count,name='unnamed'):
         general_log.debug(f'分批查询{name} count={len(ls)}...')
         yield ls
 
-def split_db_query(query,count,name='unnamed'):
+def split_db_query(query,count,name='unnamed',every_time_close_db=False):
     """透明化的处理query查询迭代，只要支持[start:end]这种查询集。
     已知支持 django.query, mongoengin库
     """
@@ -84,11 +85,16 @@ def split_db_query(query,count,name='unnamed'):
     while True:
         #print(f'分批查询 index={index}...')
         general_log.debug(f'分批查询{name} index={index}...')
+        if every_time_close_db:
+            close_old_connections()        
         this_count = 0
-        for inst in query[index:index+count]:
+        ls = list(query[index:index+count])
+        for inst in ls:
             this_count +=1
             yield inst
+            
         index += count
+       
         if this_count < count:
             break
         
