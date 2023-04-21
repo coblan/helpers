@@ -19,5 +19,6 @@ Vue.component('com-widget-el-tab',el_tab)
 Vue.component('com-message-rows',messageInfo)
 // Vue.component('com-form-one',form_one)
 
-
+import stack_widget from './stack_widget.vue'
+Vue.component('com-widget-stack',stack_widget)
 window.live_el_tab = el_tab
