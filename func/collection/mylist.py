@@ -77,7 +77,7 @@ def split_iter(iteration,count,name='unnamed'):
         general_log.debug(f'分批查询{name} count={len(ls)}...')
         yield ls
 
-def split_db_query(query,count,name='unnamed',every_time_close_db=False):
+def split_db_query(query,count,name='unnamed',read_in_memery=False,every_time_close_db=False):
     """透明化的处理query查询迭代，只要支持[start:end]这种查询集。
     已知支持 django.query, mongoengin库
     """
@@ -88,7 +88,10 @@ def split_db_query(query,count,name='unnamed',every_time_close_db=False):
         if every_time_close_db:
             close_old_connections()        
         this_count = 0
-        ls = list(query[index:index+count])
+        if read_in_memery:
+            ls = list(query[index:index+count])
+        else:
+            ls = query[index:index+count]
         for inst in ls:
             this_count +=1
             yield inst
