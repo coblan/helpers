@@ -1,7 +1,7 @@
 import inspect
 from django.conf import settings
 from helpers.func import ex
-
+import re
 # used for model render
 page_dc={
     #'xxx_model': {'model':'xxx','table_temp':xxx,'field_temp':xxx}
@@ -91,8 +91,24 @@ def director_element(name):
         #return _fun2
     return _fun
 
+
+def find_director(name:str):
+    left_name = name
+    if left_name.startswith('/dapi'):
+        rt = re.search('/dapi/(.+)',left_name)
+        left_name= rt.groups[1]
+    if left_name.startswith('element/(.+)/(\w+)$'):
+        left_name= rt.groups[1]
+        attr_name = rt.groups[2]
+        Element = director.get(left_name)
+        element = Element()
+        return getattr(element,attr_name,None)
+    else:
+        return director.get(name,None)
+
+
 """
-下面三个item都过时了，现在使用db_router对事物进行控制
+下面三个item都过时了，现在使用db_router对事务进行控制
 """
 director_transaction= {}
 def append_transaction(director_name,db_name):
