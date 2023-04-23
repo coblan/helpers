@@ -96,10 +96,11 @@ def find_director(name:str):
     left_name = name
     if left_name.startswith('/dapi'):
         rt = re.search('/dapi/(.+)',left_name)
-        left_name= rt.groups[1]
-    if left_name.startswith('element/(.+)/(\w+)$'):
-        left_name= rt.groups[1]
-        attr_name = rt.groups[2]
+        left_name= rt.groups()[0]
+    if left_name.startswith('element/'):
+        rt2 = re.search('element/(.+)/(\w+)$',left_name)
+        left_name= rt2.groups()[0]
+        attr_name = rt2.groups()[1]
         Element = director.get(left_name)
         element = Element()
         return getattr(element,attr_name,None)
