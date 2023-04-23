@@ -5,15 +5,26 @@ template = '''
 from django.db.models.fields import related
 from helpers.director.model_func.cus_fields.snow_flake  import SnowFlakeField
 
-def fields_doc(model_form,pk_field='id'):
+def table_doc(model_table):
+    model_table.nolimit=True
+    model_table_inst = model_table()
+    heads = model_table_inst.get_heads()
+    return heads
+    
+
+def fields_doc(model_form,pk_field='id',model_table=None):
     model_form.nolimit = True
     model_form_inst = model_form()
     ctx = model_form_inst.get_head_context()
     heads = ctx.get('heads')
+    fields_names = [head['name'] for head in heads]
+    
     #print(heads)
     table_str = template
     
     if pk_field:
+        fields_names.append(pk_field)
+        
         id_inst = model_form_inst.instance._meta.get_field(pk_field)
         pk_field_type = ''
         if isinstance(id_inst,SnowFlakeField):
@@ -27,6 +38,11 @@ def fields_doc(model_form,pk_field='id'):
         
     for head in heads:
         table_str += f"|{head.get('name')}|{head.get('label')}|{com_to_type(head,model_form_inst)}|{head.get('help_text','')}|\n"
+    
+    if  model_table:
+        for head in table_doc(model_table):
+            if head['name'] not in fields_names:
+                table_str += f"|{head.get('name')}|{head.get('label')}| | |\n"
     print(table_str)
 
 def com_to_type(head,model_form_inst):
