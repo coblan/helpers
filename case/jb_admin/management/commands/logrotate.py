@@ -19,8 +19,9 @@ class Command(BaseCommand):
         def on_read(line):
             general_log.debug(f'外部logrotate: {line}')
         capturing.on_readline(on_read)
-        capturing.start()
         base_url = os.path.dirname( settings.BASE_DIR )
         log_conf = os.path.join(base_url,'deploy','logrotate.conf')
+        capturing.start()
         invoke.run(f'logrotate -fd {log_conf}')
+        capturing.stop()
         general_log.info('logstate结束')
