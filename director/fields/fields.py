@@ -868,7 +868,7 @@ class Fields(ModelFields):
                 'name':'save',
                 'editor':'com-btn',
                 'label':_('保存'),
-                'type':'success',
+                'type':'primary',
                 'icon':'el-icon-receiving',
                 'click_express':'scope.ps.vc.submit()',
                 #'editor':'com-field-op-btn',
@@ -881,7 +881,7 @@ class Fields(ModelFields):
                 'name':'save',
                 'editor':'com-btn',
                 'label':'确定',
-                'type':'success',
+                'type':'primary',
                 'icon':'el-icon-receiving',
                 'click_express':'scope.ps.vc.beforeSubmit().then(()=>{  if(scope.ps.vc.isValid()){ scope.ps.vc.$emit("finish",scope.ps.vc.row)}  })',
                     })

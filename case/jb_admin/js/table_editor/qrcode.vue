@@ -1,5 +1,5 @@
 <template>
-  <div style="padding: 10px" @click="open_qr">
+  <div style="padding: 10px;height: 125px;width: 125px" @click="open_qr">
     <div class="qr-pad clickable"></div>
   </div>
 </template>

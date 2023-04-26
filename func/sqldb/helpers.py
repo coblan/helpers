@@ -20,7 +20,7 @@ def get_model_write(inst):
         Router= import_element(router_path)
         db = Router().db_for_write(inst.__class__)
     else:
-        db = 'defualt'
+        db = 'default' #  'defualt'
     return db
 
 

@@ -28,6 +28,7 @@ from .base_data import director_setting,director_view
 from .middleware.request_cache import get_request_cache
 
 from .funs.transaction_db import director_transaction_db
+import re
 
 import logging
 req_log = logging.getLogger('general_log')
@@ -173,7 +174,16 @@ def director_view(request,director_name):
     elif director_name.startswith('delete/'):
         directorEnt = director_views.get('d.delete_row')
         kws['_director_name'] = director_name#[6:]
-        kws={'row':kws}      
+        kws={'row':kws}     
+    
+    # [1] 使用element来打包 director_view
+    elif director_name.startswith('element/'):
+        directorEnt = director_views.get('d.director_element_call2')
+        rt = re.search('element/(.+)/(\w+)$', director_name)
+        director_name = rt.groups()[0]
+        attr_name = rt.groups()[1]
+        kws['director_name'] = director_name#[6:]
+        kws['attr_name'] = attr_name                   
     else:
         directorEnt= director_views.get(director_name)
     if not directorEnt:
@@ -251,7 +261,16 @@ def fast_director_view(request,director_name):
     为了加大并发量，一般只读版本
     """
     kws = argument.get_argument(request,outtype='dict')
-    directorEnt= director_views.get(director_name)
+    
+    if director_name.startswith('element/'):
+        directorEnt = director_views.get('d.director_element_call2')
+        rt = re.search('element/(.+)/(\w+)$', director_name)
+        director_name = rt.groups()[0]
+        attr_name = rt.groups()[1]
+        kws['director_name'] = director_name#[6:]
+        kws['attr_name'] = attr_name           
+    else:
+        directorEnt= director_views.get(director_name)
     allowed_methods =  ex.read_dict_path(director_setting, '%s.methods'%director_name)
     if allowed_methods and 'GET' not in allowed_methods:
         return HttpResponse('request Method not allowed',status=405)

@@ -132,6 +132,13 @@ def director_element_call(director_name,attr_name,kws):
      obj = dcls()
      return getattr(obj,attr_name)(**kws)
 
+# [1] 新开一个d.director_element_call，给dapi用，不去修改老的，免得引起其他问题
+@director_view('d.director_element_call2')
+def director_element_call(director_name,attr_name,**kws):
+     dcls = director.get(director_name)
+     obj = dcls()
+     return getattr(obj,attr_name)(**kws)
+
 @director_view('d.delete_query_related')
 def search_delete_related(rows):
      out_ls =[]

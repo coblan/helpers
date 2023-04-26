@@ -520,6 +520,14 @@ class ModelTable(object):
     def get_option(self):
         return {}
     
+    def getAdviseHeads(self,heads):
+        """
+        返回前端默认像是的字段名称，如：
+        [name1,name2]
+        """
+        heads_names = [head['name'] for head in heads]
+        return heads_names
+    
     @request_cache
     def get_head_context(self):
         """
@@ -536,9 +544,10 @@ class ModelTable(object):
                 'fitWidth':True
             })
         if self.allow_set_layout:
-            heads_names = [head['name'] for head in heads]
+            request = get_request_cache()['request']
             dc.update({
-                'advise_heads':heads_names,
+                'advise_heads':self.getAdviseHeads(heads),
+                'advise_heads_cookie_path':request.get_full_path()
             })
         return {
             'heads':heads,
@@ -1032,7 +1041,8 @@ class ModelTable(object):
                  #'type':'success',
                  'plain':True,
                   'show_express':'rt = !(scope.ps.vc.operationHeads.length == 1 && scope.ps.vc.filterHeads.length >=1) ',
-                 'visible':  self.allow_refresh, # self.filters ==RowFilter and self.search in [RowSearch],
+                  # 在没有搜索栏的时候，再显示一个刷新按钮
+                 'visible':  self.allow_refresh and self.filters ==RowFilter and self.search in [RowSearch], # , #
                  'action':'scope.ps.search()'}
         table_setting = {'editor':'com-btn-el-button',
              'name':'table_setting',
@@ -1360,7 +1370,9 @@ class PlainTable(ModelTable):
         """
         ops = self.get_operations()
         ops = evalue_container(ops)
+
         return {
+            'fitWidth':self.fitWidth,
             'heads':self.get_heads(),
             'rows': [], #self.get_rows(),
             'row_pages':{}, # self.pagenum.get_context(),

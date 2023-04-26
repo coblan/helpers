@@ -1,14 +1,13 @@
 <template>
   <div class="table-select">
 <!--    <el-button size="mini">选择</el-button>-->
-    <div style="display: inline-block;padding: 0 5px" v-for="row in selected_rows" :title="row.desp">
+    <div style="display: inline-block;padding: 0 5px" v-for="row in selected_rows" :title="row.desp ||'' ">
       <el-tag size="small">{{row._label}}</el-tag>
     </div>
 
     <i class="el-icon-edit clickable" @click="openTable"></i>
 
-<!--    <simTable v-if="selected_rows.length>0" :heads="head.table_heads" :rows="selected_rows" :showHead="true"></simTable>-->
-  </div>
+ </div>
 </template>
 <script>
 import popTable from "./tableSelect/popTable.vue";
@@ -23,8 +22,12 @@ export default {
       selected_rows:[]
     }
   },
-  mounted(){
+   async mounted(){
+    if(this.head.mounted_express){
+      await ex.eval(this.head.mounted_express,{vc:this})
+    }
     this.updateSelect()
+
   },
   computed:{
       out_value(){
@@ -38,7 +41,12 @@ export default {
   },
   methods:{
     updateSelect(){
-      var list = this.row[this.head.name] || []
+      if(this.head.format=='string'){ // 标识输出为字符串
+        var list = ex.filter(this.row[this.head.name].split(',') ,item=>{return item!=''})
+      }else{
+        var list = this.row[this.head.name] || []
+      }
+
       this.selected_rows = ex.map(list,item_id=>{
         var one= ex.findone(this.head.table_rows,{id:item_id})
         return one
@@ -47,7 +55,12 @@ export default {
      async openTable(){
       var rows = await cfg.pop_vue_com(popTable,{heads:this.head.table_heads,rows:this.head.table_rows,selected:this.selected_rows})
        this.selected_rows = rows
-       this.row[this.head.name] = ex.map(this.selected_rows,item=>{ return item.id })
+       if(this.head.format=='string'){
+         this.row[this.head.name] = ex.map(this.selected_rows,item=>{ return item.id }).join(',')
+       }else{
+         this.row[this.head.name] = ex.map(this.selected_rows,item=>{ return item.id })
+       }
+
     }
   }
 

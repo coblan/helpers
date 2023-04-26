@@ -76,7 +76,7 @@ import * as sm_link from  './header/sm_link.js'
 import * as header_main from  './header/main.js'
 
 //ui
-import * as stack_widget from './misc/stack_widget'
+// import * as stack_widget from './misc/stack_widget'
 // store
 //import * as table_store from './store/table_store'
 

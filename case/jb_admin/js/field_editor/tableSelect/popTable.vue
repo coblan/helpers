@@ -1,6 +1,6 @@
 <template>
   <div class="pop-table-select">
-    <simTable :heads="heads" :rows="rows" :selected="selected" :showSelect="true" @changed="onChange"></simTable>
+    <simTable :heads="heads" :rows="rows" :selected="inn_selected" :showSelect="true" @changed="onChange"></simTable>
     <div style="padding: 20px;margin-top: 20px">
       <el-button size="mini" type="primary" @click="makesure">确定选择</el-button>
     </div>
@@ -20,7 +20,8 @@ export  default  {
   },
   data(){
     return {
-      mydata:[]
+      mydata:[],
+      inn_selected:ex.copy(this.selected)
     }
   },
   methods:{

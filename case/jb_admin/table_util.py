@@ -1,14 +1,24 @@
 from django.utils import timezone
 
 def default_search_range_time(search_args,name, tm_delta):
+    """
+    如果没有日期，会输出默认日期
+    """
     start_str = search_args.get('_start_%s'%name)
     end_str =  search_args.get('_end_%s'%name)
     if start_str:
-        start = timezone.datetime.strptime(start_str,'%Y-%m-%d %H:%M:%S')
+        if isinstance(start_str,str):
+            start = timezone.datetime.strptime(start_str,'%Y-%m-%d %H:%M:%S')
+        else:
+            # 有可能在上游，start_str处理成了 datetime对象
+            start = start_str
     else:
         start = None
     if end_str:
-        end = timezone.datetime.strptime(end_str,'%Y-%m-%d %H:%M:%S')
+        if isinstance(end_str,str):
+            end = timezone.datetime.strptime(end_str,'%Y-%m-%d %H:%M:%S')
+        else:
+            end = end_str
     else:
         end = None
         
@@ -56,4 +66,27 @@ def default_search_range_date(search_args,name, tm_delta):
     search_args['_end_%s'%name] = end.strftime('%Y-%m-%d')
     return start,end
 
-    
+
+def adapt_range_time(search_args,name):
+    """
+    start,end = adapt_range_time(search_args,'createtime')
+    把时间补齐
+    """
+    start_str = search_args.get('_start_%s'%name)
+    end_str =  search_args.get('_end_%s'%name)
+    if start_str:
+        if isinstance(start_str,str):
+            start = timezone.datetime.strptime(start_str,'%Y-%m-%d %H:%M:%S')
+        else:
+            # 有可能在上游，start_str处理成了 datetime对象
+            start = start_str
+    else:
+        start = None
+    if end_str:
+        if isinstance(end_str,str):
+            end = timezone.datetime.strptime(end_str,'%Y-%m-%d %H:%M:%S')
+        else:
+            end = end_str
+    else:
+        end = timezone.now()
+    return start,end

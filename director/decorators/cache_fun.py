@@ -116,6 +116,9 @@ def clear_fun_cache(key):
         clear_value(key)  # in kv model
 
 def get_cache_list(key,count,insert_fun,ex=None):
+    """
+    从redis的key中pop一个list出来，长度=count，如果长度不够，则调用insert_fun增加redis缓存大小。
+    """
     rt = redis_conn.get(key)
     if rt:
         rt_obj = json.loads(rt)
