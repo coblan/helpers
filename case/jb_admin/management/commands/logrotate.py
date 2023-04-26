@@ -22,6 +22,8 @@ class Command(BaseCommand):
         base_url = os.path.dirname( settings.BASE_DIR )
         log_conf = os.path.join(base_url,'deploy','logrotate.conf')
         capturing.start()
+        invoke.run(f'chmod 600 {log_conf}')
+        invoke.run(f'chown root {log_conf}')
         invoke.run(f'logrotate -fd {log_conf}')
         capturing.stop()
         general_log.info('logstate结束')
