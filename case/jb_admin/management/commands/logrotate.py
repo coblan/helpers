@@ -9,12 +9,18 @@ from django.utils import timezone
 general_log = logging.getLogger('general_log')
 import invoke
 import os
+from helpers.func.stdout_process import Capturing
 
 class Command(BaseCommand):
     """
     """
     def handle(self, *args, **options):
+        capturing = Capturing()
+        def on_read(line):
+            general_log.debug(f'外部logrotate: {line}')
+        capturing.on_readline(on_read)
+        capturing.start()
         base_url = os.path.dirname( settings.BASE_DIR )
         log_conf = os.path.join(base_url,'deploy','logrotate.conf')
         invoke.run(f'logrotate -fd {log_conf}')
-        general_log.info('logstate')
+        general_log.info('logstate结束')
