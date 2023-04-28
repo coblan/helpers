@@ -3,11 +3,16 @@
 
         <input type="text" v-model="row[head.name]" style="display: none;" :id="'id_'+head.name" :name="head.name">
 
-        <el-tag v-for="(label,index) in labels" :closable=" can_clear" v-if="row[head.name]" @close="clear(index)">
+        <div style="display: flex;flex-wrap: wrap;gap:5px;">
+          <el-tag v-for="(label,index) in labels" :closable=" can_clear" v-if="row[head.name]" @close="clear(index)">
             <span  v-text="label"></span>
-        </el-tag>
+          </el-tag>
 
-      <el-button v-if="!head.readonly" @click="open_win" size="mini" type="success" icon="el-icon-plus"></el-button>
+          <el-button v-if="!head.readonly" @click="open_win" size="mini" type="success" icon="el-icon-plus"></el-button>
+        </div>
+
+
+
 
 <!--        <span v-if="!head.readonly" class="clickable" @click="open_win">-->
 <!--&lt;!&ndash;          <i class="fa fa-search"></i>&ndash;&gt;-->
@@ -20,10 +25,24 @@
 <script>
     export default {
         props:['row','head'],
+        data(){
+          var labels = []
+          if(this.row['_'+this.head.name+'_label']){
+            labels = this.row['_'+this.head.name+'_label'] //.split(',')
+          }
+          var inn_data = []
+          if(this.head.format=='string'){
+              inn_data = this.row[this.head.name].split(',')
+          }
+            return {
+                labels:labels,
+                inn_data:inn_data,
+            }
+        },
         computed:{
-            labels:function(){
-                return this.row['_'+this.head.name+'_label']
-            },
+            // labels:function(){
+            //     return this.row['_'+this.head.name+'_label']
+            // },
             can_clear(){
                 if(this.head.readonly){
                     return false
@@ -68,22 +87,25 @@
                     ex.eval(this.head.init_express,{head:this.head,row:this.row})
                 }
                 // 用到的时候，替换成 com-backend-table    //,com-table-panel
-                cfg.pop_vue_com( 'com-backend-table', this.head.table_ctx).then(foreign_row=>{
-                    if(!foreign_row){
-                    console.log('break table panel')
-                    return
-                }
-
-
-
-                if(self.head.after_select){
-                    ex.eval(self.head.after_select,{selected_row:foreign_row,row:self.row})
-                }else{
-                    var list =  this.row[this.head.name]
-                    if(! ex.isin(foreign_row.pk, list)){
-                        this.row[this.head.name].push(foreign_row.pk)
-                        this.row['_'+this.head.name+'_label'].push(foreign_row._label)
+                cfg.pop_vue_com( 'com-backend-table', this.head.table_ctx).then(rows=>{
+                    if(rows.length==0){
+                      console.log('break table panel')
+                      return
                     }
+                if(self.head.after_select_express){
+                    ex.eval(self.head.after_select_express,{selected_row:rows,row:self.row})
+
+                }else{
+                    // var list =  this.row[this.head.name] || []
+                  ex.each(rows,(row)=>{
+                    if(! ex.isin(row.pk, this.inn_data)){
+                      this.inn_data.push(row.pk)
+                      this.labels.push(row._label)
+
+                    }
+                  })
+                  this.syncData()
+
 
 //                    Vue.set(self.row,self.head.name,foreign_row.pk)
                 }
@@ -93,6 +115,14 @@
             })
 
             },
+          syncData(){
+            if(this.head.format=='string'){
+              this.row[this.head.name] = this.inn_data.join(',')
+            }else{
+              this.row[this.head.name] = this.inn_data
+            }
+            this.row['_'+this.head.name+'_label'] = this.labels //.join(',')
+          }
         }
     }
 </script>
