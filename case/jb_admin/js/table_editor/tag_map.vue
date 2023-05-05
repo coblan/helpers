@@ -22,7 +22,12 @@
             },
             mylabel(){
                 var option = ex.findone(this.head.options,{value:this.rowData[this.field]})
-                return option.label
+                if(option){
+                  return option.label
+                }else{
+                  return  this.rowData[this.field]
+                }
+
             }
 
         },
