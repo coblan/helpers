@@ -27,11 +27,16 @@ def SET(scope,path=None,extra_cfg={}):
           # 这里是定义过滤器，需要注意的是，由于 'filters' 是 logging.config.dictConfig 方法要求在配置字典中必须给订的 key ,所以即使不使用过滤器也需要明确给出一个空的结构。
       },
       'handlers': {
+           #'mail_admins': {
+              #'level': 'ERROR',
+              #'class': 'django.utils.log.AdminEmailHandler',
+              #'formatter':'standard',
+          #},
            'mail_admins': {
               'level': 'ERROR',
               'class': 'django.utils.log.AdminEmailHandler',
               'formatter':'standard',
-          },
+          },           
   
           'console': {
               'level':'DEBUG',
