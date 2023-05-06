@@ -1,6 +1,7 @@
 from .models import KVModel
 import json
 from django.db import transaction
+from django.utils import timezone
 
 #@transaction.atomic
 def lock_kv_inst(key,default=''):
@@ -46,3 +47,10 @@ def update_value(key,oldvalue,newvalue):
 def lock_created(key,value):
     obj,created = KVModel.objects.update_or_create(key=key,defaults={'value':value})
     return created
+
+def set_datetime(key,datetime:timezone.datetime):
+    KVModel.objects.update_or_create(key=key,defaults={'value':datetime})
+
+def get_datetime(key,):
+    value = get_value(key)
+    return timezone.datetime.strptime(value, '%Y-%m-%d %H:%M:%S.%f')

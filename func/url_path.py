@@ -1,6 +1,8 @@
 from django.conf import settings
 import os
 import re
+import urllib
+from typing import Dict
 
 def media_url_to_path(url):
     '''将本地的media路径映射为本地文件path'''
@@ -51,3 +53,12 @@ def judge_pc_or_mobile(ua):
         is_mobile = True
 
     return is_mobile
+
+def appendSearch(url:str,param:Dict) -> str:
+    """
+    """
+    encode = urllib.parse.urlencode(param)
+    if '?' not in url:
+        return f'{url}?{encode}'
+    else:
+        return f'{url}&{encode}'
