@@ -26,10 +26,11 @@ class MyAdminEmailHandler(AdminEmailHandler):
 
 def format_frames(frames):
     ls =[]
-    for row in frames:
+    
+    for row in  reversed( frames ):
         vars_list  = row.get('vars')
         vars_str =''
-        for v in reversed(vars_list):
+        for v in vars_list:
             value = unescape(v[1])
             vars_str += f'\t{v[0]}={value}\n'
         ls.append(str({
