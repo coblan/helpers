@@ -32,6 +32,12 @@ def SET(scope,path=None,extra_cfg={}):
               'class': 'django.utils.log.AdminEmailHandler',
               'formatter':'standard',
           },
+           #'mail_admins': {
+              #'level': 'ERROR',
+              #'class': 'helpers.director.log.fakeEmail.MyAdminEmailHandler',
+              #'formatter':'standard',
+              #'email_backend':'helpers.director.log.fakeEmail.MyEmailBackend'
+          #},           
   
           'console': {
               'level':'DEBUG',
@@ -41,7 +47,7 @@ def SET(scope,path=None,extra_cfg={}):
            # pip instll concurrent-log-handler   异步日志框架
           'error_warning':{
               'level': 'WARNING',
-              'class': 'concurrent_log_handler.ConcurrentRotatingFileHandler',
+              'class': 'helpers.director.log.fakeEmail.MyConcurrentLogHandler',
               'maxBytes': 1024*1024*5,
               'backupCount':3,
               'formatter':'standard',

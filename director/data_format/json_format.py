@@ -1,6 +1,6 @@
 import json  
 from django.utils import timezone
-from datetime import datetime,date
+from datetime import datetime,date,time
 from decimal import Decimal
 from django.conf import settings
 import base64
@@ -27,6 +27,8 @@ class DirectorEncoder(json.JSONEncoder):
             return obj.strftime("%Y-%m-%d")  
         elif isinstance(obj, Decimal):
             return str(obj)
+        elif isinstance(obj,time):
+            return obj.strftime('%H:%M:%S')
         elif is_lazy_label(obj):
             # models.py里面的verbose_name使用的 django lazy_gettext 
             return str(obj)
