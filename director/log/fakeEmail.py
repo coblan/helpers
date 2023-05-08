@@ -53,19 +53,21 @@ class MyConcurrentLogHandler(ConcurrentRotatingFileHandler):
         """
         # noinspection PyBroadException
         try:
-            if record.exc_info:
-                exc_info = record.exc_info
-            else:
-                exc_info = (None, record.getMessage(), None)   
-            reporter = ExceptionReporter(None, is_email=False, *exc_info)
-            frames =reporter.get_traceback_data().get('frames')     
-            
             msg = self.format(record)
-            if frames:
+            if record.levelname in ['ERROR','WARNING']:
+                if record.exc_info:
+                    exc_info = record.exc_info
+                else:
+                    exc_info = (None, record.getMessage(), None)   
+                reporter = ExceptionReporter(None, is_email=False, *exc_info)
+                frames =reporter.get_traceback_data().get('frames')     
                 
-                #ls  =[str(x) for x in frames]
-                frame_str = format_frames(frames)  #'\n'.join(ls)
-                msg += '\n ======vars=======\n' + frame_str
+                
+                if frames:
+                    
+                    #ls  =[str(x) for x in frames]
+                    frame_str = format_frames(frames)  #'\n'.join(ls)
+                    msg += '\n ======vars=======\n' + frame_str
             try:
                 self._do_lock()
 
