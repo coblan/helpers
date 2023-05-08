@@ -7,7 +7,7 @@ import logging
 
 from django.db.models.fields.related_descriptors import ForwardManyToOneDescriptor
 
-from compositefk.compat import (
+from .compat import (
     set_cached_value_by_descriptor,
     set_cached_value_by_field,
     get_cached_value,
