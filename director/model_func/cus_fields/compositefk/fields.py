@@ -14,7 +14,7 @@ from django.db.models.fields.related_descriptors import ReverseOneToOneDescripto
 from django.db.models.sql.where import WhereNode, AND
 from django.utils.translation import ugettext_lazy as _
 
-from compositefk.related_descriptors import CompositeForwardManyToOneDescriptor
+from .related_descriptors import CompositeForwardManyToOneDescriptor
 
 
 logger = logging.getLogger(__name__)
