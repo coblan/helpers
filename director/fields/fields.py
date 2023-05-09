@@ -564,6 +564,8 @@ class ModelFields(forms.ModelForm):
             heads=[]
         heads += self._base_dict_fieldmap_heads()
         heads.extend(self.getExtraHeads())
+        # 本来hide_fields只需要过滤model中的字段。但是某些时候继承，需要过滤掉getExtraHeads中增加的字段，所以在这里再次过滤一遍。
+        heads = [x for x in heads if x['name'] not in self.hide_fields]
         heads = [self.dict_head(head) for head in heads]
         
         self.heads = heads
