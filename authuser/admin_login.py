@@ -294,8 +294,15 @@ def do_logout(**kw):
              
             #return self.cleaned_data 
         
-        
-            
+@director_view('user/changepassword')
+@need_login
+def changepswd(old_password,new_password):
+    md_user = get_request_cache()['request'].user
+    if md_user.check_password(old_password):
+        md_user.set_password(new_password)
+        md_user.save()
+    else:
+        raise UserWarning('密码不正确')     
 
 #director.update({
     #'authuser.login': RegistFormPage.fieldsCls,
