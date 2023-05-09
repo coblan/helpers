@@ -7,6 +7,7 @@ from django.utils.translation import ugettext as _
 from ..dictfy  import model_to_name,name_to_model
 from helpers.director.middleware.request_cache import get_request_cache
 #from pypinyin import lazy_pinyin
+from helpers.director.model_func.cus_fields.compositefk.fields import CompositeForeignKey
 
 class ForeignProc(BaseFieldProc):
     def to_dict(self,inst,name):
@@ -74,5 +75,6 @@ class ForeignProc(BaseFieldProc):
 
 field_map.update({
     ForeignKey:ForeignProc,
-    OneToOneField:ForeignProc
+    OneToOneField:ForeignProc,
+    CompositeForeignKey:ForeignProc,
 })

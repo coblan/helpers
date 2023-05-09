@@ -57,7 +57,8 @@ def SET(scope,path=None,extra_cfg={}):
           'general_log':{
               'level': 'DEBUG',
               #'class': 'logging.handlers.RotatingFileHandler',
-              'class': 'concurrent_log_handler.ConcurrentRotatingFileHandler',
+              #'class': 'concurrent_log_handler.ConcurrentRotatingFileHandler',
+              'class': 'helpers.director.log.fakeEmail.MyConcurrentLogHandler',
               'maxBytes': 1024*1024*5,
               'backupCount':3,
               'formatter':'standard',
