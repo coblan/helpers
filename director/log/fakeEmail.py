@@ -67,7 +67,9 @@ class MyConcurrentLogHandler(ConcurrentRotatingFileHandler):
                     
                     #ls  =[str(x) for x in frames]
                     frame_str = format_frames(frames)  #'\n'.join(ls)
-                    msg += '\n ======vars=======\n' + frame_str
+                else:
+                    frame_str = 'no frames'
+                msg += '\n ======vars=======\n' + frame_str
             try:
                 self._do_lock()
 
