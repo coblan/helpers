@@ -27,11 +27,11 @@ class MyAdminEmailHandler(AdminEmailHandler):
 def format_frames(frames):
     ls =[]
     
-    count = 0
+    #count = 0
     for row in  reversed( frames ):
-        count +=1
-        if count >5:
-            break
+        #count +=1
+        #if count >5:
+            #break
         vars_list  = row.get('vars')
         vars_str =''
         #if row.get('type') =='django':
