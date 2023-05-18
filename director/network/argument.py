@@ -27,14 +27,29 @@ def get_argument(request,outtype='obj'):
         else:
             dc = request.POST.dict()
             dc.update(request.GET.dict())
+           
+                    
         #else:
             #dc =parse.parse_qs(request.body)
             
             #for k,v in dc.items():
                 #if isinstance(v,list):
                     #dc[k]=v[0]
-    else:
+    elif request.method=='GET':
         dc =  request.GET.dict()
+        # 处理get请求时，传递的数组 之类 a=1,2  a[]=1&a[]=2  a=1&a=2
+        for k in dc:
+            ls = request.GET.getlist(k)
+            if len(ls) >1:
+                dc[k] = ls
+        for k in dc:
+            if ',' in dc[k]:
+                dc[k] = dc[k].split(',')
+    else:
+        # other type request ,not process yet
+        dc = request.POST.dict()
+        dc.update(request.GET.dict())
+        
     if '_token' in dc: # _token参数被 helpers.director.middleware.tokenuser使用了。
         dc.pop('_token')
         

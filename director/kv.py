@@ -51,6 +51,9 @@ def lock_created(key,value):
 def set_datetime(key,datetime:timezone.datetime):
     KVModel.objects.update_or_create(key=key,defaults={'value':datetime})
 
-def get_datetime(key,):
+def get_datetime(key,default = None):
     value = get_value(key)
-    return timezone.datetime.strptime(value, '%Y-%m-%d %H:%M:%S.%f')
+    if value:
+        return timezone.datetime.strptime(value, '%Y-%m-%d %H:%M:%S.%f')
+    else:
+        return default

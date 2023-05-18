@@ -66,5 +66,5 @@ def com_to_type(head,model_form_inst):
     if head['editor'] =='com-field-picture':
         return '字符串代表的图片地址'
     if head['editor'] =='com-field-multi-picture':
-        return '逗号分割的图片url字符串.如:"1.png,2.png"'
+        return '图片数据.如:["1.png","2.png"]'
     return head['editor']
