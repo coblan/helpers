@@ -45,7 +45,7 @@ def format_frames(frames):
             #'function':row.get('function'),
             #'lineno':row.get('lineno'),
         #}))
-        ls.append(f"----->{row.get('function')}")
+        ls.append(f"----->{row.get('function')} [{row.get('type')}]")
         ls.append(vars_str)
     return '\n'.join(ls)
 
