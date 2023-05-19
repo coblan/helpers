@@ -93,6 +93,7 @@ class BasicReciever(object):
     def getFileUrl(self,file_name):
         file_url=urljoin(settings.MEDIA_URL, 'general_upload/{file_name}'.format(file_name=file_name))
         return  file_url
+    
 
 
 class GeneralUpload(BasicReciever):
@@ -189,11 +190,20 @@ class BigFileRecieve(GeneralUpload):
             absolut_file_path =os.path.join(absolut_par_path,file_name)
             with open(absolut_file_path,'wb') as general_file:
                 for chunk in fl.chunks():
-                    general_file.write(chunk)                
+                    general_file.write(chunk)
+                    
+            self.processImage(absolut_file_path)
+            
             file_url = self.getFileUrl(file_path)
             file_url_list.append(file_url)
         self.file_url_list = file_url_list
         return HttpResponse(json.dumps(file_url_list),content_type="application/json")
+    
+    def processImage(self,absolut_file_path):
+        if self.request.GET.get('maxspan'):
+            span = int( self.request.GET.get('maxspan') )
+            # 压缩图片的 width 和height
+            ceil_image_size(absolut_file_path,absolut_file_path,maxspan= span )
 
 director.update({
     'big-file-saver':BigFileRecieve
