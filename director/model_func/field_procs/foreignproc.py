@@ -8,6 +8,7 @@ from ..dictfy  import model_to_name,name_to_model
 from helpers.director.middleware.request_cache import get_request_cache
 #from pypinyin import lazy_pinyin
 from helpers.director.model_func.cus_fields.compositefk.fields import CompositeForeignKey
+from helpers.director.model_func.cus_fields.legacy_foreign_key import LegacyForeignKey
 
 class ForeignProc(BaseFieldProc):
     def to_dict(self,inst,name):
@@ -77,4 +78,5 @@ field_map.update({
     ForeignKey:ForeignProc,
     OneToOneField:ForeignProc,
     CompositeForeignKey:ForeignProc,
+    LegacyForeignKey:ForeignProc
 })

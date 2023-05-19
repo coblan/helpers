@@ -100,6 +100,7 @@ class ModelFields(forms.ModelForm):
         # 2021/5/24 挪到这里
         dc = self._clean_dict(dc)
         dc=self.clean_dict(dc) 
+        self.field_dc = dc
         if dc.get('instance'):
             self.kw['instance'] = dc.pop('instance')
         

@@ -34,4 +34,9 @@ def set_dict_path(dc,path,value):
         else:
             last[key] = value
 
-    
+
+def dict_pop(dc,name):
+    if name in dc:
+        return dc.pop(name)
+    else:
+        return None

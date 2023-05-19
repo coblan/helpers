@@ -27,18 +27,25 @@ class MyAdminEmailHandler(AdminEmailHandler):
 def format_frames(frames):
     ls =[]
     
+    #count = 0
     for row in  reversed( frames ):
+        #count +=1
+        #if count >5:
+            #break
         vars_list  = row.get('vars')
         vars_str =''
+        #if row.get('type') =='django':
+            #continue
         for v in vars_list:
             value = unescape(v[1])
             vars_str += f'\t{v[0]}={value}\n'
-        ls.append(str({
-            'filename':row.get('filename'),
-            'type':row.get('type'),
-            'function':row.get('function'),
-            'lineno':row.get('lineno'),
-        }))
+        #ls.append(str({
+            #'filename':row.get('filename'),
+            #'type':row.get('type'),
+            #'function':row.get('function'),
+            #'lineno':row.get('lineno'),
+        #}))
+        ls.append(f"----->{row.get('function')} [{row.get('type')}]")
         ls.append(vars_str)
     return '\n'.join(ls)
 
