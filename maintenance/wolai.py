@@ -70,4 +70,6 @@ def com_to_type(head,model_form_inst):
         return '图片数据.如:["1.png","2.png"]'
     if head['editor'] =='com-field-datetime':
         return '时间格式为:2020-01-31 23:59:59'
+    if head['editor'] =='com-field-int':
+        return '整数型'
     return head['editor']
