@@ -94,6 +94,15 @@ class BasicReciever(object):
         file_url=urljoin(settings.MEDIA_URL, 'general_upload/{file_name}'.format(file_name=file_name))
         return  file_url
     
+    def isImage(self,fl):
+        if 'image' in fl.content_type: 
+            return True
+        for sufix in ['.png','.jpg']:
+            if sufix in fl.name.lower():
+                return True
+        else:
+            return False
+    
 
 
 class GeneralUpload(BasicReciever):
@@ -167,6 +176,11 @@ class BigFileRecieve(GeneralUpload):
         file_url_list=[]
 
         for name, fl in file_dict.items():
+            """
+            @name:字段名称
+            @fl:文件对象。 
+              fl.name 是文件的上传名
+            """
             keepname = request.GET.get('keepname','tm-name')
             if keepname =='field_name':
                 file_name = name
@@ -191,8 +205,9 @@ class BigFileRecieve(GeneralUpload):
             with open(absolut_file_path,'wb') as general_file:
                 for chunk in fl.chunks():
                     general_file.write(chunk)
-                    
-            self.processImage(absolut_file_path)
+            
+            if self.isImage(fl):
+                self.processImage(absolut_file_path)
             
             file_url = self.getFileUrl(file_path)
             file_url_list.append(file_url)
