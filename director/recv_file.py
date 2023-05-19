@@ -95,8 +95,8 @@ class BasicReciever(object):
         return  file_url
     
     def isImage(self,fl):
-        if 'image' in fl.content_type: 
-            return True
+        #if 'image' in fl.content_type: 
+            #return True
         for sufix in ['.png','.jpg']:
             if sufix in fl.name.lower():
                 return True
