@@ -95,13 +95,19 @@ class BasicReciever(object):
         return  file_url
     
     def isImage(self,fl):
-        #if 'image' in fl.content_type: 
-            #return True
+        if 'image' in fl.content_type: 
+            return True
         for sufix in ['.png','.jpg']:
             if sufix in fl.name.lower():
                 return True
         else:
             return False
+    
+    def getImageFormat(self,fl):
+        suffix = None
+        if 'image' in fl.content_type: 
+            suffix = fl.content_type.split('/')[-1] 
+        return suffix
     
 
 
@@ -207,18 +213,19 @@ class BigFileRecieve(GeneralUpload):
                     general_file.write(chunk)
             
             if self.isImage(fl):
-                self.processImage(absolut_file_path)
+                suffix = self.getImageFormat(fl)
+                self.processImage(absolut_file_path,image_format = suffix)
             
             file_url = self.getFileUrl(file_path)
             file_url_list.append(file_url)
         self.file_url_list = file_url_list
         return HttpResponse(json.dumps(file_url_list),content_type="application/json")
     
-    def processImage(self,absolut_file_path):
+    def processImage(self,absolut_file_path,image_format=None):
         if self.request.GET.get('maxspan'):
             span = int( self.request.GET.get('maxspan') )
             # 压缩图片的 width 和height
-            ceil_image_size(absolut_file_path,absolut_file_path,maxspan= span )
+            ceil_image_size(absolut_file_path,absolut_file_path,maxspan= span,image_format=image_format )
 
 director.update({
     'big-file-saver':BigFileRecieve
