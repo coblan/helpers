@@ -43,8 +43,13 @@ def fields_doc(model_form,pk_field='id',model_table=None):
         model_table.nolimit =True
         for head in table_doc(model_table):
             if head['name'] not in fields_names:
-                table_str += f"|{head.get('name')}|{head.get('label')}| | |\n"
+                table_str += f"|{head.get('name')}|{head.get('label')}| {table_to_type(head)}| |\n"
     print(table_str)
+
+def table_to_type(head):
+    if head.get('options'):
+        return f'选择类型{head["options"]}'
+    return ''
 
 def com_to_type(head,model_form_inst):
     if head['editor'] =='com-field-linetext':
