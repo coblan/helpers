@@ -924,7 +924,7 @@ class ModelTable(object):
                 # 再赋值一次，以免被默认dictfy替换掉了，例如 _x_label等值
                 dc.update(cus_dict)
             else:
-                dc = inst
+                dc = self.dict_row( inst)
                 if not self.only_simple_data():
                     dc .update({
                        '_director_name':self.get_edit_director_name(),

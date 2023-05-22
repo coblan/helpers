@@ -93,6 +93,22 @@ class BasicReciever(object):
     def getFileUrl(self,file_name):
         file_url=urljoin(settings.MEDIA_URL, 'general_upload/{file_name}'.format(file_name=file_name))
         return  file_url
+    
+    def isImage(self,fl):
+        if 'image' in fl.content_type: 
+            return True
+        for sufix in ['.png','.jpg']:
+            if sufix in fl.name.lower():
+                return True
+        else:
+            return False
+    
+    def getImageFormat(self,fl):
+        suffix = None
+        if 'image' in fl.content_type: 
+            suffix = fl.content_type.split('/')[-1] 
+        return suffix
+    
 
 
 class GeneralUpload(BasicReciever):
@@ -166,6 +182,11 @@ class BigFileRecieve(GeneralUpload):
         file_url_list=[]
 
         for name, fl in file_dict.items():
+            """
+            @name:字段名称
+            @fl:文件对象。 
+              fl.name 是文件的上传名
+            """
             keepname = request.GET.get('keepname','tm-name')
             if keepname =='field_name':
                 file_name = name
@@ -189,11 +210,22 @@ class BigFileRecieve(GeneralUpload):
             absolut_file_path =os.path.join(absolut_par_path,file_name)
             with open(absolut_file_path,'wb') as general_file:
                 for chunk in fl.chunks():
-                    general_file.write(chunk)                
+                    general_file.write(chunk)
+            
+            if self.isImage(fl):
+                suffix = self.getImageFormat(fl)
+                self.processImage(absolut_file_path,image_format = suffix)
+            
             file_url = self.getFileUrl(file_path)
             file_url_list.append(file_url)
         self.file_url_list = file_url_list
         return HttpResponse(json.dumps(file_url_list),content_type="application/json")
+    
+    def processImage(self,absolut_file_path,image_format=None):
+        if self.request.GET.get('maxspan'):
+            span = int( self.request.GET.get('maxspan') )
+            # 压缩图片的 width 和height
+            ceil_image_size(absolut_file_path,absolut_file_path,maxspan= span,image_format=image_format )
 
 director.update({
     'big-file-saver':BigFileRecieve
