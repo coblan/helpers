@@ -34,7 +34,7 @@ def default_search_range_time(search_args,name, tm_delta):
     if start > end:
         raise UserWarning('起始时间不能大于结束时间')
     search_args['_start_%s'%name] = start.strftime('%Y-%m-%d %H:%M:%S')
-    if end_str and end != now:
+    if not end_str and end != now:
         search_args['_end_%s'%name] = end.strftime('%Y-%m-%d %H:%M:%S')
     return start,end
 
