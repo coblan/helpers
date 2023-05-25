@@ -263,16 +263,21 @@ import { ref, reactive,computed ,onMounted,getCurrentInstance } from '@vue/compo
               })
             }
         },
+        mounted(){
+
+        },
         methods:{
           clearRows(){
             this.$refs.dtable.rows.splice(0,this.$refs.dtable.rows.length)
           },
 
-            search_page(page,{loading}={loading:true}){
+            search_page(page,{loading=true,clear_row=true}={}){
             if(page==1){
               this.$emit('search')
             }
+            if(clear_row){
               ex.array.replace(this.tableRows,[])
+            }
                 this.searchArgs._page = page
                 if(loading){
                     cfg.show_load()

@@ -1,21 +1,21 @@
 <template>
-  <div class="com-form-one flex-v" :class="head.class">
-    <div class="oprations up" v-if="ops_loc=='up'">
-      <component v-for="op in normed_ops" :is="op.editor"  :key="op.name"
-                 :ref="'op_'+op.name" :ctx="op" :head="op" @operation="on_operation(op)"></component>
-    </div>
-    <div style="overflow: auto;" :class="{ 'box box-default box-mycustom':ops_loc=='up','has-group':fields_group}" class="flex-grow fields-area">
-      <!--有分组的情况-->
-      <div v-if="fields_group" class="fields-group">
-        <template v-for="group in grouped_heads_bucket">
+  <div class="com-form-one flex-v" :class="head.inn_class">
+      <div class="oprations up" v-if="ops_loc=='up'">
+        <component v-for="op in normed_ops" :is="op.editor"  :key="op.name"
+                   :ref="'op_'+op.name" :ctx="op" :head="op" @operation="on_operation(op)"></component>
+      </div>
+      <div style="overflow: auto;" :class="{ 'box box-default box-mycustom':ops_loc=='up','has-group':fields_group,}" class="flex-grow fields-area">
+        <!--有分组的情况-->
+        <div v-if="fields_group" class="fields-group">
+          <template v-for="group in grouped_heads_bucket">
             <div v-if="group.heads && group.heads.length > 0" :class="'group_'+group.name">
-             <div style="display: flex;gap: 30px;align-items: center">
-               <div class="fields-group-title"  v-html="group.label"></div>
-               <div v-if="group.collapse != undefined" @click="groupCollapseSwitch(group)" style="cursor: pointer">
-                 <i style="font-size: 120%" v-if="group.collapse" class="el-icon-caret-right"></i>
-                 <i style="font-size: 120%" v-if="!group.collapse" class="el-icon-caret-bottom"></i>
-               </div>
-             </div>
+              <div style="display: flex;gap: 30px;align-items: center">
+                <div class="fields-group-title"  v-html="group.label"></div>
+                <div v-if="group.collapse != undefined" @click="groupCollapseSwitch(group)" style="cursor: pointer">
+                  <i style="font-size: 120%" v-if="group.collapse" class="el-icon-caret-right"></i>
+                  <i style="font-size: 120%" v-if="!group.collapse" class="el-icon-caret-bottom"></i>
+                </div>
+              </div>
               <div v-show="group.collapse == undefined || !group.collapse">
                 <com-fields-table-block v-if="table_grid "
                                         :heads="group.heads" :row="row" :option="{table_grid:table_grid}" :alignLabel="ctx.table_grid_align_label">
@@ -32,25 +32,26 @@
 
 
 
-        </template>
+          </template>
 
 
 
+        </div>
+        <!--只有table分组-->
+        <div v-else-if="table_grid " >
+          <com-fields-table-block
+              :heads="normed_heads" :row="row" :option="{table_grid:table_grid}" :alignLabel="ctx.table_grid_align_label"></com-fields-table-block>
+        </div>
+        <!--没有分组-->
+        <div v-else class='field-panel' :class="head.inn_class?'': 'suit'" id="form" >
+          <field  v-for='head in normed_heads' :key="head.name" :head="head" :row='row'></field>
+        </div>
       </div>
-      <!--只有table分组-->
-      <div v-else-if="table_grid " >
-        <com-fields-table-block
-            :heads="normed_heads" :row="row" :option="{table_grid:table_grid}" :alignLabel="ctx.table_grid_align_label"></com-fields-table-block>
+      <div class="oprations bottom" v-if="ops_loc=='bottom'">
+        <component v-for="op in normed_ops" :key="op.name" :is="op.editor"
+                   :ref="'op_'+op.name" :head="op" :ctx="op" @operation="on_operation(op)"></component>
       </div>
-      <!--没有分组-->
-      <div v-else class='field-panel suit' id="form" >
-        <field  v-for='head in normed_heads' :key="head.name" :head="head" :row='row'></field>
-      </div>
-    </div>
-    <div class="oprations bottom" v-if="ops_loc=='bottom'">
-      <component v-for="op in normed_ops" :key="op.name" :is="op.editor"
-                 :ref="'op_'+op.name" :head="op" :ctx="op" @operation="on_operation(op)"></component>
-    </div>
+
   </div>
 </template>
 <script>
@@ -270,5 +271,42 @@ export default {
   border-top-color: #f4f4f4;
 }
 
+
+.plain{
+  .field-panel{
+    //background-color: #FAFAFA;
+    margin: auto;
+    padding: 20px 30px;
+    position: relative;
+    //border: 1px solid #E0E0E0;
+    min-width: 600px;
+
+    .form-group.field{
+      display: flex;
+      align-items: stretch;
+      margin-bottom: 0;
+
+
+    }
+  }
+  /deep/{
+    .control-label{
+      width: 180px;
+      text-align: right;
+      padding: 5px 30px 5px 0;
+      z-index: 100;
+      flex-shrink: 0;
+      //border-top: 1px solid #EEE;
+      padding-top: 10px;
+    }
+    .help-text {
+      padding: 13px 3px;
+      color: #999;
+      font-style: italic;
+      font-size: 0.9em;
+    }
+  }
+
+}
 
 </style>
