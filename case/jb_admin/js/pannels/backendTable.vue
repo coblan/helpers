@@ -20,6 +20,7 @@
             :opMergeCount="ctx.opMergeCount"
             ref="dtable"
             @search="$emit('search')"
+            @afterSearchPage="$emit('afterSearchPage')"
     >
 
       <template v-slot:default="slotprops">
