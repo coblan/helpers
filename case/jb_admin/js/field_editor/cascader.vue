@@ -64,6 +64,11 @@ export  default {
     }
   },
 //default-expand-all
+  mounted(){
+      if(this.head.mounted_express){
+        ex.eval(this.head.mounted_express,{vc:this})
+      }
+  },
   computed:{
   label:function(){
     return this.row['_'+this.head.name+'_label']
