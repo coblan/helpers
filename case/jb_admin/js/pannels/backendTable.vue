@@ -20,6 +20,7 @@
             :opMergeCount="ctx.opMergeCount"
             ref="dtable"
             @search="$emit('search')"
+            @afterSearchPage="$emit('afterSearchPage')"
     >
 
       <template v-slot:default="slotprops">
@@ -75,10 +76,13 @@
           this.$refs.dtable.childStore.$on('finish',(data)=>{
               this.$emit('finish',data)
           })
+          if(this.ctx.mounted_express){
+            ex.eval(this.ctx.mounted_express,{head:this.ctx,vc:this})
+          }
         },
       methods:{
-          search(){
-            this.$refs.dtable.search()
+          search({loading=true,clear_row=true}={}){
+            this.$refs.dtable.search({loading,clear_row})
           }
       }
     }
