@@ -11,7 +11,6 @@
                  @tab-click="handleClick"
                  :value="crt_tab_name" >
 
-          <!--<el-tab-pane v-for="tab in normed_tab( tabgroup.tabs )"            @mouseenter="set_hover(tab,true)" @mouseleave="set_hover(tab,false)"-->
           <el-tab-pane v-for="tab in normed_tab"
                        lazy
                        :key="tab.name"
@@ -225,6 +224,21 @@ export default {
     width: 100%;
     height: 100%;
   }
+  .tab-wrap{
+    height: 100%;
+    .inn-tab-wrap{
+      height: 100%;
+    }
+  }
+  //.com-wrap{
+  //  position: absolute;
+  //  left: 0;
+  //  right: 0;
+  //  top:0;
+  //  bottom: 0;
+  //}
+
+
   /deep/{
     .el-tabs{
       display: flex;
