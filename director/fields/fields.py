@@ -60,6 +60,7 @@ class ModelFields(forms.ModelForm):
     select_for_update = True  # 某些高频访问文件，写入不平凡，所以不允许锁定，就可以设置为False
     complete_field = False   # 自动补全没有上传的字段,在api或者selected_set_and_save中不必上传所有字段
     pass_clean_field = []
+    allow_create = True
     
     @classmethod
     def parse_request(cls,request):
@@ -717,6 +718,8 @@ class ModelFields(forms.ModelForm):
         if self.instance.pk is None:
             op='add'
             detail=''
+            if not self.allow_create:
+                raise PermissionDenied('can not create!')
             self.clean_create()
             # 2020/07/30 屏蔽这里 后面直接就是保存
             # 2020/08/06  开启，该行不能屏蔽，因为manytomany 必须先保存才能生成 relation对象

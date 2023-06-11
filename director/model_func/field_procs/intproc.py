@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 import re
 from ..field_proc  import BaseFieldProc
-from django.db.models import IntegerField, SmallIntegerField,BigIntegerField,AutoField
+from django.db.models import IntegerField, SmallIntegerField,BigIntegerField,AutoField,BigAutoField
 from .. .base_data import field_map
 from django.utils.translation import ugettext as _
 
@@ -86,5 +86,6 @@ field_map.update({
     IntegerField:IntProc, 
     SmallIntegerField: IntProc,
     BigIntegerField:BigProc,
-    AutoField:IntProc
+    AutoField:IntProc,
+    BigAutoField:BigProc,
 })

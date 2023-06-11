@@ -5,34 +5,48 @@
                :par_row="par_row"></component>
 
 
-    <el-tabs class="active-tab-hightlight-top"  v-if="tabs.length >1 || type!='tab-full'" :type="my_el_type"
-             @tab-click="handleClick"
-             :value="crt_tab_name" >
+    <div class="tab-wrap">
+      <div class="inn-tab-wrap">
+        <el-tabs class="active-tab-hightlight-top"  v-if="tabs.length >1 || type!='tab-full'" :type="my_el_type"
+                 @tab-click="handleClick"
+                 :value="crt_tab_name" >
 
-      <!--<el-tab-pane v-for="tab in normed_tab( tabgroup.tabs )"            @mouseenter="set_hover(tab,true)" @mouseleave="set_hover(tab,false)"-->
-      <el-tab-pane v-for="tab in normed_tab"
-                   lazy
-                   :key="tab.name"
-                   :name="tab.name">
-                        <span slot="label" v-if="tab.icon_image" class="tab-label" :class="{active:crt_tab_name==tab.name}">
-                             <img class="icon_image_active" :src="tab.icon_image_active || tab.icon_image" alt="">
-                             <img class="icon_image" :src=" tab.icon_image" alt="">
-                            <span v-text="tab.label"></span>
-                        </span>
-        <span slot="label" v-else  v-text="tab.label" ></span>
-        <!--<span v-if="!tab._loaded"></span>-->
-        <transition name="fade">
-          <component v-show="crt_tab_name==tab.name" :is="tab.editor || tab.com " :tab_head="tab"
+          <el-tab-pane v-for="tab in normed_tab"
+                       lazy
+                       :key="tab.name"
+                       :name="tab.name">
+                          <span slot="label" v-if="tab.icon_image" class="tab-label" :class="{active:crt_tab_name==tab.name}">
+                               <img class="icon_image_active" :src="tab.icon_image_active || tab.icon_image" alt="">
+                               <img class="icon_image" :src=" tab.icon_image" alt="">
+                              <span v-text="tab.label"></span>
+                          </span>
+            <span slot="label" v-else  v-text="tab.label" ></span>
+            <!--<span v-if="!tab._loaded"></span>-->
+            <transition name="fade">
+
+              <div class="com-wrap">
+                <component v-show="crt_tab_name==tab.name" :is="tab.editor || tab.com " :tab_head="tab"
+                           :par_row="par_row"
+                           :ref="'_tab_'+tab.name" @tab-event="up_event($event)"></component>
+              </div>
+
+
+
+            </transition>
+
+          </el-tab-pane>
+        </el-tabs>
+        <div class="com-wrap" v-else>
+          <component  v-for="tab in tabs"  :is="tab.editor  " :tab_head="tab"
                      :par_row="par_row"
                      :ref="'_tab_'+tab.name" @tab-event="up_event($event)"></component>
-        </transition>
+        </div>
 
-      </el-tab-pane>
-    </el-tabs>
+      </div>
+    </div>
 
-    <component v-else v-for="tab in tabs"  :is="tab.editor  " :tab_head="tab"
-               :par_row="par_row"
-               :ref="'_tab_'+tab.name" @tab-event="up_event($event)"></component>
+
+
   </div>
 </template>
 <script>
@@ -77,7 +91,7 @@ export default {
     my_el_type(){
       if(this.type=='tab-full'){
         return 'border-card'
-      }else if(this.type=='tab-v'){
+      }else{
         return 'card'// 'border-card' //
       }
     },
@@ -159,8 +173,47 @@ export default {
     //border-left: 1px solid #e1e1e1;
     box-sizing: border-box;
     position: relative;
-    min-height: 86vh; // 给一个min-height，保证切换tab时不会抖动太厉害。（由于每个tab页高度不一致，切换到height小的页面，滚动条会缩回去，造成抖动。）
+    //min-height: 86vh; // 给一个min-height，保证切换tab时不会抖动太厉害。（由于每个tab页高度不一致，切换到height小的页面，滚动条会缩回去，造成抖动。）
     //padding: 20px;
+  }
+
+}
+.tab-v-full{
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: white;
+  .active-tab-hightlight-top{
+    flex-grow: 10;
+    margin:0 20px;
+    //border-left: 1px solid #e1e1e1;
+    box-sizing: border-box;
+    position: relative;
+    height: 100%;
+  }
+  .tab-wrap{
+      position: relative;
+      flex-grow: 10;
+  }
+  .inn-tab-wrap{
+    position: absolute;
+    left: 0;
+    right: 0;
+    top:0;
+    bottom: 0;
+  }
+  .com-wrap{
+    position: absolute;
+    left: 0;
+    right: 0;
+    top:0;
+    bottom: 0;
+  }
+  /deep/{
+    .el-tabs__content{
+      height: calc( 100% - 54px ) ;
+      width:  100%;
+    }
   }
 }
 
@@ -171,6 +224,21 @@ export default {
     width: 100%;
     height: 100%;
   }
+  .tab-wrap{
+    height: 100%;
+    .inn-tab-wrap{
+      height: 100%;
+    }
+  }
+  //.com-wrap{
+  //  position: absolute;
+  //  left: 0;
+  //  right: 0;
+  //  top:0;
+  //  bottom: 0;
+  //}
+
+
   /deep/{
     .el-tabs{
       display: flex;

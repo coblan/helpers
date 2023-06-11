@@ -30,7 +30,10 @@ class ForeignProc(BaseFieldProc):
             }
     def get_options(self):
         if getattr(self.field.target_field.model,'bigdata',False):
-            return [{'value':0,'label':'大数据量,请自定义'}]        
+            return [{'value':0,'label':'大数据量,请自定义'}]     
+        elif getattr(self.field.target_field.model,'filterByUser',False):
+            query =  self.field.target_field.model.filterByUser(user=self.crt_user)
+            return super().get_options(query=query)
         else:
             return super().get_options()
     
