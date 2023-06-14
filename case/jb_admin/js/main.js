@@ -71,7 +71,8 @@ import * as misc_main from  './misc/main.js'
 
 
 // top_heads
-import * as dropdown from  './header/dropdown.js'
+// element的下拉header 应该是无用的。
+// import * as dropdown from  './header/dropdown.js'
 import * as sm_link from  './header/sm_link.js'
 import * as header_main from  './header/main.js'
 
