@@ -43,7 +43,7 @@ def fields_doc(model_form,pk_field='id',model_table=None):
         model_table.nolimit =True
         for head in table_doc(model_table):
             if head['name'] not in fields_names:
-                table_str += f"|{head.get('name')}|{head.get('label')}| {table_to_type(head)}| |\n"
+                table_str += f"|{head.get('name')}|{head.get('label')}| {table_to_type(head)}|{head.get('help_text','')} |\n"
     print(table_str)
 
 def table_to_type(head):
