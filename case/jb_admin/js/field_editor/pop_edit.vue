@@ -10,7 +10,8 @@
       <el-button style="margin-top: 2px;" v-if="!head.readonly" type="primary" size="mini" icon="el-icon-edit" @click.native="openTable"></el-button>
 <!--         <i class="el-icon-edit clickable"  @click="openTable"></i>-->
 <!--    </span>-->
-
+    <input type="text"  v-model="row[head.name]"
+           :id="'id_'+head.name" :name="head.name" style="display: none;">
  </div>
 </template>
 <script>
