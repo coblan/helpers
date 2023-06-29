@@ -986,6 +986,8 @@ class ModelTable(object):
         if self.exclude:
             query = query.defer(*self.exclude)
         
+        if getattr(self.model,'filterByUser',None):
+            query = self.model.filterByUser(user=self.crt_user,query=query)
         query = self.inn_filter(query)
         #[count-] 有时单独计算count，效率很高。
         count_query = self.getCountQuery(query)

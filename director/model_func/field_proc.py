@@ -50,7 +50,7 @@ class BaseFieldProc(object):
             head['editor'] = 'com-field-select'
         return head
     
-    def get_options(self):
+    def get_options(self,query=None):
         options=None
         try:
             if not self.form_field:
@@ -63,7 +63,10 @@ class BaseFieldProc(object):
                 options_name = '%(model)s.%(field)s.options'% {'model': model_to_name(self.model) ,'field': self.name}
                 if not catch.get(options_name):
                     def myoption():
-                        options=[{'value':val,'label':str(lab)} for val,lab in self.form_field.choices if val !='']
+                        if query:
+                            options = [{'value':x.pk,'label':str(x)} for x in query]
+                        else:
+                            options=[{'value':val,'label':str(lab)} for val,lab in self.form_field.choices if val !='']
                         #if self.form_field.required:
                             #options=[{'value':val,'label':str(lab)} for val,lab in self.form_field.choices if val !='']
                         #else:

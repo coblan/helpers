@@ -12,3 +12,5 @@ import datetime from './datetime.vue'
 Vue.component('com-head-datetime',datetime)
 import pageLink from "./pageLink.vue";
 Vue.component('com-head-page-link',pageLink)
+import dropMenu from './dropMenu.vue'
+Vue.component('com-head-dropmenu',dropMenu)
