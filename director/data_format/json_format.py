@@ -6,6 +6,7 @@ from django.conf import settings
 import base64
 from helpers.director.model_func.func import is_lazy_label
 
+from django.contrib.gis.geos.point import Point
 #if getattr(settings, 'GEO'):
     #from helpers.func.geo import poly2dict
 #from django.contrib.gis.geos import Polygon
@@ -29,6 +30,8 @@ class DirectorEncoder(json.JSONEncoder):
             return str(obj)
         elif isinstance(obj,time):
             return obj.strftime('%H:%M:%S')
+        elif isinstance(obj,Point):
+            return '%s,%s'%(obj.y,obj.x)
         elif is_lazy_label(obj):
             # models.py里面的verbose_name使用的 django lazy_gettext 
             return str(obj)
