@@ -167,7 +167,14 @@ class GeneralUpload(BasicReciever):
         if mt:
             return mt.group(1)
         else:
-            return fl_name    
+            return fl_name   
+        
+    def encrypt(self,file_url_list):
+        if self.request.GET.get('aes'):
+            from . funs.aes import encode_file
+            file_url_list = [encode_file(url) for url in file_url_list]
+        return file_url_list
+        
 
 def get_md5(text):
     m = hashlib.md5()   
@@ -219,6 +226,7 @@ class BigFileRecieve(GeneralUpload):
             file_url = self.getFileUrl(file_path)
             file_url_list.append(file_url)
         self.file_url_list = file_url_list
+        self.file_url_list = self.encrypt(self.file_url_list)
         return HttpResponse(json.dumps(file_url_list),content_type="application/json")
     
     def processImage(self,absolut_file_path,image_format=None):
