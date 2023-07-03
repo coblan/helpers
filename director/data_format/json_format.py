@@ -6,6 +6,7 @@ from django.conf import settings
 import base64
 from helpers.director.model_func.func import is_lazy_label
 
+
 #if getattr(settings, 'GEO'):
     #from helpers.func.geo import poly2dict
 #from django.contrib.gis.geos import Polygon
@@ -29,6 +30,11 @@ class DirectorEncoder(json.JSONEncoder):
             return str(obj)
         elif isinstance(obj,time):
             return obj.strftime('%H:%M:%S')
+        geo_rt = self.geoObj(obj)
+        if geo_rt:
+            return geo_rt
+        #elif isinstance(obj,Point):
+            #return '%s,%s'%(obj.y,obj.x)
         elif is_lazy_label(obj):
             # models.py里面的verbose_name使用的 django lazy_gettext 
             return str(obj)
@@ -39,4 +45,16 @@ class DirectorEncoder(json.JSONEncoder):
         #elif isinstance(obj,Polygon):
             #return poly2dict(obj) 
             return json.JSONEncoder.default(self, obj) 
+    
+    def geoObj(self,obj):
+        try:
+            if not getattr(self,'has_geo',True):
+                return None
+            from django.contrib.gis.geos.point import Point
+            if isinstance(obj,Point):
+                return '%s,%s'%(obj.y,obj.x)            
+        except Exception:
+            print('json no geo support')
+            self.has_geo = False
         
+    

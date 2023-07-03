@@ -242,9 +242,10 @@ def director_view(request,director_name):
         dc= {'success':True,'_question':str(e)}
         rt = HttpResponse(json.dumps(dc,ensure_ascii=False,cls=DirectorEncoder),content_type="application/json") 
     except UserWarning as e:
-        dc = {'success':False,'msg':str(e),'data':None,'error':str(e)}
+        #dc = {'success':False,'msg':str(e),'data':None,'error':str(e)}
+        dc = {'success':False,'msg':str(e),'data':None,}
         rt = HttpResponse(json.dumps(dc,ensure_ascii=False,cls=DirectorEncoder),content_type="application/json") 
-        #rt = JsonResponse({'success':False,'msg':str(e)})
+    
     except PermissionDenied as e:
         rt = HttpResponse(str(e),status=403)
     if hasattr(request,'on_finally'):

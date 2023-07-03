@@ -3,6 +3,7 @@ require('./styl/fields_table_block.styl')
 export default  {
     props:{
         heads:{},
+        head:{},
         row:{},
         option: {},
         alignLabel:{
@@ -70,6 +71,8 @@ export default  {
             })
             return heads_bucket
         },
+    },
+    mounted(){
     },
     methods:{
         show_msg:function(msg,event){

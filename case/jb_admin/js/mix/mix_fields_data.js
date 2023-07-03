@@ -246,7 +246,8 @@ export  var mix_fields_data ={
                             },function(){
                                     self.row.meta_overlap_fields='__all__'
                                     self.submit()
-                                }
+                                },
+                            {can_overwrite:this.head.allow_overlap_all}
                         )
                     }else{
                         ex.vueAssign(self.row,rt.row)

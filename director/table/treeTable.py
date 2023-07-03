@@ -173,15 +173,23 @@ class TreeTable(ModelTable):
         }    
     
 
-def get_tree_option(model,label_field,par=None):
+def get_tree_option(model,label_field,value_field='pk',extra_fields=[],par=None):
     ls = []
     if par:
-        ls.append({'value':par.pk,'label':getattr(par,label_field),'parent':None}) 
+        ls.append({'value': getattr(par,value_field,None) ,'label':getattr(par,label_field),'parent':None}) 
         for inst in model.objects.filter(parent=par):
-            ls.append({'value':inst.pk,'label':getattr(inst,label_field),'parent':inst.parent_id})        
+            dc = {'value': getattr(inst,value_field,None),'label':getattr(inst,label_field),'parent':inst.parent_id}
+            if extra_fields:
+                for key in extra_fields:
+                    dc[key] = getattr(inst,key,None)
+            ls.append(dc)        
     else:
         for inst in model.objects.all():
-            ls.append({'value':inst.pk,'label':getattr(inst,label_field),'parent':inst.parent_id})
+            dc = {'value':getattr(inst,value_field,None),'label':getattr(inst,label_field),'parent':inst.parent_id}
+            if extra_fields:
+                for key in extra_fields:
+                    dc[key] = getattr(inst,key,None)            
+            ls.append(dc)
     
     children_dc = {}
     for row in ls:

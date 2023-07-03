@@ -48,6 +48,7 @@ class ModelFields(forms.ModelForm):
     extra_mixins=[]
     hide_fields = []
     overlap_fields=[]  # 这些字段不会被同步检查
+    allow_overlap_all = False # 允许前端传递参数meta_overlap_fields=='__all__'，直接覆盖后端数据。现在默认数据很重要，不能随意覆盖。
     outdate_check_fields= None 
     readonly_change_warning = [] # 普通保存时，后台会恢复只读字段的值，但是有时有些只读字段，
                                  #在后台发现改变时，需要警告前端，作废此次保存。因为这些字段值可能是前端做判断的依据。
@@ -59,6 +60,7 @@ class ModelFields(forms.ModelForm):
     select_for_update = True  # 某些高频访问文件，写入不平凡，所以不允许锁定，就可以设置为False
     complete_field = False   # 自动补全没有上传的字段,在api或者selected_set_and_save中不必上传所有字段
     pass_clean_field = []
+    allow_create = True
     
     @classmethod
     def parse_request(cls,request):
@@ -267,7 +269,9 @@ class ModelFields(forms.ModelForm):
         if self.kw.get('meta_change_fields'): 
             return 
         if self.kw.get('meta_overlap_fields'):
-            if self.kw.get('meta_overlap_fields') =='__all__':
+            if self.kw.get('meta_overlap_fields') =='__all__' :
+                if not self.allow_overlap_all:
+                    raise UserWarning('overwrite data not allowed')
                 # 表示覆盖所有字段，意味着不再做过期检查
                 return
             overlaped_fields+= self.kw.get('meta_overlap_fields').split(',')
@@ -392,7 +396,8 @@ class ModelFields(forms.ModelForm):
             'ops':ops,
             'director_name':self.get_director_name(),
             #'model_name':model_to_name(self._meta.model),
-            'extra_mixins':self.extra_mixins
+            'extra_mixins':self.extra_mixins,
+            'allow_overlap_all':self.allow_overlap_all,
         }         
     
     
@@ -713,6 +718,8 @@ class ModelFields(forms.ModelForm):
         if self.instance.pk is None:
             op='add'
             detail=''
+            if not self.allow_create:
+                raise PermissionDenied('can not create!')
             self.clean_create()
             # 2020/07/30 屏蔽这里 后面直接就是保存
             # 2020/08/06  开启，该行不能屏蔽，因为manytomany 必须先保存才能生成 relation对象

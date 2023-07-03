@@ -41,7 +41,7 @@
 
      search_args=ex.parseSearch()
      user='{{ user.pk }}'
-    user_name= '{{ user.first_name }}'
+    user_name= '{{ user.first_name  }}' || '{{user.username}}'
 
     help_url = '{{ help_url |default:""}}'
 

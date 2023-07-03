@@ -1,5 +1,8 @@
 require('./scss/dropdown.scss')
 
+/*
+* 这个是element的下拉，估计无法与adminLTE兼容
+* */
 
 Vue.component('com-head-dropdown',{
     props:['head'],
