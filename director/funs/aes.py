@@ -32,8 +32,11 @@ def aes_decode_byte(data, key):
 
 @director_view('aes/file')
 def encode_file(media_path):
+    """
+    加密当前路径文件
+    """
     #key = '94a4b778g01ca4ab'
-    key = read_dict_path(settings,'AES.ecb')
+    key = read_dict_path(settings.UPLOAD_CRYPTO,'aes.key')
     try:
         path = media_url_to_path(media_path)
     except Exception as e:

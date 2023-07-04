@@ -30,6 +30,7 @@ class BasicReciever(object):
             file_data= self.readFile(fl)
             file_url = self.procFile(file_data,fl)
             file_url_list.append(file_url)
+        file_url_list = self.encrypt(file_url_list)
         return HttpResponse(json.dumps(file_url_list),content_type="application/json")
     
     def readFile(self,fl):
@@ -110,7 +111,11 @@ class BasicReciever(object):
             suffix = fl.content_type.split('/')[-1] 
         return suffix
     
-
+    def encrypt(self,file_url_list):
+        if self.request.GET.get('aes'):
+            from . funs.aes import encode_file
+            file_url_list = [encode_file(url) for url in file_url_list]
+        return file_url_list
 
 class GeneralUpload(BasicReciever):
     """
@@ -170,11 +175,7 @@ class GeneralUpload(BasicReciever):
         else:
             return fl_name   
         
-    def encrypt(self,file_url_list):
-        if self.request.GET.get('aes'):
-            from . funs.aes import encode_file
-            file_url_list = [encode_file(url) for url in file_url_list]
-        return file_url_list
+
         
 
 def get_md5(text):
