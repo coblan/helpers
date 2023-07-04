@@ -6,6 +6,10 @@ var webpack = require('D:/coblan/webcode/node_modules/webpack')
 
 //const VueLoaderPlugin = require('D:/coblan/webcode/node_modules/vue-loader/lib/plugin')
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
+var {CleanWebpackPlugin} = require('clean-webpack-plugin');
+
+var webpack = require('webpack')
 
 module.exports =
 {
@@ -84,6 +88,8 @@ module.exports =
                     loader: "css-loader" // translates CSS into CommonJS
                 }, {
                     loader: "sass-loader" // compiles Sass to CSS
+                },{
+                    loader: path.resolve('./deepChangeLoader.js'),
                 }]
             },
             {
@@ -115,7 +121,7 @@ module.exports =
     },
     plugins: [
         new VueLoaderPlugin(),
-
+        new CleanWebpackPlugin(),
 
         //new UglifyJSPlugin()
         //new webpack.DefinePlugin({

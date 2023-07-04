@@ -33,6 +33,10 @@ import  treeFirst from './treeFirst.vue'
 Vue.component('com-table-tree-first',treeFirst)
 import tablePre  from "./tablePre.vue";
 Vue.component('com-table-pre',tablePre)
+
+import picture1 from "./picture.vue";
+Vue.component('com-table-picture',picture1)
+
 import * as table_input_main from './table_input/main'
 
 /*

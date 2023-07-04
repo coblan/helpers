@@ -18,6 +18,7 @@ import time
 from helpers.func.image_proc import ceil_image_size
 from helpers.director.shortcut import director_view
 from helpers.func.url_path import media_url_to_path
+from helpers.func.dot_dict import read_dict_path
 
 class BasicReciever(object):
     
@@ -251,6 +252,9 @@ director.update({
 
 @director_view('media/file/merge')
 def merge_media_file(path_list,suffix=None):
+    """
+    分块上传后，调用改接口合并成一个文件
+    """
     #if target:
         #if not target.startswith('/media/'):
             #if target.startswith('/'):
@@ -275,8 +279,10 @@ def merge_media_file(path_list,suffix=None):
     
     return target
             
-    
-
+@director_view('upload/encrypt/info')
+def encrypt_aes_info(entry):
+    dc =  read_dict_path(settings, f'UPLOAD_CRYPTO.{entry}')
+    return dc
 
 
 
