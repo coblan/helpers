@@ -2,7 +2,7 @@
   <span>
 <!--     <img @load='loaded=true' :style="cusStyle"  @click="open()" :src="src" alt="" height="96px" style="cursor: pointer;">-->
     <aesImage @load='loaded=true' :style="cusStyle"  @click.native="open()" :src="src" alt="" height="96px"
-              @real_src="onRealSrc"
+              :image-src.sync='real_src'
               style="cursor: pointer;">
     </aesImage>
 
@@ -43,9 +43,6 @@ export default {
     }
   },
   methods:{
-    onRealSrc(e){
-      this.real_src = e
-    },
     open:function(){
 //window.open(this.rowData[this.field])
       var ctx = {imgsrc:this.real_src}

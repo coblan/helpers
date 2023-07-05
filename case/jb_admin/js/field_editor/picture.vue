@@ -33,7 +33,6 @@ export default {
   },
     computed:{
       uploadUrl(){
-        debugger
         if(this.head.upload_url_express){
           var rr = ex.eval(this.head.upload_url_express,{vc:this})
           return rr
