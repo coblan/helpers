@@ -3,7 +3,7 @@
   <div class="com-field-picture picture">
     <template v-if="head.readonly">
       <aesImage  class="img-uploador clickable" v-if='row[head.name]' @click.native="on_click_image(real_image_src)"
-                 :src='row[head.name]' :image-src.sync="real_image_src"> </aesImage>
+                 :src='absImageUrl( row[head.name] ) ' :image-src.sync="real_image_src"> </aesImage>
       <span v-else>---</span>
     </template>
     <template  v-else>
@@ -13,7 +13,7 @@
         <template v-slot:show>
           <aesImage  class="img-uploador clickable  logoImg"
                      v-if='row[head.name]' @click.native="on_click_image(real_image_src)"
-                     :src='row[head.name]' :image-src.sync="real_image_src"> </aesImage>
+                     :src='absImageUrl( row[head.name])' :image-src.sync="real_image_src"> </aesImage>
         </template>
       </img-uploador>
     </template>
@@ -47,6 +47,15 @@ export default {
       }
     },
   methods:{
+    absImageUrl(imageurl){
+      if(imageurl.startsWith('http')){
+        return imageurl
+      }else if(this.head.cdn){
+        return  `${this.head.cdn}${imageurl}`
+      }else{
+        return  imageurl
+      }
+    },
     on_uploader_click:function(){
       $(this.$el).find('.virtual_input').focus()
     },
