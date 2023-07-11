@@ -19,6 +19,8 @@ from helpers.func.image_proc import ceil_image_size
 from helpers.director.shortcut import director_view
 from helpers.func.url_path import media_url_to_path
 from helpers.func.dot_dict import read_dict_path
+import logging
+general_log = logging.getLogger('general_log')
 
 class BasicReciever(object):
     
@@ -114,7 +116,15 @@ class BasicReciever(object):
     def encrypt(self,file_url_list):
         if self.request.GET.get('aes'):
             from . funs.aes import encode_file
-            file_url_list = [encode_file(url) for url in file_url_list]
+            ls = []
+            for media_url in file_url_list:
+                ls.append(encode_file(media_url))
+                try: 
+                    path  = media_url_to_path(media_url)
+                    os.remove(path)
+                except Exception as e:
+                    general_log.debug(e)
+            file_url_list = ls
         return file_url_list
 
 class GeneralUpload(BasicReciever):
