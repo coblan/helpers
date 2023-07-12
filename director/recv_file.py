@@ -178,6 +178,7 @@ def pngquant_compress(path, force=False, quality=None,out_path=None):
     general_log.debug(f'压缩png图片{path}')
     p = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     p.wait()
+    general_log.debug(p.stdout.read())
 
 
 #def _compress(path, force=False, quality=None,out_path=None):
