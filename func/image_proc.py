@@ -11,10 +11,10 @@ class ImageProc(object):
         im_rotate = im.rotate(45) 
 
 
-def ceil_image_size(inputpath,outpath,maxspan=1200,image_format=None):
+def ceil_image_size(inputpath,outpath,maxspan=1200,image_format=None,quality=50):
     "压缩图片"
     img = Image.open(inputpath)
     ratio = max(img.size) / maxspan
     if ratio >1:
         resized_image = img.resize(  (int(x / ratio) for x in img.size) )
-        resized_image.save(outpath,image_format)
+        resized_image.save(outpath,image_format,quality=quality)
