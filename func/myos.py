@@ -26,7 +26,7 @@ def is_install(soft_name):
         ww = p.stdout.read()
         general_log.debug(ww)  
         ww= ww.decode('utf-8') 
-        if 'command not found' not in ww:
+        if 'command not found' in ww:
             return False
         else:
             return True
