@@ -75,6 +75,9 @@ class BasicReciever(object):
             # 压缩图片的 width 和height
             ceil_image_size(absolut_file_path,absolut_file_path,maxspan= span )
             compressImage(absolut_file_path)
+        
+        elif self.request.GET.get('compress'):
+            compressImage(absolut_file_path)
             
         return self.getFileUrl(file_path)
         
