@@ -6,7 +6,10 @@ general_log = logging.getLogger('general_log')
 
 def is_install(soft_name):
     p = subprocess.Popen(soft_name, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-    p.wait()    
+    p.wait()   
+    system_name = platform.system().lower()
+    general_log.debug(system_name)
+    
     if platform.system().lower() == 'windows':
         print("windows")
         ww = p.stdout.read()
