@@ -10,7 +10,7 @@ def is_install(soft_name):
     system_name = platform.system().lower()
     general_log.debug(system_name)
     
-    if platform.system().lower() == 'windows':
+    if system_name == 'windows':
         print("windows")
         ww = p.stdout.read()
         general_log.debug(ww)
@@ -21,12 +21,12 @@ def is_install(soft_name):
         else:
             return True
        
-    elif platform.system().lower() == 'linux':
+    elif system_name == 'linux':
         print('linux')
         ww = p.stdout.read()
         general_log.debug(ww)  
         ww= ww.decode('utf-8') 
-        if 'command not found' in ww:
+        if 'command not found' in ww or '':
             return False
         else:
             return True
