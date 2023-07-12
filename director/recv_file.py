@@ -151,7 +151,7 @@ def compressImage(path):
             if not jpg_comporess:
                 general_log.debug('未安装jpeg处理,略过')
                 return 
-            general_log.debug('jpg的图片暂时无压缩')
+            jpegoptim_compress(path)
     except Exception as e:
         general_log.debug(f'压缩报错:{e}')
 
@@ -181,30 +181,13 @@ def pngquant_compress(path, force=False, quality=None,out_path=None):
     general_log.debug(p.stdout.read())
 
 
-#def _compress(path, force=False, quality=None,out_path=None):
-    #"""压缩函数.
-    
-    #参数：
-        #path: 文件名称
-        #force: 如果存在同名文件，是否覆盖
-        #quality: 压缩质量。 10-40， or 10
-    #"""
-    #force_command = '-f' if force else ''
-    
-    #quality_command = ''
-    #if quality and isinstance(quality, int):
-        #quality_command = f'--quality {quality}'
-    #if quality and isinstance(quality, str):
-        #quality_command = f'--quality {quality}'
-    #if not out_path:
-        #command = f'pngquant {path} --skip-if-larger {force_command} {quality_command} --output {path}'
-    #else:
-        #command = f'pngquant {path} --skip-if-larger {force_command} {quality_command} --output {out_path}' 
-    ##subprocess.run(command)
-    #general_log.debug(f'压缩png图片{path}')
-    #p = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-    #p.wait()
-       
+def jpegoptim_compress(path,quality=80):
+    general_log.debug(f'压缩jpg图片{path}')
+    command = f'jpegoptim {path} -m{quality}'
+    p = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    p.wait()
+    general_log.debug(p.stdout.read())    
+   
 class GeneralUpload(BasicReciever):
     """
     @path: media的相对路径
