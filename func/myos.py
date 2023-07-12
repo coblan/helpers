@@ -10,17 +10,25 @@ def is_install(soft_name):
     if platform.system().lower() == 'windows':
         print("windows")
         ww = p.stdout.read()
+        general_log.debug(ww)
         ww= ww.decode('gbk')
+        
         if '不是内部或外部命令' in ww:
             return False
         else:
             return True
        
     elif platform.system().lower() == 'linux':
-        ww = p.stdout.read()
-        ww= ww.decode('utf-8')      
-        general_log.debug(ww)
-        
         print('linux')
+        ww = p.stdout.read()
+        general_log.debug(ww)  
+        ww= ww.decode('utf-8') 
+        if 'command not found' not in ww:
+            return False
+        else:
+            return True
+        
+        
+       
     
     

@@ -26,7 +26,7 @@ import subprocess
 from helpers.func.myos import is_install
 
 png_compress = is_install('pngquant')
-jpg_comporess= False
+jpg_comporess = False
 
 class BasicReciever(object):
     
@@ -74,6 +74,8 @@ class BasicReciever(object):
             span = int( self.request.GET.get('maxspan') )
             # 压缩图片的 width 和height
             ceil_image_size(absolut_file_path,absolut_file_path,maxspan= span )
+            compressImage(absolut_file_path)
+            
         return self.getFileUrl(file_path)
         
     
@@ -137,9 +139,9 @@ class BasicReciever(object):
 def compressImage(path):
     imgType = imghdr.what(path)
     try:
-        if imgType =='png':
+        if imgType.lower() =='png' and png_compress:
             pngquant_compress(path)
-        elif imgType =='jpg':
+        elif imgType.lower() in ['jpg','jpeg'] and jpg_comporess:
             general_log.debug('jpg的图片展示无压缩')
     except Exception as e:
         general_log.debug(f'压缩报错:{e}')
@@ -312,6 +314,7 @@ class BigFileRecieve(GeneralUpload):
             span = int( self.request.GET.get('maxspan') )
             # 压缩图片的 width 和height
             ceil_image_size(absolut_file_path,absolut_file_path,maxspan= span,image_format=image_format )
+            compressImage(absolut_file_path)
 
 director.update({
     'big-file-saver':BigFileRecieve
