@@ -139,10 +139,16 @@ class BasicReciever(object):
 def compressImage(path):
     imgType = imghdr.what(path)
     try:
-        if imgType.lower() =='png' and png_compress:
+        if imgType.lower() =='png':
+            if not png_compress:
+                general_log.debug('未安装pngquant,略过')
+                return
             pngquant_compress(path)
-        elif imgType.lower() in ['jpg','jpeg'] and jpg_comporess:
-            general_log.debug('jpg的图片展示无压缩')
+        elif imgType.lower() in ['jpg','jpeg']:
+            if not jpg_comporess:
+                general_log.debug('未安装jpeg处理,略过')
+                return 
+            general_log.debug('jpg的图片暂时无压缩')
     except Exception as e:
         general_log.debug(f'压缩报错:{e}')
 
@@ -171,29 +177,29 @@ def pngquant_compress(path, force=False, quality=None,out_path=None):
     p.wait()
 
 
-def _compress(path, force=False, quality=None,out_path=None):
-    """压缩函数.
+#def _compress(path, force=False, quality=None,out_path=None):
+    #"""压缩函数.
     
-    参数：
-        path: 文件名称
-        force: 如果存在同名文件，是否覆盖
-        quality: 压缩质量。 10-40， or 10
-    """
-    force_command = '-f' if force else ''
+    #参数：
+        #path: 文件名称
+        #force: 如果存在同名文件，是否覆盖
+        #quality: 压缩质量。 10-40， or 10
+    #"""
+    #force_command = '-f' if force else ''
     
-    quality_command = ''
-    if quality and isinstance(quality, int):
-        quality_command = f'--quality {quality}'
-    if quality and isinstance(quality, str):
-        quality_command = f'--quality {quality}'
-    if not out_path:
-        command = f'pngquant {path} --skip-if-larger {force_command} {quality_command} --output {path}'
-    else:
-        command = f'pngquant {path} --skip-if-larger {force_command} {quality_command} --output {out_path}' 
-    #subprocess.run(command)
-    general_log.debug(f'压缩png图片{path}')
-    p = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-    p.wait()
+    #quality_command = ''
+    #if quality and isinstance(quality, int):
+        #quality_command = f'--quality {quality}'
+    #if quality and isinstance(quality, str):
+        #quality_command = f'--quality {quality}'
+    #if not out_path:
+        #command = f'pngquant {path} --skip-if-larger {force_command} {quality_command} --output {path}'
+    #else:
+        #command = f'pngquant {path} --skip-if-larger {force_command} {quality_command} --output {out_path}' 
+    ##subprocess.run(command)
+    #general_log.debug(f'压缩png图片{path}')
+    #p = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    #p.wait()
        
 class GeneralUpload(BasicReciever):
     """
