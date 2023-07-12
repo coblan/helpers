@@ -26,7 +26,7 @@ import subprocess
 from helpers.func.myos import is_install
 
 png_compress = is_install('pngquant')
-jpg_comporess = False
+jpg_comporess = is_install('jpegoptim')
 
 class BasicReciever(object):
     
