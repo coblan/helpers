@@ -23,6 +23,10 @@ import logging
 general_log = logging.getLogger('general_log')
 import imghdr
 import subprocess
+from helpers.func.myos import is_install
+
+png_compress = is_install('pngquant')
+jpg_comporess= False
 
 class BasicReciever(object):
     
