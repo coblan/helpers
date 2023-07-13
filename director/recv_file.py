@@ -152,6 +152,8 @@ def compressImage(path):
                 general_log.debug('未安装jpeg处理,略过')
                 return 
             jpegoptim_compress(path)
+        elif imgType.lower() =='gif':
+            gifsicle_compress(path)
     except Exception as e:
         general_log.debug(f'压缩报错:{e}')
 
@@ -187,7 +189,14 @@ def jpegoptim_compress(path,quality=80):
     p = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     p.wait()
     general_log.debug(p.stdout.read())    
-   
+
+def gifsicle_compress(path,quality=None):
+    general_log.debug(f'压缩gif图片{path}')
+    command = f'gifsicle -O3 {path} -o {path}'
+    p = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    p.wait()
+    general_log.debug(p.stdout.read())     
+
 class GeneralUpload(BasicReciever):
     """
     @path: media的相对路径
@@ -354,6 +363,9 @@ def merge_media_file(path_list,suffix=None):
             
 @director_view('upload/encrypt/info')
 def encrypt_aes_info(entry):
+    """
+    前端picture组件，遇到aes文件时，直接调用这个函数获取加密设置。免得一个一个去设置组件参数
+    """
     dc =  read_dict_path(settings, f'UPLOAD_CRYPTO.{entry}')
     return dc
 
