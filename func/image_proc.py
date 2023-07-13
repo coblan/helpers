@@ -124,6 +124,7 @@ def switch_format_check(media_path):
 
 def change_to_jpg(path):
     img = Image.open(path)
+    img = img.convert("RGB")
     file_name=f'{path}.jpg'
     img.save(file_name)
     return file_name
