@@ -76,8 +76,9 @@ class BasicReciever(object):
             ceil_image_size(absolut_file_path,absolut_file_path,maxspan= span )
             compressImage(absolut_file_path)
         
-        elif self.request.GET.get('compress'):
-            compressImage(absolut_file_path)
+        elif self.request.GET.get('quality'):
+            quality = self.request.GET.get('quality')
+            compressImage(absolut_file_path,quality)
             
         return self.getFileUrl(file_path)
         
@@ -139,19 +140,19 @@ class BasicReciever(object):
         return file_url_list
     
     
-def compressImage(path):
+def compressImage(path,quality=None):
     imgType = imghdr.what(path)
     try:
         if imgType.lower() =='png':
             if not png_compress:
                 general_log.debug('未安装pngquant,略过')
                 return
-            pngquant_compress(path)
+            pngquant_compress(path,quality=quality)
         elif imgType.lower() in ['jpg','jpeg']:
             if not jpg_comporess:
                 general_log.debug('未安装jpeg处理,略过')
                 return 
-            jpegoptim_compress(path)
+            jpegoptim_compress(path,quality=quality)
     except Exception as e:
         general_log.debug(f'压缩报错:{e}')
 
@@ -181,7 +182,7 @@ def pngquant_compress(path, force=False, quality=None,out_path=None):
     general_log.debug(p.stdout.read())
 
 
-def jpegoptim_compress(path,quality=80):
+def jpegoptim_compress(path,quality=70):
     general_log.debug(f'压缩jpg图片{path}')
     command = f'jpegoptim {path} -m{quality}'
     p = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
