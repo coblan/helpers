@@ -11,7 +11,7 @@ def is_install(soft_name):
     general_log.debug(system_name)
     
     if system_name == 'windows':
-        print("windows")
+        print("system = windows")
         ww = p.stdout.read()
         general_log.debug(ww)
         ww= ww.decode('gbk')
@@ -22,7 +22,7 @@ def is_install(soft_name):
             return True
        
     elif system_name == 'linux':
-        print('linux')
+        print('system = linux')
         ww = p.stdout.read()
         general_log.debug(ww)  
         ww= ww.decode('utf-8') 
