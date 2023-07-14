@@ -15,18 +15,12 @@ import re
 from django.views.decorators.csrf import csrf_exempt
 from helpers.director.base_data import director
 import time
-from helpers.func.image_proc import ceil_image_size
+from helpers.func.image_proc import ceil_image_size,compressImage,switch_format_check
 from helpers.director.shortcut import director_view
 from helpers.func.url_path import media_url_to_path
 from helpers.func.dot_dict import read_dict_path
 import logging
 general_log = logging.getLogger('general_log')
-import imghdr
-import subprocess
-from helpers.func.myos import is_install
-
-png_compress = is_install('pngquant')
-jpg_comporess = False
 
 class BasicReciever(object):
     
@@ -38,6 +32,7 @@ class BasicReciever(object):
             file_data= self.readFile(fl)
             file_url = self.procFile(file_data,fl)
             file_url_list.append(file_url)
+        file_url_list = [ self.switch_format_check(media_path) for media_path in file_url_list]
         file_url_list = self.encrypt(file_url_list)
         return HttpResponse(json.dumps(file_url_list),content_type="application/json")
     
@@ -75,6 +70,10 @@ class BasicReciever(object):
             # 压缩图片的 width 和height
             ceil_image_size(absolut_file_path,absolut_file_path,maxspan= span )
             compressImage(absolut_file_path)
+        
+        elif self.request.GET.get('quality'):
+            quality = self.request.GET.get('quality')
+            compressImage(absolut_file_path,quality)
             
         return self.getFileUrl(file_path)
         
@@ -121,6 +120,12 @@ class BasicReciever(object):
             suffix = fl.content_type.split('/')[-1] 
         return suffix
     
+    def switch_format_check(self,media_path):
+        if self.request.GET.get('sfc'):
+            return switch_format_check(media_path)
+        else:
+            return media_path
+    
     def encrypt(self,file_url_list):
         if self.request.GET.get('aes'):
             from . funs.aes import encode_file
@@ -136,71 +141,8 @@ class BasicReciever(object):
         return file_url_list
     
     
-def compressImage(path):
-    imgType = imghdr.what(path)
-    try:
-        if imgType.lower() =='png':
-            if not png_compress:
-                general_log.debug('未安装pngquant,略过')
-                return
-            pngquant_compress(path)
-        elif imgType.lower() in ['jpg','jpeg']:
-            if not jpg_comporess:
-                general_log.debug('未安装jpeg处理,略过')
-                return 
-            general_log.debug('jpg的图片暂时无压缩')
-    except Exception as e:
-        general_log.debug(f'压缩报错:{e}')
-
-def pngquant_compress(path, force=False, quality=None,out_path=None):
-    """压缩函数.
-    
-    参数：
-        path: 文件名称
-        force: 如果存在同名文件，是否覆盖
-        quality: 压缩质量。 10-40， or 10
-    """
-    force_command = '-f' if force else ''
-    
-    quality_command = ''
-    if quality and isinstance(quality, int):
-        quality_command = f'--quality {quality}'
-    if quality and isinstance(quality, str):
-        quality_command = f'--quality {quality}'
-    if not out_path:
-        command = f'pngquant {path} --skip-if-larger {force_command} {quality_command} --output {path}'
-    else:
-        command = f'pngquant {path} --skip-if-larger {force_command} {quality_command} --output {out_path}' 
-    #subprocess.run(command)
-    general_log.debug(f'压缩png图片{path}')
-    p = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-    p.wait()
 
 
-#def _compress(path, force=False, quality=None,out_path=None):
-    #"""压缩函数.
-    
-    #参数：
-        #path: 文件名称
-        #force: 如果存在同名文件，是否覆盖
-        #quality: 压缩质量。 10-40， or 10
-    #"""
-    #force_command = '-f' if force else ''
-    
-    #quality_command = ''
-    #if quality and isinstance(quality, int):
-        #quality_command = f'--quality {quality}'
-    #if quality and isinstance(quality, str):
-        #quality_command = f'--quality {quality}'
-    #if not out_path:
-        #command = f'pngquant {path} --skip-if-larger {force_command} {quality_command} --output {path}'
-    #else:
-        #command = f'pngquant {path} --skip-if-larger {force_command} {quality_command} --output {out_path}' 
-    ##subprocess.run(command)
-    #general_log.debug(f'压缩png图片{path}')
-    #p = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-    #p.wait()
-       
 class GeneralUpload(BasicReciever):
     """
     @path: media的相对路径
@@ -311,8 +253,10 @@ class BigFileRecieve(GeneralUpload):
             
             file_url = self.getFileUrl(file_path)
             file_url_list.append(file_url)
-        self.file_url_list = file_url_list
-        self.file_url_list = self.encrypt(self.file_url_list)
+            
+        file_url_list = [ self.switch_format_check(media_path) for media_path in file_url_list]
+        #self.file_url_list = file_url_list
+        self.file_url_list = self.encrypt(file_url_list)
         return HttpResponse(json.dumps(file_url_list),content_type="application/json")
     
     def processImage(self,absolut_file_path,image_format=None):
@@ -320,7 +264,15 @@ class BigFileRecieve(GeneralUpload):
             span = int( self.request.GET.get('maxspan') )
             # 压缩图片的 width 和height
             ceil_image_size(absolut_file_path,absolut_file_path,maxspan= span,image_format=image_format )
-            compressImage(absolut_file_path)
+            if self.request.GET.get('quality'):
+                quality = self.request.GET.get('quality')
+                compressImage(absolut_file_path,quality)  
+            else:
+                compressImage(absolut_file_path)
+        
+        elif self.request.GET.get('quality'):
+            quality = self.request.GET.get('quality')
+            compressImage(absolut_file_path,quality)        
 
 director.update({
     'big-file-saver':BigFileRecieve
@@ -367,6 +319,9 @@ def merge_media_file(path_list,suffix=None):
             
 @director_view('upload/encrypt/info')
 def encrypt_aes_info(entry):
+    """
+    前端picture组件，遇到aes文件时，直接调用这个函数获取加密设置。免得一个一个去设置组件参数
+    """
     dc =  read_dict_path(settings, f'UPLOAD_CRYPTO.{entry}')
     return dc
 

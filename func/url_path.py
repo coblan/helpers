@@ -62,3 +62,12 @@ def appendSearch(url:str,param:Dict) -> str:
         return f'{url}?{encode}'
     else:
         return f'{url}&{encode}'
+
+def set_suffix(path,suffix):
+    mt= re.search('\.\w+$',path)
+    if mt:
+        suffix_path = f'{path[0:-len(mt.group())]}{suffix}'
+     
+    else:
+        suffix_path = f'{path}{suffix}'
+    return suffix_path

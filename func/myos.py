@@ -6,9 +6,12 @@ general_log = logging.getLogger('general_log')
 
 def is_install(soft_name):
     p = subprocess.Popen(soft_name, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-    p.wait()    
-    if platform.system().lower() == 'windows':
-        print("windows")
+    p.wait()   
+    system_name = platform.system().lower()
+    general_log.debug(system_name)
+    
+    if system_name == 'windows':
+        print("system = windows")
         ww = p.stdout.read()
         general_log.debug(ww)
         ww= ww.decode('gbk')
@@ -18,12 +21,12 @@ def is_install(soft_name):
         else:
             return True
        
-    elif platform.system().lower() == 'linux':
-        print('linux')
+    elif system_name == 'linux':
+        print('system = linux')
         ww = p.stdout.read()
         general_log.debug(ww)  
         ww= ww.decode('utf-8') 
-        if 'command not found' not in ww:
+        if 'not found' in ww:
             return False
         else:
             return True
