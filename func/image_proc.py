@@ -7,6 +7,7 @@ import imghdr
 import subprocess
 from helpers.func.myos import is_install
 import os
+from . url_path import set_suffix
 
 png_compress = is_install('pngquant')
 jpg_comporess = is_install('jpegoptim')
@@ -104,7 +105,7 @@ def switch_format_check(media_path):
         new_size = os.stat(new_file).st_size
         if org_size > new_size:
             os.remove(path)
-            return f'{media_path}.jpg'
+            return  set_suffix(media_path,'.jpg') # f'{media_path}.jpg'
         else:
             os.remove(new_file)
             return media_path
@@ -115,7 +116,7 @@ def switch_format_check(media_path):
         new_size = os.stat(new_file).st_size
         if org_size > new_size:
             os.remove(path)
-            return  f'{media_path}.png'   
+            return  set_suffix(media_path ,'.png')  #f'{media_path}.png'   
         else:
             os.remove(new_file)
             return media_path  
@@ -125,13 +126,13 @@ def switch_format_check(media_path):
 def change_to_jpg(path):
     img = Image.open(path)
     img = img.convert("RGB")
-    file_name=f'{path}.jpg'
+    file_name=  set_suffix(path,'.jpg') # f'{path}.jpg'
     img.save(file_name)
     return file_name
     
 
 def change_to_png(path):
     img = Image.open(path)
-    file_name=f'{path}.png'
+    file_name=  set_suffix(path,'.png') #  f'{path}.png'
     img.save(file_name)
     return file_name
