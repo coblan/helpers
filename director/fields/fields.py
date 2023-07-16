@@ -128,13 +128,13 @@ class ModelFields(forms.ModelForm):
         form_kw={}
         if 'instance' not in self.kw:
             if pk=='-1':  # -1 表示 最后一个记录 （一般用不到）
-                form_kw['instance']=self._meta.model.objects.last()
+                form_kw['instance']= self.inn_filter( query= self._meta.model.objects.all()) .last()
             elif pk != None:  # 很多时候，pk=0 是已经创建了
                 try:
                     if select_for_update and self.__class__.select_for_update:
-                        form_kw['instance']= self._meta.model.objects.select_for_update().get(pk=pk)
+                        form_kw['instance']= self.inn_filter( query= self._meta.model.objects.all().select_for_update()).get(pk=pk)
                     else:
-                        form_kw['instance']= self._meta.model.objects.get(pk=pk)
+                        form_kw['instance']= self.inn_filter(query= self._meta.model.objects.all() ).get(pk=pk)
                 except self._meta.model.DoesNotExist:
                     raise UserWarning('Id=%s that you request is not exist'%pk)
                     # 感觉 instance不存在时，报错404可能不太合适，所以还是用普通报错 
@@ -245,6 +245,13 @@ class ModelFields(forms.ModelForm):
     
     def findInstance(self,dc):
         pass
+    
+    
+    def inn_filter(self,query=None):
+        if getattr(self._meta.model,'filterByUser',None):
+            query = self._meta.model.filterByUser(user=self.crt_user,query=query) 
+        return query
+    
     
     
     def full_clean(self):

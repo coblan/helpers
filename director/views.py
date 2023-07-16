@@ -153,43 +153,43 @@ def export_excel(request):
 @csrf_exempt
 def director_view(request,director_name):
     """将director函数以api的方式直接暴露出去"""
-    
-    # 专门针对modelfield返回详情
-    if director_name.startswith('get/'):
-        kws = argument.get_argument(request,outtype='dict')
-        directorEnt= director.get(director_name)
-        rt = directorEnt(**kws,select_for_update=False).get_data_context() 
-        dc ={'success':True,'data':rt.get('row')}
-        return  HttpResponse(json.dumps(dc,ensure_ascii=False,cls=DirectorEncoder),content_type="application/json")     
-    
-    if request.method == "GET" or request.META.get('HTTP_REALTYPE')=='json_get':
-        return fast_director_view(request, director_name)
-    
-    # 2021/8/18增加新的逻辑,可以对/dapi/edit/customForm转换为请求d.save_row_for_front,参数是edit/customForm指向的director表单
-    kws = argument.get_argument(request,outtype='dict')
-    if director_name.startswith('edit/'):
-        directorEnt = director_views.get('d.save_row_for_front')
-        kws['_director_name'] = director_name#[5:]  
-        kws={'row':kws}
-    elif director_name.startswith('delete/'):
-        directorEnt = director_views.get('d.delete_row')
-        kws['_director_name'] = director_name#[6:]
-        kws={'row':kws}     
-    
-    # [1] 使用element来打包 director_view
-    elif director_name.startswith('element/'):
-        directorEnt = director_views.get('d.director_element_call2')
-        rt = re.search('element/(.+)/(\w+)$', director_name)
-        director_name = rt.groups()[0]
-        attr_name = rt.groups()[1]
-        kws['director_name'] = director_name#[6:]
-        kws['attr_name'] = attr_name                   
-    else:
-        directorEnt= director_views.get(director_name)
-    if not directorEnt:
-        directorEnt = director.get(director_name)
-          
     try:
+        # 专门针对modelfield返回详情
+        if director_name.startswith('get/'):
+            kws = argument.get_argument(request,outtype='dict')
+            directorEnt= director.get(director_name)
+            rt = directorEnt(**kws,select_for_update=False).get_data_context() 
+            dc ={'success':True,'data':rt.get('row')}
+            return  HttpResponse(json.dumps(dc,ensure_ascii=False,cls=DirectorEncoder),content_type="application/json")     
+        
+        if request.method == "GET" or request.META.get('HTTP_REALTYPE')=='json_get':
+            return fast_director_view(request, director_name)
+        
+        # 2021/8/18增加新的逻辑,可以对/dapi/edit/customForm转换为请求d.save_row_for_front,参数是edit/customForm指向的director表单
+        kws = argument.get_argument(request,outtype='dict')
+        if director_name.startswith('edit/'):
+            directorEnt = director_views.get('d.save_row_for_front')
+            kws['_director_name'] = director_name#[5:]  
+            kws={'row':kws}
+        elif director_name.startswith('delete/'):
+            directorEnt = director_views.get('d.delete_row')
+            kws['_director_name'] = director_name#[6:]
+            kws={'row':kws}     
+        
+        # [1] 使用element来打包 director_view
+        elif director_name.startswith('element/'):
+            directorEnt = director_views.get('d.director_element_call2')
+            rt = re.search('element/(.+)/(\w+)$', director_name)
+            director_name = rt.groups()[0]
+            attr_name = rt.groups()[1]
+            kws['director_name'] = director_name#[6:]
+            kws['attr_name'] = attr_name                   
+        else:
+            directorEnt= director_views.get(director_name)
+        if not directorEnt:
+            directorEnt = director.get(director_name)
+          
+    #try:  # 原来try在这里，但是try应该包含所有
         #kws = argument.get_argument(request,outtype='dict')
         if request.GET.get('transaction') == '0':
             need_transaction = False

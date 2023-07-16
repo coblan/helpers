@@ -38,7 +38,6 @@ export default {
           return rr
         }else{
           var rt =  this.head.upload_url || this.head.up_url
-          debugger
           if (this.head.aes){
             rt = ex.appendSearch(rt,{aes:'ecb'})
           }

@@ -122,7 +122,7 @@ class BasicReciever(object):
     
     def switch_format_check(self,media_path):
         if self.request.GET.get('sfc'):
-            return switch_format_check(media_path)
+            return switch_format_check(media_path,model =int( self.request.GET.get('sfc') ))
         else:
             return media_path
     

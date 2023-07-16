@@ -11,7 +11,7 @@ from . url_path import set_suffix
 
 png_compress = is_install('pngquant')
 jpg_comporess = is_install('jpegoptim')
-gif_comporess = is_install('gifsicle')
+gif_comporess =  is_install('gifsicle -h')
 
 @director_element('imageProc')
 class ImageProc(object):
@@ -74,31 +74,43 @@ def pngquant_compress(path, force=False, quality=None,out_path=None):
     #subprocess.run(command)
     general_log.debug(f'压缩png图片{path}')
     p = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-    p.wait()
-    general_log.debug(p.stdout.read())
+    #p.wait()
+    #general_log.debug(p.stdout.read())
+    stdout,erroutput = p.communicate()
+    general_log.debug(stdout)      
 
 
 def jpegoptim_compress(path,quality=70):
     general_log.debug(f'压缩jpg图片{path}')
     command = f'jpegoptim {path} -m{quality}'
     p = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-    p.wait()
-    general_log.debug(p.stdout.read())    
+    #p.wait()
+    stdout,erroutput = p.communicate()
+    general_log.debug(stdout)    
 
 def gifsicle_compress(path,quality=None):
     general_log.debug(f'压缩gif图片{path}')
     command = f'gifsicle -O3 {path} -o {path}'
     p = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-    p.wait()
-    general_log.debug(p.stdout.read())     
+    #p.wait()
+    stdout,erroutput = p.communicate()
+    general_log.debug(stdout)     
 
 
 
-def switch_format_check(media_path):
+def switch_format_check(media_path,model=1):
+    """
+    model=1  jpg,png互转
+    model=2  只png装jpg  ， jpg图片不转换。因为一般来说jpg比png小很多，这样节约很多处理时间。
+    """
     path = media_url_to_path(media_path)
     org_size = os.stat(path).st_size
     imgType = imghdr.what(path)
     suf = imgType.lower()
+    if model ==2:
+        if suf in ['jpg','jpeg']:
+            return media_path
+        
     if suf =='png':
         new_file = change_to_jpg(path)
         jpegoptim_compress(path)
@@ -135,4 +147,5 @@ def change_to_png(path):
     img = Image.open(path)
     file_name=  set_suffix(path,'.png') #  f'{path}.png'
     img.save(file_name)
+    general_log.debug(f'转换{path}为{file_name}')
     return file_name
