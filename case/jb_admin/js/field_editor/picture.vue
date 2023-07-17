@@ -38,10 +38,11 @@ export default {
           return rr
         }else{
           var rt =  this.head.upload_url || this.head.up_url
-          if (this.head.aes){
+          var search = ex.parseSearch(rt)
+          if (this.head.aes && !search.aes){
             rt = ex.appendSearch(rt,{aes:'ecb'})
           }
-          if(this.head.maxspan){
+          if(this.head.maxspan && !search.quality){
             rt = ex.appendSearch(rt,{quality:'70'})
           }
           return  rt
