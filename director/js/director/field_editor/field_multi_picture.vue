@@ -61,10 +61,18 @@ export default  {
       if(! self.validate(v)){
         return
       }
-      var up_url = this.head.up_url || '/d/upload?path=general_upload/images'
-      if(this.head.aes){
-        up_url = ex.appendSearch(up_url,{aes:this.head.aes})
+      if(this.head.up_url){
+        var up_url= this.head.up_url
+      }else{
+        var up_url =  '/d/upload?path=general_upload/images'
+        if(this.head.aes){
+          up_url = ex.appendSearch(up_url,{aes:this.head.aes})
+        }
+        if(this.head.maxspan){
+          up_url = ex.appendSearch(up_url,{quality:70})
+        }
       }
+
       cfg.show_load('uploading...')
       fl.uploads(v,up_url,function(url_list){
         cfg.hide_load()

@@ -41,6 +41,9 @@ export default {
           if (this.head.aes){
             rt = ex.appendSearch(rt,{aes:'ecb'})
           }
+          if(this.head.maxspan){
+            rt = ex.appendSearch(rt,{quality:'70'})
+          }
           return  rt
         }
       }
