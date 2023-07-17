@@ -20,7 +20,7 @@
                 <com-fields-table-block v-if="table_grid "
                                         :heads="group.heads" :row="row" :option="{table_grid:table_grid}" :alignLabel="ctx.table_grid_align_label">
                 </com-fields-table-block>
-                <div v-else class='field-panel suit' >
+                <div v-else class='field-panel' :class="head.inn_class?'': 'suit'">
                   <field  v-for='head in group.heads' :key="head.name" :head="head" :row='row'></field>
                 </div>
               </div>
