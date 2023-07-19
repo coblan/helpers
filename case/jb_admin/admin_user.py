@@ -424,8 +424,8 @@ class GroupForm(ModelFields):
     def clean_save(self):
         self.instance.save()
         
-        if not hasattr(self.instance, 'permitmodel'):
-            self.instance.permitmodel = PermitModel.objects.create(group = self.instance)
+        #if not hasattr(self.instance, 'permitmodel'):
+            #self.instance.permitmodel = PermitModel.objects.create(group = self.instance)
         self.instance.permitmodel.desp = self.kw.get('desp','')
         self.instance.permitmodel.save()
         if self.kw.get('permit',None) != None:
