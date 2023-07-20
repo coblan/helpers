@@ -40,7 +40,6 @@ export default {
   },
     watch:{
       outvalue(nv){
-           alert('bb')
           this.absImageUrl()
       }
     },
