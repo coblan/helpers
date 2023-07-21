@@ -33,6 +33,9 @@ export default {
     }
   },
   mounted(){
+    if(this.head.mounted_express){
+      ex.eval(this.head.mounted_express,{vc:this,head:this.head})
+    }
     this.absImageUrl()
   },
     watch:{
@@ -64,6 +67,11 @@ export default {
   methods:{
     async absImageUrl(){
       var imageurl = this.row[this.head.name]
+      if(!imageurl){
+        this.abs_url = imageurl
+        return
+      }
+
       if(imageurl.startsWith('http')){
         this.abs_url = imageurl
       }else if(this.head.cdn){
