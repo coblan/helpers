@@ -53,7 +53,7 @@ def to_dict(instance,filt_attr=None,include=None,exclude=None,hash_keys=None,for
     #out['meta_org_dict'] = make_mark_dict(instance.__dict__,valide_name_list)
     return out
 
-def sim_dict(instance,filt_attr=None,include=None,exclude=None,include_id=True,include_pk=True):
+def sim_dict(instance,filt_attr=None,include=None,exclude=None,include_id=True,include_pk=True,label=True):
     """
     fields=['name','age'] 虽然中函数中fields是django中的model.field对象，但是这里为了方便，接受外部
                          输入是字段的名字
@@ -131,6 +131,14 @@ def sim_dict(instance,filt_attr=None,include=None,exclude=None,include_id=True,i
     if  'pk' not in out and  include_pk:
         #out['pk']=instance.pk
         out['pk']= clean_field_for_js(instance._meta.pk,instance)
+    if not label:
+        ls = list( out.keys() )
+        for k in ls:
+            if k.startswith('_'):
+                del out[k]
+    if not include_id:
+        if 'id' in out:
+            del out['id']
     return out
     
 
