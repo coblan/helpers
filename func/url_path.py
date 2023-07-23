@@ -54,14 +54,14 @@ def judge_pc_or_mobile(ua):
 
     return is_mobile
 
-def appendSearch(url:str,param:Dict) -> str:
-    """
-    """
-    encode = urllib.parse.urlencode(param)
-    if '?' not in url:
-        return f'{url}?{encode}'
-    else:
-        return f'{url}&{encode}'
+#def appendSearch(url:str,param:Dict) -> str:
+    #"""
+    #"""
+    #encode = urllib.parse.urlencode(param)
+    #if '?' not in url:
+        #return f'{url}?{encode}'
+    #else:
+        #return f'{url}&{encode}'
 
 def set_suffix(path,suffix):
     mt= re.search('\.\w+$',path)
@@ -71,3 +71,19 @@ def set_suffix(path,suffix):
     else:
         suffix_path = f'{path}{suffix}'
     return suffix_path
+
+
+def appendSearch(url,param:Dict) -> str:
+    oo = urllib.parse.urlparse(url)
+    tp =  urllib.parse.parse_qsl(oo.query)
+    dc = {}
+    for k,v in tp:
+        dc[k] =v
+    dc.update(param)
+    encode = urllib.parse.urlencode(dc)
+    
+    if oo.port:
+        rt = oo.scheme +'://'+ oo.hostname + oo.path+ f':{oo.port}' + '?' + encode
+    else:
+        rt= oo.scheme +'://'+ oo.hostname + oo.path + '?' + encode
+    return rt 

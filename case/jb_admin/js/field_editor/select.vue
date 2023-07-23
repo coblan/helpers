@@ -168,7 +168,7 @@
             },
             invalid_options(){
                 var ls= []
-                if(this.head.multiple){
+                if(this.head.multiple && this.my_value){
                   var valid_options = ex.map(this.normed_options,item=>item.value)
                   this.my_value.forEach(v=>{
                       if(!valid_options.includes(v)){
