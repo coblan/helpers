@@ -8,14 +8,14 @@ def make_user(prefix=None,password=None):
      else:
           username = short_uuid(u=4)
           
-     while User.objects.filter(username=username).exist():
+     while User.objects.filter(username=username).exists():
           if prefix:
                number = short_uuid(u=4)
                username =f'{prefix}{number}'
           else:
                username = short_uuid(u=4)
                
-     user = User.objects.create(username)
+     user = User.objects.create(username=username)
      if password:
           user.set_password(password)
      else:
