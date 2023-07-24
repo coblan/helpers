@@ -51,8 +51,11 @@ class DirectorEncoder(json.JSONEncoder):
             if not getattr(self,'has_geo',True):
                 return None
             from django.contrib.gis.geos.point import Point
+            from helpers.func.geo import poly2dict,Polygon
             if isinstance(obj,Point):
-                return '%s,%s'%(obj.y,obj.x)            
+                return '%s,%s'%(obj.y,obj.x)   
+            if isinstance(obj,Polygon):
+                return poly2dict(obj)
         except Exception:
             print('json no geo support')
             self.has_geo = False
