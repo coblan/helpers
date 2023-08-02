@@ -499,6 +499,9 @@ export var network ={
             return false;
     },
     uploadfile({url,accept}={}){
+        /*
+        * 请使用weblib.ex.uploadFile
+        * */
         this.__upload_url =url
         return new Promise((resolve,reject)=>{
             ex.__on_filechange=function(event){
