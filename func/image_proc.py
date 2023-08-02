@@ -99,8 +99,7 @@ def gifsicle_compress(path,quality=None):
     general_log.debug(stdout)     
 
 
-def correct_image_format(media_path):
-    path = media_url_to_path(media_path)
+def correct_image_format(path):
     imgType = imghdr.what(path)
     suf = imgType.lower() 
     return suf
