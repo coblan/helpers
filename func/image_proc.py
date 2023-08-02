@@ -28,6 +28,8 @@ def ceil_image_size(inputpath,outpath,maxspan=1200,image_format=None,quality=50)
     ratio = max(img.size) / maxspan
     if ratio >1:
         resized_image = img.resize(  (int(x / ratio) for x in img.size) )
+        if not image_format:
+            image_format = correct_image_format(inputpath)
         resized_image.save(outpath,image_format,quality=quality)
 
 
@@ -97,6 +99,10 @@ def gifsicle_compress(path,quality=None):
     general_log.debug(stdout)     
 
 
+def correct_image_format(path):
+    imgType = imghdr.what(path)
+    suf = imgType.lower() 
+    return suf
 
 def switch_format_check(media_path,model=1):
     """
