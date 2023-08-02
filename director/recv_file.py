@@ -156,9 +156,7 @@ class GeneralUpload(BasicReciever):
         #img = Image.open(io.BytesIO(image_data))    
         #print('hell')
         #return img.tobytes()
-        
-        
-    
+          
     def getParDir(self):
         path = self.request.GET.get('path','general_upload')
         split = self.request.GET.get('split','')
@@ -172,18 +170,32 @@ class GeneralUpload(BasicReciever):
             path = os.path.join(path,today.strftime('%Y_%m_%d'))
         return path
     
-    def getFileName(self,file_data,name):
-        sufix = self.getSufix(name)
-        m = hashlib.md5()   
-        m.update(file_data)  
-        mid_name = m.hexdigest()
-        
-        file_name = mid_name+'.'+sufix
-        if self.request.GET.get('keepname'):
-            fl_name =self.adapt_name(name)
-            mt_name=re.search('\.(\w+)$',fl_name)
-            if mt_name:
-                file_name=mid_name+'___'+fl_name
+    def getFileName(self,file_data,fl):
+        keepname = self.request.GET.get('keepname',None)
+        if keepname =='field_name':
+            file_name = fl.name # name 不容易获取到field名称了，应该不会用这个
+        elif keepname=='overwrite':
+            file_name = fl.name
+        elif keepname=='overwrite-md5':
+            sufix = self.getSufix(fl)
+            file_name = get_md5(fl.name)+'.'+ sufix 
+        elif keepname=='tm-name':
+            file_name = '%s_%s'%(int( time.time()%1000000),fl.name)
+        elif keepname =='tm-md5':
+            sufix = self.getSufix(fl)
+            file_name = '%s_%s.%s'%(int( time.time()%1000000),get_md5( fl.name),sufix )
+        else:
+            # 老的方式，也是默认方式，使用md5作为文件名，不会造成文件重复
+            sufix = self.getSufix(fl)
+            m = hashlib.md5()   
+            m.update(file_data)  
+            mid_name = m.hexdigest()
+            file_name = mid_name+'.'+sufix
+        #if self.request.GET.get('keepname'):
+            #fl_name =self.adapt_name(fl.name)
+            #mt_name=re.search('\.(\w+)$',fl_name)
+            #if mt_name:
+                #file_name=mid_name+'___'+fl_name
         return file_name   
     
     def getFileUrl(self,file_path):
