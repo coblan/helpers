@@ -6,7 +6,7 @@
         用户登录
       </div>
       <div class="sub-title">
-        <span class="sub-content">欢迎登录后台管理系统</span>
+        <span class="sub-content">{{ctx.welcome || '欢迎登录后台管理系统'}}</span>
       </div>
       <loginForm></loginForm>
 

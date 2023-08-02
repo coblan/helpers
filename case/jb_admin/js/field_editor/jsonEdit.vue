@@ -29,7 +29,9 @@ export default {
       this. editor = new JSONEditor(this.$el.querySelector('.editor'), options)
 
       // set json
-      if(typeof value =='string'){
+      if(!value){
+        var initialJson = ex.eval(this.head.default_value_express,{vc:this})  || {}
+      } else if(typeof value =='string'){
         var initialJson = JSON.parse(this.row[this.head.name])
       }else{
         var initialJson = value

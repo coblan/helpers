@@ -3,7 +3,7 @@
   <div class="com-field-picture picture">
     <template v-if="head.readonly">
       <aesImage  class="img-uploador clickable" v-if='row[head.name]' @click.native="on_click_image(real_image_src)"
-                 :src='absImageUrl( row[head.name] ) ' :image-src.sync="real_image_src"> </aesImage>
+                 :src='abs_url ' :image-src.sync="real_image_src"> </aesImage>
       <span v-else>---</span>
     </template>
     <template  v-else>
@@ -13,7 +13,7 @@
         <template v-slot:show>
           <aesImage  class="img-uploador clickable  logoImg"
                      v-if='row[head.name]' @click.native="on_click_image(real_image_src)"
-                     :src='absImageUrl( row[head.name])' :image-src.sync="real_image_src"> </aesImage>
+                     :src='abs_url' :image-src.sync="real_image_src"> </aesImage>
         </template>
       </img-uploador>
     </template>
@@ -28,10 +28,25 @@ export default {
   props:['row','head'],
   data(){
     return {
-        real_image_src:''
+        real_image_src:'',
+        abs_url:'',
     }
   },
+  mounted(){
+    if(this.head.mounted_express){
+      ex.eval(this.head.mounted_express,{vc:this,head:this.head})
+    }
+    this.absImageUrl()
+  },
+    watch:{
+      outvalue(nv){
+          this.absImageUrl()
+      }
+    },
     computed:{
+      outvalue(){
+        return this.row[this.head.name]
+      },
       uploadUrl(){
         if(this.head.upload_url_express){
           var rr = ex.eval(this.head.upload_url_express,{vc:this})
@@ -50,13 +65,24 @@ export default {
       }
     },
   methods:{
-    absImageUrl(imageurl){
+    async absImageUrl(){
+      var imageurl = this.row[this.head.name]
+      if(!imageurl){
+        this.abs_url = imageurl
+        return
+      }
+
       if(imageurl.startsWith('http')){
-        return imageurl
+        this.abs_url = imageurl
       }else if(this.head.cdn){
-        return  `${this.head.cdn}${imageurl}`
+        this.abs_url =  `${this.head.cdn}${imageurl}`
+      }else if(this.head.abs_url_express){
+        var resp = await ex.eval(this.head.abs_url_express,{vc:this,head:this.head,imageUrl:imageurl})
+        if(resp){
+          this.abs_url = resp
+        }
       }else{
-        return  imageurl
+        this.abs_url = imageurl
       }
     },
     on_uploader_click:function(){
