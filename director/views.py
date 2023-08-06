@@ -26,6 +26,7 @@ from helpers.func.d_import import import_element
 from helpers.func import ex
 from .base_data import director_setting,director_view
 from .middleware.request_cache import get_request_cache
+from django.http import Http404
 
 from .funs.transaction_db import director_transaction_db
 import re
@@ -183,7 +184,10 @@ def director_view(request,director_name):
             director_name = rt.groups()[0]
             attr_name = rt.groups()[1]
             kws['director_name'] = director_name#[6:]
-            kws['attr_name'] = attr_name                   
+            kws['attr_name'] = attr_name
+            if hasattr(directorEnt,'public_api') and director_name not in directorEnt.public_api:
+                raise Http404
+                
         else:
             directorEnt= director_views.get(director_name)
         if not directorEnt:
