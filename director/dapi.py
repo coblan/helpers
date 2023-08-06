@@ -12,6 +12,7 @@ from .base_data import director_transaction
 from django.db import transaction
 from . views import tranactionDbs
 from django.utils import timezone
+from django.http import Http404
 import os
 from django.conf import settings
 from helpers.director.base_data import exclude_transaction
@@ -137,6 +138,8 @@ def director_element_call(director_name,attr_name,kws):
 def director_element_call(director_name,attr_name,**kws):
      dcls = director.get(director_name)
      obj = dcls()
+     if hasattr(obj,'public_api') and attr_name not in obj.public_api:
+          raise Http404()   
      return getattr(obj,attr_name)(**kws)
 
 @director_view('d.delete_query_related')

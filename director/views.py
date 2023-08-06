@@ -185,9 +185,7 @@ def director_view(request,director_name):
             attr_name = rt.groups()[1]
             kws['director_name'] = director_name#[6:]
             kws['attr_name'] = attr_name
-            if hasattr(directorEnt,'public_api') and director_name not in directorEnt.public_api:
-                raise Http404
-                
+               
         else:
             directorEnt= director_views.get(director_name)
         if not directorEnt:
