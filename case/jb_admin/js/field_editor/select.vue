@@ -121,8 +121,8 @@
               }
                 Vue.nextTick(()=>{
                   this.lightInvalidLabel()
-
-                  $(this.$el).find(`input`).trigger("validate")
+                  // 2023/8/11 ，如果不注释改行，启动form后，用户还没任何动作时，会自动验证（显示必填之类的提示语）, 感觉是有问题的。
+                  // $(this.$el).find(`input`).trigger("validate")
                 })
 
             }
