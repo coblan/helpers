@@ -82,7 +82,8 @@
         },
       methods:{
           search({loading=true,clear_row=true}={}){
-            this.$refs.dtable.search({loading,clear_row})
+            debugger
+            return this.$refs.dtable.search({loading,clear_row})
           }
       }
     }

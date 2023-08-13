@@ -224,7 +224,7 @@ export default {
             this.search()
         },
         search({loading=true,clear_row=true}={}){
-            this.search_page(1,{loading,clear_row})
+            return this.search_page(1,{loading,clear_row})
         },
         switchToTab:function(kws){
             // 从 table_page_store 移过来的。因为 live_table 可能有这个需求

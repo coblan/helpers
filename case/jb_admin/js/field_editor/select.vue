@@ -48,6 +48,7 @@
                 options:this.head.options || [],
                 loaded:false,
                 oldstyle:null,
+                first_value_change:false,
                 com_id:`select-${Date.now()}`
             }
         },
@@ -121,8 +122,12 @@
               }
                 Vue.nextTick(()=>{
                   this.lightInvalidLabel()
-
-                  $(this.$el).find(`input`).trigger("validate")
+                  // 2023/8/11 ，如果添加first_value_change，启动form后，用户还没任何动作时，会自动验证（显示必填之类的提示语）, 感觉是有问题的。
+                  if(!this.first_value_change){
+                    this.first_value_change = true
+                  }else{
+                    $(this.$el).find(`input`).trigger("validate")
+                  }
                 })
 
             }
