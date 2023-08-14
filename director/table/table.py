@@ -422,7 +422,7 @@ class ModelTable(object):
     allow_set_layout = False   # 是否自动打开 设置列。
     allow_create = True # 创建按钮是否显示
     allow_refresh = True
-    
+    foreign_bridge = []
     def __init__(self,page=1,row_sort=[],row_filter={},row_search= '',crt_user=None,perpage=None,**kw):
         """
         kw['search_args']只是一个记录，在获取到rows时，一并返回前端页面，便于显示。
@@ -713,6 +713,10 @@ class ModelTable(object):
                 #head['options']=catch.get(options_name)
                 
         heads=evalue_container(heads)
+        # 增加桥接
+        for bridge in self.foreign_bridge:
+            heads +=  bridge.getHeads()
+            
         heads = sorted(heads,key=lambda head: head.get('order',0))
         
         # start: 实现 after_fields 排序
@@ -931,6 +935,15 @@ class ModelTable(object):
                        'meta_org_dict':self.get_org_dict(dc,inst)
                        })
             out.append(dc)
+            # 增加桥接
+            for bridge in self.foreign_bridge:
+                dc.update(  bridge.getRow(inst)  )   
+                if bridge.field_name in dc:
+                    del dc[bridge.field_name]
+                if f'_{bridge.field_name}_label' in dc:
+                    del dc[f'_{bridge.field_name}_label']
+                if f'_{bridge.field_name}_model' in dc:
+                    del dc[f'_{bridge.field_name}_model']                
         return out
     
     def get_model_field_name(self):
