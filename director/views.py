@@ -26,8 +26,10 @@ from helpers.func.d_import import import_element
 from helpers.func import ex
 from .base_data import director_setting,director_view
 from .middleware.request_cache import get_request_cache
+from django.http import Http404
 
 from .funs.transaction_db import director_transaction_db
+import re
 
 import logging
 req_log = logging.getLogger('general_log')
@@ -152,34 +154,44 @@ def export_excel(request):
 @csrf_exempt
 def director_view(request,director_name):
     """将director函数以api的方式直接暴露出去"""
-    
-    # 专门针对modelfield返回详情
-    if director_name.startswith('get/'):
-        kws = argument.get_argument(request,outtype='dict')
-        directorEnt= director.get(director_name)
-        rt = directorEnt(**kws,select_for_update=False).get_data_context() 
-        dc ={'success':True,'data':rt.get('row')}
-        return  HttpResponse(json.dumps(dc,ensure_ascii=False,cls=DirectorEncoder),content_type="application/json")     
-    
-    if request.method == "GET" or request.META.get('HTTP_REALTYPE')=='json_get':
-        return fast_director_view(request, director_name)
-    
-    # 2021/8/18增加新的逻辑,可以对/dapi/edit/customForm转换为请求d.save_row_for_front,参数是edit/customForm指向的director表单
-    kws = argument.get_argument(request,outtype='dict')
-    if director_name.startswith('edit/'):
-        directorEnt = director_views.get('d.save_row_for_front')
-        kws['_director_name'] = director_name#[5:]  
-        kws={'row':kws}
-    elif director_name.startswith('delete/'):
-        directorEnt = director_views.get('d.delete_row')
-        kws['_director_name'] = director_name#[6:]
-        kws={'row':kws}      
-    else:
-        directorEnt= director_views.get(director_name)
-    if not directorEnt:
-        directorEnt = director.get(director_name)
-          
     try:
+        # 专门针对modelfield返回详情
+        if director_name.startswith('get/'):
+            kws = argument.get_argument(request,outtype='dict')
+            directorEnt= director.get(director_name)
+            rt = directorEnt(**kws,select_for_update=False).get_data_context() 
+            dc ={'success':True,'data':rt.get('row')}
+            return  HttpResponse(json.dumps(dc,ensure_ascii=False,cls=DirectorEncoder),content_type="application/json")     
+        
+        if request.method == "GET" or request.META.get('HTTP_REALTYPE')=='json_get':
+            return fast_director_view(request, director_name)
+        
+        # 2021/8/18增加新的逻辑,可以对/dapi/edit/customForm转换为请求d.save_row_for_front,参数是edit/customForm指向的director表单
+        kws = argument.get_argument(request,outtype='dict')
+        if director_name.startswith('edit/'):
+            directorEnt = director_views.get('d.save_row_for_front')
+            kws['_director_name'] = director_name#[5:]  
+            kws={'row':kws}
+        elif director_name.startswith('delete/'):
+            directorEnt = director_views.get('d.delete_row')
+            kws['_director_name'] = director_name#[6:]
+            kws={'row':kws}     
+        
+        # [1] 使用element来打包 director_view
+        elif director_name.startswith('element/'):
+            directorEnt = director_views.get('d.director_element_call2')
+            rt = re.search('element/(.+)/(\w+)$', director_name)
+            director_name = rt.groups()[0]
+            attr_name = rt.groups()[1]
+            kws['director_name'] = director_name#[6:]
+            kws['attr_name'] = attr_name
+               
+        else:
+            directorEnt= director_views.get(director_name)
+        if not directorEnt:
+            directorEnt = director.get(director_name)
+          
+    #try:  # 原来try在这里，但是try应该包含所有
         #kws = argument.get_argument(request,outtype='dict')
         if request.GET.get('transaction') == '0':
             need_transaction = False
@@ -232,9 +244,10 @@ def director_view(request,director_name):
         dc= {'success':True,'_question':str(e)}
         rt = HttpResponse(json.dumps(dc,ensure_ascii=False,cls=DirectorEncoder),content_type="application/json") 
     except UserWarning as e:
-        dc = {'success':False,'msg':str(e)}
+        #dc = {'success':False,'msg':str(e),'data':None,'error':str(e)}
+        dc = {'success':False,'msg':str(e),'data':None,}
         rt = HttpResponse(json.dumps(dc,ensure_ascii=False,cls=DirectorEncoder),content_type="application/json") 
-        #rt = JsonResponse({'success':False,'msg':str(e)})
+    
     except PermissionDenied as e:
         rt = HttpResponse(str(e),status=403)
     if hasattr(request,'on_finally'):
@@ -251,7 +264,16 @@ def fast_director_view(request,director_name):
     为了加大并发量，一般只读版本
     """
     kws = argument.get_argument(request,outtype='dict')
-    directorEnt= director_views.get(director_name)
+    
+    if director_name.startswith('element/'):
+        directorEnt = director_views.get('d.director_element_call2')
+        rt = re.search('element/(.+)/(\w+)$', director_name)
+        director_name = rt.groups()[0]
+        attr_name = rt.groups()[1]
+        kws['director_name'] = director_name#[6:]
+        kws['attr_name'] = attr_name           
+    else:
+        directorEnt= director_views.get(director_name)
     allowed_methods =  ex.read_dict_path(director_setting, '%s.methods'%director_name)
     if allowed_methods and 'GET' not in allowed_methods:
         return HttpResponse('request Method not allowed',status=405)
@@ -287,7 +309,7 @@ def fast_director_view(request,director_name):
         dc= {'success':True,'_question':str(e)}
         rt = HttpResponse(json.dumps(dc,ensure_ascii=False,cls=DirectorEncoder),content_type="application/json") 
     except UserWarning as e:
-        dc = {'success':False,'msg':str(e)}
+        dc = {'success':False,'msg':str(e),'data':None,'error':str(e)}
         rt = HttpResponse(json.dumps(dc,ensure_ascii=False,cls=DirectorEncoder),content_type="application/json") 
         #rt = JsonResponse({'success':False,'msg':str(e)})
     except PermissionDenied as e:

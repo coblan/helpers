@@ -223,7 +223,12 @@ class BaseEngine(object):
             'brand':self.brand,
             'mini_brand':self.mini_brand ,
             'header_bar_widgets': [
-                {'editor': 'com-headbar-user-info', 'first_name': username, 'username': username,'logout_url':self.logout_url },
+                #{'editor': 'com-headbar-user-info', 'first_name': username, 'username': username,'logout_url':self.logout_url },
+                
+                {"name":'userinfo', "editor":'com-head-dropmenu','label':username,'options':[
+                        {'click_express':f'location="/accounts/pswd"','label':'修改密码'},
+                        {'click_express':f'location="{self.logout_url}"','label':'退出'},
+                                    ]},
                 ],
         }
     def get_page_cls(self,name):

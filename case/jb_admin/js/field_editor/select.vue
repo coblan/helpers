@@ -1,7 +1,7 @@
 <template>
     <div class="com-field-select" :class="head.class" >
         <span v-if='head.readonly' v-text='get_label'></span>
-        <div v-else>
+        <div v-else :class="com_id">
             <input type="text" style="display: none" :id="'id_'+head.name" :name="head.name" v-model="row[head.name]"><!-- :clearable="!head.required"-->
 
           <el-select v-show="loaded"  :class="{start:!loaded || !is_select }"  v-model="row[head.name]"
@@ -14,7 +14,7 @@
                       :popper-class="head.no_wrap?'com-field-select-on-wrap':'com-field-select-wrap'"
             >
                 <el-option
-                        v-for="item in normed_options"
+                        v-for="item in normed_options .concat(invalid_options) "
                         :key="item.value"
                         :label="item.label"
                         :value="item.value">
@@ -46,7 +46,10 @@
                 cfg: inn_config,
                 parStore:ex.vueParStore(this),
                 options:this.head.options || [],
-                loaded:false
+                loaded:false,
+                oldstyle:null,
+                first_value_change:false,
+                com_id:`select-${Date.now()}`
             }
         },
         mounted: function () {
@@ -95,16 +98,19 @@
             this.loaded=true
           }
 
+          // setTimeout(()=>{
 
-          // this.$nextTick(()=>{
-          //   this.loaded=true
-          // })
+            this.lightInvalidLabel()
+
+          // },5000)
+
 
         },
 
         watch:{
             my_value:function(v){
               // this.$emit('input',v)
+              // update_label 可能是用在单选上面，更新_label用的，会在table组件里面显示用到。
               if(this.head.update_label){
                 var item = ex.findone(this.options,{value:v})
                 if(item){
@@ -114,15 +120,26 @@
                 }
 
               }
-
                 Vue.nextTick(()=>{
-                  $(this.$el).find(`input`).trigger("validate")
+                  this.lightInvalidLabel()
+                  // 2023/8/11 ，如果添加first_value_change，启动form后，用户还没任何动作时，会自动验证（显示必填之类的提示语）, 感觉是有问题的。
+                  if(!this.first_value_change){
+                    this.first_value_change = true
+                  }else{
+                    $(this.$el).find(`input`).trigger("validate")
+                  }
                 })
 
             }
         },
 
         computed:{
+            // mystyle(){
+            //     return {
+            //       '--invalid_array':'.el-tag:nth-child(1)',
+            //       '--color':'blue',
+            //     }
+            // },
             novalue(){
                 if(this.row[this.head.name] ==0){
                     var novalue = undefined
@@ -154,6 +171,23 @@
                     return ''
                 }
             },
+            invalid_options(){
+                var ls= []
+                if(this.head.multiple && this.my_value){
+                  var valid_options = ex.map(this.normed_options,item=>item.value)
+                  this.my_value.forEach(v=>{
+                      if(!valid_options.includes(v)){
+                        var one =  ex.findone(this.options,{value:v})
+                        if(one){
+                          ls.push(one)
+                        }
+
+                      }
+                  })
+                }
+                return ls
+            },
+
             normed_options:function(){
                 /*
                  head.hide_related_field设置 隐藏与 row.hide_related_field 相等的选项
@@ -165,9 +199,10 @@
                         return item.value != self.row[self.head.hide_related_field]
                     })
                 }else{
-                    if(this.head.option_show){
+                    if(this.head.option_show || this.head.option_show_express ){
+                      var show_express = this.head.option_show || this.head.option_show_express
                         var array = ex.filter(this.options,(item)=>{
-                                    return ex.eval(this.head.option_show,{option:item,row:self.row,ps:self.parStore,vc:self})
+                                    return ex.eval(show_express,{option:item,row:self.row,ps:self.parStore,vc:self})
                                 })
                     }else {
                         var array = ex.filter(this.options,(item)=>{
@@ -214,6 +249,42 @@
             },
         },
         methods:{
+          clearOldStyle(){
+            if(this.oldstyle){
+              this.oldstyle.remove()
+              this.oldstyle=null
+            }
+          },
+          lightInvalidLabel(){
+            if(this.head.multiple){
+              this.clearOldStyle()
+              if(!this.invalid_options){
+                  return
+              }
+              console.log(`value=${this.my_value}`)
+              var invalid=[]
+              this.invalid_options.forEach(item=>{
+                invalid.push(this.my_value.indexOf(item.value) +1)
+              })
+              console.log(`invalid=${invalid}`)
+              var invalid_class=''
+              invalid.forEach(index=>{
+                if(invalid_class){
+                  invalid_class +=','
+                }
+                invalid_class += `.${this.com_id} .el-tag:nth-child(${index}) .el-select__tags-text`
+              })
+              var css=  `
+               ${invalid_class}{
+                    color: #d96565;
+                    text-decoration:line-through;
+                 }`
+              var style_obj = document.createElement("STYLE");
+              style_obj.innerText = css;
+              document.head.appendChild(style_obj);
+              this.oldstyle= style_obj
+            }
+          },
           onAddNew(){
               ex.eval(this.head.add_express,{vc:this,row:this.row,head:this.head})
           },
@@ -258,6 +329,33 @@
       }
     }
 
+
+  ::v-deep{
+        //.el-tag:nth-child(1) .el-select__tags-text{
+        //  color: darkred;
+        //}
+
+        //.el-tag:nth-child(1){
+        //  .el-select__tags-text{
+        //    color: var(--color);
+        //  }
+        //}
+
+      .el-tag.invalid{
+          .el-select__tags-text{
+            color: yellow;
+          }
+        }
+      //var(--invalid_array){
+      //  .el-select__tags-text{
+      //    color: yellow;
+      //  }
+      //}
+
+
+
+      }
+
  }
 
 </style>
@@ -274,3 +372,4 @@
     }
 }
 </style>
+

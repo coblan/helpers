@@ -12,6 +12,7 @@ from .base_data import director_transaction
 from django.db import transaction
 from . views import tranactionDbs
 from django.utils import timezone
+from django.http import Http404
 import os
 from django.conf import settings
 from helpers.director.base_data import exclude_transaction
@@ -130,6 +131,15 @@ def get_context(director_name):
 def director_element_call(director_name,attr_name,kws):
      dcls = director.get(director_name)
      obj = dcls()
+     return getattr(obj,attr_name)(**kws)
+
+# [1] 新开一个d.director_element_call，给dapi用，不去修改老的，免得引起其他问题
+@director_view('d.director_element_call2')
+def director_element_call(director_name,attr_name,**kws):
+     dcls = director.get(director_name)
+     obj = dcls()
+     if hasattr(obj,'public_api') and attr_name not in obj.public_api:
+          raise Http404()   
      return getattr(obj,attr_name)(**kws)
 
 @director_view('d.delete_query_related')

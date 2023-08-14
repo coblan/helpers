@@ -285,8 +285,10 @@ var img_uploader={
                 <div class="close" v-if="cfg.can_edit" @click="edit()">
                     <i class="fa fa-edit" aria-hidden="true" style="color:black;position:relative;left:30px;top:30px"></i>
                 </div>
-
-                <img :src="url" @click="open_img(url)" alt="" class="logoImg">
+               <slot name="show">
+                   <img :src="url" @click="open_img(url)" alt="" class="logoImg">
+                </slot>
+ 
             </div>
              <div class="close" v-if="cfg.can_input" @click="do_input()">
                 <i class="fa fa-edit" aria-hidden="true" style="color:black;position:relative;left:30px;top:30px"></i>
@@ -326,7 +328,9 @@ var img_uploader={
                 }
             }).then((file1)=>{
                 var files = [file1]
+                cfg.show_load('uploading...')
                 ex.uploads(files,this.up_url).then((url_list)=>{
+                    cfg.hide_load()
                     self.url=url_list[0]
                     self.$emit('input',self.url)
                     self.$emit('select')

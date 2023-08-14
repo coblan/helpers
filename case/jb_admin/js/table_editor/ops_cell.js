@@ -11,7 +11,7 @@ var operations={
     props:['rowData','field','index'],
     template:`<div class="com-table-ops-cell">
         <!--<span style="margin-right: 1em" v-for="op in head.operations" v-show="! rowData['_op_'+op.name+'_hide']" class="clickable" v-text="op.label" @click="on_click()"></span>-->
-        <component v-for="op in normed_heads" :is="op.editor" :head="op" @operation="on_operation($event)"></component>
+        <component v-for="op in normed_heads" :key="op.name" :is="op.editor" :head="op" @operation="on_operation($event)"></component>
     </div>`,
     created:function(){
         // find head from parent table

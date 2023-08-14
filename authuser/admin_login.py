@@ -16,6 +16,7 @@ from django.utils.translation import gettext as _
 from django.conf import settings
 from helpers.func.d_import import import_element
 from helpers.director.decorator import need_login
+from helpers.func.dot_dict import read_dict_path
 
 class LoginFormPage(FieldsPage):
     template = 'director/web.html'
@@ -28,7 +29,7 @@ class LoginFormPage(FieldsPage):
         return {
             'editor':getattr(self.engin,'login_com', 'login-form-jb'),
             'editor_ctx':{
-                
+                'welcome':  read_dict_path(settings,'AUTHUSER.welcome','欢迎登录后台管理系统') ,
             }
         }
     
@@ -294,8 +295,15 @@ def do_logout(**kw):
              
             #return self.cleaned_data 
         
-        
-            
+@director_view('user/changepassword')
+@need_login
+def changepswd(old_password,new_password):
+    md_user = get_request_cache()['request'].user
+    if md_user.check_password(old_password):
+        md_user.set_password(new_password)
+        md_user.save()
+    else:
+        raise UserWarning('密码不正确')     
 
 #director.update({
     #'authuser.login': RegistFormPage.fieldsCls,

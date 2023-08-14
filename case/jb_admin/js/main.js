@@ -17,7 +17,7 @@ import * as ele_tree from  './field_editor/ele_tree.js'
 
 
 // table editor
-import * as table_picture from  './table_editor/picture.js'
+// import * as table_picture from  './table_editor/picture.js'
 import * as table_label_shower from  './table_editor/label_shower.js'
 import * as table_mapper from  './table_editor/mapper.js'
 import * as call_fun from  './table_editor/call_fun.js'
@@ -71,12 +71,13 @@ import * as misc_main from  './misc/main.js'
 
 
 // top_heads
-import * as dropdown from  './header/dropdown.js'
+// element的下拉header 应该是无用的。
+// import * as dropdown from  './header/dropdown.js'
 import * as sm_link from  './header/sm_link.js'
 import * as header_main from  './header/main.js'
 
 //ui
-import * as stack_widget from './misc/stack_widget'
+// import * as stack_widget from './misc/stack_widget'
 // store
 //import * as table_store from './store/table_store'
 

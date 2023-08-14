@@ -317,20 +317,25 @@ export var network ={
 
         //$('head').append('<link rel="stylesheet" href="'+src+'" type="text/css" />')
     },
-    append_css:function(style){
+    append_css(style){
         if(!window.md5){
-            var pro = ex.load_js('https://cdn.jsdelivr.net/npm/blueimp-md5@2.10.0/js/md5.min.js')
-        }else{
-            var pro = 1
+            alert('no md5 lib error in append_css')
         }
-        Promise.all([pro]).then(()=>{
-                let key = md5(style)
-                if(!window['__css_'+key]){
-                    $("<style type='text/css'> "+style + " </style>").appendTo("head");
-                    window['__css_'+key]=true
-                }
-        })
-
+        // if(!window.md5){
+        //     var pro = ex.load_js('https://cdn.jsdelivr.net/npm/blueimp-md5@2.10.0/js/md5.min.js')
+        // }else{
+        //     var pro = 1
+        // }
+        // await Promise.all([pro])
+        let key = md5(style)
+        if(!window['__css_'+key]){
+            // $("<style type='text/css'> "+style + " </style>").appendTo("head");
+            var style_obj = document.createElement("STYLE");
+            style_obj.innerText = style;
+            document.head.appendChild(style_obj);
+            window['__css_'+key]=true
+            return style_obj
+        }
     },
     load_image(url) {
         // 可以用来预加载图片
@@ -494,6 +499,9 @@ export var network ={
             return false;
     },
     uploadfile({url,accept}={}){
+        /*
+        * 请使用weblib.ex.uploadFile
+        * */
         this.__upload_url =url
         return new Promise((resolve,reject)=>{
             ex.__on_filechange=function(event){

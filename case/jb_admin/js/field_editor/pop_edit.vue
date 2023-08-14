@@ -4,13 +4,14 @@
 <!--    <div style="display: inline-block;padding: 0 5px" v-for="row in selected_rows" :title="row.desp">-->
 <!--      <el-tag size="small">{{row._label}}</el-tag>-->
 <!--    </div>-->
-    <span>{{out_value}}</span>
+    <span class="break-all">{{out_value}}</span>
 
 <!--    <span style="padding: 0 10px">-->
-      <el-button v-if="!head.readonly" type="primary" size="mini" icon="el-icon-edit" @click.native="openTable"></el-button>
+      <el-button style="margin-top: 2px;" v-if="!head.readonly" type="primary" size="mini" icon="el-icon-edit" @click.native="openTable"></el-button>
 <!--         <i class="el-icon-edit clickable"  @click="openTable"></i>-->
 <!--    </span>-->
-
+    <input type="text"  v-model="row[head.name]"
+           :id="'id_'+head.name" :name="head.name" style="display: none;">
  </div>
 </template>
 <script>
@@ -65,10 +66,13 @@ export default {
   display: flex;
   //flex-wrap: wrap;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   min-height: 32px;
   border: 1px solid #eeeded;
   border-radius: 3px;
   row-gap: 10px;
+}
+.break-all{
+  word-break:break-all;
 }
 </style>

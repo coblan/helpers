@@ -7,6 +7,8 @@ from django.utils.translation import ugettext as _
 from ..dictfy  import model_to_name,name_to_model
 from helpers.director.middleware.request_cache import get_request_cache
 #from pypinyin import lazy_pinyin
+from helpers.director.model_func.cus_fields.compositefk.fields import CompositeForeignKey
+from helpers.director.model_func.cus_fields.legacy_foreign_key import LegacyForeignKey
 
 class ForeignProc(BaseFieldProc):
     def to_dict(self,inst,name):
@@ -28,7 +30,10 @@ class ForeignProc(BaseFieldProc):
             }
     def get_options(self):
         if getattr(self.field.target_field.model,'bigdata',False):
-            return [{'value':0,'label':'大数据量,请自定义'}]        
+            return [{'value':0,'label':'大数据量,请自定义'}]     
+        elif getattr(self.field.target_field.model,'filterByUser',False):
+            query =  self.field.target_field.model.filterByUser(user=self.crt_user)
+            return super().get_options(query=query)
         else:
             return super().get_options()
     
@@ -74,5 +79,7 @@ class ForeignProc(BaseFieldProc):
 
 field_map.update({
     ForeignKey:ForeignProc,
-    OneToOneField:ForeignProc
+    OneToOneField:ForeignProc,
+    CompositeForeignKey:ForeignProc,
+    LegacyForeignKey:ForeignProc
 })

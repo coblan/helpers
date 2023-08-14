@@ -50,18 +50,23 @@ class BaseFieldProc(object):
             head['editor'] = 'com-field-select'
         return head
     
-    def get_options(self):
+    def get_options(self,query=None):
         options=None
         try:
             if not self.form_field:
-                self.form_field = fields_for_model(self.model,fields=[self.name])[self.name]
+                self.form_field = fields_for_model(self.model,fields=[self.name]).get(self.name)
+                if not self.form_field:
+                    return []
             if hasattr(self.form_field,'choices'):
                 #head['options'] =  [{'value':x[0],'label':x[1]} for x in self.field.choices]
                 catch = get_request_cache()
                 options_name = '%(model)s.%(field)s.options'% {'model': model_to_name(self.model) ,'field': self.name}
                 if not catch.get(options_name):
                     def myoption():
-                        options=[{'value':val,'label':str(lab)} for val,lab in self.form_field.choices if val !='']
+                        if query:
+                            options = [{'value':x.pk,'label':str(x)} for x in query]
+                        else:
+                            options=[{'value':val,'label':str(lab)} for val,lab in self.form_field.choices if val !='']
                         #if self.form_field.required:
                             #options=[{'value':val,'label':str(lab)} for val,lab in self.form_field.choices if val !='']
                         #else:

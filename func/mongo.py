@@ -12,3 +12,10 @@ def mongo2tm(dt):
         return dt
     dd = dt.replace(tzinfo=utc)
     return dd.astimezone(beijin)
+
+def get_or_create(model,**kws):
+    inst = model.objects.filter(**kws).first()
+    if inst:
+        return inst
+    else:
+        return model(**kws)

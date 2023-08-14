@@ -48,6 +48,7 @@ class ModelFields(forms.ModelForm):
     extra_mixins=[]
     hide_fields = []
     overlap_fields=[]  # 这些字段不会被同步检查
+    allow_overlap_all = False # 允许前端传递参数meta_overlap_fields=='__all__'，直接覆盖后端数据。现在默认数据很重要，不能随意覆盖。
     outdate_check_fields= None 
     readonly_change_warning = [] # 普通保存时，后台会恢复只读字段的值，但是有时有些只读字段，
                                  #在后台发现改变时，需要警告前端，作废此次保存。因为这些字段值可能是前端做判断的依据。
@@ -59,8 +60,9 @@ class ModelFields(forms.ModelForm):
     select_for_update = True  # 某些高频访问文件，写入不平凡，所以不允许锁定，就可以设置为False
     complete_field = False   # 自动补全没有上传的字段,在api或者selected_set_and_save中不必上传所有字段
     pass_clean_field = []
+    allow_create = True
     foreign_bridge = []
-    
+
     @classmethod
     def parse_request(cls,request):
         """
@@ -102,6 +104,7 @@ class ModelFields(forms.ModelForm):
         # 2021/5/24 挪到这里
         dc = self._clean_dict(dc)
         dc=self.clean_dict(dc) 
+        self.field_dc = dc
         if dc.get('instance'):
             self.kw['instance'] = dc.pop('instance')
         
@@ -127,13 +130,13 @@ class ModelFields(forms.ModelForm):
         form_kw={}
         if 'instance' not in self.kw:
             if pk=='-1':  # -1 表示 最后一个记录 （一般用不到）
-                form_kw['instance']=self._meta.model.objects.last()
+                form_kw['instance']= self.inn_filter( query= self._meta.model.objects.all()) .last()
             elif pk != None:  # 很多时候，pk=0 是已经创建了
                 try:
                     if select_for_update and self.__class__.select_for_update:
-                        form_kw['instance']= self._meta.model.objects.select_for_update().get(pk=pk)
+                        form_kw['instance']= self.inn_filter( query= self._meta.model.objects.all().select_for_update()).get(pk=pk)
                     else:
-                        form_kw['instance']= self._meta.model.objects.get(pk=pk)
+                        form_kw['instance']= self.inn_filter(query= self._meta.model.objects.all() ).get(pk=pk)
                 except self._meta.model.DoesNotExist:
                     raise UserWarning('Id=%s that you request is not exist'%pk)
                     # 感觉 instance不存在时，报错404可能不太合适，所以还是用普通报错 
@@ -252,6 +255,13 @@ class ModelFields(forms.ModelForm):
         pass
     
     
+    def inn_filter(self,query=None):
+        if getattr(self._meta.model,'filterByUser',None):
+            query = self._meta.model.filterByUser(user=self.crt_user,query=query) 
+        return query
+    
+    
+    
     def full_clean(self):
         rt = super().full_clean()
         if self.pass_clean_field:
@@ -274,7 +284,9 @@ class ModelFields(forms.ModelForm):
         if self.kw.get('meta_change_fields'): 
             return 
         if self.kw.get('meta_overlap_fields'):
-            if self.kw.get('meta_overlap_fields') =='__all__':
+            if self.kw.get('meta_overlap_fields') =='__all__' :
+                if not self.allow_overlap_all:
+                    raise UserWarning('overwrite data not allowed')
                 # 表示覆盖所有字段，意味着不再做过期检查
                 return
             overlaped_fields+= self.kw.get('meta_overlap_fields').split(',')
@@ -408,7 +420,8 @@ class ModelFields(forms.ModelForm):
             'ops':ops,
             'director_name':self.get_director_name(),
             #'model_name':model_to_name(self._meta.model),
-            'extra_mixins':self.extra_mixins
+            'extra_mixins':self.extra_mixins,
+            'allow_overlap_all':self.allow_overlap_all,
         }         
     
     
@@ -581,6 +594,8 @@ class ModelFields(forms.ModelForm):
             heads=[]
         heads += self._base_dict_fieldmap_heads()
         heads.extend(self.getExtraHeads())
+        # 本来hide_fields只需要过滤model中的字段。但是某些时候继承，需要过滤掉getExtraHeads中增加的字段，所以在这里再次过滤一遍。
+        heads = [x for x in heads if x['name'] not in self.hide_fields]
         heads = [self.dict_head(head) for head in heads]
         
         self.heads = heads
@@ -741,6 +756,8 @@ class ModelFields(forms.ModelForm):
         if self.instance.pk is None:
             op='add'
             detail=''
+            if not self.allow_create:
+                raise PermissionDenied('can not create!')
             self.clean_create()
             # 2020/07/30 屏蔽这里 后面直接就是保存
             # 2020/08/06  开启，该行不能屏蔽，因为manytomany 必须先保存才能生成 relation对象

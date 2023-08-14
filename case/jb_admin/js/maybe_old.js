@@ -28,10 +28,10 @@ Vue.component('com-suit-fields-local', async (resolve, reject)=> {
     var com = await import(/* webpackChunkName: 'maybe_old' */'./fields_panels/suit_fields_local.js')
     resolve(com.default)
 })
-Vue.component('com-fields-table-block', async (resolve, reject)=> {
-    var com = await import(/* webpackChunkName: 'maybe_old' */'./fields_panels/fields_table_block.js')
-    resolve(com.default)
-})
+// Vue.component('com-fields-table-block', async (resolve, reject)=> {
+//     var com = await import(/* webpackChunkName: 'maybe_old' */'./fields_panels/fields_table_block.js')
+//     resolve(com.default)
+// })
 
 Vue.component('com-layout-div', async (resolve, reject)=> {
     var com = await import(/* webpackChunkName: 'maybe_old' */'./layout/layout_div.vue')
