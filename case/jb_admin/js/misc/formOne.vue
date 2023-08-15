@@ -4,10 +4,24 @@
         <component v-for="op in normed_ops" :is="op.editor"  :key="op.name"
                    :ref="'op_'+op.name" :ctx="op" :head="op" @operation="on_operation(op)"></component>
       </div>
-      <div style="overflow: auto;" :class="{ 'box box-default box-mycustom':ops_loc=='up','has-group':fields_group,}" class="flex-grow fields-area">
+      <div style="overflow: auto;position: relative" :class="{ 'box box-default box-mycustom':ops_loc=='up','has-group':fields_group,}"
+           class="flex-grow fields-area">
         <!--有分组的情况-->
-        <div v-if="fields_group" class="fields-group">
-          <template v-for="group in grouped_heads_bucket">
+        <div v-if="fields_group" class="fields-group" >
+          <div v-if="ctx.tab_group" style="position: absolute;left: 0;right: 0;bottom: 0;top:0;padding-top: 6px;">
+              <el-tabs  tab-position="left" style=" height: 100%;width: 100%;flex-direction: row">
+                <el-tab-pane :label="group.label" v-for="group in grouped_heads_bucket">
+                  <com-fields-table-block v-if="table_grid " class="compact"
+                                          :heads="group.heads" :row="row" :option="{table_grid:table_grid}" :alignLabel="ctx.table_grid_align_label">
+                  </com-fields-table-block>
+                  <div v-else class='field-panel' :class="head.inn_class?'': 'suit'">
+                    <field  v-for='head in group.heads' :key="head.name" :head="head" :row='row'></field>
+                  </div>
+                </el-tab-pane>
+              </el-tabs>
+          </div>
+
+          <template v-else  v-for="group in grouped_heads_bucket">
             <div v-if="group.heads && group.heads.length > 0" :class="'group_'+group.name">
               <div style="display: flex;gap: 30px;align-items: center">
                 <div class="fields-group-title"  v-html="group.label"></div>
@@ -29,10 +43,8 @@
             <component v-show="group.collapse == undefined || !group.collapse"
                        v-if="group.editor" :is="group.editor" :row="row" :ctx="group.editor_ctx"></component>
 
-
-
-
           </template>
+
 
 
 
