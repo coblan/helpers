@@ -58,7 +58,7 @@ def com_to_type(head,model_form_inst):
         else:
             return '字符串'
     if head['editor'] =='com-field-blocktext':
-        return '无现长字符串'
+        return '无限长字符串'
     if head['editor'] =='com-field-bool':
         return 'bool型'
     if head['editor'] =='com-field-location':
