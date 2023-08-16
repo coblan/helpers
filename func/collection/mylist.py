@@ -143,3 +143,24 @@ def random_sample(collection,count):
         return collection
     else:
         return random.sample(collection,count)
+
+def jump_fetch(ls,span=3):
+    """
+    """
+    table_fields =[]
+    length= len(ls)
+    current_index=0
+    while True:
+        if current_index >=length:
+            break
+        last_ls = [ ls[current_index] ]
+        if current_index+span < length:
+            last_ls.append(
+                ls[current_index +span]
+            )
+        table_fields.append(last_ls)
+        if (current_index+span+1)%(2*span) ==0:
+            current_index +=(span+1)
+        else:
+            current_index +=1   
+    return table_fields
