@@ -19,6 +19,10 @@
             if(this.head.css){
                 ex.append_css(this.head.css)
             }
+            if(this.row[this.head.name]==undefined){
+              Vue.set(this.row,this.head.name,false)
+              // this.row[this.head] = false
+            }
         },
         computed:{
             my_label:function(){
