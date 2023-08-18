@@ -61,7 +61,8 @@ class ModelFields(forms.ModelForm):
     complete_field = False   # 自动补全没有上传的字段,在api或者selected_set_and_save中不必上传所有字段
     pass_clean_field = []
     allow_create = True
-    
+    foreign_bridge = []
+
     @classmethod
     def parse_request(cls,request):
         """
@@ -90,6 +91,7 @@ class ModelFields(forms.ModelForm):
         * 前端设置默认值： 在 table的 add_new 操作中 添加 pre_set 。注意 foreignkey 需要加 _id
         
         """
+        
         if not crt_user:
             #self.crt_user=dc.get('crt_user')
             self.crt_user = get_request_cache()['request'].user
@@ -220,6 +222,12 @@ class ModelFields(forms.ModelForm):
         self.kw.update(dc)        
 
         super(ModelFields,self).__init__(dc,*args,**form_kw)
+        
+        # 2023/8/14 加入bridge功能
+        self.foreign_bridge_inst =[]
+        for bridge in  self.foreign_bridge:
+            self.foreign_bridge_inst.append( bridge.parseDict(dc,self.instance,crt_user,select_for_update,*args,**kw) )
+            
         # 2021-05-07 挪到上面
         #if not self.instance.pk:
             #self.is_create = True
@@ -354,7 +362,12 @@ class ModelFields(forms.ModelForm):
            }
     
     def is_valid(self): 
-        rt = super().is_valid()
+        rt = True
+        for bridge,bridge_inst in zip(self.foreign_bridge,self.foreign_bridge_inst):
+            rt = rt and bridge.isValid(bridge_inst)
+        
+        rt =  rt and super().is_valid()
+        
         extra_errors = self.extra_valid()
         self._extra_errors =  extra_errors
         return rt and not extra_errors
@@ -373,6 +386,10 @@ class ModelFields(forms.ModelForm):
                 errors[k].append(v)
             else:
                 errors[k] = [v]
+        
+        for bridge,bridge_inst in zip(self.foreign_bridge,self.foreign_bridge_inst):
+            errors.update( bridge.getErrors(bridge_inst) )       
+        
         return errors
     
     def custom_permit(self):
@@ -632,6 +649,11 @@ class ModelFields(forms.ModelForm):
                 heads.remove(head)
                 heads= [head]+heads
                 break
+        
+        # 增加桥接
+        for bridge,bridge_inst in zip(self.foreign_bridge,self.foreign_bridge_inst):
+            heads += bridge.getHeads(bridge_inst,base_inst = self.instance)  
+        
         heads = sorted(heads,key=lambda head: head.get('order',0))
         return heads
     
@@ -688,6 +710,17 @@ class ModelFields(forms.ModelForm):
                         row[field.name]=getattr(self.instance,field.name)
             row['_director_name']=self.get_director_name()
             row['meta_org_dict'] = self.get_org_dict(row)
+        
+        # 增加桥接
+        for bridge,bridge_inst in zip(self.foreign_bridge,self.foreign_bridge_inst):
+            row.update( bridge.getRow(bridge_inst) )
+            if bridge.field_name in row:
+                del row[bridge.field_name]
+            if f'_{bridge.field_name}_label' in row:
+                del row[f'_{bridge.field_name}_label']
+            if f'_{bridge.field_name}_model' in row:
+                del row[f'_{bridge.field_name}_model']  
+            
         return row
 
     def dict_row(self,inst):
@@ -714,6 +747,10 @@ class ModelFields(forms.ModelForm):
         for data in self.changed_data:
             if data in self.get_readonly_fields():
                 raise PermissionDenied(" {data} is readonly".format(data=data))
+        
+        # 增加桥接
+        for bridge,bridge_inst in zip(self.foreign_bridge,self.foreign_bridge_inst):
+            bridge.saveForm(bridge_inst,base_inst = self.instance)     
         
         op=None
         if self.changed_data:
@@ -774,6 +811,11 @@ class ModelFields(forms.ModelForm):
         pass
     
     def del_form(self):
+        
+        # 增加桥接
+        for bridge,bridge_inst in zip(self.foreign_bridge,self.foreign_bridge_inst):
+            bridge.delForm(bridge_inst,base_inst = self.instance)  
+            
         if self.permit.can_del() and self.instance.pk:
             before_del_data = sim_dict(self.instance)
             

@@ -1,6 +1,6 @@
 <template>
   <div class="com-fields-table-block field-panel msg-bottom">
-    <table >
+    <table  style="width: 100%">
       <tr v-for="heads_row in table_grid_heads">
         <template v-for="(head,index) in heads_row">
           <td  v-if="alignLabel && ( head.show_label==undefined || head.show_label) " class="field-label-td" :class="head.class"  :colspan="head.label_colspan" :rowspan="head.label_rowspan">
@@ -15,7 +15,7 @@
           </td>
           <td class="field-input-td" :class="head.class" :colspan="head.colspan" :rowspan="head.rowspan">
 
-            <div style="display: flex;align-items: center;">
+            <div style="display: flex;align-items: flex-start;">
 
               <div v-if=" !alignLabel && ( head.show_label==undefined || head.show_label) "
                    class="field-label" :class="{back_label:index!=0}">
@@ -110,13 +110,21 @@ export default  {
     position: relative;
 
     td {
-      padding: 8px 5px;
+      padding: 8px 10px;
       position: relative;
       .field-label {
         font-weight: 400;
       }
     }
   }
+  /*
+  主题
+  */
+  &.compact{
+    padding-left:5px;
+    margin-left:5px;
+  }
+
   .field-label {
     display: flex;
     .label-content {
@@ -128,6 +136,7 @@ export default  {
     }
   }
   .field-input {
+    padding-left: 12px;
     position: relative;
     display: flex;
     .help-text {
