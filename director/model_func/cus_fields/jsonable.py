@@ -44,7 +44,7 @@ class JsonAbleProc(BaseFieldProc):
         """
         """
         value = dc.get(name)
-        if value:
+        if value and isinstance(value,str):
             return json.loads(value)
         else:
             return value
