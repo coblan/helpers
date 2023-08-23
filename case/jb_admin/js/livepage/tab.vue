@@ -7,9 +7,13 @@
 
     <div class="tab-wrap">
       <div class="inn-tab-wrap">
-        <el-tabs class="active-tab-hightlight-top"  v-if="tabs.length >1 || type!='tab-full'" :type="my_el_type"
-                 @tab-click="handleClick"
-                 :value="crt_tab_name" >
+<!--        我觉得当只有一个tab页面的时候，还是不显示tab了。-->
+<!--        <el-tabs class="active-tab-hightlight-top"  v-if="tabs.length >1 || type!='tab-full'" :type="my_el_type"-->
+<!--                 @tab-click="handleClick"-->
+<!--                 :value="crt_tab_name" >-->
+          <el-tabs class="active-tab-hightlight-top"  v-if="tabs.length >1" :type="my_el_type"
+                   @tab-click="handleClick"
+                   :value="crt_tab_name" >
 
           <el-tab-pane v-for="tab in normed_tab"
                        lazy
@@ -166,7 +170,7 @@ export default {
 }
 
 .tab-v{
-  background-color: white;
+  //background-color: white;
   .active-tab-hightlight-top{
 
     margin:0 20px;
@@ -176,13 +180,12 @@ export default {
     //min-height: 86vh; // 给一个min-height，保证切换tab时不会抖动太厉害。（由于每个tab页高度不一致，切换到height小的页面，滚动条会缩回去，造成抖动。）
     //padding: 20px;
   }
-
 }
 .tab-v-full{
   display: flex;
   flex-direction: column;
   height: 100%;
-  background-color: white;
+  //background-color: white;
   .active-tab-hightlight-top{
     flex-grow: 10;
     margin:0 20px;
