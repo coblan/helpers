@@ -69,7 +69,9 @@ class MultiChoiceProc(CharProc):
     
     def dict_field_head(self, head):
         #head['editor'] = 'com-field-multi-chosen'
-        head['editor'] = 'com-field-multi-select2'
+        #head['editor'] = 'com-field-multi-select2'
+        head['editor'] = 'com-field-select'
+        head['multiple'] =True
         if self.field.full_choice != None:
             head['full_choice'] = self.field.full_choice
         head['options'] = self.get_options()
