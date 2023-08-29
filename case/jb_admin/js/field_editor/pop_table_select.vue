@@ -12,7 +12,7 @@
       </el-input>
       <div v-else class="my-input" :style="mystyle">
 
-        <el-tag :closable=" can_clear" v-if="row[head.name]"
+        <el-tag :closable=" can_clear" v-if="row[head.name] != undefined "
                 size="small"
                 @close="clear()">
           <span  v-text="label"></span>
