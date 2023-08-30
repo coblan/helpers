@@ -73,7 +73,7 @@ export  var mix_fields_data ={
 
                 // 新的 readonly 动态判断
                 if(head.readonly_express){
-                    var is_readonly = ex.eval(head.readonly_express,{row:self.row,head:head})
+                    var is_readonly = ex.eval(head.readonly_express,{row:self.row,head:head,vc:self})
                     Vue.set(head,'readonly',is_readonly)
                 }
                 if( head.required_express){
