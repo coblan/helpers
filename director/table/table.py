@@ -690,7 +690,11 @@ class ModelTable(object):
             heads = [x for x in heads if x['name'] in self.include]
             
         heads += self.getExtraHead() 
-         
+        
+        # 增加桥接
+        for bridge in self.foreign_bridge:
+            heads +=  bridge.getHeads()        
+        
         for head in heads:
             if 'editor' not in head:
                 head['editor'] = 'com-table-span'
@@ -713,9 +717,7 @@ class ModelTable(object):
                 #head['options']=catch.get(options_name)
                 
         heads=evalue_container(heads)
-        # 增加桥接
-        for bridge in self.foreign_bridge:
-            heads +=  bridge.getHeads()
+
             
         heads = sorted(heads,key=lambda head: head.get('order',0))
         
@@ -938,12 +940,12 @@ class ModelTable(object):
             # 增加桥接
             for bridge in self.foreign_bridge:
                 dc.update(  bridge.getRow(inst)  )   
-                if bridge.field_name in dc:
-                    del dc[bridge.field_name]
-                if f'_{bridge.field_name}_label' in dc:
-                    del dc[f'_{bridge.field_name}_label']
-                if f'_{bridge.field_name}_model' in dc:
-                    del dc[f'_{bridge.field_name}_model']                
+                #if bridge.field_name in dc:
+                    #del dc[bridge.field_name]
+                #if f'_{bridge.field_name}_label' in dc:
+                    #del dc[f'_{bridge.field_name}_label']
+                #if f'_{bridge.field_name}_model' in dc:
+                    #del dc[f'_{bridge.field_name}_model']                
         return out
     
     def get_model_field_name(self):

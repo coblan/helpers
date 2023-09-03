@@ -713,13 +713,14 @@ class ModelFields(forms.ModelForm):
         
         # 增加桥接
         for bridge,bridge_inst in zip(self.foreign_bridge,self.foreign_bridge_inst):
-            row.update( bridge.getRow(bridge_inst) )
-            if bridge.field_name in row:
-                del row[bridge.field_name]
-            if f'_{bridge.field_name}_label' in row:
-                del row[f'_{bridge.field_name}_label']
-            if f'_{bridge.field_name}_model' in row:
-                del row[f'_{bridge.field_name}_model']  
+            #row.update( bridge.getRow(bridge_inst) )
+            bridge.joinRow(bridge_inst,row)
+            #if bridge.field_name in row:
+                #del row[bridge.field_name]
+            #if f'_{bridge.field_name}_label' in row:
+                #del row[f'_{bridge.field_name}_label']
+            #if f'_{bridge.field_name}_model' in row:
+                #del row[f'_{bridge.field_name}_model']  
             
         return row
 
