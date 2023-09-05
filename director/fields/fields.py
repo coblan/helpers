@@ -226,7 +226,7 @@ class ModelFields(forms.ModelForm):
         # 2023/8/14 加入bridge功能
         self.foreign_bridge_inst =[]
         for bridge in  self.foreign_bridge:
-            self.foreign_bridge_inst.append( bridge.parseDict(dc,self.instance,crt_user,select_for_update,*args,**kw) )
+            self.foreign_bridge_inst.append( bridge.parseDict(dc,self.instance,crt_user=self.crt_user,select_for_update=self.select_for_update,*args,**kw) )
             
         # 2021-05-07 挪到上面
         #if not self.instance.pk:

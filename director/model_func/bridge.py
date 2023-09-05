@@ -251,19 +251,25 @@ class SelectForeignFormBridge(ForeignFormBridge):
         """
         #if dc.get(self.field_name):
             
-        #real_dc = {}
-        #for k in dc:
-            #if k.startswith(self.prefix):
-                #key = k[len(self.prefix):]
-                #real_dc[key] = dc[k]
-        out_kw = dict(kw)
-        #if hasattr(base_inst,self.field_name):
-            #instance = getattr(base_inst,self.field_name)
-            #if instance:
-                #out_kw['instance'] = instance
         real_dc = {}
+        for k in dc:
+            if k.startswith(self.prefix):
+                key = k[len(self.prefix):]
+                real_dc[key] = dc[k]
+        
+        real_kw = {}
+        for k in kw:
+            if k.startswith(self.prefix):
+                key = k[len(self.prefix):]
+                real_kw[key] = kw[k]        
+        #out_kw = dict(kw)
+        if hasattr(base_inst,self.field_name):
+            instance = getattr(base_inst,self.field_name)
+            if instance:
+                real_kw['instance'] = instance
+        #real_dc = {}
         pk = dc.get(self.field_name)
-        return self.form(real_dc,pk=pk,crt_user=crt_user,select_for_update=select_for_update,*args,**out_kw)
+        return self.form(real_dc,pk=pk,crt_user=crt_user,select_for_update=select_for_update,*args,**real_kw)
     
     def isValid(self, bridge_inst):
         return True
