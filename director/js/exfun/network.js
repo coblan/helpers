@@ -450,35 +450,35 @@ export var network ={
     //    }
     //
     //},
-    director(director_name){
-        // 为了兼容性，暂时屏蔽 Proxy 版本的代码
-        //let handler = {
-        //    get: function(target, attr_name){
-        //        return function (kws){
-        //            if(kws == undefined){
-        //                kws = {}
-        //            }
-        //            return ex.director_call('d.director_element_call',{director_name:director_name,attr_name:attr_name,kws:kws})
-        //        }
-        //    }
-        //};
-        //return new Proxy({},handler)
-
-        return {
-            call(methed,kws){
-                  if(kws == undefined){
-                       kws = {}
-                   }
-                 return ex.director_call('d.director_element_call',{director_name:director_name,attr_name:methed,kws:kws})
-            },
-            get(methed,kws){
-                if(kws == undefined){
-                    kws = {}
-                }
-                return ex.director_get('d.director_element_call',{director_name:director_name,attr_name:methed,kws:kws})
-            }
-        }
-    },
+    // director(director_name){ // 现在使用weblib中的ex的proxy版本
+    //     // 为了兼容性，暂时屏蔽 Proxy 版本的代码
+    //     //let handler = {
+    //     //    get: function(target, attr_name){
+    //     //        return function (kws){
+    //     //            if(kws == undefined){
+    //     //                kws = {}
+    //     //            }
+    //     //            return ex.director_call('d.director_element_call',{director_name:director_name,attr_name:attr_name,kws:kws})
+    //     //        }
+    //     //    }
+    //     //};
+    //     //return new Proxy({},handler)
+    //
+    //     return {
+    //         call(methed,kws){
+    //               if(kws == undefined){
+    //                    kws = {}
+    //                }
+    //              return ex.director_call('d.director_element_call',{director_name:director_name,attr_name:methed,kws:kws})
+    //         },
+    //         get(methed,kws){
+    //             if(kws == undefined){
+    //                 kws = {}
+    //             }
+    //             return ex.director_get('d.director_element_call',{director_name:director_name,attr_name:methed,kws:kws})
+    //         }
+    //     }
+    // },
     download:function(strPath){
             var varExt = strPath.split('.');
             //alert(varExt.length);

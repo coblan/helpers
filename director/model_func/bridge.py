@@ -1,6 +1,8 @@
 from helpers.director.model_func.dictfy import sim_dict,to_dict
 from helpers.director.shortcut import ModelFields,ModelTable
 from django.forms.models import ModelFormMetaclass
+import re
+
 class BridgeTableMeta(type):
     def __new__(cls, name, bases, namespace):
         """
@@ -43,7 +45,7 @@ class ForeignTableBridge(object):
         self.table = table
         self.field_name= field_name
         if not prefix:
-            self.prefix = field_name +'_'
+            self.prefix = field_name +'__'
         else:
             self.prefix = prefix
         self.label_prefix = label_prefix
@@ -80,11 +82,18 @@ class ForeignTableBridge(object):
         out_dc = {}
         if hasattr(inst,self.field_name):
             base_inst = getattr(inst,self.field_name)
+            if not base_inst:
+                return {}
             dc= self._getRow(base_inst)
             for k,v in dc.items():
                 if k in ['pk','id']:
                     continue
-                out_dc[f'{self.prefix}{k}'] =v
+                mt =  re.search('^_(\w+)_label',k)
+                if mt:
+                    out_dc[f'_{self.prefix}{mt.group(1)}_label']=v
+                else:
+                    out_dc[f'{self.prefix}{k}'] =v
+                
         return out_dc
     
     def _getRow(self,base_inst):
@@ -129,7 +138,7 @@ class BridgeFormMeta(ModelFormMetaclass):
         return super().__new__(cls, name, bases, namespace)
 
 class ForeignFormBridge(ForeignTableBridge):
-    def __init__(self,field_name,form=None,prefix=None,label_prefix=''):
+    def __init__(self,field_name,form=None,prefix=None,label_prefix='',):
         #if not form:
             #class _form(ModelFields):
                 #class Meta:
@@ -138,14 +147,16 @@ class ForeignFormBridge(ForeignTableBridge):
         self.form = form
         self.field_name= field_name
         if not prefix:
-            self.prefix = field_name +'_'
+            self.prefix = field_name +'__'
         else:
             self.prefix = prefix
         self.label_prefix = label_prefix
         self.related_model = None   # 由metaclass类注入
+ 
     
     def copy(self):
-        return ForeignFormBridge(self.field_name,form=self.org_form,prefix=self.prefix,label_prefix=self.label_prefix)
+        return self.__class__(self.field_name,form=self.org_form,prefix=self.prefix,label_prefix=self.label_prefix)
+        #return ForeignFormBridge(self.field_name,form=self.org_form,prefix=self.prefix,label_prefix=self.label_prefix)
     
     def updateRelatedModel(self,model,simple_dict=False,nolimit=False):# 由metaclass类注入
         self.related_model = model
@@ -159,6 +170,10 @@ class ForeignFormBridge(ForeignTableBridge):
         self.form.nolimit = nolimit    
     
     def parseDict(self, dc,base_inst,crt_user,select_for_update,*args,**kw):
+        """
+        分解前端传来的字段
+        
+        """
         real_dc = {}
         for k in dc:
             if k.startswith(self.prefix):
@@ -193,12 +208,80 @@ class ForeignFormBridge(ForeignTableBridge):
         setattr(base_inst,self.field_name,bridge_inst.instance)
     
     def getRow(self,bridge_inst):
+        """
+        """
         row = bridge_inst.get_row()
         out_dc = {}
         for k,v in row.items():
-            out_dc[f'{self.prefix}{k}'] =v
+            if k in ['pk','id']:
+                continue            
+            mt =  re.search('^_(\w+)_label',k)
+            if mt:
+                out_dc[f'_{self.prefix}{mt.group(1)}_label']=v   
+            else:
+                out_dc[f'{self.prefix}{k}'] =v
         return out_dc
+    
+    def joinRow(self,bridge_inst:ModelFields,left_row):
+        """
+        modelfields类调用，传递bridge_inst,父row进来
+        """
+        right_row = self.getRow(bridge_inst) 
+        if self.field_name in left_row:
+            del left_row[self.field_name]
+        if f'_{self.field_name}_label' in left_row:
+            del left_row[f'_{self.field_name}_label']
+        if f'_{self.field_name}_model' in left_row:
+            del left_row[f'_{self.field_name}_model'] 
+        left_row.update(right_row)
+        
+            
     
     def delForm(self,bridge_inst,base_inst):
         """一般来说都是连带删除"""
         bridge_inst.del_form()
+
+class SelectForeignFormBridge(ForeignFormBridge):
+    #def copy(self):
+        #return SelectForeignFormBridge(self.field_name,form=self.org_form,prefix=self.prefix,label_prefix=self.label_prefix)
+    
+    def parseDict(self, dc,base_inst,crt_user,select_for_update,*args,**kw):
+        """
+        分解前端传来的字段
+        """
+        #if dc.get(self.field_name):
+            
+        real_dc = {}
+        for k in dc:
+            if k.startswith(self.prefix):
+                key = k[len(self.prefix):]
+                real_dc[key] = dc[k]
+        
+        real_kw = {}
+        for k in kw:
+            if k.startswith(self.prefix):
+                key = k[len(self.prefix):]
+                real_kw[key] = kw[k]        
+        #out_kw = dict(kw)
+        if hasattr(base_inst,self.field_name):
+            instance = getattr(base_inst,self.field_name)
+            if instance:
+                real_kw['instance'] = instance
+        #real_dc = {}
+        pk = dc.get(self.field_name)
+        return self.form(real_dc,pk=pk,crt_user=crt_user,select_for_update=select_for_update,*args,**real_kw)
+    
+    def isValid(self, bridge_inst):
+        return True
+    
+    def saveForm(self,bridge_inst,base_inst):
+        pass
+        #bridge_inst.save_form()
+        #setattr(base_inst,self.field_name,bridge_inst.instance)
+        
+    def joinRow(self,bridge_inst:ModelFields,left_row):
+        """
+        modelfields类调用，传递bridge_inst,父row进来
+        """
+        right_row = self.getRow(bridge_inst) 
+        left_row.update(right_row)
