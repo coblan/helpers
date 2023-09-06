@@ -138,10 +138,13 @@
             valid_values(){
               // 这里是为了能够在 valid_values发生变化时，叉叉线能及时更新。
                 console.log('valid_values变化')
-                var tmp = this.row[this.head.name]
-                this.row[this.head.name]  = []
+
+
+                // var tmp = this.row[this.head.name]
+                // this.row[this.head.name]  = []
                 Vue.nextTick(()=>{
-                  this.row[this.head.name] = tmp
+                  this.lightInvalidLabel()
+                  // this.row[this.head.name] = tmp
                 })
             }
         },
