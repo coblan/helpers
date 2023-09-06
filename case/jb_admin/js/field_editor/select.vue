@@ -49,7 +49,11 @@
                 loaded:false,
                 oldstyle:null,
                 first_value_change:false,
-                com_id:`select-${Date.now()}`
+                com_id:`select-${Date.now()}`,
+
+              // valid_values 是用于动态设置有效选项。还能显示叉叉线
+                valid_values: this.head.valid_values || [],
+                has_valid_values: this.head.valid_values != undefined
             }
         },
         mounted: function () {
@@ -130,6 +134,15 @@
                   }
                 })
 
+            },
+            valid_values(){
+              // 这里是为了能够在 valid_values发生变化时，叉叉线能及时更新。
+                console.log('valid_values变化')
+                var tmp = this.row[this.head.name]
+                this.row[this.head.name]  = []
+                Vue.nextTick(()=>{
+                  this.row[this.head.name] = tmp
+                })
             }
         },
 
@@ -198,6 +211,10 @@
                     var array = ex.filter(this.options,function(item){
                         return item.value != self.row[self.head.hide_related_field]
                     })
+                }else if (self.has_valid_values){
+                  var array = ex.filter(this.options,function(item){
+                    return self.valid_values.includes(item.value)
+                  })
                 }else{
                     if(this.head.option_show || this.head.option_show_express ){
                       var show_express = this.head.option_show || this.head.option_show_express
