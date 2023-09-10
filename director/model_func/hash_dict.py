@@ -62,6 +62,9 @@ def dif_mark_dict(dc,mark,include=None,exclude=[]):
     return dif_dc
 
 def adapt_type(v):
+    """
+    主要目标是用来对比ORM的两个字段的值是否相等[判断 meta_org_dict 是否变化的时候用到]。现在简单粗暴，全部转换为字符串来比较。
+    """
     if isinstance(v,(datetime.datetime,timezone.datetime)):
         return v.strftime('%Y-%m-%d %H:%M:%S')
     else:

@@ -207,7 +207,7 @@ class ModelFields(forms.ModelForm):
                     #if hasattr(inst,k):
                         #dc[k] =  getattr(inst , k)  
         if readonly_waring : # and  not dc.get('meta_overlap_fields') == '__all__' : 这个有安全隐患 ，所以去掉
-            raise OutDateException('(%s)的%s已经发生了变化,请确认后再进行操作!'%(inst,[field_label(inst.__class__,k ) for k in readonly_waring] ) )
+            raise OutDateException('(%s)的%s是只读的。但是已经发生了变化,请确认后再进行操作!'%(inst,[field_label(inst.__class__,k ) for k in readonly_waring] ) )
         
         # 真正的验证各个参数是否过期，是在clean函数中进行的。
         
@@ -813,9 +813,9 @@ class ModelFields(forms.ModelForm):
     
     def del_form(self):
         
-        # 增加桥接
-        for bridge,bridge_inst in zip(self.foreign_bridge,self.foreign_bridge_inst):
-            bridge.delForm(bridge_inst,base_inst = self.instance)  
+        # 增加桥接   删除面积太大，展示屏蔽，[TODO] 应该是那种必须删除的才能删除
+        #for bridge,bridge_inst in zip(self.foreign_bridge,self.foreign_bridge_inst):
+            #bridge.delForm(bridge_inst,base_inst = self.instance)  
             
         if self.permit.can_del() and self.instance.pk:
             before_del_data = sim_dict(self.instance)
