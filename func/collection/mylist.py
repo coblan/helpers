@@ -2,6 +2,7 @@ import random
 import logging
 general_log = logging.getLogger('general_log')
 from django.db import close_old_connections
+import copy
 
 def split_list(dstlist,every_num):
     """ 将dstlist分批次返回。
@@ -18,16 +19,19 @@ def left_join(left,right,func):
     
     left = [{name:'dog',age:18}]
     right = [{name:'dog',weight:80}]
-    func = lamda l,r : l.name==r.name
+    func = lambda l,r : l['name']==r['name']
     
     返回: [{name:'dog',age:18,weight:80}]
     """
-    for row in left:
-        for ds in right:
+    left1= copy.deepcopy(left)
+    rigth1 = copy.deepcopy(right)
+    for row in left1:
+        for ds in rigth1:
             if func(row,ds):
                 row.update(ds)
-                right.remove(ds)
+                rigth1.remove(ds)
                 break
+    return left1
 
 def complement(srcList,rows,extrac_fun,default=0):
     """以srcList为参照，返回补全的数组
