@@ -43,7 +43,7 @@
         methods:{
               on_click(){
                 var now = Date.now()
-                var lazy_time = this.head.lazy_time || 1000
+                var lazy_time = this.my_ctx.lazy_time || 1000
 
                 // console.log(now)
                 // console.log(this.last_click_time)
