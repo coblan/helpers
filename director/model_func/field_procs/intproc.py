@@ -33,9 +33,14 @@ class IntProc(BaseFieldProc):
         if this_field.choices:        
             options = [{'value':x[0],'label':x[1]} for x in this_field.choices]
         else:
-            query = model.objects.all().values_list(name,flat=True)
-            ls = list(set(query))
-            options = [{ 'value':x,'label':str(x)} for x in ls]
+            #[2023/09/13]  修改。这个options应该==[]，editor应该是com-filter-text这种输入形式的。
+            #[2023/09/13] 如果要选择，自己去外面拼凑options吧
+            options = [] #    self.get_options()  这个返回也是空的
+            
+            #[2023/09/13] 老的写法
+            #query = model.objects.all().values_list(name,flat=True)
+            #ls = list(set(query))
+            #options = [{ 'value':x,'label':str(x)} for x in ls]
             
         return {
             'name':name,
