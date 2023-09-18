@@ -39,14 +39,22 @@ class ExcelFields(ModelFields):
         """
         self_director_name = self.get_director_name()
 
+        #{
+        #if(scope.ps.vc.par_row){
+           #return ex.director("%(director_name)s").call("parse_excel_head",{url:resp[0],par_row:scope.ps.vc.par_row.pk})
+        #}else{
+           #return ex.director("%(director_name)s").call("parse_excel_head",{url:resp[0]}) 
+        #} }
+
+
         return '''
         var ctx = named_ctx["%(director_name)s"]
         ex.uploadfile({accept:".xlsx, .xls, .csv"})
             .then((resp)=>{
                if(scope.ps.vc.par_row){
-                  return ex.director("%(director_name)s").call("parse_excel_head",{url:resp[0],par_row:scope.ps.vc.par_row.pk})
+                  return ex.director("%(director_name)s").parse_excel_head({url:resp[0],par_row:scope.ps.vc.par_row.pk})
                }else{
-                  return ex.director("%(director_name)s").call("parse_excel_head",{url:resp[0]}) 
+                  return ex.director("%(director_name)s").parse_excel_head({url:resp[0]}) 
                } })
             .then((resp)=>{ 
                 ex.each(ctx.heads,head=>{head.options=resp.options});

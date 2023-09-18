@@ -33,6 +33,11 @@ def left_join(left,right,func):
                 break
     return left1
 
+def multiply_array(arry1,arry2):
+    for a1 in arry1:
+        for a2 in arry2:
+            yield a1,a2
+
 def complement(srcList,rows,extrac_fun,default=0):
     """以srcList为参照，返回补全的数组
     
