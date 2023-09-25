@@ -18,16 +18,18 @@ def aes_encode_byte(data, key):
         #data += (16 - len(data) % 16) * chr(16 - len(data) % 16)
     #data = str.encode(data)
     aes = AES.new(str.encode(key), AES.MODE_ECB)  # 初始化加密器
-    #BLOCK_SIZE =  32    
-    #return aes.encrypt(  pad(data, BLOCK_SIZE)  )
+    BLOCK_SIZE =  16 #32    
+    return aes.encrypt(  pad(data, BLOCK_SIZE)  )
 
-    return aes.encrypt(  padding(data)  )
+   # wang xiang 要求的这个，现在解密有问题，展示屏蔽了试试。
+    #return aes.encrypt(  padding(data)  )
+    
     #return str(base64.encodebytes(aes.encrypt(data)), encoding='utf8').replace('\n', '')  # 加密
 
 def aes_decode_byte(data, key):
     aes = AES.new(str.encode(key), AES.MODE_ECB)  # 初始化加密器
     decrypted_byte = aes.decrypt(data)  # 解密
-    decrypted_byte = unpad(decrypted_byte, 32)  # 去除多余补位
+    decrypted_byte = unpad(decrypted_byte, 16)  # 32去除多余补位
     return decrypted_byte
 
 @director_view('aes/file')
