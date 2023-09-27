@@ -43,7 +43,7 @@ def fields_doc(model_form,pk_field='id',model_table=None):
         model_table.nolimit =True
         for head in table_doc(model_table):
             if head['name'] not in fields_names:
-                table_str += f"|{head.get('name')}|{head.get('label')}| {table_to_type(head)}| |\n"
+                table_str += f"|{head.get('name')}|{head.get('label')}| {table_to_type(head)}|{head.get('help_text','')} |\n"
     print(table_str)
 
 def table_to_type(head):
@@ -58,17 +58,28 @@ def com_to_type(head,model_form_inst):
         else:
             return '字符串'
     if head['editor'] =='com-field-blocktext':
-        return '无现长字符串'
+        return '无限长字符串'
     if head['editor'] =='com-field-bool':
         return 'bool型'
     if head['editor'] =='com-field-location':
         return '格式为:lat,lng 的经纬度字符串'
-    if head['editor'] in ['com-field-table-select','com-field-select']:
-        field = model_form_inst.instance._meta.get_field(head['name'])
+    if head['editor'] in ['com-field-table-select','com-field-select','com-field-cascader']:
+        try:
+            field = model_form_inst.instance._meta.get_field(head['name'])
+        except:
+            if head.get('multiple'):
+                return f'[多选]选择类型:{head.get("options")}'
+            return f'选择类型:{head.get("options")}'
         if  isinstance( field,related.ManyToManyField) or isinstance(field,related.ForeignKey):
-            return f'关联表:{field.related_model._meta.verbose_name}的pk值'
+            rt= f'关联表:{field.related_model._meta.verbose_name}的pk值'
         else:
-            return f'选择类型{head.get("options")}'
+            rt=  f'选择类型:{head.get("options")}'
+        if head.get('multiple'):
+            return f'[多选]{rt}'
+        else:
+            return rt
+        
+            
     if head['editor'] =='com-field-picture':
         return '字符串代表的图片地址'
     if head['editor'] =='com-field-multi-picture':

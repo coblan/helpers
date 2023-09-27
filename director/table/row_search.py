@@ -20,6 +20,7 @@ class SelectSearch(object):
         self._names=[x for x in self.names if x in allowed_names]        
         self.q=q
         self.qf = kw.get('_qf')
+        self.kw = kw
          
     def get_context(self):
         """
@@ -85,6 +86,9 @@ class SelectSearch(object):
             else:
                 exp = self.get_express(q_str)
                 query = query.filter(exp)
+        custom_exp = self.getFilterArgs()
+        if custom_exp:
+            query = query.filter(**custom_exp)
         return query
     
     def get_express(self, q_str): 
@@ -97,6 +101,16 @@ class SelectSearch(object):
         else:
             raise UserWarning('没有指定查询字段')
         return Q(**exp)
+    
+    def getFilterArgs(self,):
+        exp = {}
+        for ii  in self.names:
+            if self.kw.get(ii):
+                exp [f'{ii}__contains'] = self.kw.get(ii)
+        for ii in self.exact_names:
+            if self.kw.get(ii):
+                exp[ii] = self.kw.get(ii)
+        return exp
     
     def inject_sql(self,where_list,params):
         if self.q and self.qf:

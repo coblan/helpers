@@ -65,6 +65,7 @@
         },
         methods:{
             search(){
+              debugger
                 if(this.tab_head.filter_express){
                     var pp = ex.eval(this.tab_head.filter_express,{vc:this,ps:this.parStore})
                     ex.vueAssign(this.head.search_args,pp)

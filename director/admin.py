@@ -40,6 +40,7 @@ from .base_data import inspect_dict
 from . import model_adapte
 from django.conf import settings 
 from .network import download_excel
+from .access import permit_api
 
 # 定制User表的显示方式
 def get_first_name(self):

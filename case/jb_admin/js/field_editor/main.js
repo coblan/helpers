@@ -87,6 +87,10 @@ Vue.component('com-field-components',components)
 import pop_edit  from "./pop_edit.vue";
 Vue.component('com-field-pop-edit',pop_edit)
 
+import picture from './picture.vue'
+Vue.component('com-field-picture',picture)
+
+
 import jsEditor from "./jsEditor.vue";
 Vue.component('com-field-js-editor', async (resolve, reject) =>{
     await ex.load_js(cfg.js_lib.ace)
@@ -160,3 +164,5 @@ Vue.component('com-field-signature',function(resovle,reject){
     })
 
 })
+
+

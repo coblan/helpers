@@ -35,13 +35,13 @@ def field_label(model,key):
     return field.verbose_name
     
 
-def to_dict(instance,filt_attr=None,include=None,exclude=None,hash_keys=None,form=False,):
+def to_dict(instance,filt_attr=None,include=None,exclude=None,hash_keys=None,form=False,include_pk=True):
     if form:
         form_cls=model_dc.get(instance.__class__).get('fields')
         form_obj = form_cls(instance=instance,nolimit=True)
         return form_obj.get_row()
     
-    out=sim_dict(instance,filt_attr,include,exclude)
+    out=sim_dict(instance,filt_attr,include,exclude,include_pk=include_pk)
     
     out['_class']= instance._meta.app_label+'.'+instance._meta.model_name
     if '_label' not in out.keys():
@@ -53,7 +53,7 @@ def to_dict(instance,filt_attr=None,include=None,exclude=None,hash_keys=None,for
     #out['meta_org_dict'] = make_mark_dict(instance.__dict__,valide_name_list)
     return out
 
-def sim_dict(instance,filt_attr=None,include=None,exclude=None,include_id=True,include_pk=True):
+def sim_dict(instance,filt_attr=None,include=None,exclude=None,include_id=True,include_pk=True,label=True):
     """
     fields=['name','age'] 虽然中函数中fields是django中的model.field对象，但是这里为了方便，接受外部
                          输入是字段的名字
@@ -131,6 +131,14 @@ def sim_dict(instance,filt_attr=None,include=None,exclude=None,include_id=True,i
     if  'pk' not in out and  include_pk:
         #out['pk']=instance.pk
         out['pk']= clean_field_for_js(instance._meta.pk,instance)
+    if not label:
+        ls = list( out.keys() )
+        for k in ls:
+            if k.startswith('_'):
+                del out[k]
+    if not include_id:
+        if 'id' in out:
+            del out['id']
     return out
     
 

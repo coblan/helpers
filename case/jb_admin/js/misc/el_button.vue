@@ -21,6 +21,7 @@
                 parStore:ex.vueParStore(this),
                 // TODO 剔除某些老组件后，需要移除 head的引用
                 my_ctx:this.ctx?this.ctx:this.head,
+                last_click_time:Date.now()
             }
         },
         computed:{
@@ -41,6 +42,20 @@
         },
         methods:{
               on_click(){
+                var now = Date.now()
+                var lazy_time = this.my_ctx.lazy_time || 1000
+
+                // console.log(now)
+                // console.log(this.last_click_time)
+
+                if(now - this.last_click_time < lazy_time){
+                    console.log('按钮时间间距过小')
+                  return
+                }else{
+                  this.last_click_time = now
+                }
+
+
                 if(this.my_ctx.click_express || this.my_ctx.action){
 
                     var click_express = this.my_ctx.click_express ||this.my_ctx.action

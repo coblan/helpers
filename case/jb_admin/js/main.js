@@ -17,7 +17,7 @@ import * as ele_tree from  './field_editor/ele_tree.js'
 
 
 // table editor
-import * as table_picture from  './table_editor/picture.js'
+// import * as table_picture from  './table_editor/picture.js'
 import * as table_label_shower from  './table_editor/label_shower.js'
 import * as table_mapper from  './table_editor/mapper.js'
 import * as call_fun from  './table_editor/call_fun.js'

@@ -12,10 +12,13 @@ class JsonAbleField(models.TextField):
     默认值 default可以直接设置python对象，例如{},[]
     """
     def  from_db_value(self,value, expression, connection,ctx):
-        return json.loads(value,)
+        if not value:
+            return self.default
+        else:
+            return json.loads(value,)
     
     def get_prep_value(self,value):
-        return json.dumps(value,cls=DirectorEncoder)
+        return json.dumps(value,ensure_ascii=False,cls=DirectorEncoder)
     
     def to_python(self,value):
         # 当form.cleaned_data时，老是返回的是字符串。所以需要我转换一下，
@@ -44,7 +47,7 @@ class JsonAbleProc(BaseFieldProc):
         """
         """
         value = dc.get(name)
-        if value:
+        if value and isinstance(value,str):
             return json.loads(value)
         else:
             return value

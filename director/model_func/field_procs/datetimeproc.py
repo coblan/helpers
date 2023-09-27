@@ -16,7 +16,7 @@ class DateTimeProc(BaseFieldProc):
                 }
         else:
             return {
-                name: '',
+                name:   value  # '', 让他返回原始值吧
             }
         
     def clean_field(self, dc, name):

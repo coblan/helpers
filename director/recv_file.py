@@ -15,9 +15,12 @@ import re
 from django.views.decorators.csrf import csrf_exempt
 from helpers.director.base_data import director
 import time
-from helpers.func.image_proc import ceil_image_size
+from helpers.func.image_proc import ceil_image_size,compressImage,switch_format_check
 from helpers.director.shortcut import director_view
 from helpers.func.url_path import media_url_to_path
+from helpers.func.dot_dict import read_dict_path
+import logging
+general_log = logging.getLogger('general_log')
 
 class BasicReciever(object):
     
@@ -29,6 +32,8 @@ class BasicReciever(object):
             file_data= self.readFile(fl)
             file_url = self.procFile(file_data,fl)
             file_url_list.append(file_url)
+        file_url_list = [ self.switch_format_check(media_path) for media_path in file_url_list]
+        file_url_list = self.encrypt(file_url_list)
         return HttpResponse(json.dumps(file_url_list),content_type="application/json")
     
     def readFile(self,fl):
@@ -64,6 +69,12 @@ class BasicReciever(object):
             span = int( self.request.GET.get('maxspan') )
             # 压缩图片的 width 和height
             ceil_image_size(absolut_file_path,absolut_file_path,maxspan= span )
+            compressImage(absolut_file_path)
+        
+        elif self.request.GET.get('quality'):
+            quality = self.request.GET.get('quality')
+            compressImage(absolut_file_path,quality)
+            
         return self.getFileUrl(file_path)
         
     
@@ -109,6 +120,27 @@ class BasicReciever(object):
             suffix = fl.content_type.split('/')[-1] 
         return suffix
     
+    def switch_format_check(self,media_path):
+        if self.request.GET.get('sfc'):
+            return switch_format_check(media_path,model =int( self.request.GET.get('sfc') ))
+        else:
+            return media_path
+    
+    def encrypt(self,file_url_list):
+        if self.request.GET.get('aes'):
+            from . funs.aes import encode_file
+            ls = []
+            for media_url in file_url_list:
+                ls.append(encode_file(media_url))
+                try: 
+                    path  = media_url_to_path(media_url)
+                    os.remove(path)
+                except Exception as e:
+                    general_log.debug(e)
+            file_url_list = ls
+        return file_url_list
+    
+    
 
 
 class GeneralUpload(BasicReciever):
@@ -124,9 +156,7 @@ class GeneralUpload(BasicReciever):
         #img = Image.open(io.BytesIO(image_data))    
         #print('hell')
         #return img.tobytes()
-        
-        
-    
+          
     def getParDir(self):
         path = self.request.GET.get('path','general_upload')
         split = self.request.GET.get('split','')
@@ -140,18 +170,32 @@ class GeneralUpload(BasicReciever):
             path = os.path.join(path,today.strftime('%Y_%m_%d'))
         return path
     
-    def getFileName(self,file_data,name):
-        sufix = self.getSufix(name)
-        m = hashlib.md5()   
-        m.update(file_data)  
-        mid_name = m.hexdigest()
-        
-        file_name = mid_name+'.'+sufix
-        if self.request.GET.get('keepname'):
-            fl_name =self.adapt_name(name)
-            mt_name=re.search('\.(\w+)$',fl_name)
-            if mt_name:
-                file_name=mid_name+'___'+fl_name
+    def getFileName(self,file_data,fl):
+        keepname = self.request.GET.get('keepname',None)
+        if keepname =='field_name':
+            file_name = fl.name # name 不容易获取到field名称了，应该不会用这个
+        elif keepname=='overwrite':
+            file_name = fl.name
+        elif keepname=='overwrite-md5':
+            sufix = self.getSufix(fl)
+            file_name = get_md5(fl.name)+'.'+ sufix 
+        elif keepname=='tm-name':
+            file_name = '%s_%s'%(int( time.time()%1000000),fl.name)
+        elif keepname =='tm-md5':
+            sufix = self.getSufix(fl)
+            file_name = '%s_%s.%s'%(int( time.time()%1000000),get_md5( fl.name),sufix )
+        else:
+            # 老的方式，也是默认方式，使用md5作为文件名，不会造成文件重复
+            sufix = self.getSufix(fl)
+            m = hashlib.md5()   
+            m.update(file_data)  
+            mid_name = m.hexdigest()
+            file_name = mid_name+'.'+sufix
+        #if self.request.GET.get('keepname'):
+            #fl_name =self.adapt_name(fl.name)
+            #mt_name=re.search('\.(\w+)$',fl_name)
+            #if mt_name:
+                #file_name=mid_name+'___'+fl_name
         return file_name   
     
     def getFileUrl(self,file_path):
@@ -167,7 +211,10 @@ class GeneralUpload(BasicReciever):
         if mt:
             return mt.group(1)
         else:
-            return fl_name    
+            return fl_name   
+        
+
+        
 
 def get_md5(text):
     m = hashlib.md5()   
@@ -218,7 +265,10 @@ class BigFileRecieve(GeneralUpload):
             
             file_url = self.getFileUrl(file_path)
             file_url_list.append(file_url)
-        self.file_url_list = file_url_list
+            
+        file_url_list = [ self.switch_format_check(media_path) for media_path in file_url_list]
+        #self.file_url_list = file_url_list
+        self.file_url_list = self.encrypt(file_url_list)
         return HttpResponse(json.dumps(file_url_list),content_type="application/json")
     
     def processImage(self,absolut_file_path,image_format=None):
@@ -226,6 +276,15 @@ class BigFileRecieve(GeneralUpload):
             span = int( self.request.GET.get('maxspan') )
             # 压缩图片的 width 和height
             ceil_image_size(absolut_file_path,absolut_file_path,maxspan= span,image_format=image_format )
+            if self.request.GET.get('quality'):
+                quality = self.request.GET.get('quality')
+                compressImage(absolut_file_path,quality)  
+            else:
+                compressImage(absolut_file_path)
+        
+        elif self.request.GET.get('quality'):
+            quality = self.request.GET.get('quality')
+            compressImage(absolut_file_path,quality)        
 
 director.update({
     'big-file-saver':BigFileRecieve
@@ -243,6 +302,9 @@ director.update({
 
 @director_view('media/file/merge')
 def merge_media_file(path_list,suffix=None):
+    """
+    分块上传后，调用改接口合并成一个文件
+    """
     #if target:
         #if not target.startswith('/media/'):
             #if target.startswith('/'):
@@ -267,8 +329,13 @@ def merge_media_file(path_list,suffix=None):
     
     return target
             
-    
-
+@director_view('upload/encrypt/info')
+def encrypt_aes_info(entry):
+    """
+    前端picture组件，遇到aes文件时，直接调用这个函数获取加密设置。免得一个一个去设置组件参数
+    """
+    dc =  read_dict_path(settings, f'UPLOAD_CRYPTO.{entry}')
+    return dc
 
 
 

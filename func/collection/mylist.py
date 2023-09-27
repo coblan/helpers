@@ -2,6 +2,7 @@ import random
 import logging
 general_log = logging.getLogger('general_log')
 from django.db import close_old_connections
+import copy
 
 def split_list(dstlist,every_num):
     """ 将dstlist分批次返回。
@@ -13,21 +14,52 @@ def split_list(dstlist,every_num):
         yield dstlist[every_num*count:every_num*(count+1)]
         count += 1
 
-def left_join(left,right,func):
+def left_join(left,right,func,merge_fun=None):
     """以left为参照，将right 链接起来。
     
     left = [{name:'dog',age:18}]
     right = [{name:'dog',weight:80}]
-    func = lamda l,r : l.name==r.name
+    func = lambda l,r : l['name']==r['name']
     
     返回: [{name:'dog',age:18,weight:80}]
+    
+    如果merge_fun为空，则会使用dict.update合并。如果不为空，就会保留merge_fun返回的元素
+    merge_fun = lambda l,r : {'name':l['name'],'count':l.get('count',0)+r.get('count',0)}
     """
-    for row in left:
-        for ds in right:
+    left1= copy.deepcopy(left)
+    rigth1 = copy.deepcopy(right)
+    for row in left1:
+        for ds in rigth1:
             if func(row,ds):
-                row.update(ds)
-                right.remove(ds)
+                if merge_fun: # 如果有融合函数
+                    row.update(merge_fun(row,ds))
+                else:
+                    row.update(ds)
+                rigth1.remove(ds)
                 break
+    return left1
+
+def out_join(left,right,func,merge_fun=None):
+    """
+    参考left_join的说明
+    """
+    left1= copy.deepcopy(left)
+    rigth1 = copy.deepcopy(right)
+    for row in left1:
+        for ds in rigth1:
+            if func(row,ds):
+                if merge_fun: # 如果有融合函数
+                    row.update(merge_fun(row,ds))
+                else:
+                    row.update(ds)
+                rigth1.remove(ds)
+                break
+    return left1 + rigth1
+
+def multiply_array(arry1,arry2):
+    for a1 in arry1:
+        for a2 in arry2:
+            yield a1,a2
 
 def complement(srcList,rows,extrac_fun,default=0):
     """以srcList为参照，返回补全的数组
@@ -143,3 +175,24 @@ def random_sample(collection,count):
         return collection
     else:
         return random.sample(collection,count)
+
+def jump_fetch(ls,span=3):
+    """
+    """
+    table_fields =[]
+    length= len(ls)
+    current_index=0
+    while True:
+        if current_index >=length:
+            break
+        last_ls = [ ls[current_index] ]
+        if current_index+span < length:
+            last_ls.append(
+                ls[current_index +span]
+            )
+        table_fields.append(last_ls)
+        if (current_index+span+1)%(2*span) ==0:
+            current_index +=(span+1)
+        else:
+            current_index +=1   
+    return table_fields

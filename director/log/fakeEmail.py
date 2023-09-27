@@ -34,8 +34,10 @@ def format_frames(frames):
             #break
         vars_list  = row.get('vars')
         vars_str =''
-        #if row.get('type') =='django':
-            #continue
+        
+        if row.get('type') =='django':
+            continue
+        
         for v in vars_list:
             value = unescape(v[1])
             vars_str += f'\t{v[0]}={value}\n'

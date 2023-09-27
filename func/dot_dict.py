@@ -13,7 +13,11 @@ def read_dict_path(dict_obj,path,default=None):
     tmp = dict_obj
     for key in ls:
         if not isinstance(tmp,dict):
-            tmp = getattr(tmp,key,None)  
+            try:
+                tmp = getattr(tmp,key,None)  
+            except Exception as e:
+                #print('')
+                return default
         else:
             tmp = tmp.get(key,None)
         if tmp == None:
