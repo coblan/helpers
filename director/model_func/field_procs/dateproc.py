@@ -15,7 +15,9 @@ class DateProc(BaseFieldProc):
             else:
                 return {name:date.isoformat()}
         else:
-            return {}
+            return {
+                name: date, # 让他返回原始值吧
+            }
     
     def dict_field_head(self, head):
         head['editor']='com-field-date'
