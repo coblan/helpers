@@ -44,7 +44,7 @@ class ForeignTableBridge(object):
     def __init__(self,table=None,field_name='',prefix=None,label_prefix='',include=None,related_model=None):
         self.org_tab = table
         self.table = table
-        self.field_name= field_name
+        self.field_name= field_name.replace('__','.')
         if not prefix:
             self.prefix = field_name +'__'
         else:
@@ -57,6 +57,7 @@ class ForeignTableBridge(object):
         """
         @model:main model
         
+        [TODO] 遇到多级表join的情况 ,现在 related_model是用的外部直接传入的，不能自动生成。
         """
         if not self.related_model:
             field = model._meta.get_field(self.field_name)
