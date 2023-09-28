@@ -2,6 +2,7 @@ from helpers.director.model_func.dictfy import sim_dict,to_dict
 from helpers.director.shortcut import ModelFields,ModelTable
 from django.forms.models import ModelFormMetaclass
 import re
+from helpers.func.dot_dict import read_dict_path
 
 class BridgeTableMeta(type):
     def __new__(cls, name, bases, namespace):
@@ -17,8 +18,8 @@ class BridgeTableMeta(type):
             foreign_bridge = [x.copy() for x in  base_cls.foreign_bridge ]
             namespace['foreign_bridge'] = foreign_bridge
         for bridge in foreign_bridge:
-            field = model._meta.get_field(bridge.field_name)
-            bridge.updateRelatedModel(field.related_model,
+            #field = model._meta.get_field(bridge.field_name)
+            bridge.updateRelatedModel(model, # field.related_model,
                                       simple_dict=namespace.get('simple_dict',False),
                                       nolimit=namespace.get('nolimit',False))
             
@@ -40,23 +41,32 @@ class BridgeTableMeta(type):
   
 
 class ForeignTableBridge(object):
-    def __init__(self,table=None,field_name='',prefix=None,label_prefix=''):
+    def __init__(self,table=None,field_name='',prefix=None,label_prefix='',include=None,related_model=None):
         self.org_tab = table
         self.table = table
-        self.field_name= field_name
+        self.field_name= field_name.replace('__','.')
         if not prefix:
             self.prefix = field_name +'__'
         else:
             self.prefix = prefix
         self.label_prefix = label_prefix
-        self.related_model = None  # 由meta类注入
+        self.related_model = related_model  # 由meta类注入
+        self.include=include
     
     def updateRelatedModel(self,model,simple_dict=False,nolimit=False):# 由meta类注入
-        self.related_model = model
+        """
+        @model:main model
+        
+        [TODO] 遇到多级表join的情况 ,现在 related_model是用的外部直接传入的，不能自动生成。
+        """
+        if not self.related_model:
+            field = model._meta.get_field(self.field_name)
+            self.related_model = field.related_model
         if not self.table:
             class _table(ModelTable):
                 model = self.related_model   
                 exclude =[]
+                include=self.include
             self.table = _table
         self.table.simple_dict = simple_dict
         self.table.nolimit = nolimit
@@ -80,8 +90,9 @@ class ForeignTableBridge(object):
     
     def getRow(self,inst):
         out_dc = {}
-        if hasattr(inst,self.field_name):
-            base_inst = getattr(inst,self.field_name)
+        #if hasattr(inst,self.field_name):
+        if read_dict_path(inst,self.field_name):
+            base_inst = read_dict_path(inst,self.field_name)
             if not base_inst:
                 return {}
             dc= self._getRow(base_inst)
@@ -100,10 +111,16 @@ class ForeignTableBridge(object):
         table_inst = self.table()
         cus_dict = table_inst.dict_row( base_inst)
         permit_fields =  table_inst.permited_fields()
+        include_pk = True
+        if self.include:
+            permit_fields = [ x for x in self.include if x in permit_fields]
+            if 'pk' not in self.include:
+                include_pk =False
+                
         if table_inst.simple_dict:
-            dc = sim_dict(base_inst, include=permit_fields,filt_attr=cus_dict,) # include_pk=False
+            dc = sim_dict(base_inst, include=permit_fields,filt_attr=cus_dict,include_pk=include_pk) # include_pk=False
         else:
-            dc= to_dict(base_inst, include=permit_fields,filt_attr=cus_dict)
+            dc= to_dict(base_inst, include=permit_fields,filt_attr=cus_dict,include_pk=include_pk)
             dc .update({
                 f'_director_name':table_inst.get_edit_director_name(),
                 f'meta_org_dict':table_inst.get_org_dict(dc,base_inst)
