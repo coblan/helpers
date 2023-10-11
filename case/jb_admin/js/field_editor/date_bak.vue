@@ -1,35 +1,26 @@
 <template>
-  <div class="com-field-date" >
-<!--    :style="mysytle"-->
-    <datetime_extend :head="head" :row="row">
-      <template v-slot:date-input>
-        <el-date-picker
-            v-if="!head.readonly"
-            v-model="row[head.name]"
-            type="date"
-            :placeholder="head.placeholder"
-            align="right"
-            size="small"
-            value-format="yyyy-MM-dd"
-            :picker-options="pickerOptions">
-        </el-date-picker>
-      </template>
+  <div class="com-field-date" :style="mysytle">
+    <span class="readonly-info" v-show='head.readonly' v-text='row[head.name]'></span>
 
-    </datetime_extend>
-
+    <input v-if="!head.readonly" type="text" style="display: none"
+           :id="'id_'+head.name"
+           :name="head.name"
+           v-model="row[head.name]">
+    <el-date-picker
+        v-if="!head.readonly"
+        v-model="row[head.name]"
+        type="date"
+        :placeholder="head.placeholder"
+        align="right"
+        size="small"
+        value-format="yyyy-MM-dd"
+        :picker-options="pickerOptions">
+    </el-date-picker>
   </div>
 </template>
 <script>
-import datetime from './datetime.vue'
-var datetime_extend = {
-  extends:datetime,
-
-}
 export default {
   props:['row','head'],
-  components:{
-    datetime_extend
-  },
   data(){
     return {
       pickerOptions: {
@@ -68,15 +59,14 @@ export default {
       },
     }
   },
-
-  // computed:{
-  //   mysytle(){
-  //     return {
-  //       '--width':this.head.width || 'auto',
-  //       '--input_width':this.head.width || '23rem',
-  //     }
-  //   },
-  // }
+  computed:{
+    mysytle(){
+      return {
+        '--width':this.head.width || 'auto',
+        '--input_width':this.head.width || '23rem',
+      }
+    },
+  }
 }
 </script>
 
@@ -84,15 +74,14 @@ export default {
 
 // .field_input.input是23rem，element.date组件写死了input外层div只有220px宽度，比input的小很多。造成nicevalidator的错误消息显示在input内部。
 // 本来在 field_input 的css里面有控制这个宽度，但是date组件在外部单独使用时，就没css控制了。所以在这里单独进行控制，适应性更广。
-
-//.com-field-date{
-//  /deep/{
-//    .el-date-editor.el-input, .el-date-editor.el-input__inner{
-//      width: var(--width) !important;
-//    }
-//    .el-date-editor input{
-//      width: var(--input_width);
-//    }
-//  }
-//}
+.com-field-date{
+  /deep/{
+    .el-date-editor.el-input, .el-date-editor.el-input__inner{
+      width: var(--width) !important;
+    }
+    .el-date-editor input{
+      width: var(--input_width);
+    }
+  }
+}
 </style>
