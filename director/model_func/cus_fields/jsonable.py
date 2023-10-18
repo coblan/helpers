@@ -52,6 +52,10 @@ class JsonAbleProc(BaseFieldProc):
         else:
             return value
 
+    def dict_field_head(self,head):
+        head['editor']='com-field-json-edit'
+        return head
+    
     #def to_dict(self, inst, name):
         #value = getattr(inst,name)
         #if value:
