@@ -167,4 +167,7 @@ Vue.component('com-field-signature',function(resovle,reject){
 
 })
 
+import datetime from './datetime.vue'
+Vue.component('com-field-datetime',datetime)
+
 

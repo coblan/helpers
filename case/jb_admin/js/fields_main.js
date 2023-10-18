@@ -2,7 +2,7 @@
 import * as fields_editor_main from  './field_editor/main.js'
 import * as field_label_shower from  './field_editor/label_shower.js'
 // import * as ele_transfer from  './field_editor/ele_transfer.js'
-import * as datetime from  './field_editor/datetime.js'
+// import * as datetime from  './field_editor/datetime.js'
 // import * as pop_table_select from  './field_editor/pop_table_select.js'
 import * as plain_file from  './field_editor/plain_file.js'
 import * as validate_code from  './field_editor/validate_code.js'
