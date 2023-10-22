@@ -21,7 +21,7 @@
                 parStore:ex.vueParStore(this),
                 // TODO 剔除某些老组件后，需要移除 head的引用
                 my_ctx:this.ctx?this.ctx:this.head,
-                last_click_time:Date.now()
+                last_click_time: Date.now()-2000 // 首次还没点击，算2秒前点击的
             }
         },
         computed:{
