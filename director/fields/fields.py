@@ -183,6 +183,7 @@ class ModelFields(forms.ModelForm):
             
         #n1 由于 multichoice.fullchoice, -1代表全部，出库的时候，转换为[1,2,3], 而数据库中是-1,造成数据库 出入不一致,所以加入以下_clean代码，将simdc再次还原为数据库数据。（simdc是走了to_dict转换函数的）
         #n2 TODO:可能会在以后移除这里的_clean_dict,因为应该保持数据库数据的 数据库->前端->后端 的一致性，就算显示需求，也应该利用_label等特殊字段。
+        #【注意】 这里clean的是simdc,前面clean的外部传入的dc
         simdc = self._clean_dict(simdc)
         #simdc = self.clean_dict(simdc) 
         
