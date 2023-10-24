@@ -46,7 +46,7 @@ from .access import permit_api
 def get_first_name(self):
     userlabel = getattr(settings,'USER_LABEL','')
     if userlabel == 'nickname':
-        return self.first_name
+        return self.first_name if self.first_name else  self.username
     elif self.first_name:
         return '%s(%s)'%(self.username,self.first_name)
     else:
