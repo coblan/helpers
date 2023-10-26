@@ -43,6 +43,7 @@ class ModelFields(forms.ModelForm):
     
     """
     readonly=[]
+    readonly_all = False
     const_fields=[]  # 只有创建的时候才允许修改的字段
     field_sort=[]
     extra_mixins=[]
@@ -486,6 +487,8 @@ class ModelFields(forms.ModelForm):
                 #'class':'btn btn-info btn-sm',
                       },
             ]
+        if self.readonly_all:
+            ls = []
         return ls
     
     def get_permit(self):
@@ -729,6 +732,8 @@ class ModelFields(forms.ModelForm):
         return {}
     
     def dict_head(self,head):
+        if self.readonly_all:
+            head['readonly'] =True
         return head      
     
     def clean_create(self):
