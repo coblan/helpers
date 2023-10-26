@@ -659,6 +659,9 @@ class ModelFields(forms.ModelForm):
             heads += bridge.getHeads(bridge_inst,base_inst = self.instance)  
         
         heads = sorted(heads,key=lambda head: head.get('order',0))
+        if self.readonly_all:
+            for head in heads:
+                head['readonly'] =True
         return heads
     
     def can_access(self):
@@ -732,8 +735,6 @@ class ModelFields(forms.ModelForm):
         return {}
     
     def dict_head(self,head):
-        if self.readonly_all:
-            head['readonly'] =True
         return head      
     
     def clean_create(self):
