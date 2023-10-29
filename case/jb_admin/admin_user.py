@@ -25,6 +25,7 @@ class UserPage(TablePage):
         pop_edit_fields = ['username']
         fields_sort = ['id','username','first_name','groups','is_superuser','is_staff','is_active','last_login']
         allow_delete = read_dict_path(settings,'JB_ADMIN.delete_user',False)
+        allow_create =  read_dict_path(settings,'JB_ADMIN.create_user',True)
         def get_head_context(self):
             ctx = super().get_head_context()
             get_request_cache()['named_ctx'].update({
