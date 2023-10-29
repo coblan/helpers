@@ -263,7 +263,7 @@ class GroupPage(TablePage):
         
         def get_operation(self):
             ops = super().get_operation()
-            if read_dict_path(settings,'JB_ADMIN.exposed_permit',True):
+            if read_dict_path(settings,'JB_ADMIN.export_permit',True):
                 ops += [
                     {'name':'export_group',
                      'label':'导出权限分组',
