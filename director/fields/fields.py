@@ -43,6 +43,7 @@ class ModelFields(forms.ModelForm):
     
     """
     readonly=[]
+    readonly_all = False
     const_fields=[]  # 只有创建的时候才允许修改的字段
     field_sort=[]
     extra_mixins=[]
@@ -486,6 +487,8 @@ class ModelFields(forms.ModelForm):
                 #'class':'btn btn-info btn-sm',
                       },
             ]
+        if self.readonly_all:
+            ls = []
         return ls
     
     def get_permit(self):
@@ -656,6 +659,9 @@ class ModelFields(forms.ModelForm):
             heads += bridge.getHeads(bridge_inst,base_inst = self.instance)  
         
         heads = sorted(heads,key=lambda head: head.get('order',0))
+        if self.readonly_all:
+            for head in heads:
+                head['readonly'] =True
         return heads
     
     def can_access(self):
