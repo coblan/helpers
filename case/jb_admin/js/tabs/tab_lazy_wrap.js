@@ -6,27 +6,40 @@ var lazy_wrap={
     data(){
             return {
                 real_head:{},
+                loaded:false,
             }
     },
     mounted(){
-        if(this.tab_head.lazy_init){
-            ex.eval(this.tab_head.lazy_init,{head:this.tab_head})
-        }
 
-        if(this.tab_head.lazy_director_name_express) {
-            var director_name = ex.eval(this.tab_head.lazy_director_name_express, {par_row: this.par_row})
-        }else {
-            var director_name = this.tab_head.lazy_director_name
-        }
-        if(this.tab_head.filter_express){
-            var filter_dc = ex.eval(this.tab_head.filter_express,{par_row:this.par_row})
+        if(this.tab_head.mounted_express){
+            ex.eval(this.tab_head.mounted_express,{head:this.tab_head,vc:this})
         }else{
-            var filter_dc = {}
+
+            if(this.tab_head.lazy_init){
+                ex.eval(this.tab_head.lazy_init,{head:this.tab_head})
+            }
+
+
+            if(this.tab_head.lazy_director_name_express) {
+                var director_name = ex.eval(this.tab_head.lazy_director_name_express, {par_row: this.par_row})
+            }else {
+                var director_name = this.tab_head.lazy_director_name
+            }
+            if(this.tab_head.filter_express){
+                var filter_dc = ex.eval(this.tab_head.filter_express,{par_row:this.par_row})
+            }else{
+                var filter_dc = {}
+            }
+
+            ex.director_get(director_name,filter_dc).then(resp=>{
+                this.real_head = resp
+                this.loaded=true
+            })
+
+
         }
 
-        ex.director_get(director_name,filter_dc).then(resp=>{
-            this.real_head = resp
-        })
+
 
         // ex.director(director_name).call("get_head_context",filter_dc).then(resp=>{
         //     this.real_head = {
@@ -35,7 +48,7 @@ var lazy_wrap={
         // })
     },
     template:`<div class="com-tab-lazy-wrap">
-           <component :is="real_head.editor" :tab_head="real_head.tab_head" :par_row="par_row"></component>
+           <component v-if="loaded" :is="real_head.editor" :tab_head="real_head.tab_head" :par_row="par_row"></component>
 </div>`
 }
 
