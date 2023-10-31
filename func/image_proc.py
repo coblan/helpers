@@ -28,9 +28,13 @@ def ceil_image_size(inputpath,outpath,maxspan=1200,image_format=None,quality=50)
     ratio = max(img.size) / maxspan
     if ratio >1:
         resized_image = img.resize(  (int(x / ratio) for x in img.size) )
-        if not image_format:
-            image_format = correct_image_format(inputpath)
-        resized_image.save(outpath,image_format,quality=quality)
+        try:
+            if not image_format:
+                image_format = correct_image_format(inputpath)
+            resized_image.save(outpath,image_format,quality=quality)
+        except Exception as e:
+            general_log.debug(f'压缩图片{outpath}时报错，后面的堆栈是报错信息。')
+            general_log.exception(e)
 
 
 def compressImage(path,quality=None):
