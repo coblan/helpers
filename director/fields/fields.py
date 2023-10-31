@@ -43,6 +43,7 @@ class ModelFields(forms.ModelForm):
     
     """
     readonly=[]
+    readonly_all = False
     const_fields=[]  # 只有创建的时候才允许修改的字段
     field_sort=[]
     extra_mixins=[]
@@ -62,7 +63,9 @@ class ModelFields(forms.ModelForm):
     pass_clean_field = []
     allow_create = True
     foreign_bridge = []
-
+    save_to_local= False
+    
+    
     @classmethod
     def parse_request(cls,request):
         """
@@ -416,14 +419,17 @@ class ModelFields(forms.ModelForm):
     def get_head_context(self):
         heads = self.get_heads()
         ops =  self.get_operations()
-        return {
+        dc = {
             'heads':heads,
             'ops':ops,
             'director_name':self.get_director_name(),
             #'model_name':model_to_name(self._meta.model),
             'extra_mixins':self.extra_mixins,
             'allow_overlap_all':self.allow_overlap_all,
-        }         
+        }   
+        if self.save_to_local:
+            dc['save_express' ] =  'scope.vc.$emit("finish",scope.vc.row);rt=Promise.resolve(scope.vc.row)'
+        return dc
     
     
     def get_del_info(self):
@@ -439,7 +445,7 @@ class ModelFields(forms.ModelForm):
                 'editor':'com-btn',
                 'type':'primary',
                 'icon':'el-icon-receiving',
-                'label':'保存', 
+                'label':'保存' if not self.save_to_local else '确定', 
                 'click_express':'scope.ps.vc.submit()'
                 #'icon': 'fa-save',
                 #'class':'btn btn-info btn-sm',
@@ -486,6 +492,8 @@ class ModelFields(forms.ModelForm):
                 #'class':'btn btn-info btn-sm',
                       },
             ]
+        if self.readonly_all:
+            ls = []
         return ls
     
     def get_permit(self):
@@ -656,6 +664,9 @@ class ModelFields(forms.ModelForm):
             heads += bridge.getHeads(bridge_inst,base_inst = self.instance)  
         
         heads = sorted(heads,key=lambda head: head.get('order',0))
+        if self.readonly_all:
+            for head in heads:
+                head['readonly'] =True
         return heads
     
     def can_access(self):

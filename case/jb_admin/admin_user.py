@@ -25,6 +25,7 @@ class UserPage(TablePage):
         pop_edit_fields = ['username']
         fields_sort = ['id','username','first_name','groups','is_superuser','is_staff','is_active','last_login']
         allow_delete = read_dict_path(settings,'JB_ADMIN.delete_user',False)
+        allow_create =  read_dict_path(settings,'JB_ADMIN.create_user',True)
         def get_head_context(self):
             ctx = super().get_head_context()
             get_request_cache()['named_ctx'].update({
@@ -263,28 +264,33 @@ class GroupPage(TablePage):
         
         def get_operation(self):
             ops = super().get_operation()
-            ops += [
-                {'name':'export_group','label':'导出权限分组','editor':'com-btn',
-                 'click_express':'''
-                 if(scope.ps.selected.length==0){var msg="确定要导出全部权限分组?"} 
-                 else{var msg="确认要导出这"+scope.ps.selected.length + "个权限分组?"}
-                 cfg.confirm(msg).then(()=>{
-                     cfg.show_load();
-                     return ex.director("GroupExport").call("export",{groups:ex.map(scope.ps.selected,item=>{return item.pk })})
-                 }).then((permit_list)=>{
-                     cfg.hide_load();
-                     ex.saveLocalFile(JSON.stringify(permit_list),'groups.json')
-                 })'''},
-                {'name':'export_group','label':'导入权限分组','editor':'com-btn',
-                 'click_express':'''ex.readLocalFile(".json").then((text)=>{
-                    var groups = JSON.parse(text)
-                    cfg.show_load();
-                    return ex.director("GroupExport").call("import_",{groups:groups})
-                 }).then(()=>{
-                    cfg.hide_load();
-                    scope.ps.search()
-                 }) ''' },
-            ]
+            if read_dict_path(settings,'JB_ADMIN.export_permit',True):
+                ops += [
+                    {'name':'export_group',
+                     'label':'导出权限分组',
+                     'editor':'com-btn',
+                     'click_express':'''
+                     if(scope.ps.selected.length==0){var msg="确定要导出全部权限分组?"} 
+                     else{var msg="确认要导出这"+scope.ps.selected.length + "个权限分组?"}
+                     cfg.confirm(msg).then(()=>{
+                         cfg.show_load();
+                         return ex.director("GroupExport").call("export",{groups:ex.map(scope.ps.selected,item=>{return item.pk })})
+                     }).then((permit_list)=>{
+                         cfg.hide_load();
+                         ex.saveLocalFile(JSON.stringify(permit_list),'groups.json')
+                     })'''},
+                    {'name':'export_group',
+                     'label':'导入权限分组',
+                     'editor':'com-btn',
+                     'click_express':'''ex.readLocalFile(".json").then((text)=>{
+                        var groups = JSON.parse(text)
+                        cfg.show_load();
+                        return ex.director("GroupExport").call("import_",{groups:groups})
+                     }).then(()=>{
+                        cfg.hide_load();
+                        scope.ps.search()
+                     }) ''' },
+                ]
             return ops
 
         def dict_head(self, head):

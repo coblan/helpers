@@ -83,6 +83,9 @@ export default {
         //    }
         //)
         //this.$on('commit',this.on_commit)
+        if(this.head.mounted_express){
+            ex.eval(this.head.mounted_express,{vc:this,row:this.row,head:this.head})
+        }
     },
     computed:{
         out_row_this_field:function(){
