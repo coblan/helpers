@@ -53,7 +53,8 @@ from .base_data import js_tr_list,js_lib_list
 from django.views.decorators.csrf import csrf_exempt
 from helpers.director.middleware.request_cache import get_request_cache
 from urllib.parse import unquote
-
+import logging
+general_log = logging.getLogger('general_log')
 gb={}
 
 class BaseEngine(object):
@@ -195,6 +196,8 @@ class BaseEngine(object):
             if hasattr(page,'getExtraJs'):
                 ctx['extra_js'] = page.getExtraJs(ctx)
             ctx=self.custome_ctx(ctx)
+            general_log.debug(f'template={template}')
+            general_log.debug(ctx)
             resp= render(request,template,context=ctx)
         if getattr(page,'get_cache_control',None):
             kw= page.get_cache_control()
