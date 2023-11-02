@@ -192,15 +192,10 @@ class BaseEngine(object):
             if hasattr(page,'get_label'):
                 ctx['page_label'] =page.get_label()
             ctx['head_bar_data']=self.get_head_bar_data(request)
-            general_log.debug(f'100{ctx}')
             ctx['js_config'] = self.getJsConfig()
-            general_log.debug(f'101{ctx}')
             if hasattr(page,'getExtraJs'):
                 ctx['extra_js'] = page.getExtraJs(ctx)
-            general_log.debug(f'102{ctx}')
             ctx=self.custome_ctx(ctx)
-            general_log.debug(f'template={template}')
-            general_log.debug(ctx)
             resp= render(request,template,context=ctx)
         if getattr(page,'get_cache_control',None):
             kw= page.get_cache_control()

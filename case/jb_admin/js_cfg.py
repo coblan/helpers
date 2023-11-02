@@ -260,7 +260,7 @@ def get_lib(request):
                 #'adminlte_them_css':admin_theme_dc.get( request.META['ENGIN'].ui_theme  )
             #})
            
-    general_log.debug(dc)
+    #general_log.debug(dc)
     return dc
 
 js_lib_list.append(get_lib)
