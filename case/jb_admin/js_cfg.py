@@ -2,6 +2,9 @@ from helpers.director.base_data import js_tr_list, js_lib_list
 from django.utils.translation import ugettext as _
 from helpers.maintenance.update_static_timestamp import js_stamp_dc,static_url
 from django.conf import settings
+import logging
+general_log = logging.getLogger('general_log')
+
 def get_tr():
     return {
         'base_setting':_('Basic Setting'),
@@ -257,7 +260,7 @@ def get_lib(request):
                 #'adminlte_them_css':admin_theme_dc.get( request.META['ENGIN'].ui_theme  )
             #})
            
-  
+    general_log.debug(dc)
     return dc
 
 js_lib_list.append(get_lib)
