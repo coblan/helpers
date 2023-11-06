@@ -914,19 +914,30 @@ class ModelTable(object):
         #director_name = self.get_director_name()
         permit_fields =  self.permited_fields()
         #used_head_names= self.hide_fields +  [x['name'] for x in self.get_light_heads()] 
+        
+        #[去掉联查] 联查的字段不要走 sim_dict函数，否则会走forign_pro
+        if self.exclude_export_related:
+            normd_permit_fields = [x for x in permit_fields if x not in self.exclude_export_related]
+        else:
+            normd_permit_fields = permit_fields
+            
         self.before_query()
         for inst in query:
             # 遇到一种情况，聚合时，这里的queryset返回的item是dict。所以下面做一个判断
             if isinstance(inst,models.Model):
                 cus_dict = self.dict_row( inst)
                 if self.only_simple_data():
-                    dc = sim_dict(inst, include=permit_fields,filt_attr=cus_dict,) # include_pk=False
+                    dc = sim_dict(inst, include=normd_permit_fields,filt_attr=cus_dict,) # include_pk=False
                 else:
-                    dc= to_dict(inst, include=permit_fields,filt_attr=cus_dict)
+                    dc= to_dict(inst, include=normd_permit_fields,filt_attr=cus_dict)
                     dc .update({
                         '_director_name':self.get_edit_director_name(),
                         'meta_org_dict':self.get_org_dict(dc,inst)
                         })
+                #[去掉联查] 联查的字段不要走 sim_dict函数，否则会走forign_pro
+                for name in  self.exclude_export_related:
+                    dc[name] = getattr(inst,f'{name}_id',None)
+                    dc[f'_{name}_label'] = getattr(inst,f'{name}_id','')
                 # 再赋值一次，以免被默认dictfy替换掉了，例如 _x_label等值
                 dc.update(cus_dict)
             else:
