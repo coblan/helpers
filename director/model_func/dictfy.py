@@ -292,7 +292,7 @@ def model_to_head(model,include=[],exclude=[]):
     return out
 
 
-def delete_related_query(inst):
+def delete_related_query(inst,deep_level=0):
     """
     When delet inst object,Django ORM will delet all related model instance.
     this function used to search related instance with inst,return string tree
@@ -300,6 +300,8 @@ def delete_related_query(inst):
     """
     if inst is None:
         return []  
+    if deep_level>4:
+        return []
     
     ls = []
     all_related_objects =  [
@@ -320,10 +322,10 @@ def delete_related_query(inst):
             elif hasattr(obj,'all'):  # Foreign Key field
                 for sub_obj in obj.all():
                     ls.append({'str':"{content}  ({cls_name})".format(cls_name = sub_obj.__class__.__name__,content=str(sub_obj)),
-                               'related':delete_related_query(sub_obj)})
+                               'related':delete_related_query(sub_obj,deep_level=deep_level+1)})
             else:   # OneToOne related
                 ls.append({'str':"{content}  ({cls_name})".format(cls_name = obj.__class__.__name__,content=str(obj)),
-                           'related':delete_related_query(obj)})   
+                           'related':delete_related_query(obj,deep_level=deep_level+1)})   
                 
     for rel in all_related_many_to_many_objects:  #inst._meta.get_all_related_many_to_many_objects():  # ManyToMany Related
         name = rel.get_accessor_name()

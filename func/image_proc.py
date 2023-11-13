@@ -23,14 +23,24 @@ class ImageProc(object):
 
 
 def ceil_image_size(inputpath,outpath,maxspan=1200,image_format=None,quality=50):
-    "压缩图片"
+    """
+    压缩图片分辨率。
+    @inputpath: 图片文件路径
+    @outpath:图片输出路径
+    
+    主要用在recv_file模块,inputpath和outpath路径相同.
+    """
     img = Image.open(inputpath)
     ratio = max(img.size) / maxspan
     if ratio >1:
         resized_image = img.resize(  (int(x / ratio) for x in img.size) )
-        if not image_format:
-            image_format = correct_image_format(inputpath)
-        resized_image.save(outpath,image_format,quality=quality)
+        try:
+            if not image_format:
+                image_format = correct_image_format(inputpath)
+            resized_image.save(outpath,image_format,quality=quality)
+        except Exception as e:
+            general_log.debug(f'压缩图片输入路径:{inputpath};输出路径:{outpath}时报错，报错信息:{str(e)}')
+            #general_log.exception(e)
 
 
 def compressImage(path,quality=None):

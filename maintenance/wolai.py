@@ -63,7 +63,7 @@ def com_to_type(head,model_form_inst):
         return 'bool型'
     if head['editor'] =='com-field-location':
         return '格式为:lat,lng 的经纬度字符串'
-    if head['editor'] in ['com-field-table-select','com-field-select','com-field-cascader']:
+    if head['editor'] in ['com-field-table-select','com-field-select','com-field-cascader','com-field-radio']:
         try:
             field = model_form_inst.instance._meta.get_field(head['name'])
         except:
