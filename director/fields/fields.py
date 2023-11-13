@@ -792,6 +792,11 @@ class ModelFields(forms.ModelForm):
                 # TODO 遇到manytomany时，测试一下是否必须要重新复制一次。
                 if self.instance._meta.get_field(k).__class__ in [models.ManyToManyField]:
                     setattr(self.instance,k, self.cleaned_data.get(k) )
+       
+        # 过滤用户数据，与filterByUser类似 [2023/11/7]
+        if getattr(self.instance,'cleanSaveByUser',None):
+            self.instance.cleanSaveByUser(self.crt_user)
+            
         # 2020/08/06 从571行挪到这里，以免 last row 代码覆盖了 clean_save的修改
         # 在clean_save 中 不能使用 pk==None来判断是否为创建row，应该使用self.is_create==Ture 来判断
         extra_log = self.clean_save()
