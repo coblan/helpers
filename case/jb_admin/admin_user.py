@@ -274,7 +274,8 @@ class GroupPage(TablePage):
                      else{var msg="确认要导出这"+scope.ps.selected.length + "个权限分组?"}
                      cfg.confirm(msg).then(()=>{
                          cfg.show_load();
-                         return ex.director("GroupExport").call("export",{groups:ex.map(scope.ps.selected,item=>{return item.pk })})
+                         debugger;
+                         return ex.director("GroupExport").export( {groups:ex.map(scope.ps.selected,item=>{return item.pk })} )
                      }).then((permit_list)=>{
                          cfg.hide_load();
                          ex.saveLocalFile(JSON.stringify(permit_list),'groups.json')
@@ -285,7 +286,7 @@ class GroupPage(TablePage):
                      'click_express':'''ex.readLocalFile(".json").then((text)=>{
                         var groups = JSON.parse(text)
                         cfg.show_load();
-                        return ex.director("GroupExport").call("import_",{groups:groups})
+                        return ex.director("GroupExport").import_( {groups:groups} )
                      }).then(()=>{
                         cfg.hide_load();
                         scope.ps.search()
