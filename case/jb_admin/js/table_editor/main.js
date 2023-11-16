@@ -10,7 +10,7 @@ import * as multi_image from  './multi_image.js'
 import * as map_html from  './map_html.js'
 import * as link from  './link.js'
 import * as rich_span from  './rich_span.js'
-import * as multi_row from  './multi_row.js'
+// import * as multi_row from  './multi_row.js'
 import * as color from  './color.js'
 import * as icon_cell from  './icon_cell.js'
 import hourAndMinute  from "./hourAndMinute.vue";
@@ -37,6 +37,8 @@ Vue.component('com-table-pre',tablePre)
 import picture1 from "./picture.vue";
 Vue.component('com-table-picture',picture1)
 
+import multiRow from "./multiRow.vue";
+Vue.component('com-table-multi-row',multiRow)
 import * as table_input_main from './table_input/main'
 
 /*
