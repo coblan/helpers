@@ -9,6 +9,7 @@ import re
 
 register = Library()
 
+replace_script = re.compile('<(/script>)',flags=re.IGNORECASE)
 def jsonify(obj):
     if obj is None:
         return ''
@@ -16,8 +17,8 @@ def jsonify(obj):
         outstr=json.dumps(obj,cls=DirectorEncoder,ensure_ascii=False)
         #'<' + '/script>'
         #outstr = outstr.replace('</script>','<" + "/script>')
-        aa = re.compile('</script>',flags=re.IGNORECASE)
-        outstr = aa.sub('<" + "/script>',outstr)  # outstr.replace('</script>','<" + "/script>')
+        #outstr = aa.sub('<" + "/script>',outstr)  # outstr.replace('</script>','<" + "/script>')
+        outstr = replace_script .sub('<" + "\g<1>',outstr) 
         outstr =  mark_safe( outstr )
         
         return outstr
