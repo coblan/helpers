@@ -5,6 +5,7 @@ from django.template import Library
 from django.utils.safestring import mark_safe
 from ..data_format.json_format import DirectorEncoder
 import json
+import re
 
 register = Library()
 
@@ -14,7 +15,9 @@ def jsonify(obj):
     else:
         outstr=json.dumps(obj,cls=DirectorEncoder,ensure_ascii=False)
         #'<' + '/script>'
-        outstr = outstr.replace('</script>','<" + "/script>')
+        #outstr = outstr.replace('</script>','<" + "/script>')
+        aa = re.compile('</script>',flags=re.IGNORECASE)
+        outstr = aa.sub('<" + "/script>',outstr)  # outstr.replace('</script>','<" + "/script>')
         outstr =  mark_safe( outstr )
         
         return outstr
