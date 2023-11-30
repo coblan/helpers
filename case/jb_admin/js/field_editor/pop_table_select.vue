@@ -10,20 +10,27 @@
       <el-input class="type-input" size="small" :style="mytype_style" v-if="head.type_input" :placeholder="head.placeholder" v-model="row[head.name]">
         <el-button @click="open_win" slot="append" icon="el-icon-search"></el-button>
       </el-input>
-      <div v-else class="my-input" :style="mystyle">
+      <div  v-else style="display: flex;align-items: center;gap:10px;">
+        <div class="my-input" :style="mystyle">
 
-        <el-tag :closable=" can_clear" v-if="row[head.name] != undefined "
-                size="small"
-                @close="clear()">
-          <span  v-text="label"></span>
-        </el-tag>
-        <div v-else>
+          <el-tag :closable=" can_clear" v-if="row[head.name] != undefined "
+                  size="small"
+                  @close="clear()">
+            <span  v-text="label"></span>
+          </el-tag>
+          <div v-else>
+
+          </div>
+
+          <span v-if="!head.readonly" class="clickable" @click="open_win"><i class="fa fa-search"></i></span>
+
 
         </div>
-
-        <span v-if="!head.readonly" class="clickable" @click="open_win"><i class="fa fa-search"></i></span>
+        <i v-if="head.add_express" @click="onAddNew" title="新建" class="el-icon-circle-plus" style="color: #0aa938;cursor: pointer"></i>
       </div>
-      <i v-if="head.add_express" @click="onAddNew" title="新建" class="el-icon-circle-plus" style="color: #0aa938;cursor: pointer"></i>
+
+
+
     </template>
     <!--<span v-if="show_search" class="clickable" @click="open_win"><i class="fa fa-search"></i></span>-->
   </div>
@@ -79,7 +86,7 @@ export  default  {
   },
   methods:{
     onAddNew(){
-
+      ex.eval(this.head.add_express,{vc:this,row:this.row,head:this.head})
     },
     clear(){
       if(this.head.clear_express){
@@ -126,6 +133,7 @@ export  default  {
 </script>
 <style scoped lang="scss">
 .my-input{
+  display: inline-block;
   min-width: 180px;
   min-height: 32px;
   background: white;
