@@ -19,6 +19,9 @@ export default {
     if(this.tab_head.mounted_express){
       ctx.mounted_express = this.tab_head.mounted_express
     }
+    if(this.tab_head.preset_express){
+      ctx.preset_express = this.tab_head.preset_express
+    }
     return {
       childStore:{vc:this,name:'com-tab-form'},
       ctx:ctx,

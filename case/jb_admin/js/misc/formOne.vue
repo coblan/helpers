@@ -83,7 +83,10 @@ export default {
         }
         if(this.ctx.preset){
         // 弹窗编辑窗时，可以利用preset传入par_row.pk等信息
-        ex.vueAssign(def_row,this.ctx.preset)
+            ex.vueAssign(def_row,this.ctx.preset)
+        }else if(this.ctx.preset_express){
+           var resp = ex.eval(this.ctx.preset_express,{vc:this,head:this.ctx})
+            ex.vueAssign(def_row,resp)
         }
         var data_row = ex.copy(this.ctx.row  || def_row )
         var self=this

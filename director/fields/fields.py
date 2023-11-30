@@ -44,6 +44,7 @@ class ModelFields(forms.ModelForm):
     """
     readonly=[]
     readonly_all = False
+    readonly_all_express = ''  # 前端执行为true时，整个com-form-one是只读的，save按钮也应该消失。
     const_fields=[]  # 只有创建的时候才允许修改的字段
     field_sort=[]
     extra_mixins=[]
@@ -426,6 +427,7 @@ class ModelFields(forms.ModelForm):
             #'model_name':model_to_name(self._meta.model),
             'extra_mixins':self.extra_mixins,
             'allow_overlap_all':self.allow_overlap_all,
+            'readonly_all_express':self.readonly_all_express,
         }   
         if self.save_to_local:
             dc['save_express' ] =  'scope.vc.$emit("finish",scope.vc.row);rt=Promise.resolve(scope.vc.row)'
@@ -446,7 +448,8 @@ class ModelFields(forms.ModelForm):
                 'type':'primary',
                 'icon':'el-icon-receiving',
                 'label':'保存' if not self.save_to_local else '确定', 
-                'click_express':'scope.ps.vc.submit()'
+                'click_express':'scope.ps.vc.submit()',
+                'show_express':'''rt= ! scope.vc.ctx.readonly_all'''
                 #'icon': 'fa-save',
                 #'class':'btn btn-info btn-sm',
             },
@@ -948,6 +951,7 @@ class Fields(ModelFields):
                 'type':'primary',
                 'icon':'el-icon-receiving',
                 'click_express':'scope.ps.vc.submit()',
+                'show_express':'rt= ! scope.vc.ctx.readonly_all'
                 #'editor':'com-field-op-btn',
                 #'label':'保存', 
                 #'icon': 'fa-save',
@@ -960,6 +964,7 @@ class Fields(ModelFields):
                 'label':'确定',
                 'type':'primary',
                 'icon':'el-icon-receiving',
+                'show_express':'rt= ! scope.vc.ctx.readonly_all',
                 'click_express':'scope.ps.vc.beforeSubmit().then(()=>{  if(scope.ps.vc.isValid()){ scope.ps.vc.$emit("finish",scope.ps.vc.row)}  })',
                     })
         return ls 

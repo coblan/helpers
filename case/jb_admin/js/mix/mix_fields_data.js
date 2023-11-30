@@ -61,6 +61,14 @@ export  var mix_fields_data ={
     computed:{
         normed_heads:function(){
             var self=this
+           if(self.ctx.readonly_all_express){
+                var total_readonly = ex.eval(self.ctx.readonly_all_express,{row:self.row,vc:self})
+               Vue.set(self.ctx,'readonly_all',total_readonly)
+            }else if(self.ctx.readonly_all){
+                var total_readonly = self.ctx.readonly_all
+            } else{
+                var total_readonly = false
+            }
             ex.each(self.heads,function(head){
 
                 if( head._org_readonly){
@@ -72,7 +80,9 @@ export  var mix_fields_data ={
                 }
 
                 // 新的 readonly 动态判断
-                if(head.readonly_express){
+                if(total_readonly){
+                    Vue.set(head,'readonly',total_readonly)
+                }else if(head.readonly_express){
                     var is_readonly = ex.eval(head.readonly_express,{row:self.row,head:head,vc:self})
                     Vue.set(head,'readonly',is_readonly)
                 }

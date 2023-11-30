@@ -91,7 +91,8 @@ Vue.component('com-field-pop-edit',pop_edit)
 
 import picture from './picture.vue'
 Vue.component('com-field-picture',picture)
-
+import multiFile from "./multiFile.vue";
+Vue.component('com-field-multi-file',multiFile)
 
 import jsEditor from "./jsEditor.vue";
 Vue.component('com-field-js-editor', async (resolve, reject) =>{
