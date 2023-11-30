@@ -23,6 +23,7 @@
 
         <span v-if="!head.readonly" class="clickable" @click="open_win"><i class="fa fa-search"></i></span>
       </div>
+      <i v-if="head.add_express" @click="onAddNew" title="新建" class="el-icon-circle-plus" style="color: #0aa938;cursor: pointer"></i>
     </template>
     <!--<span v-if="show_search" class="clickable" @click="open_win"><i class="fa fa-search"></i></span>-->
   </div>
@@ -77,6 +78,9 @@ export  default  {
     }
   },
   methods:{
+    onAddNew(){
+
+    },
     clear(){
       if(this.head.clear_express){
         ex.eval(this.head.clear_express,{head:this.head,row:this.row})
