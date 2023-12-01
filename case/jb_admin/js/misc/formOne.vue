@@ -8,6 +8,7 @@
            class="flex-grow fields-area">
         <!--有分组的情况-->
         <div v-if="fields_group" class="fields-group" >
+
         <!--  以tab页面的方式显示group分组-->
           <div v-if="ctx.tab_group" style="position: absolute;left: 0;right: 0;bottom: 0;top:0;padding-top: 6px;">
               <el-tabs  tab-position="left" style=" height: 100%;width: 100%;flex-direction: row">
@@ -28,6 +29,7 @@
               </el-tabs>
           </div>
 
+          <!--  以分块的方式显示group分组-->
           <template v-else  v-for="group in grouped_heads_bucket">
             <div v-if="group.heads && group.heads.length > 0" :class="'group_'+group.name">
               <div style="display: flex;gap: 30px;align-items: center">
@@ -43,6 +45,7 @@
                                 :class="group.grid_class"
                                  :heads="group.heads"
                                   :css="group.grid_css"
+                                  :type="group.grid_type"
                                   :row="row">
                 </fieldGridBlock>
 
@@ -68,6 +71,15 @@
 
 
         </div>
+<!--        <div v-else-if="ctx.grid_class">-->
+          <fieldGridBlock v-else-if="ctx.grid_class "
+                          :class="ctx.grid_class"
+                          :heads="normed_heads"
+                          :css="ctx.grid_css"
+                          :type="ctx.grid_type"
+                          :row="row">
+          </fieldGridBlock>
+<!--        </div>-->
         <!--只有table分组-->
         <div v-else-if="table_grid " >
           <fieldTableBlock
@@ -291,13 +303,23 @@ export default {
     margin: 10px;
   }
 
-  .field-input-td{
-    .msg-box.n-right{
-      position: absolute;
-      bottom: 0;
-      left: 0;
-    }
-  }
+  //.field-input-td{
+  //  .msg-box.n-right{
+  //    position: absolute;
+  //    bottom: 0;
+  //    left: 0;
+  //  }
+  //}
+
+ ::v-deep{
+   .msg-bottom{
+     .msg-box.n-right{
+       position: absolute;
+       bottom: 0;
+       left: 0;
+     }
+   }
+ }
 
 }
 
