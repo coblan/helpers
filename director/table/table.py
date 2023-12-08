@@ -349,9 +349,10 @@ class RowSort(object):
             if ls:
                 query = query.order_by(*ls)
         else:
-            #if not query.ordered and not query._fields and self.general_sort: # 如果这个为空，才能弄一个默认排序，否则造成聚合函数无效
-            # 【2023-12-7】上面那行代码替换为下面代码。去掉了'not query._fields' 这个可能是排除聚合字段排序。。但是聚合字段也需要排序
-            if not query.ordered and self.general_sort:
+            if self.general_sort =='-pk' and query._fields:
+                # 如果query._fields 不为空，代表经过了聚合。默认是pk排序的，这时pk排序会破坏聚合功能。
+                query =  query
+            elif not query.ordered and self.general_sort:
                 norm_name,direction = adapt_field_name(self.general_sort)
                 if norm_name in self.chinese_words:
                     query = query_chinese_words(norm_name,direction,query)
