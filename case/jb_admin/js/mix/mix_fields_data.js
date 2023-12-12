@@ -61,10 +61,10 @@ export  var mix_fields_data ={
     computed:{
         normed_heads:function(){
             var self=this
-           if(self.ctx.readonly_all_express){
+           if(self.ctx && self.ctx.readonly_all_express){
                 var total_readonly = ex.eval(self.ctx.readonly_all_express,{row:self.row,vc:self})
                Vue.set(self.ctx,'readonly_all',total_readonly)
-            }else if(self.ctx.readonly_all){
+            }else if( self.ctx && self.ctx.readonly_all){
                 var total_readonly = self.ctx.readonly_all
             } else{
                 var total_readonly = false
