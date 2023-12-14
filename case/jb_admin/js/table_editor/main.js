@@ -39,6 +39,9 @@ Vue.component('com-table-picture',picture1)
 
 import multiRow from "./multiRow.vue";
 Vue.component('com-table-multi-row',multiRow)
+import multiFile from "./multiFile.vue";
+Vue.component('com-table-multi-file',multiFile)
+
 import * as table_input_main from './table_input/main'
 
 /*
