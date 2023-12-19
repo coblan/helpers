@@ -1034,7 +1034,7 @@ class ModelTable(object):
         
         #[todo] 这里需要弄清楚原理
         #[todo_已经完成] 优化，是否select_related,select_related的field限定在输出的head中
-        if not query._fields and self.export_related:  # 如果这个属性部位空，证明已经调用了.values() or .values_list()
+        if not query._fields and self.export_related:  # 如果query._fields属性部位不为空，证明已经调用了.values() or .values_list()
             head_nams = [x['name'] for x in self.get_light_heads() if x['name'] not in self.exclude_export_related]
             for f in self.model._meta.get_fields():
                 if f.name in head_nams and isinstance(f, (models.ForeignKey,models.OneToOneField)):
