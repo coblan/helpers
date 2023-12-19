@@ -100,9 +100,12 @@ class GroupSelect(ModelTable):
         ]
 
 
-def user_group_options(user):
+def user_group_options(user=None):
+    """
+    不传user，就当成是超级用户。这个是为了简化，直接返回全部选项给form。只要用户可以配置账号分组，就让他可以全部选择分组，否则过于复杂。
+    """
     out = []
-    if user.is_superuser:
+    if not user or user.is_superuser:
         for group in Group.objects.select_related('permitmodel').all():
             out.append({
               'id':group.id,
@@ -112,9 +115,13 @@ def user_group_options(user):
             })
     else:
         names = list( user_permit_names(user) )
+        names_plus = set( [x for x in names if not x.startswith('-')] )
+        names_minus = set( [x for x in names if x.startswith('-')] )
         for group in Group.objects.select_related('permitmodel').all():
-            group_names = set(  group_permit(group) )
-            if  not group_names.difference(names):
+            group_names_list = group_permit(group)
+            group_names_list_plus = set( [x for x in group_names_list if not x.startswith('-')] )
+            group_names_list_minus = set( [x for x in group_names_list if x.startswith('-')] )
+            if  names_plus.issuperset(group_names_list_plus)  and  names_minus.issubset(group_names_list_minus):
                 out.append({
                     'id':group.id,
                     'name':group.name,
@@ -139,7 +146,10 @@ class UserFields(ModelFields):
             head['editor'] = 'com-field-table-select'
             head['table_heads'] =[{'name':'name','label':'权限组','width':'150px'},
                                   {'name':'desp','label':'描述','pre':True}]
-            head['table_rows'] =user_group_options(self.crt_user) #GroupPage.tableCls().get_rows()
+            
+            # 只要用户可以配置用户分组，就让他可以看到全部分组。如果按照以前的限制，返回用户权限包含的分组，那么超过他权限的分组，在form中
+            # 显示会出问题。
+            head['table_rows'] = user_group_options() #user_group_options(self.crt_user) #GroupPage.tableCls().get_rows()
             head['order'] = 100
             
         if head['name'] == 'username':
