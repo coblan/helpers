@@ -26,7 +26,8 @@ class MultiFileProc(BaseFieldProc):
         }
     
     def dict_table_head(self, head):
-        head['editor'] = 'com-table-multi-image'
+        #head['editor'] = 'com-table-multi-image'
+        head['editor'] ='com-table-multi-file'
         head['show_tooltip'] = False
         return head
     

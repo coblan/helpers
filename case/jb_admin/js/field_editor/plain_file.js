@@ -50,7 +50,7 @@ export var com_file_uploader = {
         <input type="text" :name="name" style="display: none" v-model="value">
     </div>
 
-    <div class="wrap">
+    <div class="wrap" style="display: flex;flex-direction: column;">
            <a v-for="pic in pictures" :href="pic" target="_blank"><span  v-text="pic"></span></a>
     </div>
 
