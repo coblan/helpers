@@ -8,5 +8,5 @@ class PermitApi(object):
     @need_login
     def userPermit(self):
         user = get_request_cache()['request'].user
-        ls = list(user_permit_names(user))
+        ls = list(set( user_permit_names(user) ) ) 
         return ls
