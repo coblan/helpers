@@ -194,10 +194,17 @@ class UserFields(ModelFields):
             target_user = self.instance
             target_user.set_password(pswd)
             #target_user.save()      
+            
+        can_change_superuser =  read_dict_path(settings,'JB_ADMIN.superuser_field_change',True)
+        if not can_change_superuser:
+            if 'is_superuser' in self.changed_data:
+                raise UserWarning('不能修改超级管理员属性')
+            
         # 检查设置人的权限
         if not self.crt_user.is_superuser:
             if 'is_superuser' in self.changed_data:
                 raise UserWarning('您不是超级管理员，不能修改超级管理员属性')
+            
             if not self.crt_user.is_staff:
                 raise UserWarning('您不是管理员，不能设置用户信息')
             if 'groups' in self.changed_data:
