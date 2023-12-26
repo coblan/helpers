@@ -17,7 +17,7 @@ from django.conf import settings
 class UserPage(TablePage):
     template='jb_admin/table_new.html'
     def get_label(self): 
-        return _('User')
+        return  '账号管理' # _('User')
     
     class tableCls(ModelTable):
         model = User
