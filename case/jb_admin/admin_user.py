@@ -13,6 +13,7 @@ import json
 from helpers.director.access.permit import user_permit_names,group_permit
 from helpers.func.dot_dict import read_dict_path
 from django.conf import settings
+
 # Register your models here.
 class UserPage(TablePage):
     template='jb_admin/table_new.html'
@@ -160,7 +161,10 @@ class UserFields(ModelFields):
             #msg = ''
             #head['fv_rule']='length(2~50);express(%s , %s)'%( express.decode('utf-8'),msg.decode('utf-8'))
         if head['name'] =='is_superuser':
-            if not self.crt_user.is_superuser:
+            can_change =  read_dict_path(settings,'JB_ADMIN.superuser_field_change',True)
+            if not can_change:
+                head['readonly'] = True
+            elif not self.crt_user.is_superuser:
                 head['readonly'] = True
         #if head['name'] =='is_staff': # 这个可以不要，因为is_staff不是true的话，根本就看不到界面。
             #if not self.crt_user.is_superuser and not self.crt_user.is_staff:
@@ -190,10 +194,17 @@ class UserFields(ModelFields):
             target_user = self.instance
             target_user.set_password(pswd)
             #target_user.save()      
+            
+        can_change_superuser =  read_dict_path(settings,'JB_ADMIN.superuser_field_change',True)
+        if not can_change_superuser:
+            if 'is_superuser' in self.changed_data:
+                raise UserWarning('不能修改超级管理员属性')
+            
         # 检查设置人的权限
         if not self.crt_user.is_superuser:
             if 'is_superuser' in self.changed_data:
                 raise UserWarning('您不是超级管理员，不能修改超级管理员属性')
+            
             if not self.crt_user.is_staff:
                 raise UserWarning('您不是管理员，不能设置用户信息')
             if 'groups' in self.changed_data:
