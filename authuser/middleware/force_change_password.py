@@ -2,6 +2,7 @@ from django.contrib.sessions.models import Session
 
 from django.http import HttpResponseRedirect
 from .. models import PasswordInfo
+from django.utils import timezone
 
 class ForceChangePasswordMiddleware:
     # Called only once when the web server starts
@@ -12,10 +13,33 @@ class ForceChangePasswordMiddleware:
     def __call__(self, request):
         # This codition is required because anonymous users 
         # dont have access to 'logged_in_user'
+        
+        if request.path =='/accounts/pswd' or request.path.startswith('/dapi'): 
+            response = self.get_response(request)
+            return response
+        
         if request.user.is_authenticated:
-            if request.COOKIES.get('need_change_password'):
-                HttpResponseRedirect('/accounts/pswd')
-        response = self.get_response(request)
+            now = timezone.now()
+            if not request.COOKIES.get('password_last_change'):
+                inst,create = PasswordInfo.objects.get_or_create(user = request.user,)
+                if create:
+                    inst.last_change = now
+                    inst.save()
+                password_last_change= inst.last_change
+                password_last_change_str = inst.last_change.strftime('%Y-%m-%d %H:%M:%S')
+            else :
+                password_last_change_str = request.COOKIES.get('password_last_change')
+                password_last_change = timezone.datetime.strptime( password_last_change_str,'%Y-%m-%d %H:%M:%S' )
+            
+            # 密码要求30天改一次
+            if password_last_change < now -  timezone.timedelta(days=30): # timezone.timedelta(minutes=5): #
+                response = HttpResponseRedirect('/accounts/pswd')
+                response.delete_cookie('password_last_change')
+            else:
+                response = self.get_response(request)
+                response.set_cookie('password_last_change',password_last_change_str)
+        else:
+            response = self.get_response(request)
         return response
     
 

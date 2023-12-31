@@ -1,7 +1,8 @@
 from helpers.director.shortcut import FieldsPage, ModelFields, director,director_view
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext as _
-
+from .models import PasswordInfo
+from django.utils import timezone
 
 from .base_data import  auth_page_dc
 
@@ -42,6 +43,11 @@ def changepswd(row):
     if md_user.check_password(row.get('old_pswd')):
         md_user.set_password(row.get('first_pswd'))
         md_user.save()
+        
+        pswd,created = PasswordInfo.objects.get_or_create(user=md_user)
+        pswd.last_change = timezone.now()
+        pswd.save()
+        
         dc={'status':'success'}
     else:
         dc={'errors':{'old_pswd':['old password not match']}}

@@ -45,7 +45,7 @@ class LoggedInUser(models.Model):
 
 class PasswordInfo(models.Model):
     user = models.OneToOneField(User,)
-    need_change = models.BooleanField(verbose_name='是否需要修改',default=True)
+    #need_change = models.BooleanField(verbose_name='是否需要修改',default=True)
     last_change = models.DateTimeField(verbose_name='上次修改时间',blank=True,null=True)
     memo = models.TextField('备注',blank=True)
     
