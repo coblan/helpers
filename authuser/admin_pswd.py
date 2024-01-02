@@ -4,7 +4,10 @@ from django.utils.translation import ugettext as _
 from .models import PasswordInfo
 from django.utils import timezone
 
+from helpers.director.network import argument
+from helpers.func.dot_dict import read_dict_path
 from .base_data import  auth_page_dc
+from django.conf import settings
 
 class AuthPwsd(FieldsPage):
     template = 'authuser/changepswd.html'
@@ -37,7 +40,11 @@ def changepswd(row):
         return  {'errors':{'second_pswd':['两次密码不一致']}}
     elif not row.get('first_pswd'):
         return {'errors':{'first_pswd':['新密码不能为空!']}}
-        
+    
+    if  read_dict_path(settings,'AUTHUSERA.complex_password',False) :
+        argument.validate_argument(row,{
+            'first_pswd':[argument.complex_password]
+        })
     md_user= User.objects.get(pk=row.get('uid'))
 
     if md_user.check_password(row.get('old_pswd')):
