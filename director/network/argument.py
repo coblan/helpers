@@ -291,9 +291,9 @@ def datetime(value,name):
 
 
 def complex_password(value,name):
-    try:
-        pwd = value
-        res = re.search("^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[~!@#$%^&*()_\-+])[A-Za-z\d~!@#$%^&*()_\-+]{8,16}$", pwd)
-        return True if res else False
-    except ValueError:
+    pwd = value
+    res = re.search("^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[~!@#$%^&*()_\-+])[A-Za-z\d~!@#$%^&*()_\-+]{8,16}$", pwd)
+    if not res:
         raise UserWarning('密码应该包含大小写字母,数字和特殊字符,以字母或数字开头,长度应在8到16位')
+    else:
+        return value

@@ -41,7 +41,7 @@ def changepswd(row):
     elif not row.get('first_pswd'):
         return {'errors':{'first_pswd':['新密码不能为空!']}}
     
-    if  read_dict_path(settings,'AUTHUSERA.complex_password',False) :
+    if  read_dict_path(settings,'AUTHUSER.complex_password',False) :
         argument.validate_argument(row,{
             'first_pswd':[argument.complex_password]
         })
