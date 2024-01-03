@@ -18,6 +18,8 @@ from helpers.func.d_import import import_element
 from helpers.director.decorator import need_login
 from helpers.func.dot_dict import read_dict_path
 
+from helpers.case.act_log.shortcut import operation_log
+
 class LoginFormPage(FieldsPage):
     template = 'director/web.html'
     need_login = False # 如果不设置这里，engine会不断的跳转到登录界面,无法执行后面的内容 
@@ -72,6 +74,7 @@ def login(username , password,validate_code='',validate_img=''):
         for k,v in rt['errors'].items():
             dc[k] = ';'.join(v)
         rt['errors'] = dc
+    operation_log('用户使用username方式登录')
     return rt
 
 @director_view('do_login')
@@ -140,6 +143,7 @@ def run(row):
                 'validate_img':url
                 }
     rt= loger.check_and_login()
+    operation_log('用户使用do_login登录')
     return rt
 
 class Login(object):
