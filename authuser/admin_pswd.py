@@ -48,13 +48,13 @@ def changepswd(row):
     md_user= User.objects.get(pk=row.get('uid'))
 
     if md_user.check_password(row.get('old_pswd')):
+        operation_log('用户修改密码')
         md_user.set_password(row.get('first_pswd'))
         md_user.save()
-        
         pswd,created = PasswordInfo.objects.get_or_create(user=md_user)
         pswd.last_change = timezone.now()
         pswd.save()
-        operation_log('用户修改密码成功')
+        
         dc={'status':'success'}
     else:
         dc={'errors':{'old_pswd':['old password not match']}}
