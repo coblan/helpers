@@ -74,7 +74,7 @@ def login(username , password,validate_code='',validate_img=''):
         for k,v in rt['errors'].items():
             dc[k] = ';'.join(v)
         rt['errors'] = dc
-    operation_log('用户使用username方式登录')
+    operation_log(f'用户使用username方式登录,,登录用户名{username}')
     return rt
 
 @director_view('do_login')
@@ -143,7 +143,7 @@ def run(row):
                 'validate_img':url
                 }
     rt= loger.check_and_login()
-    operation_log('用户使用do_login登录')
+    operation_log(f'用户使用do_login登录,登录用户名{row.get("username")}')
     return rt
 
 class Login(object):
