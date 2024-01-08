@@ -95,6 +95,7 @@ class ModelFields(forms.ModelForm):
         * 前端设置默认值： 在 table的 add_new 操作中 添加 pre_set 。注意 foreignkey 需要加 _id
         
         """
+        self.extra_log = ''
         
         if not crt_user:
             #self.crt_user=dc.get('crt_user')
@@ -203,7 +204,7 @@ class ModelFields(forms.ModelForm):
                         readonly_waring.append(k)
                     dc[k] = simdc.get(k)
                     if 'meta_org_dict' in dc:
-                        dc['meta_org_dict'].pop(k)
+                        dc['meta_org_dict'].pop(k,None)
                     #if hasattr(inst, "%s_id" % k):  # 如果是ForeignKey，必须要pk值才能通过 form验证
                         #fieldcls = inst.__class__._meta.get_field(k)
                         #if isinstance(fieldcls, models.ForeignKey):
@@ -804,9 +805,8 @@ class ModelFields(forms.ModelForm):
         # 在clean_save 中 不能使用 pk==None来判断是否为创建row，应该使用self.is_create==Ture 来判断
         extra_log = self.clean_save()
         self.instance.save()
-            
-        if op or extra_log:
-            after_changed_data = sim_dict(self.instance, include= self.changed_data,include_pk=False)
+        if op or extra_log or self.extra_log:
+            after_changed_data = sim_dict(self.instance, include= self.changed_data,include_pk=False,)
             dc = {
                 'model': model_to_name(self.instance),
                 'pk': self.instance.pk,
@@ -815,6 +815,7 @@ class ModelFields(forms.ModelForm):
                 '_before': self.before_changed_data,
                 '_after': after_changed_data,
                 '_label':{x: str( self.fields.get(x).label) for x in self.changed_data},
+                'extral_log':self.extra_log
             }
             if extra_log:
                 dc.update(extra_log)
