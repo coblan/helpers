@@ -51,7 +51,7 @@ class ModelFields(forms.ModelForm):
     hide_fields = []
     overlap_fields=[]  # 这些字段不会被同步检查
     allow_overlap_all = False # 允许前端传递参数meta_overlap_fields=='__all__'，直接覆盖后端数据。现在默认数据很重要，不能随意覆盖。
-    outdate_check_fields= None 
+    outdate_check_fields= None  # 功能应该与 overlaped_fields一致，只不过这个是正向的，相当于inlcude
     readonly_change_warning = [] # 普通保存时，后台会恢复只读字段的值，但是有时有些只读字段，
                                  #在后台发现改变时，需要警告前端，作废此次保存。因为这些字段值可能是前端做判断的依据。
     forbid_change = False # 禁止修改
@@ -190,15 +190,16 @@ class ModelFields(forms.ModelForm):
         #【注意】 这里clean的是simdc,前面clean的外部传入的dc
         simdc = self._clean_dict(simdc)
         #simdc = self.clean_dict(simdc) 
-        
+        # 考虑到 self.readonly可能是property,可能不方便添加self.const_fields操作，所以用了一个新的变量readonly来进行操作。
+        readonly = list( self.readonly )
         if not self.is_create:
-            self.readonly = list(self.readonly)
-            self.readonly += self.const_fields
+            #readonly = list(self.readonly)
+            readonly += self.const_fields
         
-        if meta_change_fields or self.readonly:
+        if meta_change_fields or readonly:
             # 修正只读字段 
             for k in dict(dc):
-                if k in self.readonly or (meta_change_fields and k not in meta_change_fields ):
+                if k in readonly or (meta_change_fields and k not in meta_change_fields ):
                     if k in self.readonly_change_warning and adapt_type(dc[k]) != adapt_type( simdc.get(k)):
                         readonly_waring.append(k)
                     dc[k] = simdc.get(k)
