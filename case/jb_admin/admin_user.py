@@ -133,10 +133,11 @@ def user_group_options(user=None):
 
 class UserFields(ModelFields):
     "具有权限性的创建和修改用户资料"
-    hide_fields = ['date_joined']
+    #hide_fields = ['date_joined']
+    const_fields =['date_joined']
     class Meta:
         model=User
-        fields=['username','first_name','is_active','is_staff','is_superuser','email','groups', 'date_joined']
+        fields=['username','first_name','is_active','is_staff','is_superuser','email','groups']
     
     
     def dict_head(self, head):
@@ -193,6 +194,7 @@ class UserFields(ModelFields):
             pswd =  self.kw.get('user_password')
             target_user = self.instance
             target_user.set_password(pswd)
+            self.extra_log +=f'修改用户{target_user}密码'
             #target_user.save()      
             
         can_change_superuser =  read_dict_path(settings,'JB_ADMIN.superuser_field_change',True)

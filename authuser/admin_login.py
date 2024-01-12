@@ -74,7 +74,7 @@ def login(username , password,validate_code='',validate_img=''):
         for k,v in rt['errors'].items():
             dc[k] = ';'.join(v)
         rt['errors'] = dc
-    operation_log(f'用户使用username方式登录,,登录用户名{username}')
+    operation_log(f'用户使用username方式登录,登录用户名{username}')
     return rt
 
 @director_view('do_login')
@@ -246,6 +246,7 @@ class Login(object):
 @director_view('do_logout')
 def do_logout(**kw):
     request = get_request_cache()['request']
+    operation_log('用户退出登录')
     auth.logout(request)
     
     #class fieldsCls(ModelFields):
@@ -304,8 +305,10 @@ def do_logout(**kw):
 def changepswd(old_password,new_password):
     md_user = get_request_cache()['request'].user
     if md_user.check_password(old_password):
+        operation_log(f'用户使用user/changepassword修改密码')
         md_user.set_password(new_password)
         md_user.save()
+        
     else:
         raise UserWarning('密码不正确')     
 
@@ -322,6 +325,7 @@ class LogOutPage(object):
     def get_context(self): 
         next = self.request.GET.get('next', self.engin.home)
         next=unquote(next)
+        operation_log('用户使用LogOutPage退出登录')
         auth.logout(self.request)
         return redirect(next) 
 
