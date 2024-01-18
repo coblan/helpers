@@ -13,6 +13,7 @@ import json
 from helpers.director.access.permit import user_permit_names,group_permit
 from helpers.func.dot_dict import read_dict_path
 from django.conf import settings
+from helpers.func.collection import ex
 # Register your models here.
 class UserPage(TablePage):
     template='jb_admin/table_new.html'
@@ -105,8 +106,12 @@ def user_group_options(user=None):
     不传user，就当成是超级用户。这个是为了简化，直接返回全部选项给form。只要用户可以配置账号分组，就让他可以全部选择分组，否则过于复杂。
     """
     out = []
+    if  user and getattr(Group,'filterByUser',None):
+        query = Group.filterByUser(user)
+    else:
+        query = Group.objects.all()
     if not user or user.is_superuser:
-        for group in Group.objects.select_related('permitmodel').all():
+        for group in query.select_related('permitmodel').all():
             out.append({
               'id':group.id,
               'name':group.name,
@@ -117,11 +122,12 @@ def user_group_options(user=None):
         names = list( user_permit_names(user) )
         names_plus = set( [x for x in names if not x.startswith('-')] )
         names_minus = set( [x for x in names if x.startswith('-')] )
-        for group in Group.objects.select_related('permitmodel').all():
-            group_names_list = group_permit(group)
+        for group in query.select_related('permitmodel').all():
+            group_names_list =  list(  group_permit(group) )
             group_names_list_plus = set( [x for x in group_names_list if not x.startswith('-')] )
             group_names_list_minus = set( [x for x in group_names_list if x.startswith('-')] )
-            if  names_plus.issuperset(group_names_list_plus)  and  names_minus.issubset(group_names_list_minus):
+            # -  约束权限，没办法计入。
+            if  names_plus.issuperset(group_names_list_plus)  : #and  names_minus.issubset(group_names_list_minus):
                 out.append({
                     'id':group.id,
                     'name':group.name,
@@ -150,6 +156,9 @@ class UserFields(ModelFields):
             # 只要用户可以配置用户分组，就让他可以看到全部分组。如果按照以前的限制，返回用户权限包含的分组，那么超过他权限的分组，在form中
             # 显示会出问题。
             head['table_rows'] = user_group_options() #user_group_options(self.crt_user) #GroupPage.tableCls().get_rows()
+            if  getattr(Group,'filterByUser',None):
+                head['valid_values']  = [x.pk for x in Group.filterByUser(self.crt_user)]
+            
             head['order'] = 100
             
         if head['name'] == 'username':
@@ -205,11 +214,29 @@ class UserFields(ModelFields):
                 """
                 #self.kw.get('groups')
                 allow_group = user_group_options(self.crt_user)
-                allow_group_names = [x['id'] for x in allow_group]
-                for group in self.kw.get('groups'):
-                    if group not in allow_group_names:
-                        raise UserWarning('你不能赋予用户权限组%s'%group)
+                allow_group_ids = [x['id'] for x in allow_group]
+                current_group = set(self.kw.get('groups'))
+                before_group = set(self.before_changed_data.get('groups'))
+                add_group = current_group.difference(before_group)
+                remove_group = before_group.difference(current_group)
+                
+                #current_group_left = change_group.symmetric_difference( self.before_changed_data.get('groups')  )
+                
+                for group_id in add_group:
+                    if group_id not in allow_group_ids:
+                        group_obj = Group.objects.filter(pk=group_id).first()
+                        if group_obj:
+                            raise UserWarning(f'不能分配权限组:{group_obj}。你的权限不能覆盖该权限组。')
+                        else:
+                            raise UserWarning(f'所设置的id={group_id}的权限组不存在')
         
+                for group_id in remove_group:
+                    if group_id not in allow_group_ids:
+                        group_obj = Group.objects.filter(pk=group_id).first()
+                        if group_obj:
+                            raise UserWarning(f'不能移除该权限组:{group_obj}。你的权限不能覆盖该权限组。')
+                        else:
+                            raise UserWarning(f'所设置的id={group_id}的权限组不存在')
 
 
 class NoLimitUserForm(UserFields):
