@@ -18,6 +18,8 @@ from helpers.func.d_import import import_element
 from helpers.director.decorator import need_login
 from helpers.func.dot_dict import read_dict_path
 
+from helpers.case.act_log.shortcut import operation_log
+
 class LoginFormPage(FieldsPage):
     template = 'director/web.html'
     need_login = False # 如果不设置这里，engine会不断的跳转到登录界面,无法执行后面的内容 
@@ -72,6 +74,7 @@ def login(username , password,validate_code='',validate_img=''):
         for k,v in rt['errors'].items():
             dc[k] = ';'.join(v)
         rt['errors'] = dc
+    operation_log(f'用户使用username方式登录,登录用户名{username}')
     return rt
 
 @director_view('do_login')
@@ -140,6 +143,7 @@ def run(row):
                 'validate_img':url
                 }
     rt= loger.check_and_login()
+    operation_log(f'用户使用do_login登录,登录用户名{row.get("username")}')
     return rt
 
 class Login(object):
@@ -242,6 +246,7 @@ class Login(object):
 @director_view('do_logout')
 def do_logout(**kw):
     request = get_request_cache()['request']
+    operation_log('用户退出登录')
     auth.logout(request)
     
     #class fieldsCls(ModelFields):
@@ -300,8 +305,10 @@ def do_logout(**kw):
 def changepswd(old_password,new_password):
     md_user = get_request_cache()['request'].user
     if md_user.check_password(old_password):
+        operation_log(f'用户使用user/changepassword修改密码')
         md_user.set_password(new_password)
         md_user.save()
+        
     else:
         raise UserWarning('密码不正确')     
 
@@ -318,6 +325,7 @@ class LogOutPage(object):
     def get_context(self): 
         next = self.request.GET.get('next', self.engin.home)
         next=unquote(next)
+        operation_log('用户使用LogOutPage退出登录')
         auth.logout(self.request)
         return redirect(next) 
 

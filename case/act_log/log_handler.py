@@ -52,6 +52,9 @@ class DBOperationHandler(logging.Handler):
 
 
 def parser_form_log(dc): 
+    """
+    应该是解析modelfields_log传过来的数据结构
+    """
     after = dc.pop('_after', {})
     after.update( dc.pop('after', {}) )
     model = dc.get('model', '')
@@ -75,9 +78,22 @@ def parser_form_log(dc):
             content = '将主键为%(pk)s的%(model)s,从%(before_str)s,修改为%(after_str)s' % str_kws
         else:
             content = '将主键为%(pk)s的%(model)s,修改为%(after_str)s' % str_kws
-            
+    
+    elif dc.get('extral_log'):
+        #2024/1/8增加extral_log字段，收集额外的信息。
+        #增加这条elif入口,为了兼容老的代码。老的逻辑中，没有after，就会打印所有dc信息出来。
+        #而新的版本要求如果有extral_log信息，就要打印extral_log的信息.
+        #老的数据中是没有extral_log的，可以做到区分新老版本的作用。
+        content = ''
     else:
         content = json.dumps(dc)
+        
+    if dc.get('extral_log'):
+        if content:
+            content+=f';{dc.get("extral_log")}' 
+        else:
+            content+=f'{dc.get("extral_log")}' 
+        
     return content
 
         

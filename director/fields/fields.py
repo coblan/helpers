@@ -51,7 +51,7 @@ class ModelFields(forms.ModelForm):
     hide_fields = []
     overlap_fields=[]  # 这些字段不会被同步检查
     allow_overlap_all = False # 允许前端传递参数meta_overlap_fields=='__all__'，直接覆盖后端数据。现在默认数据很重要，不能随意覆盖。
-    outdate_check_fields= None 
+    outdate_check_fields= None  # 功能应该与 overlaped_fields一致，只不过这个是正向的，相当于inlcude
     readonly_change_warning = [] # 普通保存时，后台会恢复只读字段的值，但是有时有些只读字段，
                                  #在后台发现改变时，需要警告前端，作废此次保存。因为这些字段值可能是前端做判断的依据。
     forbid_change = False # 禁止修改
@@ -95,6 +95,7 @@ class ModelFields(forms.ModelForm):
         * 前端设置默认值： 在 table的 add_new 操作中 添加 pre_set 。注意 foreignkey 需要加 _id
         
         """
+        self.extra_log = ''
         
         if not crt_user:
             #self.crt_user=dc.get('crt_user')
@@ -190,20 +191,21 @@ class ModelFields(forms.ModelForm):
         #【注意】 这里clean的是simdc,前面clean的外部传入的dc
         simdc = self._clean_dict(simdc)
         #simdc = self.clean_dict(simdc) 
-        
+        # 考虑到 self.readonly可能是property,可能不方便添加self.const_fields操作，所以用了一个新的变量readonly来进行操作。
+        readonly = list( self.readonly )
         if not self.is_create:
-            self.readonly = list(self.readonly)
-            self.readonly += self.const_fields
+            #readonly = list(self.readonly)
+            readonly += self.const_fields
         
-        if meta_change_fields or self.readonly:
+        if meta_change_fields or readonly:
             # 修正只读字段 
             for k in dict(dc):
-                if k in self.readonly or (meta_change_fields and k not in meta_change_fields ):
+                if k in readonly or (meta_change_fields and k not in meta_change_fields ):
                     if k in self.readonly_change_warning and adapt_type(dc[k]) != adapt_type( simdc.get(k)):
                         readonly_waring.append(k)
                     dc[k] = simdc.get(k)
                     if 'meta_org_dict' in dc:
-                        dc['meta_org_dict'].pop(k)
+                        dc['meta_org_dict'].pop(k,None)
                     #if hasattr(inst, "%s_id" % k):  # 如果是ForeignKey，必须要pk值才能通过 form验证
                         #fieldcls = inst.__class__._meta.get_field(k)
                         #if isinstance(fieldcls, models.ForeignKey):
@@ -804,9 +806,8 @@ class ModelFields(forms.ModelForm):
         # 在clean_save 中 不能使用 pk==None来判断是否为创建row，应该使用self.is_create==Ture 来判断
         extra_log = self.clean_save()
         self.instance.save()
-            
-        if op or extra_log:
-            after_changed_data = sim_dict(self.instance, include= self.changed_data,include_pk=False)
+        if op or extra_log or self.extra_log:
+            after_changed_data = sim_dict(self.instance, include= self.changed_data,include_pk=False,)
             dc = {
                 'model': model_to_name(self.instance),
                 'pk': self.instance.pk,
@@ -815,6 +816,7 @@ class ModelFields(forms.ModelForm):
                 '_before': self.before_changed_data,
                 '_after': after_changed_data,
                 '_label':{x: str( self.fields.get(x).label) for x in self.changed_data},
+                'extral_log':self.extra_log
             }
             if extra_log:
                 dc.update(extra_log)

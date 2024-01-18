@@ -125,9 +125,16 @@ def sim_dict(instance,filt_attr=None,include=None,exclude=None,include_id=True,i
     #if 'id' in [x.name for x in instance._meta.get_fields()] and \
        #instance.id:
         #out['id']=instance.id
-    if 'id' not in out and include_id and hasattr(instance,'id'):
-        #out['id'] = instance.id
-        out['id'] = clean_field_for_js(instance._meta.get_field('id'),instance)
+    if include == None:
+        # 2024/1/8 如果有include传入，那么就不单独处理id了。
+        if include_id:
+            if 'id' not in out and hasattr(instance,'id'):
+                #out['id'] = instance.id
+                out['id'] = clean_field_for_js(instance._meta.get_field('id'),instance)
+        else:
+            if 'id' in out:
+                del out['id']            
+        
     if  'pk' not in out and  include_pk:
         #out['pk']=instance.pk
         out['pk']= clean_field_for_js(instance._meta.pk,instance)
@@ -136,9 +143,7 @@ def sim_dict(instance,filt_attr=None,include=None,exclude=None,include_id=True,i
         for k in ls:
             if k.startswith('_'):
                 del out[k]
-    if not include_id:
-        if 'id' in out:
-            del out['id']
+    
     return out
     
 

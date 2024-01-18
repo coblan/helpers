@@ -18,7 +18,7 @@ from helpers.func.collection import ex
 class UserPage(TablePage):
     template='jb_admin/table_new.html'
     def get_label(self): 
-        return _('User')
+        return  '账号管理' # _('User')
     
     class tableCls(ModelTable):
         model = User
@@ -138,10 +138,11 @@ def user_group_options(user=None):
 
 class UserFields(ModelFields):
     "具有权限性的创建和修改用户资料"
-    hide_fields = ['date_joined']
+    #hide_fields = ['date_joined']
+    const_fields =['date_joined']
     class Meta:
         model=User
-        fields=['username','first_name','is_active','is_staff','is_superuser','email','groups', 'date_joined']
+        fields=['username','first_name','is_active','is_staff','is_superuser','email','groups']
     
     
     def dict_head(self, head):
@@ -169,7 +170,10 @@ class UserFields(ModelFields):
             #msg = ''
             #head['fv_rule']='length(2~50);express(%s , %s)'%( express.decode('utf-8'),msg.decode('utf-8'))
         if head['name'] =='is_superuser':
-            if not self.crt_user.is_superuser:
+            can_change =  read_dict_path(settings,'JB_ADMIN.superuser_field_change',True)
+            if not can_change:
+                head['readonly'] = True
+            elif not self.crt_user.is_superuser:
                 head['readonly'] = True
         #if head['name'] =='is_staff': # 这个可以不要，因为is_staff不是true的话，根本就看不到界面。
             #if not self.crt_user.is_superuser and not self.crt_user.is_staff:
@@ -198,11 +202,19 @@ class UserFields(ModelFields):
             pswd =  self.kw.get('user_password')
             target_user = self.instance
             target_user.set_password(pswd)
+            self.extra_log +=f'修改用户{target_user}密码'
             #target_user.save()      
+            
+        can_change_superuser =  read_dict_path(settings,'JB_ADMIN.superuser_field_change',True)
+        if not can_change_superuser:
+            if 'is_superuser' in self.changed_data:
+                raise UserWarning('不能修改超级管理员属性')
+            
         # 检查设置人的权限
         if not self.crt_user.is_superuser:
             if 'is_superuser' in self.changed_data:
                 raise UserWarning('您不是超级管理员，不能修改超级管理员属性')
+            
             if not self.crt_user.is_staff:
                 raise UserWarning('您不是管理员，不能设置用户信息')
             if 'groups' in self.changed_data:
