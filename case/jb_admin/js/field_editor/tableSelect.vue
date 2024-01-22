@@ -49,11 +49,22 @@ export default {
 
       this.selected_rows = ex.map(list,item_id=>{
         var one= ex.findone(this.head.table_rows,{id:item_id})
-        return one
+        if(one){
+          return  one
+        }else{
+          return {
+            id:item_id,
+            desp:item_id,
+            _label:item_id,
+          }
+        }
+
       })
     },
      async openTable(){
-      var rows = await cfg.pop_vue_com(popTable,{heads:this.head.table_heads,rows:this.head.table_rows,selected:this.selected_rows})
+      var rows = await cfg.pop_vue_com(popTable,{heads:this.head.table_heads,rows:this.head.table_rows,
+        valid_values:this.head.valid_values,
+        selected:this.selected_rows})
        this.selected_rows = rows
        if(this.head.format=='string'){
          this.row[this.head.name] = ex.map(this.selected_rows,item=>{ return item.id }).join(',')

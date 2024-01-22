@@ -22,11 +22,11 @@
 
           </div>
 
-          <span v-if="!head.readonly" class="clickable" @click="open_win"><i class="fa fa-search"></i></span>
+          <span v-if="!head.readonly&&can_select" class="clickable" @click="open_win"><i class="fa fa-search"></i></span>
 
 
         </div>
-        <i v-if="head.add_express" @click="onAddNew" title="新建" class="el-icon-circle-plus" style="color: #0aa938;cursor: pointer"></i>
+        <i v-if="head.add_express&&can_add" @click="onAddNew" title="新建" class="el-icon-circle-plus" style="color: #0aa938;cursor: pointer"></i>
       </div>
 
 
@@ -38,6 +38,12 @@
 <script>
 export  default  {
   props:['row','head'],
+  data(){
+    return {
+      can_select:true,
+      can_add:true
+    }
+  },
   computed:{
     mystyle(){
         if (this.head.width){
