@@ -42,6 +42,8 @@ def changepswd(row):
         return  {'errors':{'second_pswd':['两次密码不一致']}}
     elif not row.get('first_pswd'):
         return {'errors':{'first_pswd':['新密码不能为空!']}}
+    elif row.get('old_pswd') ==row.get('first_pswd'):
+        return {'errors':{'first_pswd':['新密码不能与旧密码相同!']}}
     
     if  read_dict_path(settings,'AUTHUSER.complex_password',False) :
         argument.validate_argument(row,{
