@@ -19,6 +19,7 @@ from helpers.director.decorator import need_login
 from helpers.func.dot_dict import read_dict_path
 
 from helpers.case.act_log.shortcut import operation_log
+from helpers.func.sim_signal import sim_signal
 
 class LoginFormPage(FieldsPage):
     template = 'director/web.html'
@@ -144,6 +145,7 @@ def run(row):
                 }
     rt= loger.check_and_login()
     operation_log(f'用户使用do_login登录,登录用户名{row.get("username")}')
+    sim_signal.send('authuser.login',username=row.get('username'))
     return rt
 
 class Login(object):
@@ -308,7 +310,7 @@ def changepswd(old_password,new_password):
         operation_log(f'用户使用user/changepassword修改密码')
         md_user.set_password(new_password)
         md_user.save()
-        
+        sim_signal.send('authuser.change_password')
     else:
         raise UserWarning('密码不正确')     
 

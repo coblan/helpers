@@ -9,6 +9,8 @@ from helpers.func.dot_dict import read_dict_path
 from .base_data import  auth_page_dc
 from django.conf import settings
 from helpers.case.act_log.shortcut import operation_log
+from helpers.func.sim_signal import sim_signal
+
 class AuthPwsd(FieldsPage):
     template = 'authuser/changepswd.html'
     need_login = False
@@ -54,7 +56,7 @@ def changepswd(row):
         pswd,created = PasswordInfo.objects.get_or_create(user=md_user)
         pswd.last_change = timezone.now()
         pswd.save()
-        
+        sim_signal.send('authuser.change_password')
         dc={'status':'success'}
     else:
         dc={'errors':{'old_pswd':['old password not match']}}
