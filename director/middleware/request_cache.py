@@ -72,6 +72,7 @@ class RequestCacheMiddleware(MiddlewareMixin):
             'request': request,
             'msg': [],
             'named_ctx':{},
+            'response_cache':{}
             }  #_request_cache.get(currentThread()) or RequestCache()
         _request_cache[currentThread()] = cache
         
