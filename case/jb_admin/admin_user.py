@@ -101,6 +101,16 @@ class GroupSelect(ModelTable):
         ]
 
 
+def user_dif_promit(user,group):
+    names = list( user_permit_names(user) )
+    #group = Group.objects.filter(id=groupid).first()
+    if group:
+        group_names_list =  list(  group_permit(group) )
+        group_names_list_plus = set( [x for x in group_names_list if not x.startswith('-')] )
+        return group_names_list_plus.difference(names)
+    else:
+        return []
+
 def user_group_options(user=None):
     """
     不传user，就当成是超级用户。这个是为了简化，直接返回全部选项给form。只要用户可以配置账号分组，就让他可以全部选择分组，否则过于复杂。
@@ -238,7 +248,8 @@ class UserFields(ModelFields):
                     if group_id not in allow_group_ids:
                         group_obj = Group.objects.filter(pk=group_id).first()
                         if group_obj:
-                            raise UserWarning(f'不能分配权限组:{group_obj}。你的权限不能覆盖该权限组。')
+                            dif_names = user_dif_promit(self.crt_user, group_obj)
+                            raise UserWarning(f'不能分配权限组:{group_obj}。你的权限不能覆盖{dif_names}。')
                         else:
                             raise UserWarning(f'所设置的id={group_id}的权限组不存在')
         
@@ -246,7 +257,8 @@ class UserFields(ModelFields):
                     if group_id not in allow_group_ids:
                         group_obj = Group.objects.filter(pk=group_id).first()
                         if group_obj:
-                            raise UserWarning(f'不能移除该权限组:{group_obj}。你的权限不能覆盖该权限组。')
+                            dif_names = user_dif_promit(self.crt_user, group_obj)
+                            raise UserWarning(f'不能移除该权限组:{group_obj}。你的权限不能覆盖该{dif_names}。')
                         else:
                             raise UserWarning(f'所设置的id={group_id}的权限组不存在')
 
