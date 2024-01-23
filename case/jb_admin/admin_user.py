@@ -10,7 +10,7 @@ from django.utils.translation import ugettext as _
 from helpers.director.shortcut import model_to_name, model_full_permit, add_permits, model_read_permit,RowSearch
 from django.db.models import Count,F
 import json
-from helpers.director.access.permit import user_permit_names,group_permit
+from helpers.director.access.permit import user_permit_names,group_permit,has_permit
 from helpers.func.dot_dict import read_dict_path
 from django.conf import settings
 from helpers.func.collection import ex
@@ -229,38 +229,50 @@ class UserFields(ModelFields):
                 raise UserWarning('您不是管理员，不能设置用户信息')
             if 'groups' in self.changed_data:
                 """
-                当前只判断了【当前用户】给【目标用户】添加group时，不能超过【当前用户】自身的权限。
-                TODO:可能需要判断【当前用户】删除【目标用户】group时，不能让【当前用户】删除更高权限的分组。
-                考虑到普通用户为【目标用户】分配组时，可能是在特殊的界面，例如本部门下。所以不太可能能直接操作所有用户的分组，就不能乱删除。
-                所以占时不做这个TODO需求。
+                
                 """
-                #self.kw.get('groups')
-                allow_group = user_group_options(self.crt_user)
-                allow_group_ids = [x['id'] for x in allow_group]
-                current_group = set(self.kw.get('groups'))
-                before_group = set(self.before_changed_data.get('groups'))
-                add_group = current_group.difference(before_group)
-                remove_group = before_group.difference(current_group)
-                
-                #current_group_left = change_group.symmetric_difference( self.before_changed_data.get('groups')  )
-                
-                for group_id in add_group:
-                    if group_id not in allow_group_ids:
-                        group_obj = Group.objects.filter(pk=group_id).first()
-                        if group_obj:
-                            dif_names = user_dif_promit(self.crt_user, group_obj)
-                            raise UserWarning(f'不能分配权限组:{group_obj}。你的权限不能覆盖{dif_names}。')
-                        else:
-                            raise UserWarning(f'所设置的id={group_id}的权限组不存在')
-        
-                for group_id in remove_group:
-                    if group_id not in allow_group_ids:
-                        group_obj = Group.objects.filter(pk=group_id).first()
-                        if group_obj:
-                            dif_names = user_dif_promit(self.crt_user, group_obj)
-                            raise UserWarning(f'不能移除该权限组:{group_obj}。你的权限不能覆盖该{dif_names}。')
-                        else:
-                            raise UserWarning(f'所设置的id={group_id}的权限组不存在')
+                if not has_permit(self.crt_user,'group.superadmin'):
+                    """
+                    没有groups.superadmin权限的人，只能赋予别人自己权限内的权限。
+                    """
+                    allow_group = user_group_options(self.crt_user)
+                else:
+                    if hasattr(Group,'filterByUser'):
+                        allow_group= [{
+                            'id':group.id,
+                            'name':group.name,
+                            #'desp':group.permitmodel.desp,
+                            '_label':group.name
+                        } for group in Group.filterByUser(self.crt_user)]
+                    else:
+                        allow_group = '__all__'
+                        
+                if allow_group !='__all__':
+                    allow_group_ids = [x['id'] for x in allow_group]
+                    current_group = set(self.kw.get('groups'))
+                    before_group = set(self.before_changed_data.get('groups'))
+                    add_group = current_group.difference(before_group)
+                    remove_group = before_group.difference(current_group)
+                    
+                    #current_group_left = change_group.symmetric_difference( self.before_changed_data.get('groups')  )
+                    
+                    for group_id in add_group:
+                        if group_id not in allow_group_ids:
+                            group_obj = Group.objects.filter(pk=group_id).first()
+                            if group_obj:
+                                dif_names = user_dif_promit(self.crt_user, group_obj)
+                                raise UserWarning(f'不能分配权限组:{group_obj}。你的权限不能覆盖{dif_names}。')
+                            else:
+                                raise UserWarning(f'所设置的id={group_id}的权限组不存在')
+            
+                    for group_id in remove_group:
+                        if group_id not in allow_group_ids:
+                            group_obj = Group.objects.filter(pk=group_id).first()
+                            if group_obj:
+                                dif_names = user_dif_promit(self.crt_user, group_obj)
+                                raise UserWarning(f'不能移除该权限组:{group_obj}。你的权限不能覆盖该{dif_names}。')
+                            else:
+                                raise UserWarning(f'所设置的id={group_id}的权限组不存在')
 
 
 class NoLimitUserForm(UserFields):
