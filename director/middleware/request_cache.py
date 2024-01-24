@@ -30,6 +30,7 @@ def get_request_cache():
     return {
         'request':no_request,
         'named_ctx':{},
+        'response_cache':{}
     }
 
 def request_cache(fun): 
