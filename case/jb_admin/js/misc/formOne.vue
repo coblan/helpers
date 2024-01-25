@@ -8,12 +8,20 @@
            class="flex-grow fields-area">
         <!--有分组的情况-->
         <div v-if="fields_group" class="fields-group" >
+
+        <!--  以tab页面的方式显示group分组-->
           <div v-if="ctx.tab_group" style="position: absolute;left: 0;right: 0;bottom: 0;top:0;padding-top: 6px;">
               <el-tabs  tab-position="left" style=" height: 100%;width: 100%;flex-direction: row">
                 <el-tab-pane :label="group.label" v-for="group in grouped_heads_bucket">
-                  <com-fields-table-block v-if="table_grid " class="compact"
+
+                  <fieldTableBlock v-if="table_grid " class="compact"
                                           :heads="group.heads" :row="row" :option="{table_grid:table_grid}" :alignLabel="ctx.table_grid_align_label">
-                  </com-fields-table-block>
+                  </fieldTableBlock>
+
+
+<!--                  <com-fields-table-block v-if="table_grid " class="compact"-->
+<!--                                          :heads="group.heads" :row="row" :option="{table_grid:table_grid}" :alignLabel="ctx.table_grid_align_label">-->
+<!--                  </com-fields-table-block>-->
                   <div v-else class='field-panel' :class="head.inn_class?'': 'suit'">
                     <field  v-for='head in group.heads' :key="head.name" :head="head" :row='row'></field>
                   </div>
@@ -21,6 +29,7 @@
               </el-tabs>
           </div>
 
+          <!--  以分块的方式显示group分组-->
           <template v-else  v-for="group in grouped_heads_bucket">
             <div v-if="group.heads && group.heads.length > 0" :class="'group_'+group.name">
               <div style="display: flex;gap: 30px;align-items: center">
@@ -31,9 +40,22 @@
                 </div>
               </div>
               <div v-show="group.collapse == undefined || !group.collapse">
-                <com-fields-table-block v-if="table_grid "
+
+                <fieldGridBlock v-if="group.grid_class "
+                                :class="group.grid_class"
+                                 :heads="group.heads"
+                                  :css="group.grid_css"
+                                  :type="group.grid_type"
+                                  :row="row">
+                </fieldGridBlock>
+
+                <fieldTableBlock v-else-if="table_grid "
                                         :heads="group.heads" :row="row" :option="{table_grid:table_grid}" :alignLabel="ctx.table_grid_align_label">
-                </com-fields-table-block>
+                </fieldTableBlock>
+
+<!--                <com-fields-table-block v-if="table_grid "-->
+<!--                                        :heads="group.heads" :row="row" :option="{table_grid:table_grid}" :alignLabel="ctx.table_grid_align_label">-->
+<!--                </com-fields-table-block>-->
                 <div v-else class='field-panel' :class="head.inn_class?'': 'suit'">
                   <field  v-for='head in group.heads' :key="head.name" :head="head" :row='row'></field>
                 </div>
@@ -49,10 +71,21 @@
 
 
         </div>
+<!--        <div v-else-if="ctx.grid_class">-->
+          <fieldGridBlock v-else-if="ctx.grid_class "
+                          :class="ctx.grid_class"
+                          :heads="normed_heads"
+                          :css="ctx.grid_css"
+                          :type="ctx.grid_type"
+                          :row="row">
+          </fieldGridBlock>
+<!--        </div>-->
         <!--只有table分组-->
         <div v-else-if="table_grid " >
-          <com-fields-table-block
-              :heads="normed_heads" :row="row" :option="{table_grid:table_grid}" :alignLabel="ctx.table_grid_align_label"></com-fields-table-block>
+          <fieldTableBlock
+              :heads="normed_heads" :row="row" :option="{table_grid:table_grid}" :alignLabel="ctx.table_grid_align_label"></fieldTableBlock>
+<!--          <com-fields-table-block-->
+<!--              :heads="normed_heads" :row="row" :option="{table_grid:table_grid}" :alignLabel="ctx.table_grid_align_label"></com-fields-table-block>-->
         </div>
         <!--没有分组-->
         <div v-else class='field-panel' :class="head.inn_class?'': 'suit'" id="form" >
@@ -72,8 +105,13 @@
 * 改造form_one.js 还未完成。
 * */
 import {mix_fields_data} from "../mix/mix_fields_data";
-
+import fieldTableBlock from "./form_one/fieldTableBlock.vue";
+import fieldGridBlock from "./form_one/fieldGridBlock.vue";
 export default {
+    components:{
+      fieldTableBlock,
+      fieldGridBlock
+    },
     props:['ctx'],
     data(){
         if (this.ctx.director_name){
@@ -83,7 +121,10 @@ export default {
         }
         if(this.ctx.preset){
         // 弹窗编辑窗时，可以利用preset传入par_row.pk等信息
-        ex.vueAssign(def_row,this.ctx.preset)
+            ex.vueAssign(def_row,this.ctx.preset)
+        }else if(this.ctx.preset_express){
+           var resp = ex.eval(this.ctx.preset_express,{vc:this,head:this.ctx})
+            ex.vueAssign(def_row,resp)
         }
         var data_row = ex.copy(this.ctx.row  || def_row )
         var self=this
@@ -262,13 +303,23 @@ export default {
     margin: 10px;
   }
 
-  .field-input-td{
-    .msg-box.n-right{
-      position: absolute;
-      bottom: 0;
-      left: 0;
-    }
-  }
+  //.field-input-td{
+  //  .msg-box.n-right{
+  //    position: absolute;
+  //    bottom: 0;
+  //    left: 0;
+  //  }
+  //}
+
+ ::v-deep{
+   .msg-bottom{
+     .msg-box.n-right{
+       position: absolute;
+       bottom: 0;
+       left: 0;
+     }
+   }
+ }
 
 }
 

@@ -151,6 +151,12 @@ def export_excel(request):
     wb.save(response)
     return response 
 
+def clear_forbid_name(name):
+    forbid_name = getattr(settings,'FORBID_DIRECTOR',[])
+    if name in forbid_name:
+        raise PermissionDenied('not permited access!')
+    return name
+
 @csrf_exempt
 def director_view(request,director_name):
     """将director函数以api的方式直接暴露出去"""
@@ -158,7 +164,7 @@ def director_view(request,director_name):
         # 专门针对modelfield返回详情
         if director_name.startswith('get/'):
             kws = argument.get_argument(request,outtype='dict')
-            directorEnt= director.get(director_name)
+            directorEnt= director.get( clear_forbid_name(  director_name)  )
             rt = directorEnt(**kws,select_for_update=False).get_data_context() 
             dc ={'success':True,'data':rt.get('row')}
             return  HttpResponse(json.dumps(dc,ensure_ascii=False,cls=DirectorEncoder),content_type="application/json")     
@@ -187,9 +193,9 @@ def director_view(request,director_name):
             kws['attr_name'] = attr_name
                
         else:
-            directorEnt= director_views.get(director_name)
+            directorEnt= director_views.get( clear_forbid_name(  director_name) )
         if not directorEnt:
-            directorEnt = director.get(director_name)
+            directorEnt = director.get(  clear_forbid_name(  director_name) )
           
     #try:  # 原来try在这里，但是try应该包含所有
         #kws = argument.get_argument(request,outtype='dict')
@@ -273,12 +279,12 @@ def fast_director_view(request,director_name):
         kws['director_name'] = director_name#[6:]
         kws['attr_name'] = attr_name           
     else:
-        directorEnt= director_views.get(director_name)
+        directorEnt= director_views.get(  clear_forbid_name(  director_name)  )
     allowed_methods =  ex.read_dict_path(director_setting, '%s.methods'%director_name)
     if allowed_methods and 'GET' not in allowed_methods:
         return HttpResponse('request Method not allowed',status=405)
     if not directorEnt:
-        directorEnt = director.get(director_name)
+        directorEnt = director.get( clear_forbid_name(  director_name) )
     try:
         # 快速版本里面应该只有fuction,尽量不要使用 modelfields,之类
         if inspect.isfunction(directorEnt):

@@ -43,5 +43,6 @@ export default {
         white-space: pre-wrap;
         word-wrap: break-word;
         border: none;
+        background-color: inherit;
     }
 </style>

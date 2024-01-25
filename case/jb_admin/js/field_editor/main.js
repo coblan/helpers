@@ -2,7 +2,7 @@ import * as invite_code from  './invite_code'
 //import * as line_text from  './line_text'
 
 import * as phone_code from  './phone_code'
-import * as month from  './month'
+// import * as month from  './month'
 
 
 // import * as cascader from  './cascader'
@@ -91,8 +91,10 @@ Vue.component('com-field-pop-edit',pop_edit)
 
 import picture from './picture.vue'
 Vue.component('com-field-picture',picture)
-
-
+import multiFile from "./multiFile.vue";
+Vue.component('com-field-multi-file',multiFile)
+import month from './month.vue'
+Vue.component('com-field-month',month)
 import jsEditor from "./jsEditor.vue";
 Vue.component('com-field-js-editor', async (resolve, reject) =>{
     await ex.load_js(cfg.js_lib.ace)
@@ -147,6 +149,8 @@ Vue.component('com-field-qrcode', async (resolve, reject) =>{
     var com = await import(/* webpackChunkName: 'fields_import' */'./qrcode.vue')
     resolve(com.default)
 })
+
+
 
 Vue.component('com-field-phone', async (resolve, reject) =>{
     var com = await import(/* webpackChunkName: 'fields_import' */'./phone.vue')

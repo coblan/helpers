@@ -269,7 +269,8 @@ class BigFileRecieve(GeneralUpload):
         file_url_list = [ self.switch_format_check(media_path) for media_path in file_url_list]
         #self.file_url_list = file_url_list
         self.file_url_list = self.encrypt(file_url_list)
-        return HttpResponse(json.dumps(file_url_list),content_type="application/json")
+        #return HttpResponse(json.dumps(file_url_list),content_type="application/json")
+        return HttpResponse(json.dumps(self.file_url_list),content_type="application/json")
     
     def processImage(self,absolut_file_path,image_format=None):
         if self.request.GET.get('maxspan'):

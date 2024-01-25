@@ -44,11 +44,19 @@ export  var pop_fields={
         },
         open_layer:function(){
             var self=this
+            // 从父亲com-field-table-list组件里面去拿readonly属性。
+            var readonly = self.parStore.vc.head.readonly
+            if(readonly){
+                var ops =[]
+            }else{
+                var ops = [{
+                        'name':'save','editor':'com-field-op-btn','label':'确定', 'icon': 'fa-save',
+                    }]
+            }
             var fields_ctx={
+                readonly_all:readonly,
                 heads:self.table_par.head.fields_heads,
-                ops:[{
-                    'name':'save','editor':'com-field-op-btn','label':'确定', 'icon': 'fa-save',
-                }],
+                ops:ops,
                 extra_mixin:[],
                 genVc:self,
                 par_row:this.rowData

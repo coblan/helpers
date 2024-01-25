@@ -37,7 +37,11 @@ def fields_doc(model_form,pk_field='id',model_table=None):
         table_str += f"|pk|数据库主键|唯一|与{pk_field}值一致。|\n"
         
     for head in heads:
-        table_str += f"|{head.get('name')}|{head.get('label')}|{com_to_type(head,model_form_inst)}|{head.get('help_text','')}|\n"
+        if head['name'] ==pk_field:
+            continue
+        
+        required_str = ' 必填' if head.get('required',False)  else ''
+        table_str += f"|{head.get('name')}|{head.get('label')}|{com_to_type(head,model_form_inst)}|{head.get('help_text','')}{required_str}|\n"
     
     if  model_table:
         model_table.nolimit =True
@@ -63,7 +67,7 @@ def com_to_type(head,model_form_inst):
         return 'bool型'
     if head['editor'] =='com-field-location':
         return '格式为:lat,lng 的经纬度字符串'
-    if head['editor'] in ['com-field-table-select','com-field-select','com-field-cascader']:
+    if head['editor'] in ['com-field-table-select','com-field-select','com-field-cascader','com-field-radio']:
         try:
             field = model_form_inst.instance._meta.get_field(head['name'])
         except:

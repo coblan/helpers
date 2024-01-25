@@ -30,6 +30,7 @@ def get_request_cache():
     return {
         'request':no_request,
         'named_ctx':{},
+        'response_cache':{}
     }
 
 def request_cache(fun): 
@@ -72,6 +73,7 @@ class RequestCacheMiddleware(MiddlewareMixin):
             'request': request,
             'msg': [],
             'named_ctx':{},
+            'response_cache':{}
             }  #_request_cache.get(currentThread()) or RequestCache()
         _request_cache[currentThread()] = cache
         

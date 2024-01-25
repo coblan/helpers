@@ -286,10 +286,12 @@ var cfg={
     switch_back(){
         // 这里很混乱，root_live只存在于live.html中，而live_root存在于live.html和table_new.html中
         if(window.root_live){
-            var com = window.live_root.stack.pop()
-            Vue.delete(window.live_root.$options.components,com)
+            window.root_live.pop_stack()
+            // var com = window.live_root.stack.pop()
+            // Vue.delete(window.live_root.$options.components,com)
         }else{
-            window.live_root.childStore.tab_stack.pop()
+            window.live_root. pop_tab_stack()
+            // window.live_root.childStore.tab_stack.pop()
         }
     }
 }
