@@ -336,7 +336,7 @@ def merge_media_file(path_list,suffix=None):
                 dt = f_slice.read()
                 f.write(dt)
             os.remove(abs_path)
-
+    general_log.debug(f'合并文件成功,Useragent={useragent},生成的文件是:{abs_target}') 
     return target
             
 @director_view('upload/encrypt/info')
