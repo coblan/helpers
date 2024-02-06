@@ -328,15 +328,17 @@ def merge_media_file(path_list,suffix=None):
     request = get_request_cache()['request']
     useragent = request.META.get('HTTP_USER_AGENT', '')
     general_log.debug(f'合并文件接口,Useragent={useragent},生成的文件是:{abs_target};pathlist={path_list}')  
-    
-    with open(abs_target,'wb+') as f:
-        for path in path_list:
-            abs_path = media_url_to_path(path) #  os.path.join(settings.MEDIA_ROOT,path.lstrip('/media/'))
-            with open(abs_path,'rb') as f_slice:
-                dt = f_slice.read()
-                f.write(dt)
-            os.remove(abs_path)
-    general_log.debug(f'合并文件成功,Useragent={useragent},生成的文件是:{abs_target}') 
+    if os.path.exists(abs_target):
+        general_log.debug(f'文件:{abs_target};已经存在')
+    else:
+        with open(abs_target,'wb+') as f:
+            for path in path_list:
+                abs_path = media_url_to_path(path) #  os.path.join(settings.MEDIA_ROOT,path.lstrip('/media/'))
+                with open(abs_path,'rb') as f_slice:
+                    dt = f_slice.read()
+                    f.write(dt)
+                os.remove(abs_path)
+        general_log.debug(f'合并文件成功,Useragent={useragent},生成的文件是:{abs_target}') 
     return target
             
 @director_view('upload/encrypt/info')
