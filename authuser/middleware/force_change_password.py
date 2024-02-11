@@ -3,44 +3,85 @@ from django.contrib.sessions.models import Session
 from django.http import HttpResponseRedirect
 from .. models import PasswordInfo
 from django.utils import timezone
+from helpers.director.shortcut import get_request_cache
+from django.utils.deprecation import MiddlewareMixin
 
-class ForceChangePasswordMiddleware:
-    # Called only once when the web server starts
-    def __init__(self, get_response):
-        self.get_response = get_response
+class ForceChangePasswordMiddleware(MiddlewareMixin):
 
-    # Called once per request
-    def __call__(self, request):
-        # This codition is required because anonymous users 
-        # dont have access to 'logged_in_user'
+    def process_request(self, request):
+        pass
         
-        if request.path =='/accounts/pswd' or request.path.startswith('/dapi'): 
-            response = self.get_response(request)
+    
+    def process_response(self, request, response):
+        """
+        """
+        if request.path =='/accounts/pswd' : # or request.path.startswith('/dapi'): 
             return response
         
         if request.user.is_authenticated:
-            now = timezone.now()
-            if not request.COOKIES.get('password_last_change'):
-                inst,create = PasswordInfo.objects.get_or_create(user = request.user,)
-                if create:
-                    inst.last_change = now
-                    inst.save()
-                password_last_change= inst.last_change
-                password_last_change_str = inst.last_change.strftime('%Y-%m-%d %H:%M:%S')
-            else :
-                password_last_change_str = request.COOKIES.get('password_last_change')
-                password_last_change = timezone.datetime.strptime( password_last_change_str,'%Y-%m-%d %H:%M:%S' )
-            
-            # 密码要求30天改一次
-            if password_last_change < now -  timezone.timedelta(days=30): # timezone.timedelta(minutes=5): #
-                response = HttpResponseRedirect('/accounts/pswd')
-                response.delete_cookie('password_last_change')
+            response_cache = get_request_cache()['response_cache']
+            if response_cache.get('clear_password_expire'):
+                response.delete_cookie('clear_password_expire')
+                response.delete_cookie('password_expire')            
+            elif response_cache.get('password_expire') ==1:
+                """
+                第一次 password_expire==1 不能直接跳转，因为api调用跳转了会出问题。
+                要等下次请求页面的时候才能跳转。
+                """
+                response.set_cookie('password_expire',1)
             else:
-                response = self.get_response(request)
-                response.set_cookie('password_last_change',password_last_change_str)
-        else:
-            response = self.get_response(request)
+                if not request.path.startswith('/dapi') and \
+                    request.COOKIES.get('password_expire')=='1':
+                    response = HttpResponseRedirect('/accounts/pswd')
         return response
+    
+    
+#class ForceChangePasswordMiddleware:
+    ## Called only once when the web server starts
+    #def __init__(self, get_response):
+        #self.get_response = get_response
+
+    ## Called once per request
+    #def __call__(self, request):
+        ## This codition is required because anonymous users 
+        ## dont have access to 'logged_in_user'
+        
+        #if request.path =='/accounts/pswd' or request.path.startswith('/dapi'): 
+            #response = self.get_response(request)
+            #return response
+        
+        #if request.user.is_authenticated:
+            ##now = timezone.now()
+            ##if not request.COOKIES.get('password_last_change'):
+                ##inst,create = PasswordInfo.objects.get_or_create(user = request.user,)
+                ##if create:
+                    ##inst.last_change = now
+                    ##inst.save()
+                ##password_last_change= inst.last_change
+                ##password_last_change_str = inst.last_change.strftime('%Y-%m-%d %H:%M:%S')
+            ##else :
+                ##password_last_change_str = request.COOKIES.get('password_last_change')
+                ##password_last_change = timezone.datetime.strptime( password_last_change_str,'%Y-%m-%d %H:%M:%S' )
+            
+            ## 密码要求30天改一次
+            ##if password_last_change < now -  timezone.timedelta(days=30): # timezone.timedelta(minutes=5): #
+                ##response = HttpResponseRedirect('/accounts/pswd')
+                ##response.delete_cookie('password_last_change')
+            ##else:
+                ##response = self.get_response(request)
+                ##response.set_cookie('password_last_change',password_last_change_str)
+            #response_cache = get_request_cache()['response_cache']
+            #if response_cache.get('clear_password_expire'):
+                #response.delete_cookie('clear_password_expire')
+                #response.delete_cookie('password_expire')            
+            #elif response_cache.get('password_expire'):
+                #response = HttpResponseRedirect('/accounts/pswd')
+            #else:
+                #response = self.get_response(request)
+            
+        #else:
+            #response = self.get_response(request)
+        #return response
     
 
 

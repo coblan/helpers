@@ -19,8 +19,11 @@ from helpers.func.image_proc import ceil_image_size,compressImage,switch_format_
 from helpers.director.shortcut import director_view
 from helpers.func.url_path import media_url_to_path
 from helpers.func.dot_dict import read_dict_path
+from helpers.director.shortcut import get_request_cache
+
 import logging
 general_log = logging.getLogger('general_log')
+
 
 class BasicReciever(object):
     
@@ -312,22 +315,30 @@ def merge_media_file(path_list,suffix=None):
                 #target =  '/media' + target
             #else:
                 #target =  '/media/' + target
+     
     if suffix:
         if suffix.startswith('.'):
-            target = path_list[0] + suffix
+            target = path_list[0]+'_total' + suffix
         else:
-            target = path_list[0]+'.' + suffix
+            target = path_list[0]+'_total'+'.' + suffix
     else:
-        target = path_list[0]
+        target = path_list[0]+'_total'
     abs_target = media_url_to_path(target)
-    with open(abs_target,'wb+') as f:
-        for path in path_list:
-            abs_path = media_url_to_path(path) #  os.path.join(settings.MEDIA_ROOT,path.lstrip('/media/'))
-            with open(abs_path,'rb') as f_slice:
-                dt = f_slice.read()
-                f.write(dt)
-            os.remove(abs_path)
     
+    request = get_request_cache()['request']
+    useragent = request.META.get('HTTP_USER_AGENT', '')
+    general_log.debug(f'合并文件接口,Useragent={useragent},生成的文件是:{abs_target};pathlist={path_list}')  
+    if os.path.exists(abs_target):
+        general_log.debug(f'文件:{abs_target};已经存在')
+    else:
+        with open(abs_target,'wb+') as f:
+            for path in path_list:
+                abs_path = media_url_to_path(path) #  os.path.join(settings.MEDIA_ROOT,path.lstrip('/media/'))
+                with open(abs_path,'rb') as f_slice:
+                    dt = f_slice.read()
+                    f.write(dt)
+                os.remove(abs_path)
+        general_log.debug(f'合并文件成功,Useragent={useragent},生成的文件是:{abs_target}') 
     return target
             
 @director_view('upload/encrypt/info')

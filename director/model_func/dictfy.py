@@ -53,6 +53,12 @@ def to_dict(instance,filt_attr=None,include=None,exclude=None,hash_keys=None,for
     #out['meta_org_dict'] = make_mark_dict(instance.__dict__,valide_name_list)
     return out
 
+def model_fields_names(model_or_inst):
+    fields=model_or_inst._meta.get_fields() # 如果用  instance._meta.fields 没有 manytomany (测试过) ,可能也没有 onetoone
+    fields=[field for field in fields if isinstance(field,models.Field)]
+    
+    return [x.name for x in fields]
+
 def sim_dict(instance,filt_attr=None,include=None,exclude=None,include_id=True,include_pk=True,label=True):
     """
     fields=['name','age'] 虽然中函数中fields是django中的model.field对象，但是这里为了方便，接受外部
