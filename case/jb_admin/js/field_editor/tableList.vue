@@ -16,6 +16,7 @@
               border
               :stripe="true"
               size="mini"
+              :fit="false"
               @header-dragend="on_header_dragend"
               @selection-change="handleSelectionChange"
               style="width: 100%">
@@ -74,7 +75,7 @@ export default {
       heads:this.head.table_heads,
       selected:[],
       parStore:ex.vueParStore(this),
-      childStore:{name:'com-field-table-list',vc:self}
+      childStore:{name:'com-field-table-list',vc:self},
     }
 
   },
@@ -145,11 +146,11 @@ export default {
         setting_obj.advise_width = setting_obj.advise_width || {}
         setting_obj.advise_width[column.property] = newWidth
         localStorage.setItem(key,JSON.stringify(setting_obj))
+
       }
     },
     loadAdviseInfo(){
       if(this.head.advise_name){
-        debugger
         var key = '_table_settings_'+this.head.advise_name
         var setting_str = localStorage.getItem(key) || '{}'
         var setting_obj = JSON.parse(setting_str)
