@@ -996,7 +996,10 @@ class ModelTable(object):
         """
         重写该函数，定制row输出字典
         """
-        return {}
+        if isinstance(inst,dict):
+            return inst
+        else:
+            return {}
     
     #def init_query(self):
         #return self.model.objects.all()
