@@ -139,8 +139,8 @@ export default {
   methods:{
     on_header_dragend(newWidth, oldWidth, column, event){
       // if(this.advise_heads.length >0){
-      if(this.head.advise_name){
-        var key = '_table_settings_'+this.head.advise_name
+      if(this.head.layout_key){
+        var key = '_table_settings_'+this.head.layout_key
         var setting_str = localStorage.getItem(key) || '{}'
         var setting_obj = JSON.parse(setting_str)
         setting_obj.advise_width = setting_obj.advise_width || {}
@@ -150,8 +150,8 @@ export default {
       }
     },
     loadAdviseInfo(){
-      if(this.head.advise_name){
-        var key = '_table_settings_'+this.head.advise_name
+      if(this.head.layout_key){
+        var key = '_table_settings_'+this.head.layout_key
         var setting_str = localStorage.getItem(key) || '{}'
         var setting_obj = JSON.parse(setting_str)
         var advise_width =  setting_obj.advise_width
