@@ -78,10 +78,10 @@ $(function() {
 
         },
         methods:{
-            pop_stack(){
+            pop_stack(obj){
                 var com = this.stack.pop()
                 if(cfg._tab_call_back.length>0){
-                    cfg._tab_call_back.pop()()
+                    cfg._tab_call_back.pop()(obj)
                 }
                 Vue.delete(this.$options.components,com)
             },
