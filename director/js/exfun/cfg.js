@@ -275,22 +275,24 @@ var cfg={
                 genVc:kws.genVc
             })
         }
+        debugger
         return new Promise((resolve,reject)=>{
-            this._tab_call_back.push(()=>{
-                resolve()
+            this._tab_call_back.push((obj)=>{
+                debugger
+                resolve(obj)
             })
         })
 
 
     },
-    switch_back(){
+    switch_back(arg_obj){
         // 这里很混乱，root_live只存在于live.html中，而live_root存在于live.html和table_new.html中
         if(window.root_live){
-            window.root_live.pop_stack()
+            window.root_live.pop_stack(arg_obj)
             // var com = window.live_root.stack.pop()
             // Vue.delete(window.live_root.$options.components,com)
         }else{
-            window.live_root. pop_tab_stack()
+            window.live_root. pop_tab_stack(arg_obj)
             // window.live_root.childStore.tab_stack.pop()
         }
     }
