@@ -3,6 +3,9 @@ from threading import currentThread
 import json
 from django.utils.deprecation import MiddlewareMixin
 from functools import wraps
+import inspect
+import hashlib
+
 
 # 每个request请求的全局对象
 _request_cache = {
@@ -40,17 +43,19 @@ def request_cache(fun):
         if kws.get('cache_key'):
             key = kws.get('cache_key')
         else:
-            key = str( hash(fun))
+            key =  fun.__module__+'.' +fun.__name__ # str( hash(fun))
             if args:
                 for item in args:
                     key += '%s_%s'%(item.__class__.__name__, id(item) )
             if kws:
-                key += str( hash(json.dumps(kws, sort_keys=True)) )
+                key +=  hashlib.md5(json.dumps(kws, sort_keys=True) ).hexdigest().upper()    #  str( hash(json.dumps(kws, sort_keys=True)) )
             
         if cache.get(key):
             return cache.get(key)
         else:
             rt = fun(*args, **kws)
+            if inspect.isgenerator(rt):
+                rt = list(rt)
             cache[key] = rt
             return rt
     return _fun
