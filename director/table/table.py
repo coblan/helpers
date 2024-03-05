@@ -650,7 +650,7 @@ class ModelTable(object):
         elif 'id' in self.exclude and 'id' in ls:
             ls.remove('id')
             
-        if self.include:
+        if self.include != None:
             return [x for x in self.include if x in ls]
         if self.exclude:
             return [x for x in ls if x not in self.exclude]
@@ -687,7 +687,7 @@ class ModelTable(object):
             heads = []
         model_heads = self.get_model_heads()
         heads =  heads + model_heads
-        if not self.include:
+        if  self.include ==None:
             heads = [x for x in heads if x['name'] not in self.exclude]
         else:
             heads = [x for x in heads if x['name'] in self.include]
