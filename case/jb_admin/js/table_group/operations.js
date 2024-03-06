@@ -2,7 +2,7 @@ export  var ele_operations={
 
     //                      :disabled="get_attr(op.disabled)"
     //v-show="! get_attr(op.hide)"   // overflow: hidden  是因为有 refresh 按钮 是float:right 的；
-    template:`<div class="oprations" style="padding: 5px;overflow: hidden">
+    template:`<div class="oprations" style="padding: 5px;overflow: hidden;flex-shrink: 0;">
                 <component v-for="(op,index) in ops"
                            :is="op.editor"
                            :ref="'op_'+op.name"
