@@ -1,8 +1,13 @@
+/*
+* 真正的operations已经移动到webcase里面去了，这里的operations.js和operations.vue都无用
+* 这个operations.js生成了com-table-operations组件，可能改组件还会在哪里用到，所以没有删除。
+* */
+
 export  var ele_operations={
 
     //                      :disabled="get_attr(op.disabled)"
     //v-show="! get_attr(op.hide)"   // overflow: hidden  是因为有 refresh 按钮 是float:right 的；
-    template:`<div class="oprations" style="padding: 5px;overflow: hidden;flex-shrink: 0;">
+    template:`<div class="oprations11" style="padding: 5px;overflow: hidden;flex-shrink: 0;">
                 <component v-for="(op,index) in ops"
                            :is="op.editor"
                            :ref="'op_'+op.name"
