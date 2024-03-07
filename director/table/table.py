@@ -535,6 +535,10 @@ class ModelTable(object):
     def get_head_context(self):
         """
         有些时候，最先不需要返回rows，而只返回filters，head等，等待用户选择后，才返回rows
+        
+        {
+            opMergeCount:3
+        }
         """
         ops = self.get_operation()
         ops = evalue_container(ops)
