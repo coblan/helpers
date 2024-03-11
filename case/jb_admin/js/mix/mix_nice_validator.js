@@ -179,8 +179,8 @@ var nice_validator={
                         $(this.$el).find('[name='+k+']').trigger("showmsg", ["error", error_msg ]);
                     }
                 }else{
-                    //$(this.$el).find('[name='+k+']').trigger("showmsg", ["error", errors[k].join(';')]);
-                    no_name_error.push({k:error_msg} )
+                    // no_name_error.push({k:error_msg} )
+                    no_name_error.push( `${k}:${error_msg}` )
                 }
             }
             if(no_name_error.length > 0){
