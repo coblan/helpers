@@ -188,6 +188,7 @@ export  var mix_fields_data ={
             // if(!ex.isEmpty(errors)){
             //     cfg.showMsg(  JSON.stringify(errors)  )
             // }
+            return errors;
 
         },
         dataSaver:function(callback){
@@ -239,15 +240,22 @@ export  var mix_fields_data ={
                     delete self.row.meta_change_fields
 
                     var rt = resp //resp.save_row
-                    debugger;
                     if(rt.errors){
                         //cfg.hide_load()
                         cfg.toast('请检查填写内容')
-                        self.setErrors(rt.errors)
+                        var left_error = self.setErrors(rt.errors)
+
                         // 如果是联系服务器前 self.setErrors(rt.errors) + self.isValid()就会自动触发显示错误项目
                         // 但是这个是服务器处理后，所以没有调用self.isValid，而是调用的showErrors()直接显示错误。
                         // 感觉self.setErrors(rt.errors)会不会没啥用？
+
                         self.showErrors(rt.errors)
+
+                        // if(ex.isEmpty(left_error)){
+                        //     cfg.toast('请检查填写内容')
+                        // }else{
+                        //     cfg.showError(JSON.stringify(errors))
+                        // }
                         //reject(rt.errors)
                     }else if(rt._outdate){
                         cfg.outdate_confirm(
