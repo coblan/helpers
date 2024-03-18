@@ -4,6 +4,7 @@ from helpers.director.base_data import field_map
 from django.db.models import Q
 from helpers.director.model_func.dictfy import model_to_name
 from django.core.exceptions import FieldDoesNotExist
+from helpers.director.model_func.func import path_to_field
 
 class SelectSearch(object):
     names=[]
@@ -62,7 +63,7 @@ class SelectSearch(object):
             mapper = mapperCls(name=self.qf,model = self.model)
         else:
             try:
-                f = self.model._meta.get_field(self.qf)
+                f =  path_to_field(self.model,self.qf )  #self.model._meta.get_field(self.qf)
                 if f:
                     mapperCls = field_map.get(f.__class__)
                     mapper = mapperCls(name=f.name,model = f.model)
