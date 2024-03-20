@@ -38,7 +38,7 @@ import json
 from django.db import models
 from ..base_data import model_dc,permit_list, director
 from ..access.permit_data import get_model_permit, expand_permit_names
-
+from ..middleware.request_cache import  request_cache
 
 def can_touch(model, user):
     validator = ModelPermit(model, user)
@@ -65,13 +65,21 @@ def has_permit(user, perm_name):
     
     return perm_name in user_permit_names(user)
 
+#count =0
 
+#global count
+#count +=1
+#print(count)   
+
+@request_cache
 def user_permit_names(user):
     for group in user.groups.all():
         for permit_dc in expand_permit_names( group_permit(group) ):
             yield permit_dc
 
+#@request_cache
 def group_permit(group):
+    
     if hasattr(group, 'permitmodel'):
         for permit in group.permitmodel.names.split(';'):
             yield permit

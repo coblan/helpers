@@ -1,6 +1,7 @@
 <template>
     <div class="com-table-tag-map">
         <el-tag
+               v-if="mylabel"
                 :type="mytype"
                 effect="dark"
                 size = 'mini'

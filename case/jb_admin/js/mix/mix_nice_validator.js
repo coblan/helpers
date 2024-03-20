@@ -171,7 +171,7 @@ var nice_validator={
                 }else{
                     var error_msg = errors[k].join(';')
                 }
-                var head = ex.findone(this.heads,{name:k})
+                var head = ex.findone(this.normed_heads,{name:k})
                 if(head){
                     if(head.validate_showError){
                         ex.eval(head.validate_showError,{head:this.head,msg:error_msg })
@@ -179,8 +179,8 @@ var nice_validator={
                         $(this.$el).find('[name='+k+']').trigger("showmsg", ["error", error_msg ]);
                     }
                 }else{
-                    //$(this.$el).find('[name='+k+']').trigger("showmsg", ["error", errors[k].join(';')]);
-                    no_name_error.push({k:error_msg} )
+                    // no_name_error.push({k:error_msg} )
+                    no_name_error.push( `${k}:${error_msg}` )
                 }
             }
             if(no_name_error.length > 0){

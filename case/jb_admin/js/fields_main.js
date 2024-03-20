@@ -70,7 +70,12 @@ Vue.component('com-field-ele-transfer', async (resolve, reject) =>{
     var com = await import(/* webpackChunkName: 'fields_import' */'./field_editor/ele_transfer.js')
     resolve(com.default)
 })
+// Vue.component('com-field-table-list', async (resolve, reject) =>{
+//     var com = await import(/* webpackChunkName: 'fields_import' */'./field_editor/order_list_table.js')
+//     resolve(com.default)
+// })
+
 Vue.component('com-field-table-list', async (resolve, reject) =>{
-    var com = await import(/* webpackChunkName: 'fields_import' */'./field_editor/order_list_table.js')
+    var com = await import(/* webpackChunkName: 'fields_import' */'./field_editor/tableList.vue')
     resolve(com.default)
 })
