@@ -14,7 +14,6 @@ from warnings import warn
 
 __all__ = ["relativedelta",] # "MO", "TU", "WE", "TH", "FR", "SA", "SU"]
 
-
 class relativedelta(object):
     """
     The relativedelta type is designed to be applied to an existing datetime and
