@@ -28,10 +28,10 @@ def director_save_row(row):
      else:
           return {}
 
-def _total_save(user, row,**kw):
-     field_obj = permit_save_model(user, row,**kw)
-     dc = field_obj.get_row()
-     return dc
+#def _total_save(user, row,**kw):
+     #field_obj = permit_save_model(user, row,**kw)
+     #dc = field_obj.get_row()
+     #return dc
 
 @director_view('d.save_row')
 def save_row(row):
@@ -39,14 +39,17 @@ def save_row(row):
      user = request.user
      try:
           kw = request.GET.dict()
-          d_name =  row.get('_director_name')
-          if director_transaction.get(d_name):
-               real_save = tranactionDbs(_total_save,director_transaction.get(d_name))
-               dc = real_save(user, row,**kw)
-          else:
-               dc = _total_save(user, row,**kw)
-          #field_obj = permit_save_model(user, row,**kw)
-          #dc = field_obj.get_row()
+          #[1] 下面本来用来控制事务的，不过现在使用db_router来控制
+          #d_name =  row.get('_director_name')
+          #if director_transaction.get(d_name):
+               #real_save = tranactionDbs(_total_save,director_transaction.get(d_name))
+               #dc = real_save(user, row,**kw)
+          #else:
+               #dc = _total_save(user, row,**kw)
+          # [1] 直接使用下面代码
+          field_obj = permit_save_model(user, row,**kw)
+          dc = field_obj.get_row()
+          
           return {'success':True,'status':'success','row':dc}
      except ValidationError as e:
           return {'errors':dict(e)}
