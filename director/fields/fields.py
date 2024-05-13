@@ -65,7 +65,7 @@ class ModelFields(forms.ModelForm):
     allow_create = True
     foreign_bridge = []
     save_to_local= False
-    
+    front_info=True # 报错的时候，是否走前端的业务流程。例如 form 字段提醒，字段过期提醒等。
     
     @classmethod
     def parse_request(cls,request):

@@ -42,9 +42,14 @@ def sign_check(salt,expire=60):
                     continue
                 ls.append(f'{k}={v}')
             ls.sort()
-            url = '&'.join(ls)
-            no_salt_url = url + f'&salt={{salt}}&ts={timestamp}'
-            url += f'&salt={salt}&ts={timestamp}'
+            if ls:
+                # 判断是否有参数
+                url = '&'.join(ls)
+                no_salt_url = url + f'&salt={{salt}}&ts={timestamp}'
+                url += f'&salt={salt}&ts={timestamp}'
+            else:
+                no_salt_url = f'salt={{salt}}&ts={timestamp}'
+                url = f'salt={salt}&ts={timestamp}'                
             #url = f'amount={amount}&app={app}&userid={userid}&username={username}&salt={salt}'
             sign_str = md5(url)
             if sign_str != sign:

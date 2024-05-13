@@ -64,16 +64,26 @@ def save_row_for_front(row):
      request = get_request_cache()['request']
      user = request.user
      try:
+          # 记录下director 的form，后面报错会根据form类确定是否报异常到前端。
+          # 如果这里不记录，经过permit_save_model后，row可能没有_director_name属性了。
+          fields_cls = director.get(row['_director_name'])
+          
           kw = request.GET.dict()
           field_obj = permit_save_model(user, row,**kw)
           dc = field_obj.get_row()
           return dc
      except ValidationError as e:
-          return {'errors':dict(e)}
+          if getattr(fields_cls,'front_info',True):
+               return {'errors':dict(e)}
+          else:
+               raise UserWarning(dict(e))
      except PermissionDenied as e:
           raise UserWarning(str(e))
      except OutDateException as e:
-          return {'_outdate':str(e)}
+          if getattr(fields_cls,'front_info',True):
+               return {'_outdate':str(e)}
+          else:        
+               raise UserWarning(str(e))
 
 
 @exclude_transaction
