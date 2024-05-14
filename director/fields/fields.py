@@ -60,7 +60,7 @@ class ModelFields(forms.ModelForm):
     simple_dict = False
     allow_delete= False
     select_for_update = True  # 某些高频访问文件，写入不平凡，所以不允许锁定，就可以设置为False
-    complete_field = False   # 自动补全没有上传的字段,在api或者selected_set_and_save中不必上传所有字段
+    complete_field = True # False   # 自动补全没有上传的字段,在api或者selected_set_and_save中不必上传所有字段  2024/5/14改为true
     pass_clean_field = []
     allow_create = True
     foreign_bridge = []
@@ -131,7 +131,7 @@ class ModelFields(forms.ModelForm):
             self.is_create = True
         else:
             self.is_create = False 
-                
+           
         form_kw={}
         if 'instance' not in self.kw:
             if pk=='-1':  # -1 表示 最后一个记录 （一般用不到）
@@ -183,7 +183,7 @@ class ModelFields(forms.ModelForm):
 
         # todict -> ui -> todict(compare) -> adapte_dict
         readonly_waring = []
-        simdc = sim_dict(inst)
+        simdc = sim_dict(inst)  # 用来修正那些只读的字段
         orgin_simdc = dict(simdc)  # 将可json化的结果保存下来，后面记录日志会用到。simdc被clean处理过，可能不能json化了
             
         #n1 由于 multichoice.fullchoice, -1代表全部，出库的时候，转换为[1,2,3], 而数据库中是-1,造成数据库 出入不一致,所以加入以下_clean代码，将simdc再次还原为数据库数据。（simdc是走了to_dict转换函数的）
@@ -225,7 +225,16 @@ class ModelFields(forms.ModelForm):
             dd = dict(simdc)
             dd.update(dc)
             dc = dd
-            
+        
+        # 创建时，把必要的默认值补上 2024/5/14添加。
+        # 原因： 在创建row时，某些隐藏字段是必填的，有默认值。
+        # 后台创建是先从后台获取了默认row，再提交的，所以没有问题。
+        # 但是三方api调用时，就会报错。
+        if self.is_create:
+            for field in self.Meta.model._meta.get_fields():
+                if  dc.get(field.name) ==None and field.blank != True and field.default != models.fields.NOT_PROVIDED:
+                    dc[field.name]= field.default
+
         self.kw.update(dc)        
 
         super(ModelFields,self).__init__(dc,*args,**form_kw)

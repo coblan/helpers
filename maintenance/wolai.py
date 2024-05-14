@@ -4,6 +4,7 @@ template = '''
 '''
 from django.db.models.fields import related
 from helpers.director.model_func.cus_fields.snow_flake  import SnowFlakeField
+from django.db import models
 
 def table_doc(model_table):
     model_table.nolimit=True
@@ -40,7 +41,13 @@ def fields_doc(model_form,pk_field='id',model_table=None):
         if head['name'] ==pk_field:
             continue
         
-        required_str = ' 必填' if head.get('required',False)  else ''
+        #required_str = ' 必填' if head.get('required',False)  else ''
+        field = model_form.Meta.model._meta.get_field(head['name'])
+        required_str = ''
+        if not field.blank:
+            required_str = ' 必填'
+        if field.default != models.fields.NOT_PROVIDED:
+            required_str += f' 默认值:{field.default}'
         table_str += f"|{head.get('name')}|{head.get('label')}|{com_to_type(head,model_form_inst)}|{head.get('help_text','')}{required_str}|\n"
     
     if  model_table:
