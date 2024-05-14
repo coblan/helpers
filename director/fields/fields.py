@@ -232,7 +232,7 @@ class ModelFields(forms.ModelForm):
         # 但是三方api调用时，就会报错。
         if self.is_create:
             for field in self.Meta.model._meta.get_fields():
-                if  dc.get(field.name) ==None and field.blank != True and field.default != models.fields.NOT_PROVIDED:
+                if  dc.get(field.name) ==None and  getattr( field,'blank' ,False) != True and field.default != models.fields.NOT_PROVIDED:
                     dc[field.name]= field.default
 
         self.kw.update(dc)        
