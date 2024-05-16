@@ -101,6 +101,8 @@ class BasicReciever(object):
     
     def getSufix(self,fl):
         mt_name=re.search('\.(\w+)$',fl.name)
+        general_log.debug(f'上传文件名:{fl.name}')
+        general_log.debug(f'上传file.content_type:{fl.content_type}')
         if mt_name:
             return mt_name.group(1)
         else:
