@@ -35,9 +35,9 @@ class BasicReciever(object):
             file_data= self.readFile(fl)
             file_url = self.procFile(file_data,fl)
             file_url_list.append(file_url)
-        general_log.debug(f'上传文件路径{file_url_list}')
         file_url_list = [ self.switch_format_check(media_path) for media_path in file_url_list]
         file_url_list = self.encrypt(file_url_list)
+        general_log.debug(f'上传文件路径{file_url_list}')
         return HttpResponse(json.dumps(file_url_list),content_type="application/json")
     
     def readFile(self,fl):
@@ -87,7 +87,13 @@ class BasicReciever(object):
         m = hashlib.md5()   
         m.update(file_data)  
         mid_name = m.hexdigest()
-        file_name = mid_name+'.'+sufix
+        """
+        能够读取到后缀才加后缀
+        """        
+        if sufix:
+            file_name = mid_name+'.'+sufix
+        else:
+            file_name = mid_name
         return file_name
     
     def getParDir(self):
@@ -101,12 +107,13 @@ class BasicReciever(object):
     
     def getSufix(self,fl):
         mt_name=re.search('\.(\w+)$',fl.name)
-        general_log.debug(f'上传文件名:{fl.name}')
-        general_log.debug(f'上传file.content_type:{fl.content_type}')
+        #general_log.debug(f'上传文件名:{fl.name}')
+        #general_log.debug(f'上传file.content_type:{fl.content_type}')
         if mt_name:
             return mt_name.group(1)
         else:
             return fl.content_type.split('/')[-1]
+        
     def getFileUrl(self,file_name):
         file_url=urljoin(settings.MEDIA_URL, 'general_upload/{file_name}'.format(file_name=file_name))
         return  file_url
