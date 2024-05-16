@@ -35,6 +35,7 @@ class BasicReciever(object):
             file_data= self.readFile(fl)
             file_url = self.procFile(file_data,fl)
             file_url_list.append(file_url)
+        general_log.debug(f'上传文件路径{file_url_list}')
         file_url_list = [ self.switch_format_check(media_path) for media_path in file_url_list]
         file_url_list = self.encrypt(file_url_list)
         return HttpResponse(json.dumps(file_url_list),content_type="application/json")
@@ -141,6 +142,7 @@ class BasicReciever(object):
                 except Exception as e:
                     general_log.debug(e)
             file_url_list = ls
+            general_log.debug(f'aes加密后路径:{file_url_list}')
         return file_url_list
     
     
