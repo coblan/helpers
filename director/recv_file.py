@@ -60,11 +60,13 @@ class BasicReciever(object):
         file_path = os.path.join(par_dir,file_name)
         
         absolut_par_path = os.path.join( settings.MEDIA_ROOT, par_dir)
-        try:
-            os.makedirs(absolut_par_path)
-        except os.error as e:
-            print(e)   
-        
+        if not os.path.exists(absolut_par_path):
+            try:
+                os.makedirs(absolut_par_path)
+            except os.error as e:
+                #print(e)   
+                general_log.exception(e)
+                
         absolut_file_path =os.path.join(absolut_par_path,file_name)
 
         with open(absolut_file_path,'wb') as general_file:
