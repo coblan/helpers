@@ -349,7 +349,10 @@ class RowSort(object):
             if ls:
                 query = query.order_by(*ls)
         else:
-            if not query.ordered and not query._fields and self.general_sort: # 如果这个为空，才能弄一个默认排序，否则造成聚合函数无效
+            if self.general_sort =='-pk' and query._fields:
+                # 如果query._fields 不为空，代表经过了聚合。默认是pk排序的，这时pk排序会破坏聚合功能。
+                query =  query
+            elif not query.ordered and self.general_sort:
                 norm_name,direction = adapt_field_name(self.general_sort)
                 if norm_name in self.chinese_words:
                     query = query_chinese_words(norm_name,direction,query)
@@ -532,6 +535,10 @@ class ModelTable(object):
     def get_head_context(self):
         """
         有些时候，最先不需要返回rows，而只返回filters，head等，等待用户选择后，才返回rows
+        
+        {
+            opMergeCount:3
+        }
         """
         ops = self.get_operation()
         ops = evalue_container(ops)
@@ -647,7 +654,7 @@ class ModelTable(object):
         elif 'id' in self.exclude and 'id' in ls:
             ls.remove('id')
             
-        if self.include:
+        if self.include != None:
             return [x for x in self.include if x in ls]
         if self.exclude:
             return [x for x in ls if x not in self.exclude]
@@ -684,7 +691,7 @@ class ModelTable(object):
             heads = []
         model_heads = self.get_model_heads()
         heads =  heads + model_heads
-        if not self.include:
+        if  self.include ==None:
             heads = [x for x in heads if x['name'] not in self.exclude]
         else:
             heads = [x for x in heads if x['name'] in self.include]
@@ -914,19 +921,30 @@ class ModelTable(object):
         #director_name = self.get_director_name()
         permit_fields =  self.permited_fields()
         #used_head_names= self.hide_fields +  [x['name'] for x in self.get_light_heads()] 
+        
+        #[去掉联查] 联查的字段不要走 sim_dict函数，否则会走forign_pro
+        if self.exclude_export_related:
+            normd_permit_fields = [x for x in permit_fields if x not in self.exclude_export_related]
+        else:
+            normd_permit_fields = permit_fields
+            
         self.before_query()
         for inst in query:
             # 遇到一种情况，聚合时，这里的queryset返回的item是dict。所以下面做一个判断
             if isinstance(inst,models.Model):
                 cus_dict = self.dict_row( inst)
                 if self.only_simple_data():
-                    dc = sim_dict(inst, include=permit_fields,filt_attr=cus_dict,) # include_pk=False
+                    dc = sim_dict(inst, include=normd_permit_fields,filt_attr=cus_dict,) # include_pk=False
                 else:
-                    dc= to_dict(inst, include=permit_fields,filt_attr=cus_dict)
+                    dc= to_dict(inst, include=normd_permit_fields,filt_attr=cus_dict)
                     dc .update({
                         '_director_name':self.get_edit_director_name(),
                         'meta_org_dict':self.get_org_dict(dc,inst)
                         })
+                #[去掉联查] 联查的字段不要走 sim_dict函数，否则会走forign_pro
+                for name in  self.exclude_export_related:
+                    dc[name] = getattr(inst,f'{name}_id',None)
+                    dc[f'_{name}_label'] = getattr(inst,f'{name}_id','')
                 # 再赋值一次，以免被默认dictfy替换掉了，例如 _x_label等值
                 dc.update(cus_dict)
             else:
@@ -982,7 +1000,10 @@ class ModelTable(object):
         """
         重写该函数，定制row输出字典
         """
-        return {}
+        if isinstance(inst,dict):
+            return inst
+        else:
+            return {}
     
     #def init_query(self):
         #return self.model.objects.all()
@@ -1020,7 +1041,7 @@ class ModelTable(object):
         
         #[todo] 这里需要弄清楚原理
         #[todo_已经完成] 优化，是否select_related,select_related的field限定在输出的head中
-        if not query._fields and self.export_related:  # 如果这个属性部位空，证明已经调用了.values() or .values_list()
+        if not query._fields and self.export_related:  # 如果query._fields属性部位不为空，证明已经调用了.values() or .values_list()
             head_nams = [x['name'] for x in self.get_light_heads() if x['name'] not in self.exclude_export_related]
             for f in self.model._meta.get_fields():
                 if f.name in head_nams and isinstance(f, (models.ForeignKey,models.OneToOneField)):

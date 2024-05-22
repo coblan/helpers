@@ -51,22 +51,38 @@ def expand_permit_names(names):
     return inn_names  
 
 
-def model_read_permit(model,write=[],exclude=[]): 
-    fields = model._meta.get_fields()
+def model_read_permit(model,write=[],exclude=[],include=None): 
+    """
+    @write:可写字段，感觉这个作用不大，最好还是在model_full_permit函数里面控制
+    
+    """
+    if include:
+        done_fields = include
+    else:
+        fields = model._meta.get_fields()
+        done_fields = [f.name for f in fields if f.name not in exclude]
     permit = {
-        'read': [f.name for f in fields if f.name not in exclude],
+        'read': done_fields,
         'write': write,
         '_can_create': False,
         '_can_delete': False,
     }
     return json.dumps( permit )    
 
-def model_full_permit(model,exclude=[],write_exclude=[],create=True,delete=True): 
-    fields = model._meta.get_fields()
-    fields=[x for x in fields if x.name not in exclude]  
+def model_full_permit(model,exclude=[],write_exclude=[],create=True,delete=True,include=None): 
+    """
+    把这个函数当做
+    @write_exclude: 不用这个参数了。
+    """
+    if include:
+        done_fields = include
+    else:
+        fields = model._meta.get_fields()
+        #fields=[x for x in fields if x.name not in exclude]  
+        done_fields = [f.name for f in fields if f.name not in exclude]
     permit = {
-        'read': [f.name for f in fields],
-        'write': [f.name for f in fields if f.name not in write_exclude],
+        'read': done_fields ,  #[f.name for f in fields],
+        'write': done_fields, #[f.name for f in fields if f.name not in write_exclude],
         '_can_create': create,
         '_can_delete': delete,
     }

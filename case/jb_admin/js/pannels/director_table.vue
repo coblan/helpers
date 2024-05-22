@@ -286,8 +286,10 @@ import { ref, reactive,computed ,onMounted,getCurrentInstance } from '@vue/compo
                 if(this.$refs.dtable){
                   this.searchArgs._advise_heads= this.$refs.dtable.advise_heads
                 }
+                debugger
                return ex.director_get('d.get_rows',{director_name:this.directorName,search_args:this.searchArgs}).then(resp=>{
-                    cfg.hide_load()
+                 debugger
+                 cfg.hide_load()
 //                    this.tableRows.splice(0,this.tableRows.length,...resp.rows)
                     ex.array.replace(this.tableRows,resp.rows)
                     ex.vueAssign( this.rowPages,resp.row_pages)

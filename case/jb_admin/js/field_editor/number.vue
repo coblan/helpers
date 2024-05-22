@@ -26,6 +26,11 @@
          row:{},
          head:{},
        },
+      mounted(){
+        if(this.head.mounted_express){
+          ex.eval(this.head.mounted_express,{vc:this,head:this.head})
+        }
+      },
       methods:{
         isNumber(evt){
           evt = (evt) ? evt : window.event;

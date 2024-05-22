@@ -11,6 +11,15 @@ Vue.component('com-field-richtext',{
                 </div>
             </div>
          </div>`,
+    mounted(){
+        if(this.head.mounted_express){
+            ex.eval(this.head.mounted_express,{vc:this,})
+        }
+        if(this.head.css){
+            ex.append_css(this.head.css)
+        }
+    },
+
     methods:{
         commit:function(){
             Vue.set(this.row,this.head.name,this.$refs.ck.editor.getData())

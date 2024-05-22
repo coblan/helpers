@@ -4,6 +4,7 @@ template = '''
 '''
 from django.db.models.fields import related
 from helpers.director.model_func.cus_fields.snow_flake  import SnowFlakeField
+from django.db import models
 
 def table_doc(model_table):
     model_table.nolimit=True
@@ -35,9 +36,23 @@ def fields_doc(model_form,pk_field='id',model_table=None):
             pk_field_help = id_inst.help_text or '数据的唯一标识值'
         table_str += f"|{pk_field}|{id_inst.verbose_name}|{pk_field_type}|{pk_field_help}|\n"
         table_str += f"|pk|数据库主键|唯一|与{pk_field}值一致。|\n"
-        
+    
+    field_name_list = [field.name for field in model_form.Meta.model._meta.get_fields()]
     for head in heads:
-        table_str += f"|{head.get('name')}|{head.get('label')}|{com_to_type(head,model_form_inst)}|{head.get('help_text','')}|\n"
+        if head['name'] ==pk_field:
+            continue
+        
+        #required_str = ' 必填' if head.get('required',False)  else ''
+        if head['name'] in field_name_list:
+            field = model_form.Meta.model._meta.get_field(head['name'])
+            required_str = ''
+            if not field.blank:
+                required_str = ' 必填'
+            if field.default != models.fields.NOT_PROVIDED:
+                required_str += f' 默认值:{field.default}'
+        else:
+            required_str = ' 必填' if head.get('required',False)  else ''
+        table_str += f"|{head.get('name')}|{head.get('label')}|{com_to_type(head,model_form_inst)}|{head.get('help_text','')}{required_str}|\n"
     
     if  model_table:
         model_table.nolimit =True
@@ -63,11 +78,16 @@ def com_to_type(head,model_form_inst):
         return 'bool型'
     if head['editor'] =='com-field-location':
         return '格式为:lat,lng 的经纬度字符串'
-    if head['editor'] in ['com-field-table-select','com-field-select','com-field-cascader']:
+    if head['editor']=='com-field-richtext':
+        return 'com-field-richtext 富文本'
+    if head['editor'] in ['com-field-table-select','com-field-select','com-field-cascader',
+                          'com-field-checkbox',
+                          'com-field-single-checkbox',
+                          'com-field-radio']:
         try:
             field = model_form_inst.instance._meta.get_field(head['name'])
         except:
-            if head.get('multiple'):
+            if head.get('multiple') or head['editor']=='com-field-checkbox':
                 return f'[多选]选择类型:{head.get("options")}'
             return f'选择类型:{head.get("options")}'
         if  isinstance( field,related.ManyToManyField) or isinstance(field,related.ForeignKey):

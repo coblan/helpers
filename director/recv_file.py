@@ -19,8 +19,11 @@ from helpers.func.image_proc import ceil_image_size,compressImage,switch_format_
 from helpers.director.shortcut import director_view
 from helpers.func.url_path import media_url_to_path
 from helpers.func.dot_dict import read_dict_path
+from helpers.director.shortcut import get_request_cache
+
 import logging
 general_log = logging.getLogger('general_log')
+
 
 class BasicReciever(object):
     
@@ -34,6 +37,7 @@ class BasicReciever(object):
             file_url_list.append(file_url)
         file_url_list = [ self.switch_format_check(media_path) for media_path in file_url_list]
         file_url_list = self.encrypt(file_url_list)
+        general_log.debug(f'上传文件路径{file_url_list}')
         return HttpResponse(json.dumps(file_url_list),content_type="application/json")
     
     def readFile(self,fl):
@@ -56,11 +60,12 @@ class BasicReciever(object):
         file_path = os.path.join(par_dir,file_name)
         
         absolut_par_path = os.path.join( settings.MEDIA_ROOT, par_dir)
-        try:
+        if not os.path.exists(absolut_par_path):
             os.makedirs(absolut_par_path)
-        except os.error as e:
-            print(e)   
-        
+            #except os.error as e:
+                ##print(e)   
+                #general_log.exception(e)
+                
         absolut_file_path =os.path.join(absolut_par_path,file_name)
 
         with open(absolut_file_path,'wb') as general_file:
@@ -83,7 +88,13 @@ class BasicReciever(object):
         m = hashlib.md5()   
         m.update(file_data)  
         mid_name = m.hexdigest()
-        file_name = mid_name+'.'+sufix
+        """
+        能够读取到后缀才加后缀
+        """        
+        if sufix:
+            file_name = mid_name+'.'+sufix
+        else:
+            file_name = mid_name
         return file_name
     
     def getParDir(self):
@@ -97,10 +108,13 @@ class BasicReciever(object):
     
     def getSufix(self,fl):
         mt_name=re.search('\.(\w+)$',fl.name)
+        #general_log.debug(f'上传文件名:{fl.name}')
+        #general_log.debug(f'上传file.content_type:{fl.content_type}')
         if mt_name:
             return mt_name.group(1)
         else:
             return fl.content_type.split('/')[-1]
+        
     def getFileUrl(self,file_name):
         file_url=urljoin(settings.MEDIA_URL, 'general_upload/{file_name}'.format(file_name=file_name))
         return  file_url
@@ -138,6 +152,7 @@ class BasicReciever(object):
                 except Exception as e:
                     general_log.debug(e)
             file_url_list = ls
+            general_log.debug(f'aes加密后路径:{file_url_list}')
         return file_url_list
     
     
@@ -269,7 +284,8 @@ class BigFileRecieve(GeneralUpload):
         file_url_list = [ self.switch_format_check(media_path) for media_path in file_url_list]
         #self.file_url_list = file_url_list
         self.file_url_list = self.encrypt(file_url_list)
-        return HttpResponse(json.dumps(file_url_list),content_type="application/json")
+        #return HttpResponse(json.dumps(file_url_list),content_type="application/json")
+        return HttpResponse(json.dumps(self.file_url_list),content_type="application/json")
     
     def processImage(self,absolut_file_path,image_format=None):
         if self.request.GET.get('maxspan'):
@@ -311,22 +327,30 @@ def merge_media_file(path_list,suffix=None):
                 #target =  '/media' + target
             #else:
                 #target =  '/media/' + target
+     
     if suffix:
         if suffix.startswith('.'):
-            target = path_list[0] + suffix
+            target = path_list[0]+'_total' + suffix
         else:
-            target = path_list[0]+'.' + suffix
+            target = path_list[0]+'_total'+'.' + suffix
     else:
-        target = path_list[0]
+        target = path_list[0]+'_total'
     abs_target = media_url_to_path(target)
-    with open(abs_target,'wb+') as f:
-        for path in path_list:
-            abs_path = media_url_to_path(path) #  os.path.join(settings.MEDIA_ROOT,path.lstrip('/media/'))
-            with open(abs_path,'rb') as f_slice:
-                dt = f_slice.read()
-                f.write(dt)
-            os.remove(abs_path)
     
+    request = get_request_cache()['request']
+    useragent = request.META.get('HTTP_USER_AGENT', '')
+    general_log.debug(f'合并文件接口,Useragent={useragent},生成的文件是:{abs_target};pathlist={path_list}')  
+    if os.path.exists(abs_target):
+        general_log.debug(f'文件:{abs_target};已经存在')
+    else:
+        with open(abs_target,'wb+') as f:
+            for path in path_list:
+                abs_path = media_url_to_path(path) #  os.path.join(settings.MEDIA_ROOT,path.lstrip('/media/'))
+                with open(abs_path,'rb') as f_slice:
+                    dt = f_slice.read()
+                    f.write(dt)
+                os.remove(abs_path)
+        general_log.debug(f'合并文件成功,Useragent={useragent},生成的文件是:{abs_target}') 
     return target
             
 @director_view('upload/encrypt/info')

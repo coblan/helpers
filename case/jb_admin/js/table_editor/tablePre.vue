@@ -1,5 +1,5 @@
 <template>
-  <pre class="mypre">{{rowData[field]}}</pre>
+  <pre class="mypre beauty-scorll-bar" >{{rowData[field]}}</pre>
 </template>
 <script>
 export default {

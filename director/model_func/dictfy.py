@@ -53,6 +53,12 @@ def to_dict(instance,filt_attr=None,include=None,exclude=None,hash_keys=None,for
     #out['meta_org_dict'] = make_mark_dict(instance.__dict__,valide_name_list)
     return out
 
+def model_fields_names(model_or_inst):
+    fields=model_or_inst._meta.get_fields() # 如果用  instance._meta.fields 没有 manytomany (测试过) ,可能也没有 onetoone
+    fields=[field for field in fields if isinstance(field,models.Field)]
+    
+    return [x.name for x in fields]
+
 def sim_dict(instance,filt_attr=None,include=None,exclude=None,include_id=True,include_pk=True,label=True):
     """
     fields=['name','age'] 虽然中函数中fields是django中的model.field对象，但是这里为了方便，接受外部
@@ -125,9 +131,16 @@ def sim_dict(instance,filt_attr=None,include=None,exclude=None,include_id=True,i
     #if 'id' in [x.name for x in instance._meta.get_fields()] and \
        #instance.id:
         #out['id']=instance.id
-    if 'id' not in out and include_id and hasattr(instance,'id'):
-        #out['id'] = instance.id
-        out['id'] = clean_field_for_js(instance._meta.get_field('id'),instance)
+    if include == None:
+        # 2024/1/8 如果有include传入，那么就不单独处理id了。
+        if include_id:
+            if 'id' not in out and hasattr(instance,'id'):
+                #out['id'] = instance.id
+                out['id'] = clean_field_for_js(instance._meta.get_field('id'),instance)
+        else:
+            if 'id' in out:
+                del out['id']            
+        
     if  'pk' not in out and  include_pk:
         #out['pk']=instance.pk
         out['pk']= clean_field_for_js(instance._meta.pk,instance)
@@ -136,9 +149,7 @@ def sim_dict(instance,filt_attr=None,include=None,exclude=None,include_id=True,i
         for k in ls:
             if k.startswith('_'):
                 del out[k]
-    if not include_id:
-        if 'id' in out:
-            del out['id']
+    
     return out
     
 
@@ -292,7 +303,7 @@ def model_to_head(model,include=[],exclude=[]):
     return out
 
 
-def delete_related_query(inst):
+def delete_related_query(inst,deep_level=0):
     """
     When delet inst object,Django ORM will delet all related model instance.
     this function used to search related instance with inst,return string tree
@@ -300,6 +311,8 @@ def delete_related_query(inst):
     """
     if inst is None:
         return []  
+    if deep_level>4:
+        return []
     
     ls = []
     all_related_objects =  [
@@ -320,10 +333,10 @@ def delete_related_query(inst):
             elif hasattr(obj,'all'):  # Foreign Key field
                 for sub_obj in obj.all():
                     ls.append({'str':"{content}  ({cls_name})".format(cls_name = sub_obj.__class__.__name__,content=str(sub_obj)),
-                               'related':delete_related_query(sub_obj)})
+                               'related':delete_related_query(sub_obj,deep_level=deep_level+1)})
             else:   # OneToOne related
                 ls.append({'str':"{content}  ({cls_name})".format(cls_name = obj.__class__.__name__,content=str(obj)),
-                           'related':delete_related_query(obj)})   
+                           'related':delete_related_query(obj,deep_level=deep_level+1)})   
                 
     for rel in all_related_many_to_many_objects:  #inst._meta.get_all_related_many_to_many_objects():  # ManyToMany Related
         name = rel.get_accessor_name()

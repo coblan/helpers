@@ -2,9 +2,12 @@
 废弃了，采用 cfg.pop_middle('local-panel',ctx,callbank)
 * */
 
-import {fields_all_in_one} from '../misc/form_one'
+// import {fields_all_in_one} from '../misc/form_one'
+// 2023-12-1日改为引入formOne。注释掉了../misc/form_one.js文件，如果后面调试不通，可以恢复 form_one.js文件
+import formOne from "../misc/formOne.vue";
 Vue.component('com-local-form-one',{
-    mixins:[fields_all_in_one],
+    // mixins:[fields_all_in_one],
+    mixins:[formOne],
     methods:{
         save:function(){
             //cfg.show_load()

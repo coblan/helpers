@@ -2,6 +2,7 @@ from django.db.models import CharField,TextField
 from .. field_procs.charproc import CharProc
 from .. .base_data import field_map
 from helpers.director.shortcut import request_cache
+from django.utils.translation import ugettext as _
 
 class MultiChoiceField(CharField):
     """
@@ -83,6 +84,16 @@ class MultiChoiceProc(CharProc):
         for k,v in dc.items():
             out_list.append({'value':k,'label':v})
         return out_list
+    
+    def filter_get_head(self, name, model):
+        ".. Note:: 在没有choices的情况下，可能会造成性能问题"
+        this_field= model._meta.get_field(name)
+        return {
+            'name':name,
+            'label':_(this_field.verbose_name),
+            'editor':'com-filter-select',
+            'options':self.get_options()
+        }    
     
     
 field_map[MultiChoiceField]=MultiChoiceProc

@@ -8,6 +8,15 @@ from django.utils.translation import ugettext as _
 
 class IntProc(BaseFieldProc):
 
+    #def clean_field(self,dc,name):
+        #""" 
+        #fields类里，从前端穿过来的row dict数据进行清洗， dc里面有的 字段，才会被调用
+        #"""
+        #if dc.get(name) =='':
+            #return None
+        #else:
+            #return dc.get(name)
+
     def filter_get_range_head(self,name,model):
         f = model._meta.get_field(name)
         return {'name':name,
@@ -55,9 +64,11 @@ class IntProc(BaseFieldProc):
             if -2147483648 < bb <2147483647:
                 return bb
             else:
-                return None
+                raise UserWarning(f'查询条件:{self.name} 超过int型范围')
+                #return None
         else:
-            return None
+            raise UserWarning(f'查询条件:{self.name} 不能转换int型')
+            #return None
 
 
 class BigProc(IntProc):
@@ -82,10 +93,12 @@ class BigProc(IntProc):
             if (-10**19 +1 < bb < 10**19 -1 ):
                 return bb
             else:
-                return None
+                raise UserWarning(f'查询超过:{self.name} bigint型范围')
+                #return None
 
         else:
-            return None
+            raise UserWarning(f'查询条件:{self.name} 不能转换bigint型')
+            #return None
 
 field_map.update({
     IntegerField:IntProc, 

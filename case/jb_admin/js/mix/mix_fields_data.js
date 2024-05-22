@@ -61,6 +61,14 @@ export  var mix_fields_data ={
     computed:{
         normed_heads:function(){
             var self=this
+           if(self.ctx && self.ctx.readonly_all_express){
+                var total_readonly = ex.eval(self.ctx.readonly_all_express,{row:self.row,vc:self})
+               Vue.set(self.ctx,'readonly_all',total_readonly)
+            }else if( self.ctx && self.ctx.readonly_all){
+                var total_readonly = self.ctx.readonly_all
+            } else{
+                var total_readonly = false
+            }
             ex.each(self.heads,function(head){
 
                 if( head._org_readonly){
@@ -72,7 +80,9 @@ export  var mix_fields_data ={
                 }
 
                 // 新的 readonly 动态判断
-                if(head.readonly_express){
+                if(total_readonly){
+                    Vue.set(head,'readonly',total_readonly)
+                }else if(head.readonly_express){
                     var is_readonly = ex.eval(head.readonly_express,{row:self.row,head:head,vc:self})
                     Vue.set(head,'readonly',is_readonly)
                 }
@@ -172,9 +182,13 @@ export  var mix_fields_data ={
                 }
             })
 
-            if(!ex.isEmpty(errors)){
-                cfg.showMsg(  JSON.stringify(errors)  )
-            }
+            // 本来这里的用途是在服务器返回时，显示那些隐藏的字段报错。
+            // 因为每次都要self.setErrors();self.showErrors();
+            // 所以把这个功能挪到了showErrors()函数里面去
+            // if(!ex.isEmpty(errors)){
+            //     cfg.showMsg(  JSON.stringify(errors)  )
+            // }
+            return errors;
 
         },
         dataSaver:function(callback){
@@ -229,8 +243,19 @@ export  var mix_fields_data ={
                     if(rt.errors){
                         //cfg.hide_load()
                         cfg.toast('请检查填写内容')
-                        self.setErrors(rt.errors)
+                        var left_error = self.setErrors(rt.errors)
+
+                        // 如果是联系服务器前 self.setErrors(rt.errors) + self.isValid()就会自动触发显示错误项目
+                        // 但是这个是服务器处理后，所以没有调用self.isValid，而是调用的showErrors()直接显示错误。
+                        // 感觉self.setErrors(rt.errors)会不会没啥用？
+
                         self.showErrors(rt.errors)
+
+                        // if(ex.isEmpty(left_error)){
+                        //     cfg.toast('请检查填写内容')
+                        // }else{
+                        //     cfg.showError(JSON.stringify(errors))
+                        // }
                         //reject(rt.errors)
                     }else if(rt._outdate){
                         cfg.outdate_confirm(

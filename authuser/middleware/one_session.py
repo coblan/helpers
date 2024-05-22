@@ -34,3 +34,20 @@ class OneSessionPerUserMiddleware:
 
         response = self.get_response(request)
         return response
+    
+
+
+# 下面这部分本来应该放到db_signal.py里面，考虑到按需加载，先放在这里。
+# 必须要创建LoggedInUser数据，才能保证OneSessionPerUserMiddleware中间件功能。
+from django.contrib.auth import user_logged_in, user_logged_out
+from django.dispatch import receiver
+#from .models import LoggedInUser
+
+@receiver(user_logged_in)
+def on_user_logged_in(sender, request, **kwargs):
+    LoggedInUser.objects.get_or_create(user=kwargs.get('user')) 
+
+
+@receiver(user_logged_out)
+def on_user_logged_out(sender, **kwargs):
+    LoggedInUser.objects.filter(user=kwargs.get('user')).delete()

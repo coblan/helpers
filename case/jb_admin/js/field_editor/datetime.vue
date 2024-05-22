@@ -22,7 +22,6 @@
 export default {
   props:['row','head'],
   data(){
-    debugger
     Vue.set(this.row,this.head.name,this.row[this.head.name]||'')
     return {
       inn_data:this.row[this.head.name],
