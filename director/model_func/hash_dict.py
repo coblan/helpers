@@ -27,6 +27,11 @@ def hash_dict(dc,keys=None):
     return md5(code.encode('utf-8')).hexdigest() 
 
 def make_mark_dict(dc,keys=None):
+    """
+    将row生成可以比对的dict，用于overtime比对。要比对的两个row，都要经过这个函数处理一下，才能进行比对。
+    1.去除 下划线，meta开始的字段
+    2.将none规则化为'' 空字符串，便于比较
+    """
     out_dc = {}
     for k,v in dc.items():
         if keys:

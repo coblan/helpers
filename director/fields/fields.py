@@ -717,8 +717,14 @@ class ModelFields(forms.ModelForm):
             raise PermissionDenied('you have no Permission access %s'%self.instance._meta.model_name)
 
         # self.fields 是经过 权限 处理了的。可读写的字段
-        if self.instance.pk: # not self.instance._state.adding #
+        
+        # 由于现在的modelfields默认是select_for_update读取的instance，这个是加了锁的，不存在其他程序会修改数据。
+        # 所以没有必要再刷新一次数据。
+        # 但是考虑到可能会在内存中修改instance的字段值，可能会影响导出，所以还是决定刷新一下数据库。
+        if self.instance.pk: 
             self.instance.refresh_from_db()
+            
+            
         if self.simple_dict:
             row = sim_dict(self.instance,include=self.fields.keys(),include_pk=True)
             row.update( self.dict_row(self.instance) )
