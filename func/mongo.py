@@ -16,12 +16,18 @@ def mongo2tm(dt):
     dd = dt.replace(tzinfo=utc)
     return dd.astimezone(beijin)
 
-def get_or_create(model,**kws):
-    inst = model.objects.filter(**kws).first()
-    if inst:
+def get_or_create(model,defaults={},**kws):
+    #inst = model.objects.filter(**kws).first()
+    try:
+        inst = model.objects.get(**kws)
         return inst
-    else:
-        return model(**kws)
+    except model.DoesNotExist:
+        ff = kws.copy()
+        ff.update(defaults)
+        return model.objects.create(**ff)
+    #else:
+        #VideoTagIndexTest.objects.create(mid=302)
+        #return model(**kws)
 
 def filter_update(model,update_list):
     """
