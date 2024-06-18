@@ -1,8 +1,33 @@
 from .table import PlainTable
-from helpers.func.mongo import tm2mongo,mongo2tm
+#from helpers.func.mongo import tm2mongo,mongo2tm
 import datetime
 from django.utils import timezone
 from helpers.func.dict_list import sort_by_name,find_one
+
+"""
+MongoTable需要使用mongoengin来进行替换优化[TODO]
+
+"""
+"""
+[1]下面这个是直接拷贝过来的，避免引入报错。因为很多系统没有安装 pymongo
+# from helpers.func.mongo import tm2mongo,mongo2tm
+"""
+#[1]start
+beijin = datetime.timezone(datetime.timedelta(hours=8))
+utc = datetime.timezone(datetime.timedelta(hours=0))
+def tm2mongo(dt):
+    if not dt:
+        return dt
+    tmp = dt.replace(tzinfo=beijin)
+    return tmp
+
+def mongo2tm(dt):
+    if not dt:
+        return dt
+    dd = dt.replace(tzinfo=utc)
+    return dd.astimezone(beijin)
+
+#[1] end
 
 class MongoTable(PlainTable):
 
