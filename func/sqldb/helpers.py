@@ -1,4 +1,3 @@
-# coding: utf8
 """
 Main module with the bulk_update function.
 文档:

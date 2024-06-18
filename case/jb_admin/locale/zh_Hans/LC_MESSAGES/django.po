@@ -20,7 +20,7 @@ msgstr ""
 
 #: .\helpers\case\jb_admin\admin_user.py:16
 msgid "User"
-msgstr ""
+msgstr "用户"
 
 #: .\helpers\case\jb_admin\js_cfg.py:7
 msgid "Basic Setting"

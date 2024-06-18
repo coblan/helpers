@@ -27,6 +27,8 @@ from django.db.utils import ProgrammingError
 from helpers.director.model_func.func import str_lazy_label
 from helpers.func.collection.ex import findone,find_index
 from helpers.case.jb_admin.uidict import pop_edit_current_row
+
+
 class PageNum(object):
     perPage=20
     def __init__(self,pageNumber=1,perpage=None,**kws):
