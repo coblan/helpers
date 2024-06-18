@@ -118,8 +118,9 @@ class ModelPermit(object):
         self.model = model
         self.permit_list=[]
         self.nolimit=nolimit
-        
-        self._read_perm_from_db()
+        if not self.nolimit:
+            "只有nolimit=false时才去读取用户权限"
+            self._read_perm_from_db()
     
     def _read_perm_from_db(self):
         #model_name = model_to_name(self.model)
