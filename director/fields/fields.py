@@ -650,7 +650,8 @@ class ModelFields(forms.ModelForm):
                     if head['name'] == k:
                         tmp_heads.append(head)
             heads=tmp_heads
-        
+        # [排序] 从下面挪上来，先排序，再处理after_fields
+        heads = sorted(heads,key=lambda head: head.get('order',0))
         # start: 实现 after_fields 排序
         after_fields_list =[]
         after_dict = {}
@@ -679,7 +680,8 @@ class ModelFields(forms.ModelForm):
         for bridge,bridge_inst in zip(self.foreign_bridge,self.foreign_bridge_inst):
             heads += bridge.getHeads(bridge_inst,base_inst = self.instance)  
         
-        heads = sorted(heads,key=lambda head: head.get('order',0))
+        # [排序] 挪到after_fields处理代码上面，先排序，在处理after_fields
+        #heads = sorted(heads,key=lambda head: head.get('order',0))
         if self.readonly_all:
             for head in heads:
                 head['readonly'] =True
