@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-18 20:34+0800\n"
+"POT-Creation-Date: 2024-06-20 01:20+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,34 +17,65 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: .\helpers\director\admin.py:58
-msgid "称呼"
-msgstr ""
-
 #: .\helpers\director\admin.py:59
-#, fuzzy
-#| msgid "切换账号"
-msgid "账号"
-msgstr "Switch Account"
+msgid "称呼"
+msgstr "Nickname"
 
 #: .\helpers\director\admin.py:60
-msgid "管理员账号"
-msgstr ""
+msgid "用户名"
+msgstr "Username"
 
-#: .\helpers\director\admin.py:86
+#: .\helpers\director\admin.py:61
+msgid "管理员账号"
+msgstr "Administrator"
+
+#: .\helpers\director\admin.py:62
+msgid "超级管理员"
+msgstr "Superuser"
+
+#: .\helpers\director\admin.py:63
+msgid "电子邮件地址"
+msgstr "Email"
+
+#: .\helpers\director\admin.py:64
+msgid "有效性"
+msgstr "Is Valid"
+
+#: .\helpers\director\admin.py:65
+msgid "权限分组"
+msgstr "Permit Group"
+
+#: .\helpers\director\admin.py:66
+msgid "用户密码"
+msgstr "Password"
+
+#: .\helpers\director\admin.py:67
+msgid "上次登录"
+msgstr "Last Login"
+
+#: .\helpers\director\admin.py:94
 msgid "包含用户"
 msgstr "included user"
 
-#: .\helpers\director\admin.py:226
+#: .\helpers\director\admin.py:234
 msgid "permit name has been exist"
 msgstr ""
 
+#: .\helpers\director\engine.py:233
+msgid "修改密码"
+msgstr "Change password"
+
+#: .\helpers\director\engine.py:234
+msgid "退出"
+msgstr "Log Out"
+
 #: .\helpers\director\fields\fields.py:463
-#: .\helpers\director\fields\fields.py:969
+#: .\helpers\director\fields\fields.py:971
 msgid "保存"
 msgstr "Save"
 
-#: .\helpers\director\fields\fields.py:463 .\helpers\director\js_cfg.py:10
+#: .\helpers\director\fields\fields.py:463
+#: .\helpers\director\fields\fields.py:985 .\helpers\director\js_cfg.py:10
 msgid "确定"
 msgstr "Yes"
 
@@ -67,7 +98,7 @@ msgstr "Cancel"
 #: .\helpers\director\js_cfg.py:12
 #, python-brace-format
 msgid "图片大小不能超过{maxsize}"
-msgstr ""
+msgstr "Image Size no more than {maxsize}"
 
 #: .\helpers\director\model_func\cus_fields\compositefk\fields.py:269
 msgid "One-to-one relationship"
@@ -121,6 +152,9 @@ msgstr "Switch Account"
 #: .\helpers\director\templates\403.html:19
 msgid "联系管理员提升您的权限"
 msgstr "Contact your administrator to promote your permissions"
+
+#~ msgid "账号"
+#~ msgstr "Account"
 
 #~ msgid "昵称"
 #~ msgstr "nickname"

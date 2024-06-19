@@ -982,7 +982,7 @@ class Fields(ModelFields):
             ls.append({
                 'name':'save',
                 'editor':'com-btn',
-                'label':'确定',
+                'label':_('确定'),
                 'type':'primary',
                 'icon':'el-icon-receiving',
                 'show_express':'rt= ! scope.vc.ctx.readonly_all',

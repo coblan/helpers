@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-18 20:34+0800\n"
+"POT-Creation-Date: 2024-06-20 01:20+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,6 +16,41 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+#: .\helpers\case\jb_admin\admin_user.py:21
+msgid "账号管理"
+msgstr "Accounts"
+
+#: .\helpers\case\jb_admin\admin_user.py:35
+msgid "基本信息"
+msgstr "Base Info"
+
+#: .\helpers\case\jb_admin\admin_user.py:52
+#: .\helpers\case\jb_admin\admin_user.py:77
+#: .\helpers\case\jb_admin\admin_user.py:163
+msgid "权限分组"
+msgstr "Permit Group"
+
+#: .\helpers\case\jb_admin\admin_user.py:57
+msgid "用户名"
+msgstr ""
+
+#: .\helpers\case\jb_admin\admin_user.py:164
+msgid "描述"
+msgstr ""
+
+#: .\helpers\case\jb_admin\admin_user.py:176
+msgid "作为登录账号,只能填写字母,数字或者下划线(_),长度为2~50"
+msgstr ""
+
+#: .\helpers\case\jb_admin\admin_user.py:196
+msgid "用户密码"
+msgstr ""
+
+#: .\helpers\case\jb_admin\admin_user.py:197
+msgid ""
+"原有密码已被隐藏。输入框留空,则不会修改原有密码;如填写,将会覆盖原有密码。"
+msgstr ""
 
 #: .\helpers\case\jb_admin\js_cfg.py:10
 msgid "Basic Setting"
@@ -49,10 +84,6 @@ msgstr "LogOut"
 msgid "LogIn"
 msgstr "LogIn"
 
-#: .\helpers\case\jb_admin\js_cfg.py:18
-msgid "element_translation_js"
-msgstr "https://cdn.jsdelivr.net/npm/element-ui@2.14.1/lib/umd/locale/en.js"
-
 #: .\helpers\case\jb_admin\js_cfg.py:19
 msgid "开始时间"
 msgstr "Start Time"
@@ -64,6 +95,10 @@ msgstr "End Time"
 #: .\helpers\case\jb_admin\js_cfg.py:21
 msgid "请选择"
 msgstr "please select"
+
+#: .\helpers\case\jb_admin\js_cfg.py:22
+msgid "查询"
+msgstr "Search"
 
 #: .\helpers\case\jb_admin\uidict.py:11
 msgid "确定要导出EXCEL?"
@@ -77,8 +112,14 @@ msgstr "Number of export"
 #, fuzzy, python-format
 #| msgid "请输入小于%(max_length)s的正整数"
 msgid "请输入小于%s的正整数"
-msgstr "Please input integer small than %(max_length)s"
+msgstr "Please input integer small than %s"
 
 #: .\helpers\case\jb_admin\uidict.py:25 .\helpers\case\jb_admin\uidict.py:28
 msgid "导出Excel"
 msgstr "Export Excel"
+
+#~ msgid "账号"
+#~ msgstr "Account"
+
+#~ msgid "User"
+#~ msgstr "User"

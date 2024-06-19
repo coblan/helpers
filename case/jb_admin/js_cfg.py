@@ -15,10 +15,11 @@ def get_tr():
         'change_password':_('Change Password'),
         'logout':_('LogOut'),
         'login':_('LogIn'), 
-        'element_translation_js':_('element_translation_js'),
+        #'element_translation_js':_('element_translation_js'),
         '开始时间':_("开始时间"),
         '结束时间':_("结束时间"),
-        "请选择":_("请选择")
+        "请选择":_("请选择"),
+        '查询':_('查询')
     }
 
 js_tr_list.append(get_tr)
