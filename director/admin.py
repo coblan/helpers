@@ -22,7 +22,8 @@ from .models import PermitModel
 from .access.assem_group import AssemGroupPage
 from .model_func.dictfy import to_dict,model_to_name
 
-from django.utils.translation import ugettext as _
+#from django.utils.translation import ugettext as _
+from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import pgettext
 from .access.permit import permit_to_text
 from . import  ajax
@@ -57,8 +58,8 @@ def get_first_name(self):
 
 User.add_to_class("__str__", get_first_name)
 User._meta.get_field('first_name').verbose_name = _('称呼')
-User._meta.get_field('username').verbose_name = _('用户名')
-User._meta.get_field('is_staff').verbose_name = _('管理员账号')
+#User._meta.get_field('username').verbose_name = _('用户名')
+#User._meta.get_field('is_staff').verbose_name = _('管理员账号')
 User._meta.get_field('is_superuser').verbose_name = _('超级管理员')
 User._meta.get_field('email').verbose_name = _('电子邮件地址')
 User._meta.get_field('is_active').verbose_name = _('有效性')

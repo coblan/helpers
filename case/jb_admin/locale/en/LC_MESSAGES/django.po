@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-20 01:20+0800\n"
+"POT-Creation-Date: 2024-06-20 02:22+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,40 +17,66 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: .\helpers\case\jb_admin\admin_user.py:21
+#: .\helpers\case\jb_admin\admin_user.py:22
 msgid "账号管理"
 msgstr "Accounts"
 
-#: .\helpers\case\jb_admin\admin_user.py:35
+#: .\helpers\case\jb_admin\admin_user.py:36
 msgid "基本信息"
 msgstr "Base Info"
 
-#: .\helpers\case\jb_admin\admin_user.py:52
-#: .\helpers\case\jb_admin\admin_user.py:77
-#: .\helpers\case\jb_admin\admin_user.py:163
+#: .\helpers\case\jb_admin\admin_user.py:53
+#: .\helpers\case\jb_admin\admin_user.py:78
+#: .\helpers\case\jb_admin\admin_user.py:164
+#: .\helpers\case\jb_admin\admin_user.py:320
 msgid "权限分组"
 msgstr "Permit Group"
 
-#: .\helpers\case\jb_admin\admin_user.py:57
+#: .\helpers\case\jb_admin\admin_user.py:58
 msgid "用户名"
-msgstr ""
+msgstr "Username"
 
-#: .\helpers\case\jb_admin\admin_user.py:164
+#: .\helpers\case\jb_admin\admin_user.py:165
+#: .\helpers\case\jb_admin\admin_user.py:333
 msgid "描述"
-msgstr ""
+msgstr "Description"
 
-#: .\helpers\case\jb_admin\admin_user.py:176
+#: .\helpers\case\jb_admin\admin_user.py:177
 msgid "作为登录账号,只能填写字母,数字或者下划线(_),长度为2~50"
 msgstr ""
 
-#: .\helpers\case\jb_admin\admin_user.py:196
-msgid "用户密码"
-msgstr ""
-
 #: .\helpers\case\jb_admin\admin_user.py:197
+msgid "用户密码"
+msgstr "Password"
+
+#: .\helpers\case\jb_admin\admin_user.py:198
 msgid ""
 "原有密码已被隐藏。输入框留空,则不会修改原有密码;如填写,将会覆盖原有密码。"
 msgstr ""
+
+#: .\helpers\case\jb_admin\admin_user.py:334
+msgid "用户数"
+msgstr "User Count"
+
+#: .\helpers\case\jb_admin\admin_user.py:343
+msgid "导出权限分组"
+msgstr "Export Group"
+
+#: .\helpers\case\jb_admin\admin_user.py:357
+msgid "导入权限分组"
+msgstr "Import Group"
+
+#: .\helpers\case\jb_admin\admin_user.py:465
+msgid "权限过滤"
+msgstr "Permit Filter"
+
+#: .\helpers\case\jb_admin\admin_user.py:481
+msgid "权限选择"
+msgstr "Permit Select"
+
+#: .\helpers\case\jb_admin\admin_user.py:488
+msgid "权限组描述"
+msgstr "Permit Detail"
 
 #: .\helpers\case\jb_admin\js_cfg.py:10
 msgid "Basic Setting"
@@ -109,8 +135,7 @@ msgid "导出最大条数"
 msgstr "Number of export"
 
 #: .\helpers\case\jb_admin\uidict.py:22
-#, fuzzy, python-format
-#| msgid "请输入小于%(max_length)s的正整数"
+#, python-format
 msgid "请输入小于%s的正整数"
 msgstr "Please input integer small than %s"
 

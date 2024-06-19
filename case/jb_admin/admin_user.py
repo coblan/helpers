@@ -6,7 +6,8 @@ from helpers.director.shortcut import TablePage,ModelTable,page_dc,model_dc,Mode
 from helpers.director.models import PermitModel 
 import re
 from . import  js_cfg
-from django.utils.translation import ugettext as _
+#from django.utils.translation import ugettext as _
+from django.utils.translation import ugettext_lazy as _
 from helpers.director.shortcut import model_to_name, model_full_permit, add_permits, model_read_permit,RowSearch
 from django.db.models import Count,F
 import json
@@ -316,7 +317,7 @@ class GroupPage(TablePage):
     template='jb_admin/table_new.html'
     
     def get_label(self): 
-        return '权限分组'
+        return _('权限分组')
     
     class tableCls(ModelTable):
         model=Group
@@ -329,8 +330,8 @@ class GroupPage(TablePage):
         
         def getExtraHead(self):
             return [
-                {'name':'desp','label':'描述','editor':'com-table-pre'},
-                {'name':'user_count','label':'用户数'},
+                {'name':'desp','label':_('描述'),'editor':'com-table-pre'},
+                {'name':'user_count','label':_('用户数')},
                 
             ]
         
@@ -339,7 +340,7 @@ class GroupPage(TablePage):
             if read_dict_path(settings,'JB_ADMIN.export_permit',True):
                 ops += [
                     {'name':'export_group',
-                     'label':'导出权限分组',
+                     'label':_('导出权限分组'),
                      'editor':'com-btn',
                      'click_express':'''
                      if(scope.ps.selected.length==0){var msg="确定要导出全部权限分组?"} 
@@ -353,7 +354,7 @@ class GroupPage(TablePage):
                          ex.saveLocalFile(JSON.stringify(permit_list),'groups.json')
                      })'''},
                     {'name':'export_group',
-                     'label':'导入权限分组',
+                     'label':_('导入权限分组'),
                      'editor':'com-btn',
                      'click_express':'''ex.readLocalFile(".json").then((text)=>{
                         var groups = JSON.parse(text)
@@ -461,7 +462,7 @@ class GroupForm(ModelFields):
             heads.append({
                 'name':'ui',
                 'editor':'com-field-select',
-                'label':'权限过滤',
+                'label':_('权限过滤'),
                 'options':director.get('permit.ui_options'),
                 'help_text':'保存时会移除不在当前选择中的权限。不选择，代表所有权限都可选择',
                 'event_slots':[
@@ -477,14 +478,14 @@ class GroupForm(ModelFields):
         heads.append({
             'name':'permit',
             'editor':'com-field-ele-tree-depend',
-            'label':'权限选择',
+            'label':_('权限选择'),
             'options':options,
             'event_slots':[
                 {'par_event':'permit_options_changed','express':'scope.vc.refresh(scope.event)'},
             ]
         })
         heads+= [
-            {'name':'desp','label':'权限组描述','editor':'com-field-blocktext'},
+            {'name':'desp','label':_('权限组描述'),'editor':'com-field-blocktext'},
         ]
         return heads    
     
