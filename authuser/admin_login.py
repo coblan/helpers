@@ -20,6 +20,7 @@ from helpers.func.dot_dict import read_dict_path
 
 from helpers.case.act_log.shortcut import operation_log
 from helpers.func.sim_signal import sim_signal
+from django.utils.translation import gettext as _
 
 class LoginFormPage(FieldsPage):
     template = 'director/web.html'
@@ -32,7 +33,7 @@ class LoginFormPage(FieldsPage):
         return {
             'editor':getattr(self.engin,'login_com', 'login-form-jb'),
             'editor_ctx':{
-                'welcome':  read_dict_path(settings,'AUTHUSER.welcome','欢迎登录后台管理系统') ,
+                'welcome':  read_dict_path(settings,'AUTHUSER.welcome',_('欢迎登录后台管理系统')) ,
             }
         }
     
@@ -75,7 +76,7 @@ def login(username , password,validate_code='',validate_img=''):
         for k,v in rt['errors'].items():
             dc[k] = ';'.join(v)
         rt['errors'] = dc
-    operation_log(f'用户使用username方式登录,登录用户名{username}')
+    operation_log(_(f'用户使用username方式登录,登录用户名{username}') )
     return rt
 
 @director_view('do_login')

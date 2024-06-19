@@ -53,9 +53,12 @@ from .base_data import js_tr_list,js_lib_list
 from django.views.decorators.csrf import csrf_exempt
 from helpers.director.middleware.request_cache import get_request_cache
 from urllib.parse import unquote
+from django.utils.translation import gettext as _
+
 import logging
 general_log = logging.getLogger('general_log')
 gb={}
+
 
 class BaseEngine(object):
     _pages=None
@@ -227,8 +230,8 @@ class BaseEngine(object):
                 #{'editor': 'com-headbar-user-info', 'first_name': username, 'username': username,'logout_url':self.logout_url },
                 
                 {"name":'userinfo', "editor":'com-head-dropmenu','label':username,'options':[
-                        {'click_express':f'location="/accounts/pswd"','label':'修改密码'},
-                        {'click_express':f'location="{self.logout_url}"','label':'退出'},
+                        {'click_express':f'location="/accounts/pswd"','label':_('修改密码') },
+                        {'click_express':f'location="{self.logout_url}"','label':_('退出') },
                                     ]},
                 ],
         }

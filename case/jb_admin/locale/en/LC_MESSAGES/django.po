@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-02-22 18:15+0800\n"
+"POT-Creation-Date: 2024-06-20 01:08+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,67 +17,100 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: .\helpers\case\jb_admin\admin_user.py:16
-msgid "User"
-msgstr "User"
+#: .\helpers\case\jb_admin\admin_user.py:21
+msgid "账号管理"
+msgstr "Accounts"
 
-#: .\helpers\case\jb_admin\js_cfg.py:7
+#: .\helpers\case\jb_admin\admin_user.py:35
+msgid "基本信息"
+msgstr "Base Info"
+
+#: .\helpers\case\jb_admin\admin_user.py:52
+#: .\helpers\case\jb_admin\admin_user.py:77
+#: .\helpers\case\jb_admin\admin_user.py:163
+msgid "权限分组"
+msgstr "Permit Group"
+
+#: .\helpers\case\jb_admin\admin_user.py:57
+msgid "用户名"
+msgstr ""
+
+#: .\helpers\case\jb_admin\admin_user.py:164
+msgid "描述"
+msgstr ""
+
+#: .\helpers\case\jb_admin\admin_user.py:176
+msgid "作为登录账号,只能填写字母,数字或者下划线(_),长度为2~50"
+msgstr ""
+
+#: .\helpers\case\jb_admin\js_cfg.py:10
 msgid "Basic Setting"
 msgstr "Basic Setting"
 
-#: .\helpers\case\jb_admin\js_cfg.py:8
+#: .\helpers\case\jb_admin\js_cfg.py:11
 msgid "Language"
 msgstr "Language"
 
-#: .\helpers\case\jb_admin\js_cfg.py:9
+#: .\helpers\case\jb_admin\js_cfg.py:12
 msgid "back"
 msgstr "Back"
 
-#: .\helpers\case\jb_admin\js_cfg.py:10
+#: .\helpers\case\jb_admin\js_cfg.py:13
 msgid "Refresh"
 msgstr "Refresh"
 
-#: .\helpers\case\jb_admin\js_cfg.py:11
+#: .\helpers\case\jb_admin\js_cfg.py:14
+msgid "菜单"
+msgstr "Menu"
+
+#: .\helpers\case\jb_admin\js_cfg.py:15
 msgid "Change Password"
 msgstr "Change Password"
 
-#: .\helpers\case\jb_admin\js_cfg.py:12
+#: .\helpers\case\jb_admin\js_cfg.py:16
 msgid "LogOut"
 msgstr "LogOut"
 
-#: .\helpers\case\jb_admin\js_cfg.py:13
+#: .\helpers\case\jb_admin\js_cfg.py:17
 msgid "LogIn"
 msgstr "LogIn"
 
-#: .\helpers\case\jb_admin\js_cfg.py:14
-msgid "element_translation_js"
-msgstr "https://cdn.jsdelivr.net/npm/element-ui@2.14.1/lib/umd/locale/en.js"
-
-#: .\helpers\case\jb_admin\js_cfg.py:15
+#: .\helpers\case\jb_admin\js_cfg.py:19
 msgid "开始时间"
 msgstr "Start Time"
 
-#: .\helpers\case\jb_admin\js_cfg.py:16
+#: .\helpers\case\jb_admin\js_cfg.py:20
 msgid "结束时间"
 msgstr "End Time"
 
-#: .\helpers\case\jb_admin\js_cfg.py:17
+#: .\helpers\case\jb_admin\js_cfg.py:21
 msgid "请选择"
 msgstr "please select"
 
-#: .\helpers\case\jb_admin\uidict.py:8
+#: .\helpers\case\jb_admin\js_cfg.py:22
+msgid "查询"
+msgstr "Search"
+
+#: .\helpers\case\jb_admin\uidict.py:11
 msgid "确定要导出EXCEL?"
 msgstr "Confirm export EXCEL?"
 
-#: .\helpers\case\jb_admin\uidict.py:16
+#: .\helpers\case\jb_admin\uidict.py:21
 msgid "导出最大条数"
 msgstr "Number of export"
 
-#: .\helpers\case\jb_admin\uidict.py:16
-#, python-format
-msgid "请输入小于%(max_length)s的正整数"
-msgstr "Please input integer small than %(max_length)s"
+#: .\helpers\case\jb_admin\uidict.py:22
+#, fuzzy, python-format
+#| msgid "请输入小于%(max_length)s的正整数"
+msgid "请输入小于%s的正整数"
+msgstr "Please input integer small than %s"
 
-#: .\helpers\case\jb_admin\uidict.py:19 .\helpers\case\jb_admin\uidict.py:22
+#: .\helpers\case\jb_admin\uidict.py:25 .\helpers\case\jb_admin\uidict.py:28
 msgid "导出Excel"
 msgstr "Export Excel"
+
+#~ msgid "账号"
+#~ msgstr "Account"
+
+#~ msgid "User"
+#~ msgstr "User"

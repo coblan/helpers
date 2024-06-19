@@ -459,7 +459,7 @@ class ModelFields(forms.ModelForm):
                 'editor':'com-btn',
                 'type':'primary',
                 'icon':'el-icon-receiving',
-                'label':'保存' if not self.save_to_local else '确定', 
+                'label':_('保存') if not self.save_to_local else _('确定'), 
                 'click_express':'scope.ps.vc.submit()',
                 'show_express':'''rt= ! scope.vc.ctx.readonly_all'''
                 #'icon': 'fa-save',
@@ -979,7 +979,7 @@ class Fields(ModelFields):
             ls.append({
                 'name':'save',
                 'editor':'com-btn',
-                'label':'确定',
+                'label':_('确定'),
                 'type':'primary',
                 'icon':'el-icon-receiving',
                 'show_express':'rt= ! scope.vc.ctx.readonly_all',

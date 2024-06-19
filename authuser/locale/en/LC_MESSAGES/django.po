@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-02-22 18:15+0800\n"
+"POT-Creation-Date: 2024-06-20 01:08+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,25 +17,18 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: .\helpers\authuser\admin_login.py:22 .\helpers\authuser\admin_login.py:37
-msgid "用户名"
-msgstr "user name"
-
-#: .\helpers\authuser\admin_login.py:23
-msgid "用户密码"
-msgstr "password"
-
-#: .\helpers\authuser\admin_login.py:32
-msgid "用户登录"
-msgstr "user login"
-
-#: .\helpers\authuser\admin_login.py:33
+#: .\helpers\authuser\admin_login.py:36 .\helpers\authuser\js_cfg.py:12
 msgid "欢迎登录后台管理系统"
-msgstr "Welcome"
+msgstr "Welcome Log In Admin system"
 
-#: .\helpers\authuser\admin_login.py:116
-msgid "验证码错误"
+#: .\helpers\authuser\admin_login.py:79
+#, python-brace-format
+msgid "用户使用username方式登录,登录用户名{username}"
 msgstr ""
+
+#: .\helpers\authuser\admin_login.py:144
+msgid "验证码错误"
+msgstr "Verification code error"
 
 #: .\helpers\authuser\admin_regist.py:60 .\helpers\authuser\forms.py:24
 msgid "need password"
@@ -65,18 +58,51 @@ msgstr ""
 msgid "User not exist or password not correct"
 msgstr ""
 
-#: .\helpers\authuser\js_cfg.py:7
+#: .\helpers\authuser\js_cfg.py:8
 #, fuzzy
 #| msgid "用户登录"
 msgid "登录"
 msgstr "user login"
 
-#: .\helpers\authuser\js_cfg.py:8
+#: .\helpers\authuser\js_cfg.py:9
 #, fuzzy
 #| msgid "用户密码"
 msgid "密码"
 msgstr "password"
 
-#: .\helpers\authuser\js_cfg.py:9
+#: .\helpers\authuser\js_cfg.py:10
 msgid "下次自动登录"
 msgstr "Auto login"
+
+#: .\helpers\authuser\js_cfg.py:11
+#, fuzzy
+#| msgid "用户登录"
+msgctxt "user_login"
+msgid "用户登录"
+msgstr "user login"
+
+#: .\helpers\authuser\js_cfg.py:13
+msgid "验证码"
+msgstr "verification code"
+
+#: .\helpers\authuser\js_cfg.py:14
+msgid "请输入验证码"
+msgstr "Please input verification code"
+
+#: .\helpers\authuser\js_cfg.py:15
+#, fuzzy
+#| msgid "用户名"
+msgctxt "user_login"
+msgid "用户名"
+msgstr "user name"
+
+#: .\helpers\authuser\js_cfg.py:16
+msgid "请输入用户名"
+msgstr "Please input user name"
+
+#: .\helpers\authuser\js_cfg.py:17
+msgid "请输入密码"
+msgstr "Please input password"
+
+#~ msgid "用户密码"
+#~ msgstr "password"

@@ -40,6 +40,7 @@ export  default  {
   border:1px solid #ebeef5;
   padding: 5px 0 !important;
   min-width: 100px;
+  white-space: nowrap;
 }
 .my-row{
   padding: 8px 20px;

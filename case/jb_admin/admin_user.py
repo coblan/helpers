@@ -18,7 +18,7 @@ from helpers.func.collection import ex
 class UserPage(TablePage):
     template='jb_admin/table_new.html'
     def get_label(self): 
-        return  '账号管理' # _('User')
+        return  _('账号管理') # _('User')
     
     class tableCls(ModelTable):
         model = User
@@ -32,7 +32,7 @@ class UserPage(TablePage):
             get_request_cache()['named_ctx'].update({
                 'jb-user-tabs':[
                     {'name':'account',
-                    'label':'基本信息',
+                    'label':_('基本信息'),
                      'editor':'com-tab-form',
                      'mounted_express':'ex.vueAssign(scope.vc.row,scope.par_row)',
                      'fields_ctx':UserFields().get_head_context()}
@@ -49,12 +49,12 @@ class UserPage(TablePage):
             if head['name'] in width:
                 head['width'] = width.get(head['name'])
             if head['name'] == 'groups':
-                head['label']='权限分组'
+                head['label']=_('权限分组')
                 head['editor'] = 'com-table-array-mapper'
                 head['options'] = [{'value': group.pk, 'label': str(group),} for group in Group.objects.all()]
     
             if head['name'] == 'username':
-                head['label']='账号'
+                head['label']=_('用户名')
                 head['editor'] = 'com-table-click'
                 head['click_express'] = "scope.ps.switch_to_tab({ctx_name:'jb-user-tabs',tab_name:'account',par_row:scope.row})"
             return head
@@ -74,7 +74,7 @@ class UserPage(TablePage):
                                 #'label':'用户手机'
                             #}
                 if name =='groups__name':
-                    return {'value':name,'label':'权限组'}
+                    return {'value':name,'label':_('权限分组')}
                 else:
                     return super().get_option(name)
                 
@@ -157,12 +157,11 @@ class UserFields(ModelFields):
     
     def dict_head(self, head):
         if head['name']=='groups':
-            head['label']='权限分组'
-            #head['editor'] = 'com-field-select'
-            #head['multiple'] = True
+            #head['label']='权限分组'
+
             head['editor'] = 'com-field-table-select'
-            head['table_heads'] =[{'name':'name','label':'权限组','width':'150px'},
-                                  {'name':'desp','label':'描述','pre':True}]
+            head['table_heads'] =[{'name':'name','label':_('权限分组'),'width':'150px'},
+                                  {'name':'desp','label':_('描述'),'pre':True}]
             
             # 只要用户可以配置用户分组，就让他可以看到全部分组。如果按照以前的限制，返回用户权限包含的分组，那么超过他权限的分组，在form中
             # 显示会出问题。
@@ -173,8 +172,8 @@ class UserFields(ModelFields):
             head['order'] = 100
             
         if head['name'] == 'username':
-            head['label']='账号'
-            head['help_text'] = '作为登录账号,只能填写字母,数字或者下划线(_),长度为2~50'
+            #head['label']='账号'
+            head['help_text'] = _('作为登录账号,只能填写字母,数字或者下划线(_),长度为2~50')
             head['fv_rule'] = 'length(2~50);regexp(^\w+$ , 只能有字母,数字和下划线)' #
             #express = ''
             #msg = ''
@@ -194,8 +193,8 @@ class UserFields(ModelFields):
         ls =[]
         if  'password' in self.permit.changeable_fields():
             ls.append({
-                'name': 'user_password', 'label': '用户密码', 'editor': 'com-field-linetext', 'required_express': '!scope.row.pk',
-                'fv_msg':'新建用户必须输入密码！','help_text':'原有密码已被隐藏。输入框留空,则不会修改原有密码;如填写,将会覆盖原有密码。'
+                'name': 'user_password', 'label': _('用户密码'), 'editor': 'com-field-linetext', 'required_express': '!scope.row.pk',
+                'fv_msg':'新建用户必须输入密码！','help_text':_('原有密码已被隐藏。输入框留空,则不会修改原有密码;如填写,将会覆盖原有密码。')
             })
         return ls
     
