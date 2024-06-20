@@ -79,6 +79,20 @@ def get_date_sequence(key='_data_sequence',fill=6,how_many=1,remove_year_digit=0
   set_value(key,ls[-1])
   return ls
 
+@transaction.atomic
+def get_date_random(key='_data_sequence',fill=6,how_many=1,remove_year_digit=0):
+  """以日期为依据，生成随机序列
+  @remove_year_digit:有时候fill的位数太多了，可能会造成int类型溢出，所以增加可以移除 年份前面的前面两位，2022的  20基本是无用的。
+  生成 20240620120101[123512]
+  
+  """
+  now = timezone.now()
+  date_str = now.strftime('%Y%m%d%H%M%S')[remove_year_digit:]
+  ls = []
+  for ii in range(how_many):
+    ls.append(date_str+get_random_number(length=fill))
+  return ls
+
 def get_short_date_sequence(how_many=1,start_date='2021-05-18',fill=5,key='_short_date_sequence'):
   now = timezone.now()
   day_span = ( now - timezone.datetime.strptime(start_date, '%Y-%m-%d') ).days
