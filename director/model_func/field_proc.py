@@ -64,9 +64,9 @@ class BaseFieldProc(object):
                 if not catch.get(options_name):
                     def myoption():
                         if query:
-                            options = [{'value':x.pk,'label':str(x)} for x in query]
+                            options = [{'value':self.cleanOption(x.pk),'label':str(x)} for x in query]
                         else:
-                            options=[{'value':val,'label':str(lab)} for val,lab in self.form_field.choices if val !='']
+                            options=[{'value':self.cleanOption(val),'label':str(lab)} for val,lab in self.form_field.choices if val !='']
                         #if self.form_field.required:
                             #options=[{'value':val,'label':str(lab)} for val,lab in self.form_field.choices if val !='']
                         #else:
@@ -79,6 +79,15 @@ class BaseFieldProc(object):
         except exceptions.FieldError:
             pass
         return options
+    
+    def cleanOption(self,val):
+        if isinstance(val,int):
+            if val >2147483647 or val < -2147483648:
+                return str(val)
+            else:
+                return val
+        else:
+            return val
     
     
     def filter_get_range_head(self,name,model):

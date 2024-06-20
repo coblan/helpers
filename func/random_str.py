@@ -66,13 +66,15 @@ def get_date_sequence(key='_data_sequence',fill=6,how_many=1,remove_year_digit=0
 
   if v and v.startswith(date_str):
     date_str_length =len(date_str)
-    start = int(v[date_str_length-remove_year_digit:])+1
+    #start = int(v[date_str_length-remove_year_digit:])+1
+    start = int(v[date_str_length:])+1
   else:
     start = 1
   #time_str = now.strftime('%Y%m%d')
   #date_int = int( time_str[remove_year_digit :] ) * 10**fill
 
-  date_int = int( date_str[remove_year_digit :] ) * 10**fill  
+  #date_int = int( date_str[remove_year_digit :] ) * 10**fill  
+  date_int = int( date_str ) * 10**fill 
   ls = [date_int+x for x in range(start,start+how_many) ]
   set_value(key,ls[-1])
   return ls
