@@ -204,7 +204,8 @@ def get_lib(request):
                 #'element':'https://cdn.bytedance.com/cdn/expire-1-M/element-ui/2.15.7/index.min.js',
                 #'element_css':'https://cdn.bytedance.com/cdn/expire-1-M/element-ui/2.15.7/theme-chalk/index.min.css',  
                 'element':'https://s1.pstatp.com/cdn/element-ui/2.15.7/index.min.js',
-                'element_css':'https://s1.pstatp.com/cdn/element-ui/2.15.7/theme-chalk/index.min.css',                 
+                'element_css':'https://s1.pstatp.com/cdn/element-ui/2.15.7/theme-chalk/index.min.css', 
+                'element_en':'https://s1.pstatp.com/cdn/element-ui/2.15.7/locale/en.js',     
                 
                 #'element':'https://lib.baomitu.com/element-ui/2.15.9/index.min.js',
                 #'element_css':'https://lib.baomitu.com/element-ui/2.15.9/theme-chalk/index.min.css',

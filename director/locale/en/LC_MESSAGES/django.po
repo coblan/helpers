@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-20 02:22+0800\n"
+"POT-Creation-Date: 2024-06-22 01:44+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,37 +21,13 @@ msgstr ""
 msgid "称呼"
 msgstr "Nickname"
 
-#: .\helpers\director\admin.py:61
-msgid "用户名"
-msgstr "Username"
-
 #: .\helpers\director\admin.py:62
 msgid "管理员账号"
 msgstr "Administrator"
 
-#: .\helpers\director\admin.py:63
-msgid "超级管理员"
-msgstr "Superuser"
-
-#: .\helpers\director\admin.py:64
-msgid "电子邮件地址"
-msgstr "Email"
-
-#: .\helpers\director\admin.py:65
-msgid "有效性"
-msgstr "Is Valid"
-
 #: .\helpers\director\admin.py:66
 msgid "权限分组"
 msgstr "Permit Group"
-
-#: .\helpers\director\admin.py:67
-msgid "用户密码"
-msgstr "Password"
-
-#: .\helpers\director\admin.py:68
-msgid "上次登录"
-msgstr "Last Login"
 
 #: .\helpers\director\admin.py:95
 msgid "包含用户"
@@ -99,6 +75,10 @@ msgstr "Cancel"
 #, python-brace-format
 msgid "图片大小不能超过{maxsize}"
 msgstr "Image Size no more than {maxsize}"
+
+#: .\helpers\director\js_cfg.py:13
+msgid "操作成功"
+msgstr "Operation successful"
 
 #: .\helpers\director\model_func\cus_fields\compositefk\fields.py:269
 msgid "One-to-one relationship"
@@ -152,6 +132,24 @@ msgstr "Switch Account"
 #: .\helpers\director\templates\403.html:19
 msgid "联系管理员提升您的权限"
 msgstr "Contact your administrator to promote your permissions"
+
+#~ msgid "用户名"
+#~ msgstr "Username"
+
+#~ msgid "超级管理员"
+#~ msgstr "Superuser"
+
+#~ msgid "电子邮件地址"
+#~ msgstr "Email"
+
+#~ msgid "有效性"
+#~ msgstr "Is Valid"
+
+#~ msgid "用户密码"
+#~ msgstr "Password"
+
+#~ msgid "上次登录"
+#~ msgstr "Last Login"
 
 #~ msgid "账号"
 #~ msgstr "Account"

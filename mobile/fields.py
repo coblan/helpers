@@ -39,7 +39,7 @@ class FieldsMobile(Fields):
               #'editor':'com-op-submit',
               'editor':'com-btn',
               'label':'确定', 
-              'default_after_save':'''cfg.toast("操作成功");
+              'default_after_save':'''cfg.toast(cfg.tr("操作成功"));
               if(scope.ps.vc.par_row){
                     ex.vueAssign(scope.ps.vc.par_row,row)
                     } 
