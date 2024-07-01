@@ -3,10 +3,10 @@
     <imageDiv class="bg" src="/static/authuser/image/login_bg.jpg"></imageDiv>
     <div class="login-form">
       <div class="big-head">
-        用户登录
+        {{tr('用户登录')}}
       </div>
       <div class="sub-title">
-        <span class="sub-content">{{ctx.welcome || '欢迎登录后台管理系统'}}</span>
+        <span class="sub-content">{{ctx.welcome || tr('欢迎登录后台管理系统')}}</span>
       </div>
       <loginForm></loginForm>
 
@@ -28,6 +28,11 @@ export  default  {
   props:{
     ctx:{}
   },
+  methods:{
+    tr(str){
+      return cfg.tr(str)
+    }
+  }
 }
 </script>
 <style scoped lang="scss">

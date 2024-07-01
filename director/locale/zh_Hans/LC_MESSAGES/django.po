@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-02-02 02:15+0800\n"
+"POT-Creation-Date: 2024-06-20 01:45+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,15 +18,110 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: .\helpers\director\admin.py:214
+#: .\helpers\director\admin.py:59
+msgid "称呼"
+msgstr ""
+
+#: .\helpers\director\admin.py:60
+msgid "用户名"
+msgstr "用户名"
+
+#: .\helpers\director\admin.py:61
+msgid "管理员账号"
+msgstr ""
+
+#: .\helpers\director\admin.py:62
+msgid "超级管理员"
+msgstr ""
+
+#: .\helpers\director\admin.py:63
+msgid "电子邮件地址"
+msgstr ""
+
+#: .\helpers\director\admin.py:64
+msgid "有效性"
+msgstr ""
+
+#: .\helpers\director\admin.py:65
+msgid "权限分组"
+msgstr ""
+
+#: .\helpers\director\admin.py:66
+msgid "用户密码"
+msgstr ""
+
+#: .\helpers\director\admin.py:67
+msgid "上次登录"
+msgstr ""
+
+#: .\helpers\director\admin.py:94
+msgid "包含用户"
+msgstr ""
+
+#: .\helpers\director\admin.py:234
 #, fuzzy
 #| msgid "username has been exist"
 msgid "permit name has been exist"
 msgstr "用户名已经存在了"
 
-#: .\helpers\director\model_func\dictfy.py:232
+#: .\helpers\director\engine.py:233
+msgid "修改密码"
+msgstr ""
+
+#: .\helpers\director\engine.py:234
+msgid "退出"
+msgstr ""
+
+#: .\helpers\director\fields\fields.py:463
+#: .\helpers\director\fields\fields.py:971
+msgid "保存"
+msgstr ""
+
+#: .\helpers\director\fields\fields.py:463
+#: .\helpers\director\fields\fields.py:985 .\helpers\director\js_cfg.py:10
+msgid "确定"
+msgstr ""
+
+#: .\helpers\director\js_cfg.py:7
+msgid "收起"
+msgstr ""
+
+#: .\helpers\director\js_cfg.py:8
+msgid "更多"
+msgstr ""
+
+#: .\helpers\director\js_cfg.py:9
+msgid "确认"
+msgstr ""
+
+#: .\helpers\director\js_cfg.py:11
+msgid "取消"
+msgstr ""
+
+#: .\helpers\director\js_cfg.py:12
+#, python-brace-format
+msgid "图片大小不能超过{maxsize}"
+msgstr ""
+
+#: .\helpers\director\model_func\cus_fields\compositefk\fields.py:269
+msgid "One-to-one relationship"
+msgstr ""
+
+#: .\helpers\director\model_func\dictfy.py:274
 msgid "ID"
 msgstr "ID"
+
+#: .\helpers\director\model_func\field_procs\boolproc.py:37
+#: .\helpers\director\model_func\field_procs\nullboolproc.py:16
+#: .\helpers\director\model_func\field_procs\nullboolproc.py:27
+msgid "是"
+msgstr ""
+
+#: .\helpers\director\model_func\field_procs\boolproc.py:38
+#: .\helpers\director\model_func\field_procs\nullboolproc.py:17
+#: .\helpers\director\model_func\field_procs\nullboolproc.py:28
+msgid "否"
+msgstr ""
 
 #: .\helpers\director\model_func\model_validator.py:8
 #, python-format
@@ -36,6 +131,14 @@ msgstr "%(value)s不能转换为整数"
 #: .\helpers\director\model_func\model_validator.py:15
 msgid "must input string"
 msgstr "不能为空"
+
+#: .\helpers\director\table\table.py:1123
+msgid "创建"
+msgstr ""
+
+#: .\helpers\director\table\table.py:1140
+msgid "删除"
+msgstr ""
 
 #: .\helpers\director\templates\403.html:8
 msgid "禁止访问"

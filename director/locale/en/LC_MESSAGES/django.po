@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-02-22 18:15+0800\n"
+"POT-Creation-Date: 2024-06-22 01:44+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,27 +17,43 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: .\helpers\director\admin.py:47
-msgid "昵称"
-msgstr "nickname"
+#: .\helpers\director\admin.py:60
+msgid "称呼"
+msgstr "Nickname"
 
-#: .\helpers\director\admin.py:48
-#, fuzzy
-#| msgid "切换账号"
-msgid "账号"
-msgstr "Switch Account"
+#: .\helpers\director\admin.py:62
+msgid "管理员账号"
+msgstr "Administrator"
 
-#: .\helpers\director\admin.py:74
+#: .\helpers\director\admin.py:66
+msgid "权限分组"
+msgstr "Permit Group"
+
+#: .\helpers\director\admin.py:95
 msgid "包含用户"
 msgstr "included user"
 
-#: .\helpers\director\admin.py:214
+#: .\helpers\director\admin.py:235
 msgid "permit name has been exist"
 msgstr ""
 
-#: .\helpers\director\fields\fields.py:729
+#: .\helpers\director\engine.py:233
+msgid "修改密码"
+msgstr "Change password"
+
+#: .\helpers\director\engine.py:234
+msgid "退出"
+msgstr "Log Out"
+
+#: .\helpers\director\fields\fields.py:463
+#: .\helpers\director\fields\fields.py:971
 msgid "保存"
-msgstr ""
+msgstr "Save"
+
+#: .\helpers\director\fields\fields.py:463
+#: .\helpers\director\fields\fields.py:985 .\helpers\director\js_cfg.py:10
+msgid "确定"
+msgstr "Yes"
 
 #: .\helpers\director\js_cfg.py:7
 msgid "收起"
@@ -51,15 +67,24 @@ msgstr "more"
 msgid "确认"
 msgstr "Confirm"
 
-#: .\helpers\director\js_cfg.py:10
-msgid "确定"
-msgstr "Yes"
-
 #: .\helpers\director\js_cfg.py:11
 msgid "取消"
 msgstr "Cancel"
 
-#: .\helpers\director\model_func\dictfy.py:232
+#: .\helpers\director\js_cfg.py:12
+#, python-brace-format
+msgid "图片大小不能超过{maxsize}"
+msgstr "Image Size no more than {maxsize}"
+
+#: .\helpers\director\js_cfg.py:13
+msgid "操作成功"
+msgstr "Operation successful"
+
+#: .\helpers\director\model_func\cus_fields\compositefk\fields.py:269
+msgid "One-to-one relationship"
+msgstr ""
+
+#: .\helpers\director\model_func\dictfy.py:274
 msgid "ID"
 msgstr "ID"
 
@@ -84,15 +109,11 @@ msgstr "%(value)s is not integer number"
 msgid "must input string"
 msgstr "must input string"
 
-#: .\helpers\director\table\table.py:881
-msgid "刷新"
-msgstr "refresh"
-
-#: .\helpers\director\table\table.py:910
+#: .\helpers\director\table\table.py:1123
 msgid "创建"
 msgstr "create"
 
-#: .\helpers\director\table\table.py:927
+#: .\helpers\director\table\table.py:1140
 msgid "删除"
 msgstr "delete"
 
@@ -111,3 +132,30 @@ msgstr "Switch Account"
 #: .\helpers\director\templates\403.html:19
 msgid "联系管理员提升您的权限"
 msgstr "Contact your administrator to promote your permissions"
+
+#~ msgid "用户名"
+#~ msgstr "Username"
+
+#~ msgid "超级管理员"
+#~ msgstr "Superuser"
+
+#~ msgid "电子邮件地址"
+#~ msgstr "Email"
+
+#~ msgid "有效性"
+#~ msgstr "Is Valid"
+
+#~ msgid "用户密码"
+#~ msgstr "Password"
+
+#~ msgid "上次登录"
+#~ msgstr "Last Login"
+
+#~ msgid "账号"
+#~ msgstr "Account"
+
+#~ msgid "昵称"
+#~ msgstr "nickname"
+
+#~ msgid "刷新"
+#~ msgstr "refresh"

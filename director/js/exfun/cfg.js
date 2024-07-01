@@ -111,7 +111,7 @@ var cfg={
         layer.close(this._loader_index)
         this._loader_index =null
         if(delay){
-            var realMsg = msg || '操作成功'
+            var realMsg = msg || this.tr('操作成功')
             layer.msg(realMsg,{time:delay})
         }
     },

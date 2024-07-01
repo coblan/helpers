@@ -23,6 +23,7 @@ import logging
 from helpers.director.decorator import get_request_cache
 from ..model_func.hash_dict import hash_dict,make_mark_dict,dif_mark_dict,adapt_type
 from helpers.func.collection.ex import findone,find_index
+from django.utils.translation import ugettext as _
 
 # sql_log 可能没有什么用
 #sql_log = logging.getLogger('director.sql_op')
@@ -459,7 +460,7 @@ class ModelFields(forms.ModelForm):
                 'editor':'com-btn',
                 'type':'primary',
                 'icon':'el-icon-receiving',
-                'label':'保存' if not self.save_to_local else '确定', 
+                'label':_('保存') if not self.save_to_local else _('确定'), 
                 'click_express':'scope.ps.vc.submit()',
                 'show_express':'''rt= ! scope.vc.ctx.readonly_all'''
                 #'icon': 'fa-save',
@@ -981,7 +982,7 @@ class Fields(ModelFields):
             ls.append({
                 'name':'save',
                 'editor':'com-btn',
-                'label':'确定',
+                'label':_('确定'),
                 'type':'primary',
                 'icon':'el-icon-receiving',
                 'show_express':'rt= ! scope.vc.ctx.readonly_all',

@@ -246,7 +246,7 @@ import { ref, reactive,computed ,onMounted,getCurrentInstance } from '@vue/compo
         },
         computed:{
             seach_label(){
-                return cfg.tr.search
+                return cfg.tr('查询')
             },
             proxy(){
               var self = this

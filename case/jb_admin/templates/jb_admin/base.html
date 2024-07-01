@@ -61,6 +61,13 @@
     <link href="{{ js_config.js_lib.nprogress_css }}" rel="stylesheet">
     <!--<link href="https://cdn.bootcss.com/nprogress/0.2.0/nprogress.min.css" rel="stylesheet">-->
 
+    {% if js_config.crt_lan == 'en' %}
+    <script src="{{ js_config.js_lib.element_en }}"></script>
+    <script >
+        ELEMENT.locale(ELEMENT.lang.en)
+        {{js_config.js_lib.nprogress}}
+    </script>
+    {% endif %}
     <script>
         (function(){
             document.onreadystatechange = function(){
