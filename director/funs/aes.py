@@ -32,6 +32,10 @@ def aes_decode_byte(data, key):
     decrypted_byte = unpad(decrypted_byte, 16)  # 32去除多余补位
     return decrypted_byte
 
+def aes_encode_str(string,key):
+    bb= aes_encode_byte(string.encode('utf-8'),key)
+    return base64.b64encode(bb)
+
 @director_view('aes/file')
 def encode_file(media_path):
     """
