@@ -160,6 +160,7 @@ import { ref, reactive,computed ,onMounted,getCurrentInstance } from '@vue/compo
                 }
             })
             childStore.vc = vc
+            childStore.name='com-d-table'
             return childStore
         }
     }

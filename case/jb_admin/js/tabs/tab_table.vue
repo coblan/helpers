@@ -1,11 +1,16 @@
 <template>
-  <com-backend-table class="com-tab-table" v-if="loaded"
-                     ref="backend_table" :ctx="tab_head.table_ctx"></com-backend-table>
+<!--  <com-backend-table class="com-tab-table" v-if="loaded"-->
+<!--                     ref="backend_table" :ctx="tab_head.table_ctx"></com-backend-table>-->
+  <backendTable class="com-tab-table" v-if="loaded"
+                ref="backend_table" :ctx="tab_head.table_ctx"></backendTable>
 </template>
 <script>
-
+import  backendTable from '../pannels/backendTable.vue'
 export default {
   props:['tab_head','par_row'],
+  components:{
+    backendTable
+  },
   data(){
     var childStore = {
       vc:this,
