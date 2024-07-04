@@ -1,27 +1,18 @@
 <template>
   <li class="dropdown messages-menu">
-    <!-- Menu toggle button -->
-    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-<!--      <i class="fa fa-envelope-o"></i>-->
-<!--      <span class="label label-success">4</span>-->
-      <i class="fa fa-user-circle-o"></i>
-      <span>{{ctx.label}}</span>
-    </a>
-    <ul class="dropdown-menu">
-      <li class="my-row" v-for="action in ctx.options" @click="runAction(action)">{{action.label}}</li>
 
-<!--      <li>-->
-<!--&lt;!&ndash;         inner menu: contains the messages &ndash;&gt;-->
-<!--        <ul class="menu">-->
+    <el-dropdown  trigger="click">
+        <div class="el-dropdown-link my-drop-down">
+          {{ctx.label}}<i class="el-icon-arrow-down el-icon--right"></i>
+        </div>
 
-<!--          &lt;!&ndash; end message &ndash;&gt;-->
-<!--        </ul>-->
-<!--        &lt;!&ndash; /.menu &ndash;&gt;-->
+        <el-dropdown-menu slot="dropdown">
+          <el-dropdown-item v-for="action in ctx.options" @click.native="runAction(action)">{{action.label}}</el-dropdown-item>
+        </el-dropdown-menu>
+    </el-dropdown>
 
 
-<!--      </li>-->
 
-    </ul>
   </li>
 </template>
 <script>
@@ -35,20 +26,16 @@ export  default  {
 }
 </script>
 <style scoped lang="scss">
-.dropdown-menu{
-  width: auto !important;
-  border:1px solid #ebeef5;
-  padding: 5px 0 !important;
-  min-width: 100px;
-  white-space: nowrap;
-}
-.my-row{
-  padding: 8px 20px;
-  background-color: white;
+.my-drop-down{
+  color: white;
+  //padding-top: 15px;
+  //padding-bottom: 15px;
+  line-height: 20px;
+  padding: 15px;
+
   &:hover{
-    background-color: #ecf5ff;
-    color: #66b1ff;
-    cursor: pointer;
+    background: rgba(0, 0, 0, 0.1);
+    color: #f6f6f6;
   }
 }
 </style>

@@ -260,8 +260,8 @@ class BaseEngine(object):
         lans = []
         for k,v in settings.LANGUAGES:
             lans.append({'value':k,'label':v})
-        #def_lan = settings.LANGUAGE_CODE
-        crt_lan = self.request.LANGUAGE_CODE #self.request.COOKIES.get('django_language', def_lan)
+        def_lan = settings.LANGUAGE_CODE
+        crt_lan =  getattr(self.request,'LANGUAGE_CODE',def_lan) #self.request.LANGUAGE_CODE #self.request.COOKIES.get('django_language', def_lan)
         
         tr_dc = {}
         for fun in js_tr_list:
