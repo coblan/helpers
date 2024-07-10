@@ -3,6 +3,14 @@ from django.db.models import Count
 
 class CascadTable(ModelTable):
     def getParents(self):
+        if self.kw.get('id'):
+            inst = self.model.objects.get(pk = self.kw.get('id') )
+            par_inst = inst.parent
+            ls =[]
+            while par_inst:
+                ls.append({'value':par_inst.pk,'label':str(par_inst)})
+                par_inst = par_inst.parent
+            return [{'value':'','label':'全部'}] + list( reversed(ls) )
         if self.kw.get('_par'):
             par_inst = self.model.objects.get(pk = self.kw.get('_par') )
             ls =[]
@@ -14,10 +22,12 @@ class CascadTable(ModelTable):
             return [{'value':'','label':'全部'}]    
     
     def inn_filter(self, query):
-        if self.kw.get('_par'):
-            query = query.filter(parent_id = self.kw.get('_par'))
-        else:
-            query = query.filter(parent_id__isnull=True)
+        if not self.kw.get('id'):
+            # 如果直接查询ID，才使用par去查
+            if self.kw.get('_par'):
+                query = query.filter(parent_id = self.kw.get('_par'))
+            else:
+                query = query.filter(parent_id__isnull=True)
         model_name = self.model.__name__.lower()
         query = query.annotate(child_count=Count(model_name))
         return query 
