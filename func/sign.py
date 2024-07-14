@@ -40,7 +40,11 @@ def sign_check(salt,expire=60):
             for k,v in tmp_kws.items():
                 if isinstance(v,list) or isinstance(v,dict):
                     continue
-                ls.append(f'{k}={v}')
+                if isinstance(v,bool):
+                    v_str= str(v).lower()
+                    ls.append(f'{k}={v_str}')
+                else:
+                    ls.append(f'{k}={v}')
             ls.sort()
             if ls:
                 # 判断是否有参数
