@@ -3,8 +3,8 @@ from django.db.models import Count
 
 class CascadTable(ModelTable):
     def getParents(self):
-        if self.kw.get('id'):
-            inst = self.model.objects.get(pk = self.kw.get('id') )
+        if self.kw.get('pk'):
+            inst = self.model.objects.get(pk = self.kw.get('pk') )
             par_inst = inst.parent
             ls =[]
             while par_inst:
@@ -22,12 +22,14 @@ class CascadTable(ModelTable):
             return [{'value':'','label':'全部'}]    
     
     def inn_filter(self, query):
-        if not self.kw.get('id'):
+        if not self.kw.get('pk'):
             # 如果直接查询ID，才使用par去查
             if self.kw.get('_par'):
                 query = query.filter(parent_id = self.kw.get('_par'))
             else:
                 query = query.filter(parent_id__isnull=True)
+        else:
+            query = query.filter(pk=self.kw.get('pk'))
         model_name = self.model.__name__.lower()
         query = query.annotate(child_count=Count(model_name))
         return query 
