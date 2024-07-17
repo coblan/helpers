@@ -140,19 +140,25 @@ def get_context(director_name):
      return dcls(select_for_update=False).get_context()
 
 #@exclude_transaction
-@director_view('d.director_element_call')
-def director_element_call(director_name,attr_name,kws):
-     dcls = director.get(director_name)
-     obj = dcls()
-     return getattr(obj,attr_name)(**kws)
+#@director_view('d.director_element_call')
+#def director_element_call(director_name,attr_name,kws):
+     #dcls = director.get(director_name)
+     #obj = dcls()
+     
+     #if hasattr(obj,'public_api') and attr_name not in obj.public_api:
+          #raise UserWarning(f'不能直接请求{attr_name},请使用新版本')     
+     #return getattr(obj,attr_name)(**kws)
 
 # [1] 新开一个d.director_element_call，给dapi用，不去修改老的，免得引起其他问题
-@director_view('d.director_element_call2')
+@director_view('d.director_element_call')
 def director_element_call(director_name,attr_name,**kws):
      dcls = director.get(director_name)
      obj = dcls()
-     if hasattr(obj,'public_api') and attr_name not in obj.public_api:
-          raise Http404()   
+     if not hasattr(obj,'public_api'):
+          raise UserWarning('接口升级,请联系管理员')
+     if obj.public_api !='__all__':
+          if  attr_name not in obj.public_api:
+               raise UserWarning(f'不能直接请求{attr_name}')    
      return getattr(obj,attr_name)(**kws)
 
 @director_view('d.delete_query_related')

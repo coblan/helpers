@@ -60,6 +60,7 @@ class ModelFields(forms.ModelForm):
     nolimit=False
     simple_dict = False
     allow_delete= False
+    allow_cascade_delete=False
     select_for_update = True  # 某些高频访问文件，写入不平凡，所以不允许锁定，就可以设置为False
     complete_field = True # False   # 自动补全没有上传的字段,在api或者selected_set_and_save中不必上传所有字段  2024/5/14改为true
     pass_clean_field = []
@@ -857,8 +858,14 @@ class ModelFields(forms.ModelForm):
         # 增加桥接   删除面积太大，展示屏蔽，[TODO] 应该是那种必须删除的才能删除
         #for bridge,bridge_inst in zip(self.foreign_bridge,self.foreign_bridge_inst):
             #bridge.delForm(bridge_inst,base_inst = self.instance)  
-            
-        if self.permit.can_del() and self.instance.pk:
+        
+      
+        
+        if self.permit.can_del() and self.instance.pk and self.allow_delete:
+            cascade_ls = delete_related_query(self.instance)
+            if not self.allow_cascade_delete:
+                if cascade_ls:
+                    raise UserWarning(f'已经有相关数据({cascade_ls[0]["str"]}),不能删除!')
             before_del_data = sim_dict(self.instance)
             
             model = model_to_name(self.instance)
@@ -870,7 +877,8 @@ class ModelFields(forms.ModelForm):
                 'pk':pk, 
                 'kind':'delete', 
                 'user': self.crt_user.username if self.crt_user.is_authenticated else 'anonymous',
-                '_before':before_del_data,                 
+                '_before':before_del_data,
+                'cascade_delete':cascade_ls
             }
             if ex_del_log:
                 dc.update(ex_del_log)
