@@ -2,6 +2,7 @@ from .table import ModelTable
 from django.db.models import Count
 
 class CascadTable(ModelTable):
+    public_api=['paste']
     def getParents(self):
         if self.kw.get('pk'):
             inst = self.model.objects.get(pk = self.kw.get('pk') )
