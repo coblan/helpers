@@ -5,7 +5,8 @@
                       :name="head.name"
                       :id="'id_'+head.name"
                       @keypress.native="isNumber($event)"
-                      @blur.native="on_blur"
+                      @blur="onBlur"
+                      @focus="onFocus"
                       :autofocus="head.autofocus">
                 <template slot="prepend" >
                     <span  v-if="head.prefix" v-html="head.prefix"></span>
@@ -119,6 +120,28 @@
 
         },
         methods:{
+          onFocus(){
+            this.inter_index = setInterval(this.filterIllegal,500)
+          },
+          onBlur(){
+            if(this.inter_index){
+              clearInterval(this.inter_index)
+              this.inter_index=''
+            }
+            // this.filterIllegal()
+          },
+          filterIllegal(){
+            var value = this.row[this.head.name]
+            const newValue =
+                value
+                    .replace(/[^\d^\.^-]+/g, '')   // 把不是数字，不是小数点的过滤掉
+                    .replace(/^0+(\d)/, '$1')      // 以0开头，0后面为数字，则过滤掉，取后面的数字
+                    .replace(/^-0+(\d)/, '-$1')    // 以-0开头，0后面为数字，则过滤掉，取后面的数字
+                    .replace(/-/g, (match, offset) => offset === 0 ? '-' : '') // 只允许第一个是负号-
+                    .replace(/\./, '#').replace(/\./, '').replace(/#/, '\.') // 只保留第一个小数点
+
+            this.row[this.head.name] = newValue
+          }
 //            on_blur(){
 //                this.row[this.head.name] =
 //            },
