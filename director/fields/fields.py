@@ -859,9 +859,10 @@ class ModelFields(forms.ModelForm):
         #for bridge,bridge_inst in zip(self.foreign_bridge,self.foreign_bridge_inst):
             #bridge.delForm(bridge_inst,base_inst = self.instance)  
         
-      
+        if not self.allow_delete:
+            raise UserWarning('不允许删除改数据')
         
-        if self.permit.can_del() and self.instance.pk and self.allow_delete:
+        if self.permit.can_del() and self.instance.pk:
             cascade_ls = delete_related_query(self.instance)
             if not self.allow_cascade_delete:
                 if cascade_ls:
