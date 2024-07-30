@@ -24,7 +24,11 @@ class BaseFieldProc(object):
         """返回字典
         to_dict 函数会调用这个方法
         """
-        return { name :getattr(inst,name)}
+        value = getattr(inst,name)
+        if isinstance(value,str):
+            return {name:value.strip()}
+        else:
+            return { name :value}
     
     def clean_field(self,dc,name):
         """ 

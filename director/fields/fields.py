@@ -778,7 +778,10 @@ class ModelFields(forms.ModelForm):
         
         for data in self.changed_data:
             if data in self.get_readonly_fields():
-                raise PermissionDenied(" {data} is readonly".format(data=data))
+                if  getattr( self.instance,data) == self.kw.get(data):
+                    pass
+                else:
+                    raise PermissionDenied(" {data} is readonly".format(data=data))
         
         # 增加桥接
         for bridge,bridge_inst in zip(self.foreign_bridge,self.foreign_bridge_inst):
