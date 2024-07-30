@@ -155,7 +155,7 @@ def director_element_call(director_name,attr_name,**kws):
      dcls = director.get(director_name)
      obj = dcls()
      if not hasattr(obj,'public_api'):
-          raise UserWarning('接口升级,请联系管理员')
+          raise UserWarning(f'{director_name}接口升级,请联系管理员')
      if obj.public_api !='__all__':
           if  attr_name not in obj.public_api:
                raise UserWarning(f'不能直接请求{attr_name}')    

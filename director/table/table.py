@@ -428,6 +428,7 @@ class ModelTable(object):
     allow_create = True # 创建按钮是否显示
     allow_refresh = True
     foreign_bridge = []
+    autoLoad = True # 控制前端界面，初始时，是否自动加载。
     def __init__(self,page=1,row_sort=[],row_filter={},row_search= '',crt_user=None,perpage=None,**kw):
         """
         kw['search_args']只是一个记录，在获取到rows时，一并返回前端页面，便于显示。
@@ -571,6 +572,7 @@ class ModelTable(object):
             'ops' : ops, 
             'selectable': self.selectable,
             'event_slots':self.get_event_slots(),
+            'autoLoad':self.autoLoad,
             **dc,
         }  
     
