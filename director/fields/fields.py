@@ -236,6 +236,12 @@ class ModelFields(forms.ModelForm):
 
         super(ModelFields,self).__init__(dc,*args,**form_kw)
         
+        # 防止读写分离，写的instane关联查询问题。
+        for key,value in self.fields.items():
+            if isinstance(value,forms.models.ModelChoiceField) or \
+               isinstance(value,forms.models.ModelMultipleChoiceField):
+                value.queryset = value.queryset.using(self.instance._state.db)
+        
         # 2023/8/14 加入bridge功能
         self.foreign_bridge_inst =[]
         for bridge in  self.foreign_bridge:
