@@ -11,7 +11,7 @@ class CascadTable(ModelTable):
                 ls.append({'value':par_inst.pk,'label':str(par_inst)})
                 par_inst = par_inst.parent
             return [{'value':'','label':'全部'}] + list( reversed(ls) )
-        if self.kw.get('_par'):
+        if self.kw.get('_par') and self.kw.get('_par') !='__all__':
             par_inst = self.model.objects.get(pk = self.kw.get('_par') )
             ls =[]
             while par_inst:
@@ -22,14 +22,15 @@ class CascadTable(ModelTable):
             return [{'value':'','label':'全部'}]    
     
     def inn_filter(self, query):
-        if not self.kw.get('pk'):
+        if self.kw.get('pk'):
+            query = query.filter(pk=self.kw.get('pk'))
+        elif self.kw.get('_par') !='__all__':
             # 如果直接查询ID，才使用par去查
-            if self.kw.get('_par'):
+            if self.kw.get('_par') :
                 query = query.filter(parent_id = self.kw.get('_par'))
             else:
                 query = query.filter(parent_id__isnull=True)
-        else:
-            query = query.filter(pk=self.kw.get('pk'))
+       
         model_name = self.model.__name__.lower()
         query = query.annotate(child_count=Count(model_name))
         return query 
