@@ -166,23 +166,11 @@ class ModelFields(forms.ModelForm):
         inst =  form_kw['instance']
         
         # 如果row有meta_change_fields 字段，那么该次请求，只能修改这些字段，其他字段一律还原
-        meta_change_fields=[]
-        if dc.get('meta_change_fields'):
-            meta_change_fields = dc.get('meta_change_fields').split(',')
-        
-        # 强制保存字段，不验证是否改变,并且其他字段都不能改变
+        # [Meta_change_fields] 2024-07-30去掉meta_change_fields这个东西，感觉实用性不大，让row来携带meta_change_fields信息，过于复杂
+        #meta_change_fields=[]
         #if dc.get('meta_change_fields'):
-            #force_change_fields = dc.get('meta_change_fields').split(',')
-            #force_change_fields += self.overlap_fields
-            #for k in self.permit.changeable_fields():
-                #if k not in force_change_fields:
-                    #fieldcls = inst.__class__._meta.get_field(k)
-                    #if isinstance(fieldcls, models.ForeignKey):
-                        #dc[k] = getattr(inst, "%s_id" % k)
-                        #continue
-                    #dc[k] = getattr(form_kw['instance'] , k)  kw
+            #meta_change_fields = dc.get('meta_change_fields').split(',')
         
-
         # todict -> ui -> todict(compare) -> adapte_dict
         readonly_waring = []
         simdc = sim_dict(inst)  # 用来修正那些只读的字段
@@ -199,24 +187,30 @@ class ModelFields(forms.ModelForm):
             #readonly = list(self.readonly)
             readonly += self.const_fields
         
-        if meta_change_fields or readonly:
-            # 修正只读字段 
+        if  readonly:
+          # 修正只读字段 
             for k in dict(dc):
-                if k in readonly or (meta_change_fields and k not in meta_change_fields ):
+                if k in readonly :
                     if k in self.readonly_change_warning and adapt_type(dc[k]) != adapt_type( simdc.get(k)):
                         readonly_waring.append(k)
                     dc[k] = simdc.get(k)
                     if 'meta_org_dict' in dc:
                         dc['meta_org_dict'].pop(k,None)
-                    #if hasattr(inst, "%s_id" % k):  # 如果是ForeignKey，必须要pk值才能通过 form验证
-                        #fieldcls = inst.__class__._meta.get_field(k)
-                        #if isinstance(fieldcls, models.ForeignKey):
-                            #dc[k] = getattr(inst, "%s_id" % k)
-                            #continue
-                    #if hasattr(inst,k):
-                        #dc[k] =  getattr(inst , k)  
+                        
+        #[Meta_change_fields]
+        #if meta_change_fields or readonly:
+            ## 修正只读字段 
+            #for k in dict(dc):
+                #if k in readonly or (meta_change_fields and k not in meta_change_fields ):
+                    #if k in self.readonly_change_warning and adapt_type(dc[k]) != adapt_type( simdc.get(k)):
+                        #readonly_waring.append(k)
+                    #dc[k] = simdc.get(k)
+                    #if 'meta_org_dict' in dc:
+                        #dc['meta_org_dict'].pop(k,None)
+            
         if readonly_waring : # and  not dc.get('meta_overlap_fields') == '__all__' : 这个有安全隐患 ，所以去掉
-            raise OutDateException('(%s)的%s是只读的。但是已经发生了变化,请确认后再进行操作!'%(inst,[field_label(inst.__class__,k ) for k in readonly_waring] ) )
+            raise UserWarning('(%s) fields ( %s ) is readonly'%(inst,[field_label(inst.__class__,k ) for k in readonly_waring] ))
+            #raise OutDateException('(%s)的%s是只读的。但是已经发生了变化,请确认后再进行操作!'%(inst,[field_label(inst.__class__,k ) for k in readonly_waring] ) )
         
         # 真正的验证各个参数是否过期，是在clean函数中进行的。
         
@@ -241,6 +235,12 @@ class ModelFields(forms.ModelForm):
         self.kw.update(dc)        
 
         super(ModelFields,self).__init__(dc,*args,**form_kw)
+        
+        # 防止读写分离，写的instane关联查询问题。
+        for key,value in self.fields.items():
+            if isinstance(value,forms.models.ModelChoiceField) or \
+               isinstance(value,forms.models.ModelMultipleChoiceField):
+                value.queryset = value.queryset.using(self.instance._state.db)
         
         # 2023/8/14 加入bridge功能
         self.foreign_bridge_inst =[]
@@ -784,7 +784,10 @@ class ModelFields(forms.ModelForm):
         
         for data in self.changed_data:
             if data in self.get_readonly_fields():
-                raise PermissionDenied(" {data} is readonly".format(data=data))
+                if  getattr( self.instance,data) == self.kw.get(data):
+                    pass
+                else:
+                    raise PermissionDenied(" {data} is readonly".format(data=data))
         
         # 增加桥接
         for bridge,bridge_inst in zip(self.foreign_bridge,self.foreign_bridge_inst):
