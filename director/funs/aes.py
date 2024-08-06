@@ -10,6 +10,8 @@ import logging
 general_log = logging.getLogger('general_log')
 from django.conf import settings
 from helpers.func.dot_dict import read_dict_path
+from bs4 import BeautifulSoup
+import hashlib
 
 padding = lambda s: s + (16 - len(s) % 16) * chr(16 - len(s) % 16) .encode('utf-8')
 #加密
@@ -68,6 +70,16 @@ def encode_file(media_path):
             f2.write(rt)
         return aes_url
 
+
+def decode_file_content(media_path):
+    key = read_dict_path(settings.UPLOAD_CRYPTO,'aes.key')
+    path = media_url_to_path(media_path)
+
+    with open (path,'rb') as f:
+        data = f.read()
+        rt = aes_decode_byte(data,key)
+        return rt
+        
 @director_view('aes-decode/file')
 def decode_file(media_path):
     """
@@ -98,6 +110,7 @@ def decode_file(media_path):
             #aes_path = f'{path}.aes'
             #aes_url = f'{media_path}.aes'
         if path.endswith('.aes'):
+            # 获取.jpg.aes中的.jpg作为文件后缀
             aes_path =path[:-4]
             aes_url = media_path[:-4]
         else:
@@ -106,6 +119,51 @@ def decode_file(media_path):
         with open (aes_path,'wb') as f2:
             f2.write(rt)
         return aes_url
+
+class AesHtml(object):
+    def __init__(self,aes_files=None):
+        self.aes_files = aes_files
+        
+    def run(self,html):
+        self.html = html
+        soup = BeautifulSoup(html)
+        for image in soup.select('img'):
+            if  self.aes_files and image.attrs.get('src').startswith('data:image/png;base64,'):
+                md = hashlib.md5()
+                md.update( image.attrs['src'].encode('utf-8') )
+                key = md.hexdigest()
+                image.attrs['src'] = self.aes_files.get(key )            
+            elif image.attrs['src'].startswith('/media'):
+                image.attrs['src'] = self.aesImage(image.attrs['src'])
+           
+        return  str(soup)
+        
+    def aesImage(self,media_url):
+        aes_url = encode_file(media_url)
+        return aes_url
+
+class UnAesHtml(object):
+    def __init__(self):
+        self.aes_files={}
+        
+    def run(self,html):
+        self.html = html
+        soup = BeautifulSoup(html)
+        for image in soup.select('img'):
+            if image.attrs.get('src').endswith('.aes'):
+                old_str = image.attrs['src']
+                image.attrs['src'] = self.decodeAesImage(image.attrs['src'])
+                md = hashlib.md5()
+                md.update( image.attrs['src'].encode('utf-8') )
+                key = md.hexdigest()
+                self.aes_files[ key] = old_str
+        return  str(soup)
+        
+    def decodeAesImage(self,media_url):
+        aes_url = decode_file_content(media_url)
+        base_str= base64.b64encode(aes_url).decode('utf-8')
+        aes_url = 'data:image/png;base64,'+base_str 
+        return aes_url 
     
 if __name__ == '__main__':
     key = '94a4b778g01ca4ab'  # 密钥长度必须为16、24或32位，分别对应AES-128、AES-192和AES-256
