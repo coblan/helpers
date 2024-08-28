@@ -122,6 +122,11 @@ def decode_file(media_path):
 
 class AesHtml(object):
     def __init__(self,aes_files=None):
+        """
+        aes_files={
+            'ASDFSGASG':/media/xxx.aes
+        }
+        """
         self.aes_files = aes_files
         
     def run(self,html):
