@@ -170,9 +170,14 @@ class UnAesHtml(object):
         return  str(soup)
         
     def decodeAesImage(self,media_url):
-        aes_url = decode_file_content(media_url)
-        base_str= base64.b64encode(aes_url).decode('utf-8')
-        aes_url = 'data:image/png;base64,'+base_str 
+        try:
+            aes_url = decode_file_content(media_url)
+            base_str= base64.b64encode(aes_url).decode('utf-8')
+            aes_url = 'data:image/png;base64,'+base_str             
+        except Exception as e:
+            general_log.exception(e)
+            aes_url = ''
+        
         return aes_url 
     
 if __name__ == '__main__':
