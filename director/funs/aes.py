@@ -140,11 +140,13 @@ class AesHtml(object):
                 image.attrs['src'] = self.aes_files.get(key )            
             elif image.attrs['src'].startswith('/media'):
                 png_src = image.attrs['src']
-                image.attrs['src'] = self.aesImage(png_src)
-                
-                # 删除原图
-                png_path = media_url_to_path(png_src)
-                os.remove(png_path)
+                #if png_path :''.endswith(('.jpg','.jpeg','.gif','.png','.webp'))
+                if not png_src.endswith('.aes'):
+                    image.attrs['src'] = self.aesImage(png_src)
+                    
+                    # 删除原图
+                    png_path = media_url_to_path(png_src)
+                    os.remove(png_path)
                 
         return  str(soup)
         
@@ -175,8 +177,8 @@ class UnAesHtml(object):
             base_str= base64.b64encode(aes_url).decode('utf-8')
             aes_url = 'data:image/png;base64,'+base_str             
         except Exception as e:
-            general_log.exception(e)
-            aes_url = ''
+            general_log.debug('decode aes error:',str(e)) 
+            aes_url = media_url
         
         return aes_url 
     
