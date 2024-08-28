@@ -134,8 +134,13 @@ class AesHtml(object):
                 key = md.hexdigest()
                 image.attrs['src'] = self.aes_files.get(key )            
             elif image.attrs['src'].startswith('/media'):
-                image.attrs['src'] = self.aesImage(image.attrs['src'])
-           
+                png_src = image.attrs['src']
+                image.attrs['src'] = self.aesImage(png_src)
+                
+                # 删除原图
+                png_path = media_url_to_path(png_src)
+                os.remove(png_path)
+                
         return  str(soup)
         
     def aesImage(self,media_url):
