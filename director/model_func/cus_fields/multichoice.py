@@ -26,6 +26,7 @@ class MultiChoiceTextField(TextField):
             self.my_choices = choices
         self.seperator = kwargs.pop('seperator',',')
         self.full_choice = kwargs.pop('full_choice',None)
+        self.data_type=kwargs.pop('data_type',int)
         super().__init__(*args,**kwargs)
         
 
@@ -41,7 +42,8 @@ class MultiChoiceProc(CharProc):
         else:
             ls = [x for x in value.split(seperator) if x!=''] 
         try:
-            ls = [ int(x) for x in ls]
+            if self.field.data_type==int:
+                ls = [ int(x) for x in ls]
         except ValueError:
             pass
         
