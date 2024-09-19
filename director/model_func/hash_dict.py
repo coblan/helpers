@@ -72,5 +72,7 @@ def adapt_type(v):
     """
     if isinstance(v,(datetime.datetime,timezone.datetime)):
         return v.strftime('%Y-%m-%d %H:%M:%S')
+    elif isinstance(v,(list,tuple)):
+        return sorted(v)
     else:
         return str(v)
