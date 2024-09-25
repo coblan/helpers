@@ -37,7 +37,10 @@ def fields_doc(model_form,pk_field='id',model_table=None):
         table_str += f"|{pk_field}|{id_inst.verbose_name}|{pk_field_type}|{pk_field_help}|\n"
         table_str += f"|pk|数据库主键|唯一|与{pk_field}值一致。|\n"
     
-    field_name_list = [field.name for field in model_form.Meta.model._meta.get_fields()]
+    if hasattr(model_form,'Meta'):
+        field_name_list = [field.name for field in model_form.Meta.model._meta.get_fields()]
+    else:
+        field_name_list = []
     for head in heads:
         if head['name'] ==pk_field:
             continue
