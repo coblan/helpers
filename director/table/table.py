@@ -1033,8 +1033,8 @@ class ModelTable(object):
         #[count-] 有时单独计算count，效率很高。
         count_query = self.getCountQuery(query,before_innfilter_query=before_innfilter_query)
         if count_query != None:
-            self.row_filter.get_query(count_query)
-            self.row_search.get_query(count_query)
+            count_query= self.row_filter.get_query(count_query)
+            count_query = self.row_search.get_query(count_query)
             self.count_query=count_query 
         # [-count]
 
