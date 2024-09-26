@@ -1,6 +1,8 @@
 <template>
   <div class="com-field-json-edit">
     <div class="editor" style="width: 600px; height: 400px;"></div>
+
+    <div v-if="head.dif" class="editor2" style="width: 600px; height: 400px;"></div>
   </div>
 </template>
 <script>
@@ -28,42 +30,51 @@ export default {
     }
   },
   methods:{
-    initData(){
+    async initData(){
       var self = this
       ex.load_css(cfg.js_lib.jsoneditor_css)
-      ex.load_js(cfg.js_lib.jsoneditor).then(()=>{
-        if(self.head.readonly){
-          var options = {
-            mode: 'view',
-            // modes: ['code', 'form', 'text', 'tree', 'view', 'preview']
-            modes: [ 'view', 'preview']
-          }
-        }else{
-          var options = {
-            mode: 'code',
-            // modes: ['code', 'form', 'text', 'tree', 'view', 'preview']
-            modes: ['code', 'form', 'tree', 'view', 'preview']
-          }
+      await ex.load_js(cfg.js_lib.jsoneditor)
+      if(self.head.readonly){
+        var options = {
+          mode: 'view',
+          // modes: ['code', 'form', 'text', 'tree', 'view', 'preview']
+          modes: [ 'view', 'preview']
         }
-
-        var value =  this.inn_value  //this.row[this.head.name]
-
-        this. editor = new JSONEditor(this.$el.querySelector('.editor'), options)
-
-        // set json
-        if(!value){
-          var initialJson = ex.eval(this.head.default_value_express,{vc:this})  || {}
-        } else if(typeof value =='string'){
-          var initialJson = JSON.parse(this.row[this.head.name])
-        }else{
-          var initialJson = value
+      }else{
+        var options = {
+          mode: 'code',
+          // modes: ['code', 'form', 'text', 'tree', 'view', 'preview']
+          modes: ['code', 'form', 'tree', 'view', 'preview']
         }
+      }
 
-        this.editor.set(initialJson)
+      var value =  this.inn_value  //this.row[this.head.name]
+
+      this. editor = new JSONEditor(this.$el.querySelector('.editor'), options)
+
+      // set json
+      if(!value){
+        var initialJson = ex.eval(this.head.default_value_express,{vc:this})  || {}
+      } else if(typeof value =='string'){
+        var initialJson = JSON.parse(this.row[this.head.name])
+      }else{
+        var initialJson = value
+      }
+
+      this.editor.set(initialJson)
+
+      if (this.head.dif){
+        this. editor2 = new JSONEditor(this.$el.querySelector('.editor2'),  {
+          mode: 'view',
+          modes: [ 'view', 'preview']
+        })
+        this.editor2.set(initialJson)
+      }
+
 
         // get json
         // const updatedJson = editor.get()
-      })
+
     },
     updateEditorData(){
       var value =  this.inn_value  //this.row[this.head.name]
@@ -75,7 +86,6 @@ export default {
       }else{
         var initialJson = value
       }
-
       this.editor.set(initialJson)
     },
     updateData(){
@@ -85,6 +95,10 @@ export default {
 }
 </script>
 <style scoped lang="scss">
+.com-field-json-edit{
+  display: flex;
+  flex-wrap: nowrap;
+}
 ::v-deep{
   .jsoneditor-menu a.jsoneditor-poweredBy{
     display: none;
