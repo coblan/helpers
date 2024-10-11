@@ -32,7 +32,7 @@ Vue.component('com-field-richtext',{
 
         this.loaded=true
 
-        this.checkLive()
+        // this.checkLive()
 
     },
     data(){
