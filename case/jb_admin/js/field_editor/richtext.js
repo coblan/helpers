@@ -160,6 +160,40 @@ Vue.component('com-field-richtext',{
     }
 })
 
+function blobToArrayBuffer(blob) {
+    return new Promise((resolve, reject) => {
+        const file = new FileReader()
+        file.onload = function(result) {
+            resolve(file.result)
+        }
+        file.readAsArrayBuffer(blob)
+    })
+}
+
+// async function Decrypt(data,key) {
+//     // var arrayBuffer =  await data.arrayBuffer()  // await  blobToArrayBuffer(data)
+//     // var wordArray = CryptoJS.lib.WordArray.create(arrayBuffer);
+//     // var mydata = await blobToDataURL(data)
+//     // var naked_base64= mydata.slice(37,)
+//
+//     var array_buff= await blobToArrayBuffer(data)
+//     var wordArray1 = CryptoJS.lib.WordArray.create(array_buff)
+//     // var wordArray = CryptoJS.enc.Base64.parse()
+//     debugger
+//     var AES_KEY = CryptoJS.enc.Utf8.parse(key); //key //
+//     var decrypted = CryptoJS.AES.decrypt(wordArray1, AES_KEY, {
+//         mode: CryptoJS.mode.ECB,
+//         padding: CryptoJS.pad.Pkcs7 });
+//     // decrypted = decrypted.toString(CryptoJS.enc.Utf8)
+//
+//     // var array_buf2 = wordArrayToArrayBuffer(decrypted)
+//     // console.log('走了新的转换3')
+//     // return new Blob(array_buf2,{type:'image/png'})
+//     var bb = CryptoJS.enc.Base64.stringify(decrypted)
+//     console.log('走了新的转换2')
+//     return b64toBlob(bb)
+// }
+
 async function Decrypt(data,key) {
     // var arrayBuffer =  await data.arrayBuffer()  // await  blobToArrayBuffer(data)
     // var wordArray = CryptoJS.lib.WordArray.create(arrayBuffer);
