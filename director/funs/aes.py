@@ -39,7 +39,7 @@ def aes_encode_str(string,key):
     return base64.b64encode(bb)
 
 @director_view('aes/file')
-def encode_file(media_path):
+def encode_file(media_path,after_del=True):
     """
     加密当前路径文件
     """
@@ -49,6 +49,8 @@ def encode_file(media_path):
     key = read_dict_path(settings.UPLOAD_CRYPTO,'aes.key')
     try:
         path = media_url_to_path(media_path)
+        if path.endswith('.aes'):
+            return media_path
     except Exception as e:
         general_log.exception(e)
         return
@@ -68,7 +70,10 @@ def encode_file(media_path):
             aes_url = f'{media_path}.aes'
         with open (aes_path,'wb') as f2:
             f2.write(rt)
-        return aes_url
+    if after_del:
+        os.remove(path)
+        general_log.debug(f'加密后,删除文件{path}')
+    return aes_url
 
 
 def decode_file_content(media_path):
