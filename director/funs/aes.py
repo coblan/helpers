@@ -149,9 +149,9 @@ class AesHtml(object):
                 if not png_src.endswith('.aes'):
                     image.attrs['src'] = self.aesImage(png_src)
                     
-                    # 删除原图
-                    png_path = media_url_to_path(png_src)
-                    os.remove(png_path)
+                    # 删除原图  [现在已经在encode_file函数里面删除原始文件了，这里就不需要再删除了。]
+                    #png_path = media_url_to_path(png_src)
+                    #os.remove(png_path)
                 
         return  str(soup)
         
