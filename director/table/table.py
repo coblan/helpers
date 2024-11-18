@@ -910,7 +910,7 @@ class ModelTable(object):
     def before_query(self):
         pass
     
-    def getCountQuery(self,query):
+    def getCountQuery(self,query,before_innfilter_query):
         return getattr(self,'count_query',None)
         #return None
     
@@ -1028,12 +1028,13 @@ class ModelTable(object):
         
         if getattr(self.model,'filterByUser',None):
             query = self.model.filterByUser(user=self.crt_user,query=query)
+        before_innfilter_query = query
         query = self.inn_filter(query)
         #[count-] 有时单独计算count，效率很高。
-        count_query = self.getCountQuery(query)
+        count_query = self.getCountQuery(query,before_innfilter_query=before_innfilter_query)
         if count_query != None:
-            self.row_filter.get_query(count_query)
-            self.row_search.get_query(count_query)
+            count_query= self.row_filter.get_query(count_query)
+            count_query = self.row_search.get_query(count_query)
             self.count_query=count_query 
         # [-count]
 

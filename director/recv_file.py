@@ -146,11 +146,11 @@ class BasicReciever(object):
             ls = []
             for media_url in file_url_list:
                 ls.append(encode_file(media_url))
-                try: 
-                    path  = media_url_to_path(media_url)
-                    os.remove(path)
-                except Exception as e:
-                    general_log.debug(e)
+                #try: 
+                    #path  = media_url_to_path(media_url)
+                    #os.remove(path)
+                #except Exception as e:
+                    #general_log.debug(e)
             file_url_list = ls
             general_log.debug(f'aes加密后路径:{file_url_list}')
         return file_url_list
