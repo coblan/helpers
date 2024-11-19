@@ -37,6 +37,7 @@ class BasicReciever(object):
             file_url_list.append(file_url)
         file_url_list = [ self.switch_format_check(media_path) for media_path in file_url_list]
         file_url_list = self.encrypt(file_url_list)
+        general_log.debug(f'上传文件路径{file_url_list}')
         return HttpResponse(json.dumps(file_url_list),content_type="application/json")
     
     def readFile(self,fl):
@@ -59,11 +60,12 @@ class BasicReciever(object):
         file_path = os.path.join(par_dir,file_name)
         
         absolut_par_path = os.path.join( settings.MEDIA_ROOT, par_dir)
-        try:
+        if not os.path.exists(absolut_par_path):
             os.makedirs(absolut_par_path)
-        except os.error as e:
-            print(e)   
-        
+            #except os.error as e:
+                ##print(e)   
+                #general_log.exception(e)
+                
         absolut_file_path =os.path.join(absolut_par_path,file_name)
 
         with open(absolut_file_path,'wb') as general_file:
@@ -86,7 +88,13 @@ class BasicReciever(object):
         m = hashlib.md5()   
         m.update(file_data)  
         mid_name = m.hexdigest()
-        file_name = mid_name+'.'+sufix
+        """
+        能够读取到后缀才加后缀
+        """        
+        if sufix:
+            file_name = mid_name+'.'+sufix
+        else:
+            file_name = mid_name
         return file_name
     
     def getParDir(self):
@@ -100,10 +108,13 @@ class BasicReciever(object):
     
     def getSufix(self,fl):
         mt_name=re.search('\.(\w+)$',fl.name)
+        #general_log.debug(f'上传文件名:{fl.name}')
+        #general_log.debug(f'上传file.content_type:{fl.content_type}')
         if mt_name:
             return mt_name.group(1)
         else:
             return fl.content_type.split('/')[-1]
+        
     def getFileUrl(self,file_name):
         file_url=urljoin(settings.MEDIA_URL, 'general_upload/{file_name}'.format(file_name=file_name))
         return  file_url
@@ -135,12 +146,13 @@ class BasicReciever(object):
             ls = []
             for media_url in file_url_list:
                 ls.append(encode_file(media_url))
-                try: 
-                    path  = media_url_to_path(media_url)
-                    os.remove(path)
-                except Exception as e:
-                    general_log.debug(e)
+                #try: 
+                    #path  = media_url_to_path(media_url)
+                    #os.remove(path)
+                #except Exception as e:
+                    #general_log.debug(e)
             file_url_list = ls
+            general_log.debug(f'aes加密后路径:{file_url_list}')
         return file_url_list
     
     

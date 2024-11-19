@@ -308,6 +308,7 @@ def delete_related_query(inst,deep_level=0):
     When delet inst object,Django ORM will delet all related model instance.
     this function used to search related instance with inst,return string tree
     查询 删除inst时，所要删除的所有关联对象
+    @deep_level: 递归调用时，程序自动传入的当前level数。递归到4层时，就会退出。
     """
     if inst is None:
         return []  

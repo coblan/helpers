@@ -27,6 +27,8 @@ from django.db.utils import ProgrammingError
 from helpers.director.model_func.func import str_lazy_label
 from helpers.func.collection.ex import findone,find_index
 from helpers.case.jb_admin.uidict import pop_edit_current_row
+
+
 class PageNum(object):
     perPage=20
     def __init__(self,pageNumber=1,perpage=None,**kws):
@@ -426,6 +428,7 @@ class ModelTable(object):
     allow_create = True # 创建按钮是否显示
     allow_refresh = True
     foreign_bridge = []
+    autoLoad = True # 控制前端界面，初始时，是否自动加载。
     def __init__(self,page=1,row_sort=[],row_filter={},row_search= '',crt_user=None,perpage=None,**kw):
         """
         kw['search_args']只是一个记录，在获取到rows时，一并返回前端页面，便于显示。
@@ -535,6 +538,10 @@ class ModelTable(object):
     def get_head_context(self):
         """
         有些时候，最先不需要返回rows，而只返回filters，head等，等待用户选择后，才返回rows
+        
+        {
+            opMergeCount:3
+        }
         """
         ops = self.get_operation()
         ops = evalue_container(ops)
@@ -565,6 +572,7 @@ class ModelTable(object):
             'ops' : ops, 
             'selectable': self.selectable,
             'event_slots':self.get_event_slots(),
+            'autoLoad':self.autoLoad,
             **dc,
         }  
     
@@ -650,7 +658,7 @@ class ModelTable(object):
         elif 'id' in self.exclude and 'id' in ls:
             ls.remove('id')
             
-        if self.include:
+        if self.include != None:
             return [x for x in self.include if x in ls]
         if self.exclude:
             return [x for x in ls if x not in self.exclude]
@@ -687,7 +695,7 @@ class ModelTable(object):
             heads = []
         model_heads = self.get_model_heads()
         heads =  heads + model_heads
-        if not self.include:
+        if  self.include ==None:
             heads = [x for x in heads if x['name'] not in self.exclude]
         else:
             heads = [x for x in heads if x['name'] in self.include]
@@ -902,7 +910,7 @@ class ModelTable(object):
     def before_query(self):
         pass
     
-    def getCountQuery(self,query):
+    def getCountQuery(self,query,before_innfilter_query):
         return getattr(self,'count_query',None)
         #return None
     
@@ -996,7 +1004,10 @@ class ModelTable(object):
         """
         重写该函数，定制row输出字典
         """
-        return {}
+        if isinstance(inst,dict):
+            return inst
+        else:
+            return {}
     
     #def init_query(self):
         #return self.model.objects.all()
@@ -1017,12 +1028,13 @@ class ModelTable(object):
         
         if getattr(self.model,'filterByUser',None):
             query = self.model.filterByUser(user=self.crt_user,query=query)
+        before_innfilter_query = query
         query = self.inn_filter(query)
         #[count-] 有时单独计算count，效率很高。
-        count_query = self.getCountQuery(query)
+        count_query = self.getCountQuery(query,before_innfilter_query=before_innfilter_query)
         if count_query != None:
-            self.row_filter.get_query(count_query)
-            self.row_search.get_query(count_query)
+            count_query= self.row_filter.get_query(count_query)
+            count_query = self.row_search.get_query(count_query)
             self.count_query=count_query 
         # [-count]
 

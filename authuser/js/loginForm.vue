@@ -2,25 +2,25 @@
   <div>
     <el-form :model="row" :rules="rules" ref="ruleForm" label-width="0" class="real-form bootstrap-style">
       <el-form-item label="" prop="username">
-        <el-input prefix-icon="el-icon-user" size="small" placeholder="用户名" v-model="row.username"></el-input>
+        <el-input prefix-icon="el-icon-user" size="small" :placeholder="tr('用户名')" v-model="row.username"></el-input>
       </el-form-item>
       <el-form-item label="" prop="password" :error="arrayToStr(errors.password)">
         <el-input prefix-icon="el-icon-key"
                   @keydown.enter.native="submit"
-                  type="password" size="small" placeholder="密码" v-model="row.password"></el-input>
+                  type="password" size="small" :placeholder="tr('密码')" v-model="row.password"></el-input>
       </el-form-item>
       <el-form-item v-if="row.validate_img" label=""
-                    :rules="{ required: true, message: '请输入验证码', trigger: 'blur' }"
+                    :rules="{ required: true, message: tr('请输入验证码'), trigger: 'blur' }"
                     prop="validate_code" :error="arrayToStr(errors.validate_code)">
-        <el-input class="validate-code" size="small" placeholder="验证码" v-model="row.validate_code">
+        <el-input class="validate-code" size="small" :placeholder="tr('验证码')" v-model="row.validate_code">
           <template slot="append" ><img :src="row.validate_img" alt=""></template>
         </el-input>
       </el-form-item>
-      <el-checkbox v-model="row.auto_login"></el-checkbox> <span class="auto-log-text">下次自动登录</span>
+      <el-checkbox v-model="row.auto_login"></el-checkbox> <span class="auto-log-text">{{tr('下次自动登录')}}</span>
     </el-form>
 
     <div class="dark-blue">
-      <el-button  size="small" type="primary"  style="width: 100%" @click="submit()">登录</el-button>
+      <el-button  size="small" type="primary"  style="width: 100%" @click="submit()">{{tr('登录')}}</el-button>
     </div>
   </div>
 
@@ -44,10 +44,10 @@ export  default  {
       },
       rules:{
         username:[
-          { required: true, message: '请输入用户名', trigger: 'blur' },
+          { required: true, message: cfg.tr('请输入用户名'), trigger: 'blur' },
         ],
         password:[
-          { required: true, message: '请输入密码', trigger: 'blur' },
+          { required: true, message: cfg.tr('请输入密码'), trigger: 'blur' },
         ],
         // validate_code:[
         //   { required: true, message: '请输入验证码', trigger: 'blur' },
@@ -63,6 +63,9 @@ export  default  {
     }
   },
   methods:{
+    tr(str){
+      return cfg.tr(str)
+    },
     arrayToStr(array){
       if(array && array.length >0){
         return array.join(';')

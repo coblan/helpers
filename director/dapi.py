@@ -28,10 +28,10 @@ def director_save_row(row):
      else:
           return {}
 
-def _total_save(user, row,**kw):
-     field_obj = permit_save_model(user, row,**kw)
-     dc = field_obj.get_row()
-     return dc
+#def _total_save(user, row,**kw):
+     #field_obj = permit_save_model(user, row,**kw)
+     #dc = field_obj.get_row()
+     #return dc
 
 @director_view('d.save_row')
 def save_row(row):
@@ -39,14 +39,17 @@ def save_row(row):
      user = request.user
      try:
           kw = request.GET.dict()
-          d_name =  row.get('_director_name')
-          if director_transaction.get(d_name):
-               real_save = tranactionDbs(_total_save,director_transaction.get(d_name))
-               dc = real_save(user, row,**kw)
-          else:
-               dc = _total_save(user, row,**kw)
-          #field_obj = permit_save_model(user, row,**kw)
-          #dc = field_obj.get_row()
+          #[1] 下面本来用来控制事务的，不过现在使用db_router来控制
+          #d_name =  row.get('_director_name')
+          #if director_transaction.get(d_name):
+               #real_save = tranactionDbs(_total_save,director_transaction.get(d_name))
+               #dc = real_save(user, row,**kw)
+          #else:
+               #dc = _total_save(user, row,**kw)
+          # [1] 直接使用下面代码
+          field_obj = permit_save_model(user, row,**kw)
+          dc = field_obj.get_row()
+          
           return {'success':True,'status':'success','row':dc}
      except ValidationError as e:
           return {'errors':dict(e)}
@@ -61,16 +64,26 @@ def save_row_for_front(row):
      request = get_request_cache()['request']
      user = request.user
      try:
+          # 记录下director 的form，后面报错会根据form类确定是否报异常到前端。
+          # 如果这里不记录，经过permit_save_model后，row可能没有_director_name属性了。
+          fields_cls = director.get(row['_director_name'])
+          
           kw = request.GET.dict()
           field_obj = permit_save_model(user, row,**kw)
           dc = field_obj.get_row()
           return dc
      except ValidationError as e:
-          return {'errors':dict(e)}
+          if getattr(fields_cls,'front_info',True):
+               return {'errors':dict(e)}
+          else:
+               raise UserWarning(dict(e))
      except PermissionDenied as e:
           raise UserWarning(str(e))
      except OutDateException as e:
-          return {'_outdate':str(e)}
+          if getattr(fields_cls,'front_info',True):
+               return {'_outdate':str(e)}
+          else:        
+               raise UserWarning(str(e))
 
 
 @exclude_transaction
@@ -127,19 +140,25 @@ def get_context(director_name):
      return dcls(select_for_update=False).get_context()
 
 #@exclude_transaction
-@director_view('d.director_element_call')
-def director_element_call(director_name,attr_name,kws):
-     dcls = director.get(director_name)
-     obj = dcls()
-     return getattr(obj,attr_name)(**kws)
+#@director_view('d.director_element_call')
+#def director_element_call(director_name,attr_name,kws):
+     #dcls = director.get(director_name)
+     #obj = dcls()
+     
+     #if hasattr(obj,'public_api') and attr_name not in obj.public_api:
+          #raise UserWarning(f'不能直接请求{attr_name},请使用新版本')     
+     #return getattr(obj,attr_name)(**kws)
 
 # [1] 新开一个d.director_element_call，给dapi用，不去修改老的，免得引起其他问题
-@director_view('d.director_element_call2')
+@director_view('d.director_element_call')
 def director_element_call(director_name,attr_name,**kws):
      dcls = director.get(director_name)
      obj = dcls()
-     if hasattr(obj,'public_api') and attr_name not in obj.public_api:
-          raise Http404()   
+     if not hasattr(obj,'public_api'):
+          raise UserWarning(f'{director_name}接口升级,请联系管理员')
+     if obj.public_api !='__all__':
+          if  attr_name not in obj.public_api:
+               raise UserWarning(f'不能直接请求{attr_name}')    
      return getattr(obj,attr_name)(**kws)
 
 @director_view('d.delete_query_related')

@@ -23,6 +23,7 @@ import logging
 from helpers.director.decorator import get_request_cache
 from ..model_func.hash_dict import hash_dict,make_mark_dict,dif_mark_dict,adapt_type
 from helpers.func.collection.ex import findone,find_index
+from django.utils.translation import ugettext as _
 
 # sql_log 可能没有什么用
 #sql_log = logging.getLogger('director.sql_op')
@@ -59,13 +60,14 @@ class ModelFields(forms.ModelForm):
     nolimit=False
     simple_dict = False
     allow_delete= False
+    allow_cascade_delete=False
     select_for_update = True  # 某些高频访问文件，写入不平凡，所以不允许锁定，就可以设置为False
-    complete_field = False   # 自动补全没有上传的字段,在api或者selected_set_and_save中不必上传所有字段
+    complete_field = True # False   # 自动补全没有上传的字段,在api或者selected_set_and_save中不必上传所有字段  2024/5/14改为true
     pass_clean_field = []
     allow_create = True
     foreign_bridge = []
     save_to_local= False
-    
+    front_info=True # 报错的时候，是否走前端的业务流程。例如 form 字段提醒，字段过期提醒等。
     
     @classmethod
     def parse_request(cls,request):
@@ -131,7 +133,7 @@ class ModelFields(forms.ModelForm):
             self.is_create = True
         else:
             self.is_create = False 
-                
+           
         form_kw={}
         if 'instance' not in self.kw:
             if pk=='-1':  # -1 表示 最后一个记录 （一般用不到）
@@ -164,26 +166,14 @@ class ModelFields(forms.ModelForm):
         inst =  form_kw['instance']
         
         # 如果row有meta_change_fields 字段，那么该次请求，只能修改这些字段，其他字段一律还原
-        meta_change_fields=[]
-        if dc.get('meta_change_fields'):
-            meta_change_fields = dc.get('meta_change_fields').split(',')
-        
-        # 强制保存字段，不验证是否改变,并且其他字段都不能改变
+        # [Meta_change_fields] 2024-07-30去掉meta_change_fields这个东西，感觉实用性不大，让row来携带meta_change_fields信息，过于复杂
+        #meta_change_fields=[]
         #if dc.get('meta_change_fields'):
-            #force_change_fields = dc.get('meta_change_fields').split(',')
-            #force_change_fields += self.overlap_fields
-            #for k in self.permit.changeable_fields():
-                #if k not in force_change_fields:
-                    #fieldcls = inst.__class__._meta.get_field(k)
-                    #if isinstance(fieldcls, models.ForeignKey):
-                        #dc[k] = getattr(inst, "%s_id" % k)
-                        #continue
-                    #dc[k] = getattr(form_kw['instance'] , k)  kw
+            #meta_change_fields = dc.get('meta_change_fields').split(',')
         
-
         # todict -> ui -> todict(compare) -> adapte_dict
         readonly_waring = []
-        simdc = sim_dict(inst)
+        simdc = sim_dict(inst)  # 用来修正那些只读的字段
         orgin_simdc = dict(simdc)  # 将可json化的结果保存下来，后面记录日志会用到。simdc被clean处理过，可能不能json化了
             
         #n1 由于 multichoice.fullchoice, -1代表全部，出库的时候，转换为[1,2,3], 而数据库中是-1,造成数据库 出入不一致,所以加入以下_clean代码，将simdc再次还原为数据库数据。（simdc是走了to_dict转换函数的）
@@ -197,24 +187,30 @@ class ModelFields(forms.ModelForm):
             #readonly = list(self.readonly)
             readonly += self.const_fields
         
-        if meta_change_fields or readonly:
-            # 修正只读字段 
+        if  readonly:
+          # 修正只读字段 
             for k in dict(dc):
-                if k in readonly or (meta_change_fields and k not in meta_change_fields ):
+                if k in readonly :
                     if k in self.readonly_change_warning and adapt_type(dc[k]) != adapt_type( simdc.get(k)):
                         readonly_waring.append(k)
                     dc[k] = simdc.get(k)
                     if 'meta_org_dict' in dc:
                         dc['meta_org_dict'].pop(k,None)
-                    #if hasattr(inst, "%s_id" % k):  # 如果是ForeignKey，必须要pk值才能通过 form验证
-                        #fieldcls = inst.__class__._meta.get_field(k)
-                        #if isinstance(fieldcls, models.ForeignKey):
-                            #dc[k] = getattr(inst, "%s_id" % k)
-                            #continue
-                    #if hasattr(inst,k):
-                        #dc[k] =  getattr(inst , k)  
+                        
+        #[Meta_change_fields]
+        #if meta_change_fields or readonly:
+            ## 修正只读字段 
+            #for k in dict(dc):
+                #if k in readonly or (meta_change_fields and k not in meta_change_fields ):
+                    #if k in self.readonly_change_warning and adapt_type(dc[k]) != adapt_type( simdc.get(k)):
+                        #readonly_waring.append(k)
+                    #dc[k] = simdc.get(k)
+                    #if 'meta_org_dict' in dc:
+                        #dc['meta_org_dict'].pop(k,None)
+            
         if readonly_waring : # and  not dc.get('meta_overlap_fields') == '__all__' : 这个有安全隐患 ，所以去掉
-            raise OutDateException('(%s)的%s是只读的。但是已经发生了变化,请确认后再进行操作!'%(inst,[field_label(inst.__class__,k ) for k in readonly_waring] ) )
+            raise UserWarning('(%s) fields ( %s ) is readonly'%(inst,[field_label(inst.__class__,k ) for k in readonly_waring] ))
+            #raise OutDateException('(%s)的%s是只读的。但是已经发生了变化,请确认后再进行操作!'%(inst,[field_label(inst.__class__,k ) for k in readonly_waring] ) )
         
         # 真正的验证各个参数是否过期，是在clean函数中进行的。
         
@@ -225,10 +221,26 @@ class ModelFields(forms.ModelForm):
             dd = dict(simdc)
             dd.update(dc)
             dc = dd
-            
+        
+        # 创建时，把必要的默认值补上 2024/5/14添加。
+        # 原因： 在创建row时，某些隐藏字段是必填的，有默认值。
+        # 后台创建是先从后台获取了默认row，再提交的，所以没有问题。
+        # 但是三方api调用时，就会报错。
+        if self.is_create:
+            for field in self.Meta.model._meta.get_fields():
+                if  dc.get(field.name) ==None and  hasattr(field,'blank') and field.blank != True:
+                    if getattr(field,'default',None) !=None and field.default != models.fields.NOT_PROVIDED:
+                        dc[field.name]= field.default
+
         self.kw.update(dc)        
 
         super(ModelFields,self).__init__(dc,*args,**form_kw)
+        
+        # 防止读写分离，写的instane关联查询问题。
+        for key,value in self.fields.items():
+            if isinstance(value,forms.models.ModelChoiceField) or \
+               isinstance(value,forms.models.ModelMultipleChoiceField):
+                value.queryset = value.queryset.using(self.instance._state.db)
         
         # 2023/8/14 加入bridge功能
         self.foreign_bridge_inst =[]
@@ -449,7 +461,7 @@ class ModelFields(forms.ModelForm):
                 'editor':'com-btn',
                 'type':'primary',
                 'icon':'el-icon-receiving',
-                'label':'保存' if not self.save_to_local else '确定', 
+                'label':_('保存') if not self.save_to_local else _('确定'), 
                 'click_express':'scope.ps.vc.submit()',
                 'show_express':'''rt= ! scope.vc.ctx.readonly_all'''
                 #'icon': 'fa-save',
@@ -639,7 +651,8 @@ class ModelFields(forms.ModelForm):
                     if head['name'] == k:
                         tmp_heads.append(head)
             heads=tmp_heads
-        
+        # [排序] 从下面挪上来，先排序，再处理after_fields
+        heads = sorted(heads,key=lambda head: head.get('order',0))
         # start: 实现 after_fields 排序
         after_fields_list =[]
         after_dict = {}
@@ -668,7 +681,8 @@ class ModelFields(forms.ModelForm):
         for bridge,bridge_inst in zip(self.foreign_bridge,self.foreign_bridge_inst):
             heads += bridge.getHeads(bridge_inst,base_inst = self.instance)  
         
-        heads = sorted(heads,key=lambda head: head.get('order',0))
+        # [排序] 挪到after_fields处理代码上面，先排序，在处理after_fields
+        #heads = sorted(heads,key=lambda head: head.get('order',0))
         if self.readonly_all:
             for head in heads:
                 head['readonly'] =True
@@ -707,8 +721,14 @@ class ModelFields(forms.ModelForm):
             raise PermissionDenied('you have no Permission access %s'%self.instance._meta.model_name)
 
         # self.fields 是经过 权限 处理了的。可读写的字段
-        if self.instance.pk: # not self.instance._state.adding #
+        
+        # 由于现在的modelfields默认是select_for_update读取的instance，这个是加了锁的，不存在其他程序会修改数据。
+        # 所以没有必要再刷新一次数据。
+        # 但是考虑到可能会在内存中修改instance的字段值，可能会影响导出，所以还是决定刷新一下数据库。
+        if self.instance.pk: 
             self.instance.refresh_from_db()
+            
+            
         if self.simple_dict:
             row = sim_dict(self.instance,include=self.fields.keys(),include_pk=True)
             row.update( self.dict_row(self.instance) )
@@ -764,7 +784,10 @@ class ModelFields(forms.ModelForm):
         
         for data in self.changed_data:
             if data in self.get_readonly_fields():
-                raise PermissionDenied(" {data} is readonly".format(data=data))
+                if  getattr( self.instance,data) == self.kw.get(data):
+                    pass
+                else:
+                    raise PermissionDenied(" {data} is readonly".format(data=data))
         
         # 增加桥接
         for bridge,bridge_inst in zip(self.foreign_bridge,self.foreign_bridge_inst):
@@ -838,8 +861,15 @@ class ModelFields(forms.ModelForm):
         # 增加桥接   删除面积太大，展示屏蔽，[TODO] 应该是那种必须删除的才能删除
         #for bridge,bridge_inst in zip(self.foreign_bridge,self.foreign_bridge_inst):
             #bridge.delForm(bridge_inst,base_inst = self.instance)  
-            
+        
+        if not self.allow_delete:
+            raise UserWarning('不允许删除改数据')
+        
         if self.permit.can_del() and self.instance.pk:
+            cascade_ls = delete_related_query(self.instance)
+            if not self.allow_cascade_delete:
+                if cascade_ls:
+                    raise UserWarning(f'已经有相关数据({cascade_ls[0]["str"]}),不能删除!')
             before_del_data = sim_dict(self.instance)
             
             model = model_to_name(self.instance)
@@ -851,7 +881,8 @@ class ModelFields(forms.ModelForm):
                 'pk':pk, 
                 'kind':'delete', 
                 'user': self.crt_user.username if self.crt_user.is_authenticated else 'anonymous',
-                '_before':before_del_data,                 
+                '_before':before_del_data,
+                'cascade_delete':cascade_ls
             }
             if ex_del_log:
                 dc.update(ex_del_log)
@@ -963,7 +994,7 @@ class Fields(ModelFields):
             ls.append({
                 'name':'save',
                 'editor':'com-btn',
-                'label':'确定',
+                'label':_('确定'),
                 'type':'primary',
                 'icon':'el-icon-receiving',
                 'show_express':'rt= ! scope.vc.ctx.readonly_all',

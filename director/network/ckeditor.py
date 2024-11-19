@@ -8,7 +8,7 @@ import io
 from urllib.parse import urljoin
 from django.views.decorators.csrf import csrf_exempt
 from django.utils import timezone
-
+import time
 class Ckeditor(object):
     def RecieveView(self,request):
         self.request = request
@@ -25,7 +25,8 @@ class Ckeditor(object):
                 m.update(chunk)
             catch.flush()
             #file_name=m.hexdigest()+'_'+f.name
-            file_name=m.hexdigest()+'.'+f.name.split('.')[-1]
+            now = int( time.time()*1000)
+            file_name=m.hexdigest()+f'_{now}'+'.'+f.name.split('.')[-1]
             file_path=os.path.join(file_dir,file_name)
             self.file_name= file_name
             self.file_path= file_path

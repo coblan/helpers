@@ -10,6 +10,8 @@ import logging
 general_log = logging.getLogger('general_log')
 from django.conf import settings
 from helpers.func.dot_dict import read_dict_path
+from bs4 import BeautifulSoup
+import hashlib
 
 padding = lambda s: s + (16 - len(s) % 16) * chr(16 - len(s) % 16) .encode('utf-8')
 #加密
@@ -32,8 +34,12 @@ def aes_decode_byte(data, key):
     decrypted_byte = unpad(decrypted_byte, 16)  # 32去除多余补位
     return decrypted_byte
 
+def aes_encode_str(string,key):
+    bb= aes_encode_byte(string.encode('utf-8'),key)
+    return base64.b64encode(bb)
+
 @director_view('aes/file')
-def encode_file(media_path):
+def encode_file(media_path,after_del=True):
     """
     加密当前路径文件
     """
@@ -43,6 +49,8 @@ def encode_file(media_path):
     key = read_dict_path(settings.UPLOAD_CRYPTO,'aes.key')
     try:
         path = media_url_to_path(media_path)
+        if path.endswith('.aes'):
+            return media_path
     except Exception as e:
         general_log.exception(e)
         return
@@ -62,8 +70,21 @@ def encode_file(media_path):
             aes_url = f'{media_path}.aes'
         with open (aes_path,'wb') as f2:
             f2.write(rt)
-        return aes_url
+    if after_del:
+        os.remove(path)
+        general_log.debug(f'加密后,删除文件{path}')
+    return aes_url
 
+
+def decode_file_content(media_path):
+    key = read_dict_path(settings.UPLOAD_CRYPTO,'aes.key')
+    path = media_url_to_path(media_path)
+
+    with open (path,'rb') as f:
+        data = f.read()
+        rt = aes_decode_byte(data,key)
+        return rt
+        
 @director_view('aes-decode/file')
 def decode_file(media_path):
     """
@@ -94,6 +115,7 @@ def decode_file(media_path):
             #aes_path = f'{path}.aes'
             #aes_url = f'{media_path}.aes'
         if path.endswith('.aes'):
+            # 获取.jpg.aes中的.jpg作为文件后缀
             aes_path =path[:-4]
             aes_url = media_path[:-4]
         else:
@@ -102,6 +124,68 @@ def decode_file(media_path):
         with open (aes_path,'wb') as f2:
             f2.write(rt)
         return aes_url
+
+class AesHtml(object):
+    def __init__(self,aes_files=None):
+        """
+        aes_files={
+            'ASDFSGASG':/media/xxx.aes
+        }
+        """
+        self.aes_files = aes_files
+        
+    def run(self,html):
+        self.html = html
+        soup = BeautifulSoup(html)
+        for image in soup.select('img'):
+            if  self.aes_files and image.attrs.get('src').startswith('data:image/png;base64,'):
+                md = hashlib.md5()
+                md.update( image.attrs['src'].encode('utf-8') )
+                key = md.hexdigest()
+                image.attrs['src'] = self.aes_files.get(key )            
+            elif image.attrs['src'].startswith('/media'):
+                png_src = image.attrs['src']
+                #if png_path :''.endswith(('.jpg','.jpeg','.gif','.png','.webp'))
+                if not png_src.endswith('.aes'):
+                    image.attrs['src'] = self.aesImage(png_src)
+                    
+                    # 删除原图  [现在已经在encode_file函数里面删除原始文件了，这里就不需要再删除了。]
+                    #png_path = media_url_to_path(png_src)
+                    #os.remove(png_path)
+                
+        return  str(soup)
+        
+    def aesImage(self,media_url):
+        aes_url = encode_file(media_url)
+        return aes_url
+
+class UnAesHtml(object):
+    def __init__(self):
+        self.aes_files={}
+        
+    def run(self,html):
+        self.html = html
+        soup = BeautifulSoup(html)
+        for image in soup.select('img'):
+            if image.attrs.get('src').endswith('.aes'):
+                old_str = image.attrs['src']
+                image.attrs['src'] = self.decodeAesImage(image.attrs['src'])
+                md = hashlib.md5()
+                md.update( image.attrs['src'].encode('utf-8') )
+                key = md.hexdigest()
+                self.aes_files[ key] = old_str
+        return  str(soup)
+        
+    def decodeAesImage(self,media_url):
+        try:
+            aes_url = decode_file_content(media_url)
+            base_str= base64.b64encode(aes_url).decode('utf-8')
+            aes_url = 'data:image/png;base64,'+base_str             
+        except Exception as e:
+            general_log.debug('decode aes error:',str(e)) 
+            aes_url = media_url
+        
+        return aes_url 
     
 if __name__ == '__main__':
     key = '94a4b778g01ca4ab'  # 密钥长度必须为16、24或32位，分别对应AES-128、AES-192和AES-256

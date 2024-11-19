@@ -41,7 +41,7 @@ var ck_complex = {
 	toolbarGroups : [
 		{ name: 'tools' },
 		{ name: 'clipboard',   groups: [ 'clipboard', 'undo' ] },
-		{ name: 'editing',     groups: [ 'find', 'selection', 'spellchecker' ] },
+		{ name: 'editing',     groups: [ 'find', 'selection', ] }, // 'spellchecker'
 		{ name: 'links' },
 		{ name: 'insert' },
 		{ name: 'forms' },
@@ -70,7 +70,7 @@ var ck_complex = {
 	image_previewText:'image preview',
 	imageUploadUrl: '/d/ckeditor_image',// '/_face/ckeditor_upload_image',
 	filebrowserImageUploadUrl: '/d/ckeditor_image',// '/_face/ckeditor_upload_image', // Will be replace by imageUploadUrl when upload_image
-	extraPlugins : 'justify,codesnippet,lineutils,mathjax,colorbutton,uploadimage,font,autogrow,html5video,widget,widgetselection,clipboard,lineutils', //autogrow,
+	extraPlugins : 'lineheight,justify,codesnippet,lineutils,mathjax,colorbutton,uploadimage,font,autogrow,html5video,widget,widgetselection,clipboard,lineutils', //autogrow,
 	mathJaxLib : 'https://cdn.mathjax.org/mathjax/2.6-latest/MathJax.js?config=TeX-AMS_HTML',
 	extraAllowedContent :'img[class],strong[onclick]',
 	autoGrow_maxHeight : 600,
@@ -133,10 +133,24 @@ var ckeditor = {
 			//'complex':'//res.enjoyst.com/js/ck/config_complex.js',
 			'complex':ck_complex,
 			'edit':edit_level,
+			'no_image':no_image,
 		}
 		var config={}
 		ex.assign(config,config_obj[self.set]) 
 		ex.assign(config,self.config)
+		// if(self.set =='no_image'){
+		// 	console.log('去除图像')
+		// 	CKEDITOR.editorConfig = function( config ) {
+		// 		console.log(config.toolbar)
+		// 		ex.each(config.toolbar,item=>{
+		// 			if(item.name=='insert'){
+		// 				item.items.pop('Image')
+		// 				console.log('移除图像成功')
+		// 			}
+		// 		})
+		//
+		// 	};
+		// }
 		// 4.5.10   4.6.2   ///static/lib/ckeditor4.6.2.js
 		//
 		//ex.load_js('https://cdn.bootcss.com/ckeditor/4.6.2/ckeditor.js',function(){
@@ -264,5 +278,105 @@ var edit_level = {
 	baseFloatZIndex : 99891014, //  > layer
 //height:800,
 };
+
+var simple_level = {
+	toolbarGroups : [
+
+		//{ name: 'editing',     groups: [ 'find', 'selection', 'spellchecker' ] },
+		{ name: 'tools' },
+		//{ name: 'clipboard',   groups: [  'undo' ] },
+		//'/',
+		{ name: 'basicstyles', groups: [  'undo','basicstyles', 'cleanup', ] },
+		{ name: 'paragraph',   groups: [ 'list', 'indent', 'blocks', 'align',  ] }, //'bidi',
+		{ name: 'styles' },
+		{name:'font'},
+		{ name: 'colors' },
+
+		{ name: 'links' },
+		{ name: 'insert' ,groups: [ 'table', 'line', ]},
+		{ name: 'forms' },
+		{ name: 'others' },
+		{ name: 'document',	   groups: [ 'mode', 'document', 'doctools' ] },
+		//{ name: 'about' },
+	],
+
+// Remove some buttons provided by the standard plugins, which are
+	// not needed in the Standard(s) toolbar.
+	removeButtons : 'Underline,Subscript,Superscript',
+
+	// Set the most common block elements.
+	format_tags : 'p;h1;h2;h3;pre',
+
+	// Simplify the dialog windows.
+	//plugins : 'wysiwygarea,toolbar,basicstyles,...',
+	removeDialogTabs : 'image:advanced;link:advanced',
+	// image_previewText:'image preview',
+	// imageUploadUrl:'/d/ckeditor_image', // '/_face/ckeditor_upload_image',
+	// filebrowserImageUploadUrl:'/d/ckeditor_image',// '/_face/ckeditor_upload_image', // Will be replace by imageUploadUrl when upload_image
+	extraPlugins:'lineheight',
+	allowedContent: true,
+	//extraPlugins : 'justify,lineutils,colorbutton,uploadimage,font,autogrow', //,mathjax,codesnippet
+	//removePlugins: 'html5video,forms,flash,a11yhelp,scayt,wsc,language,preview,print,save,saveall,template,newpage,templates',
+	removePlugins: 'iframe,forms,flash,a11yhelp,scayt,wsc,language,preview,print,save,saveall,template,newpage,templates',
+	mathJaxLib : '//cdn.mathjax.org/mathjax/2.6-latest/MathJax.js?config=TeX-AMS_HTML',
+	extraAllowedContent :'img[class],strong[onclick]',
+	autoGrow_maxHeight : 600,
+	autoGrow_minHeight:200,
+	autoGrow_onStartup:true,
+	autoGrow_bottomSpace:50,
+	baseFloatZIndex : 99891014, //  > layer
+//height:800,
+};
+
+var no_image = {
+	// Define changes to default configuration here.
+	// For complete reference see:
+	// http://docs.ckeditor.com/#!/api/CKEDITOR.config
+
+	// The toolbar groups arrangement, optimized for two toolbar rows.
+	toolbarGroups : [
+		{ name: 'tools' },
+		{ name: 'clipboard',   groups: [ 'clipboard', 'undo' ] },
+		{ name: 'editing',     groups: [ 'find', 'selection',  ] }, //'spellchecker'
+		{ name: 'links' ,groups: ['Table']},
+		{ name: 'insert' },
+		{ name: 'forms' },
+		{ name: 'document',	   groups: [ 'mode', 'document', 'doctools' ] },
+		{ name: 'others' },
+		'/',
+		{ name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
+		{ name: 'paragraph',   groups: [ 'list', 'indent', 'blocks', 'align', 'bidi' ] },
+		{ name: 'styles' },
+		{name:'font'},
+		{ name: 'colors' },
+		{ name: 'about' },
+	],
+
+
+
+	// Remove some buttons provided by the standard plugins, which are
+	// not needed in the Standard(s) toolbar.
+	removeButtons : 'Image', // Underline,Subscript,Superscript,
+
+	// Set the most common block elements.
+	format_tags : 'p;h1;h2;h3;pre',
+
+	// Simplify the dialog windows.
+	removeDialogTabs : 'image:advanced;link:advanced',
+	// image_previewText:'image preview',
+	// imageUploadUrl: '/d/ckeditor_image',// '/_face/ckeditor_upload_image',
+	// filebrowserImageUploadUrl: '/d/ckeditor_image',// '/_face/ckeditor_upload_image', // Will be replace by imageUploadUrl when upload_image
+	extraPlugins : 'lineheight,justify,codesnippet,lineutils,mathjax,colorbutton,font,autogrow,html5video,widget,widgetselection,clipboard,lineutils', //autogrow,
+	mathJaxLib : 'https://cdn.mathjax.org/mathjax/2.6-latest/MathJax.js?config=TeX-AMS_HTML',
+	extraAllowedContent :'img[class],strong[onclick]',
+	autoGrow_maxHeight : 600,
+	autoGrow_minHeight:200,
+	autoGrow_onStartup:true,
+	autoGrow_bottomSpace:50,
+	baseFloatZIndex : 99891014, //  > layer
+	//height:800,
+};
+
+
 
 

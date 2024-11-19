@@ -116,10 +116,10 @@
             open_stack_tab(tab_ctx){
                 this.childStore.tab_stack.push(tab_ctx)
             },
-            pop_tab_stack(){
+            pop_tab_stack(obj){
                 this.childStore.tab_stack.pop()
                 if(cfg._tab_call_back.length>0){
-                    cfg._tab_call_back.pop()()
+                    cfg._tab_call_back.pop()(obj)
                 }
             },
 //            on_td_event:function(e){

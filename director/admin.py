@@ -22,7 +22,9 @@ from .models import PermitModel
 from .access.assem_group import AssemGroupPage
 from .model_func.dictfy import to_dict,model_to_name
 
-from django.utils.translation import ugettext as _
+#from django.utils.translation import ugettext as _
+from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import pgettext
 from .access.permit import permit_to_text
 from . import  ajax
 from .fields.delpage import DelPage
@@ -56,8 +58,15 @@ def get_first_name(self):
 
 User.add_to_class("__str__", get_first_name)
 User._meta.get_field('first_name').verbose_name = _('称呼')
-User._meta.get_field('username').verbose_name = _('账号')
+#User._meta.get_field('username').verbose_name = _('用户名')
 User._meta.get_field('is_staff').verbose_name = _('管理员账号')
+#User._meta.get_field('is_superuser').verbose_name = _('超级管理员')
+#User._meta.get_field('email').verbose_name = _('电子邮件地址')
+#User._meta.get_field('is_active').verbose_name = _('有效性')
+User._meta.get_field('groups').verbose_name = _('权限分组')
+#User._meta.get_field('password').verbose_name = _('用户密码')
+#User._meta.get_field('last_login').verbose_name = _('上次登录')
+
 
 inspect_dict['sim_signal']=sim_signal.map_dict
 
@@ -276,12 +285,12 @@ class UserTable(ModelTable):
     model=User
     include=['username','groups','first_name','is_active','is_staff','is_superuser','email',]
     
-    def get_heads(self):
-        heads=super(UserTable,self).get_heads()
-        for head in heads:
-            if head['name']=='username':
-                head['label']='账号'
-        return heads
+    #def get_heads(self):
+        #heads=super(UserTable,self).get_heads()
+        #for head in heads:
+            #if head['name']=='username':
+                #head['label']='账号'
+        #return heads
     
     #def get_rows(self):
         #rows=super(UserTable,self).get_rows()

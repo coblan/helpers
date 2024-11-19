@@ -185,7 +185,7 @@ def director_view(request,director_name):
         
         # [1] 使用element来打包 director_view
         elif director_name.startswith('element/'):
-            directorEnt = director_views.get('d.director_element_call2')
+            directorEnt = director_views.get('d.director_element_call')
             rt = re.search('element/(.+)/(\w+)$', director_name)
             director_name = rt.groups()[0]
             attr_name = rt.groups()[1]

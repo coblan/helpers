@@ -28,6 +28,17 @@ class ForeignProc(BaseFieldProc):
                 name:  getattr(inst,name + '_id', None), # foreign,
                 '_%s_label'%name: getattr(inst,name + '_id', '')                
             }
+    
+    def dict_field_head(self,head): 
+        if getattr(self.field.target_field.model,'bigdata',False):
+            head['editor'] ='com-field-label-shower'
+        else:
+            options = self.get_options()  
+            if options:
+                head['options']=options
+                head['editor'] = 'com-field-select'
+        return head
+    
     def get_options(self):
         if getattr(self.field.target_field.model,'bigdata',False):
             return [{'value':0,'label':'大数据量,请自定义'}]     

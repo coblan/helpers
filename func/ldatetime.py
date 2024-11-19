@@ -4,6 +4,9 @@ from django.utils import timezone
 #from dateutil.tz import *
 
 def to_utc(date_time):
+    """
+    默认时区是东8区
+    """
     if isinstance(date_time,str):
         date_time_obj = datetime.strptime(date_time, '%Y-%m-%d %H:%M:%S')
     else:

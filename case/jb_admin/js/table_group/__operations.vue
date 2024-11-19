@@ -1,5 +1,5 @@
 <template>
-    <div class="oprations" style="padding: 5px;overflow: hidden">
+    <div class="com-table-operations-pannel" style="padding: 5px;overflow: hidden;flex-shrink: 0;">
         <component v-for="(op,index) in ops"
                    :is="op.editor"
                    :ref="'op_'+op.name"
