@@ -258,10 +258,10 @@ class BigFileRecieve(GeneralUpload):
                 sufix = self.getSufix(fl)
                 file_name = get_md5(fl.name)+'.'+ sufix 
             elif keepname=='tm-name':
-                file_name = '%s_%s'%(int( time.time()%1000000),fl.name)
+                file_name = '%s_%s'%(int( time.time()*10000),fl.name)
             elif keepname =='tm-md5':
                 sufix = self.getSufix(fl)
-                file_name = '%s_%s.%s'%(int( time.time()%1000000),get_md5( fl.name),sufix )
+                file_name = '%s_%s.%s'%(int(  time.time()%10000000 ),get_md5( fl.name),sufix )
             par_dir = self.getParDir()
             file_path = os.path.join(par_dir,file_name)            
             absolut_par_path = os.path.join( settings.MEDIA_ROOT, par_dir)
