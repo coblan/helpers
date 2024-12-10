@@ -635,6 +635,11 @@ class ModelFields(forms.ModelForm):
                     if head['name']==name:
                         head['readonly']=True 
                         break
+            for name in self.const_fields:
+                for head in heads:
+                    if head['name']==name:
+                        head['readonly_express']='rt=scope.row.pk' 
+                        break
                 
         for head in heads:
             if head.get('editor') == 'sim_select' and not head.get('options'):
