@@ -43,7 +43,25 @@ Vue.component('com-field-richtext',{
             image_map:{}
         }
     },
+    computed:{
+        out_data(){
+            return this.row[this.head.name]
+        }
+    },
+    watch:{
+        async out_data(nv,ov){
+            if(this.head.aes=='ecb'){
+                this.inn_data = await this.parseHtml(this.row[this.head.name])
+            }else{
+                this.inn_data = this.row[this.head.name]
+            }
 
+            // this.loaded = false
+            // setTimeout(()=>{
+            //     this.loaded = true
+            // },200)
+        }
+    },
     // unmounted(){
     //     alert('waw')
     // },
@@ -96,6 +114,7 @@ Vue.component('com-field-richtext',{
             Vue.set(this.row,this.head.name,html)
         },
         async parseHtml(html){
+            // 解析.aes的图片为dataurl格式
             var el = document.createElement( 'div' );
             el.innerHTML=html
             var self = this
@@ -143,6 +162,7 @@ Vue.component('com-field-richtext',{
 
         },
         stringifyHtml(html){
+            // 这个函数会把图片还原为原来的.aes地址,是parseHtml的反函数
             var el = document.createElement( 'div' );
             el.innerHTML=html
             var self = this
