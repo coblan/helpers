@@ -23,6 +23,7 @@
     </div>
 </template>
 <script>
+import tableMultiSelect from "./tableSelect/tableMultiSelect.vue";
     export default {
         props:['row','head'],
         data(){
@@ -87,7 +88,9 @@
                     ex.eval(this.head.init_express,{head:this.head,row:this.row})
                 }
                 // 用到的时候，替换成 com-backend-table    //,com-table-panel
-                cfg.pop_vue_com( 'com-backend-table', this.head.table_ctx).then(rows=>{
+                //cfg.pop_vue_com( 'com-backend-table', this.head.table_ctx).then(rows=>{
+                cfg.pop_vue_com( tableMultiSelect, {table_ctx:this.head.table_ctx}).then(rows=>{
+
                     if(rows.length==0){
                       console.log('break table panel')
                       return

@@ -10,7 +10,7 @@ import logging
 general_log = logging.getLogger('general_log')
 from django.conf import settings
 from helpers.func.dot_dict import read_dict_path
-from bs4 import BeautifulSoup
+
 import hashlib
 
 padding = lambda s: s + (16 - len(s) % 16) * chr(16 - len(s) % 16) .encode('utf-8')
@@ -135,6 +135,7 @@ class AesHtml(object):
         self.aes_files = aes_files
         
     def run(self,html):
+        from bs4 import BeautifulSoup
         self.html = html
         soup = BeautifulSoup(html)
         for image in soup.select('img'):
@@ -164,6 +165,7 @@ class UnAesHtml(object):
         self.aes_files={}
         
     def run(self,html):
+        from bs4 import BeautifulSoup
         self.html = html
         soup = BeautifulSoup(html)
         for image in soup.select('img'):
