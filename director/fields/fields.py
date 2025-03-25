@@ -784,6 +784,8 @@ class ModelFields(forms.ModelForm):
 
             if not self.can_access():
                 raise PermissionDenied('you have no Permission access %s'%self.instance._meta.model_name  )
+            if not self.permit.can_edit():
+                raise PermissionDenied('you have no Permission edit %s'%self.instance._meta.model_name  )
         if self.forbid_change:
             raise PermissionDenied("%s is readonly"%self.instance._meta.model_name)
         
