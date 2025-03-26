@@ -789,12 +789,16 @@ class ModelFields(forms.ModelForm):
         if self.forbid_change:
             raise PermissionDenied("%s is readonly"%self.instance._meta.model_name)
         
-        for data in self.changed_data:
-            if data in self.get_readonly_fields():
-                if  getattr( self.instance,data) == self.kw.get(data):
+        for field_name in self.changed_data:
+            if field_name in self.get_readonly_fields():
+                #if  getattr( self.instance,data) == self.kw.get(data):
+                if  self.before_changed_data.get(field_name) == self.kw.get(field_name):
+                    # 作用是防止某些字段误入self.changed_data，造成没有更新，但是判断权限了。【现在还没看到是哪种字段会产生这种情况】
+                    # 原来的 getattr( self.instance,data)==self.kw.get(data) 应该是错误的，因为getattr( self.instance,data)已经是更新后的数据了
+                    # 那当然是相等的呀 [2025-03-26更新]
                     pass
                 else:
-                    raise PermissionDenied(" {data} is readonly".format(data=data))
+                    raise PermissionDenied(f"{field_name} is readonly" )
         
         # 增加桥接
         for bridge,bridge_inst in zip(self.foreign_bridge,self.foreign_bridge_inst):
