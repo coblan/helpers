@@ -423,6 +423,7 @@ class ModelTable(object):
     exclude_export_related =[]  # 有些外键有问题，例如用0作为null，所以这是不用用select_related导出，否则会出现空数据。
     button_edit = False    # 自动添加一列，有一个编辑按钮
     allow_delete = False   # 删除按钮是否显示出来
+    check_cascade_delete=True  # 有时让人确认层叠删除很烦，这里可以控制是否提醒用户。
     fitWidth = False
     allow_set_layout = False   # 是否自动打开 设置列。
     allow_create = True # 创建按钮是否显示
@@ -1109,6 +1110,29 @@ class ModelTable(object):
         fields_ctx.update({
             'ops_loc':'bottom'
         })
+        
+        
+        if self.check_cascade_delete:
+            delete_js='''(async ()=>{
+                     cfg.show_load();
+                     var resp = await ex.director_get("d.delete_query_related",{rows:scope.ps.selected})
+                     cfg.hide_load();
+                     var confirm_delete = true;
+                     if(resp.length>0){
+                         confirm_delete = await cfg.pop_vue_com("com-pan-delete-query-message",{msg_list:resp,title:"删除关联确认"})
+                     }
+                     if(confirm_delete){
+                        scope.ps.delete_selected()
+                     }
+                     
+                 } )()
+                 '''
+        else:
+            delete_js='''(async ()=>{
+                    scope.ps.delete_selected()                     
+                 } )()
+                     '''
+        
         return [
             table_setting,    
             refresh_action,
@@ -1140,20 +1164,7 @@ class ModelTable(object):
                 {'name':'delete_selected',
                  'editor':'com-btn',
                  'label':_('删除'),
-                 'click_express':'''(async ()=>{
-                     cfg.show_load();
-                     var resp = await ex.director_get("d.delete_query_related",{rows:scope.ps.selected})
-                     cfg.hide_load();
-                     var confirm_delete = true;
-                     if(resp.length>0){
-                         confirm_delete = await cfg.pop_vue_com("com-pan-delete-query-message",{msg_list:resp,title:"删除关联确认"})
-                     }
-                     if(confirm_delete){
-                        scope.ps.delete_selected()
-                     }
-                     
-                 } )()
-                 ''' ,
+                 'click_express':delete_js ,
                  
                  #'''
                    #cfg.show_load();ex.director_call("d.delete_query_related",{rows:scope.ps.selected}).then((resp)=>{

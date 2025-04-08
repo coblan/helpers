@@ -61,6 +61,7 @@ class ModelFields(forms.ModelForm):
     simple_dict = False
     allow_delete= False
     allow_cascade_delete=False
+    check_cascade_delete=True
     select_for_update = True  # 某些高频访问文件，写入不平凡，所以不允许锁定，就可以设置为False
     complete_field = True # False   # 自动补全没有上传的字段,在api或者selected_set_and_save中不必上传所有字段  2024/5/14改为true
     pass_clean_field = []
@@ -474,8 +475,7 @@ class ModelFields(forms.ModelForm):
                 #}
             ]
         if self.allow_delete and self.permit.can_del():
-            ls += [
-                {
+            del_btn =  {
                 'name':'delete',
                 'editor':'com-btn',
                 'type':'danger',
@@ -507,8 +507,24 @@ class ModelFields(forms.ModelForm):
                 'show_express':'scope.row.pk'
                 #'icon': 'fa-save',
                 #'class':'btn btn-info btn-sm',
-                      },
-            ]
+                      }
+            if not self.check_cascade_delete:
+                del_btn['click_express']='''(async ()=>{
+                        cfg.show_load()
+                        await ex.director_call("d.delete_row",{row:scope.ps.vc.row})
+                        cfg.hide_load()
+                        cfg.toast("删除成功")
+                       // tab形式的
+                       var ps = ex.vueParStore(scope.ps.vc,{name:'com-widget-el-tab'})
+                       if(ps){
+                            var tab_table = ps.vc.ctx.genVc
+                            tab_table.search()
+                            cfg.switch_back()
+                       }
+                })()
+                    
+                '''
+            ls += [del_btn]
         if self.readonly_all:
             ls = []
         return ls
