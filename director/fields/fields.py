@@ -376,6 +376,21 @@ class ModelFields(forms.ModelForm):
     def clean_dict(self,dc):   
         return dc
     
+    def cleanDelete(self):
+        model = self.Meta.model
+        model_name = model_to_name(model)
+        all_field_names =[f.name for f in model._meta.get_fields()]
+        for k in all_field_names:
+            field_path = model_name+'.'+k
+            field = model._meta.get_field(k)
+            if field_map.get(field_path):
+                mapper_cls = field_map[field_path]
+                mapper_cls(instance=self.instance, field=field).cleanDelete(name=k)
+            elif field_map.get(field.__class__):
+                mapper_cls = field_map.get(field.__class__)
+                mapper_cls(instance=self.instance, field=field).cleanDelete(name=k)
+                
+    
     def get_data_context(self):
         return {
             'row':self.get_row()
@@ -902,6 +917,7 @@ class ModelFields(forms.ModelForm):
             model = model_to_name(self.instance)
             pk = self.instance.pk
             ex_del_log = self.ex_del_form()
+            self.cleanDelete()
             self.instance.delete()
             dc = {
                 'model':model, 
