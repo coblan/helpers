@@ -174,7 +174,7 @@ export default  {
              :filter-node-method="filterNode"
     >
       <span class="custom-tree-node" slot-scope="{ node, data }">
-        <span :title="data.help_text" v-text="node.label"></span>
+        <span v-text="node.label"></span> <i v-if="data.help_text" class="fa fa-question-circle" :title="data.help_text"></i>
       </span>
 
     </el-tree>

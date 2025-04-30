@@ -81,6 +81,9 @@ export  function pop_layer (com_ctx,component_name,callback,layerConfig){
             component_name:component_name,
         },
         render(createElement){
+            if(this.com_ctx.title){
+                delete  this.com_ctx.title
+            }
             return createElement(this.component_name,{
                 attrs:{
                     ctx:this.com_ctx,
