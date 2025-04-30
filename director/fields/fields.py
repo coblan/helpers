@@ -905,10 +905,10 @@ class ModelFields(forms.ModelForm):
             #bridge.delForm(bridge_inst,base_inst = self.instance)  
         
         if not self.allow_delete:
-            raise UserWarning('不允许删除改数据')
+            raise UserWarning('不允许删除该数据')
         
         if self.permit.can_del() and self.instance.pk:
-            cascade_ls = delete_related_query(self.instance,include_relation=False)
+            cascade_ls = delete_related_query(self.instance,include_relation=False,deep_level=9,parents=[])
             if not self.allow_cascade_delete:
                 if cascade_ls:
                     raise UserWarning(f'已经有相关数据({cascade_ls[0]["str"]}),不能删除!')

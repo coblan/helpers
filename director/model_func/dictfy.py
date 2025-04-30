@@ -303,17 +303,22 @@ def model_to_head(model,include=[],exclude=[]):
     return out
 
 
-def delete_related_query(inst,deep_level=0,include_relation=True):
+def delete_related_query(inst,deep_level=0,include_relation=True,parents=None):
     """
     When delet inst object,Django ORM will delet all related model instance.
     this function used to search related instance with inst,return string tree
     查询 删除inst时，所要删除的所有关联对象
     @deep_level: 递归调用时，程序自动传入的当前level数。递归到4层时，就会退出。
+    @parents=[]  root调用的时候需要弄一个parents=[],防止递归删除，deep_level占时无用了
     """
     if inst is None:
         return []  
-    if deep_level>4:
+    if inst.__class__ in parents:
         return []
+    if deep_level>10:
+        # 在del_form中，会检查是否有cascade_delete 删除，只需要递归一层即可，所以传入deep_level=9防止递归。
+        return []
+    parents.append(inst.__class__)
     
     ls = []
     all_related_objects =  [
@@ -333,30 +338,42 @@ def delete_related_query(inst,deep_level=0,include_relation=True):
                 continue
             elif hasattr(obj,'all'):  # Foreign Key field
                 for sub_obj in obj.all():
+                    if len(ls) >3:
+                        ls.append({'str':'......'})
+                        break                    
                     ls.append({'str':"{content}  ({cls_name})".format(cls_name = sub_obj.__class__.__name__,content=str(sub_obj)),
-                               'related':delete_related_query(sub_obj,deep_level=deep_level+1)})
+                               'related':delete_related_query(sub_obj,deep_level=deep_level+1,parents=parents)})
             else:   # OneToOne related
+                if len(ls) >3:
+                    ls.append({'str':'......',})
+                    continue               
                 ls.append({'str':"{content}  ({cls_name})".format(cls_name = obj.__class__.__name__,content=str(obj)),
-                           'related':delete_related_query(obj,deep_level=deep_level+1)})   
+                           'related':delete_related_query(obj,deep_level=deep_level+1,parents=parents)})   
                 
     if include_relation:
         for rel in all_related_many_to_many_objects:  #inst._meta.get_all_related_many_to_many_objects():  # ManyToMany Related
             name = rel.get_accessor_name()
             many_to_many_rels = getattr(inst,name)
             for obj in many_to_many_rels.all():
+                if len(ls)>4:
+                    ls.append({'str':'......',})
+                    break                
                 ls.append({'str':'{obj_cls}({obj_content}) to {inst_cls}({inst_content}) relationship '.format(obj_cls=obj.__class__.__name__,\
                                     obj_content=str(obj),inst_cls=inst.__class__.__name__,inst_content=str(obj)),
                            'related':[]})
-        for field in inst._meta.get_fields():    # manyToMany Field
+        for field in inst._meta.get_fields():    # manyToMany Field          
             if isinstance(field,models.ManyToManyField):
                 name = field.name
                 if not inst.pk: # instance must save before access manyToMany
                     continue
                 for obj in getattr(inst,name).all():
+                    if len(ls)>4:
+                        ls.append({'str':'......',})
+                        break                      
                     ls.append({'str':'{obj_cls}({obj_content}) to {inst_cls}({inst_content}) relationship '.format(obj_cls=obj.__class__.__name__,\
                                     obj_content=str(obj),inst_cls=inst.__class__.__name__,inst_content=str(obj)),
                            'related':[]})
-    
+    parents.pop()
     return ls
        
 def permit_to_dict(user,inst):
