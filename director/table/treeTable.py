@@ -86,6 +86,7 @@ class TreeTable(ModelTable):
                        'width':100,
                        'type':'warning',
                        'class':'myphone',
+                       'visible':self.permit.can_del(),
                        'click_express':''' 
                        var func = async ()=>{
                                  cfg.show_load();
