@@ -101,7 +101,14 @@ def com_to_type(head,model_form_inst):
             return f'[多选]{rt}'
         else:
             return rt
-        
+    else:
+        field = model_form_inst.instance._meta.get_field(head['name'])
+        if  isinstance( field,related.ManyToManyField) or isinstance(field,related.ForeignKey):
+            rt= f'关联表:{field.related_model._meta.verbose_name}的pk值'
+            if head.get('multiple'):
+                return f'[多选]{rt}'
+            else:
+                return rt
             
     if head['editor'] =='com-field-picture':
         return '字符串代表的图片地址'
