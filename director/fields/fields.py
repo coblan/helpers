@@ -376,6 +376,21 @@ class ModelFields(forms.ModelForm):
     def clean_dict(self,dc):   
         return dc
     
+    def cleanDelete(self):
+        model = self.Meta.model
+        model_name = model_to_name(model)
+        all_field_names =[f.name for f in model._meta.get_fields()]
+        for k in all_field_names:
+            field_path = model_name+'.'+k
+            field = model._meta.get_field(k)
+            if field_map.get(field_path):
+                mapper_cls = field_map[field_path]
+                mapper_cls(instance=self.instance, field=field).cleanDelete(name=k)
+            elif field_map.get(field.__class__):
+                mapper_cls = field_map.get(field.__class__)
+                mapper_cls(instance=self.instance, field=field).cleanDelete(name=k)
+                
+    
     def get_data_context(self):
         return {
             'row':self.get_row()
@@ -890,10 +905,10 @@ class ModelFields(forms.ModelForm):
             #bridge.delForm(bridge_inst,base_inst = self.instance)  
         
         if not self.allow_delete:
-            raise UserWarning('不允许删除改数据')
+            raise UserWarning('不允许删除该数据')
         
         if self.permit.can_del() and self.instance.pk:
-            cascade_ls = delete_related_query(self.instance,include_relation=False)
+            cascade_ls = delete_related_query(self.instance,include_relation=False,deep_level=9,parents=[])
             if not self.allow_cascade_delete:
                 if cascade_ls:
                     raise UserWarning(f'已经有相关数据({cascade_ls[0]["str"]}),不能删除!')
@@ -902,6 +917,7 @@ class ModelFields(forms.ModelForm):
             model = model_to_name(self.instance)
             pk = self.instance.pk
             ex_del_log = self.ex_del_form()
+            self.cleanDelete()
             self.instance.delete()
             dc = {
                 'model':model, 

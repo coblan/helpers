@@ -153,6 +153,8 @@ class BaseFieldProc(object):
             return '%s = %s'%(name,filter_args.get(name) )
         else:
             return ''
+    def cleanDelete(self,name):
+        pass
 
 
 def model_to_name(model):

@@ -16,6 +16,8 @@ from django.http import Http404
 import os
 from django.conf import settings
 from helpers.director.base_data import exclude_transaction
+import logging
+general_log = logging.getLogger('general_log')
 
 def director_save_row(row):
      #rt_dc = save_row(row,user,request)
@@ -52,11 +54,17 @@ def save_row(row):
           
           return {'success':True,'status':'success','row':dc}
      except ValidationError as e:
-          return {'errors':dict(e)}
+          try:
+               dc = dict(e)
+               return {'errors':dc}
+          except Exception as e:
+               general_log.exception(e)
+          
      except PermissionDenied as e:
           raise UserWarning(str(e))
      except OutDateException as e:
           return {'_outdate':str(e)}
+     
 
 
 @director_view('d.save_row_for_front')
@@ -168,7 +176,7 @@ def search_delete_related(rows):
           fields_cls = director.get(row['_director_name'])
           fields_obj = fields_cls(dc = row,select_for_update=False)
           inst = fields_obj.instance
-          ls = delete_related_query(inst)
+          ls = delete_related_query(inst,parents=[])
           if ls:
                out_ls.append(
                     {'str':str(inst),'related':ls}
