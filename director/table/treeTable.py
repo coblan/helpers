@@ -180,7 +180,7 @@ def get_tree_option(model,label_field,value_field='pk',extra_fields=[],par=None,
         if par:
             ls.append({'value': getattr(par,value_field,None) ,'label':getattr(par,label_field),'parent':None}) 
             #query = model.objects.filter(parent=par)
-            query = model.objects.filter(path__startswith=par.path)
+            query = model.objects.filter(path__startswith=par.path).exclude(pk=getattr(par,value_field,None))
             #for inst in model.objects.filter(parent=par):
                 #dc = {'value': getattr(inst,value_field,None),'label':getattr(inst,label_field),'parent':inst.parent_id}
                 #if extra_fields:
