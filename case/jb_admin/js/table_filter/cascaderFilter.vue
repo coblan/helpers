@@ -1,7 +1,8 @@
 <template>
   <div class="com-filter-cascasder">
     <el-cascader
-        :show-all-levels="false"
+        :style="{width:head.width}"
+        :show-all-levels="head.show_all_level==undefined?false:head.show_all_level "
         v-model="search_args[head.name]"
         :options="head.options"
         :placeholder="head.label"
