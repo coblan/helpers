@@ -13,9 +13,9 @@ def table_doc(model_table):
     return heads
     
 
-def fields_doc(model_form,pk_field='id',model_table=None):
+def fields_doc(model_form,pk_field='id',model_table=None,crt_user=None):
     model_form.nolimit = True
-    model_form_inst = model_form()
+    model_form_inst = model_form(crt_user=crt_user)
     ctx = model_form_inst.get_head_context()
     heads = ctx.get('heads')
     fields_names = [head['name'] for head in heads]
