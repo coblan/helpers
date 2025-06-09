@@ -272,7 +272,8 @@ def fast_director_view(request,director_name):
     kws = argument.get_argument(request,outtype='dict')
     
     if director_name.startswith('element/'):
-        directorEnt = director_views.get('d.director_element_call2')
+        #directorEnt = director_views.get('d.director_element_call2')
+        directorEnt = director_views.get('d.director_element_call')
         rt = re.search('element/(.+)/(\w+)$', director_name)
         director_name = rt.groups()[0]
         attr_name = rt.groups()[1]
