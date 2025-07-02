@@ -41,13 +41,23 @@ export default {
   mounted(){
     // 去掉rows是为了防止第二次打开tab-table时，携带了上次的rows数据
     this.tab_head.table_ctx.rows=[]
+
+
+    if(this.tab_head.mounted_express){
+      var scope = {vc:this}
+      ex.eval(this.tab_head.mounted_express,scope)
+      Vue.nextTick(()=>{
+        scope.table_vc = this.$refs.backend_table
+      })
+    }
+
     this.init_search_args()
   },
   methods:{
     init_search_args(){
       var search_args = {}
       if(this.tab_head.filter_express){
-        search_args = ex.eval(this.tab_head.filter_express,{par_row:this.par_row,vc:this,ps:this.childStore})
+        search_args = ex.eval(this.tab_head.filter_express,{par_row:this.par_row,vc:this,ps:this.childStore,table_vc:this.$refs.backend_table})
       }else if(this.tab_head.pre_set){
         // pre_set 含义不够清晰，被 filter_express 替代了
         var pre_set = ex.eval(this.tab_head.pre_set,{par_row:this.par_row,vc:this,ps:this.childStore})
